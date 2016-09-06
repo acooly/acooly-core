@@ -19,6 +19,6 @@ public interface DynamicListQueryDao<T> {
 	 *            排序，多条件按Map迭代顺序组合.key:排序属性或字段 / value: true-ASC false:DESC
 	 * @return 数据集合
 	 */
-	List<T> query(Map<String, Object> map, Map<String, Boolean> orderMap);
+	List<T> list(Map<String, Object> map, Map<String, Boolean> orderMap);
 
 }

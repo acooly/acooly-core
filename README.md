@@ -59,6 +59,11 @@ OK,你可以Half-Happy的使用MyBatis了，等基于框架的自动代码生成
 
 ## 版本说明
 
+### v3.2.1
+
+* 2016-09-06 修改DynamicListQueryDao接口的查询方法，从query修改为list
+ 
+
 ### v3.2.0
 
 >特别注意：该版本新增Mybatis特性后，原有的EntityDao.query(Map<String,Object>,...) rename 为 list，如果有直接调用DAO层自动封装代码query(非分页的重载方法，MyBatis不支持接口定义方法重载)，则不兼容，需要重构下代码。新版本上线后，框架服务层及以上全兼容~

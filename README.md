@@ -59,10 +59,14 @@ OK,你可以Half-Happy的使用MyBatis了，等基于框架的自动代码生成
 
 ## 版本说明
 
+### v3.2.2
+
+
+
+
 ### v3.2.1
 
 * 2016-09-06 修改DynamicListQueryDao接口的查询方法，从query修改为list
- 
 
 ### v3.2.0
 

@@ -1,5 +1,6 @@
 package com.acooly.core.common.dao.support;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,7 +9,10 @@ import java.util.List;
  * @author zhangpu
  * 
  */
-public class PageInfo<T> {
+public class PageInfo<T> implements Serializable {
+	/** UID */
+	private static final long serialVersionUID = -168321987075635774L;
+
 	/** 查询分页结果 */
 	private List<T> pageResults;
 
@@ -43,10 +47,20 @@ public class PageInfo<T> {
 		return currentPage != totalPage;
 	}
 
+	
+	public boolean isNext() {
+		return hasNext();
+	}
+	
 	/** 是否有上页 */
 	public boolean hasPrevious() {
 		return currentPage != 1;
 	}
+	
+	public boolean isPrevious() {
+		return hasPrevious();
+	}
+	
 
 	public int getCountOfCurrentPage() {
 		return countOfCurrentPage;

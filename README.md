@@ -61,8 +61,8 @@ OK,你可以Half-Happy的使用MyBatis了，等基于框架的自动代码生成
 
 ### v3.2.2
 
-
-
+* 2016-11-02 - 修改PageInfo支持序列化；增加isNext() 和 isPrevious()两个帮助方法 - [zhangpu] 32f5003
+* 2016-09-07 - 增加mybatis的配置文件打包规则 - [zhangpu] ff7b567
 
 ### v3.2.1
 

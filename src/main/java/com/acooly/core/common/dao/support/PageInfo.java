@@ -47,20 +47,18 @@ public class PageInfo<T> implements Serializable {
 		return currentPage != totalPage;
 	}
 
-	
 	public boolean isNext() {
 		return hasNext();
 	}
-	
+
 	/** 是否有上页 */
 	public boolean hasPrevious() {
 		return currentPage != 1;
 	}
-	
+
 	public boolean isPrevious() {
 		return hasPrevious();
 	}
-	
 
 	public int getCountOfCurrentPage() {
 		return countOfCurrentPage;
@@ -118,4 +116,11 @@ public class PageInfo<T> implements Serializable {
 
 		pageResults = results.subList(iStart, iStart + iOffset);
 	}
+
+	@Override
+	public String toString() {
+		return String.format("{pageResults:%s, countOfCurrentPage:%s, totalCount:%s}", pageResults, countOfCurrentPage,
+		        totalCount);
+	}
+
 }

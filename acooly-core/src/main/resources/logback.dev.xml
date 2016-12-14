@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+	<property name="LOG_HOME" value="${webapp.root}/WEB-INF/logs" />
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 [%file:%line] -->
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{0}:%L-%X{gid}- %msg%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${LOG_HOME}/main.log.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<MaxHistory>30</MaxHistory>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg [%file:%line] %n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 连接池SQL -->
+	<logger name="com.alibaba.druid" level="INFO" />
+	<logger name="druid.sql.Statement" level="INFO" />
+
+	<!-- show parameters for hibernate sql 专为 Hibernate 定制 -->
+	<logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="INFO" />
+	<logger name="org.hibernate.type.descriptor.sql.BasicExtractor" level="INFO" />
+	<logger name="org.hibernate.engine.QueryParameters" level="INFO" />
+	<logger name="org.hibernate.engine.query.HQLQueryPlan" level="INFO" />
+	<logger name="org.hibernate.cache" level="INFO" />
+
+	<logger name="org.springframework.aop.framework.Cglib2AopProxy" level="OFF" />
+	<logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" level="OFF" />
+	<logger name="jdbc" level="OFF" />
+
+	<!-- 日志输出级别 -->
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+</configuration>

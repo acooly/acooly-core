@@ -51,7 +51,7 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
 
 	public AbstractEntityJpaDao(Class<T> domainClass, EntityManager em) {
 		super(domainClass, em);
-		this.entityInformation = JpaEntityInformationSupport.getMetadata(domainClass, em);
+		this.entityInformation = JpaEntityInformationSupport.getEntityInformation(domainClass, em);
 		this.domainClass = domainClass;
 		this.em = em;
 	}

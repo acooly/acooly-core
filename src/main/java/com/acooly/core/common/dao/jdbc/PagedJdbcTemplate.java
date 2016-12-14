@@ -49,7 +49,7 @@ public class PagedJdbcTemplate extends JdbcTemplate {
 		String sqlFrom = sql.substring(sql.indexOf("from"));
 		String sqlCount = "select count(*) " + sqlFrom;
 		// 总记录数
-		long totalCount = super.queryForLong(sqlCount);
+		long totalCount = super.queryForObject(sqlCount,Long.class);
 		int startNum = pageInfo.getCountOfCurrentPage() * (pageInfo.getCurrentPage() - 1) + 1;
 		int endNum = pageInfo.getCountOfCurrentPage() * (pageInfo.getCurrentPage());
 		if (endNum > totalCount) {
@@ -91,7 +91,7 @@ public class PagedJdbcTemplate extends JdbcTemplate {
 		try {
 			String sqlCount = "select count(*) from (" + sql + ") as t1";
 			// 总记录数
-			long totalCount = super.queryForLong(sqlCount);
+			long totalCount = super.queryForObject(sqlCount,Long.class);
 			int startNum = pageInfo.getCountOfCurrentPage() * (pageInfo.getCurrentPage() - 1);
 			int endNum = pageInfo.getCountOfCurrentPage() * (pageInfo.getCurrentPage());
 			if (endNum > totalCount) {
@@ -118,7 +118,6 @@ public class PagedJdbcTemplate extends JdbcTemplate {
 	 * 
 	 * @param pageInfo
 	 * @param sql
-	 * @param dto
 	 * @return
 	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
@@ -126,7 +125,7 @@ public class PagedJdbcTemplate extends JdbcTemplate {
 		try {
 			String sqlCount = "select count(*) from (" + sql + ") as xxttbb";
 			// 总记录数
-			long totalCount = super.queryForLong(sqlCount);
+			long totalCount = super.queryForObject(sqlCount,Long.class);
 			int startNum = pageInfo.getCountOfCurrentPage() * (pageInfo.getCurrentPage() - 1);
 			int endNum = pageInfo.getCountOfCurrentPage() * (pageInfo.getCurrentPage());
 			if (endNum > totalCount) {

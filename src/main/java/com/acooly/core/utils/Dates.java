@@ -496,7 +496,7 @@ public class Dates {
 	}
 
 	private static SimpleDateFormat getSimpleDateFormat(String defaultFormat) {
-		if (org.apache.commons.lang.StringUtils.isBlank(defaultFormat)) {
+		if (Strings.isBlank(defaultFormat)) {
 			defaultFormat = DEFAULT_DATE_FORMAT;
 		}
 		return new SimpleDateFormat(defaultFormat);

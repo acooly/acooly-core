@@ -34,14 +34,7 @@ public interface EntityDao<T> {
 	 * @param o
 	 */
 	void update(T o);
-	
-	/**
-	 * 保存/更新和刷新缓存，防止后置提交影响执行序
-	 * 
-	 * @param entity
-	 * @return
-	 */
-	T saveAndFlush(T entity);
+
 	
 	void flush();
 	

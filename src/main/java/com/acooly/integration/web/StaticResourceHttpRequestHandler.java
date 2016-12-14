@@ -4,10 +4,12 @@
  */
 package com.acooly.integration.web;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.acooly.core.common.exception.AppConfigException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.context.support.ServletContextResource;
@@ -44,7 +46,11 @@ public class StaticResourceHttpRequestHandler extends ResourceHttpRequestHandler
 	@Override
 	protected Resource getResource(HttpServletRequest request) {
 		request.setAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE, request.getRequestURI());
-		return super.getResource(request);
+		try {
+			return super.getResource(request);
+		} catch (IOException e) {
+			throw new AppConfigException(e);
+		}
 	}
 
 	public void setClasspathViewRoot(String classpathViewRoot) {

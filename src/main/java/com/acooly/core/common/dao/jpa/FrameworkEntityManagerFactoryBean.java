@@ -2,7 +2,8 @@ package com.acooly.core.common.dao.jpa;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import com.acooly.core.utils.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 import com.google.common.collect.Lists;
@@ -21,7 +22,7 @@ public class FrameworkEntityManagerFactoryBean extends LocalContainerEntityManag
 	public void setPackagesToScan(String... packagesToScan) {
 		List<String> packages = Lists.newArrayList();
 		for (String packageToScan : packagesToScan) {
-			if (StringUtils.isBlank(packageToScan)) {
+			if (Strings.isBlank(packageToScan)) {
 				continue;
 			}
 			if (StringUtils.contains(packageToScan, PACKAGES_DELIMITER)) {

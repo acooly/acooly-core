@@ -7,10 +7,10 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.Validate;
+import com.acooly.core.utils.Strings;
 
 import com.google.common.collect.Maps;
+import org.apache.commons.lang3.Validate;
 
 /**
  * 参数验证工具
@@ -29,7 +29,7 @@ public class Validators extends Validate {
 	 * @param reqValue
 	 */
 	public static void assertEmpty(String paraName, String reqValue) {
-		if (StringUtils.isBlank(reqValue)) {
+		if (Strings.isBlank(reqValue)) {
 			throw new IllegalArgumentException("参数[" + paraName + "]是必须的");
 		}
 	}

@@ -41,9 +41,7 @@ public class JDBCAutoConfiguration {
 	
 	@Autowired
 	private DruidProperties druidProperties;
-	
-	@Autowired
-	private ApplicationContext applicationContext;
+
 	
 	@Bean
 	public DataSource dataSource() {

@@ -9,7 +9,6 @@
  */
 package com.acooly.core.test.dal;
 
-
 import com.acooly.core.common.dao.jpa.EntityJpaDao;
 
 /**

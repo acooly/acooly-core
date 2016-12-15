@@ -1,7 +1,10 @@
 package com.acooly.core.common.dao.jpa;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
+import com.acooly.core.common.dao.support.PageInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 

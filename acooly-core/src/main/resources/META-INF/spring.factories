@@ -4,7 +4,7 @@ com.acooly.core.common.boot.listener.ExApplicationRunListener
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.acooly.core.common.boot.log.LogAutoConfiguration,\
 com.acooly.core.common.boot.component.ds.JDBCAutoConfiguration,\
-com.acooly.core.common.dao.jpa.JpaConfig
+com.acooly.core.common.boot.component.jpa.JpaConfig
 
 #logger initializer
 com.acooly.core.common.boot.log.initializer.LogInitializer=\
@@ -17,4 +17,6 @@ org.springframework.context.ApplicationContextInitializer=\
 com.acooly.core.common.boot.component.ComponentExtensionContextInitializer,\
 com.acooly.core.common.boot.listener.HolderInitApplicationContextInitializer
 
-com.acooly.core.common.boot.component.ComponentInitializer=com.acooly.core.common.boot.component.ds.DruidComponentInitializer
+com.acooly.core.common.boot.component.ComponentInitializer=\
+com.acooly.core.common.boot.component.ds.DruidComponentInitializer,\
+com.acooly.core.common.boot.component.jpa.JPAComponentInitializer

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.acooly.core.common.boot.ApplicationContextHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,9 +86,14 @@ public abstract class AbstractGenericsController<T extends AbstractEntity, M ext
 	@SuppressWarnings("unchecked")
 	protected M getEntityService() {
 		if (entityService == null) {
-			List<Field> fields = BeanUtils.getFieldsByType(this, GenericsUtils.getSuperClassGenricType(getClass(), 1));
+			Class<M> entityServiceClass=GenericsUtils.getSuperClassGenricType(getClass(), 1);
+			List<Field> fields = BeanUtils.getFieldsByType(this,entityServiceClass );
 			try {
-				entityService = (M) BeanUtils.getDeclaredProperty(this, fields.get(0).getName());
+				if(fields.isEmpty()){
+					entityService=ApplicationContextHolder.get().getBean(entityServiceClass);
+				}else{
+					entityService = (M) BeanUtils.getDeclaredProperty(this, fields.get(0).getName());
+				}
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			} catch (NoSuchFieldException e) {

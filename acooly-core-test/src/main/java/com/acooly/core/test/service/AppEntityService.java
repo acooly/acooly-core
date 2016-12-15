@@ -12,9 +12,11 @@ package com.acooly.core.test.service;
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.test.dal.App;
 import com.acooly.core.test.dal.AppRepository;
+import org.springframework.stereotype.Service;
 
 /**
  * @author qiubo@yiji.com
  */
+@Service
 public class AppEntityService extends EntityServiceImpl<App, AppRepository> {
 }

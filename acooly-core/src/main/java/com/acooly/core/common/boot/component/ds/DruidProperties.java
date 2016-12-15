@@ -160,8 +160,10 @@ public class DruidProperties implements BeanClassLoaderAware {
 		
 		if (mysql()) {
 			maxActive = Math.max(maxActive, MYSQL_MAX_ACTIVE);
+			System.setProperty("spring.jpa.database","MYSQL");
 		} else {
 			maxActive = Math.max(maxActive, ORACLE_MAX_ACTIVE);
+			System.setProperty("spring.jpa.database","ORACLE");
 		}
 		dataSource.setMaxActive(maxActive);
 		dataSource.setMaxWait(this.getMaxWait());

@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 import com.acooly.core.common.dao.support.PageInfo;
+import org.springframework.data.repository.NoRepositoryBean;
 
 /**
  * 针对单个Entity对象的操作,不依赖于具体ORM实现方案.
  * 
  * @author zhangpu
  */
+@NoRepositoryBean
 public interface EntityDao<T> {
 	
 	/**

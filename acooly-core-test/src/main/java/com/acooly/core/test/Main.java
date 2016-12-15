@@ -18,8 +18,8 @@ import org.springframework.boot.SpringApplication;
  */
 @BootApp(sysName = "acooly-test", httpPort = 8080)
 public class Main {
-    public static void main(String[] args) {
-        Apps.setProfileIfNotExists("sdev");
-        SpringApplication.run(Main.class,args);
-    }
+	public static void main(String[] args) {
+		Apps.setProfileIfNotExists("sdev");
+		SpringApplication.run(Main.class, args);
+	}
 }

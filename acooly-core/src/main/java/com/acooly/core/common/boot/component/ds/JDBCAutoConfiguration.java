@@ -10,8 +10,10 @@
  */
 package com.acooly.core.common.boot.component.ds;
 
+import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.common.exception.AppConfigException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -25,7 +27,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import static com.acooly.core.common.boot.component.ds.DruidProperties.ENABLE_KEY;
@@ -76,5 +80,4 @@ public class JDBCAutoConfiguration {
 	public TransactionTemplate transactionTemplate(PlatformTransactionManager platformTransactionManager) {
 		return new TransactionTemplate(platformTransactionManager);
 	}
-	
 }

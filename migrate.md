@@ -1,4 +1,7 @@
 ## 迁移文档
+### 1. 日志
+
+不需要配置
 
 ### 1. 数据源
 
@@ -7,4 +10,9 @@
 
 ### 2. jpa
 
-1. 新增实体扫描包`org.springframework.boot.autoconfigure.domain.EntityScan`
+不需要配置
+
+### 3. jsp
+
+1. jsp文件路径为`src/main/resources/META-INF/resources/WEB-INF/jsp'
+2. 修改include,例如`<%@ include file="/WEB-INF/jsp/manage/common/taglibs.jsp"%>`

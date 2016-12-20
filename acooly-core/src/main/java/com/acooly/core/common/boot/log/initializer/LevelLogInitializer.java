@@ -30,7 +30,7 @@ public class LevelLogInitializer extends AbstractLogInitializer {
 	@Override
 	public void init(LogbackConfigurator configurator) {
 		Map<String, Object> levels = new RelaxedPropertyResolver(configurator.getEnvironment())
-			.getSubProperties("yiji.log.level.");
+			.getSubProperties("acooly.log.level.");
 		for (Map.Entry<String, Object> entry : levels.entrySet()) {
 			String loggerName = entry.getKey();
 			String level = entry.getValue().toString();

@@ -16,7 +16,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * @author qiubo@yiji.com
  */
-@ConfigurationProperties("yiji.tomcat")
+@ConfigurationProperties("acooly.tomcat")
 @Data
 public class TomcatProperties {
 	public static final String HTTP_ACCESS_LOG_FORMAT = "%h %l [%{yyyy-MM-dd HH:mm:ss.SSS}t] \"%r\" %s %b %D";
@@ -39,25 +39,7 @@ public class TomcatProperties {
 	 */
 	private String uriEncoding = "UTF-8";
 	
-	private Jsp jsp = new Jsp();
-	
-	@Data
-	public static class Jsp {
-		
-		public static final String ENABLE_KEY = "yiji.tomcat.jsp.enable";
-		/**
-		 * 是否启用jsp
-		 */
-		private boolean enable = true;
-		/**
-		 * jsp文件路径前缀
-		 */
-		private String prefix = "/WEB-INF/jsp/";
-		/**
-		 * jsp扩展名
-		 */
-		private String suffix = ".jsp";
-		
-	}
+
+
 	
 }

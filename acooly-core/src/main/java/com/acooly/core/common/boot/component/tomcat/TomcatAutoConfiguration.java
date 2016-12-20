@@ -12,6 +12,7 @@ package com.acooly.core.common.boot.component.tomcat;
 
 import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.common.boot.Apps;
+import com.acooly.core.common.boot.component.web.WebProperties;
 import com.acooly.core.common.exception.AppConfigException;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.valves.AccessLogValve;
@@ -42,19 +43,21 @@ import java.nio.charset.Charset;
 @Configuration
 @ConditionalOnWebApplication
 @ConditionalOnClass(Tomcat.class)
-@EnableConfigurationProperties({ TomcatProperties.class })
+@EnableConfigurationProperties({ TomcatProperties.class, WebProperties.class})
 public class TomcatAutoConfiguration {
 	private static final Logger logger = LoggerFactory.getLogger(TomcatAutoConfiguration.class);
 	
 	@Autowired
 	private TomcatProperties tomcatProperties;
+	@Autowired
+	private WebProperties webProperties;
 	
 	@Bean(name = "embeddedServletContainerCustomizer")
 	public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer() {
 		
 		return container -> {
 			//1. disable jsp if possible
-			if (!tomcatProperties.getJsp().isEnable()) {
+			if (!webProperties.getJsp().isEnable()) {
 				JspServlet jspServlet = new JspServlet();
 				jspServlet.setRegistered(false);
 				container.setJspServlet(jspServlet);
@@ -107,17 +110,4 @@ public class TomcatAutoConfiguration {
 		docbase.deleteOnExit();
 		logger.info("设置tomcat baseDir={},docbase={}", file, docbase);
 	}
-	@PostConstruct
-	public void jspViewResolver() {
-		try {
-			InternalResourceViewResolver internalResourceViewResolver = ApplicationContextHolder.get()
-					.getBean(InternalResourceViewResolver.class);
-			internalResourceViewResolver.setSuffix(tomcatProperties.getJsp().getSuffix());
-			internalResourceViewResolver.setPrefix(tomcatProperties.getJsp().getPrefix());
-		} catch (BeansException e) {
-			// do nothing
-		}
-
-	}
-	
 }

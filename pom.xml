@@ -18,6 +18,7 @@
 	<modules>
 		<module>acooly-core</module>
 		<module>acooly-core-test</module>
+		<module>acooly-components</module>
 	</modules>
 	<dependencies>
 		<dependency>

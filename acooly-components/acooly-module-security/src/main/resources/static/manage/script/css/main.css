@@ -1,0 +1,235 @@
+@charset "utf-8";
+/* CSS Document */
+body{
+    margin:0px;padding:0px; font:14px/1.6em "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;color:#666
+}
+div,form,img,ul,ol,li,dl,dt,dd,span{margin:0px;padding:0px;border:none;vertical-align:top}
+ul,dl,ol{list-style-type:none;}
+.red{
+    color:#e6183f
+}
+.Green{
+    color:#8cc016
+}
+
+/*============== menu ===================*/
+.list-group-item {
+	padding: 5px 10px;
+}
+
+.list-group .selected{
+	background-color: #d9edf7;
+}
+
+.panel {
+	border-radius: 0px;
+	margin-bottom: 0px;
+	border: 0px solid transparent;
+    -webkit-box-shadow: 0 0px 0px rgba(0,0,0,.05);
+}
+
+.panel-heading{
+	border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    margin-top: 1px;
+}
+
+.panel-primary {
+	margin-bottom: 0px;
+	background-color: #fff;
+	border-bottom: 0px;
+	border-radius: 0px;
+}
+
+
+
+/*============= content =================*/
+.menu li ol{
+    display:none
+}
+.menu li a.hover{
+    color:#4597e0;
+}
+
+.menu ol li a{
+    padding-left:35px;
+}
+
+.content{
+    background:#fff; border:1px solid #d2d2de; position:relative; padding:25px; padding-top:0; color:#5F636C; border-top:0; line-height:21px; overflow:hidden;
+}
+
+.content p{
+    padding:0 18px; margin:15px 0
+}
+.content p a,.content p a:visited,.content p small{
+    color:#3B7DB0; margin:0 5px;font-size:12px;
+}
+.content p a:hover{
+    text-decoration:underline
+}
+.content strong{
+    padding:0 0 0 18px;
+}
+.content li strong{
+    display: block; margin-bottom: -15px;
+}
+.content li p{
+    margin-bottom: 5px
+}
+.img {
+    width:560px;
+    margin:15px auto;
+    text-align: center;
+}
+.img img{
+    margin:5px 0;
+}
+
+.content>table{
+    border-top:1px solid #E0E0E0; border-left:1px solid #E0E0E0; margin:10px 0
+}
+.content>table td,table th{
+    height:28px; border-bottom:1px solid #E0E0E0; border-right:1px solid #E0E0E0; padding:0 10px;
+}
+.content>table th{
+    background:#F5F5F5;
+}
+.content>ol{
+    margin:20px 0 20px 35px;
+}
+.content>ol>li{
+    height:24px; line-height:24px; list-style-type:decimal
+}
+
+/*------------------------------------API样式开始------------------------------------*/
+.apiContents { clear:both; display:block; overflow:hidden;}
+.apiContents h3 { display:block; padding:5px 0px; margin:0 10px; font-size:16px; font-weight:bold; overflow:hidden; }
+.contentWords { clear:both; display:block; overflow:hidden; padding:10px 10px 20px;}
+.apiContents span { clear:both; display:block; overflow:hidden; line-height:25px; padding:5px 14px; }
+.apiContents strong { font-size:14px; display:block; clear:both; overflow: hidden; padding:20px 0 2px 14px;}
+.apiContents a.apply { color:#fff; text-decoration:none; border-bottom:1px solid #46821c; border-radius:4px; font-size:14px; padding:6px 20px; display:block; float:left; box-shadow:0 2px 2px #d5d8d3;
+    background:#519727;
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#83be44), color-stop(20%, #519727));
+    background: -ms-linear-gradient(top, #83be44 0%,#519727 100%); /* IE10+ */
+    background: -webkit-linear-gradient(top, #83be44 0%,#519727 100%); /* Chrome10+,Safari5.1+ */
+    background: -moz-linear-gradient(top, rgba(131,190,68,0.6), rgba(81,151,39,1)); /* for firefox 3.6+ */
+    background: -o-linear-gradient(rgba(131,190,68,0.6),rgba(81,151,39,1));  /* For Opera Browsers */}
+.apiContents a.format { color:#247ae4; text-decoration:underline}
+.apiContents .tableAPI { border:1px solid #e7e7e7; border-collapse: collapse; font-size:12px;width:100%}
+.apiContents .tableAPI th { background:#e7e7e7; color:#3f4346;font-size:12px;}
+.apiContents .tableAPI td, .apiContents .tableAPI th { border:1px solid #ddd; line-height:20px; padding:4px 10px;font-size:12px; }
+.apiContents .tableAPI td { text-align:left;font-size:12px;}
+/*------------------------------------API样式结束------------------------------------*/
+
+
+
+
+.masthead {
+    padding: 90px 0 110px;
+}
+.masthead {
+    padding: 60px 0 80px;
+    margin-bottom: 0;
+    color: #fff;
+}
+.doc-header {
+	margin-top:50px;
+    position: relative;
+    padding: 40px 0;
+    color: #fff;
+    /*text-align: center;*/
+	text-shadow: 0 1px 3px rgba(0,0,0,.4),0 0 30px rgba(0,0,0,.075);
+    background: #020031;
+    background: -moz-linear-gradient(45deg,#020031 0,#6d3353 100%);
+    background: -webkit-gradient(linear,left bottom,right top,color-stop(0%,#020031),color-stop(100%,#6d3353));
+    background: -webkit-linear-gradient(45deg,#2980B9 0,#3498DB 100%);
+    background: -o-linear-gradient(45deg,#020031 0,#6d3353 100%);
+    background: -ms-linear-gradient(45deg,#020031 0,#6d3353 100%);
+    background: linear-gradient(45deg,#020031 0,#3498DB 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#020031', endColorstr='#6d3353', GradientType=1);
+    -webkit-box-shadow: inset 0 3px 7px rgba(0,0,0,.2),inset 0 -3px 7px rgba(0,0,0,.2);
+    -moz-box-shadow: inset 0 3px 7px rgba(0,0,0,.2),inset 0 -3px 7px rgba(0,0,0,.2);
+    box-shadow: inset 0 3px 7px rgba(0,0,0,.2),inset 0 -3px 7px rgba(0,0,0,.2);    
+    
+    /*
+    text-shadow: 0 1px 3px rgba(0,0,0,.4),0 0 30px rgba(0,0,0,.075);
+    background-color: #6f5499;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#3175B0),to(#7E9EBF));
+    background-image: -webkit-linear-gradient(top,#2980B9 0,#3498DB 100%);
+    background-image: -o-linear-gradient(top,#3175B0 0,#7E9EBF 100%);
+    background-image: linear-gradient(to bottom,#2980B9 0,#3498DB 100%)
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#563d7c', endColorstr='#6F5499', GradientType=0);
+    background-repeat: repeat-x;
+    */
+}
+
+.projects{}
+.projects .thumbnail {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    max-width: 310px;
+    margin-bottom: 30px;
+    border-radius: 0;
+}
+.projects .thumbnail .caption {
+    height: 200px;
+    overflow-y: hidden;
+    color: #555;
+}
+
+.projects .thumbnail .banner { 
+	 height:125px;
+	 width:500px;
+	 display: table-cell;
+	 vertical-align:middle;
+	 /*设置水平居中*/
+	 text-align:center;
+	 /* 针对IE的Hack */
+	 *display: block;
+	 *font-size: 109px;/*约为高度的0.873，200*0.873 约为175*/
+	 *font-family:Arial;/*防止非utf-8引起的hack失效问题，如gbk编码*/
+ }
+ 
+.projects .thumbnail .banner img {vertical-align:middle;}
+
+.projects .thumbnail .bgblue { background-color: #136AAB; }
+
+.projects .thumbnail .bggreen { background-color: #50AE55; }
+
+
+.footer {
+    color: #777;
+    padding: 30px 0;
+    border-top: 1px solid #e5e5e5;
+    margin-top: 70px;
+}
+.footer-bottom {
+    font-size: 13px;
+}
+
+/****** scrollUp ***********/
+@media screen and (min-width: 992px)
+#scrollUp {
+    bottom: 100px;
+}
+#scrollUp {
+    background-color: #777;
+    color: #eee;
+    padding-top:8px;
+    font-size: 30px;
+    line-height: 1;
+    text-align: center;
+    text-decoration: none;
+    bottom: 20px;
+    right: 20px;
+    overflow: hidden;
+    width: 46px;
+    height: 46px;
+    border: none;
+    opacity: .8;
+}
+
+#scrollUp:hover {background-color: #aaa;}

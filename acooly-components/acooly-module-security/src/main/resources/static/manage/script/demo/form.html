@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>acooly easyui form demo</title>
+<link rel="stylesheet" href="/manage/script/css/main.css">
+<link rel="stylesheet" href="/manage/plugin/jquery-easyui/themes/acooly/easyui.css">
+<script type="text/javascript" src="/manage/plugin/jquery/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/manage/plugin/jquery-easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/manage/script/acooly.format.js"></script>
+<script type="text/javascript" src="/manage/script/acooly.easyui.js"></script>
+
+</head>
+<body>
+
+<h2>内置验证器</h2>
+<div>
+<h2>email</h2>
+邮件：<input name="email" type="text" class="easyui-validatebox" required="true"
+	validType="email" missingMessage="请输入您的电子邮箱地址" invalidMessage="请输入正确的电子邮箱格式"/>
+<br><br>
+昵称：<input name="nickName" type="text" class="easyui-validatebox" required="true"
+	validType="length[2,4]" missingMessage="请输入您的昵称" invalidMessage="姓名只能是2-4个字"/>
+<br><br>
+姓名：<input name="realName" type="text" class="easyui-validatebox" required="true"
+	data-options="validType:['CHS','length[2,4]']" missingMessage="请输入您的真实姓名" invalidMessage="姓名只能是2-4个汉字"/>
+
+
+
+<br>
+<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_customer_searchform','manage_customer_datagrid');">查询</a>
+</div>
+
+
+</body>
+</html>

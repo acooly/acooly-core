@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+	<!-- Spring ApplicationContext配置文件的路径 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring/applicationContext-main.xml</param-value>
+	</context-param>
+
+	<!-- 日志配置 -->
+	<context-param>
+		<param-name>logConfigLocation</param-name>
+		<param-value>classpath:logback/logback.xml</param-value>
+	</context-param>
+
+	<!-- Character Encoding filter -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+
+	<!-- XSS defence filter -->
+	<filter>
+		<filter-name>XssDefenseFilter</filter-name>
+		<filter-class>com.acooly.module.security.defence.XssDefenseFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>XssDefenseFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>csrfDefenseFilter</filter-name>
+		<filter-class>com.acooly.integration.web.SpringFilterProxy</filter-class>
+		<init-param>
+			<param-name>exclusions</param-name>
+			<param-value>/gateway.html,/ofile/upload.html</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>csrfDefenseFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+		<url-pattern>*.jsp</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+
+	<!-- static resource access filter -->
+	<filter>
+		<filter-name>staticResourceSpringFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>staticResourceSpringFilter</filter-name>
+		<url-pattern>/manage/script/*</url-pattern>
+		<url-pattern>/manage/image/*</url-pattern>
+		<url-pattern>/manage/style/*</url-pattern>
+		<url-pattern>/manage/plugin/*</url-pattern>
+	</filter-mapping>
+
+	<!-- Hibernate Open Session in View Filter -->
+	<filter>
+		<filter-name>openEntityManagerInViewFilter</filter-name>
+		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>openEntityManagerInViewFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>openEntityManagerInViewFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>openEntityManagerInViewFilter</filter-name>
+		<url-pattern>/services/*</url-pattern>
+	</filter-mapping>
+
+
+	<!-- Shiro Security filter -->
+	<filter>
+		<filter-name>shiroFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+
+	<!-- druid数据源Web监控配置 -->
+	<filter>
+		<filter-name>druidWebStatFilter</filter-name>
+		<filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+		<init-param>
+			<param-name>exclusions</param-name>
+			<param-value>/manage/error/*,/manage/layout/*,/manage/plugin/*,*.js,*.css,/manage/druid*,*.jsp</param-value>
+		</init-param>
+		<init-param>
+			<param-name>principalSessionName</param-name>
+			<param-value>sessionInfo</param-value>
+		</init-param>
+		<init-param>
+			<param-name>profileEnable</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>druidWebStatFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>
+
+
+
+	<!-- Setting system property -->
+	<listener>
+		<listener-class>com.acooly.integration.SystemPropertyIntergrationListener</listener-class>
+	</listener>
+
+	<!-- Intergration log4j/slf4j/commons-logger/jdk14-logger to log4j -->
+	<listener>
+		<listener-class>com.acooly.integration.log.LogbackIntergrationListener</listener-class>
+	</listener>
+
+	<!--Spring Context loader -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+
+	<!-- Spring MVC Servlet -->
+	<servlet>
+		<servlet-name>springServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>
+				classpath*:spring/acooly/acooly-springmvc.xml
+			</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>springServlet</servlet-name>
+		<url-pattern>*.html</url-pattern>
+	</servlet-mapping>
+
+	<!-- jcaptcha -->
+	<servlet>
+		<servlet-name>jcaptcha</servlet-name>
+		<servlet-class>com.acooly.module.security.jcaptcha.ImageCaptchaServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>jcaptcha</servlet-name>
+		<url-pattern>/jcaptcha.jpg</url-pattern>
+	</servlet-mapping>
+
+	<!-- druid监控页面，使用${pageContext.request.contextPath}/druid/index.html访问 -->
+	<servlet>
+		<servlet-name>druidStatView</servlet-name>
+		<servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>druidStatView</servlet-name>
+		<url-pattern>/manage/druid/*</url-pattern>
+	</servlet-mapping>
+
+	<!--session 超时定义 -->
+	<session-config>
+		<session-timeout>120</session-timeout>
+	</session-config>
+
+	<!--默认首页定义 -->
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+</web-app>

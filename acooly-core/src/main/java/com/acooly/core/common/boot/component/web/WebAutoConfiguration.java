@@ -13,6 +13,8 @@ package com.acooly.core.common.boot.component.web;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
+import freemarker.cache.ClassTemplateLoader;
+import freemarker.cache.TemplateLoader;
 import freemarker.template.utility.XmlEscape;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -21,7 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
+import org.springframework.boot.autoconfigure.freemarker.FreeMarkerProperties;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.WebMvcProperties;
@@ -33,16 +38,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.MediaType;
+import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.filter.HttpPutFormContentFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfig;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import javax.servlet.Servlet;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author qiubo@yiji.com
@@ -145,7 +155,23 @@ public class WebAutoConfiguration extends WebMvcConfigurerAdapter implements App
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
 	}
-	
+	@Configuration
+	public static class AcoolyFreeMarkerConfiguration extends FreeMarkerAutoConfiguration.FreeMarkerWebConfiguration {
+		@Bean
+		@ConditionalOnMissingBean(FreeMarkerConfig.class)
+		public FreeMarkerConfigurer freeMarkerConfigurer() {
+			FreeMarkerConfigurer configurer = new FreeMarkerConfigurer(){
+				@Override
+				protected void postProcessTemplateLoaders(List<TemplateLoader> templateLoaders) {
+					templateLoaders.add(new ClassTemplateLoader(FreeMarkerConfigurer.class, "/templates"));
+
+				}
+			};
+			applyProperties(configurer);
+			return configurer;
+		}
+	}
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		Map<String, WebMvcAutoConfiguration> beansOfType = applicationContext

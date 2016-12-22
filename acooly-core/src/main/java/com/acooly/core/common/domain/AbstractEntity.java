@@ -1,5 +1,7 @@
 package com.acooly.core.common.domain;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.GeneratedValue;
@@ -17,21 +19,14 @@ import java.io.Serializable;
  * 
  */
 @MappedSuperclass
+@Getter
+@Setter
 public abstract class AbstractEntity implements Serializable, Persistable<Long> {
 	/** UID */
 	private static final long serialVersionUID = -1L;
 	@Id
 	@GeneratedValue
-	protected Long id;
-
-	@Override
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	private Long id;
 
 	@Transient
 	public boolean isNew() {

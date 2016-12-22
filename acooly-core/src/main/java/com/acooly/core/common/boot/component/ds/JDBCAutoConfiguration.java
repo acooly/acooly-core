@@ -11,6 +11,7 @@
 package com.acooly.core.common.boot.component.ds;
 
 import com.acooly.core.common.boot.ApplicationContextHolder;
+import com.acooly.core.common.dao.jdbc.PagedJdbcTemplate;
 import com.acooly.core.common.exception.AppConfigException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -68,13 +69,19 @@ public class JDBCAutoConfiguration {
 	public JdbcTemplate jdbcTemplate(DataSource dataSource) {
 		return new JdbcTemplate(dataSource);
 	}
+
+	@Bean
+	public PagedJdbcTemplate pagedJdbcTemplate(DataSource dataSource) {
+		return new PagedJdbcTemplate(dataSource);
+	}
 	
 	@Bean
 	@ConditionalOnMissingBean(NamedParameterJdbcOperations.class)
 	public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
 		return new NamedParameterJdbcTemplate(dataSource);
 	}
-	
+
+
 	@Bean
 	@ConditionalOnMissingBean(TransactionTemplate.class)
 	public TransactionTemplate transactionTemplate(PlatformTransactionManager platformTransactionManager) {

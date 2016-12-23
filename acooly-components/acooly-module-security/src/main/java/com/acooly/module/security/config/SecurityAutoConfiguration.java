@@ -108,6 +108,7 @@ public class SecurityAutoConfiguration {
 		public Realm shiroRealm(PathMatchPermissionResolver pathMatchPermissionResolver) {
 			ShiroDbRealm shiroDbRealm = new ShiroDbRealm();
 			shiroDbRealm.setPermissionResolver(pathMatchPermissionResolver);
+			shiroDbRealm.setAuthenticationCachingEnabled(false);
 			return shiroDbRealm;
 		}
 		

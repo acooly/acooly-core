@@ -25,5 +25,10 @@ public class WebComponentInitializer implements ComponentInitializer {
 		if (!applicationContext.getEnvironment().containsProperty("multipart.maxRequestSize")) {
 			System.setProperty("multipart.maxRequestSize", "300Mb");
 		}
+		System.setProperty("spring.freemarker.expose-session-attributes","false");
+		System.setProperty("spring.freemarker.expose-request-attributes","false");
+		System.setProperty("spring.freemarker.allow-session-override","false");
+		System.setProperty("spring.freemarker.request-context-attribute","rc");
+
 	}
 }

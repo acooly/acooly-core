@@ -21,10 +21,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.condition.*;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerProperties;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
@@ -47,6 +44,7 @@ import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfig;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 import javax.servlet.Servlet;
 import java.util.HashMap;
@@ -135,12 +133,12 @@ public class WebAutoConfiguration extends WebMvcConfigurerAdapter implements App
 		return registration;
 	}
 	
-	@Override
-	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-		configurer.ignoreAcceptHeader(true).defaultContentType(MediaType.TEXT_HTML).favorPathExtension(true)
-			.favorParameter(false).useJaf(false).mediaType("html", MediaType.APPLICATION_JSON)
-			.mediaType("xml", MediaType.APPLICATION_XML).mediaType("json", MediaType.APPLICATION_JSON);
-	}
+//	@Override
+//	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+//		configurer.ignoreAcceptHeader(true).defaultContentType(MediaType.TEXT_HTML).favorPathExtension(true)
+//			.favorParameter(false).useJaf(false).mediaType("html", MediaType.APPLICATION_JSON)
+//			.mediaType("xml", MediaType.APPLICATION_XML).mediaType("json", MediaType.APPLICATION_JSON);
+//	}
 
 	@Override
 	public void configureViewResolvers(ViewResolverRegistry registry) {
@@ -170,6 +168,19 @@ public class WebAutoConfiguration extends WebMvcConfigurerAdapter implements App
 			applyProperties(configurer);
 			return configurer;
 		}
+
+		/**
+		 * 禁用org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter#viewResolver(org.springframework.beans.factory.BeanFactory)
+		 * 禁用默认的org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration.FreeMarkerWebConfiguration#freeMarkerViewResolver()
+		 * @return
+		 */
+		@Bean(name = {"freeMarkerViewResolver","viewResolver"})
+		public FreeMarkerViewResolver viewResolver() {
+			FreeMarkerViewResolver resolver = new FreeMarkerViewResolver();
+			this.properties.applyToViewResolver(resolver);
+			resolver.setOrder(Ordered.HIGHEST_PRECEDENCE);
+			return resolver;
+		}
 	}
 
 	@Override
@@ -177,7 +188,7 @@ public class WebAutoConfiguration extends WebMvcConfigurerAdapter implements App
 		Map<String, WebMvcAutoConfiguration> beansOfType = applicationContext
 			.getBeansOfType(WebMvcAutoConfiguration.class);
 		if (beansOfType.isEmpty()) {
-			log.error("yiji-boot spring mvc 没有正确加载WebMvcAutoConfiguration,原因可能有:");
+			log.error("spring mvc 没有正确加载WebMvcAutoConfiguration,原因可能有:");
 			log.error("1. JavaConfig中配置了@EnableWebMvc");
 			log.error("2. 引入了spring-mvc xml配置文件");
 		}

@@ -12,6 +12,8 @@ package com.acooly.module.security.config;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.LinkedHashMap;
@@ -34,10 +36,10 @@ public class SecurityProperties {
 	private Shiro shiro = new Shiro();
 	private CSRF csrf = new CSRF();
 	private Xss xss = new Xss();
-	private Captcha captcha=new Captcha();
-
+	private Captcha captcha = new Captcha();
 	
-	@Data
+	@Getter
+	@Setter
 	public static class Shiro {
 		
 		/**
@@ -84,22 +86,48 @@ public class SecurityProperties {
 		 * </ul>
 		 */
 		private LinkedHashMap<String, String> filters = Maps.newLinkedHashMap();
+		
+		public Shiro() {
+			//添加默认url过滤器
+			addUrlFilter("/manage/login.html", "authc");
+			addUrlFilter("/manage/logout.html", "logout");
+			addUrlFilter("/manage/error/*", "anon");
+			addUrlFilter("/manage/*.html", "anon");
+			addUrlFilter("/manage/*.jsp", "user");
+			addUrlFilter("/manage/layout/*", "user");
+			addUrlFilter("/manage/system/*", "user");
+			addUrlFilter("/manage/**", "urlAuthr");
+			addUrlFilter("/**", "anon");
+		}
+		
+		public void addUrlFilter(String key, String value) {
+			Map<String, String> url = Maps.newHashMap();
+			url.put(key, value);
+			urls.add(url);
+		}
 	}
 	
-	@Data
+	@Getter
+	@Setter
 	public static class CSRF {
 		private boolean enable = true;
-		private List<String> exclusions;
+		private List<String> exclusions = Lists.newArrayList();
+		
+		public CSRF() {
+			exclusions.add("/gateway.html");
+			exclusions.add("/ofile/upload.html");
+		}
 	}
 	
 	@Data
 	public static class Xss {
 		private boolean enable = true;
 	}
+	
 	@Data
-	public static class Captcha{
-        private boolean enable = true;
-        private String url="/jcaptcha.jpg";
-    }
+	public static class Captcha {
+		private boolean enable = true;
+		private String url = "/jcaptcha.jpg";
+	}
 	
 }

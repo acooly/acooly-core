@@ -30,6 +30,7 @@ import com.acooly.module.security.domain.Resource;
 import com.acooly.module.security.domain.Role;
 import com.acooly.module.security.domain.User;
 import com.acooly.module.security.service.UserService;
+import org.springframework.transaction.annotation.Transactional;
 
 public class ShiroDbRealm extends AuthorizingRealm {
 
@@ -56,6 +57,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	 * 认证回调函数,登录时调用.
 	 */
 	@Override
+	@Transactional
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		UsernamePasswordToken captchaToken = (UsernamePasswordToken) token;
 		User user = userService.getAndCheckUser(captchaToken.getUsername());
@@ -72,6 +74,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	 * 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.
 	 */
 	@Override
+	@Transactional
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		User sessionUser = (User) principals.getPrimaryPrincipal();
 		User user = null;

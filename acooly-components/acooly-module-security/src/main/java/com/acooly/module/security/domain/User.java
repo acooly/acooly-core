@@ -135,23 +135,6 @@ public class User extends AbstractEntity {
 		return (this.status == STATUS_ENABLE);
 	}
 
-
-	/**
-	 * 重载equals,只计算loginid;
-	 */
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this, "username");
-	}
-
-	/**
-	 * 重载equals,只比较loginid
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		return EqualsBuilder.reflectionEquals(this, obj, "username");
-	}
-
 	@Override
 	public String toString() {
 		return String.format("%s [%s]", username, realName);

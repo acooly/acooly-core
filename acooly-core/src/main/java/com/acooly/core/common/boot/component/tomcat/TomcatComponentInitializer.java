@@ -25,10 +25,6 @@ public class TomcatComponentInitializer implements ComponentInitializer {
 		//enable https redirct to relative location
 		System.setProperty("server.tomcat.protocol_header", "x-forwarded-proto");
 		System.setProperty("server.tomcat.port-header", "x-forwarded-port");
-		
-		// 设置session cookie name
-		System.setProperty("server.session.cookie.name", Apps.getAppSessionCookieName());
-		System.setProperty("server.session.cookie.httpOnly", Boolean.TRUE.toString());
-		System.setProperty("server.session.tracking-modes", "cookie");
+
 	}
 }

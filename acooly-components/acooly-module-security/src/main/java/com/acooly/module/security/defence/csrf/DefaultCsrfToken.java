@@ -1,52 +1,75 @@
-/**
- * create by zhangpu
- * date:2015年3月1日
+/*
+ * Copyright 2002-2013 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.acooly.module.security.defence.csrf;
 
+import org.springframework.util.Assert;
+
 /**
- * @author zhangpu
+ * A CSRF token that is used to protect against CSRF attacks.
  *
+ * @author Rob Winch
+ * @since 3.2
  */
 @SuppressWarnings("serial")
-public class DefaultCsrfToken implements CsrfToken {
-
-	private String headerName;
-	private String parameterName;
-	private String token;
-
-	public DefaultCsrfToken() {
-	}
-
+public final class DefaultCsrfToken implements CsrfToken {
+	
+	private final String token;
+	
+	private final String parameterName;
+	
+	private final String headerName;
+	
+	/**
+	 * Creates a new instance
+	 * @param headerName the HTTP header name to use
+	 * @param parameterName the HTTP parameter name to use
+	 * @param token the value of the token (i.e. expected value of the HTTP parameter of parametername).
+	 */
 	public DefaultCsrfToken(String headerName, String parameterName, String token) {
-		super();
+		Assert.hasLength(headerName, "headerName cannot be null or empty");
+		Assert.hasLength(parameterName, "parameterName cannot be null or empty");
+		Assert.hasLength(token, "token cannot be null or empty");
 		this.headerName = headerName;
 		this.parameterName = parameterName;
 		this.token = token;
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see org.springframework.security.web.csrf.CsrfToken#getHeaderName()
+	 */
 	public String getHeaderName() {
 		return headerName;
 	}
-
-	public void setHeaderName(String headerName) {
-		this.headerName = headerName;
-	}
-
+	
+	/* (non-Javadoc)
+	 * @see org.springframework.security.web.csrf.CsrfToken#getParameterName()
+	 */
 	public String getParameterName() {
 		return parameterName;
 	}
-
-	public void setParameterName(String parameterName) {
-		this.parameterName = parameterName;
-	}
-
+	
+	/* (non-Javadoc)
+	 * @see org.springframework.security.web.csrf.CsrfToken#getToken()
+	 */
 	public String getToken() {
 		return token;
 	}
-
-	public void setToken(String token) {
-		this.token = token;
+	
+	@Override
+	public String toString() {
+		return token;
 	}
-
 }

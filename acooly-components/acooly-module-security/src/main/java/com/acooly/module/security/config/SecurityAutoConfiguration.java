@@ -11,10 +11,12 @@ package com.acooly.module.security.config;
 
 import com.acooly.core.common.dao.jpa.AbstractEntityJpaDao;
 import com.acooly.module.security.SecurityConstants;
-import com.acooly.module.security.dao.UserDao;
+import com.acooly.module.security.captche.CaptchaServlet;
 import com.acooly.module.security.defence.XssDefenseFilter;
-import com.acooly.module.security.defence.csrf.CsrfDefenseFilter;
-import com.acooly.module.security.defence.csrf.CsrfRequestMatcher;
+import com.acooly.module.security.defence.csrf.CookieCsrfTokenRepository;
+import com.acooly.module.security.defence.csrf.CsrfAccessDeniedHandlerImpl;
+import com.acooly.module.security.defence.csrf.CsrfFilter;
+import com.acooly.module.security.defence.csrf.RequireCsrfProtectionMatcher;
 import com.acooly.module.security.jcaptcha.AcoolyImageCaptchaEngine;
 import com.acooly.module.security.jcaptcha.ImageCaptchaServlet;
 import com.acooly.module.security.shiro.cache.ShiroCacheManager;
@@ -45,7 +47,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -55,7 +56,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.Ordered;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 
@@ -74,14 +74,15 @@ import java.util.Map;
 @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackageClasses = SecurityConstants.class)
 //@EntityScan(basePackages="com.acooly.module.security.domain")
-@EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class,basePackages ="com.acooly.module.security.dao")
+@EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class,
+		basePackages = "com.acooly.module.security.dao")
 public class SecurityAutoConfiguration {
-//	@Bean
-//	public JpaRepositoryFactoryBean userDao() {
-//		JpaRepositoryFactoryBean factory = new JpaRepositoryFactoryBean();
-//		factory.setRepositoryInterface(UserDao.class);
-//		return factory;
-//	}
+	//	@Bean
+	//	public JpaRepositoryFactoryBean userDao() {
+	//		JpaRepositoryFactoryBean factory = new JpaRepositoryFactoryBean();
+	//		factory.setRepositoryInterface(UserDao.class);
+	//		return factory;
+	//	}
 	
 	@Configuration
 	@ConditionalOnWebApplication
@@ -333,31 +334,11 @@ public class SecurityAutoConfiguration {
 	@ConditionalOnProperty(value = SecurityProperties.PREFIX + ".captcha.enable", matchIfMissing = true)
 	public static class CaptchaAutoConfigration {
 		@Bean
-		public FastHashMapCaptchaStore fastHashMapCaptchaStore() {
-			return new FastHashMapCaptchaStore();
-		}
-		
-		@Bean
-		public AcoolyImageCaptchaEngine acoolyImageCaptchaEngine() {
-			return new AcoolyImageCaptchaEngine();
-		}
-		
-		@Bean
-		public ImageCaptchaService imageCaptchaService(	FastHashMapCaptchaStore fastHashMapCaptchaStore,
-														AcoolyImageCaptchaEngine acoolyImageCaptchaEngine) {
-			DefaultManageableImageCaptchaService captchaService = new DefaultManageableImageCaptchaService(
-				fastHashMapCaptchaStore, acoolyImageCaptchaEngine, 180, 100000, 75000);
-			return captchaService;
-		}
-		
-		@Bean
-		public ServletRegistrationBean jcaptchaServlet(	SecurityProperties securityProperties,
-														ImageCaptchaService imageCaptchaService) {
+		public ServletRegistrationBean jcaptchaServlet(	SecurityProperties securityProperties) {
 			ServletRegistrationBean bean = new ServletRegistrationBean();
 			bean.setUrlMappings(Lists.newArrayList(securityProperties.getCaptcha().getUrl()));
-			ImageCaptchaServlet imageCaptchaServlet = new ImageCaptchaServlet();
-			imageCaptchaServlet.setImageCaptchaService(imageCaptchaService);
-			bean.setServlet(imageCaptchaServlet);
+			CaptchaServlet captchaServlet = new CaptchaServlet();
+			bean.setServlet(captchaServlet);
 			return bean;
 		}
 	}
@@ -367,18 +348,20 @@ public class SecurityAutoConfiguration {
 	@ConditionalOnProperty(value = SecurityProperties.PREFIX + ".csrf.enable", matchIfMissing = true)
 	public static class CSRFAutoConfigration {
 		@Bean
-		public FilterRegistrationBean csrfFilter(SecurityProperties securityProperties) {
-			CsrfDefenseFilter csrfDefenseFilter = new CsrfDefenseFilter();
-			CsrfRequestMatcher csrfRequestMatcher = new CsrfRequestMatcher();
-			csrfRequestMatcher.setAllowedUrls(securityProperties.getCsrf().getExclusions());
-			csrfDefenseFilter.setRequireCsrfProtectionMatcher(csrfRequestMatcher);
-			
+		public Filter csrfFilter(SecurityProperties securityProperties) {
+			CookieCsrfTokenRepository tokenRepository = new CookieCsrfTokenRepository();
+			CsrfFilter csrfFilter = new CsrfFilter(tokenRepository);
+			csrfFilter.setRequireCsrfProtectionMatcher(
+				new RequireCsrfProtectionMatcher(securityProperties.getCsrf().getExclusions()));
+			CsrfAccessDeniedHandlerImpl csrfAccessDeniedHandler = new CsrfAccessDeniedHandlerImpl();
+			csrfAccessDeniedHandler.setErrorPage("/error");
+			csrfFilter.setAccessDeniedHandler(csrfAccessDeniedHandler);
 			FilterRegistrationBean registration = new FilterRegistrationBean();
-			registration.setFilter(csrfDefenseFilter);
+			registration.setFilter(csrfFilter);
 			registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp").toArray(new String[0]));
 			registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
 			registration.setName("csrfDefenseFilter");
-			return registration;
+			return csrfFilter;
 		}
 		
 	}

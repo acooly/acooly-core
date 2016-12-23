@@ -32,5 +32,20 @@ public abstract class AbstractEntity implements Serializable, Persistable<Long> 
 	public boolean isNew() {
 		return null == getId();
 	}
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof AbstractEntity)) return false;
+
+		AbstractEntity that = (AbstractEntity) o;
+
+		return id != null ? id.equals(that.id) : that.id == null;
+
+	}
+
+	@Override
+	public int hashCode() {
+		return id != null ? id.hashCode() : 0;
+	}
 	
 }

@@ -9,12 +9,19 @@
  */
 package com.acooly.core.common.boot.component;
 
+import com.acooly.core.common.boot.EnvironmentHolder;
 import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * @author qiubo@yiji.com
  */
 public interface ComponentInitializer extends AutoConfigExcluder {
-    default void initialize(ConfigurableApplicationContext applicationContext) {
-    }
+	default void initialize(ConfigurableApplicationContext applicationContext) {
+	}
+	
+	default void setPropertyIfMissing(String key, Object value) {
+		if (!EnvironmentHolder.get().containsProperty(key)) {
+			System.setProperty(key, value.toString());
+		}
+	}
 }

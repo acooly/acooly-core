@@ -6,7 +6,8 @@ com.acooly.core.common.boot.log.LogAutoConfiguration,\
 com.acooly.core.common.boot.component.ds.JDBCAutoConfiguration,\
 com.acooly.core.common.boot.component.jpa.JpaConfig,\
 com.acooly.core.common.boot.component.tomcat.TomcatAutoConfiguration,\
-com.acooly.core.common.boot.component.web.WebAutoConfiguration
+com.acooly.core.common.boot.component.web.WebAutoConfiguration,\
+com.acooly.core.common.boot.component.cache.RedisAutoConfig
 
 #logger initializer
 com.acooly.core.common.boot.log.initializer.LogInitializer=\
@@ -25,4 +26,5 @@ com.acooly.core.common.boot.component.ComponentInitializer=\
 com.acooly.core.common.boot.component.ds.DruidComponentInitializer,\
 com.acooly.core.common.boot.component.jpa.JPAComponentInitializer,\
 com.acooly.core.common.boot.component.tomcat.TomcatComponentInitializer,\
-com.acooly.core.common.boot.component.web.WebComponentInitializer
+com.acooly.core.common.boot.component.web.WebComponentInitializer,\
+com.acooly.core.common.boot.component.cache.CacheComponentInitializer

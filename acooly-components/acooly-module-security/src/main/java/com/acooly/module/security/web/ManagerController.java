@@ -36,7 +36,7 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
 
 	@Override
 	public String index(HttpServletRequest request, HttpServletResponse response, Model model) {
-		return login(request, model);
+		return "/manage/index";
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
 		Subject subject = SecurityUtils.getSubject();
 		if (subject.isAuthenticated()) {
 			// 如果已经登录的情况，直接回到主框架界面
-			return "/manage/index";
+			return "redirect:/manage/index.html";
 		} else {
 			// 如果没有登录的首次进入登录界面，直接返回到登录界面。
 			SecurityConfig securityConfig = SecurityConfigHolder.getSecurityConfig();

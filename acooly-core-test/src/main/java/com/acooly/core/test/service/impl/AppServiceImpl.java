@@ -13,6 +13,7 @@ import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.test.service.AppService;
 import com.acooly.core.test.dao.AppDao;
 import com.acooly.core.test.domain.App;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * app Service实现
@@ -23,6 +24,7 @@ import com.acooly.core.test.domain.App;
  *
  */
 @Service("appService")
+@Transactional
 public class AppServiceImpl extends EntityServiceImpl<App, AppDao> implements AppService {
 
 }

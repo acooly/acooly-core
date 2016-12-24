@@ -16,6 +16,7 @@ import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.exception.GeneralException;
 import com.acooly.core.utils.BeanUtils;
 import com.acooly.core.utils.GenericsUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 基础EntityService的抽象实现。
@@ -27,6 +28,7 @@ import com.acooly.core.utils.GenericsUtils;
  * @param <M>
  *            实体类的DAO
  */
+@Transactional
 public abstract class EntityServiceImpl<T, M extends EntityDao<T>> implements
 		ApplicationContextAware, EntityService<T> {
 

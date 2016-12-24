@@ -50,15 +50,15 @@ public class Role extends AbstractEntity {
 	private String descn;
 
 	/** 包含的用户 */
-	@ManyToMany(mappedBy = "roles", targetEntity = User.class, cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "roles", targetEntity = User.class, cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@LazyCollection(value = LazyCollectionOption.EXTRA)
 	private Set<User> users;
 
 	/** 包含的资源 */
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = com.acooly.module.security.domain.Resource.class)
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER, targetEntity = com.acooly.module.security.domain.Resource.class)
 	@JoinTable(name = "SYS_ROLE_RESC", joinColumns = { @JoinColumn(name = "ROLE_ID") }, inverseJoinColumns = @JoinColumn(name = "RESC_ID"))
 	@OrderBy(clause = "resc_id")
-	@LazyCollection(value = LazyCollectionOption.EXTRA)
+//	@LazyCollection(value = LazyCollectionOption.EXTRA)
 	private Set<Resource> rescs;
 
 	public Role() {

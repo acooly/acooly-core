@@ -9,6 +9,7 @@
  */
 package com.acooly.module.security.config;
 
+import com.acooly.core.common.boot.component.jpa.JpaConfig;
 import com.acooly.core.common.dao.jpa.AbstractEntityJpaDao;
 import com.acooly.module.security.SecurityConstants;
 import com.acooly.module.security.captche.CaptchaServlet;
@@ -44,9 +45,13 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.mgt.WebSecurityManager;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -73,20 +78,15 @@ import java.util.Map;
 @EnableConfigurationProperties({ SecurityProperties.class })
 @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackageClasses = SecurityConstants.class)
-//@EntityScan(basePackages="com.acooly.module.security.domain")
+@EntityScan(basePackages="com.acooly.module.security.domain")
 @EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class,
 		basePackages = "com.acooly.module.security.dao")
 public class SecurityAutoConfiguration {
-	//	@Bean
-	//	public JpaRepositoryFactoryBean userDao() {
-	//		JpaRepositoryFactoryBean factory = new JpaRepositoryFactoryBean();
-	//		factory.setRepositoryInterface(UserDao.class);
-	//		return factory;
-	//	}
-	
+
 	@Configuration
 	@ConditionalOnWebApplication
 	@ConditionalOnProperty(value = SecurityProperties.PREFIX + ".shiro.enable", matchIfMissing = true)
+	@AutoConfigureAfter({JpaConfig.class,DataSourceTransactionManagerAutoConfiguration.class})
 	public static class ShiroAutoConfigration {
 		@Bean
 		public CacheManager shiroCacheManager(RedisTemplate redisTemplate) {
@@ -109,6 +109,9 @@ public class SecurityAutoConfiguration {
 			ShiroDbRealm shiroDbRealm = new ShiroDbRealm();
 			shiroDbRealm.setPermissionResolver(pathMatchPermissionResolver);
 			shiroDbRealm.setAuthenticationCachingEnabled(false);
+            shiroDbRealm.setAuthorizationCachingEnabled(false);
+			shiroDbRealm.setAuthorizationCacheName(ShiroCacheManager.KEY_AUTHZ);
+			shiroDbRealm.setAuthenticationCacheName(ShiroCacheManager.KEY_AUTHC);
 			return shiroDbRealm;
 		}
 		
@@ -134,22 +137,6 @@ public class SecurityAutoConfiguration {
 		@Bean
 		@DependsOn({ "logout", "urlAuthr", "authc" })
 		public Filter shiroFilter(ShiroFilterFactoryBean shiroFilterFactoryBean, Realm shiroRealm) throws Exception {
-			//延迟加载shiroRealm。由于shiroFilterFactoryBean是FactoryBean会提前被加载。
-			if (shiroRealm instanceof CachingRealm) {
-				CachingRealm realm = (CachingRealm) shiroRealm;
-				realm.setCachingEnabled(true);
-			}
-			if (shiroRealm instanceof AuthorizingRealm) {
-				AuthorizingRealm realm = (AuthorizingRealm) shiroRealm;
-				realm.setAuthorizationCachingEnabled(true);
-				realm.setAuthorizationCacheName(ShiroCacheManager.KEY_AUTHZ);
-			}
-			if (shiroRealm instanceof AuthenticatingRealm) {
-				AuthenticatingRealm realm = (AuthenticatingRealm) shiroRealm;
-				realm.setAuthenticationCachingEnabled(true);
-				realm.setAuthenticationCacheName(ShiroCacheManager.KEY_AUTHC);
-			}
-			customSecurityManager(shiroFilterFactoryBean.getSecurityManager(), shiroRealm);
 			((DefaultWebSecurityManager) shiroFilterFactoryBean.getSecurityManager()).setRealm(shiroRealm);
 			return (Filter) shiroFilterFactoryBean.getObject();
 		}
@@ -160,7 +147,7 @@ public class SecurityAutoConfiguration {
 			FilterRegistrationBean registration = new FilterRegistrationBean();
 			registration.setFilter(shiroFilter);
 			registration.setOrder(Ordered.LOWEST_PRECEDENCE - 10);
-			registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp", "*.json").toArray(new String[0]));
+//			registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp", "*.json").toArray(new String[0]));
 			registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
 			registration.setName("shiroFilter");
 			return registration;
@@ -179,40 +166,10 @@ public class SecurityAutoConfiguration {
 			return advisor;
 		}
 		
-		/**
-		 * 延迟加载shiroRealm。由于shiroFilterFactoryBean是FactoryBean会提前被加载。
-		 *
-		 * @param shiroSecurityManager
-		 * @param shiroRealm
-		 */
-		private void customSecurityManager(	org.apache.shiro.mgt.SecurityManager shiroSecurityManager,
-											Realm shiroRealm) {
-			
-			DefaultWebSecurityManager securityManager = ((DefaultWebSecurityManager) shiroSecurityManager);
-			if (securityManager.getRealms() == null) {
-				
-				if (shiroRealm instanceof CachingRealm) {
-					CachingRealm realm = (CachingRealm) shiroRealm;
-					realm.setCachingEnabled(true);
-				}
-				if (shiroRealm instanceof AuthorizingRealm) {
-					AuthorizingRealm realm = (AuthorizingRealm) shiroRealm;
-					realm.setAuthorizationCachingEnabled(true);
-					realm.setAuthorizationCacheName(ShiroCacheManager.KEY_AUTHZ);
-				}
-				if (shiroRealm instanceof AuthenticatingRealm) {
-					AuthenticatingRealm realm = (AuthenticatingRealm) shiroRealm;
-					realm.setAuthenticationCachingEnabled(true);
-					realm.setAuthenticationCacheName(ShiroCacheManager.KEY_AUTHC);
-				}
-				securityManager.setRealm(shiroRealm);
-			}
-		}
-		
+
 		@Bean
 		public AuthorizationAttributeSourceAdvisor shiroAuthorizationAttributeSourceAdvisor(WebSecurityManager shiroSecurityManager,
 																							Realm shiroRealm) {
-			customSecurityManager(shiroSecurityManager, shiroRealm);
 			AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
 			advisor.setSecurityManager(shiroSecurityManager);
 			return advisor;

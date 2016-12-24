@@ -19,7 +19,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * @author qiubo@yiji.com
  */
 @BootApp(sysName = "acooly-test", httpPort = 8080)
-//@EntityScan(basePackages="com.acooly.core.test")
 public class Main {
 	public static void main(String[] args) {
 		Apps.setProfileIfNotExists("sdev");

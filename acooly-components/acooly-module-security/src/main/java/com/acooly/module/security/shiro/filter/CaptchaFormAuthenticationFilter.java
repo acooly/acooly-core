@@ -37,9 +37,10 @@ import java.util.Map;
  */
 
 public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(CaptchaFormAuthenticationFilter.class);
-	
+	public static final String CAPTCHA_FIRST_VERFIY = "CaptchaFirstVerfiy";
+
 	/** 界面请求的Input-form表单名称 */
 	public String captchaInputName = "captcha";
 	
@@ -130,9 +131,9 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 	protected void checkCaptcha(HttpServletRequest request) {
 		String requestCaptcha = request.getParameter(captchaInputName);
 		//判断是否为第一次验证码检查
-		Object firstVerfiy = SecurityUtils.getSubject().getSession().getAttribute("CaptchaFirstVerfiy");
+		Object firstVerfiy = SecurityUtils.getSubject().getSession().getAttribute(CAPTCHA_FIRST_VERFIY);
 		if (firstVerfiy == null) {
-			SecurityUtils.getSubject().getSession().setAttribute("CaptchaFirstVerfiy", "");
+			SecurityUtils.getSubject().getSession().setAttribute(CAPTCHA_FIRST_VERFIY, "");
 			return;
 		}else{
 			if (!Captchas.verify(request,requestCaptcha)) {
@@ -146,6 +147,8 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 										ServletResponse response) throws Exception {
 		String username = (String) token.getPrincipal();
 		userService.clearLoginFailureCount(username);
+		SecurityUtils.getSubject().getSession().removeAttribute(CAPTCHA_FIRST_VERFIY);
+
 		return super.onLoginSuccess(token, subject, request, response);
 	}
 	

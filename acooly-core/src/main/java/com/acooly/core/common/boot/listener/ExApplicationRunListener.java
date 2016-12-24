@@ -109,12 +109,10 @@ public class ExApplicationRunListener implements SpringApplicationRunListener, P
 		//for extends log
 		System.setProperty(LoggingSystem.SYSTEM_PROPERTY, ExLogbackLoggingSystem.class.getName());
 		//spring aop use cglib
-		System.setProperty("spring.aop.proxy-target-class", Boolean.TRUE.toString());
+//		System.setProperty("spring.aop.proxy-target-class", Boolean.TRUE.toString());
 		String logPath = Apps.getLogPath();
 		System.setProperty(Apps.LOG_PATH, logPath);
-		//关闭jpa校验
-		System.setProperty("spring.jpa.properties.javax.persistence.validation.mode", "none");
-		
+
 	}
 	
 	private BootApp findYijiBootApplication(SpringApplication application) {

@@ -84,7 +84,7 @@ public class User extends AbstractEntity {
 	private String descn;
 
 	/** 包含的角色 */
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = com.acooly.module.security.domain.Role.class)
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER, targetEntity = com.acooly.module.security.domain.Role.class)
 	@JoinTable(name = "SYS_USER_ROLE", joinColumns = @JoinColumn(name = "USER_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
 	@OrderBy(clause = "role_id")
 	private Set<Role> roles;

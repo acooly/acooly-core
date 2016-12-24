@@ -85,7 +85,13 @@ public class WebAutoConfiguration extends WebMvcConfigurerAdapter implements App
 			registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
 		}
 	}
-	
+
+	@Override
+	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+		//和原逻辑保持一直，原因未知。
+		configurer.mediaType("html",MediaType.APPLICATION_JSON);
+	}
+
 	/**
 	 * 配置模板直接映射bean
 	 */

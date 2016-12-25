@@ -10,6 +10,7 @@
  */
 package com.acooly.core.common.boot.component.ds;
 
+import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.exception.AppConfigException;
@@ -160,10 +161,10 @@ public class DruidProperties implements BeanClassLoaderAware {
 		
 		if (mysql()) {
 			maxActive = Math.max(maxActive, MYSQL_MAX_ACTIVE);
-			System.setProperty("spring.jpa.database","MYSQL");
+			System.setProperty("spring.jpa.database", "MYSQL");
 		} else {
 			maxActive = Math.max(maxActive, ORACLE_MAX_ACTIVE);
-			System.setProperty("spring.jpa.database","ORACLE");
+			System.setProperty("spring.jpa.database", "ORACLE");
 		}
 		dataSource.setMaxActive(maxActive);
 		dataSource.setMaxWait(this.getMaxWait());
@@ -191,9 +192,13 @@ public class DruidProperties implements BeanClassLoaderAware {
 			properties.put("yiji.ds.logForHumanRead", Boolean.TRUE.toString());
 		}
 		if (!Env.isOnline()) {
-			//线下测试时，执行时间超过100ms就打印sql，用户可以设置为0，每条sql语句都打印
-			properties.put("yiji.ds.slowSqlMillis",
-				Integer.toString(Math.min(this.getSlowSqlThreshold(), DEFAULT_SLOW_SQL_THRESHOLD)));
+			if (Apps.isDevMode()) {
+				properties.put("yiji.ds.slowSqlMillis", 0);
+			} else {
+				//线下测试时，执行时间超过100ms就打印sql，用户可以设置为0，每条sql语句都打印
+				properties.put("yiji.ds.slowSqlMillis",
+					Integer.toString(Math.min(this.getSlowSqlThreshold(), DEFAULT_SLOW_SQL_THRESHOLD)));
+			}
 		} else {
 			//线上运行时，阈值选最大值。有可能线下测试设置为0，方便调试
 			properties.put("yiji.ds.slowSqlMillis",

@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.lang.annotation.*;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

@@ -23,7 +23,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class EnvironmentHolder implements EnvironmentAware {
     private static Environment environment;

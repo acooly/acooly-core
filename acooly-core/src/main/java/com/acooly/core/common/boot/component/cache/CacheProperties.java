@@ -13,7 +13,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 @ConfigurationProperties(prefix = "acooly.cache")
 @Data

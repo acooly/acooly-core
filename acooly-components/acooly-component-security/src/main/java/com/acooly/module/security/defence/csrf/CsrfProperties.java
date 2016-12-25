@@ -13,7 +13,7 @@ package com.acooly.module.security.defence.csrf;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 @ConfigurationProperties("yiji.csrf")
 public class CsrfProperties {

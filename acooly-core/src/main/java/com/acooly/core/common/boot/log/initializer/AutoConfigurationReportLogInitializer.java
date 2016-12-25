@@ -18,7 +18,7 @@ import org.springframework.boot.autoconfigure.logging.AutoConfigurationReportLog
 
 /**
  * 用于打印AutoConfigurationReport到单独的文件
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class AutoConfigurationReportLogInitializer extends AbstractLogInitializer {
 	@Override

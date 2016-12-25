@@ -26,7 +26,7 @@ import org.springframework.data.redis.core.RedisTemplate;
  * <li>4. 缓存key格式为:namespace+{@link Cacheable#cacheNames}+":"+param
  * </ul>
  *
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class DefaultCachingConfigurer implements CachingConfigurer {
 	private RedisTemplate redisTemplate;

@@ -44,7 +44,7 @@ import java.io.PrintStream;
 import java.util.List;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class ExApplicationRunListener implements SpringApplicationRunListener, PriorityOrdered {
 	private static List<String> disabledPackageName = Lists.newArrayList("", "com.acooly", "com.acooly.core",

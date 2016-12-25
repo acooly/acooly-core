@@ -40,7 +40,7 @@ import java.util.Map;
 
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 @Configuration
 @ConditionalOnProperty(value = JPAProperties.ENABLE_KEY, matchIfMissing = true)

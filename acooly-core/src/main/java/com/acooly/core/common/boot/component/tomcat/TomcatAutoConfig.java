@@ -34,7 +34,7 @@ import java.io.File;
 import java.nio.charset.Charset;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 @Configuration
 @ConditionalOnWebApplication

@@ -18,7 +18,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import java.util.List;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class DruidComponentInitializer implements ComponentInitializer {
 	@Override

@@ -26,7 +26,7 @@ import java.util.Iterator;
 import static com.acooly.core.common.boot.log.LogAutoConfiguration.LogProperties.consoleEnable;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class ConsoleLogInitializer extends AbstractLogInitializer {
 	//console log默认只启用10分钟

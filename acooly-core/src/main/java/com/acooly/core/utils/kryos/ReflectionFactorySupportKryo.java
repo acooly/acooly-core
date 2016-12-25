@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class ReflectionFactorySupportKryo extends Kryo {
 

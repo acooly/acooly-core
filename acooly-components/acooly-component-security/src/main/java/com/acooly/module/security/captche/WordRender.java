@@ -21,7 +21,7 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class WordRender extends Configurable implements WordRenderer {
 

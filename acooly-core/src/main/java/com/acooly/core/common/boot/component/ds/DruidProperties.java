@@ -27,7 +27,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 @ConfigurationProperties(prefix = DruidProperties.PREFIX)
 @Getter

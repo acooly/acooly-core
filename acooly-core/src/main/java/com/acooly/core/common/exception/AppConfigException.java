@@ -10,7 +10,7 @@
 package com.acooly.core.common.exception;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class AppConfigException extends RuntimeException {
     public AppConfigException(Throwable cause) {

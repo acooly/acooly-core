@@ -14,7 +14,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class DefaultRedisSerializer implements RedisSerializer {
 

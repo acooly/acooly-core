@@ -13,7 +13,7 @@ import com.acooly.core.common.boot.EnvironmentHolder;
 import org.springframework.context.ConfigurableApplicationContext;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public interface ComponentInitializer extends AutoConfigExcluder {
 	default void initialize(ConfigurableApplicationContext applicationContext) {

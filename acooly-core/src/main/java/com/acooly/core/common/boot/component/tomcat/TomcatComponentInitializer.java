@@ -15,7 +15,7 @@ import com.acooly.core.common.boot.component.ComponentInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class TomcatComponentInitializer implements ComponentInitializer {
 	@Override

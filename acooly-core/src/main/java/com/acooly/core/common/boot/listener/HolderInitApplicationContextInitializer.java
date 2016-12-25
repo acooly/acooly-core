@@ -16,7 +16,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class HolderInitApplicationContextInitializer implements
         ApplicationContextInitializer<ConfigurableApplicationContext>,

@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class CookieCsrfTokenRepository implements CsrfTokenRepository {
 	

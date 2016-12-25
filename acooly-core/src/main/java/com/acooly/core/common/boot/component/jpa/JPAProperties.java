@@ -17,7 +17,7 @@ import static com.acooly.core.common.boot.component.jpa.JPAProperties.PREFIX;
 
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 @ConfigurationProperties(prefix = PREFIX)
 @Getter

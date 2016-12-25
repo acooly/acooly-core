@@ -17,7 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import java.util.Collection;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class DefaultCacheManager extends AbstractCacheManager {
     private RedisTemplate redisTemplate;

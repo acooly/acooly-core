@@ -16,7 +16,7 @@ import com.esotericsoftware.minlog.Log;
 import java.util.*;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class DuplicateFieldNameAcceptedCompatibleFieldSerializer<T> extends CompatibleFieldSerializer<T> {
 

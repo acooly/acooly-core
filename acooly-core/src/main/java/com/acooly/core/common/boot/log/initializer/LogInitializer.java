@@ -15,7 +15,7 @@ import org.springframework.core.annotation.Order;
 
 /**
  * log初始化扩展
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 @Order(0)
 public interface LogInitializer {

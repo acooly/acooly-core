@@ -20,7 +20,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import java.net.UnknownHostException;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 @Configuration
 @EnableConfigurationProperties({ CacheProperties.class })

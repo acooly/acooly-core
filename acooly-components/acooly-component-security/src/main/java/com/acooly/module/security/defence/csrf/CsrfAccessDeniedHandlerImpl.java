@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class CsrfAccessDeniedHandlerImpl implements AccessDeniedHandler {
 	

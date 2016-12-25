@@ -16,7 +16,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class WaterRender extends Configurable implements GimpyEngine {
     @Override

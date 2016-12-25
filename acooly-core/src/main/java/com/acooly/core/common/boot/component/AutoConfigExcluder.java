@@ -14,7 +14,7 @@ import com.google.common.collect.Lists;
 import java.util.List;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public interface AutoConfigExcluder {
     /**

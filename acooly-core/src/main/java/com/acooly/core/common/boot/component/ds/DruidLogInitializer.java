@@ -21,7 +21,7 @@ import static com.acooly.core.common.boot.component.ds.DruidProperties.ENABLE_KE
 
 /**
  * 打印慢sql和big result sql到sql-10dt.log文件
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class DruidLogInitializer extends AbstractLogInitializer {
 	@Override

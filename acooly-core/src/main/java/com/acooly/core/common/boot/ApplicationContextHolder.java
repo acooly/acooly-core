@@ -14,7 +14,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class ApplicationContextHolder implements ApplicationContextAware {
 

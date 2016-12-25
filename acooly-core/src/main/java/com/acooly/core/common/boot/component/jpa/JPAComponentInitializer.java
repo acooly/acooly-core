@@ -16,7 +16,7 @@ import static com.acooly.core.common.boot.component.jpa.JPAProperties.ENABLE_KEY
 
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class JPAComponentInitializer implements ComponentInitializer {
 	@Override

@@ -16,7 +16,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 @BootApp(sysName = "acooly-test", httpPort = 8080)
 public class Main {

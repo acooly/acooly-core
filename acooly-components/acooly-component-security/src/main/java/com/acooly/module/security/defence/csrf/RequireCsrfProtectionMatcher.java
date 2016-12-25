@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 @Slf4j
 public class RequireCsrfProtectionMatcher implements RequestMatcher {

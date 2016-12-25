@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 @Slf4j
 public class CaptchaServlet extends HttpServlet {

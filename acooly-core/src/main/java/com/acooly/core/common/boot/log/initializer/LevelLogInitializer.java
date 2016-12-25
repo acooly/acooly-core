@@ -23,7 +23,7 @@ import java.util.Map;
  *
  * <p>
  * 用户可以通过配置yiji.log.level.com.yiji=debug 设置com.yiji的日志级别
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 @Order
 public class LevelLogInitializer extends AbstractLogInitializer {

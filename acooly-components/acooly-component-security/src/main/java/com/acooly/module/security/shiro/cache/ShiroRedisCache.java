@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class ShiroRedisCache<K, V> implements Cache<K, V> {
 

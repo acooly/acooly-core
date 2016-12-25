@@ -53,7 +53,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 @Configuration
 @EnableWebMvc

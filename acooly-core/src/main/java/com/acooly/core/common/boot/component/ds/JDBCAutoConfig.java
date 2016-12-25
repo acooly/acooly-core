@@ -31,7 +31,7 @@ import javax.sql.DataSource;
 import static com.acooly.core.common.boot.component.ds.DruidProperties.ENABLE_KEY;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 @Configuration
 @EnableConfigurationProperties({ DruidProperties.class })

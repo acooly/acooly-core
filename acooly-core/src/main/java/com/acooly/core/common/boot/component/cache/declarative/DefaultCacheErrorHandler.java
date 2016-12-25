@@ -14,7 +14,7 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.interceptor.SimpleCacheErrorHandler;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 @Slf4j
 public class DefaultCacheErrorHandler extends SimpleCacheErrorHandler {

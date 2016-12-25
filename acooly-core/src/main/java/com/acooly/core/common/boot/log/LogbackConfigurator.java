@@ -41,7 +41,7 @@ import java.util.Map;
 import static com.acooly.core.common.boot.log.LogAutoConfiguration.LogProperties.pattern;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class LogbackConfigurator {
 	private LoggerContext context;

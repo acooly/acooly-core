@@ -21,7 +21,7 @@ import java.util.concurrent.Callable;
 import java.util.function.BiFunction;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class DefaultCache implements Cache {
 

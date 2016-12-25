@@ -36,7 +36,7 @@ import java.util.List;
 import static com.acooly.core.common.boot.log.LogAutoConfiguration.LogProperties.pattern;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 @SuppressWarnings("all")
 public class ExLogbackLoggingSystem extends LogbackLoggingSystem {

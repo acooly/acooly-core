@@ -11,7 +11,7 @@
 package com.acooly.core.common.boot.log.initializer;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public abstract class AbstractLogInitializer implements LogInitializer {
 }

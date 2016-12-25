@@ -18,7 +18,7 @@ import static org.apache.commons.lang3.SystemUtils.IS_OS_LINUX;
 import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class AnsiSupportApplicationListener implements ApplicationListener<ApplicationStartedEvent> {
 	@Override

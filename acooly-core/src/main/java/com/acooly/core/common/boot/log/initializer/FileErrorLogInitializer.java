@@ -18,7 +18,7 @@ import com.acooly.core.common.boot.log.LogbackConfigurator;
 
 /**
  * 添加error文件日志
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class FileErrorLogInitializer extends AbstractLogInitializer {
 	@Override

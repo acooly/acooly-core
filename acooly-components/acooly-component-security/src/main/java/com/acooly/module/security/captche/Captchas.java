@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.Properties;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class Captchas {
     private static final Logger logger = LoggerFactory.getLogger(Captchas.class);

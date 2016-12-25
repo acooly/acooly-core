@@ -12,7 +12,7 @@ package com.acooly.core.common.boot;
 import com.acooly.core.common.exception.AppConfigException;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public enum Env {
 	online,

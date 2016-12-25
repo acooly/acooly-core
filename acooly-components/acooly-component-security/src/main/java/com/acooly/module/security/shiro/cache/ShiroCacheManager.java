@@ -17,7 +17,7 @@ import org.apache.shiro.util.Destroyable;
 import org.springframework.data.redis.core.RedisTemplate;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 public class ShiroCacheManager implements CacheManager{
 

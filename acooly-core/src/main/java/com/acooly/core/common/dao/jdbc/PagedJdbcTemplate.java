@@ -10,7 +10,7 @@
 package com.acooly.core.common.dao.jdbc;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 
 import com.acooly.core.common.dao.support.PageInfo;

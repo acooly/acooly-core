@@ -21,7 +21,7 @@ import org.springframework.core.io.support.SpringFactoriesLoader;
 import java.util.List;
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
 @Order(value = Ordered.LOWEST_PRECEDENCE)
 public class ComponentExtensionContextInitializer implements ApplicationContextInitializer {

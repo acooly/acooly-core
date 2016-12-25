@@ -30,7 +30,7 @@ public class RedisAutoConfig {
 	public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) throws UnknownHostException {
 		RedisTemplate<Object, Object> template = new RedisTemplate<>();
 		template.setConnectionFactory(redisConnectionFactory);
-		template.setDefaultSerializer(new DefaultRedisSerializer());
+		template.setDefaultSerializer(springSessionDefaultRedisSerializer());
 		return template;
 	}
 	
@@ -38,5 +38,9 @@ public class RedisAutoConfig {
 	public CachingConfigurer cachingConfigurer(RedisTemplate redisTemplate, CacheProperties cacheProperties) {
 		return new DefaultCachingConfigurer(redisTemplate, cacheProperties.getExpireTime());
 	}
-	
+	//session使用kryo序列化器 ref:org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration.setDefaultRedisSerializer()
+	@Bean("springSessionDefaultRedisSerializer")
+	public DefaultRedisSerializer springSessionDefaultRedisSerializer(){
+		return new DefaultRedisSerializer();
+	}
 }

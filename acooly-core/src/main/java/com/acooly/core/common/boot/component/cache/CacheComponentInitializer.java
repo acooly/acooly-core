@@ -9,6 +9,7 @@
  */
 package com.acooly.core.common.boot.component.cache;
 
+import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.component.ComponentInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -20,6 +21,7 @@ public class CacheComponentInitializer implements ComponentInitializer {
 	public void initialize(ConfigurableApplicationContext applicationContext) {
 		setPropertyIfMissing("spring.redis.pool.maxActive", "100");
 		setPropertyIfMissing("spring.redis.pool.maxWait", "5000");
+		setPropertyIfMissing("spring.session.redis.namespace", "session:" + Apps.getAppName());
 	}
 	
 }

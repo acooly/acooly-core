@@ -82,7 +82,7 @@ public class ExApplicationRunListener implements SpringApplicationRunListener, P
 	}
 	
 	private void setThreadName() {
-		Thread.currentThread().setName("Main");
+		Thread.currentThread().setName("main");
 	}
 	
 	@Override
@@ -102,7 +102,7 @@ public class ExApplicationRunListener implements SpringApplicationRunListener, P
 		//set servlet container display name
 		System.setProperty("server.display-name", sysName);
 		//set servelt container response header server
-		System.setProperty("server.server-header", "YIJI");
+		System.setProperty("server.server-header", "ACOOLY");
 		
 		System.setProperty(Apps.HTTP_PORT, Integer.toString(bootApp.httpPort()));
 		System.setProperty(Apps.PID, new ApplicationPid().toString());

@@ -193,7 +193,7 @@ public class DruidProperties implements BeanClassLoaderAware {
 		}
 		if (!Env.isOnline()) {
 			if (Apps.isDevMode()) {
-				properties.put("yiji.ds.slowSqlMillis", 0);
+				properties.put("yiji.ds.slowSqlMillis", Integer.toString(0));
 			} else {
 				//线下测试时，执行时间超过100ms就打印sql，用户可以设置为0，每条sql语句都打印
 				properties.put("yiji.ds.slowSqlMillis",

@@ -12,7 +12,8 @@ package com.acooly.core.common.boot.component.jpa;
 import com.acooly.core.common.boot.component.ComponentInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import static com.acooly.core.common.boot.component.jpa.JpaConfig.JPADruidProperties.ENABLE_KEY;
+import static com.acooly.core.common.boot.component.jpa.JPAProperties.ENABLE_KEY;
+
 
 /**
  * @author qiubo@yiji.com
@@ -23,7 +24,7 @@ public class JPAComponentInitializer implements ComponentInitializer {
 		if (!applicationContext.getEnvironment().getProperty(ENABLE_KEY, Boolean.class, Boolean.TRUE)) {
 			System.setProperty("spring.data.jpa.repositories.enabled", "false");
 		}
-		//因为shiro的原因，使用filter代替  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration.JpaWebConfiguration.JpaWebMvcConfiguration.openEntityManagerInViewInterceptor()
+		//因为shiro的原因，使用filter代替 ref:com.acooly.core.common.boot.component.jpa.JPAAutoConfig.openEntityManagerInViewFilter
 		System.setProperty("spring.jpa.open-in-view", "false");
 		//关闭jpa校验
 		System.setProperty("spring.jpa.properties.javax.persistence.validation.mode", "none");

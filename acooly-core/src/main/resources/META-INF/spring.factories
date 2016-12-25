@@ -3,10 +3,10 @@ com.acooly.core.common.boot.listener.ExApplicationRunListener
 
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.acooly.core.common.boot.log.LogAutoConfiguration,\
-com.acooly.core.common.boot.component.ds.JDBCAutoConfiguration,\
-com.acooly.core.common.boot.component.jpa.JpaConfig,\
-com.acooly.core.common.boot.component.tomcat.TomcatAutoConfiguration,\
-com.acooly.core.common.boot.component.web.WebAutoConfiguration,\
+com.acooly.core.common.boot.component.ds.JDBCAutoConfig,\
+com.acooly.core.common.boot.component.jpa.JPAAutoConfig,\
+com.acooly.core.common.boot.component.tomcat.TomcatAutoConfig,\
+com.acooly.core.common.boot.component.web.WebAutoConfig,\
 com.acooly.core.common.boot.component.cache.RedisAutoConfig
 
 #logger initializer

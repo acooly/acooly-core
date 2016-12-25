@@ -12,7 +12,7 @@
     <artifactId>acooly-components</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>acooly-module-security</module>
+        <module>acooly-component-security</module>
     </modules>
 
     <dependencies>

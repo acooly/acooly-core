@@ -20,22 +20,32 @@ public class WebComponentInitializer implements ComponentInitializer {
 	@Override
 	public void initialize(ConfigurableApplicationContext applicationContext) {
 		setPropertyIfMissing("multipart.maxFileSize", "100Mb");
-        setPropertyIfMissing("multipart.maxFileSize", "300Mb");
-
-        setPropertyIfMissing("spring.freemarker.expose-session-attributes","false");
-        setPropertyIfMissing("spring.freemarker.expose-request-attributes","false");
-        setPropertyIfMissing("spring.freemarker.allow-session-override","false");
-        setPropertyIfMissing("spring.freemarker.request-context-attribute","rc");
-        setPropertyIfMissing("spring.freemarker.request-context-attribute","rc");
-        setPropertyIfMissing("spring.freemarker.request-context-attribute","rc");
-
-
-        // 设置session
-        setPropertyIfMissing("server.session.cookie.name", Apps.getAppSessionCookieName());
-        setPropertyIfMissing("server.session.cookie.httpOnly", Boolean.TRUE.toString());
-        setPropertyIfMissing("server.session.tracking-modes", "cookie");
-        setPropertyIfMissing("server.session.timeout","3600");
-        setPropertyIfMissing("spring.session.store-type","REDIS");
-        setPropertyIfMissing("spring.redis.pool.max-active","100");
-    }
+		setPropertyIfMissing("multipart.maxFileSize", "300Mb");
+		
+		setPropertyIfMissing("spring.freemarker.expose-session-attributes", false);
+		setPropertyIfMissing("spring.freemarker.expose-request-attributes", false);
+		setPropertyIfMissing("spring.freemarker.allow-session-override", false);
+		setPropertyIfMissing("spring.freemarker.request-context-attribute", "rc");
+		
+		// 设置session
+		setPropertyIfMissing("server.session.cookie.name", Apps.getAppSessionCookieName());
+		setPropertyIfMissing("server.session.cookie.httpOnly", Boolean.TRUE.toString());
+		setPropertyIfMissing("server.session.tracking-modes", "cookie");
+		setPropertyIfMissing("server.session.timeout", 3600);
+		setPropertyIfMissing("spring.session.store-type", "REDIS");
+		setPropertyIfMissing("spring.redis.pool.max-active", 100);
+		
+		//设置freemarker
+		setPropertyIfMissing("spring.freemarker.settings.classic_compatible", true);
+		setPropertyIfMissing("spring.freemarker.settings.whitespace_stripping", true);
+		setPropertyIfMissing("spring.freemarker.settings.locale", "zh_CN");
+		setPropertyIfMissing("spring.freemarker.settings.default_encoding", "utf-8");
+		setPropertyIfMissing("spring.freemarker.settings.url_escaping_charset", "utf-8");
+		setPropertyIfMissing("spring.freemarker.settings.tag_syntax", "auto_detect");
+		setPropertyIfMissing("spring.freemarker.settings.datetime_format", "yyyy-MM-dd HH:mm:ss");
+		setPropertyIfMissing("spring.freemarker.settings.date_format", "yyyy-MM-dd");
+		setPropertyIfMissing("spring.freemarker.settings.time_format", "HH:mm:ss");
+		setPropertyIfMissing("spring.freemarker.settings.number_format", "0.######;");
+		setPropertyIfMissing("spring.freemarker.settings.boolean_format", "true,false");
+	}
 }

@@ -11,7 +11,6 @@ package com.acooly.module.security.config;
 
 import com.acooly.core.common.boot.component.jpa.JPAAutoConfig;
 import com.acooly.core.common.dao.jpa.AbstractEntityJpaDao;
-import com.acooly.module.security.SecurityConstants;
 import com.acooly.module.security.captche.CaptchaServlet;
 import com.acooly.module.security.defence.XssDefenseFilter;
 import com.acooly.module.security.defence.csrf.CookieCsrfTokenRepository;
@@ -66,18 +65,18 @@ import java.util.Map;
  */
 @Configuration
 @ConditionalOnWebApplication
-@EnableConfigurationProperties({ SecurityProperties.class ,FrameworkProperties.class})
+@EnableConfigurationProperties({ SecurityProperties.class, FrameworkProperties.class })
 @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".enable", matchIfMissing = true)
-@ComponentScan(basePackageClasses = SecurityConstants.class)
-@EntityScan(basePackages="com.acooly.module.security.domain")
+@ComponentScan(basePackages = { "com.acooly.module.security" })
+@EntityScan(basePackages = "com.acooly.module.security.domain")
 @EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class,
 		basePackages = "com.acooly.module.security.dao")
 public class SecurityAutoConfiguration {
-
+	
 	@Configuration
 	@ConditionalOnWebApplication
 	@ConditionalOnProperty(value = SecurityProperties.PREFIX + ".shiro.enable", matchIfMissing = true)
-	@AutoConfigureAfter({JPAAutoConfig.class,DataSourceTransactionManagerAutoConfiguration.class})
+	@AutoConfigureAfter({ JPAAutoConfig.class, DataSourceTransactionManagerAutoConfiguration.class })
 	public static class ShiroAutoConfigration {
 		@Bean
 		public CacheManager shiroCacheManager(RedisTemplate redisTemplate) {
@@ -100,7 +99,7 @@ public class SecurityAutoConfiguration {
 			ShiroDbRealm shiroDbRealm = new ShiroDbRealm();
 			shiroDbRealm.setPermissionResolver(pathMatchPermissionResolver);
 			shiroDbRealm.setAuthenticationCachingEnabled(false);
-            shiroDbRealm.setAuthorizationCachingEnabled(false);
+			shiroDbRealm.setAuthorizationCachingEnabled(false);
 			shiroDbRealm.setAuthorizationCacheName(ShiroCacheManager.KEY_AUTHZ);
 			shiroDbRealm.setAuthenticationCacheName(ShiroCacheManager.KEY_AUTHC);
 			return shiroDbRealm;
@@ -157,7 +156,6 @@ public class SecurityAutoConfiguration {
 			return advisor;
 		}
 		
-
 		@Bean
 		public AuthorizationAttributeSourceAdvisor shiroAuthorizationAttributeSourceAdvisor(WebSecurityManager shiroSecurityManager,
 																							Realm shiroRealm) {
@@ -283,7 +281,7 @@ public class SecurityAutoConfiguration {
 	@ConditionalOnProperty(value = SecurityProperties.PREFIX + ".captcha.enable", matchIfMissing = true)
 	public static class CaptchaAutoConfigration {
 		@Bean
-		public ServletRegistrationBean jcaptchaServlet(	SecurityProperties securityProperties) {
+		public ServletRegistrationBean jcaptchaServlet(SecurityProperties securityProperties) {
 			ServletRegistrationBean bean = new ServletRegistrationBean();
 			bean.setUrlMappings(Lists.newArrayList(securityProperties.getCaptcha().getUrl()));
 			CaptchaServlet captchaServlet = new CaptchaServlet();

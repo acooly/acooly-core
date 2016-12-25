@@ -38,9 +38,11 @@ public class RedisAutoConfig {
 	public CachingConfigurer cachingConfigurer(RedisTemplate redisTemplate, CacheProperties cacheProperties) {
 		return new DefaultCachingConfigurer(redisTemplate, cacheProperties.getExpireTime());
 	}
+	
 	//session使用kryo序列化器 ref:org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration.setDefaultRedisSerializer()
-	@Bean("springSessionDefaultRedisSerializer")
-	public DefaultRedisSerializer springSessionDefaultRedisSerializer(){
+	//	@Bean("springSessionDefaultRedisSerializer")
+	//由于实体对象中有懒加载集合，不能用kryo。。。
+	public DefaultRedisSerializer springSessionDefaultRedisSerializer() {
 		return new DefaultRedisSerializer();
 	}
 }

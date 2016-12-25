@@ -7,8 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.acooly.module.security.config.SecurityConfig;
-import com.acooly.module.security.config.SecurityConfigHolder;
+import com.acooly.module.security.config.FrameworkProperties;
+import com.acooly.module.security.config.FrameworkPropertiesHolder;
 
 /**
  * 系统框架参数
@@ -27,8 +27,8 @@ public class SecurityConfigController {
 	 */
 	@RequestMapping("index")
 	@ResponseBody
-	public SecurityConfig authorisedMenus(HttpServletRequest request, HttpServletResponse response) {
-		return SecurityConfigHolder.getSecurityConfig();
+	public FrameworkProperties authorisedMenus(HttpServletRequest request, HttpServletResponse response) {
+		return FrameworkPropertiesHolder.get();
 	}
 
 }

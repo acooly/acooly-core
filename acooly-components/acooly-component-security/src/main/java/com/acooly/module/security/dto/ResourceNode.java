@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.acooly.module.security.SecurityConstants;
+import com.acooly.module.security.config.FrameworkProperties;
 
 public class ResourceNode {
 
@@ -13,11 +13,11 @@ public class ResourceNode {
 	private Long parentId;
 	private String name;
 	private String type;
-	private int showMode = SecurityConstants.SHOW_MODE_AJAXLOAD;
+	private int showMode = FrameworkProperties.SHOW_MODE_AJAXLOAD;
 	private Date orderTime;
 	private String value;
 	private String icon;
-	private int showState = SecurityConstants.SHOW_STATE_YES;
+	private int showState = FrameworkProperties.SHOW_STATE_YES;
 	private boolean checked = false;
 	private List<ResourceNode> children = new LinkedList<ResourceNode>();
 

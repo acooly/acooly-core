@@ -3,16 +3,18 @@ package com.acooly.module.security.service.impl;
 import java.util.Date;
 
 
+import com.acooly.module.security.config.FrameworkProperties;
+import com.acooly.module.security.config.FrameworkPropertiesHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Encodes;
-import com.acooly.module.security.SecurityConstants;
 import com.acooly.module.security.dao.UserDao;
 import com.acooly.module.security.domain.User;
 import com.acooly.module.security.service.UserService;
@@ -24,6 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl extends EntityServiceImpl<User, UserDao> implements UserService {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
+	@Autowired
+	private FrameworkProperties frameworkProperties;
 
 	@Override
 	public User findUserByUsername(String username) {
@@ -47,8 +52,8 @@ public class UserServiceImpl extends EntityServiceImpl<User, UserDao> implements
 				entryptPassword(user);
 			}
 
-			if (SecurityConstants.USER_LOGIN_EXPIRE) {
-				user.setExpirationTime(Dates.addDay(new Date(), SecurityConstants.USER_LOGIN_EXPIRE_DAYS));
+			if (FrameworkPropertiesHolder.get().isExpire()) {
+				user.setExpirationTime(Dates.addDay(new Date(), FrameworkPropertiesHolder.get().getExpireDays()));
 			}
 
 			super.save(user);
@@ -81,8 +86,8 @@ public class UserServiceImpl extends EntityServiceImpl<User, UserDao> implements
 		if (StringUtils.isNotBlank(newPassword)) {
 			user.setPassword(newPassword);
 			entryptPassword(user);
-			if (SecurityConstants.USER_LOGIN_EXPIRE) {
-				user.setExpirationTime(Dates.addDay(new Date(), SecurityConstants.USER_LOGIN_EXPIRE_DAYS));
+			if (FrameworkPropertiesHolder.get().isExpire()) {
+				user.setExpirationTime(Dates.addDay(new Date(), FrameworkPropertiesHolder.get().getExpireDays()));
 			}
 			if (user.getStatus() == User.STATUS_EXPIRES) {
 				user.setStatus(User.STATUS_ENABLE);
@@ -149,9 +154,9 @@ public class UserServiceImpl extends EntityServiceImpl<User, UserDao> implements
 			user.setLoginFailTimes(user.getLoginFailTimes() + 1);
 			Date now = new Date();
 			user.setLastModifyTime(now);
-			if (user.getStatus() == User.STATUS_ENABLE && SecurityConstants.USER_LOGIN_LOCK
-					&& user.getLoginFailTimes() >= SecurityConstants.USER_LOGIN_LOCK_ERRORTIMES) {
-				user.setUnlockTime(Dates.addDate(now, SecurityConstants.USER_LOGIN_LOCK_SECONDS * 1000));
+			if (user.getStatus() == User.STATUS_ENABLE && frameworkProperties.isLoginLock()
+					&& user.getLoginFailTimes() >= frameworkProperties.getLoginLockErrorTimes()) {
+				user.setUnlockTime(Dates.addDate(now, frameworkProperties.getLoginLockSeconds() * 1000));
 				user.setStatus(User.STATUS_LOCK);
 			}
 			save(user);

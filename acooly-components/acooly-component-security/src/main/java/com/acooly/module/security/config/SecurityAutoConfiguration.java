@@ -66,7 +66,7 @@ import java.util.Map;
  */
 @Configuration
 @ConditionalOnWebApplication
-@EnableConfigurationProperties({ SecurityProperties.class })
+@EnableConfigurationProperties({ SecurityProperties.class ,FrameworkProperties.class})
 @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackageClasses = SecurityConstants.class)
 @EntityScan(basePackages="com.acooly.module.security.domain")

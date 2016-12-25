@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.acooly.module.security.config.FrameworkPropertiesHolder;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -29,7 +30,6 @@ import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Strings;
-import com.acooly.module.security.SecurityConstants;
 import com.acooly.module.security.domain.Resource;
 import com.acooly.module.security.dto.ResourceNode;
 import com.acooly.module.security.service.ResourceService;
@@ -88,7 +88,7 @@ public class ResourceController extends AbstractJQueryEntityController<Resource,
 			IOUtils.closeQuietly(in);
 		}
 		if (Collections3.isEmpty(icons)) {
-			icons.addAll(SecurityConstants.FRAMEWORK_ALL_ICONS);
+			icons.addAll(FrameworkPropertiesHolder.get().getIcons());
 		}
 		return icons;
 	}
@@ -187,9 +187,9 @@ public class ResourceController extends AbstractJQueryEntityController<Resource,
 
 	@Override
 	protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-		model.put("allShowStates", SecurityConstants.SHOW_STATE_MAPPING);
-		model.put("allShowModes", SecurityConstants.SHOW_MODE_MAPPING);
-		model.put("allTypes", SecurityConstants.RESOURCE_TYPES);
+		model.put("allShowStates", FrameworkPropertiesHolder.get().getShowStates());
+		model.put("allShowModes", FrameworkPropertiesHolder.get().getShowModes());
+		model.put("allTypes", FrameworkPropertiesHolder.get().getResourceTypes());
 		model.put("allIcons", icons);
 		model.put("menuId", request.getParameter("menuId"));
 	}

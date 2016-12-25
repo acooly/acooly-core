@@ -2,19 +2,15 @@ package com.acooly.module.security.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.acooly.module.security.config.FrameworkProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.acooly.core.common.domain.AbstractEntity;
-import com.acooly.module.security.SecurityConstants;
 
 /**
  * 桌面管理 Entity
@@ -48,11 +44,11 @@ public class Portallet extends AbstractEntity {
 
 	/** 内容类型 1:url,2:html */
 	@Column(name = "load_mode", nullable = false, length = 4)
-	private int loadMode = SecurityConstants.LOAD_MODE_URL;
+	private int loadMode = FrameworkProperties.LOAD_MODE_URL;
 
 	/** 加载方式 1:ajax,2:iframe */
 	@Column(name = "show_mode", nullable = false, length = 4)
-	private int showMode = SecurityConstants.SHOW_MODE_AJAXLOAD;
+	private int showMode = FrameworkProperties.SHOW_MODE_AJAXLOAD;
 
 	/** 连接地址 */
 	@Column(name = "href", nullable = true, length = 128)

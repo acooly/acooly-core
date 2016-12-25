@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.acooly.module.security.config.FrameworkPropertiesHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,8 +24,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonResult;
-import com.acooly.core.utils.mapper.JsonMapper;
-import com.acooly.module.security.SecurityConstants;
 import com.acooly.module.security.domain.Role;
 import com.acooly.module.security.domain.User;
 import com.acooly.module.security.service.RoleService;
@@ -35,9 +34,8 @@ import com.acooly.module.security.service.UserService;
 @RequestMapping(value = "/manage/system/user")
 public class UserController extends AbstractJQueryEntityController<User, UserService> {
 
-	private static Map<Integer, String> allUserTypes = JsonMapper.nonDefaultMapper().fromJson(
-			SecurityConstants.USER_TYPE_MAPPING, Map.class);
-	private static Map<Integer, String> allStatus = SecurityConstants.USER_STATUS_MAPPING;
+	private static Map<Integer, String> allUserTypes = FrameworkPropertiesHolder.get().getUserTypes();
+	private static Map<Integer, String> allStatus = FrameworkPropertiesHolder.get().getUserStatus();
 
 	@Autowired
 	private UserService userService;
@@ -120,8 +118,8 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
 		model.put("allUserTypes", allUserTypes);
 		List<Role> list = roleService.getAll();
 		model.put("allRoles", list);
-		model.put("PASSWORD_REGEX", SecurityConstants.PASSWORD_REGEX);
-		model.put("PASSWORD_ERROR", SecurityConstants.PASSWORD_ERROR);
+		model.put("PASSWORD_REGEX", FrameworkPropertiesHolder.get().getPasswordRegex());
+		model.put("PASSWORD_ERROR", FrameworkPropertiesHolder.get().getPasswordError());
 	}
 
 	private Set<Role> loadRoleFormRequest(HttpServletRequest request) {

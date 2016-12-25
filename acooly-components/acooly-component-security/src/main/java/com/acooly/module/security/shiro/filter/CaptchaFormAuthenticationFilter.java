@@ -2,15 +2,13 @@ package com.acooly.module.security.shiro.filter;
 
 import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Strings;
-import com.acooly.module.security.SecurityConstants;
 import com.acooly.module.security.captche.Captchas;
+import com.acooly.module.security.config.FrameworkPropertiesHolder;
 import com.acooly.module.security.domain.User;
 import com.acooly.module.security.service.UserService;
 import com.acooly.module.security.shiro.exception.InvaildCaptchaException;
 import com.acooly.module.security.shiro.listener.ShireLoginLogoutSubject;
 import com.google.common.collect.Maps;
-import com.octo.captcha.service.CaptchaServiceException;
-import com.octo.captcha.service.image.ImageCaptchaService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -108,7 +106,7 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 		
 		// 密码过期
 		if (user.getStatus() == User.STATUS_EXPIRES
-			|| (SecurityConstants.USER_LOGIN_EXPIRE	&& user.getExpirationTime() != null
+			|| (FrameworkPropertiesHolder.get().isExpire()	&& user.getExpirationTime() != null
 				&& now.getTime() >= user.getExpirationTime().getTime())) {
 			user.setStatus(User.STATUS_EXPIRES);
 			userService.save(user);
@@ -118,7 +116,7 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 		
 		if (user.getStatus() != User.STATUS_ENABLE) {
 			logger.debug("login checkUserStatus：用户状态非法:{}", user.getStatus());
-			throw new AuthenticationException("用户已" + SecurityConstants.USER_STATUS_MAPPING.get(user.getStatus()));
+			throw new AuthenticationException("用户已" + FrameworkPropertiesHolder.get().getUserStatus().get(user.getStatus()));
 		}
 		return user;
 	}
@@ -175,7 +173,7 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 			Map<String, String> queryParams = Maps.newHashMap();
 			queryParams.put(getFailureKeyAttribute(), e.getClass().getName());
 			queryParams.put("message", e.getMessage());
-			int lastTimes = SecurityConstants.USER_LOGIN_LOCK_ERRORTIMES - user.getLoginFailTimes();
+			int lastTimes = FrameworkPropertiesHolder.get().getLoginLockErrorTimes() - user.getLoginFailTimes();
 			if (lastTimes > 0) {
 				queryParams.put("lastTimes", String.valueOf(lastTimes));
 			}

@@ -5,18 +5,15 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.acooly.module.security.config.FrameworkProperties;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.LazyCollection;
@@ -26,7 +23,6 @@ import org.hibernate.annotations.LazyToOneOption;
 import org.hibernate.annotations.OrderBy;
 
 import com.acooly.core.common.domain.AbstractEntity;
-import com.acooly.module.security.SecurityConstants;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -43,7 +39,7 @@ public class Resource extends AbstractEntity {
 	private String name;
 
 	/** 类型 */
-	private String type = SecurityConstants.RESOURCE_TYPE_URL;
+	private String type = FrameworkProperties.RESOURCE_TYPE_URL;
 
 	/** 资源串 */
 	private String value;
@@ -58,10 +54,10 @@ public class Resource extends AbstractEntity {
 	private Date orderTime = new Date();
 
 	/** 是否显示(0:显示,1:隐藏) */
-	private int showState = SecurityConstants.SHOW_STATE_YES;
+	private int showState = FrameworkProperties.SHOW_STATE_YES;
 
 	/** 显示方式(用于easyUI或EXTJS,1:AJAXLOAD,2:IFRAME) */
-	private int showMode = SecurityConstants.SHOW_MODE_AJAXLOAD;
+	private int showMode = FrameworkProperties.SHOW_MODE_AJAXLOAD;
 
 	/** 包含角色 */
 	@ManyToMany(mappedBy = "rescs", targetEntity = com.acooly.module.security.domain.Role.class)

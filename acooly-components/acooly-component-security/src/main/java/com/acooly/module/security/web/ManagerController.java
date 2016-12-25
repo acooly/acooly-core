@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Servlets;
-import com.acooly.module.security.config.SecurityConfig;
-import com.acooly.module.security.config.SecurityConfigHolder;
+import com.acooly.module.security.config.FrameworkProperties;
+import com.acooly.module.security.config.FrameworkPropertiesHolder;
 import com.acooly.module.security.domain.User;
 import com.acooly.module.security.service.UserService;
 
@@ -42,9 +42,9 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
 			return "/manage/index";
 		} else {
 			// 如果没有登录的首次进入登录界面，直接返回到登录界面。
-			SecurityConfig securityConfig = SecurityConfigHolder.getSecurityConfig();
+			FrameworkProperties frameworkProperties = FrameworkPropertiesHolder.get();
 			// model.addAttribute("securityConfig", securityConfig);
-			request.getSession(true).setAttribute("securityConfig", securityConfig);
+			request.getSession(true).setAttribute("securityConfig", frameworkProperties);
 			return "/manage/login";
 		}
 	}
@@ -62,9 +62,9 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
 			return "redirect:/manage/index.html";
 		} else {
 			// 如果没有登录的首次进入登录界面，直接返回到登录界面。
-			SecurityConfig securityConfig = SecurityConfigHolder.getSecurityConfig();
+			FrameworkProperties frameworkProperties = FrameworkPropertiesHolder.get();
 			// model.addAttribute("securityConfig", securityConfig);
-			request.getSession(true).setAttribute("securityConfig", securityConfig);
+			request.getSession(true).setAttribute("securityConfig", frameworkProperties);
 			return "/manage/login";
 		}
 	}

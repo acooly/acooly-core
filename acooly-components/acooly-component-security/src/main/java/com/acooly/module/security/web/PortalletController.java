@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.acooly.module.security.config.FrameworkPropertiesHolder;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.acooly.core.common.web.AbstractJQueryEntityController;
-import com.acooly.module.security.SecurityConstants;
 import com.acooly.module.security.domain.Portallet;
 import com.acooly.module.security.domain.User;
 import com.acooly.module.security.service.PortalletService;
@@ -56,8 +56,8 @@ public class PortalletController extends AbstractJQueryEntityController<Portalle
 	@Override
 	protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
 		model.put("allCollapsibles", allCollapsibles);
-		model.put("allLoadModes", SecurityConstants.LOAD_MODE_MAPPING);
-		model.put("allShowModes", SecurityConstants.SHOW_MODE_MAPPING);
+		model.put("allLoadModes", FrameworkPropertiesHolder.get().getLoadModes());
+		model.put("allShowModes", FrameworkPropertiesHolder.get().getShowModes());
 	}
 
 }

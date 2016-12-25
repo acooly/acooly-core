@@ -2,7 +2,7 @@ package com.acooly.module.security.shiro.realm;
 
 import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.utils.Encodes;
-import com.acooly.module.security.SecurityConstants;
+import com.acooly.module.security.config.FrameworkProperties;
 import com.acooly.module.security.domain.Resource;
 import com.acooly.module.security.domain.Role;
 import com.acooly.module.security.domain.User;
@@ -102,9 +102,9 @@ public class ShiroDbRealm extends AuthorizingRealm {
 			Set<Resource> resources = role.getRescs();
 			Set<String> urls = new HashSet<String>();
 			for (Resource resource : resources) {
-				if (resource.getType().equalsIgnoreCase(SecurityConstants.RESOURCE_TYPE_URL)) {
+				if (resource.getType().equalsIgnoreCase(FrameworkProperties.RESOURCE_TYPE_URL)) {
 					urls.add("*:" + getCanonicalResource(contextPath, resource.getValue()));
-				} else if (resource.getType().equalsIgnoreCase(SecurityConstants.RESOURCE_TYPE_FUNCTION)) {
+				} else if (resource.getType().equalsIgnoreCase(FrameworkProperties.RESOURCE_TYPE_FUNCTION)) {
 					urls.add(resource.getValue());
 				}
 			}

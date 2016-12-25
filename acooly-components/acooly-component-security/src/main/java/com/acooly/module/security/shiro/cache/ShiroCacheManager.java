@@ -19,7 +19,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 /**
  * @author qiubo@yiji.com
  */
-public class ShiroCacheManager implements CacheManager, Destroyable {
+public class ShiroCacheManager implements CacheManager{
 
     public static final String KEY_PREFIX = Apps.getAppName()+"_shiro_redis_cache:";
     public static final String KEY_AUTHZ = Apps.getAppName()+"_authorizationCache";
@@ -31,11 +31,6 @@ public class ShiroCacheManager implements CacheManager, Destroyable {
         return new ShiroRedisCache(KEY_PREFIX + name, redisTemplate);
     }
 
-    @Override
-    public void destroy() throws Exception {
-        redisTemplate.delete(KEY_PREFIX + KEY_AUTHZ);
-        redisTemplate.delete(KEY_PREFIX + KEY_AUTHC);
-    }
 
     private RedisTemplate redisTemplate;
 

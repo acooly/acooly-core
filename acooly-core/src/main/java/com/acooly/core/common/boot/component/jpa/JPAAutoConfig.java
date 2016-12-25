@@ -55,7 +55,7 @@ public class JPAAutoConfig {
 
 		FilterRegistrationBean registration = new FilterRegistrationBean();
 		registration.setFilter(filter);
-		registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp").toArray(new String[0]));
+		registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp","/services/*").toArray(new String[0]));
 		registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
 		registration.setName("openSessionInViewFilter");
 		registration.setOrder(Ordered.LOWEST_PRECEDENCE - 100);

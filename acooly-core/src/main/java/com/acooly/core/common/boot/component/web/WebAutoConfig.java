@@ -21,9 +21,11 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
-import org.springframework.boot.autoconfigure.freemarker.FreeMarkerProperties;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.WebMvcProperties;
@@ -35,7 +37,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.MediaType;
-import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.filter.HttpPutFormContentFilter;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -50,7 +51,6 @@ import javax.servlet.Servlet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * @author qiubo@yiji.com
@@ -85,13 +85,13 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter implements Applicatio
 			registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
 		}
 	}
-
+	
 	@Override
 	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
 		//和原逻辑保持一直，原因未知。
-		configurer.mediaType("html",MediaType.APPLICATION_JSON);
+		configurer.mediaType("html", MediaType.APPLICATION_JSON);
 	}
-
+	
 	/**
 	 * 配置模板直接映射bean
 	 */
@@ -132,55 +132,56 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter implements Applicatio
 	
 	@Bean
 	@ConditionalOnBean(HttpPutFormContentFilter.class)
-	public FilterRegistrationBean disableHttpPutFormContentFilter(HttpPutFormContentFilter filter,
+	public FilterRegistrationBean disableHttpPutFormContentFilter(	HttpPutFormContentFilter filter,
 																	WebProperties webProperties) {
 		FilterRegistrationBean registration = new FilterRegistrationBean(filter);
 		registration.setEnabled(webProperties.isHttpPutFormContentFilterEnable());
 		return registration;
 	}
 	
-//	@Override
-//	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-//		configurer.ignoreAcceptHeader(true).defaultContentType(MediaType.TEXT_HTML).favorPathExtension(true)
-//			.favorParameter(false).useJaf(false).mediaType("html", MediaType.APPLICATION_JSON)
-//			.mediaType("xml", MediaType.APPLICATION_XML).mediaType("json", MediaType.APPLICATION_JSON);
-//	}
-
+	//	@Override
+	//	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+	//		configurer.ignoreAcceptHeader(true).defaultContentType(MediaType.TEXT_HTML).favorPathExtension(true)
+	//			.favorParameter(false).useJaf(false).mediaType("html", MediaType.APPLICATION_JSON)
+	//			.mediaType("xml", MediaType.APPLICATION_XML).mediaType("json", MediaType.APPLICATION_JSON);
+	//	}
+	
 	@Override
 	public void configureViewResolvers(ViewResolverRegistry registry) {
 		super.configureViewResolvers(registry);
-		Map<String, Object> attributes= Maps.newHashMap();
-		attributes.put("requestContextAttribute","rc");
-		attributes.put("xml_escape",new XmlEscape());
+		Map<String, Object> attributes = Maps.newHashMap();
+		attributes.put("requestContextAttribute", "rc");
+		attributes.put("xml_escape", new XmlEscape());
 		registry.freeMarker().attributes(attributes);
 	}
-
+	
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
 	}
+	
 	@Configuration
 	public static class AcoolyFreeMarkerConfiguration extends FreeMarkerAutoConfiguration.FreeMarkerWebConfiguration {
 		@Bean
 		@ConditionalOnMissingBean(FreeMarkerConfig.class)
 		public FreeMarkerConfigurer freeMarkerConfigurer() {
-			FreeMarkerConfigurer configurer = new FreeMarkerConfigurer(){
+			FreeMarkerConfigurer configurer = new FreeMarkerConfigurer() {
 				@Override
 				protected void postProcessTemplateLoaders(List<TemplateLoader> templateLoaders) {
 					templateLoaders.add(new ClassTemplateLoader(FreeMarkerConfigurer.class, "/templates"));
-
+					
 				}
 			};
 			applyProperties(configurer);
 			return configurer;
 		}
-
+		
 		/**
 		 * 禁用org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter#viewResolver(org.springframework.beans.factory.BeanFactory)
 		 * 禁用默认的org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration.FreeMarkerWebConfiguration#freeMarkerViewResolver()
 		 * @return
 		 */
-		@Bean(name = {"freeMarkerViewResolver","viewResolver"})
+		@Bean(name = { "freeMarkerViewResolver", "viewResolver" })
 		public FreeMarkerViewResolver viewResolver() {
 			FreeMarkerViewResolver resolver = new FreeMarkerViewResolver();
 			this.properties.applyToViewResolver(resolver);
@@ -188,7 +189,7 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter implements Applicatio
 			return resolver;
 		}
 	}
-
+	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		Map<String, WebMvcAutoConfiguration> beansOfType = applicationContext

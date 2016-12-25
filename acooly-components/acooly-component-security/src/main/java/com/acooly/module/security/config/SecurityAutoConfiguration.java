@@ -138,7 +138,7 @@ public class SecurityAutoConfiguration {
 			FilterRegistrationBean registration = new FilterRegistrationBean();
 			registration.setFilter(shiroFilter);
 			registration.setOrder(Ordered.LOWEST_PRECEDENCE - 10);
-//			registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp", "*.json").toArray(new String[0]));
+			registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp", "*.json").toArray(new String[0]));
 			registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
 			registration.setName("shiroFilter");
 			return registration;
@@ -303,7 +303,7 @@ public class SecurityAutoConfiguration {
 			csrfFilter.setRequireCsrfProtectionMatcher(
 				new RequireCsrfProtectionMatcher(securityProperties.getCsrf().getExclusions()));
 			CsrfAccessDeniedHandlerImpl csrfAccessDeniedHandler = new CsrfAccessDeniedHandlerImpl();
-			csrfAccessDeniedHandler.setErrorPage("/error");
+			csrfAccessDeniedHandler.setErrorPage(securityProperties.getCsrf().getErrorPage());
 			csrfFilter.setAccessDeniedHandler(csrfAccessDeniedHandler);
 			FilterRegistrationBean registration = new FilterRegistrationBean();
 			registration.setFilter(csrfFilter);

@@ -31,7 +31,7 @@ public class WebComponentInitializer implements ComponentInitializer {
 		setPropertyIfMissing("server.session.cookie.name", Apps.getAppSessionCookieName());
 		setPropertyIfMissing("server.session.cookie.httpOnly", Boolean.TRUE.toString());
 		setPropertyIfMissing("server.session.tracking-modes", "cookie");
-		setPropertyIfMissing("server.session.timeout", 3600);
+		setPropertyIfMissing("server.session.timeout", 7200);
 		setPropertyIfMissing("spring.session.store-type", "REDIS");
 		setPropertyIfMissing("spring.redis.pool.max-active", 100);
 		

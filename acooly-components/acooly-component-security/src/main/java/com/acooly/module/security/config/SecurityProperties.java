@@ -114,10 +114,12 @@ public class SecurityProperties {
 	public static class CSRF {
 		private boolean enable = true;
 		private List<String> exclusions = Lists.newArrayList();
+		private String errorPage="/error/csrf.htm";
 		
 		public CSRF() {
 			exclusions.add("/gateway.html");
 			exclusions.add("/ofile/upload.html");
+			exclusions.add("/mock/gateway/**");
 		}
 	}
 	

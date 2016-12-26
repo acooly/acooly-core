@@ -32,7 +32,13 @@
                     	<div class="form-top">
                     		<div class="form-top-left">
                     			<h3>登录您的账号</h3>
-                        		<p id="message" class="text-danger"><i class="fa fa-exclamation"></i> 请注意账户安全</p>
+                        		<p id="message" class="text-danger"><i class="fa fa-exclamation"></i>
+									<#if Request.message??>
+										${Request.message}
+									<#else>
+										请注意账户安全
+									</#if>
+								</p>
                     		</div>
                     		<div class="form-top-right">
                     			<i class="fa fa-lock"></i>

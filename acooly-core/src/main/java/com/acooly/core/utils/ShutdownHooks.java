@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
+import org.springframework.core.OrderComparator;
+import org.springframework.core.Ordered;
 
 /**
  * shutdown回收资源hook
@@ -24,73 +26,90 @@ import com.google.common.collect.Lists;
  */
 public class ShutdownHooks {
 	private static final Logger logger = LoggerFactory.getLogger(ShutdownHooks.class.getName());
-	public static List<ShutdownHooks.TaskWrapper> tasks = Lists.newArrayList();
-	private static AtomicInteger index = new AtomicInteger();
+	public static List<TaskWrapper> tasks = Lists.newArrayList();
 
-	public ShutdownHooks() {
-	}
-
+	/**
+	 * 添加关闭钩子
+	 *
+	 * @param runnable 钩子内容
+	 * @param hookName 钩子名称
+	 */
 	public static void addShutdownHook(Runnable runnable, String hookName) {
+		addShutdownHook(runnable, hookName, 0);
+	}
+
+	/**
+	 * 添加关闭钩子
+	 *
+	 * @param runnable 钩子内容
+	 * @param hookName 钩子名称
+	 * @param order 钩子执行顺序,顺序参考{@link Ordered}
+	 */
+	public static void addShutdownHook(Runnable runnable, String hookName, int order) {
 		if (runnable != null) {
-			ShutdownHooks.TaskWrapper taskwrapper = new ShutdownHooks.TaskWrapper(runnable, hookName);
-			Thread thread = new Thread(taskwrapper, "YIJIShutdownHook" + index.incrementAndGet());
-			taskwrapper.setShutdownhook(thread);
+			TaskWrapper taskwrapper = new TaskWrapper(runnable, hookName, order);
 			tasks.add(taskwrapper);
-			Runtime.getRuntime().addShutdownHook(thread);
 		}
-
 	}
 
-	public static void shutdownAll() {
-		Iterator<ShutdownHooks.TaskWrapper> var0 = tasks.iterator();
-		while (var0.hasNext()) {
-			ShutdownHooks.TaskWrapper task = (ShutdownHooks.TaskWrapper) var0.next();
-			task.run();
-
-			try {
-				Runtime.getRuntime().removeShutdownHook(task.getShutdownhook());
-			} catch (Exception var3) {
-				;
-			}
-		}
-
+	/**
+	 * 执行所有shutdown hook,建议在容器关闭时执行.
+	 * <p/>
+	 * 避免容器关闭后,classloader关闭,容器加载类失败.
+	 * https://issues.apache.org/bugzilla/show_bug.cgi?id=56387
+	 */
+	public static synchronized void shutdownAll() {
+		List<TaskWrapper> taskWrappers = Lists.newArrayList(tasks);
 		tasks.clear();
+
+		OrderComparator.sort(taskWrappers);
+		for (TaskWrapper task : taskWrappers) {
+			task.run();
+		}
+		taskWrappers.clear();
+
+		//在执行shutdownhook任务时,任务内部代码增加shutdownhook任务,继续执行,暂时不考虑有循环的地方
+		if (!tasks.isEmpty()) {
+			shutdownAll();
+		}
 	}
 
-	private static class TaskWrapper implements Runnable {
+	private static class TaskWrapper implements Runnable, Ordered {
 		private Runnable runnable;
 		private String hookName;
+		private int order;
 		private boolean isRunned = false;
-		private Thread shutdownhook;
 
 		public TaskWrapper(Runnable runnable, String hookName) {
 			this.runnable = runnable;
 			this.hookName = hookName;
 		}
 
+		public TaskWrapper(Runnable runnable, String hookName, int order) {
+			this.hookName = hookName;
+			this.order = order;
+			this.runnable = runnable;
+		}
+
+		@Override
 		public void run() {
 			synchronized (this) {
-				if (!this.isRunned) {
-					ShutdownHooks.logger.info("[SHUTDOWNHOOK-{}]开始执行", this.hookName);
-					this.isRunned = true;
-
+				if (!isRunned) {
+					logger.info("[SHUTDOWNHOOK-{}]开始执行", hookName);
+					isRunned = true;
 					try {
 						this.runnable.run();
-						ShutdownHooks.logger.info("[SHUTDOWNHOOK-{}]执行结束", this.hookName);
-					} catch (Exception var4) {
-						ShutdownHooks.logger.error("[SHUTDOWNHOOK-{}]执行失败", this.hookName, var4);
+						logger.info("[SHUTDOWNHOOK-{}]执行结束", hookName);
+					} catch (Exception e) {
+						logger.error("[SHUTDOWNHOOK-{}]执行失败", hookName, e);
 					}
 				}
-
 			}
 		}
 
-		public Thread getShutdownhook() {
-			return this.shutdownhook;
-		}
-
-		public void setShutdownhook(Thread shutdownhook) {
-			this.shutdownhook = shutdownhook;
+		@Override
+		public int getOrder() {
+			return this.order;
 		}
 	}
 }

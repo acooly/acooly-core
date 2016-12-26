@@ -87,9 +87,6 @@ public class ResourceController extends AbstractJQueryEntityController<Resource,
 		} finally {
 			IOUtils.closeQuietly(in);
 		}
-		if (Collections3.isEmpty(icons)) {
-			icons.addAll(FrameworkPropertiesHolder.get().getIcons());
-		}
 		return icons;
 	}
 

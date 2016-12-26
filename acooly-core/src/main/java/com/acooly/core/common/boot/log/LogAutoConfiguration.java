@@ -16,6 +16,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Map;
+
 /**
  * @author qiubo
  */
@@ -71,6 +73,11 @@ public class LogAutoConfiguration {
          */
         private String msgReplace;
 
+        /**
+         * 设置包名日志级别
+         */
+        private Map<String,String> level;
+
         public boolean isConsoleEnable() {
             return consoleEnable;
         }
@@ -118,6 +125,15 @@ public class LogAutoConfiguration {
         public void setMsgReplace(String msgReplace) {
             this.msgReplace = msgReplace;
         }
+
+        public Map<String, String> getLevel() {
+            return level;
+        }
+
+        public void setLevel(Map<String, String> level) {
+            this.level = level;
+        }
+
         /**
          * 从环境获取日志appender pattern
          */

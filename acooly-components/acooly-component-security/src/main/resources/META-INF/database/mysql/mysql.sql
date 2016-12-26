@@ -164,10 +164,10 @@ insert into SYS_RESOURCE (ID, PARENTID, NAME, TYPE, VALUE, SHOW_STATE, SHOW_MODE
 values (3, 1, '角色管理', 'URL', '/manage/system/role/index.html', 0, 1, '2014-01-10 00:00:01', 'icons-resource-bianmin', null);
 insert into SYS_RESOURCE (ID, PARENTID, NAME, TYPE, VALUE, SHOW_STATE, SHOW_MODE, ORDER_TIME, ICON, DESCN)
 values (4, 1, '资源菜单', 'URL', '/manage/system/resource/index.html', 0, 1, '2014-01-10', 'icons-resource-jiekuanbiaoxinxi', null);
-insert into SYS_RESOURCE (ID, PARENTID, NAME, TYPE, VALUE, SHOW_STATE, SHOW_MODE, ORDER_TIME, ICON, DESCN)
-values (5, 1, '操作日志', 'URL', '/manage/module/olog/olog/index.html', 0, 1, '2014-01-08 02:36:49', 'icons-resource-shouzhimingxi', null);
-insert into SYS_RESOURCE (ID, PARENTID, NAME, TYPE, VALUE, SHOW_STATE, SHOW_MODE, ORDER_TIME, ICON, DESCN)
-values (6, 1, '系统监控', 'URL', '/manage/druid/index.html', 0, 2, '2014-01-08 02:37:26', 'icons-resource-mac', null);
+-- insert into SYS_RESOURCE (ID, PARENTID, NAME, TYPE, VALUE, SHOW_STATE, SHOW_MODE, ORDER_TIME, ICON, DESCN)
+-- values (5, 1, '操作日志', 'URL', '/manage/module/olog/olog/index.html', 0, 1, '2014-01-08 02:36:49', 'icons-resource-shouzhimingxi', null);
+-- insert into SYS_RESOURCE (ID, PARENTID, NAME, TYPE, VALUE, SHOW_STATE, SHOW_MODE, ORDER_TIME, ICON, DESCN)
+-- values (6, 1, '系统监控', 'URL', '/manage/druid/index.html', 0, 2, '2014-01-08 02:37:26', 'icons-resource-mac', null);
 insert into SYS_RESOURCE (ID, PARENTID, NAME, TYPE, VALUE, SHOW_STATE, SHOW_MODE, ORDER_TIME, ICON, DESCN)
 values (7, 1, '桌面管理', 'URL', '/manage/system/portallet/index.html', 0, 1, '2014-01-08 02:39:40', 'icons-resource-wangzhan1', null);
 

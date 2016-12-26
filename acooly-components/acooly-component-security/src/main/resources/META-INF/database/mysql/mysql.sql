@@ -181,10 +181,10 @@ insert into SYS_ROLE_RESC (ROLE_ID, RESC_ID)
 values (1, 3);
 insert into SYS_ROLE_RESC (ROLE_ID, RESC_ID)
 values (1, 4);
-insert into SYS_ROLE_RESC (ROLE_ID, RESC_ID)
-values (1, 5);
-insert into SYS_ROLE_RESC (ROLE_ID, RESC_ID)
-values (1, 6);
+-- insert into SYS_ROLE_RESC (ROLE_ID, RESC_ID)
+-- values (1, 5);
+-- insert into SYS_ROLE_RESC (ROLE_ID, RESC_ID)
+-- values (1, 6);
 insert into SYS_ROLE_RESC (ROLE_ID, RESC_ID)
 values (1, 7);
 

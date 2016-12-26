@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * @author qiubo
  */
-@ConfigurationProperties("framework")
+@ConfigurationProperties("acooly.framework")
 @Getter
 @Setter
 @ToString

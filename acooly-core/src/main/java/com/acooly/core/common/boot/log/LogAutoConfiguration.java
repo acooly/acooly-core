@@ -11,6 +11,7 @@ package com.acooly.core.common.boot.log;
 
 import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.boot.EnvironmentHolder;
+import com.google.common.collect.Maps;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -76,7 +77,7 @@ public class LogAutoConfiguration {
         /**
          * 设置包名日志级别
          */
-        private Map<String,String> level;
+        private Map<String,String> level= Maps.newHashMap();
 
         public boolean isConsoleEnable() {
             return consoleEnable;
@@ -92,6 +93,10 @@ public class LogAutoConfiguration {
 
         public void setPattern(Pattern pattern) {
             this.pattern = pattern;
+        }
+
+        public LogProperties() {
+            System.setProperty("acooly.log.level.org.apache.tomcat.util.scan", "error");
         }
 
         public enum Pattern {

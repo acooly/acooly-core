@@ -9,6 +9,7 @@
  */
 package com.acooly.core.common.boot.component;
 
+import com.acooly.core.common.boot.listener.ExApplicationRunListener;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
@@ -27,6 +28,7 @@ import java.util.List;
 public class ComponentExtensionContextInitializer implements ApplicationContextInitializer {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
+        new ExApplicationRunListener.DevToolsDetector().apply(applicationContext.getEnvironment());
         RelaxedPropertyResolver resolver = new RelaxedPropertyResolver(applicationContext.getEnvironment(),
                 "spring.autoconfigure.");
         String[] exclude = resolver.getProperty("exclude", String[].class);

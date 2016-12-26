@@ -223,7 +223,7 @@ public class ExApplicationRunListener implements SpringApplicationRunListener, P
 	/**
 	 * 检测是否为开发模式
 	 */
-	static class DevToolsDetector {
+	public static class DevToolsDetector {
 		public void apply(ConfigurableEnvironment environment) {
 			if (environment.getPropertySources().contains("refresh")) {
 				System.setProperty(Apps.DEV_MODE_KEY, Boolean.TRUE.toString());

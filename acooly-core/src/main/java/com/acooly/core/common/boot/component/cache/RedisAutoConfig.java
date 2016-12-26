@@ -45,4 +45,5 @@ public class RedisAutoConfig {
 	public DefaultRedisSerializer springSessionDefaultRedisSerializer() {
 		return new DefaultRedisSerializer();
 	}
+
 }

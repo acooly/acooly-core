@@ -304,6 +304,12 @@
             <artifactId>httpmime</artifactId>
             <scope>provided</scope>
         </dependency>
+        <!--for devmode mock redis-->
+        <dependency>
+            <groupId>com.github.kstyrc</groupId>
+            <artifactId>embedded-redis</artifactId>
+            <version>0.6</version>
+        </dependency>
     </dependencies>
     <profiles>
         <profile>

@@ -253,6 +253,7 @@ public class LogbackConfigurator {
 		logger("org.apache.tomcat.util.net.NioSelectorPool", Level.WARN);
 		logger("org.crsh.plugin", Level.WARN);
 		logger("org.crsh.ssh", Level.WARN);
+		logger("org.apache.tomcat.util.scan", Level.ERROR);
 		logger("org.eclipse.jetty.util.component.AbstractLifeCycle", Level.ERROR);
 		logger("org.hibernate.validator.internal.util.Version", Level.WARN);
 		logger("org.springframework.boot.actuate.autoconfigure." + "CrshAutoConfiguration", Level.WARN);

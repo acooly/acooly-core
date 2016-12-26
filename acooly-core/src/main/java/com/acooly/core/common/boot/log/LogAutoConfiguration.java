@@ -96,7 +96,6 @@ public class LogAutoConfiguration {
         }
 
         public LogProperties() {
-            System.setProperty("acooly.log.level.org.apache.tomcat.util.scan", "error");
         }
 
         public enum Pattern {

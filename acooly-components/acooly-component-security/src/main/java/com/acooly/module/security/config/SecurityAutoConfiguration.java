@@ -9,6 +9,7 @@
  */
 package com.acooly.module.security.config;
 
+import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.component.jpa.JPAAutoConfig;
 import com.acooly.core.common.dao.jpa.AbstractEntityJpaDao;
 import com.acooly.module.security.captche.CaptchaServlet;
@@ -327,6 +328,17 @@ public class SecurityAutoConfiguration {
 			registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
 			registration.setName("xssDefenseFilter");
 			return registration;
+		}
+		
+	}
+	
+	@Configuration
+	public static class DatabaseInitConfiguration {
+		
+		@ConditionalOnProperty(value = Apps.DEV_MODE_KEY)
+		@Bean
+		public DatabaseScriptIniter databaseScriptIniter() {
+			return new DatabaseScriptIniter();
 		}
 		
 	}

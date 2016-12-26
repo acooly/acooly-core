@@ -10,6 +10,7 @@
  */
 package com.acooly.core.common.boot.component.ds;
 
+import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.common.dao.jdbc.PagedJdbcTemplate;
 import com.acooly.core.common.exception.AppConfigException;
 import lombok.extern.slf4j.Slf4j;
@@ -44,12 +45,15 @@ public class JDBCAutoConfig {
 	
 	@Bean
 	public DataSource dataSource() {
+		DataSource dataSource;
 		try {
 			if (druidProperties == null) {
-				return DruidProperties.buildFromEnv(DruidProperties.PREFIX);
+				dataSource = DruidProperties.buildFromEnv(DruidProperties.PREFIX);
 			} else {
-				return druidProperties.build();
+				dataSource = druidProperties.build();
 			}
+			ApplicationContextHolder.get().publishEvent(new DataSourceReadyEvent(dataSource));
+			return dataSource;
 		} catch (Exception e) {
 			//这种方式有点挫，先就这样吧
 			log.error("初始化数据库连接池异常，关闭应用", e);

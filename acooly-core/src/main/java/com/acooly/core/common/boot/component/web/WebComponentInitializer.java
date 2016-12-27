@@ -47,5 +47,8 @@ public class WebComponentInitializer implements ComponentInitializer {
 		setPropertyIfMissing("spring.freemarker.settings.time_format", "HH:mm:ss");
 		setPropertyIfMissing("spring.freemarker.settings.number_format", "0.######;");
 		setPropertyIfMissing("spring.freemarker.settings.boolean_format", "true,false");
+
+		//设置 jackson
+		setPropertyIfMissing("spring.jackson.date-format", "yyyy-MM-dd HH:mm:ss");
 	}
 }

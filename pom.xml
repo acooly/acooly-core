@@ -19,7 +19,8 @@
 		<module>acooly-core</module>
 		<module>acooly-core-test</module>
 		<module>acooly-components</module>
-	</modules>
+        <module>acooly-configuration-processor</module>
+    </modules>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

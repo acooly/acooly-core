@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>acooly-component-security</module>
+        <module>acooly-component-dubbo</module>
     </modules>
 
     <dependencies>

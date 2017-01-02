@@ -13,7 +13,6 @@ import java.io.Serializable;
  * @author zhangpu
  */
 public interface Orderable extends Serializable {
-
 	String getGid();
 
 	String getPartnerId();

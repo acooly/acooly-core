@@ -1,0 +1,3 @@
+providerLogFilter=com.acooly.module.dubbo.ProviderLogFilter
+consumerLogFilter=com.acooly.module.dubbo.ConsumerLogFilter
+mdcFilter=com.acooly.module.dubbo.MDCFilter

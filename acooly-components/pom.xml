@@ -14,6 +14,7 @@
     <modules>
         <module>acooly-component-security</module>
         <module>acooly-component-dubbo</module>
+        <module>acooly-component-mybatis</module>
     </modules>
 
     <dependencies>

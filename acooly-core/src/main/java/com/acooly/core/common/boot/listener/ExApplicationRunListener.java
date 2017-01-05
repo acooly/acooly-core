@@ -109,9 +109,11 @@ public class ExApplicationRunListener implements SpringApplicationRunListener, P
 		//for extends log
 		System.setProperty(LoggingSystem.SYSTEM_PROPERTY, ExLogbackLoggingSystem.class.getName());
 		//spring aop use cglib
-//		System.setProperty("spring.aop.proxy-target-class", Boolean.TRUE.toString());
+		System.setProperty("spring.aop.proxy-target-class", Boolean.TRUE.toString());
 		String logPath = Apps.getLogPath();
 		System.setProperty(Apps.LOG_PATH, logPath);
+		//TODO:关闭导致开发者模式失效，开启导致mybatis mapper类加载器不一致
+		System.setProperty("spring.devtools.restart.enabled","false");
 
 	}
 	
@@ -173,6 +175,7 @@ public class ExApplicationRunListener implements SpringApplicationRunListener, P
 				context.getEnvironment().getProperty(Apps.HTTP_PORT));
 		} else {
 			ConsoleLogInitializer.addConsoleAppender();
+			LoggerFactory.getLogger(ExApplicationRunListener.class).error("启动失败",exception);
 			ShutdownHooks.shutdownAll();
 			shutdownLogSystem();
 		}

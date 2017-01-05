@@ -26,7 +26,7 @@ import com.google.common.collect.Lists;
  * @date 2012年6月30日
  */
 public class DynamicSpecifications {
-	private static final ConversionService conversionService = new EnhanceDefaultConversionService();
+	private static final ConversionService conversionService = EnhanceDefaultConversionService.INSTANCE;
 
 	public static <T> Specification<T> bySearchFilter(final Collection<SearchFilter> filters, final Class<T> clazz) {
 		return new Specification<T>() {

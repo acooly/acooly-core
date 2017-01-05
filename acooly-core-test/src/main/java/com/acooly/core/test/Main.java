@@ -18,7 +18,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 /**
  * @author qiubo
  */
-@BootApp(sysName = "acooly-test", httpPort = 8080)
+@BootApp(sysName = "acooly-test", httpPort = 8081)
 public class Main {
 	public static void main(String[] args) {
 		Apps.setProfileIfNotExists("sdev");

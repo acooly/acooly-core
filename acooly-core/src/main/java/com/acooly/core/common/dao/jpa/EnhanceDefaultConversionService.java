@@ -4,7 +4,8 @@ import org.springframework.core.convert.support.DefaultConversionService;
 
 public class EnhanceDefaultConversionService extends DefaultConversionService {
 
-	public EnhanceDefaultConversionService() {
+	public static EnhanceDefaultConversionService INSTANCE=new EnhanceDefaultConversionService();
+	private EnhanceDefaultConversionService() {
 		super();
 		addConverter(new StringToDateConverter());
 	}

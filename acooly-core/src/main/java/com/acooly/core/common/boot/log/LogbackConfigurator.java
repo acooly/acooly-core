@@ -24,6 +24,7 @@ import ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.spi.ContextAware;
 import ch.qos.logback.core.spi.LifeCycle;
+import ch.qos.logback.core.util.FileSize;
 import ch.qos.logback.core.util.OptionHelper;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.Env;
@@ -38,6 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static ch.qos.logback.core.util.FileSize.GB_COEFFICIENT;
 import static com.acooly.core.common.boot.log.LogAutoConfiguration.LogProperties.pattern;
 
 /**
@@ -209,7 +211,7 @@ public class LogbackConfigurator {
 		rollingPolicy.setCleanHistoryOnStart(true);
 		
 		SizeAndTimeBasedFNATP<ILoggingEvent> triggeringPolicy = new SizeAndTimeBasedFNATP<>();
-		triggeringPolicy.setMaxFileSize("1024MB");
+		triggeringPolicy.setMaxFileSize(new FileSize(GB_COEFFICIENT));
 		triggeringPolicy.setTimeBasedRollingPolicy(rollingPolicy);
 		rollingPolicy.setTimeBasedFileNamingAndTriggeringPolicy(triggeringPolicy);
 		

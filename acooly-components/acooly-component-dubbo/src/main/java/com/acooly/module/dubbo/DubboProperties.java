@@ -67,7 +67,7 @@ public class DubboProperties implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		if (enable) {
-			Assert.hasText(owner, "dubbo应用负责人yiji.dubbo.owner不能为空");
+			Assert.hasText(owner, "dubbo应用负责人acooly.dubbo.owner不能为空");
 		}
 	}
 	@Data

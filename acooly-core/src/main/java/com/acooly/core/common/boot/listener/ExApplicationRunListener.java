@@ -33,8 +33,6 @@ import org.springframework.boot.SpringApplicationRunListener;
 import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.Ordered;
-import org.springframework.core.PriorityOrdered;
 import org.springframework.core.SpringVersion;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
@@ -46,7 +44,7 @@ import java.util.List;
 /**
  * @author qiubo
  */
-public class ExApplicationRunListener implements SpringApplicationRunListener, PriorityOrdered {
+public class ExApplicationRunListener implements SpringApplicationRunListener {
 	private static List<String> disabledPackageName = Lists.newArrayList("", "com.acooly", "com.acooly.core",
 		"com.acooly.core.common.boot");
 	
@@ -112,7 +110,7 @@ public class ExApplicationRunListener implements SpringApplicationRunListener, P
 		System.setProperty("spring.aop.proxy-target-class", Boolean.TRUE.toString());
 		String logPath = Apps.getLogPath();
 		System.setProperty(Apps.LOG_PATH, logPath);
-		//TODO:关闭导致开发者模式失效，开启导致mybatis mapper类加载器不一致
+		//TODO:关闭导致开发者模式失效，开启导致mybatis mapper、dubbo类加载器不一致
 		System.setProperty("spring.devtools.restart.enabled","false");
 
 	}
@@ -160,7 +158,7 @@ public class ExApplicationRunListener implements SpringApplicationRunListener, P
 	
 	@Override
 	public void contextPrepared(final ConfigurableApplicationContext context) {
-		new DevToolsDetector().apply(context.getEnvironment());
+		new DevModeDetector().apply(context.getEnvironment());
 	}
 	
 	@Override
@@ -187,10 +185,10 @@ public class ExApplicationRunListener implements SpringApplicationRunListener, P
 		loggerContext.stop();
 	}
 	
-	@Override
-	public int getOrder() {
-		return Ordered.LOWEST_PRECEDENCE - 1;
-	}
+//	@Override
+//	public int getOrder() {
+//		return Ordered.LOWEST_PRECEDENCE - 1;
+//	}
 	
 	public static class AppBanner implements Banner {
 		private static List<String> infos = Lists.newArrayList();
@@ -222,18 +220,7 @@ public class ExApplicationRunListener implements SpringApplicationRunListener, P
 			return infos;
 		}
 	}
-	
-	/**
-	 * 检测是否为开发模式
-	 */
-	public static class DevToolsDetector {
-		public void apply(ConfigurableEnvironment environment) {
-			if (environment.getPropertySources().contains("refresh")) {
-				System.setProperty(Apps.DEV_MODE_KEY, Boolean.TRUE.toString());
-			}
-		}
-	}
-	
+
 	/**
 	 * 关闭应用
 	 */

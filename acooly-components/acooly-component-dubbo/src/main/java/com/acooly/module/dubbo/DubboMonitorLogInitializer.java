@@ -21,7 +21,7 @@ import com.acooly.core.common.boot.log.initializer.AbstractLogInitializer;
 public class DubboMonitorLogInitializer extends AbstractLogInitializer {
 	@Override
 	public void init(LogbackConfigurator configurator) {
-		if (configurator.getEnvironment().getProperty("yiji.dubbo.enable", Boolean.class, Boolean.TRUE)) {
+		if (configurator.getEnvironment().getProperty("acooly.dubbo.enable", Boolean.class, Boolean.TRUE)) {
 			configurator.logger("com.alibaba.dubbo.monitor.dubbo.DubboMonitor", Level.WARN);
 		}
 	}

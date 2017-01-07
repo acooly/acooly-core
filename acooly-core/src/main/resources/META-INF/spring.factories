@@ -23,6 +23,9 @@ org.springframework.context.ApplicationContextInitializer=\
 com.acooly.core.common.boot.component.ComponentExtensionContextInitializer,\
 com.acooly.core.common.boot.listener.HolderInitApplicationContextInitializer
 
+org.springframework.context.ApplicationListener=\
+com.acooly.core.common.boot.listener.EnvironmentApplicationListener
+
 com.acooly.core.common.boot.component.ComponentInitializer=\
 com.acooly.core.common.boot.component.ds.DruidComponentInitializer,\
 com.acooly.core.common.boot.component.jpa.JPAComponentInitializer,\

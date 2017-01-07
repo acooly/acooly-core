@@ -21,9 +21,9 @@ import static com.acooly.core.common.boot.component.cache.CacheComponentInitiali
 public class DubboDependencyChecker implements DependencyChecker {
 	@Override
 	public void check(Environment environment) {
-		if (environment.getProperty("yiji.dubbo.enable", Boolean.class, Boolean.TRUE)) {
-			if (environment.getProperty("yiji.dubbo.provider.enable", Boolean.class, Boolean.TRUE)) {
-				Integer port = environment.getRequiredProperty("yiji.dubbo.provider.port", Integer.class);
+		if (environment.getProperty("acooly.dubbo.enable", Boolean.class, Boolean.TRUE)) {
+			if (environment.getProperty("acooly.dubbo.provider.enable", Boolean.class, Boolean.TRUE)) {
+				Integer port = environment.getRequiredProperty("acooly.dubbo.provider.port", Integer.class);
 				if (isPortUsing(port.intValue())) {
 					throw new AppConfigException("dubbo port:" + port + " is using.");
 				}

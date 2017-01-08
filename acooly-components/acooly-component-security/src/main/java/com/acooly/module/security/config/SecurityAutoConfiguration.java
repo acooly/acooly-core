@@ -10,8 +10,8 @@
 package com.acooly.module.security.config;
 
 import com.acooly.core.common.boot.Apps;
-import com.acooly.core.common.boot.component.jpa.JPAAutoConfig;
-import com.acooly.core.common.dao.jpa.AbstractEntityJpaDao;
+import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
+import com.acooly.module.jpa.JPAAutoConfig;
 import com.acooly.module.security.captche.CaptchaServlet;
 import com.acooly.module.security.defence.XssDefenseFilter;
 import com.acooly.module.security.defence.csrf.CookieCsrfTokenRepository;

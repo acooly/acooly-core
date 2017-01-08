@@ -7,17 +7,18 @@
  */
 package com.acooly.core.common.dao.jdbc;
 
-import java.util.List;
-import java.util.Map;
-
+import com.acooly.core.common.dao.support.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.acooly.core.common.dao.support.Hibernates;
-import com.acooly.core.common.dao.support.PageInfo;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 基于native-sql的DAO基类
@@ -25,16 +26,17 @@ import com.acooly.core.common.dao.support.PageInfo;
  * @author zhangpu
  */
 public abstract class AbstractJdbcTemplateDao {
-
+	
 	public static enum DbType {
-		mysql, oracle
+								mysql,
+								oracle
 	}
-
+	
 	@Autowired
 	protected JdbcTemplate jdbcTemplate;
-
+	
 	private DbType dbType;
-
+	
 	public <T> PageInfo<T> query(PageInfo<T> pageInfo, String sql, Class<T> requiredType) {
 		DbType dbType = getDbType();
 		if (dbType == DbType.mysql) {
@@ -45,12 +47,12 @@ public abstract class AbstractJdbcTemplateDao {
 			throw new UnsupportedOperationException("不支持[" + dbType + "]的分页查询");
 		}
 	}
-
+	
 	protected DbType getDbType() {
 		if (dbType == null) {
 			synchronized (this) {
 				if (dbType == null) {
-					String jdbcUrl = Hibernates.getJdbcUrlFromDataSource(jdbcTemplate.getDataSource());
+					String jdbcUrl = getJdbcUrlFromDataSource(jdbcTemplate.getDataSource());
 					if (jdbcUrl.contains(":mysql:")) {
 						dbType = DbType.mysql;
 					} else if (jdbcUrl.contains(":oracle:")) {
@@ -64,14 +66,32 @@ public abstract class AbstractJdbcTemplateDao {
 		}
 		return dbType;
 	}
-
+	
+	public static String getJdbcUrlFromDataSource(DataSource dataSource) {
+		Connection connection = null;
+		try {
+			connection = dataSource.getConnection();
+			if (connection == null) {
+				throw new IllegalStateException("Connection returned by DataSource [" + dataSource + "] was null");
+			}
+			return connection.getMetaData().getURL();
+		} catch (SQLException e) {
+			throw new RuntimeException("Could not get database url", e);
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+	}
+	
 	/**
 	 * 实体查询
 	 * 
-	 * @param sql
-	 *            查询sql
-	 * @param elementType
-	 *            实体类型 支持pojo或map
+	 * @param sql 查询sql
+	 * @param elementType 实体类型 支持pojo或map
 	 * @return List<elementType>
 	 * @throws DataAccessException
 	 */
@@ -83,7 +103,7 @@ public abstract class AbstractJdbcTemplateDao {
 			return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(elementType));
 		}
 	}
-
+	
 	/**
 	 * Oracle jdbc 分页查询简单封装
 	 * 
@@ -103,7 +123,7 @@ public abstract class AbstractJdbcTemplateDao {
 		// 总记录数
 		long totalCount = getCount(sqlCount);
 		long totalPage = (totalCount % pageInfo.getCountOfCurrentPage() == 0
-				? totalCount / pageInfo.getCountOfCurrentPage() : totalCount / pageInfo.getCountOfCurrentPage() + 1);
+			? totalCount / pageInfo.getCountOfCurrentPage() : totalCount / pageInfo.getCountOfCurrentPage() + 1);
 		pageInfo.setTotalCount(totalCount);
 		pageInfo.setTotalPage(totalPage);
 		
@@ -116,14 +136,14 @@ public abstract class AbstractJdbcTemplateDao {
 		pageSql = StringUtils.replace(pageSql, "${sql}", sql);
 		pageSql = StringUtils.replace(pageSql, "${startNum}", String.valueOf(startNum));
 		pageSql = StringUtils.replace(pageSql, "${endNum}", String.valueOf(endNum));
-
+		
 		List<T> result = queryForList(pageSql, requiredType);
-
+		
 		pageInfo.setPageResults(result);
 		
 		return pageInfo;
 	}
-
+	
 	/**
 	 * mysql 分页查询
 	 * 
@@ -143,9 +163,8 @@ public abstract class AbstractJdbcTemplateDao {
 				endNum = (int) totalCount;
 			}
 			long totalPage = (totalCount % pageInfo.getCountOfCurrentPage() == 0
-					? totalCount / pageInfo.getCountOfCurrentPage()
-					: totalCount / pageInfo.getCountOfCurrentPage() + 1);
-
+				? totalCount / pageInfo.getCountOfCurrentPage() : totalCount / pageInfo.getCountOfCurrentPage() + 1);
+			
 			String pageSql = sql + " limit " + startNum + "," + pageInfo.getCountOfCurrentPage();
 			List<T> result = queryForList(pageSql, dtoEntity);
 			pageInfo.setPageResults(result);
@@ -156,12 +175,12 @@ public abstract class AbstractJdbcTemplateDao {
 		}
 		return pageInfo;
 	}
-
+	
 	private long getCount(String sqlCount) {
 		return jdbcTemplate.queryForObject(sqlCount, Long.class);
 	}
-
+	
 	private static final String ORACLE_PAGESQL_TEMPLATE = "SELECT * FROM (SELECT XX.*,rownum ROW_NUM FROM (${sql}) XX ) ZZ"
-			+ " where ZZ.ROW_NUM BETWEEN ${startNum} AND ${endNum}";
-
+															+ " where ZZ.ROW_NUM BETWEEN ${startNum} AND ${endNum}";
+	
 }

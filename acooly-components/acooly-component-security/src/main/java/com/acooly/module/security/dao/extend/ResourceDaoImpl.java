@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
-import com.acooly.core.common.dao.jpa.JapDynamicQueryDao;
+import com.acooly.module.jpa.JapDynamicQueryDao;
 import com.acooly.module.security.domain.Resource;
 import com.acooly.module.security.dto.ResourceNode;
 import com.google.common.collect.Lists;

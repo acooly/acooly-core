@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 import static ch.qos.logback.core.util.FileSize.GB_COEFFICIENT;
-import static com.acooly.core.common.boot.log.LogAutoConfiguration.LogProperties.pattern;
+import static com.acooly.core.common.boot.log.LogAutoConfig.LogProperties.pattern;
 
 /**
  * @author qiubo

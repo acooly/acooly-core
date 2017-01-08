@@ -7,7 +7,7 @@
  */
  package com.acooly.core.test.dao;
 
-import com.acooly.core.common.dao.jpa.EntityJpaDao;
+import com.acooly.module.jpa.EntityJpaDao;
 import com.acooly.core.test.domain.App;
 
 /**

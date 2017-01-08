@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.acooly.core.common.dao.jpa.EntityJpaDao;
+import com.acooly.module.jpa.EntityJpaDao;
 import com.acooly.module.security.domain.Portallet;
 
 /**

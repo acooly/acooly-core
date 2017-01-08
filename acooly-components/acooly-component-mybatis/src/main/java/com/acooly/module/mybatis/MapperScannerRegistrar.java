@@ -36,7 +36,7 @@ public class MapperScannerRegistrar implements BeanFactoryAware, ImportBeanDefin
 			if (this.resourceLoader != null) {
 				scanner.setResourceLoader(this.resourceLoader);
 			}
-			scanner.setMarkerInterface(MyBatisEntityDao.class);
+			scanner.setMarkerInterface(EntityMybatisDao.class);
 			scanner.registerFilters();
 			scanner.doScan(Apps.getBasePackage());
 		} catch (IllegalStateException ex) {

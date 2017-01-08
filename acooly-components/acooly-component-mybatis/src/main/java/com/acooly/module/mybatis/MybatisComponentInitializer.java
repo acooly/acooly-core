@@ -10,7 +10,6 @@
  */
 package com.acooly.module.mybatis;
 
-import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.component.ComponentInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -20,8 +19,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class MybatisComponentInitializer implements ComponentInitializer {
 	@Override
 	public void initialize(ConfigurableApplicationContext applicationContext) {
-		setPropertyIfMissing("mybatis.typeAliasesPackage", Apps.getBasePackage() + ".domain");
-		setPropertyIfMissing("mybatis.mapperLocations", "classpath:mapper/*.xml");
-		setPropertyIfMissing("mapper.mappers", "com.acooly.module.mybatis.MyBatisEntityDao");
+		setPropertyIfMissing("mapper.mappers", "com.acooly.module.mybatis.EntityMybatisDao");
 	}
 }

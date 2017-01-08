@@ -9,7 +9,7 @@
  */
 package com.acooly.module.mybatis.ex;
 
-import com.acooly.core.common.dao.jpa.SearchFilter;
+import com.acooly.core.common.dao.support.SearchFilter;
 import com.acooly.module.mybatis.SearchFilterParser;
 import com.google.common.collect.Maps;
 import org.apache.ibatis.annotations.SelectProvider;

@@ -9,7 +9,8 @@
  */
 package com.acooly.module.mybatis.ex;
 
-import com.acooly.core.common.dao.jpa.SearchFilter;
+import com.acooly.core.common.dao.support.PageInfo;
+import com.acooly.core.common.dao.support.SearchFilter;
 import com.acooly.module.mybatis.SearchFilterParser;
 import com.google.common.collect.Maps;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -43,6 +44,9 @@ public interface ListMapper<T> {
 	@SelectProvider(type = ListProvider.class, method = "dynamicSQL")
 	List<T> list(Map<String, Object> map, Map<String, Boolean> sortMap);
 	
+	@SelectProvider(type = ListProvider.class, method = "dynamicSQL")
+	PageInfo<T> query(PageInfo<T> pageInfo, Map<String, Object> map, Map<String, Boolean> sortMap);
+	
 	class ListProvider extends MapperTemplate {
 		
 		public ListProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
@@ -61,33 +65,47 @@ public interface ListMapper<T> {
 			for (EntityColumn column : entityTable.getEntityClassColumns()) {
 				fieldsTypes.put(column.getProperty(), column.getJavaType());
 			}
-			ListSqlSource findSqlSource = new ListSqlSource(ms, entityClass, sql.toString(), fieldsTypes, false);
+			ListSqlSource findSqlSource = new ListSqlSource(ms, entityClass, sql.toString(), fieldsTypes, 1);
+			setSqlSource(ms, findSqlSource);
+		}
+		
+		public void query(MappedStatement ms) {
+			final Class<?> entityClass = getEntityClass(ms);
+			//将返回值修改为实体类型
+			setResultType(ms, entityClass);
+			StringBuilder sql = new StringBuilder();
+			sql.append(SqlHelper.selectAllColumns(entityClass));
+			sql.append(SqlHelper.fromTable(entityClass, tableName(entityClass)));
+			Map<String, Class<?>> fieldsTypes = Maps.newHashMap();
+			EntityTable entityTable = EntityHelper.getEntityTable(entityClass);
+			for (EntityColumn column : entityTable.getEntityClassColumns()) {
+				fieldsTypes.put(column.getProperty(), column.getJavaType());
+			}
+			ListSqlSource findSqlSource = new ListSqlSource(ms, entityClass, sql.toString(), fieldsTypes, 2);
 			setSqlSource(ms, findSqlSource);
 		}
 	}
 	
 	class ListSqlSource implements SqlSource {
 		private MappedStatement ms;
-		private Class<?> entityClass;
 		private String sql;
 		private Map<String, Class<?>> fieldsTypes;
-		private boolean unique;
+		private int index;
 		
 		public ListSqlSource(	MappedStatement ms, Class<?> entityClass, String sql, Map<String, Class<?>> fieldsTypes,
-								boolean unique) {
+								int index) {
 			this.ms = ms;
-			this.entityClass = entityClass;
 			this.sql = sql;
 			this.fieldsTypes = fieldsTypes;
-			this.unique = unique;
+			this.index = index;
 		}
 		
 		@Override
 		public BoundSql getBoundSql(Object parameterObject) {
 			Assert.isInstanceOf(MapperMethod.ParamMap.class, parameterObject);
 			MapperMethod.ParamMap paramMap = (MapperMethod.ParamMap) parameterObject;
-			Map<String, Object> map = (Map<String, Object>) paramMap.get("param1");
-			Map<String, Boolean> sortMap = (Map<String, Boolean>) paramMap.get("param2");
+			Map<String, Object> map = (Map<String, Object>) paramMap.get("param" + index);
+			Map<String, Boolean> sortMap = (Map<String, Boolean>) paramMap.get("param" + (index+1));
 			StringBuilder sqlResult = new StringBuilder();
 			sqlResult.append(sql);
 			sqlResult.append(" WHERE ");

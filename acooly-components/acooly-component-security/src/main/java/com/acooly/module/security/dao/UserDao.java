@@ -3,7 +3,7 @@ package com.acooly.module.security.dao;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-import com.acooly.core.common.dao.jpa.EntityJpaDao;
+import com.acooly.module.jpa.EntityJpaDao;
 import com.acooly.module.security.dao.extend.UserDaoCustom;
 import com.acooly.module.security.domain.User;
 import org.springframework.stereotype.Repository;

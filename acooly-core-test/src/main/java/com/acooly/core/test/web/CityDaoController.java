@@ -24,7 +24,8 @@
 
 package com.acooly.core.test.web;
 
-import com.acooly.core.test.dao.CityDao;
+import com.acooly.core.common.dao.support.PageInfo;
+import com.acooly.core.test.dao.CityMybatisDao;
 import com.acooly.core.test.domain.City;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -45,7 +46,7 @@ import java.util.Map;
 public class CityDaoController {
 	
 	@Autowired
-	private CityDao cityDao;
+	private CityMybatisDao cityDao;
 	
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public City create(City city) {
@@ -147,11 +148,23 @@ public class CityDaoController {
 	public List<City> list3() {
 		java.util.Map<String, Object> map = Maps.newHashMap();
 		map.put("EQ_name", "dfd2");
-//		map.put("EQ_state", "dfd1");
+		//		map.put("EQ_state", "dfd1");
 		Map<String, Boolean> sortMap = Maps.newHashMap();
 		sortMap.put("name", true);
 		sortMap.put("state", false);
 		return cityDao.list(map, sortMap);
+	}
+	
+	@RequestMapping(value = "/query", method = RequestMethod.GET)
+	public PageInfo<City> query() {
+		PageInfo pageInfo = new PageInfo();
+		java.util.Map<String, Object> map = Maps.newHashMap();
+		map.put("EQ_name", "dfd2");
+		//		map.put("EQ_state", "dfd1");
+		Map<String, Boolean> sortMap = Maps.newHashMap();
+		sortMap.put("name", true);
+		sortMap.put("state", false);
+		return cityDao.query(pageInfo, map, sortMap);
 	}
 	
 }

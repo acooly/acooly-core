@@ -9,8 +9,8 @@
  */
 package com.acooly.module.mybatis;
 
-import com.acooly.core.common.dao.jpa.EnhanceDefaultConversionService;
-import com.acooly.core.common.dao.jpa.SearchFilter;
+import com.acooly.core.common.dao.support.EnhanceDefaultConversionService;
+import com.acooly.core.common.dao.support.SearchFilter;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import org.springframework.core.convert.ConversionService;

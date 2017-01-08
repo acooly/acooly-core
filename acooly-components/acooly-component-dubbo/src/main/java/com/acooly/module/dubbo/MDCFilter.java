@@ -9,14 +9,13 @@
  */
 package com.acooly.module.dubbo;
 
-import com.acooly.core.utils.service.OrderBase;
 import com.acooly.core.utils.service.Orderable;
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.extension.Activate;
 import com.alibaba.dubbo.rpc.*;
 import org.slf4j.MDC;
 
-import static com.acooly.core.common.boot.log.LogAutoConfiguration.LogProperties.GID_KEY;
+import static com.acooly.core.common.boot.log.LogAutoConfig.LogProperties.GID_KEY;
 
 /**
  * @author qiubo@yiji.com

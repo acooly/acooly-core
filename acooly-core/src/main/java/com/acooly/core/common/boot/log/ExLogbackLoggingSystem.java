@@ -33,7 +33,7 @@ import java.security.CodeSource;
 import java.security.ProtectionDomain;
 import java.util.List;
 
-import static com.acooly.core.common.boot.log.LogAutoConfiguration.LogProperties.pattern;
+import static com.acooly.core.common.boot.log.LogAutoConfig.LogProperties.pattern;
 
 /**
  * @author qiubo

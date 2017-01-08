@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
-	<description>applicationContext配置文件列表</description>
-	<import resource="classpath:src/main/resources/spring/acooly/acooly-database.xml" />
-	<import resource="classpath:src/main/resources/spring/acooly/acooly-common.xml" />
-</beans>

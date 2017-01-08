@@ -3,9 +3,8 @@ com.acooly.core.common.boot.listener.ExApplicationRunListener,\
 com.acooly.core.common.boot.listener.DependencyCheckRunListener
 
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.acooly.core.common.boot.log.LogAutoConfiguration,\
+com.acooly.core.common.boot.log.LogAutoConfig,\
 com.acooly.core.common.boot.component.ds.JDBCAutoConfig,\
-com.acooly.core.common.boot.component.jpa.JPAAutoConfig,\
 com.acooly.core.common.boot.component.tomcat.TomcatAutoConfig,\
 com.acooly.core.common.boot.component.web.WebAutoConfig,\
 com.acooly.core.common.boot.component.cache.RedisAutoConfig
@@ -28,7 +27,6 @@ com.acooly.core.common.boot.listener.EnvironmentApplicationListener
 
 com.acooly.core.common.boot.component.ComponentInitializer=\
 com.acooly.core.common.boot.component.ds.DruidComponentInitializer,\
-com.acooly.core.common.boot.component.jpa.JPAComponentInitializer,\
 com.acooly.core.common.boot.component.tomcat.TomcatComponentInitializer,\
 com.acooly.core.common.boot.component.web.WebComponentInitializer,\
 com.acooly.core.common.boot.component.cache.CacheComponentInitializer

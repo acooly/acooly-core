@@ -23,7 +23,7 @@ import org.apache.commons.lang3.SystemUtils;
 
 import java.util.Iterator;
 
-import static com.acooly.core.common.boot.log.LogAutoConfiguration.LogProperties.consoleEnable;
+import static com.acooly.core.common.boot.log.LogAutoConfig.LogProperties.consoleEnable;
 
 /**
  * @author qiubo

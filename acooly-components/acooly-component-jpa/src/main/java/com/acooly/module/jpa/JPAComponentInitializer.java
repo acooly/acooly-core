@@ -9,6 +9,7 @@
  */
 package com.acooly.module.jpa;
 
+import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.boot.component.ComponentInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -21,6 +22,9 @@ public class JPAComponentInitializer implements ComponentInitializer {
 	public void initialize(ConfigurableApplicationContext applicationContext) {
 		if (!applicationContext.getEnvironment().getProperty(JPAProperties.ENABLE_KEY, Boolean.class, Boolean.TRUE)) {
 			System.setProperty("spring.data.jpa.repositories.enabled", "false");
+		}
+		if(!Env.isOnline()){
+			setPropertyIfMissing("spring.jpa.hibernate.ddl-auto","update");
 		}
 		//因为shiro的原因，使用filter代替 ref:com.acooly.core.common.boot.component.jpa.JPAAutoConfig.openEntityManagerInViewFilter
 		System.setProperty("spring.jpa.open-in-view", "false");

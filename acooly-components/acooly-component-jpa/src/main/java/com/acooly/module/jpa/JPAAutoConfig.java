@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
 import org.hibernate.SessionFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.data.AbstractRepositoryConfigurationSourceSupport;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
@@ -50,6 +51,7 @@ public class JPAAutoConfig {
 
 	@Bean
 	@ConditionalOnProperty(value = "acooly.jpa.openEntityManagerInViewFilterEnable", matchIfMissing = true)
+	@ConditionalOnWebApplication
 	public FilterRegistrationBean openEntityManagerInViewFilter() {
 		OpenEntityManagerInViewFilter filter = new OpenEntityManagerInViewFilter();
 

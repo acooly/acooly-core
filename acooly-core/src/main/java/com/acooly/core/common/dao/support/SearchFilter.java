@@ -2,7 +2,7 @@ package com.acooly.core.common.dao.support;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.util.Assert;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Map;

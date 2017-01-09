@@ -49,5 +49,15 @@
             <artifactId>acooly-component-jpa</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-cache</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-web</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

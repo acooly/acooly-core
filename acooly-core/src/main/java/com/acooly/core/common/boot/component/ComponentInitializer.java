@@ -12,6 +12,11 @@ package com.acooly.core.common.boot.component;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 /**
  * @author qiubo
  */
@@ -24,4 +29,6 @@ public interface ComponentInitializer extends AutoConfigExcluder {
 			System.setProperty(key, value.toString());
 		}
 	}
+	
+
 }

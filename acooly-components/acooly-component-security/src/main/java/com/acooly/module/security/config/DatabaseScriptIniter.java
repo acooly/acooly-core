@@ -10,7 +10,7 @@
 package com.acooly.module.security.config;
 
 import com.acooly.core.common.boot.ApplicationContextHolder;
-import com.acooly.core.common.boot.component.ds.DataSourceReadyEvent;
+import com.acooly.module.ds.DataSourceReadyEvent;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;

@@ -9,7 +9,7 @@
  */
 package com.acooly.module.mybatis;
 
-import com.acooly.core.common.boot.component.ds.JDBCAutoConfig;
+import com.acooly.module.ds.JDBCAutoConfig;
 import com.acooly.module.mybatis.interceptor.PageExecutorInterceptor;
 import com.acooly.module.mybatis.page.PageObjectFactory;
 import com.acooly.module.mybatis.page.PageObjectWrapperFactory;

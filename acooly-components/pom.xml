@@ -16,6 +16,10 @@
         <module>acooly-component-dubbo</module>
         <module>acooly-component-mybatis</module>
         <module>acooly-component-jpa</module>
+        <module>acooly-component-cache</module>
+        <module>acooly-component-ds</module>
+        <module>acooly-component-tomcat</module>
+        <module>acooly-component-web</module>
     </modules>
 
     <dependencies>

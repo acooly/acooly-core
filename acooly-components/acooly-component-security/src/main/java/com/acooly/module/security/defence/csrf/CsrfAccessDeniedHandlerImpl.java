@@ -25,7 +25,7 @@ import java.io.IOException;
 public class CsrfAccessDeniedHandlerImpl implements AccessDeniedHandler {
 	
 	protected static final Log logger = LogFactory
-		.getLog(org.springframework.security.web.access.AccessDeniedHandlerImpl.class);
+		.getLog(CsrfAccessDeniedHandlerImpl.class);
 	private String errorPage;
 	
 	public CsrfAccessDeniedHandlerImpl() {

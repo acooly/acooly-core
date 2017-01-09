@@ -6,15 +6,14 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import com.acooly.module.ds.PagedJdbcTemplate;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 
-import com.acooly.core.common.dao.jdbc.PagedJdbcTemplate;
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.module.security.domain.User;
-import org.springframework.stereotype.Service;
 
 /**
  * JPA方案中，对特殊需求的DAO的扩展实现DEMO

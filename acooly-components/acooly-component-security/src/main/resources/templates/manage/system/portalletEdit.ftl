@@ -16,7 +16,7 @@
 				<th>块收缩：</th>
 		 		<td>
 				<select name="collapsible" editable="false" panelHeight="auto" class="easyui-combobox" data-options="required:true">
-					<#list allCollapsibles.keySet() as key><option value="${key}">${allCollapsibles.get(key)}</option></#list>
+					<#list allCollapsibles as k,v><option value="${k}">${v}</option></#list>
 				</select>
 				</td>
 			</tr>
@@ -24,7 +24,7 @@
 				<th>内容类型：</th>
 		 		<td>
 				<select name="loadMode" id="manage_portallet_edit_loadMode" editable="false" panelHeight="auto" class="easyui-combobox" data-options="required:true">
-					<#list allLoadModes.keySet() as key><option value="${key}">${allLoadModes.get(key)}</option></#list>
+					<#list allLoadModes as k,v><option value="${k}">${v}</option></#list>
 				</select>
 				</td>
 			</tr>
@@ -33,7 +33,7 @@
 				<td>
 				<div style="margin-bottom:5px;">加载方式：
 				<select name="showMode" editable="false" panelHeight="auto" class="easyui-combobox" data-options="required:true">
-					<#list allShowModes.keySet() as key><option value="${key}">${allShowModes.get(key)}</option></#list>
+					<#list allShowModes as k,v><option value="${k}">${v}</option></#list>
 				</select>
 				</div>
 				<div><input type="text" name="href" style="width:400px;" class="easyui-validatebox" validType="length[1,128]"/><div>

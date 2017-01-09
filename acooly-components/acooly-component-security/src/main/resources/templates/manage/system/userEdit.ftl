@@ -56,19 +56,19 @@
 				<tr>
 					<th>类型</th>
 					<td><select name="userType" panelHeight="auto" style="width: 200px;height:27px;" class="easyui-combobox">
-						<#list allUserTypes.keySet() as key><option value="${key}">${allUserTypes.get(key)}</option></#list>
+						<#list allUserTypes as k,v><option value="${k}">${v}</option></#list>
 					</select></td>
 				</tr>
 				<tr>
 					<th>状态</th>
 					<td><select name="status" panelHeight="auto" style="width: 200px;height:27px;" class="easyui-combobox">
-							<#list allStatus.keySet() as key><option value="${key}">${allStatus.get(key)}</option></#list>
+							<#list allStatus as k,v><option value="${k}">${v}</option></#list>
 					</select></td>
 				</tr>
 				<tr>
 					<th>所属角色</th>
 					<td><select name="role" panelHeight="auto" style="width: 200px;height:27px;" class="easyui-combobox">
-							<#list allRoles as e><option <#if user.roles?contains(e)>selected</#if> value="${e.id}">${e.name}</option></#list>
+							<#list allRoles as e><option <#if user.roles?seq_contains(e)>selected</#if> value="${e.id}">${e.name}</option></#list>
 					</select></td>
 				</tr>
 				<tr>

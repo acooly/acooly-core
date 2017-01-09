@@ -12,6 +12,7 @@ package com.acooly.module.cache;
 import com.acooly.module.cache.declarative.DefaultCachingConfigurer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.CachingConfigurer;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -24,6 +25,7 @@ import java.net.UnknownHostException;
  */
 @Configuration
 @EnableConfigurationProperties({ CacheProperties.class })
+@EnableCaching
 public class CacheAutoConfig {
 	
 	@Bean

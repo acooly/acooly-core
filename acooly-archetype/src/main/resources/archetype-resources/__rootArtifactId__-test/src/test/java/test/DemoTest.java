@@ -37,6 +37,5 @@ public class DemoTest extends TestBase {
         String path = "xxxx";
         String url = buildUrl(path);
         assertThat(get(url).body()).contains("status=404");
-        assertThat(get(url).body()).contains("path=/" + path);
     }
 }

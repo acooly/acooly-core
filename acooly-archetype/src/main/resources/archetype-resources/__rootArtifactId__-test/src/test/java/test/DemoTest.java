@@ -15,8 +15,6 @@ package ${package}.test;
 
 import org.junit.Test;
 
-import static com.github.kevinsawicki.http.HttpRequest.get;
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author qiubo@yiji.com
@@ -24,18 +22,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DemoTest extends TestBase {
     @Test
     public void testController() throws Exception {
-        String url = buildUrl("hello");
-        assertThat(get(url).body()).isEqualTo("hello world");
+        assertGetBodyIs("hello", "hello world");
     }
+
     @Test
     public void testStaticResouce() throws Exception {
-        String url = buildUrl("demo.html");
-        assertThat(get(url).body()).isEqualTo("demo");
+        assertGetBodyIs("demo.html", "demo");
     }
+
     @Test
     public void testNotFound() throws Exception {
-        String path = "xxxx";
-        String url = buildUrl(path);
-        assertThat(get(url).body()).contains("status=404");
+        assertGetBodyContains("xxxx", "status=404");
     }
 }

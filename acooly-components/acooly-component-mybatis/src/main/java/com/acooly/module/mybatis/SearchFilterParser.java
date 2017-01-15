@@ -11,12 +11,14 @@ package com.acooly.module.mybatis;
 
 import com.acooly.core.common.dao.support.EnhanceDefaultConversionService;
 import com.acooly.core.common.dao.support.SearchFilter;
+import com.acooly.core.utils.Dates;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,6 +33,9 @@ public class SearchFilterParser {
 		sb.append(searchFilter.fieldName);
 		sb.append(" ");
 		Object value = convert(searchFilter, proType);
+		if(value instanceof Date){
+			value= "'"+Dates.format((Date)value)+"'";
+		}
 		//fixme: sql injection
 		switch (searchFilter.operator) {
 			case EQ:
@@ -57,19 +62,15 @@ public class SearchFilterParser {
 				sb.append(" like '" + value + "%'");
 				break;
 			case GT:
-				Assert.isInstanceOf(Number.class, value);
 				sb.append(" > " + value);
 				break;
 			case LT:
-				Assert.isInstanceOf(Number.class, value);
 				sb.append(" < " + value);
 				break;
 			case GTE:
-				Assert.isInstanceOf(Number.class, value);
 				sb.append(" >= " + value);
 				break;
 			case LTE:
-				Assert.isInstanceOf(Number.class, value);
 				sb.append(" <= " + value);
 				break;
 			case NULL:
@@ -145,6 +146,13 @@ public class SearchFilterParser {
 		} else {
 			if (searchFilter.value != null) {
 				if (!proType.isAssignableFrom(searchFilter.value.getClass())) {
+					if (searchFilter.operator == SearchFilter.Operator.LTE
+							&& proType.isAssignableFrom(java.sql.Date.class)) {
+						String oriValue = (String) searchFilter.value;
+						if (oriValue.length() == Dates.CHINESE_DATE_FORMAT_LINE.length()) {
+							searchFilter.value = Dates.addDay(Dates.parse(oriValue));
+						}
+					}
 					value = conversionService.convert(searchFilter.value, proType);
 				} else {
 					value = searchFilter.value;

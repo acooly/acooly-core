@@ -13,6 +13,7 @@ package com.acooly.module.tomcat;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.exception.AppConfigException;
+import com.google.common.collect.Maps;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.valves.AccessLogValve;
 import org.apache.coyote.AbstractProtocol;
@@ -27,11 +28,13 @@ import org.springframework.boot.context.embedded.JspServlet;
 import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 /**
  * @author qiubo
@@ -52,6 +55,10 @@ public class TomcatAutoConfig {
 			//1. disable jsp if possible
 			if (!EnvironmentHolder.get().getProperty("acooly.web.jsp.enable", Boolean.class, Boolean.TRUE)) {
 				JspServlet jspServlet = new JspServlet();
+				Map<String,String> param= Maps.newHashMap();
+				param.put("compilerTargetVM","1.8");
+				param.put("compilerSourceVM","1.8");
+				jspServlet.setInitParameters(param);
 				jspServlet.setRegistered(false);
 				container.setJspServlet(jspServlet);
 			}
@@ -89,7 +96,7 @@ public class TomcatAutoConfig {
 			}
 		};
 	}
-	
+
 	private void setTomcatWorkDir(TomcatEmbeddedServletContainerFactory factory) {
 		//设置tomcat base dir
 		File file = new File(Apps.getAppDataPath() + "/tomcat-" + Apps.getHttpPort());

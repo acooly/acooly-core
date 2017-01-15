@@ -26,29 +26,35 @@ import java.util.Map;
  */
 @Slf4j
 public class DevModeDetector {
-    private static final Map<String, Object> PROPERTIES;
-    static {
-        HashMap properties = new HashMap();
-        properties.put("spring.thymeleaf.cache", "false");
-        properties.put("spring.freemarker.cache", "false");
-        properties.put("spring.groovy.template.cache", "false");
-        properties.put("spring.velocity.cache", "false");
-        properties.put("spring.mustache.cache", "false");
-        properties.put("server.session.persistent", "true");
-        properties.put("spring.h2.console.enabled", "true");
-        properties.put("spring.resources.cache-period", "0");
-        properties.put("spring.resources.chain.cache", "false");
-        properties.put("spring.template.provider.cache", "false");
-        properties.put("spring.mvc.log-resolved-exception", "true");
-        PROPERTIES = Collections.unmodifiableMap(properties);
-    }
+	private static final Map<String, Object> PROPERTIES;
+	private static volatile boolean inited = false;
+	static {
+		HashMap properties = new HashMap();
+		properties.put("spring.thymeleaf.cache", "false");
+		properties.put("spring.freemarker.cache", "false");
+		properties.put("spring.groovy.template.cache", "false");
+		properties.put("spring.velocity.cache", "false");
+		properties.put("spring.mustache.cache", "false");
+		properties.put("server.session.persistent", "true");
+		properties.put("spring.h2.console.enabled", "true");
+		properties.put("spring.resources.cache-period", "0");
+		properties.put("spring.resources.chain.cache", "false");
+		properties.put("spring.template.provider.cache", "false");
+		properties.put("spring.mvc.log-resolved-exception", "true");
+		PROPERTIES = Collections.unmodifiableMap(properties);
+	}
+	
 	public void apply(ConfigurableEnvironment environment) {
+		if (inited) {
+			return;
+		}
+		inited = true;
 		if (environment.getPropertySources().contains("refresh")) {
 			System.setProperty(Apps.DEV_MODE_KEY, Boolean.TRUE.toString());
-		}else if(runInIDE()){
-            MapPropertySource propertySource = new MapPropertySource("refresh", PROPERTIES);
-            environment.getPropertySources().addLast(propertySource);
-        }
+		} else if (runInIDE()) {
+			MapPropertySource propertySource = new MapPropertySource("refresh", PROPERTIES);
+			environment.getPropertySources().addLast(propertySource);
+		}
 	}
 	
 	private boolean runInIDE() {

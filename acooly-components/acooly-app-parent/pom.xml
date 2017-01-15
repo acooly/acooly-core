@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.acooly</groupId>
+        <artifactId>acooly-parent</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>acooly-app-parent</artifactId>
+    <packaging>pom</packaging>
+    <description>acooly boot app parent</description>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-cache</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-ds</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-dubbo</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-jpa</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-mybatis</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-security</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-test</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-tomcat</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-web</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-web</artifactId>
+        </dependency>
+        <!-- 公共依赖-->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-ds</artifactId>
+            <version>4.0.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>

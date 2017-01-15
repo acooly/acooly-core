@@ -5,7 +5,7 @@
 
 /*
  * 修订记录:
- * qiubo@acooly.com 2016-12-14 22:32 创建
+ * qiubo 2016-12-14 22:32 创建
  */
 package com.acooly.core.common.boot;
 
@@ -14,7 +14,7 @@ import com.google.common.base.Strings;
 import org.springframework.util.StringUtils;
 
 /**
- * @author qiubo@acooly.com
+ * @author qiubo
  */
 public class Apps {
 	/**

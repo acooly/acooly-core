@@ -21,6 +21,7 @@
         <module>acooly-component-tomcat</module>
         <module>acooly-component-web</module>
         <module>acooly-component-test</module>
+        <module>acooly-app-parent</module>
     </modules>
 
     <dependencies>

@@ -1,21 +1,17 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-/*
- * www.yiji.com Inc.
- * Copyright (c) 2015 All Rights Reserved
- */
 package ${package};
 
-import com.yiji.boot.core.Apps;
+import com.acooly.core.common.boot.Apps;
 import org.springframework.boot.SpringApplication;
-import com.yiji.boot.core.YijiBootApplication;
+import com.acooly.core.common.BootApp;
 
 
 /**
- * @author qiubo@yiji.com
+ * @author qiubo
  */
-@YijiBootApplication(sysName = "${rootArtifactId}", httpPort = ${webport})
+@BootApp(sysName = "${rootArtifactId}", httpPort = ${webport})
 public class Main {
     public static void main(String[] args) {
         Apps.setProfileIfNotExists("sdev");

@@ -52,6 +52,7 @@ public class DevModeDetector {
 		if (environment.getPropertySources().contains("refresh")) {
 			System.setProperty(Apps.DEV_MODE_KEY, Boolean.TRUE.toString());
 		} else if (runInIDE()) {
+			log.info("开发者模式启动...");
 			MapPropertySource propertySource = new MapPropertySource("refresh", PROPERTIES);
 			environment.getPropertySources().addLast(propertySource);
 		}

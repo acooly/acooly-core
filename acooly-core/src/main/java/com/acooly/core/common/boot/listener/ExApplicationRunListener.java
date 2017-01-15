@@ -226,7 +226,7 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
 	 */
 	public static void shutdownApp() {
 		Logger logger = LoggerFactory.getLogger(ExApplicationRunListener.class);
-		logger.info("应用[{}}]开始关闭", Apps.getAppName());
+		logger.info("应用[{}]开始关闭", Apps.getAppName());
 		//在应用关闭时打印console log,便于自动化发布系统查看日志
 		ConsoleLogInitializer.addConsoleAppender();
 		//close spring container

@@ -20,6 +20,7 @@
 		<module>acooly-core-test</module>
 		<module>acooly-components</module>
         <module>acooly-configuration-processor</module>
+        <module>acooly-archetype</module>
     </modules>
 	<dependencies>
 		<dependency>

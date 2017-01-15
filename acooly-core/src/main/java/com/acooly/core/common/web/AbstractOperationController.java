@@ -97,7 +97,11 @@ public abstract class AbstractOperationController<T extends AbstractEntity, M ex
 		doDataBinding(request, entity);
 		onSave(request, response, model, entity, isCreate);
 		// 这里服务层默认是根据entity的Id是否为空自动判断是SAVE还是UPDATE.
-		getEntityService().save(entity);
+		if(isCreate){
+			getEntityService().save(entity);
+		}else{
+			getEntityService().update(entity);
+		}
 		return entity;
 	}
 

@@ -7,7 +7,7 @@ import com.acooly.core.common.domain.AbstractEntity;
 public class City extends AbstractEntity {
     private String name;
 
-    private String state;
+    private  String state;
 
     public String getName() {
         return name;

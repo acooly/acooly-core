@@ -18,11 +18,9 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,8 +29,10 @@ import java.util.Map;
 @ConfigurationProperties(prefix = MybatisProperties.PREFIX)
 @Data
 public class MybatisProperties implements InitializingBean {
-	
 	public static final String PREFIX = "acooly.mybatis";
+	
+	private static final String MAPPER_RESOURCE_PATTERN = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX
+															+ "/mybatis/**/*Mapper.xml";
 	
 	/**
 	 * 是否启用此组件
@@ -50,8 +50,8 @@ public class MybatisProperties implements InitializingBean {
 	private String typeHandlersPackage;
 	
 	private String typeAliasesPackage = Apps.getBasePackage() + ".domain";
-	private String[] mapperLocations;
 	private String configLocation;
+	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		if (settings == null) {
@@ -68,22 +68,11 @@ public class MybatisProperties implements InitializingBean {
 	}
 	
 	public Resource[] resolveMapperLocations() {
-		List<Resource> resources = new ArrayList<Resource>();
-		if (this.mapperLocations != null) {
-			for (String mapperLocation : this.mapperLocations) {
-				Resource[] mappers;
-				try {
-					mappers = new PathMatchingResourcePatternResolver().getResources(mapperLocation);
-					resources.addAll(Arrays.asList(mappers));
-				} catch (IOException e) {
-					
-				}
-			}
+		try {
+			return new PathMatchingResourcePatternResolver().getResources(MAPPER_RESOURCE_PATTERN);
+		} catch (IOException e) {
+			return null;
 		}
-		
-		Resource[] mapperLocations = new Resource[resources.size()];
-		mapperLocations = resources.toArray(mapperLocations);
-		return mapperLocations;
 	}
 	
 }

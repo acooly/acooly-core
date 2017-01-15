@@ -373,7 +373,7 @@ public abstract class AbstractStandardEntityController<T extends AbstractEntity,
 	protected void handleException(String action, Exception e, HttpServletRequest request) {
 		String message = getExceptionMessage(action, e);
 		saveMessage(request, message);
-		logger.info(message);
+		logger.error(message,e);
 	}
 
 	protected String getExceptionMessage(String action, Exception e) {

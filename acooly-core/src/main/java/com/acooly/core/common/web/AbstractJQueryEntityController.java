@@ -194,7 +194,7 @@ public abstract class AbstractJQueryEntityController<T extends AbstractEntity, M
 	 */
 	protected void handleException(JsonResult result, String action, Exception e) {
 		String message = getExceptionMessage(action, e);
-		logger.error(message, e.getMessage());
+		logger.error(message, e);
 		result.setSuccess(false);
 		if (e instanceof BusinessException) {
 			BusinessException be = (BusinessException) e;

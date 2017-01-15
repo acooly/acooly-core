@@ -51,9 +51,9 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>> implements
 				entityDao = (M) context.getBean(daoType);
 			}
 		} catch (IllegalAccessException e) {
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e.getMessage(),e);
 		} catch (NoSuchFieldException e) {
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e.getMessage(),e);
 		}
 		return entityDao;
 	}
@@ -69,8 +69,7 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>> implements
 		try {
 			return getEntityDao().get(id);
 		} catch (DataAccessException e) {
-			e.printStackTrace();
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e.getMessage(),e);
 		}
 
 	}
@@ -80,7 +79,7 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>> implements
 		try {
 			return getEntityDao().getAll();
 		} catch (DataAccessException e) {
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e.getMessage(),e);
 		}
 	}
 
@@ -89,7 +88,7 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>> implements
 		try {
 			getEntityDao().remove(o);
 		} catch (DataAccessException e) {
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e.getMessage(),e);
 		}
 	}
 
@@ -98,7 +97,7 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>> implements
 		try {
 			getEntityDao().removeById(id);
 		} catch (DataAccessException e) {
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e.getMessage(),e);
 		}
 
 	}
@@ -108,7 +107,7 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>> implements
 		try {
 			getEntityDao().removes(ids);
 		} catch (DataAccessException e) {
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e.getMessage(),e);
 		}
 	}
 
@@ -117,7 +116,7 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>> implements
 		try {
 			getEntityDao().create(o);
 		} catch (DataAccessException e) {
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e.getMessage(),e);
 		}
 	}
 
@@ -126,7 +125,7 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>> implements
 		try {
 			getEntityDao().saves(ts);
 		} catch (DataAccessException e) {
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e.getMessage(),e);
 		}
 	}
 
@@ -135,7 +134,7 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>> implements
 		try {
 			getEntityDao().update(o);
 		} catch (DataAccessException e) {
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e.getMessage(),e);
 		}
 	}
 
@@ -145,7 +144,7 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>> implements
 		try {
 			return getEntityDao().query(pageInfo, map, orderMap);
 		} catch (DataAccessException e) {
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e.getMessage(),e);
 		}
 	}
 
@@ -160,7 +159,7 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>> implements
 		try {
 			return getEntityDao().list(map, sortMap);
 		} catch (DataAccessException e) {
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e.getMessage(),e);
 		}
 	}
 

@@ -111,6 +111,9 @@ public interface ListMapper<T> {
 			sqlResult.append(" WHERE ");
 			for (Map.Entry<String, Object> entry : map.entrySet()) {
 				SearchFilter searchFilter = SearchFilter.parse(entry.getKey(), entry.getValue());
+				if(searchFilter==null){
+					continue;
+				}
 				Class proType = fieldsTypes.get(searchFilter.fieldName);
 				Assert.notNull(proType, "属性[" + searchFilter.fieldName + "]不存在");
 				sqlResult.append(SearchFilterParser.parseSqlField(searchFilter, proType));

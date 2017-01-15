@@ -11,6 +11,7 @@ package com.acooly.module.mybatis;
 
 import com.acooly.module.ds.JDBCAutoConfig;
 import com.acooly.module.mybatis.interceptor.PageExecutorInterceptor;
+import com.acooly.module.mybatis.interceptor.DateInterceptor;
 import com.acooly.module.mybatis.page.PageObjectFactory;
 import com.acooly.module.mybatis.page.PageObjectWrapperFactory;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
@@ -81,7 +82,7 @@ public class MybatisAutoConfig {
 		return sqlSessionFactory;
 	}
 	
-	private void customConfig(org.apache.ibatis.session.Configuration configuration,
+	private void customConfig(	org.apache.ibatis.session.Configuration configuration,
 								MybatisProperties mybatisProperties) {
 		BeanWrapperImpl wrapper = new BeanWrapperImpl(configuration);
 		mybatisProperties.getSettings().entrySet().stream()
@@ -94,5 +95,9 @@ public class MybatisAutoConfig {
 	public PageExecutorInterceptor pageExecutorInterceptor() {
 		return new PageExecutorInterceptor();
 	}
-
+	
+	@Bean
+	public DateInterceptor updateInterceptor() {
+		return new DateInterceptor();
+	}
 }

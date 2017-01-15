@@ -229,8 +229,6 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
 		logger.info("应用[{}}]开始关闭", Apps.getAppName());
 		//在应用关闭时打印console log,便于自动化发布系统查看日志
 		ConsoleLogInitializer.addConsoleAppender();
-		//run all shutdown hooks before spring container avoid service dependency
-		ShutdownHooks.shutdownAll();
 		//close spring container
 		ApplicationContext applicationContext = ApplicationContextHolder.get();
 		if (applicationContext instanceof ConfigurableApplicationContext) {
@@ -240,6 +238,7 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
 				((ConfigurableApplicationContext) applicationContext).close();
 			}
 		}
+		ShutdownHooks.shutdownAll();
 		shutdownLogSystem();
 	}
 	

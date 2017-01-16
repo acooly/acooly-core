@@ -15,14 +15,12 @@ import com.acooly.core.common.boot.component.ComponentInitializer;
 import com.acooly.core.utils.Ports;
 import com.acooly.core.utils.ShutdownHooks;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.SystemUtils;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.ConfigurableApplicationContext;
 import redis.embedded.RedisServer;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
 
 /**
  * @author qiubo
@@ -41,11 +39,15 @@ public class CacheComponentInitializer implements ComponentInitializer {
 			int port = redisProperties.getPort();
 			if (host.equalsIgnoreCase("localhost") || host.equalsIgnoreCase("127.0.0.1")) {
 				if (!Ports.isPortUsing(port)) {
+					if(SystemUtils.IS_OS_WINDOWS){
+						log.info("发现redis服务没有启动，但是您使用的windows，请手动启动redis");
+						return;
+					}
 					log.info("发现redis服务没有启动，使用内置redis用于开发测试");
 					try {
 						RedisServer redisServer = new RedisServer(6379);
 						redisServer.start();
-						ShutdownHooks.addShutdownHook(redisServer::stop,"内置redis关闭");
+						ShutdownHooks.addShutdownHook(redisServer::stop, "内置redis关闭");
 					} catch (IOException e) {
 						throw new RuntimeException(e);
 					}
@@ -53,7 +55,5 @@ public class CacheComponentInitializer implements ComponentInitializer {
 			}
 		}
 	}
-	
-
 	
 }

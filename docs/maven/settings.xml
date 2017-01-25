@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+	<pluginGroups>
+		<!-- pluginGroup | Specifies a further group identifier to use for plugin
+			lookup. <pluginGroup>com.your.plugins</pluginGroup> -->
+	</pluginGroups>
+	<proxies></proxies>
+
+	<servers>
+		<server>
+			<id>acooly-releases</id>
+			<username>deployment</username>
+			<password>820705</password>
+		</server>
+
+		<server>
+			<id>acooly-snapshot</id>
+			<username>deployment</username>
+			<password>820705</password>
+		</server>
+
+
+		<!-- yiji internal project -->
+		<server>
+			<id>nexus-releases</id>
+			<username>admin</username>
+			<password>admin123</password>
+		</server>
+
+		<server>
+			<id>nexus-snapshot</id>
+			<username>admin</username>
+			<password>admin123</password>
+		</server>
+
+		<!-- yiji outside package -->
+		<server>
+			<id>yiji-snapshots</id>
+			<username>admin</username>
+			<password>admin123</password>
+		</server>
+
+		<server>
+			<id>thirdparty</id>
+			<username>admin</username>
+			<password>admin123</password>
+		</server>
+
+
+
+		<server>
+			<id>nexus-site</id>
+			<username>deployment</username>
+			<password>820705</password>
+		</server>
+		<server>
+			<id>maven-website</id>
+			<username>root</username>
+			<password>820705</password>
+		</server>
+
+</servers>
+
+	<mirrors>
+
+		<mirror>
+			<id>acooly-mirror</id>
+			<mirrorOf>*</mirrorOf>
+			<name>nexue repository mirror for acooly.</name>
+			<url>http://acooly.cn/nexus/content/groups/public</url>
+		</mirror>
+	</mirrors>
+
+
+	<profiles>
+
+		<profile>
+			<id>dev</id>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>yiji-maven-plugin-repos</id>
+					<name>Maven yiji Mirror</name>
+					<url>http://192.168.45.35:8081/nexus/content/groups/public/</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+						<!--snapshots 总是检查是否有新版本 -->
+						<updatePolicy>always</updatePolicy>
+					</snapshots>
+				</pluginRepository>
+			</pluginRepositories>
+			<repositories>
+				<repository>
+					<id>yiji-maven-dep-repos</id>
+					<name>Maven yiji Mirror</name>
+					<url>http://192.168.45.35:8081/nexus/content/groups/public/</url>
+					<releases>
+						<enabled>true</enabled>
+						<updatePolicy>always</updatePolicy>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+						<!--snapshots 总是检查是否有新版本 -->
+						<updatePolicy>always</updatePolicy>
+					</snapshots>
+					<layout>default</layout>
+				</repository>
+			</repositories>
+		</profile>
+
+		<profile>
+		<id>online</id>
+		<pluginRepositories>
+			<pluginRepository>
+				<id>yiji-online-plugin-repos</id>
+				<name>Maven yiji online Mirror</name>
+				<url>http://192.168.45.199:8081/nexus/content/groups/public/</url>
+				<releases>
+					<enabled>true</enabled>
+				</releases>
+				<snapshots>
+					<enabled>true</enabled>
+					<!--snapshots 总是检查是否有新版本 -->
+					<updatePolicy>always</updatePolicy>
+				</snapshots>
+			</pluginRepository>
+		</pluginRepositories>
+		<repositories>
+			<repository>
+				<id>yiji-online-dep-repos</id>
+				<name>Maven yiji online Mirror</name>
+				<url>http://192.168.45.199:8081/nexus/content/groups/public/</url>
+				<releases>
+					<enabled>true</enabled>
+					<updatePolicy>always</updatePolicy>
+				</releases>
+				<snapshots>
+					<enabled>true</enabled>
+					<!--snapshots 总是检查是否有新版本 -->
+					<updatePolicy>always</updatePolicy>
+				</snapshots>
+				<layout>default</layout>
+			</repository>
+		</repositories>
+	</profile>
+
+		<profile>
+			<id>acooly</id>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>acooly-maven-plugin-repos</id>
+					<name>Maven acooly Mirror</name>
+					<url>http://acooly.cn/nexus/content/groups/public</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+						<!--snapshots 总是检查是否有新版本 -->
+						<updatePolicy>always</updatePolicy>
+					</snapshots>
+				</pluginRepository>
+			</pluginRepositories>
+			<repositories>
+				<repository>
+					<id>acooly-maven-dep-repos</id>
+					<name>Maven acooly Mirror</name>
+					<url>http://acooly.cn/nexus/content/groups/public</url>
+					<releases>
+						<enabled>true</enabled>
+						<updatePolicy>always</updatePolicy>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+						<!--snapshots 总是检查是否有新版本 -->
+						<updatePolicy>always</updatePolicy>
+					</snapshots>
+					<layout>default</layout>
+				</repository>
+			</repositories>
+		</profile>
+
+	</profiles>
+
+	<!-- activeProfiles | List of profiles that are active for all builds. | -->
+	<activeProfiles>
+		<activeProfile>acooly</activeProfile>
+	</activeProfiles>
+
+</settings>

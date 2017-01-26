@@ -32,6 +32,7 @@ public class CacheAutoConfig {
 	public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) throws UnknownHostException {
 		RedisTemplate<Object, Object> template = new RedisTemplate<>();
 		template.setConnectionFactory(redisConnectionFactory);
+		template.setKeySerializer(new DefaultKeySerializer());
 		template.setDefaultSerializer(springSessionDefaultRedisSerializer());
 		return template;
 	}

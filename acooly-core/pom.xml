@@ -31,8 +31,7 @@
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>persistence-api</artifactId>
-            <version>1.0</version>
-            <scope>provided</scope>
+            <version>2.1</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
@@ -151,6 +150,12 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-taglibs</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.servlet.jsp</groupId>
+                    <artifactId>jsp-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- JMS begin -->
         <dependency>

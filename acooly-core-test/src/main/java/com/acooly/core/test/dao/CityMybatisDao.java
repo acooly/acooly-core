@@ -11,9 +11,14 @@ package com.acooly.core.test.dao;
 
 import com.acooly.core.test.domain.City;
 import com.acooly.module.mybatis.EntityMybatisDao;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * @author qiubo@yiji.com
  */
 public interface CityMybatisDao extends EntityMybatisDao<City> {
+    @Select("select * from City")
+    List<City> selectAll();
 }

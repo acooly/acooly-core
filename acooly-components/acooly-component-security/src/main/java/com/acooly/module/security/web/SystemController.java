@@ -5,6 +5,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.acooly.core.common.domain.AbstractEntity;
+import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractStandardEntityController;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.acooly.core.common.web.AbstractEntityController;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.security.domain.Portallet;
@@ -32,7 +34,7 @@ import com.google.common.collect.Lists;
 
 @Controller
 @RequestMapping(value = "/manage/system/")
-public class SystemController extends AbstractEntityController<User, UserService> {
+public class SystemController extends AbstractJQueryEntityController<User, UserService> {
 
 	@Autowired
 	private UserService userService;

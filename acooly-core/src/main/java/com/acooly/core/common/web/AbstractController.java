@@ -24,18 +24,20 @@ import org.extremecomponents.table.limit.TableLimit;
 import org.extremecomponents.table.limit.TableLimitFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.WebUtils;
 
@@ -57,13 +59,13 @@ import com.google.common.collect.Maps;
  * @param <T>
  * @param <M>
  */
-public abstract class AbstractController<T extends AbstractEntity, M extends EntityService<T>>
-		extends MultiActionController {
+public abstract class AbstractController<T extends AbstractEntity, M extends EntityService<T>> {
 
 	/** 系统日志 */
 	private static final Logger logger = LoggerFactory
 			.getLogger(AbstractController.class);
-
+	@Autowired(required = false)
+	private Validator[] validators;
 	private String springMvcPostfix = ".mvc";
 
 	/** 所管理的Entity类型. */
@@ -451,6 +453,25 @@ public abstract class AbstractController<T extends AbstractEntity, M extends Ent
 		bind(request, command);
 	}
 
+	private void bind(HttpServletRequest request, Object command) throws Exception {
+		ServletRequestDataBinder binder = createBinder(request, command);
+		binder.bind(request);
+		if (this.validators != null) {
+			for (Validator validator : this.validators) {
+				if (validator.supports(command.getClass())) {
+					ValidationUtils.invokeValidator(validator, command, binder.getBindingResult());
+				}
+			}
+		}
+		binder.closeNoCatch();
+	}
+	protected ServletRequestDataBinder createBinder(HttpServletRequest request, Object command) throws Exception {
+		ServletRequestDataBinder binder = new ServletRequestDataBinder(command, "command");
+		initBinder(request, binder);
+		return binder;
+	}
+
+
 	/**
 	 * 根据业务需求，把需要输出的结果输出到输出流中,由子类实现
 	 * 
@@ -613,7 +634,6 @@ public abstract class AbstractController<T extends AbstractEntity, M extends Ent
 	/**
 	 * 兼容设置
 	 */
-	@Override
 	protected void initBinder(HttpServletRequest request,
 			ServletRequestDataBinder binder) throws Exception {
 		initBinder(binder);

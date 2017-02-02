@@ -10,8 +10,12 @@ import com.acooly.core.common.boot.ApplicationContextHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
+import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
@@ -32,8 +36,7 @@ import com.acooly.core.utils.system.IPUtil;
  * @param <T>
  * @param <M>
  */
-public abstract class AbstractGenericsController<T extends AbstractEntity, M extends EntityService<T>>
-		extends MultiActionController {
+public abstract class AbstractGenericsController<T extends AbstractEntity, M extends EntityService<T>> {
 
 	private static final Logger logger = LoggerFactory.getLogger(AbstractGenericsController.class);
 
@@ -43,6 +46,31 @@ public abstract class AbstractGenericsController<T extends AbstractEntity, M ext
 	private M entityService;
 
 	protected String allowMapping = "*";
+	@Autowired(required = false)
+	private Validator[] validators;
+
+
+	protected void bind(HttpServletRequest request, Object command) throws Exception {
+		ServletRequestDataBinder binder = createBinder(request, command);
+		binder.bind(request);
+		if (this.validators != null) {
+			for (Validator validator : this.validators) {
+				if (validator.supports(command.getClass())) {
+					ValidationUtils.invokeValidator(validator, command, binder.getBindingResult());
+				}
+			}
+		}
+		binder.closeNoCatch();
+	}
+	protected ServletRequestDataBinder createBinder(HttpServletRequest request, Object command) throws Exception {
+		ServletRequestDataBinder binder = new ServletRequestDataBinder(command, "command");
+		initBinder(request, binder);
+		return binder;
+	}
+
+	protected void initBinder(HttpServletRequest request,
+							  ServletRequestDataBinder binder) throws Exception {
+	}
 
 	protected void allow(HttpServletRequest request, HttpServletResponse response, MappingMethod mappingMethod) {
 		if (!MappingMethod.allow(allowMapping, mappingMethod)) {

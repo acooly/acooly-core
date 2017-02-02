@@ -47,6 +47,11 @@ public class CityDaoController {
 	
 	@Autowired
 	private CityMybatisDao cityDao;
+
+	@RequestMapping(value = "/selectAll", method = RequestMethod.GET)
+	public  List<City> selectAll() {
+		return cityDao.selectAll();
+	}
 	
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public City create(City city) {

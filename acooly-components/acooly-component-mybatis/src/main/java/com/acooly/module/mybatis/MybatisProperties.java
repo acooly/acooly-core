@@ -60,6 +60,7 @@ public class MybatisProperties implements InitializingBean {
 		if (!settings.containsKey("localCacheScope")) {
 			settings.put("localCacheScope", LocalCacheScope.STATEMENT.name());
 		}
+		settings.put("mapUnderscoreToCamelCase",Boolean.TRUE.toString());
 		if (typeHandlersPackage == null) {
 			typeHandlersPackage = "com.acooly.module.mybatis.typehandler";
 		} else {

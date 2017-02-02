@@ -37,7 +37,7 @@ public abstract class AbstractStandardEntityController<T extends AbstractEntity,
 		extends AbstractFileOperationController<T, M> {
 
 	/** 系统日志 */
-	private static final Logger logger = LoggerFactory.getLogger(AbstractCrudController.class);
+	private static final Logger logger = LoggerFactory.getLogger(AbstractStandardEntityController.class);
 	protected static final String LISTVIEW_POSIX = "List";
 	protected static final String EDITVIEW_POSIX = "Edit";
 	protected static final String SHOWVIEW_POSIX = "Show";
@@ -116,7 +116,7 @@ public abstract class AbstractStandardEntityController<T extends AbstractEntity,
 		allow(request, response, MappingMethod.exports);
 		try {
 			model.addAllAttributes(referenceData(request));
-			doExportExcel(request, response, model);
+			doExportExcel(request, response);
 			return null;
 		} catch (Exception e) {
 			logger.warn(getExceptionMessage("exportExcel", e), e);
@@ -130,7 +130,7 @@ public abstract class AbstractStandardEntityController<T extends AbstractEntity,
 		allow(request, response, MappingMethod.exports);
 		try {
 			model.addAllAttributes(referenceData(request));
-			doExportCsv(request, response, model);
+			doExportCsv(request, response);
 			return null;
 		} catch (Exception e) {
 			logger.warn(getExceptionMessage("exportCsv", e), e);
@@ -154,9 +154,8 @@ public abstract class AbstractStandardEntityController<T extends AbstractEntity,
 	public String importXls(Model model, HttpServletRequest request, HttpServletResponse response) {
 		allow(request, response, MappingMethod.imports);
 		try {
-			List<T> entities = doImport(request, response, model, FileType.EXCEL);
+			List<T> entities = doImport(request, response, FileType.EXCEL);
 			saveMessage(request, "Excel导入成功，批量插入数据" + entities.size() + "条");
-			entities = null;
 		} catch (Exception e) {
 			logger.warn(getExceptionMessage("importXls", e), e);
 			handleException("Excel导入", e, request);
@@ -168,9 +167,8 @@ public abstract class AbstractStandardEntityController<T extends AbstractEntity,
 	public String importCsv(Model model, HttpServletRequest request, HttpServletResponse response) {
 		allow(request, response, MappingMethod.imports);
 		try {
-			List<T> entities = doImport(request, response, model, FileType.CSV);
+			List<T> entities = doImport(request, response, FileType.CSV);
 			saveMessage(request, "CSV导入成功，批量插入数据" + entities.size() + "条");
-			entities = null;
 		} catch (Exception e) {
 			logger.warn(getExceptionMessage("importCsv", e), e);
 			handleException("CSV导入", e, request);
@@ -294,8 +292,7 @@ public abstract class AbstractStandardEntityController<T extends AbstractEntity,
 
 	/**
 	 * 删除实体,支持单个和批量
-	 * 
-	 * @param id
+	 *
 	 * @param model
 	 * @param request
 	 * @param response
@@ -336,7 +333,6 @@ public abstract class AbstractStandardEntityController<T extends AbstractEntity,
 	/**
 	 * 向View层传递message时将message放入httpSession的messages变量中.
 	 * 放在session中能保证message即使Redirect也不会消失。 需配合
-	 * {@link com.acooly.core.common.web.support.framwork.common.web.acooly.common.util.filer.MessageFilter
 	 * MessageFilter}使用, MessageFilter实现从Session中读取message并放入到request中
 	 * 然后，从session中删除message
 	 */

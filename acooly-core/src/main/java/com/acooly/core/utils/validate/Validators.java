@@ -1,12 +1,14 @@
 package com.acooly.core.utils.validate;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import com.acooly.core.common.exception.OrderCheckException;
 import com.acooly.core.utils.Strings;
 
 import com.google.common.collect.Maps;
@@ -34,32 +36,33 @@ public class Validators extends Validate {
 		}
 	}
 
-	public static void assertJSR303(Object object, Class<?>... groups) {
-		assertJSR303(object, null, groups);
+	public static Object assertJSR303(Object object, Class<?>... groups) {
+		return assertJSR303(object, null, groups);
 	}
 
-	public static void assertJSR303(Object object, ValidatorFactory validatorFactory, Class<?>... groups) {
+	public static Object assertJSR303(Object object, ValidatorFactory validatorFactory, Class<?>... groups) {
 		if (validatorFactory == null) {
 			validatorFactory = HibernateValidatorFactory.getInstance();
 			// validatorFactory = Validation.buildDefaultValidatorFactory();
 		}
-		Validator validator = validatorFactory.getValidator();
-		Set<ConstraintViolation<Object>> constraintViolations = null;
-		if (groups != null) {
-			constraintViolations = validator.validate(object, groups);
-		} else {
-			constraintViolations = validator.validate(object);
-		}
-
-		Map<String, String> errors = Maps.newHashMap();
+		Objects.requireNonNull(object);
+		Set<ConstraintViolation<Object>> constraintViolations = validatorFactory.getValidator().validate(
+				object, groups);
+		validateJsr303(object, constraintViolations);
+		return object;
+	}
+	private static <T> void validateJsr303(Object object, Set<ConstraintViolation<T>> constraintViolations) {
+		OrderCheckException exception = null;
 		if (constraintViolations != null && !constraintViolations.isEmpty()) {
-			for (ConstraintViolation<Object> constraintViolation : constraintViolations) {
-				errors.put(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
+			exception = new OrderCheckException();
+			for (ConstraintViolation<T> constraintViolation : constraintViolations) {
+				exception.addError(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
 			}
 		}
-		if (errors.size() > 0) {
-			throw new IllegalArgumentException(errors.toString());
+		if (exception != null) {
+			throw exception;
 		}
+
 	}
 
 }

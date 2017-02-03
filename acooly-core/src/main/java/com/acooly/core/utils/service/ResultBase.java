@@ -7,6 +7,7 @@
  */
 package com.acooly.core.utils.service;
 
+import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.core.utils.enums.ResultStatus;
 
@@ -38,4 +39,8 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object> implem
 		this.detail = detail;
 	}
 
+	@Override
+	public String toString() {
+		return ToString.toString(this);
+	}
 }

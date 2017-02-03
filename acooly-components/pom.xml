@@ -23,6 +23,7 @@
         <module>acooly-component-test</module>
         <module>acooly-app-parent</module>
         <module>acooly-component-filterchain</module>
+        <module>acooly-component-appservice</module>
     </modules>
 
     <dependencies>

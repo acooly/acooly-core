@@ -9,6 +9,7 @@ package com.acooly.core.utils.service;
 
 import javax.validation.constraints.NotNull;
 
+import com.acooly.core.utils.ToString;
 import org.hibernate.validator.constraints.Length;
 
 import com.acooly.core.utils.validate.Validators;
@@ -54,5 +55,8 @@ public class OrderBase implements Orderable {
 	public void setGid(String gid) {
 		this.gid = gid;
 	}
-
+	@Override
+	public String toString() {
+		return ToString.toString(this);
+	}
 }

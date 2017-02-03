@@ -24,4 +24,10 @@ public class SingleValueOrder<T> extends OrderBase {
 	@Valid
 	@NotNull
 	private T dto;
+	
+	public static <T> SingleValueOrder<T> from(T dto) {
+		SingleValueOrder<T> singleValueResult = new SingleValueOrder<T>();
+		singleValueResult.setDto(dto);
+		return singleValueResult;
+	}
 }

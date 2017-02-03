@@ -16,6 +16,6 @@ import com.acooly.core.utils.service.SingleValueResult;
 /**
  * @author qiubo@yiji.com
  */
-public interface DemoService {
+public interface DemoService1 {
 	SingleValueResult<String> echo(SingleValueOrder<String> msg);
 }

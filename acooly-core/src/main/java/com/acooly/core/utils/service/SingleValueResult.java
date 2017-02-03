@@ -25,9 +25,9 @@ public class SingleValueResult<T> extends ResultBase {
 		this.dto = dto;
 	}
 	
-	public static <T> SingleValueResult<T> from(T playload) {
+	public static <T> SingleValueResult<T> from(T dto) {
 		SingleValueResult<T> singleValueResult = new SingleValueResult<T>();
-		singleValueResult.setDto(playload);
+		singleValueResult.setDto(dto);
 		singleValueResult.setStatus(ResultStatus.success);
 		return singleValueResult;
 	}

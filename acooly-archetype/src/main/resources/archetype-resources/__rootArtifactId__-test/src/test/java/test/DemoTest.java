@@ -1,16 +1,7 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-/*
- * www.yiji.com Inc.
- * Copyright (c) 2015 All Rights Reserved
- */
 
-/*
- * 修订记录:
- * qzhanbo@yiji.com 2015-09-20 00:43 创建
- *
- */
 package ${package}.test;
 
 import org.junit.Test;

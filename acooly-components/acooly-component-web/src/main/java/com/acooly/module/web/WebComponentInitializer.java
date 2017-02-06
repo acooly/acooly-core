@@ -32,7 +32,11 @@ public class WebComponentInitializer implements ComponentInitializer {
 		setPropertyIfMissing("server.session.cookie.httpOnly", Boolean.TRUE.toString());
 		setPropertyIfMissing("server.session.tracking-modes", "cookie");
 		setPropertyIfMissing("server.session.timeout", 7200);
-		setPropertyIfMissing("spring.session.store-type", "REDIS");
+		if (Apps.isDevMode()) {
+			setPropertyIfMissing("spring.session.store-type", "HASH_MAP");
+		} else {
+			setPropertyIfMissing("spring.session.store-type", "REDIS");
+		}
 		setPropertyIfMissing("spring.redis.pool.max-active", 100);
 		
 		//设置freemarker
@@ -47,7 +51,7 @@ public class WebComponentInitializer implements ComponentInitializer {
 		setPropertyIfMissing("spring.freemarker.settings.time_format", "HH:mm:ss");
 		setPropertyIfMissing("spring.freemarker.settings.number_format", "0.######;");
 		setPropertyIfMissing("spring.freemarker.settings.boolean_format", "true,false");
-
+		
 		//设置 jackson
 		setPropertyIfMissing("spring.jackson.date-format", "yyyy-MM-dd HH:mm:ss");
 	}

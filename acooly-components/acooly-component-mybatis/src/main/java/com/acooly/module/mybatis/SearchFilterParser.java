@@ -128,6 +128,9 @@ public class SearchFilterParser {
 	}
 	
 	private static Object convert(SearchFilter searchFilter, Class proType) {
+		if(proType.isEnum()){
+			return searchFilter.value;
+		}
 		Object value = null;
 		if (searchFilter.operator == SearchFilter.Operator.IN || searchFilter.operator == SearchFilter.Operator.NOTIN) {
 			if (searchFilter.value == null) {

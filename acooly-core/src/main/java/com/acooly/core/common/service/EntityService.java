@@ -6,7 +6,6 @@ import java.util.Map;
 
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.exception.BusinessException;
-import com.acooly.core.common.exception.GeneralException;
 
 /**
  * 针对单个Entity对象的操作定义. 不依赖于具体ORM实现方案.
@@ -20,22 +19,22 @@ public interface EntityService<T> {
 	 * 
 	 * @param id
 	 * @return
-	 * @throws GeneralException
+	 * @throws BusinessException
 	 */
-	T get(Serializable id) throws GeneralException;
+	T get(Serializable id) throws BusinessException;
 
 	/**
 	 * 获得对象所有集合
 	 * 
 	 * @return
-	 * @throws GeneralException
+	 * @throws BusinessException
 	 */
-	List<T> getAll() throws GeneralException;
+	List<T> getAll() throws BusinessException;
 
 	/**
 	 * 保存对象
 	 * 
-	 * @param o
+	 * @param t
 	 * @throws BusinessException
 	 */
 	void save(T t) throws BusinessException;
@@ -43,7 +42,7 @@ public interface EntityService<T> {
 	/**
 	 * 批量保存对象
 	 * 
-	 * @param o
+	 * @param ts
 	 * @throws BusinessException
 	 */
 	void saves(List<T> ts) throws BusinessException;
@@ -80,16 +79,16 @@ public interface EntityService<T> {
 	 * @param pageInfo
 	 * @param map
 	 *            propertyName([EQ/LIKE...]_propertyName) --> value
-	 * @param orderMap
+	 * @param sortMap
 	 *            propertyName --> true:asc,false:desc
 	 * @return
-	 * @throws GeneralException
+	 * @throws BusinessException
 	 */
 	PageInfo<T> query(PageInfo<T> pageInfo, Map<String, Object> map,
-			Map<String, Boolean> sortMap) throws GeneralException;
+			Map<String, Boolean> sortMap) throws BusinessException;
 
 	PageInfo<T> query(PageInfo<T> pageInfo, Map<String, Object> map)
-			throws GeneralException;
+			throws BusinessException;
 
 	List<T> query(Map<String, Object> map, Map<String, Boolean> sortMap);
 

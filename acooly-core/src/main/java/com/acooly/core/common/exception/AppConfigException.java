@@ -10,9 +10,11 @@
 package com.acooly.core.common.exception;
 
 /**
+ * 应用配置异常
  * @author qiubo
  */
-public class AppConfigException extends RuntimeException {
+public class AppConfigException extends BusinessException {
+
     public AppConfigException(Throwable cause) {
         super(cause);
     }

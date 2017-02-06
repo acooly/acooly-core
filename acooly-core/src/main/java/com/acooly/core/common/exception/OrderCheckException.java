@@ -9,13 +9,15 @@
  */
 package com.acooly.core.common.exception;
 
+import com.acooly.core.utils.enums.Messageable;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author qiubo@yiji.com
  */
-public class OrderCheckException extends IllegalArgumentException {
+public class OrderCheckException extends IllegalArgumentException implements Messageable {
 
     private static final long serialVersionUID = 1L;
 
@@ -93,5 +95,15 @@ public class OrderCheckException extends IllegalArgumentException {
     @Override
     public synchronized Throwable fillInStackTrace() {
         return this;
+    }
+
+    @Override
+    public String code() {
+        return "INVALID_ARGUMENTS";
+    }
+
+    @Override
+    public String message() {
+        return this.getMessage();
     }
 }

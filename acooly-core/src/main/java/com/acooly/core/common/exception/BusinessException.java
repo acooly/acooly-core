@@ -1,5 +1,7 @@
 package com.acooly.core.common.exception;
 
+import com.acooly.core.utils.enums.Messageable;
+
 /**
  * 标记事务可回滚的业务异常,配合声明式事务使用
  * 
@@ -8,33 +10,58 @@ package com.acooly.core.common.exception;
  * @author pu.zhang
  * 
  */
-public class BusinessException extends AbstractI18NMessageException {
+public class BusinessException extends RuntimeException implements Messageable {
+	
+	private static final long serialVersionUID = 1L;
 
-	/** UID */
-	private static final long serialVersionUID = -9018571104185955115L;
-
+	private String code="SYSTEM";
+	
 	public BusinessException() {
 		super();
 	}
 
-	public BusinessException(String errorCode, String[] errorArgs, String debugMessage, Throwable cause) {
-		super(errorCode, errorArgs, debugMessage, cause);
+	public BusinessException(String message) {
+		super(message);
 	}
 
-	public BusinessException(String errorCode, String[] errorArgs, Throwable cause) {
-		super(errorCode, errorArgs, cause);
+	public BusinessException(String message, Throwable cause) {
+		super(message, cause);
 	}
 
-	public BusinessException(String errorCode, String[] errorArgs) {
-		super(errorCode, errorArgs);
+	public BusinessException(Throwable cause) {
+		super(cause);
 	}
 
-	public BusinessException(String debugMessage, Throwable cause) {
-		super(debugMessage, cause);
+	public BusinessException(String message, String code) {
+		super(message);
+		this.code = code;
 	}
 
-	public BusinessException(String debugMessage) {
-		super(debugMessage);
+	public BusinessException(String message, Throwable cause, String code) {
+		super(message, cause);
+		this.code = code;
 	}
 
+	public BusinessException(Throwable cause, String code) {
+		super(cause);
+		this.code = code;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	@Override
+	public String code() {
+		return this.code;
+	}
+
+	@Override
+	public String message() {
+		return this.getMessage();
+	}
 }

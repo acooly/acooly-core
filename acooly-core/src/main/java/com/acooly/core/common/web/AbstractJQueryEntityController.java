@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.acooly.core.utils.enums.Messageable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,11 +49,6 @@ public abstract class AbstractJQueryEntityController<T extends AbstractEntity, M
 
 	/**
 	 * EasyUI分页查询
-	 * 
-	 * @param request
-	 * @param response
-	 * @param model
-	 * @return
 	 */
 	@RequestMapping(value = { "listJson" })
 	@ResponseBody
@@ -196,10 +192,10 @@ public abstract class AbstractJQueryEntityController<T extends AbstractEntity, M
 		String message = getExceptionMessage(action, e);
 		logger.error(message, e);
 		result.setSuccess(false);
-		if (e instanceof BusinessException) {
-			BusinessException be = (BusinessException) e;
-			result.setCode(be.getErrorCode());
-			result.setMessage(be.getResourceMessage());
+		if (e instanceof Messageable) {
+			Messageable be = (Messageable) e;
+			result.setCode(be.code());
+			result.setMessage(be.message());
 		} else {
 			result.setCode(e.getClass().toString());
 			result.setMessage(message);

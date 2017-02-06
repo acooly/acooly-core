@@ -13,7 +13,6 @@ import org.springframework.dao.DataAccessException;
 import com.acooly.core.common.dao.EntityDao;
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.exception.BusinessException;
-import com.acooly.core.common.exception.GeneralException;
 import com.acooly.core.utils.BeanUtils;
 import com.acooly.core.utils.GenericsUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -140,7 +139,7 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>> implements
 
 	@Override
 	public PageInfo<T> query(PageInfo<T> pageInfo, Map<String, Object> map,
-			Map<String, Boolean> orderMap) throws GeneralException {
+			Map<String, Boolean> orderMap) throws BusinessException {
 		try {
 			return getEntityDao().query(pageInfo, map, orderMap);
 		} catch (DataAccessException e) {
@@ -150,7 +149,7 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>> implements
 
 	@Override
 	public PageInfo<T> query(PageInfo<T> pageInfo, Map<String, Object> map)
-			throws GeneralException {
+			throws BusinessException {
 		return query(pageInfo, map, null);
 	}
 

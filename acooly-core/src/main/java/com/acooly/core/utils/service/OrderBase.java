@@ -60,6 +60,10 @@ public class OrderBase implements Orderable {
 		this.gid= Ids.gid();
 		return this;
 	}
+	public OrderBase gid(String gid){
+		this.gid= gid;
+		return this;
+	}
 	public OrderBase partnerId(String partnerId){
 		this.partnerId=partnerId;
 		return this;

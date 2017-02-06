@@ -9,6 +9,7 @@
  */
 package com.acooly.core.utils.service;
 
+import com.acooly.core.utils.Ids;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,5 +30,16 @@ public class SingleValueOrder<T> extends OrderBase {
 		SingleValueOrder<T> singleValueResult = new SingleValueOrder<T>();
 		singleValueResult.setDto(dto);
 		return singleValueResult;
+	}
+	public SingleValueOrder gid(){
+		return this.gid(Ids.gid());
+	}
+	public SingleValueOrder gid(String gid){
+		this.setGid(gid);
+		return this;
+	}
+	public SingleValueOrder partnerId(String partnerId){
+		this.setPartnerId(partnerId);
+		return this;
 	}
 }

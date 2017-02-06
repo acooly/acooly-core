@@ -31,14 +31,14 @@ public class SingleValueOrder<T> extends OrderBase {
 		singleValueResult.setDto(dto);
 		return singleValueResult;
 	}
-	public SingleValueOrder gid(){
+	public SingleValueOrder<T> gid(){
 		return this.gid(Ids.gid());
 	}
-	public SingleValueOrder gid(String gid){
+	public SingleValueOrder<T> gid(String gid){
 		this.setGid(gid);
 		return this;
 	}
-	public SingleValueOrder partnerId(String partnerId){
+	public SingleValueOrder<T> partnerId(String partnerId){
 		this.setPartnerId(partnerId);
 		return this;
 	}

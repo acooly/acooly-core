@@ -26,15 +26,16 @@ import java.util.List;
  */
 public class SearchFilterParser {
 	private static final ConversionService conversionService = EnhanceDefaultConversionService.INSTANCE;
+	private static final char UNDERLINE='_';
 	
 	public static String parseSqlField(SearchFilter searchFilter, Class proType) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(" ");
-		sb.append(searchFilter.fieldName);
+		sb.append(camelToUnderline(searchFilter.fieldName));
 		sb.append(" ");
 		Object value = convert(searchFilter, proType);
 		if(value instanceof Date){
-			value= "'"+Dates.format((Date)value)+"'";
+			value= Dates.format((Date)value);
 		}
 		//fixme: sql injection
 		switch (searchFilter.operator) {
@@ -62,16 +63,32 @@ public class SearchFilterParser {
 				sb.append(" like '" + value + "%'");
 				break;
 			case GT:
-				sb.append(" > " + value);
+				if (value instanceof String) {
+					sb.append(" > '" + value + "'");
+				} else {
+					sb.append(" > " + value);
+				}
 				break;
 			case LT:
-				sb.append(" < " + value);
+				if (value instanceof String) {
+					sb.append(" < '" + value + "'");
+				} else {
+					sb.append(" < " + value);
+				}
 				break;
 			case GTE:
-				sb.append(" >= " + value);
+				if (value instanceof String) {
+					sb.append(" >= '" + value + "'");
+				} else {
+					sb.append(" >= " + value);
+				}
 				break;
 			case LTE:
-				sb.append(" <= " + value);
+				if (value instanceof String) {
+					sb.append(" <= '" + value + "'");
+				} else {
+					sb.append(" <= " + value);
+				}
 				break;
 			case NULL:
 				sb.append(" is null ");
@@ -167,5 +184,22 @@ public class SearchFilterParser {
 		}
 		
 		return value;
+	}
+	private static String camelToUnderline(String param){
+		if (param==null||"".equals(param.trim())){
+			return "";
+		}
+		int len=param.length();
+		StringBuilder sb=new StringBuilder(len);
+		for (int i = 0; i < len; i++) {
+			char c=param.charAt(i);
+			if (Character.isUpperCase(c)){
+				sb.append(UNDERLINE);
+				sb.append(Character.toLowerCase(c));
+			}else{
+				sb.append(c);
+			}
+		}
+		return sb.toString();
 	}
 }

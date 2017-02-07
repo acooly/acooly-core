@@ -5,7 +5,7 @@
  * date:2016年3月19日
  *
  */
-package com.acooly.core.utils.service;
+package com.acooly.core.common.facade;
 
 import java.util.Collection;
 import java.util.Map;

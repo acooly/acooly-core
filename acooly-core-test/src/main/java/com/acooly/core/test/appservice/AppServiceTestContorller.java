@@ -10,8 +10,8 @@
 package com.acooly.core.test.appservice;
 
 import com.acooly.core.utils.Ids;
-import com.acooly.core.utils.service.ResultBase;
-import com.acooly.core.utils.service.SingleValueOrder;
+import com.acooly.core.common.facade.ResultBase;
+import com.acooly.core.common.facade.SingleOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,8 +46,8 @@ public class AppServiceTestContorller {
 		return appServiceTestService.test3(newTestOrder(appRequest));
 	}
 	
-	private SingleValueOrder<AppDto> newTestOrder(AppDto appRequest) {
-		SingleValueOrder<AppDto> testOrder = new SingleValueOrder<>();
+	private SingleOrder<AppDto> newTestOrder(AppDto appRequest) {
+		SingleOrder<AppDto> testOrder = new SingleOrder<>();
 		testOrder.setGid(Ids.gid());
 		testOrder.setPartnerId("1");
 		testOrder.setDto(appRequest);

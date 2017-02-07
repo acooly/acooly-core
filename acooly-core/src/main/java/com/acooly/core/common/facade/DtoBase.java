@@ -7,7 +7,7 @@
  * 修订记录:
  * qiubo@yiji.com 2017-02-03 15:03 创建
  */
-package com.acooly.core.utils.service;
+package com.acooly.core.common.facade;
 
 import com.acooly.core.utils.ToString;
 

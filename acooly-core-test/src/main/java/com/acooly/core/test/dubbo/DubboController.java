@@ -9,8 +9,8 @@
  */
 package com.acooly.core.test.dubbo;
 
-import com.acooly.core.utils.service.SingleValueOrder;
-import com.acooly.core.utils.service.SingleValueResult;
+import com.acooly.core.common.facade.SingleOrder;
+import com.acooly.core.common.facade.SingleResult;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,14 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class DubboController {
 
 	@Reference(version = "1.0")
-	private DemoService demoService;
+	private DemoFacade demoFacade;
 	
 	@RequestMapping(value = "/dubbo", method = RequestMethod.GET)
-	public SingleValueResult<String> get(String msg) {
-		SingleValueOrder<String> request = new SingleValueOrder<>();
+	public SingleResult<String> get(String msg) {
+		SingleOrder<String> request = new SingleOrder<>();
 		request.gid().partnerId("test");
 		request.setDto(msg);
-		return demoService.echo(request);
+		return demoFacade.echo(request);
 	}
 	
 }

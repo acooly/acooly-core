@@ -12,7 +12,7 @@ package com.acooly.module.appservice.filter;
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.common.exception.OrderCheckException;
 import com.acooly.core.utils.Exceptions;
-import com.acooly.core.utils.service.OrderBase;
+import com.acooly.core.common.facade.OrderBase;
 import com.acooly.core.utils.validate.HibernateValidatorFactory;
 import com.acooly.module.appservice.AppService;
 import com.acooly.module.filterchain.Filter;

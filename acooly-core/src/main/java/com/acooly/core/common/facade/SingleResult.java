@@ -7,14 +7,14 @@
  * 修订记录:
  * qiubo@yiji.com 2017-02-03 15:16 创建
  */
-package com.acooly.core.utils.service;
+package com.acooly.core.common.facade;
 
 import com.acooly.core.utils.enums.ResultStatus;
 
 /**
  * @author qiubo@yiji.com
  */
-public class SingleValueResult<T> extends ResultBase {
+public class SingleResult<T> extends ResultBase {
 	private T dto;
 	
 	public T getDto() {
@@ -25,10 +25,10 @@ public class SingleValueResult<T> extends ResultBase {
 		this.dto = dto;
 	}
 	
-	public static <T> SingleValueResult<T> from(T dto) {
-		SingleValueResult<T> singleValueResult = new SingleValueResult<T>();
-		singleValueResult.setDto(dto);
-		singleValueResult.setStatus(ResultStatus.success);
-		return singleValueResult;
+	public static <T> SingleResult<T> from(T dto) {
+		SingleResult<T> singleResult = new SingleResult<>();
+		singleResult.setDto(dto);
+		singleResult.setStatus(ResultStatus.success);
+		return singleResult;
 	}
 }

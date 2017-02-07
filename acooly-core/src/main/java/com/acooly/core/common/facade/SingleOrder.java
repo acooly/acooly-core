@@ -7,7 +7,7 @@
  * 修订记录:
  * qiubo@yiji.com 2017-02-03 15:08 创建
  */
-package com.acooly.core.utils.service;
+package com.acooly.core.common.facade;
 
 import com.acooly.core.utils.Ids;
 import lombok.Getter;
@@ -21,24 +21,24 @@ import javax.validation.constraints.NotNull;
  */
 @Setter
 @Getter
-public class SingleValueOrder<T> extends OrderBase {
+public class SingleOrder<T> extends OrderBase {
 	@Valid
 	@NotNull
 	private T dto;
 	
-	public static <T> SingleValueOrder<T> from(T dto) {
-		SingleValueOrder<T> singleValueResult = new SingleValueOrder<T>();
-		singleValueResult.setDto(dto);
-		return singleValueResult;
+	public static <T> SingleOrder<T> from(T dto) {
+		SingleOrder<T> order = new SingleOrder<T>();
+		order.setDto(dto);
+		return order;
 	}
-	public SingleValueOrder<T> gid(){
+	public SingleOrder<T> gid(){
 		return this.gid(Ids.gid());
 	}
-	public SingleValueOrder<T> gid(String gid){
+	public SingleOrder<T> gid(String gid){
 		this.setGid(gid);
 		return this;
 	}
-	public SingleValueOrder<T> partnerId(String partnerId){
+	public SingleOrder<T> partnerId(String partnerId){
 		this.setPartnerId(partnerId);
 		return this;
 	}

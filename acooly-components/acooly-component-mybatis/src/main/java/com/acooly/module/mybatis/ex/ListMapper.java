@@ -105,21 +105,23 @@ public interface ListMapper<T> {
 			Assert.isInstanceOf(MapperMethod.ParamMap.class, parameterObject);
 			MapperMethod.ParamMap paramMap = (MapperMethod.ParamMap) parameterObject;
 			Map<String, Object> map = (Map<String, Object>) paramMap.get("param" + index);
-			Map<String, Boolean> sortMap = (Map<String, Boolean>) paramMap.get("param" + (index+1));
+			Map<String, Boolean> sortMap = (Map<String, Boolean>) paramMap.get("param" + (index + 1));
 			StringBuilder sqlResult = new StringBuilder();
 			sqlResult.append(sql);
-			sqlResult.append(" WHERE ");
-			for (Map.Entry<String, Object> entry : map.entrySet()) {
-				SearchFilter searchFilter = SearchFilter.parse(entry.getKey(), entry.getValue());
-				if(searchFilter==null){
-					continue;
+			if (map != null && !map.isEmpty()) {
+				sqlResult.append(" WHERE ");
+				for (Map.Entry<String, Object> entry : map.entrySet()) {
+					SearchFilter searchFilter = SearchFilter.parse(entry.getKey(), entry.getValue());
+					if (searchFilter == null) {
+						continue;
+					}
+					Class proType = fieldsTypes.get(searchFilter.fieldName);
+					Assert.notNull(proType, "属性[" + searchFilter.fieldName + "]不存在");
+					sqlResult.append(SearchFilterParser.parseSqlField(searchFilter, proType));
+					sqlResult.append(" AND ");
 				}
-				Class proType = fieldsTypes.get(searchFilter.fieldName);
-				Assert.notNull(proType, "属性[" + searchFilter.fieldName + "]不存在");
-				sqlResult.append(SearchFilterParser.parseSqlField(searchFilter, proType));
-				sqlResult.append(" AND ");
+				sqlResult.delete(sqlResult.length() - 4, sqlResult.length() - 1);
 			}
-			sqlResult.delete(sqlResult.length() - 4, sqlResult.length() - 1);
 			sqlResult.append("order by ");
 			if (sortMap == null || sortMap.isEmpty()) {
 				sqlResult.append(" id desc");

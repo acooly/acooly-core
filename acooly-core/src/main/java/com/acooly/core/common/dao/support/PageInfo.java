@@ -4,6 +4,7 @@ import com.acooly.core.utils.mapper.BeanCopier;
 import com.google.common.collect.Lists;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -138,6 +139,8 @@ public class PageInfo<T> implements Serializable {
 				list.add(BeanCopier.copy(pageResult, clazz));
 			}
 			info.setPageResults(list);
+		}else{
+			info.setPageResults(Collections.emptyList());
 		}
 		return info;
 	}

@@ -7,7 +7,7 @@ import com.acooly.core.common.boot.EnvironmentHolder;
  */
 public class FrameworkPropertiesHolder {
 	
-	private static FrameworkProperties config = null;
+	private static volatile FrameworkProperties config = null;
 	
 	@SuppressWarnings("unchecked")
 	public static FrameworkProperties get() {

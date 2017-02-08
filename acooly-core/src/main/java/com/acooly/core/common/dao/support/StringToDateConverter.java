@@ -1,11 +1,11 @@
 package com.acooly.core.common.dao.support;
 
+import org.springframework.core.convert.converter.Converter;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import org.springframework.core.convert.converter.Converter;
 
 /**
  * String to Date simple converter implement.
@@ -19,7 +19,7 @@ public class StringToDateConverter implements Converter<String, Date> {
 	public static final String DATE_FORMAT_3 = "yyyy/MM/dd HH:mm:ss";
 	public static final String DATE_FORMAT_4 = "yyyy/MM/dd";
 
-	public static final SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_1);
+
 
 	private List<String> dateFormats = new ArrayList<String>();
 
@@ -30,7 +30,7 @@ public class StringToDateConverter implements Converter<String, Date> {
 	@Override
 	public Date convert(String source) {
 		for (String dateFormat : dateFormats) {
-			sdf.applyPattern(dateFormat);
+			SimpleDateFormat sdf=	new SimpleDateFormat(dateFormat);
 			try {
 				return sdf.parse(source);
 			} catch (Exception e) {

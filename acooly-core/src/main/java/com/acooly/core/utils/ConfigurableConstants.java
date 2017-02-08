@@ -1,18 +1,17 @@
 package com.acooly.core.utils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
+import com.acooly.core.utils.conversion.TypeConverterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.AbstractEnvironment;
 
-import com.acooly.core.utils.conversion.TypeConverterUtils;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class ConfigurableConstants {
-	protected static Logger logger = LoggerFactory.getLogger(ConfigurableConstants.class);
-	protected static Properties p = new Properties();
+	protected final static Logger logger = LoggerFactory.getLogger(ConfigurableConstants.class);
+	protected final static Properties p = new Properties();
 
 	protected static void init(String propertyFileName) {
 		InputStream in = null;

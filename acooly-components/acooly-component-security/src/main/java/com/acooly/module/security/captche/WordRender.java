@@ -19,6 +19,7 @@ import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author qiubo
@@ -39,14 +40,14 @@ public class WordRender extends Configurable implements WordRenderer {
                 RenderingHints.VALUE_RENDER_QUALITY));
         g2D.setRenderingHints(hints);
         draw(width, height, fontSize, wordChars, charSpace, fonts, color, g2D);
-        Random random = new Random();
+        Random random = ThreadLocalRandom.current();
         image = twistImage(image, random);
         return image;
     }
 
     protected void draw(int width, int height, int fontSize, char[] wordChars, int charSpace,
                         Font[] fonts, Color color, Graphics2D g2D) {
-        Random random = new Random();
+        Random random = ThreadLocalRandom.current();
         FontRenderContext frc = g2D.getFontRenderContext();
         Font[] chosenFonts = new Font[wordChars.length];
         int[] charWidths = new int[wordChars.length];
@@ -94,7 +95,7 @@ public class WordRender extends Configurable implements WordRenderer {
     }
 
     protected int getRandomDegree(Boolean b, int max) {
-        int count = new Random().nextInt(max) + 3;
+        int count = ThreadLocalRandom.current().nextInt(max) + 3;
         if (b) {
             if (count > 0) {
                 count = -count;
@@ -127,7 +128,7 @@ public class WordRender extends Configurable implements WordRenderer {
     private int getXPosition4Twist(double dPhase, double dMultValue, int height, int xPosition,
                                    int yPosition) {
         //double PI = 4; // 此值越大，扭曲程度越大
-        double dx = (double) (Math.PI * yPosition) / height + dPhase;
+        double dx = Math.PI * yPosition / height + dPhase;
         double dy = Math.sin(dx);
         return xPosition + (int) (dy * dMultValue);
     }

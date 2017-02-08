@@ -136,7 +136,7 @@ public class PageInfo<T> implements Serializable {
 		if (pageResults != null && !pageResults.isEmpty()) {
 			List<E> list = Lists.newArrayListWithCapacity(this.pageResults.size());
 			for (T pageResult : pageResults) {
-				list.add(BeanCopier.copy(pageResult, clazz));
+				list.add(BeanCopier.copy(pageResult, clazz, BeanCopier.CopyStrategy.IGNORE_NULL));
 			}
 			info.setPageResults(list);
 		}else{

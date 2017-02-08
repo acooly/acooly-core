@@ -12,8 +12,6 @@ package com.acooly.core.test;
 import com.acooly.core.common.BootApp;
 import com.acooly.core.common.boot.Apps;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
  * @author qiubo

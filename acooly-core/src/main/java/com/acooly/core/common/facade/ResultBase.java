@@ -5,7 +5,7 @@
  * date:2016年3月19日
  *
  */
-package com.acooly.core.utils.service;
+package com.acooly.core.common.facade;
 
 import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.enums.Messageable;
@@ -37,6 +37,10 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object> implem
 
 	public void setDetail(String detail) {
 		this.detail = detail;
+	}
+
+	public boolean success(){
+		return status==ResultStatus.success;
 	}
 
 	@Override

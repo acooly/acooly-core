@@ -17,6 +17,7 @@ import org.apache.ibatis.session.RowBounds;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -54,8 +55,11 @@ public class PageExecutorInterceptor implements Interceptor {
 		MappedStatement newMapperStmt = copyFromMappedStatement(mappedStatement, newBoundSql);
 		invocation.getArgs()[0] = newMapperStmt;
 		List result = (List) invocation.proceed();
-		
-		pageInfo.setPageResults(result);
+		if (result == null) {
+			pageInfo.setPageResults(Collections.emptyList());
+		}else{
+			pageInfo.setPageResults(result);
+		}
 		MyBatisPage page = new MyBatisPage<>(result, totalCount, totalPage);
 		page.setCurrentPage(pageInfo.getCurrentPage());
 		page.setCountOfCurrentPage(pageInfo.getCountOfCurrentPage());

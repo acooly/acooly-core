@@ -10,12 +10,12 @@
  */
 package com.acooly.core.test.dubbo;
 
-import com.acooly.core.utils.service.SingleValueOrder;
-import com.acooly.core.utils.service.SingleValueResult;
+import com.acooly.core.common.facade.SingleOrder;
+import com.acooly.core.common.facade.SingleResult;
 
 /**
  * @author qiubo@yiji.com
  */
-public interface DemoService {
-	SingleValueResult<String> echo(SingleValueOrder<String> msg);
+public interface DemoFacade {
+	SingleResult<String> echo(SingleOrder<String> msg);
 }

@@ -11,15 +11,14 @@ package com.acooly.module.appservice.filter;
 
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.common.exception.OrderCheckException;
+import com.acooly.core.common.facade.OrderBase;
 import com.acooly.core.utils.Exceptions;
-import com.acooly.core.utils.service.OrderBase;
 import com.acooly.core.utils.validate.HibernateValidatorFactory;
 import com.acooly.module.appservice.AppService;
 import com.acooly.module.filterchain.Filter;
 import com.acooly.module.filterchain.FilterChain;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -203,7 +202,7 @@ public class ParameterCheckFilter implements Filter<AppServiceContext> {
 		void invokeCheckMethod(Object request, OrderCheckException e);
 	}
 	
-	public class RequestCheckerHandler implements CheckerHandler {
+	public static class RequestCheckerHandler implements CheckerHandler {
 		private Method validateMethod;
 		
 		public RequestCheckerHandler(Method validateMethod) {

@@ -9,7 +9,7 @@
  */
 package com.acooly.module.dubbo;
 
-import com.acooly.core.utils.service.Orderable;
+import com.acooly.core.common.facade.Orderable;
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.extension.Activate;
 import com.alibaba.dubbo.rpc.*;

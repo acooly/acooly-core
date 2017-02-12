@@ -12,7 +12,7 @@ package com.acooly.module.appservice.filter;
 
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.utils.enums.ResultStatus;
-import com.acooly.core.utils.service.ResultBase;
+import com.acooly.core.common.facade.ResultBase;
 import com.acooly.module.appservice.ex.ExceptionContext;
 import com.acooly.module.appservice.ex.ExceptionHandlers;
 import com.acooly.module.filterchain.Filter;

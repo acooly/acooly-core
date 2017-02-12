@@ -11,7 +11,7 @@ package com.acooly.core.test.appservice;
 
 
 import com.acooly.core.common.exception.OrderCheckException;
-import com.acooly.core.utils.service.DtoBase;
+import com.acooly.core.common.facade.DtoBase;
 
 import lombok.Getter;
 import lombok.Setter;

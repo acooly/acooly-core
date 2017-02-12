@@ -20,7 +20,7 @@ public class MoneyUtil {
 	 * 
 	 * @return
 	 */
-	public static Money Zero() {
+	public static Money zero() {
 		return new Money();
 	}
 

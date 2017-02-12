@@ -1,17 +1,14 @@
 package com.acooly.core.common.web.taglib;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import com.acooly.core.common.dao.support.PageInfo;
+import org.apache.commons.beanutils.PropertyUtils;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
-
-import org.apache.commons.beanutils.PropertyUtils;
-
-import com.acooly.core.common.dao.support.PageInfo;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 已迁移到acooly-taglibs
@@ -132,14 +129,14 @@ public class PortalSimplePaging extends TagSupport {
 	}
 
 	private String makeStartTag(String tag, String style) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("<" + tag + " class=\"pageNav\"");
 		if (style != null && !style.equals("")) {
 			Map<Object, Object> m = this.convertProperties(style);
-			for (Iterator<Object> ite = m.keySet().iterator(); ite.hasNext();) {
+			for (Map.Entry<Object, Object> entry : m.entrySet()) {
 				buf.append(" ");
-				Object k = ite.next();
-				Object v = m.get(k);
+				Object k = entry.getKey();
+				Object v = entry.getValue();
 				buf.append(k + "=\"" + v + "\"");
 			}
 		}
@@ -148,7 +145,7 @@ public class PortalSimplePaging extends TagSupport {
 	}
 
 	private String makeEndTag(String tag) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("</" + tag + ">");
 		return buf.toString();
 	}
@@ -186,10 +183,11 @@ public class PortalSimplePaging extends TagSupport {
 	private String makeSelector(String style, Map<Object, Object> options, Object selected) {
 		StringBuffer buf = new StringBuffer();
 		buf.append(this.makeStartTag("select", style));
-		for (Iterator<Object> ite = options.keySet().iterator(); ite.hasNext();) {
-			Object k = ite.next();
-			Object v = options.get(k);
+		for (Map.Entry<Object, Object> entry : options.entrySet()) {
+			Object k = entry.getKey();
+			Object v = entry.getValue();
 			buf.append("<option value=\"" + v + "\"" + (v.equals(selected) ? "selected" : "") + ">" + k + "</option>");
+
 		}
 		buf.append(this.makeEndTag("select"));
 		return buf.toString();
@@ -275,7 +273,7 @@ public class PortalSimplePaging extends TagSupport {
 					} else {
 						int total = currentPage + Integer.parseInt(this.showPageNo);
 						if (total > totalPage) {
-							total = Integer.valueOf(String.valueOf(totalPage));
+							total = (int)totalPage;
 						}
 						int count = 0;
 						for (int i = currentPage; i <= total; i++) {

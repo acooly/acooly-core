@@ -11,7 +11,7 @@
 package com.acooly.module.appservice.ex;
 
 import com.acooly.core.utils.enums.ResultStatus;
-import com.acooly.core.utils.service.ResultBase;
+import com.acooly.core.common.facade.ResultBase;
 
 
 /**

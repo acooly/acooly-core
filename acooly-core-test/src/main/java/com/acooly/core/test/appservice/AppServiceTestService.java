@@ -9,9 +9,8 @@
  */
 package com.acooly.core.test.appservice;
 
-import com.acooly.core.utils.service.ResultBase;
-import com.acooly.core.utils.service.SingleValueOrder;
-import com.acooly.core.utils.service.SingleValueResult;
+import com.acooly.core.common.facade.SingleOrder;
+import com.acooly.core.common.facade.SingleResult;
 import com.acooly.module.appservice.AppService;
 
 /**
@@ -20,26 +19,26 @@ import com.acooly.module.appservice.AppService;
 @AppService
 public class AppServiceTestService {
 	
-	public SingleValueResult<AppDto> test(SingleValueOrder<AppDto> orderBase) {
+	public SingleResult<AppDto> test(SingleOrder<AppDto> orderBase) {
 		//do what you like
-		return SingleValueResult.from(orderBase.getDto());
+		return SingleResult.from(orderBase.getDto());
 	}
 	
 	@AppService.ValidationGroup(AppDto.Test1.class)
-	public SingleValueResult<AppDto> test1(SingleValueOrder<AppDto> orderBase) {
+	public SingleResult<AppDto> test1(SingleOrder<AppDto> orderBase) {
 		//do what you like
-		return SingleValueResult.from(orderBase.getDto());
+		return SingleResult.from(orderBase.getDto());
 	}
 	
 	@AppService.ValidationGroup(AppDto.Test2.class)
-	public SingleValueResult<AppDto> test2(SingleValueOrder<AppDto> orderBase) {
+	public SingleResult<AppDto> test2(SingleOrder<AppDto> orderBase) {
 		//do what you like
-		return SingleValueResult.from(orderBase.getDto());
+		return SingleResult.from(orderBase.getDto());
 	}
 	
 	@AppService.ValidationGroup(value = AppDto.Test2.class, checkDefaultGroup = false)
-	public SingleValueResult<AppDto> test3(SingleValueOrder<AppDto> orderBase) {
+	public SingleResult<AppDto> test3(SingleOrder<AppDto> orderBase) {
 		//do what you like
-		return SingleValueResult.from(orderBase.getDto());
+		return SingleResult.from(orderBase.getDto());
 	}
 }

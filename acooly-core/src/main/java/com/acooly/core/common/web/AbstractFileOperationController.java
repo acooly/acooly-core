@@ -8,15 +8,13 @@ import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.Reflections;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.mapper.CsvMapper;
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.write.Label;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
+import com.google.common.net.HttpHeaders;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
@@ -146,15 +144,13 @@ public abstract class AbstractFileOperationController<T extends AbstractEntity, 
                     File file = uResult.getFile();
                     in = new FileInputStream(file);
                 }
-                workBook = Workbook.getWorkbook(in);
-                Sheet sheet = workBook.getSheet(0);
-                Cell cell = null;
+                workBook = new HSSFWorkbook(in);
+                Sheet sheet = workBook.getSheetAt(0);
                 List<String> row = null;
-                for (int j = 0; j < sheet.getRows(); j++) {
-                    row = new ArrayList<String>(sheet.getColumns());
-                    for (int i = 0; i < sheet.getColumns(); i++) {
-                        cell = sheet.getCell(i, j);
-                        row.add(cell.getContents());
+                for (Row r : sheet) {
+                    row = new ArrayList<String>(r.getLastCellNum());
+                    for (Cell cell : r) {
+                        row.add(cell.getStringCellValue());
                     }
                     lines.add(row);
                 }
@@ -164,10 +160,8 @@ public abstract class AbstractFileOperationController<T extends AbstractEntity, 
                 throw new RuntimeException("读取文件[" + uResult.getName() + "]行错误,行号:" + readRows + " ,原因:"
                         + e.getMessage());
             } finally {
+                IOUtils.closeQuietly(workBook);
                 IOUtils.closeQuietly(in);
-                if (workBook != null) {
-                    workBook.close();
-                }
                 if (!uploadConfig.isUseMemery()) {
                     if (uResult.getFile().exists()) {
                         uResult.getFile().delete();
@@ -326,7 +320,7 @@ public abstract class AbstractFileOperationController<T extends AbstractEntity, 
         String fileName = getExportFileName(request);
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "attachment");
-        response.setHeader("Content-Disposition", "filename=\"" + Encodes.urlEncode(fileName) + ".xls\"");
+        response.setHeader("Content-Disposition", "filename=\"" + Encodes.urlEncode(fileName) + ".xlsx\"");
     }
 
     /**
@@ -340,60 +334,68 @@ public abstract class AbstractFileOperationController<T extends AbstractEntity, 
      * @return
      */
     protected void doExportExcelBody(HttpServletRequest request, HttpServletResponse response, int batchSize) {
-        WritableWorkbook workbook = null;
+        SXSSFWorkbook workbook = null;
         OutputStream out = null;
         try {
-            out = response.getOutputStream();
             List<String> headerNames = getExportTitles();
-            workbook = Workbook.createWorkbook(out);
-            WritableSheet sheet = workbook.createSheet("Sheet1", 0);
-            int row = 0;
+            workbook = new SXSSFWorkbook(batchSize);
+            workbook.setCompressTempFiles(true);
+            Sheet sheet = workbook.createSheet();
+            int rowNum = 0;
             // 写入header
+            Row row = sheet.createRow(rowNum);
             if (headerNames != null) {
-                for (int i = 0; i < headerNames.size(); i++) {
-                    sheet.addCell(new Label(i, row, headerNames.get(i)));
+                for (int cellnum = 0; cellnum < headerNames.size(); cellnum++) {
+                    row.createCell(cellnum).setCellValue(headerNames.get(cellnum));
                 }
-                row++;
+                rowNum++;
             }
             // 写数据
             PageInfo<T> pageInfo = new PageInfo<T>(batchSize, 1);
             pageInfo = getEntityService().query(pageInfo, getSearchParams(request), getSortMap(request));
-            row = doExportExcelPage(pageInfo.getPageResults(), row, sheet);
-            out.flush();
+            rowNum = doExportExcelPage(pageInfo.getPageResults(), rowNum, sheet);
             long totalPage = pageInfo.getTotalPage();
             if (totalPage > 1) {
                 for (int i = 2; i <= totalPage; i++) {
                     pageInfo.setCurrentPage(i);
                     pageInfo = getEntityService().query(pageInfo, getSearchParams(request), getSortMap(request));
-                    row = doExportExcelPage(pageInfo.getPageResults(), row, sheet);
-                    out.flush();
+                    rowNum = doExportExcelPage(pageInfo.getPageResults(), rowNum, sheet);
                 }
             }
-            workbook.write();
+
+            out = response.getOutputStream();
+            workbook.write(out);
             out.flush();
         } catch (Exception e) {
             logger.warn("do export excel failure -> " + e.getMessage(), e);
             throw new RuntimeException("执行导出过程失败[" + e.getMessage() + "]");
         } finally {
-            try {
-                workbook.close();
-            } catch (Exception e2) {
-                // ig
-            }
             IOUtils.closeQuietly(out);
+            IOUtils.closeQuietly(workbook);
+            workbook.dispose();
         }
     }
 
-    protected int doExportExcelPage(List<T> list, int startRow, WritableSheet sheet) throws Exception {
-        int row = startRow;
+    protected int doExportExcelPage(List<T> list, int startRow, Sheet sheet) throws Exception {
+        int rowNum = startRow;
+        String value = null;
+        Row row = null;
+        Cell cell = null;
         for (T entity : list) {
             List<String> entityData = doExportEntity(entity);
-            for (int i = 0; i < entityData.size(); i++) {
-                sheet.addCell(new Label(i, row, Strings.trimToEmpty(entityData.get(i))));
+            row = sheet.createRow(rowNum);
+            for (int cellNum = 0; cellNum < entityData.size(); cellNum++) {
+                value = Strings.trimToEmpty(entityData.get(cellNum));
+                cell = row.createCell(cellNum);
+                if (Strings.isNumeric(value)) {
+                    cell.setCellValue(Double.valueOf(value));
+                } else {
+                    cell.setCellValue(value);
+                }
             }
-            row = row + 1;
+            rowNum = rowNum + 1;
         }
-        return row;
+        return rowNum;
     }
 
     /**

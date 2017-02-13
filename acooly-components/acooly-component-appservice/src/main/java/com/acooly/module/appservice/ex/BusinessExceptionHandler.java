@@ -11,8 +11,8 @@
 package com.acooly.module.appservice.ex;
 
 import com.acooly.core.common.exception.BusinessException;
-import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.core.common.facade.ResultBase;
+import com.acooly.core.utils.enums.ResultStatus;
 
 public class BusinessExceptionHandler implements ExceptionHandler<BusinessException> {
 	
@@ -20,6 +20,6 @@ public class BusinessExceptionHandler implements ExceptionHandler<BusinessExcept
 		ResultBase res = context.getResponse();
 		res.setDetail(e.getMessage());
 		res.setStatus(ResultStatus.failure);
-		
+		res.setCode(e.getCode());
 	}
 }

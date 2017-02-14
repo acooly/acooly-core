@@ -7,7 +7,7 @@
  * 修订记录:
  * qiubo@yiji.com 2016-12-26 10:41 创建
  */
-package com.acooly.module.ds;
+package com.acooly.core.common.dao.support;
 
 import org.springframework.context.ApplicationEvent;
 

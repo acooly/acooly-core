@@ -11,6 +11,7 @@
 package com.acooly.module.ds;
 
 import com.acooly.core.common.boot.ApplicationContextHolder;
+import com.acooly.core.common.dao.support.DataSourceReadyEvent;
 import com.acooly.core.common.exception.AppConfigException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

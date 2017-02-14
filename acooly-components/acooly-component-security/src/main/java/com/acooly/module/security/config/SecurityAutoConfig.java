@@ -9,9 +9,10 @@
  */
 package com.acooly.module.security.config;
 
-import com.acooly.core.common.boot.Apps;
-import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
+import com.acooly.core.common.dao.dialect.DatabaseType;
+import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
 import com.acooly.module.jpa.JPAAutoConfig;
+import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
 import com.acooly.module.security.captche.CaptchaServlet;
 import com.acooly.module.security.defence.XssDefenseFilter;
 import com.acooly.module.security.defence.csrf.CookieCsrfTokenRepository;
@@ -331,15 +332,18 @@ public class SecurityAutoConfig {
 		}
 		
 	}
-	
-	@Configuration
-	public static class DatabaseInitConfiguration {
-		
-		@ConditionalOnProperty(value = Apps.DEV_MODE_KEY)
-		@Bean
-		public DatabaseScriptIniter databaseScriptIniter() {
-			return new DatabaseScriptIniter();
-		}
-		
+	@Bean
+	public AbstractDatabaseScriptIniter securityScriptIniter() {
+		return new AbstractDatabaseScriptIniter() {
+			@Override
+			public String getEvaluateSql(DatabaseType databaseType) {
+				return "SELECT count(*) FROM SYS_ROLE";
+			}
+
+			@Override
+			public String getInitSqlFile(DatabaseType databaseType) {
+				return "META-INF/database/mysql/security.sql";
+			}
+		};
 	}
 }

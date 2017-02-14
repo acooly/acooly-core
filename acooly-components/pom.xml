@@ -24,6 +24,7 @@
         <module>acooly-app-parent</module>
         <module>acooly-component-filterchain</module>
         <module>acooly-component-appservice</module>
+        <module>acooly-component-ofile</module>
     </modules>
 
     <dependencies>

@@ -17,9 +17,7 @@ function formatThumbnail(value,row){
           <td align="left">
 					文件名:<input type="text" size="15" name="search_LIKE_fileName"/>
 					文件类型:<select name="search_EQ_fileType" editable="false" style="width: 80px;" panelHeight="auto" class="easyui-combobox"><option value="">所有</option>
-						<#list ofileTypes.keySet() as key>
-							<option value="${key}">${ofileTypes.get(key)}</option>
-						</#list>					
+                     <#list ofileTypes as k,v><option value="${k}">${v}</option></#list>
 					</select>
 					文件名:<input type="text" size="15" name="search_LIKE_originalName" />
 					上传时间:<input id="search_GTE_createTime" name="search_GTE_createTime" size="10" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
@@ -83,7 +81,9 @@ $(function() {
         <tr>
           <td align="left">
 					文件名:<input type="text" size="15" name="search_LIKE_fileName" />
-					文件类型:<select name="search_EQ_fileType" editable="false" style="width: 80px;" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${ofileTypes}"><option value="${e.key}" >${e.value}</option></c:forEach></select>
+					文件类型:<select name="search_EQ_fileType" editable="false" style="width: 80px;" panelHeight="auto" class="easyui-combobox"><option value="">所有</option>
+                        <#list ofileTypes as k,v><option value="${k}">${v}</option></#list>
+                    </select>
 					文件名:<input type="text" size="15" name="search_LIKE_originalName" />
 					上传时间:<input id="search_GTE_createTime" name="search_GTE_createTime" size="10" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
 					至<input id="search_LTE_createTime" name="search_LTE_createTime" size="10" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" /> 					

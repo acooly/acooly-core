@@ -77,7 +77,7 @@ public class JPAAutoConfig {
 		Map<String, Object> vendorProperties = new LinkedHashMap<String, Object>();
 		vendorProperties.putAll(properties.getHibernateProperties(dataSource));
 		return factoryBuilder.dataSource(dataSource)
-			.packages(Lists.newArrayList(Apps.getBasePackage(), "com.acooly.module.security").toArray(new String[0]))
+			.packages(Lists.newArrayList(Apps.getBasePackage(), "com.acooly.module").toArray(new String[0]))
 			.properties(vendorProperties).jta(false).build();
 	}
 

@@ -11,11 +11,13 @@ package com.acooly.module.ofile;
 
 import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
+import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import static com.acooly.module.ofile.OFileProperties.PREFIX;
 
@@ -26,6 +28,8 @@ import static com.acooly.module.ofile.OFileProperties.PREFIX;
 @EnableConfigurationProperties({ OFileProperties.class })
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.module.ofile")
+@EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class,
+        basePackages = "com.acooly.module.ofile.dao")
 public class OFileAutoConfig {
     @Bean
     public AbstractDatabaseScriptIniter ofileScriptIniter() {

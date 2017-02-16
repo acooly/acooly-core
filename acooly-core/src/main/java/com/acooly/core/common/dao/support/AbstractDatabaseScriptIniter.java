@@ -35,9 +35,6 @@ public abstract class AbstractDatabaseScriptIniter implements ApplicationListene
 	
 	@Override
 	public void onApplicationEvent(DataSourceReadyEvent event) {
-		if (!Apps.isDevMode()) {
-			return;
-		}
 		DataSource dataSource = (DataSource) event.getSource();
 		try {
 			DatabaseType databaseType = DatabaseDialectManager.getDatabaseType(dataSource.getConnection());
@@ -50,6 +47,10 @@ public abstract class AbstractDatabaseScriptIniter implements ApplicationListene
 				if (throwable.getClass().getName().endsWith("MySQLSyntaxErrorException")
 					&& msg.endsWith("doesn't exist")) {
 					String sqlPath = getInitSqlFile(databaseType);
+					if (!Apps.isDevMode()) {
+						logger.error("组件相关表不存在，请初始化[{}]",sqlPath);
+						Apps.shutdown();
+					}
 					exeSqlFile(dataSource, sqlPath);
 				}
 			}

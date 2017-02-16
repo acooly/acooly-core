@@ -9,7 +9,6 @@
  */
 package com.acooly.module.ofile;
 
-import com.acooly.core.common.boot.Apps;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -23,7 +22,7 @@ import static com.acooly.module.ofile.OFileProperties.PREFIX;
 public class OFileProperties {
 	public static final String PREFIX = "acooly.ofile";
 	private final String serverRoot = "/media";
-	private String storageRoot = Apps.getAppDataPath()+"media/";
+	private final String storageRoot = "/data/media/";
 	private String allowExtentions = "txt,zip,csv,xls,word,jpg,gif,png";
 	private long maxSize = 5242880;
 	private int thumbnailSize = 200;

@@ -9,6 +9,7 @@
  */
 package com.acooly.core.common.boot;
 
+import com.acooly.core.common.boot.listener.ExApplicationRunListener;
 import com.acooly.core.common.exception.AppConfigException;
 import com.google.common.base.Strings;
 import org.springframework.util.StringUtils;
@@ -116,6 +117,10 @@ public class Apps {
 	 */
 	public static boolean isDevMode() {
 		return Boolean.valueOf(System.getProperty(DEV_MODE_KEY));
+	}
+
+	public static void shutdown(){
+		ExApplicationRunListener.shutdownApp();
 	}
 	
 }

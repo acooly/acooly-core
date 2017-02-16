@@ -12,12 +12,15 @@ package com.acooly.module.ofile;
 import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
 import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import static com.acooly.module.ofile.OFileProperties.PREFIX;
 
@@ -30,7 +33,9 @@ import static com.acooly.module.ofile.OFileProperties.PREFIX;
 @ComponentScan(basePackages = "com.acooly.module.ofile")
 @EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class,
         basePackages = "com.acooly.module.ofile.dao")
-public class OFileAutoConfig {
+public class OFileAutoConfig extends WebMvcConfigurerAdapter {
+    @Autowired
+    private OFileProperties oFileProperties;
     @Bean
     public AbstractDatabaseScriptIniter ofileScriptIniter() {
         return new AbstractDatabaseScriptIniter() {
@@ -44,5 +49,9 @@ public class OFileAutoConfig {
                 return "META-INF/database/mysql/ofile.sql";
             }
         };
+    }
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler(oFileProperties.getServerRoot()+"/**").addResourceLocations("file:"+oFileProperties.getStorageRoot());
     }
 }

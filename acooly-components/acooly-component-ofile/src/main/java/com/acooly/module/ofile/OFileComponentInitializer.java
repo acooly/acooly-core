@@ -10,7 +10,6 @@
 package com.acooly.module.ofile;
 
 import com.acooly.core.common.boot.Apps;
-import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.boot.component.ComponentInitializer;
 import com.acooly.core.common.exception.AppConfigException;
 import org.apache.commons.io.FileUtils;
@@ -29,7 +28,7 @@ public class OFileComponentInitializer implements ComponentInitializer {
 	
 	@Override
 	public void initialize(ConfigurableApplicationContext applicationContext) {
-		OFileProperties oFileProperties = EnvironmentHolder.buildProperties(OFileProperties.class);
+		OFileProperties oFileProperties = Apps.buildProperties(OFileProperties.class);
 		File file = new File(oFileProperties.getStorageRoot());
 		if (!file.exists()) {
 			if (Apps.isDevMode()) {

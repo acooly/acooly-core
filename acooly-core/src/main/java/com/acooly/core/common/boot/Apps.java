@@ -122,5 +122,9 @@ public class Apps {
 	public static void shutdown(){
 		ExApplicationRunListener.shutdownApp();
 	}
+
+	public static <T> T buildProperties(Class<T> clazz){
+		return EnvironmentHolder.buildProperties(clazz);
+	}
 	
 }

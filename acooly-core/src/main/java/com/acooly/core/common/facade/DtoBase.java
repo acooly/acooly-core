@@ -37,4 +37,20 @@ public class DtoBase implements Serializable {
 	public void check() throws OrderCheckException {
 		
 	}
+
+	public String getMerchOrderNo() {
+		return merchOrderNo;
+	}
+
+	public void setMerchOrderNo(String merchOrderNo) {
+		this.merchOrderNo = merchOrderNo;
+	}
+
+	public String getBizOrderNo() {
+		return bizOrderNo;
+	}
+
+	public void setBizOrderNo(String bizOrderNo) {
+		this.bizOrderNo = bizOrderNo;
+	}
 }

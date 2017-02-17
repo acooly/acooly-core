@@ -11,7 +11,9 @@ package com.acooly.module.appservice.filter;
 
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.common.exception.OrderCheckException;
+import com.acooly.core.common.facade.DtoBase;
 import com.acooly.core.common.facade.OrderBase;
+import com.acooly.core.common.facade.SingleOrder;
 import com.acooly.core.utils.Exceptions;
 import com.acooly.core.utils.validate.HibernateValidatorFactory;
 import com.acooly.module.appservice.AppService;
@@ -39,7 +41,8 @@ import java.util.Set;
  *
  * <li>1. 支持原orderBase校验逻辑</li>
  * <li>2. 支持jsr303分组校验</li>
- * <li>3. 支持请求对象和请求对象字段(需标注@javax.validation.Valid)类执行checkOnXxx()方法，比如ValidationGroup.value
+ * <li>3.
+ * 支持请求对象和请求对象字段(需标注@javax.validation.Valid)类执行checkOnXxx()方法，比如ValidationGroup.value
  * =Update.class,执行校验方法为checkOnUpdate(OrderCheckException oce)</li>
  *
  * @author qiubo@yiji.com
@@ -69,9 +72,7 @@ public class ParameterCheckFilter implements Filter<AppServiceContext> {
 			.getAnnotation(AppService.ValidationGroup.class);
 		if (validationGroup == null) {
 			for (Object o : context.getMethodInvocation().getArguments()) {
-				if (o instanceof OrderBase) {
-					((OrderBase) o).check();
-				}
+				validateRequestObject(o);
 			}
 			filterChain.doFilter(context);
 			return;
@@ -98,7 +99,37 @@ public class ParameterCheckFilter implements Filter<AppServiceContext> {
 		filterChain.doFilter(context);
 	}
 	
-	private void checkJsr303WithGroup(AppService.ValidationGroup validationGroup, OrderCheckException exception,
+	private void validateRequestObject(Object o) {
+		if (o instanceof OrderBase) {
+			//检查orderbase
+			OrderCheckException orderCheckException = null;
+			try {
+				((OrderBase) o).check();
+			} catch (OrderCheckException e) {
+				orderCheckException = e;
+			}
+			//如果是SingleOrder，检查dto
+			if (o instanceof SingleOrder) {
+				Object dto = ((SingleOrder) o).getDto();
+				try {
+					if (dto instanceof DtoBase) {
+						((DtoBase) dto).check();
+					}
+				} catch (OrderCheckException e) {
+					if (orderCheckException == null) {
+						orderCheckException = e;
+					} else {
+						orderCheckException.getErrorMap().putAll(e.getErrorMap());
+					}
+				}
+			}
+			if (orderCheckException != null) {
+				throw orderCheckException;
+			}
+		}
+	}
+	
+	private void checkJsr303WithGroup(	AppService.ValidationGroup validationGroup, OrderCheckException exception,
 										Object request) {
 		Set<ConstraintViolation<Object>> constraintViolations;
 		Class<?>[] groups;
@@ -126,7 +157,7 @@ public class ParameterCheckFilter implements Filter<AppServiceContext> {
 		}
 	}
 	
-	private CheckerHandler buildCheckHandler(AppServiceContext context, AppService.ValidationGroup validationGroups,
+	private CheckerHandler buildCheckHandler(	AppServiceContext context, AppService.ValidationGroup validationGroups,
 												Object request) {
 		if (request == null) {
 			return null;
@@ -144,7 +175,7 @@ public class ParameterCheckFilter implements Filter<AppServiceContext> {
 		return checkerHandlers;
 	}
 	
-	private void findRequestFieldChecker(AppService.ValidationGroup validationGroups, Object request,
+	private void findRequestFieldChecker(	AppService.ValidationGroup validationGroups, Object request,
 											CheckerHandlers checkerHandlers) {
 		
 		Method method;
@@ -181,7 +212,7 @@ public class ParameterCheckFilter implements Filter<AppServiceContext> {
 		}
 	}
 	
-	private void findRequestObjectChecker(AppService.ValidationGroup validationGroups, Object request,
+	private void findRequestObjectChecker(	AppService.ValidationGroup validationGroups, Object request,
 											CheckerHandlers checkerHandlers) {
 		Method method = findCheckerMethod(validationGroups, request.getClass());
 		if (method != null) {

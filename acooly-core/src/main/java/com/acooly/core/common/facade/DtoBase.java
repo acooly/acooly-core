@@ -32,7 +32,7 @@ public class DtoBase implements Serializable {
 	}
 	
 	/**
-	 * 请求参数校验
+	 * 请求参数校验,在使用@AppService并且没有启用校验组@AppService.ValidationGroup时会被调用
 	 */
 	public void check() throws OrderCheckException {
 		

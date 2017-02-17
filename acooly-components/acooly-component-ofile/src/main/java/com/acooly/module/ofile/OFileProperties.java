@@ -21,8 +21,8 @@ import static com.acooly.module.ofile.OFileProperties.PREFIX;
 @Data
 public class OFileProperties {
 	public static final String PREFIX = "acooly.ofile";
-	private final String serverRoot = "/media";
-	private final String storageRoot = "/data/media/";
+	private  String serverRoot = "/media";
+	private  String storageRoot = "/data/media/";
 	private String allowExtentions = "txt,zip,csv,xls,word,jpg,gif,png";
 	private long maxSize = 5242880;
 	private int thumbnailSize = 200;

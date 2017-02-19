@@ -11,6 +11,7 @@ import com.acooly.module.cms.domain.Content;
 import com.acooly.module.cms.service.AttachmentService;
 import com.acooly.module.cms.service.ContentBodyService;
 import com.acooly.module.cms.service.ContentService;
+import com.acooly.module.cms.service.ContentTypeService;
 import com.acooly.module.ds.PagedJdbcTemplate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -34,11 +35,12 @@ public class ContentServiceImpl extends EntityServiceImpl<Content, ContentDao>
 	@Autowired
 	private ContentBodyService contentBodyService;
 	@Autowired
+	private ContentTypeService contentTypeService;
+	@Autowired
 	private AttachmentService attachmentService;
 
 	@Override
 	public Content getLatestByTypeCode(String typeCode) {
-
 		return getLatestByTypeCode(typeCode, null);
 	}
 
@@ -61,6 +63,28 @@ public class ContentServiceImpl extends EntityServiceImpl<Content, ContentDao>
 			return null;
 		}
 		return Collections3.getFirst(pageInfo.getPageResults());
+	}
+
+	@Override
+	public Content getLatestByTypeCodeNoLazy(String typeCode) {
+		return convertToNoLazy(getLatestByTypeCode(typeCode));
+	}
+
+	@Override
+	public Content getByKeycodeNoLazy(String keycode) {
+		return convertToNoLazy(getByKeycode(keycode));
+	}
+
+	@Override
+	public Content getByIdNoLazy(Long id) {
+		return convertToNoLazy(get(id));
+	}
+
+	private Content convertToNoLazy(Content content){
+		// 无延迟加载场景，需要手动加载body和type
+		content.setContentType(contentTypeService.get(content.getContentType().getId()));
+		content.setBody_(content.getContentBody().getBody());
+		return content;
 	}
 
 	public void updateStatusBatch(Integer status, Serializable... ids) {

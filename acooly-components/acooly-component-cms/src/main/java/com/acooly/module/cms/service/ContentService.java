@@ -31,5 +31,11 @@ public interface ContentService extends EntityService<Content> {
 
 	Content getLatestByTypeCode(String typeCode, String carrierCode);
 
+	Content getLatestByTypeCodeNoLazy(String typeCode);
+
 	Content getByKeycode(String keycode);
+
+	Content getByKeycodeNoLazy(String keycode);
+
+	Content getByIdNoLazy(Long id);
 }

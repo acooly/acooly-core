@@ -22,8 +22,8 @@ import java.util.UUID;
 public class PayOrderApiServiceTest extends AbstractApiServieTests {
 	{
 		gatewayUrl = "http://localhost:8081/gateway.html";
-		key = "06aa643ff61bc881318cc41c6a5ff2d5";
-		partnerId = "17021922162610100000";
+		key = "6672360f5720437380b89c3a00f5f45d";
+		partnerId = "17022000254110100000";
 		notifyUrl = "http://127.0.0.1:8081/notify/receiver";
 		version = null;
 		signType = null;

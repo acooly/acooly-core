@@ -9,7 +9,6 @@
  */
 package com.acooly.module.jpa;
 
-import com.acooly.core.common.boot.Apps;
 import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
 import com.google.common.collect.Lists;
 import org.hibernate.SessionFactory;
@@ -19,6 +18,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.autoconfigure.data.AbstractRepositoryConfigurationSourceSupport;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -47,6 +47,7 @@ import java.util.Map;
 @ConditionalOnProperty(value = JPAProperties.ENABLE_KEY, matchIfMissing = true)
 @Import(JPAAutoConfig.JpaRegistrar.class)
 @AutoConfigureAfter(HibernateJpaAutoConfiguration.class)
+@EnableConfigurationProperties({ JPAProperties.class })
 public class JPAAutoConfig {
 
 	@Bean
@@ -73,11 +74,11 @@ public class JPAAutoConfig {
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(	EntityManagerFactoryBuilder factoryBuilder,
 																		DataSource dataSource,
-																		JpaProperties properties) {
+																		JpaProperties properties,JPAProperties jpaProperties ) {
 		Map<String, Object> vendorProperties = new LinkedHashMap<String, Object>();
 		vendorProperties.putAll(properties.getHibernateProperties(dataSource));
 		return factoryBuilder.dataSource(dataSource)
-			.packages(Lists.newArrayList(Apps.getBasePackage(), "com.acooly.module").toArray(new String[0]))
+			.packages(jpaProperties.getEntityPackagesToScan().values().toArray(new String[0]))
 			.properties(vendorProperties).jta(false).build();
 	}
 

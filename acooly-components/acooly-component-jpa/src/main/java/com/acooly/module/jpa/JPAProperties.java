@@ -9,9 +9,13 @@
  */
 package com.acooly.module.jpa;
 
+import com.acooly.core.common.boot.Apps;
+import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.util.Map;
 
 import static com.acooly.module.jpa.JPAProperties.PREFIX;
 
@@ -27,5 +31,10 @@ public class JPAProperties {
 	public static final String ENABLE_KEY = PREFIX + ".enable";
 	private boolean enable = true;
 	private boolean openEntityManagerInViewFilterEnable=true;
-	
+	private Map<String,String> entityPackagesToScan= Maps.newHashMap();
+
+    public JPAProperties() {
+        entityPackagesToScan.put("app", Apps.getBasePackage());
+        entityPackagesToScan.put("components", "com.acooly.module");
+    }
 }

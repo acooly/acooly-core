@@ -11,6 +11,8 @@ package com.acooly.core.common.facade;
 
 import com.acooly.core.common.exception.OrderCheckException;
 import com.acooly.core.utils.ToString;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
@@ -18,6 +20,8 @@ import java.io.Serializable;
 /**
  * @author qiubo@yiji.com
  */
+@Getter
+@Setter
 public class DtoBase implements Serializable {
 	
 	/** 商户订单号 */
@@ -36,21 +40,5 @@ public class DtoBase implements Serializable {
 	 */
 	public void check() throws OrderCheckException {
 		
-	}
-
-	public String getMerchOrderNo() {
-		return merchOrderNo;
-	}
-
-	public void setMerchOrderNo(String merchOrderNo) {
-		this.merchOrderNo = merchOrderNo;
-	}
-
-	public String getBizOrderNo() {
-		return bizOrderNo;
-	}
-
-	public void setBizOrderNo(String bizOrderNo) {
-		this.bizOrderNo = bizOrderNo;
 	}
 }

@@ -47,14 +47,12 @@ public abstract class AbstractDatabaseScriptIniter implements ApplicationListene
 				String msg = throwable.getMessage();
 				if (throwable.getClass().getName().endsWith("MySQLSyntaxErrorException")
 					&& msg.endsWith("doesn't exist")) {
-					 getInitSqlFile(databaseType).forEach(sqlPath->{
-                         if (!Apps.isDevMode()) {
-                             logger.error("组件相关表不存在，请初始化[{}]",sqlPath);
-                             Apps.shutdown();
-                         }
-                         exeSqlFile(dataSource, sqlPath);
-                     });
-
+					List<String> files = getInitSqlFile(databaseType);
+                    if (!Apps.isDevMode()) {
+                        logger.error("组件相关表不存在，请初始化[{}]", files);
+                        Apps.shutdown();
+                    }
+                    files.forEach(sqlPath -> exeSqlFile(dataSource, sqlPath));
 				}
 			}
 		} catch (SQLException e) {

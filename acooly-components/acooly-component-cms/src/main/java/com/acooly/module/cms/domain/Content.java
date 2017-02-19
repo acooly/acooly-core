@@ -1,6 +1,8 @@
 package com.acooly.module.cms.domain;
 
 import com.acooly.core.common.domain.AbstractEntity;
+import com.acooly.core.common.domain.Entityable;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,7 +18,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "CMS_CONTENT")
-public class Content extends AbstractEntity {
+public class Content implements Entityable {
 
     public static final int STATUS_ENABLED = 1;// 1:正常
     public static final int STATUS_DISABLED = 2;// 2:禁用
@@ -25,6 +27,11 @@ public class Content extends AbstractEntity {
      * uid
      */
     private static final long serialVersionUID = 7860091097881184418L;
+
+    @Id
+    @GeneratedValue(generator = "incrementGenerator", strategy = GenerationType.AUTO)
+    @GenericGenerator(name = "incrementGenerator", strategy = "increment")
+    private Long id;
 
     /**
      * 编码 唯一
@@ -71,6 +78,10 @@ public class Content extends AbstractEntity {
      * 扩展CODE(分类维度考虑，比如：所属商户，所属用户等编码)
      **/
     private String belongCode;
+
+    private Date createTime;
+
+    private Date updateTime;
 
     /**
      * 所属分类
@@ -220,5 +231,33 @@ public class Content extends AbstractEntity {
         this.belongCode = belongCode;
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    @Override
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 }
+
+
+
+

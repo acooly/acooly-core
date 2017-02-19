@@ -2,6 +2,7 @@ package com.acooly.core.common.web;
 
 import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.common.domain.AbstractEntity;
+import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.UnMappingMethodException;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.core.utils.BeanUtils;
@@ -32,7 +33,7 @@ import java.util.List;
  * @param <M>
  * @author zhangpu
  */
-public abstract class AbstractGenericsController<T extends AbstractEntity, M extends EntityService<T>> {
+public abstract class AbstractGenericsController<T extends Entityable, M extends EntityService<T>> {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractGenericsController.class);
 

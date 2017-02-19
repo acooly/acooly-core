@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.acooly.core.common.domain.Entityable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.ui.Model;
@@ -34,7 +35,7 @@ import com.google.common.collect.Maps;
  * @param <M>
  */
 
-public abstract class AbstractOperationController<T extends AbstractEntity, M extends EntityService<T>>
+public abstract class AbstractOperationController<T extends Entityable, M extends EntityService<T>>
 		extends AbstractGenericsController<T, M> {
 	/** 实体ID名称 */
 	protected String entityIdName = "id";

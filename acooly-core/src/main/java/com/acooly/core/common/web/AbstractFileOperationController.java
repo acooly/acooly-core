@@ -2,6 +2,7 @@ package com.acooly.core.common.web;
 
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.domain.AbstractEntity;
+import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Encodes;
@@ -32,7 +33,7 @@ import java.util.*;
  * @param <M>
  * @author zhangpu
  */
-public abstract class AbstractFileOperationController<T extends AbstractEntity, M extends EntityService<T>> extends
+public abstract class AbstractFileOperationController<T extends Entityable, M extends EntityService<T>> extends
         AbstractOperationController<T, M> {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractFileOperationController.class);

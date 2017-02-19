@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.utils.enums.Messageable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -42,7 +43,7 @@ import com.google.common.collect.Maps;
  * @param <M>
  */
 
-public abstract class AbstractJQueryEntityController<T extends AbstractEntity, M extends EntityService<T>>
+public abstract class AbstractJQueryEntityController<T extends Entityable, M extends EntityService<T>>
 		extends AbstractStandardEntityController<T, M> {
 
 	private static final Logger logger = LoggerFactory.getLogger(AbstractJQueryEntityController.class);

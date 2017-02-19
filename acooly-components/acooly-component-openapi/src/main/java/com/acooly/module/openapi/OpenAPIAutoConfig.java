@@ -12,9 +12,11 @@ package com.acooly.module.openapi;
 import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
 import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
+import com.acooly.module.security.config.SecurityAutoConfig;
 import com.google.common.collect.Lists;
 import com.yiji.framework.openapi.core.servlet.OpenAPIDispatchServlet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -40,6 +42,7 @@ import static com.acooly.module.openapi.OpenAPIProperties.PREFIX;
 @ComponentScan(basePackages = "com.yiji.framework.openapi.manage.web")
 @EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class,
     basePackages = "com.yiji.framework.openapi.service.persistent")
+@AutoConfigureAfter(SecurityAutoConfig.class)
 public class OpenAPIAutoConfig {
 	@Autowired
 	private OpenAPIProperties properties;

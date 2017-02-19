@@ -37,7 +37,7 @@
                     <input type="file" name="cover_f" id="cover_f" class="easyui-validatebox"
                            validType="validImg['jpg,gif,png','只能上传jpg,gif,png格式的图片']"/>
                     <#if content.cover?? && content.cover != '' && action!='create'>
-                        <span><a href="${mediaRoot }${content.cover}" target="_blank"
+                        <span><a href="${mediaRoot }/${content.cover}" target="_blank"
                                  data-lightbox="cover">查看</a></span>
                     </#if>
                 </td>

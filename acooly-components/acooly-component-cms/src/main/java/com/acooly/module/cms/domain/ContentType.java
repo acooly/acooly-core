@@ -18,7 +18,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "CMS_CONTENT_TYPE")
-@JsonIgnoreProperties("parent")
+@JsonIgnoreProperties({"parent", "handler","hibernateLazyInitializer"})
 public class ContentType extends AbstractEntity {
 
     private static final long serialVersionUID = -2050961554185236572L;

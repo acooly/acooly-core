@@ -18,7 +18,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "CMS_CONTENT_BODY")
-@JsonIgnoreProperties(value = {"content"})
+@JsonIgnoreProperties({"content", "handler","hibernateLazyInitializer"})
 @Getter
 @Setter
 public class ContentBody{

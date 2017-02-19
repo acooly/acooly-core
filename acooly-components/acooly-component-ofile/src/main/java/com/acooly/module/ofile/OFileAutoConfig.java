@@ -12,6 +12,7 @@ package com.acooly.module.ofile;
 import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
 import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -21,6 +22,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import java.util.List;
 
 import static com.acooly.module.ofile.OFileProperties.PREFIX;
 
@@ -45,8 +48,8 @@ public class OFileAutoConfig extends WebMvcConfigurerAdapter {
             }
 
             @Override
-            public String getInitSqlFile(DatabaseType databaseType) {
-                return "META-INF/database/mysql/ofile.sql";
+            public List<String> getInitSqlFile(DatabaseType databaseType) {
+                return Lists.newArrayList("META-INF/database/mysql/ofile.sql");
             }
         };
     }

@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import static com.acooly.module.openapi.OpenAPIProperties.PREFIX;
@@ -74,11 +75,11 @@ public class OpenAPIAutoConfig {
 			}
 			
 			@Override
-			public String getInitSqlFile(DatabaseType databaseType) {
+			public List<String> getInitSqlFile(DatabaseType databaseType) {
 				if (databaseType == DatabaseType.mysql) {
-					return "META-INF/database/mysql/openapi-core.sql";
+					return Lists.newArrayList("META-INF/database/mysql/openapi-core.sql");
 				} else {
-					return "META-INF/database/oracle/openapi-core.sql";
+					return Lists.newArrayList("META-INF/database/oracle/openapi-core.sql");
 				}
 			}
 		};
@@ -92,9 +93,9 @@ public class OpenAPIAutoConfig {
             }
 
             @Override
-            public String getInitSqlFile(DatabaseType databaseType) {
+            public List<String> getInitSqlFile(DatabaseType databaseType) {
                 if (databaseType == DatabaseType.mysql) {
-                    return "META-INF/database/mysql/openapi-manage.sql";
+                    return Lists.newArrayList("META-INF/database/mysql/openapi-manage.sql","META-INF/database/mysql/openapi-manage-urls.sql");
                 } else {
                     throw new UnsupportedOperationException("还不支持oracle");
                 }

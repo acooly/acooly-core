@@ -26,6 +26,7 @@ import org.springframework.jdbc.datasource.init.ScriptUtils;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * @author qiubo@yiji.com
@@ -46,12 +47,14 @@ public abstract class AbstractDatabaseScriptIniter implements ApplicationListene
 				String msg = throwable.getMessage();
 				if (throwable.getClass().getName().endsWith("MySQLSyntaxErrorException")
 					&& msg.endsWith("doesn't exist")) {
-					String sqlPath = getInitSqlFile(databaseType);
-					if (!Apps.isDevMode()) {
-						logger.error("组件相关表不存在，请初始化[{}]",sqlPath);
-						Apps.shutdown();
-					}
-					exeSqlFile(dataSource, sqlPath);
+					 getInitSqlFile(databaseType).forEach(sqlPath->{
+                         if (!Apps.isDevMode()) {
+                             logger.error("组件相关表不存在，请初始化[{}]",sqlPath);
+                             Apps.shutdown();
+                         }
+                         exeSqlFile(dataSource, sqlPath);
+                     });
+
 				}
 			}
 		} catch (SQLException e) {
@@ -61,7 +64,7 @@ public abstract class AbstractDatabaseScriptIniter implements ApplicationListene
 	
 	public abstract String getEvaluateSql(DatabaseType databaseType);
 	
-	public abstract String getInitSqlFile(DatabaseType databaseType);
+	public abstract List<String> getInitSqlFile(DatabaseType databaseType);
 	
 	private void exeSqlFile(DataSource dataSource, String sqlpath) {
 		logger.info("发现数据库基础数据还没有初始化，开始初始化:{}", sqlpath);

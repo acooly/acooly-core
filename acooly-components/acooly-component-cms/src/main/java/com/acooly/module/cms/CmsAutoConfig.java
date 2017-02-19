@@ -12,12 +12,15 @@ package com.acooly.module.cms;
 import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
 import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
+import com.google.common.collect.Lists;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import java.util.List;
 
 
 /**
@@ -39,8 +42,8 @@ public class CmsAutoConfig extends WebMvcConfigurerAdapter {
             }
 
             @Override
-            public String getInitSqlFile(DatabaseType databaseType) {
-                return "META-INF/database/mysql/cms.sql";
+            public List<String> getInitSqlFile(DatabaseType databaseType) {
+                return Lists.newArrayList("META-INF/database/mysql/cms.sql","META-INF/database/mysql/cms_urls.sql");
             }
         };
     }

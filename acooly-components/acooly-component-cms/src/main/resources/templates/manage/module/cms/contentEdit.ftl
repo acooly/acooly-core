@@ -11,7 +11,7 @@
 </script>
 <div>
     <form id="manage_content${RequestParameters.code}_editform"
-          action="${rc.contextPath}/manage/module/feature/cms/content/<#if action == 'create'>save<#else>update</#if>Json.html"
+          action="${rc.contextPath}/manage/module/cms/content/<#if action == 'create'>save<#else>update</#if>Json.html"
           method="post"
           enctype="multipart/form-data">
     <@jodd.form bean="content" scope="request">

@@ -84,6 +84,7 @@ public class Content extends AbstractEntity {
      */
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @PrimaryKeyJoinColumn
+    @JoinColumn(name="id")
     private ContentBody contentBody;
 
     /**

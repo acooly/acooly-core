@@ -1,13 +1,13 @@
 package com.acooly.module.cms.domain;
 
-import com.acooly.core.common.domain.AbstractEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * 内容主体 Entity
@@ -19,28 +19,32 @@ import javax.persistence.*;
 @Entity
 @Table(name = "CMS_CONTENT_BODY")
 @JsonIgnoreProperties(value = {"content"})
-public class ContentBody extends AbstractEntity {
-    /**
-     * UID
-     */
+@Getter
+@Setter
+public class ContentBody{
+    /** UID */
     private static final long serialVersionUID = -1561944102999714790L;
-    /**
-     * 主键
-     */
+    /** 主键 */
     @Id
-    @GenericGenerator(name = "foreignKey", strategy = "foreign", parameters = @Parameter(name = "property", value = "content"))
-    @GeneratedValue(generator = "foreignKey")
+    @GenericGenerator(name="foreignKey", strategy="foreign", parameters=@Parameter(name="property", value="content"))
+    @GeneratedValue(generator="foreignKey")
     private Long id;
-    /**
-     * 内容主体
-     */
+    /** 内容主体 */
     private String body;
 
-    /**
-     * 内容主表
-     */
+    /** 内容主表 */
     @OneToOne(mappedBy = "contentBody")
     private Content content;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime = new Date();
+
+    /**
+     * 修改时间
+     */
+    private Date updateTime = new Date();
 
 
     public Long getId() {
@@ -59,7 +63,6 @@ public class ContentBody extends AbstractEntity {
         this.body = body;
     }
 
-
     public Content getContent() {
         return content;
     }
@@ -67,6 +70,9 @@ public class ContentBody extends AbstractEntity {
     public void setContent(Content content) {
         this.content = content;
     }
+
+
+
 
 
 }

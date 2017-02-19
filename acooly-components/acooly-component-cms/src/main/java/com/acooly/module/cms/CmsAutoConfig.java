@@ -31,7 +31,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class CmsAutoConfig extends WebMvcConfigurerAdapter {
 
     @Bean
-    public AbstractDatabaseScriptIniter ofileScriptIniter() {
+    public AbstractDatabaseScriptIniter cmsScriptIniter() {
         return new AbstractDatabaseScriptIniter() {
             @Override
             public String getEvaluateSql(DatabaseType databaseType) {
@@ -40,7 +40,7 @@ public class CmsAutoConfig extends WebMvcConfigurerAdapter {
 
             @Override
             public String getInitSqlFile(DatabaseType databaseType) {
-                return "META-INF/database/cms.sql";
+                return "META-INF/database/mysql/cms.sql";
             }
         };
     }

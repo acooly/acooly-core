@@ -1,13 +1,13 @@
 package com.acooly.core.utils;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Assert;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.Assert;
 
 /**
  * 访问在当前类声明的private/protected成员变量及private/protected函数的BeanUtils.
@@ -140,7 +140,8 @@ public class BeanUtils {
 	public static Object getDeclaredProperty(Object object, String propertyName) throws IllegalAccessException, NoSuchFieldException {
 		Assert.notNull(object);
 		Assert.hasText(propertyName);
-		Field field = object.getClass().getDeclaredField(propertyName);
+
+		Field field =getDeclaredField(object,propertyName);
 		return getDeclaredProperty(object, field);
 	}
 

@@ -105,7 +105,7 @@ public class OfilePortalController extends AbstractJQueryEntityController<Online
 		try {
 			JsonListResult<OnlineFile> onlineFiles = upload(request, response);
 			result.put("error", 0);
-			result.put("url", oFileProperties.getServerRoot()
+			result.put("url", oFileProperties.getServerRoot()+"/"
 					+ Collections3.getFirst(onlineFiles.getRows()).getFilePath());
 		} catch (Exception e) {
 			result.put("error", 1);

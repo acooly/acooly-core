@@ -1,7 +1,7 @@
 <#assign jodd=JspTaglibs["http://www.springside.org.cn/jodd_form"] />
 <div>
     <form id="manage_contentType_editform"
-          action="${rc.contextPath}/manage/module/feature/cms/contentType/<#if action == 'create'>save<#else>update</#if>Json.html"
+          action="${rc.contextPath}/manage/module/cms/contentType/<#if action == 'create'>save<#else>update</#if>Json.html"
           method="post">
         <@jodd.form bean="contentType" scope="request">
         <input name="id" type="hidden"/>

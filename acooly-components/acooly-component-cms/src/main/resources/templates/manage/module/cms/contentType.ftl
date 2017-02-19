@@ -7,13 +7,13 @@
         var row = $.acooly.framework.getSelectedRow("manage_contentType_datagrid");
         if (!row || row == null) {
             $.acooly.framework.create({
-                url: '/manage/module/feature/cms/contentType/create.html',
+                url: '/manage/module/cms/contentType/create.html',
                 entity: 'contentType',
                 height: 300
             })
         } else {
             $.acooly.framework.create({
-                url: '/manage/module/feature/cms/contentType/create.html?parentId=' + row.id,
+                url: '/manage/module/cms/contentType/create.html?parentId=' + row.id,
                 entity: 'contentType',
                 height: 300
             })
@@ -30,7 +30,7 @@
     <!-- 列表和工具栏 -->
     <div data-options="region:'center',border:false">
         <table id="manage_contentType_datagrid" class="easyui-treegrid"
-               url="${rc.contextPath}/manage/module/feature/cms/contentType/loadTree.html"
+               url="${rc.contextPath}/manage/module/cms/contentType/loadTree.html"
                toolbar="#manage_contentType_toolbar" fit="true" border="false" fitColumns="true"
                rownumbers="true" idField="id" treeField="name" checkOnSelect="true" selectOnCheck="true"
                data-options="loadFilter:manage_contentType_datagrid_loadFilter">
@@ -54,10 +54,10 @@
         <!-- 每行的Action动作模板 -->
         <div id="manage_contentType_action" style="display: none;">
             <a class="line-action icon-edit"
-               onclick="$.acooly.framework.edit({url:'/manage/module/feature/cms/contentType/edit.html',id:{0},entity:'contentType',height:300});"
+               onclick="$.acooly.framework.edit({url:'/manage/module/cms/contentType/edit.html',id:{0},entity:'contentType',height:300});"
                href="#"></a>&nbsp
             <a class="line-action icon-delete"
-               onclick="$.acooly.framework.remove('/manage/module/feature/cms/contentType/deleteJson.html',{0},'manage_contentType_datagrid');"
+               onclick="$.acooly.framework.remove('/manage/module/cms/contentType/deleteJson.html',{0},'manage_contentType_datagrid');"
                href="#"></a>
         </div>
 
@@ -66,7 +66,7 @@
             <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
                onclick="manage_contentType_create();">添加</a>
             <a href="#" class="easyui-linkbutton" iconCls="icon-delete" plain="true"
-               onclick="$.acooly.framework.removes('/manage/module/feature/cms/contentType/deleteJson.html','manage_contentType_datagrid')">删除</a>
+               onclick="$.acooly.framework.removes('/manage/module/cms/contentType/deleteJson.html','manage_contentType_datagrid')">删除</a>
         </div>
 
     </div>

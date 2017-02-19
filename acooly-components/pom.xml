@@ -26,6 +26,7 @@
         <module>acooly-component-appservice</module>
         <module>acooly-component-ofile</module>
         <module>acooly-component-cms</module>
+        <module>acooly-component-openapi</module>
     </modules>
 
     <dependencies>

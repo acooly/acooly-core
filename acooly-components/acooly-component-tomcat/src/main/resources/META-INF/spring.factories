@@ -3,3 +3,5 @@ com.acooly.module.tomcat.TomcatAutoConfig
 
 com.acooly.core.common.boot.component.ComponentInitializer=\
 com.acooly.module.tomcat.TomcatComponentInitializer
+
+com.acooly.core.common.boot.component.DependencyChecker=com.acooly.module.tomcat.TomcatDependencyChecker

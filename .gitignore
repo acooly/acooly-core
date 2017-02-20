@@ -66,3 +66,5 @@ acooly-core-test/.settings/
 acooly-core-test/target/
 acooly-core/.apt_generated/
 acooly-core/target/
+acooly-components/acooly-component-cms/.DS_Store
+acooly-components/acooly-component-openapi/target/

@@ -3,3 +3,6 @@ com.acooly.module.ds.JDBCAutoConfig
 
 com.acooly.core.common.boot.component.ComponentInitializer=\
 com.acooly.module.ds.DruidComponentInitializer
+
+com.acooly.core.common.boot.log.initializer.LogInitializer=\
+com.acooly.module.ds.DruidLogInitializer

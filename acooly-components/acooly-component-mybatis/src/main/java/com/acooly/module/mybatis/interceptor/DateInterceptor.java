@@ -12,6 +12,7 @@ package com.acooly.module.mybatis.interceptor;
 import com.acooly.core.common.domain.AbstractEntity;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.plugin.*;
 
 import java.util.Date;
@@ -26,6 +27,16 @@ public class DateInterceptor implements Interceptor {
 	public Object intercept(Invocation invocation) throws Throwable {
 		Object[] args = invocation.getArgs();
 		if (args != null) {
+            //删除时不改变值
+            if(args.length==2){
+                if(args[0] instanceof MappedStatement){
+                    MappedStatement statement= (MappedStatement) args[0];
+                    if(statement.getSqlCommandType()== SqlCommandType.DELETE){
+                        return invocation.proceed();
+                    }
+                }
+            }
+            //更新改变值
             for (Object arg : args) {
                 if(arg instanceof AbstractEntity){
 					AbstractEntity abstractEntity=(AbstractEntity)arg;

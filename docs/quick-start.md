@@ -15,6 +15,9 @@
 
  	mvn archetype:generate  -DarchetypeGroupId=com.acooly  -DarchetypeArtifactId=acooly-archetype -DarchetypeVersion=4.0.0-SNAPSHOT -DarchetypeRepository=http://acooly.cn/nexus/content/groups/public/ -DgroupId=com.acooly.demo -DartifactId=acooly-demo -Dversion=1.0 -Dwebport=8080
  	
+> 如果命令行在："Generating project in Interactive mode"卡住，请加入：-DarchetypeCatalog=local
+
+ 	
 ### 2. 项目结构介绍
 
 `archtype`生成如下目录：

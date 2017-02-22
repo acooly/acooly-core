@@ -26,13 +26,13 @@ public class AcoolyCoder {
 		}
 		service.generateTable("dm_customer");
 	}
-	
-	private static String getProjectPath() {
-		String file = AcoolyCoder.class.getClassLoader().getResource(".").getFile();
-		String testModulePath = file.substring(0, file.indexOf(File.separatorChar + "target" + File.separatorChar));
-		String projectPath = testModulePath.substring(0, testModulePath.lastIndexOf(File.separatorChar));
-		return projectPath+File.separatorChar;
-	}
+
+    public static String getProjectPath() {
+        String file = Coder.class.getClassLoader().getResource(".").getFile();
+        String testModulePath = file.substring(0, file.indexOf( "/target/"));
+        String projectPath = testModulePath.substring(0, testModulePath.lastIndexOf("/"));
+        return projectPath+"/";
+    }
     private static String getRootPackage() {
 		return "${package}";
 	}

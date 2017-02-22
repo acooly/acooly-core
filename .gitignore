@@ -3,7 +3,7 @@
 /.settings
 src/main/webapp/WEB-INF/lib
 src/main/webapp/WEB-INF/logs
-target
+target/
 .idea/
 *.iml
 acooly-archetype/.apt_generated/

@@ -29,6 +29,7 @@
         <module>acooly-component-openapi</module>
         <module>acooly-component-portlet</module>
         <module>acooly-component-app</module>
+        <module>acooly-component-sms</module>
     </modules>
 
     <dependencies>

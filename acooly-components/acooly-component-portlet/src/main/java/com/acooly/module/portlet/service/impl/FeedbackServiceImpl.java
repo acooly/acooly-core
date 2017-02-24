@@ -1,9 +1,9 @@
-package com.acooly.component.portlet.service.impl;
+package com.acooly.module.portlet.service.impl;
 
-import com.acooly.component.portlet.dao.FeedbackDao;
-import com.acooly.component.portlet.domain.Feedback;
-import com.acooly.component.portlet.service.FeedbackService;
 import com.acooly.core.common.service.EntityServiceImpl;
+import com.acooly.module.portlet.dao.FeedbackDao;
+import com.acooly.module.portlet.domain.Feedback;
+import com.acooly.module.portlet.service.FeedbackService;
 import org.springframework.stereotype.Service;
 
 

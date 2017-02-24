@@ -5,14 +5,14 @@
  * date:2016-08-14
  *
  */
-package com.acooly.component.portlet.enums;
+package com.acooly.module.portlet.enums;
+
+import com.acooly.core.utils.enums.Messageable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.acooly.core.utils.enums.Messageable;
 
 /**
  * site_action_log Channel 枚举定义
@@ -36,7 +36,7 @@ public enum ActionChannel implements Messageable {
 	private final String code;
 	private final String message;
 
-	private ActionChannel(String code, String message) {
+	ActionChannel(String code, String message) {
 		this.code = code;
 		this.message = message;
 	}

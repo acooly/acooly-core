@@ -1,8 +1,8 @@
-package com.acooly.component.portlet.dao;
+package com.acooly.module.portlet.dao;
 
 
-import com.acooly.component.portlet.domain.Feedback;
 import com.acooly.module.mybatis.EntityMybatisDao;
+import com.acooly.module.portlet.domain.Feedback;
 
 /**
  * 客户反馈 JPA Dao

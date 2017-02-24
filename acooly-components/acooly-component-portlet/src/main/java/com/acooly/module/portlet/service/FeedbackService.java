@@ -1,7 +1,7 @@
-package com.acooly.component.portlet.service;
+package com.acooly.module.portlet.service;
 
-import com.acooly.component.portlet.domain.Feedback;
 import com.acooly.core.common.service.EntityService;
+import com.acooly.module.portlet.domain.Feedback;
 
 /**
  * 客户反馈 Service

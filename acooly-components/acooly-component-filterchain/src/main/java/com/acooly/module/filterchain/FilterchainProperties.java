@@ -13,6 +13,8 @@ import com.google.common.base.Strings;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import static com.acooly.core.common.boot.listener.ExApplicationRunListener.COMPONENTS_PACKAGE;
+
 /**
  * @author qiubo@yiji.com
  */
@@ -20,7 +22,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 public class FilterchainProperties {
 	
-	private static final String DEFAULT_SCAN_PACKAGE = Apps.getBasePackage() + "," + "com.acooly.module";
+	private static final String DEFAULT_SCAN_PACKAGE = Apps.getBasePackage() + ".**.filter," + COMPONENTS_PACKAGE+".**.filter";
 	/**
 	 * 是否启用组件
 	 */

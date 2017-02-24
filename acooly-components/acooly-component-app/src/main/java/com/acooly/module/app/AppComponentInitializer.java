@@ -10,16 +10,14 @@
 package com.acooly.module.app;
 
 import com.acooly.core.common.boot.component.ComponentInitializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * @author kuli@yiji.com
  */
+@Slf4j
 public class AppComponentInitializer implements ComponentInitializer {
-    private static final Logger logger = LoggerFactory.getLogger(AppComponentInitializer.class);
-
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
 

@@ -1,9 +1,9 @@
-package com.acooly.component.portlet.web;
+package com.acooly.module.portlet.web;
 
-import com.acooly.component.portlet.domain.Feedback;
-import com.acooly.component.portlet.enums.FeedbackType;
-import com.acooly.component.portlet.service.FeedbackService;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.module.portlet.domain.Feedback;
+import com.acooly.module.portlet.enums.FeedbackType;
+import com.acooly.module.portlet.service.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

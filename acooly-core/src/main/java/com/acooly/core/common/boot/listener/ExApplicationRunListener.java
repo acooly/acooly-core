@@ -45,8 +45,9 @@ import java.util.List;
  * @author qiubo
  */
 public class ExApplicationRunListener implements SpringApplicationRunListener {
+    public static final String COMPONENTS_PACKAGE="com.acooly.module";
 	private static List<String> disabledPackageName = Lists.newArrayList("", "com.acooly", "com.acooly.core",
-		"com.acooly.core.common.boot");
+		"com.acooly.core.common.boot",COMPONENTS_PACKAGE);
 	
 	public ExApplicationRunListener(SpringApplication application, String[] args) {
 		application.setRegisterShutdownHook(false);

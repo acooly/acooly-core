@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -41,8 +42,8 @@ public class AppAutoConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private AppProperties appProperties;
 
-    //@Bean
-    public AbstractDatabaseScriptIniter ofileScriptIniter() {
+    @Bean
+    public AbstractDatabaseScriptIniter appScriptIniter() {
         return new AbstractDatabaseScriptIniter() {
             @Override
             public String getEvaluateSql(DatabaseType databaseType) {

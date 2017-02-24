@@ -2,7 +2,7 @@
  * create by zhangpu
  * date:2015年5月19日
  */
-package com.acooly.component.portlet.enums;
+package com.acooly.module.portlet.enums;
 
 import com.acooly.core.utils.enums.Messageable;
 import com.google.common.collect.Maps;
@@ -23,7 +23,7 @@ public enum FeedbackType implements Messageable {
     private final String code;
     private final String message;
 
-    private FeedbackType(String code, String message) {
+    FeedbackType(String code, String message) {
         this.code = code;
         this.message = message;
     }

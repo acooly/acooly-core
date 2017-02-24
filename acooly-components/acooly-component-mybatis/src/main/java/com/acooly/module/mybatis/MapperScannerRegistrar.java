@@ -20,6 +20,8 @@ import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.type.AnnotationMetadata;
 
+import static com.acooly.core.common.boot.listener.ExApplicationRunListener.COMPONENTS_PACKAGE;
+
 /**
  * @author qiubo@yiji.com
  */
@@ -38,7 +40,7 @@ public class MapperScannerRegistrar implements BeanFactoryAware, ImportBeanDefin
 			}
 			scanner.setMarkerInterface(EntityMybatisDao.class);
 			scanner.registerFilters();
-			scanner.doScan(Apps.getBasePackage());
+			scanner.doScan(Apps.getBasePackage(),COMPONENTS_PACKAGE+".**.dao");
 		} catch (IllegalStateException ex) {
 		}
 	}

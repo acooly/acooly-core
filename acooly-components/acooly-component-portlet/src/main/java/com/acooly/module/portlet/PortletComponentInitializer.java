@@ -7,7 +7,7 @@
  * 修订记录:
  * kuli@yiji.com 2017-02-18 00:37 创建
  */
-package com.acooly.component.portlet;
+package com.acooly.module.portlet;
 
 import com.acooly.core.common.boot.component.ComponentInitializer;
 import org.slf4j.Logger;

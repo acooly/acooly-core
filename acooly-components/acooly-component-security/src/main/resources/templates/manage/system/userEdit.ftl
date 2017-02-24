@@ -68,7 +68,7 @@
 				<tr>
 					<th>所属角色</th>
 					<td><select name="role" panelHeight="auto" style="width: 200px;height:27px;" class="easyui-combobox">
-							<#list allRoles as e><option <#if user.roles?seq_contains(e)>selected</#if> value="${e.id}">${e.name}</option></#list>
+							<#list allRoles as e><option <#if user??> <#if user.roles?seq_contains(e)>selected</#if>  </#if> value="${e.id}">${e.name}</option></#list>
 					</select></td>
 				</tr>
 				<tr>

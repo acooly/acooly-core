@@ -12,8 +12,6 @@ import com.acooly.coder.Generator;
 import com.acooly.coder.generate.impl.DefaultCodeGenerateService;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
-
 /**
  * @author qiubo@yiji.com
  */
@@ -34,9 +32,9 @@ public class Coder {
 
 	public static String getProjectPath() {
 		String file = Coder.class.getClassLoader().getResource(".").getFile();
-		String testModulePath = file.substring(0, file.indexOf(File.separatorChar + "target" + File.separatorChar));
-		String projectPath = testModulePath.substring(0, testModulePath.lastIndexOf(File.separatorChar));
-		return projectPath+File.separatorChar;
+		String testModulePath = file.substring(0, file.indexOf( "/target/"));
+		String projectPath = testModulePath.substring(0, testModulePath.lastIndexOf("/"));
+		return projectPath+"/";
 	}
 	public static String getRootPackage() {
 		return "com.acooly.core.test";

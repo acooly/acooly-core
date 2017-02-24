@@ -12,7 +12,6 @@ package com.acooly.module.security.config;
 import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
 import com.acooly.module.jpa.JPAAutoConfig;
-import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
 import com.acooly.module.security.captche.CaptchaServlet;
 import com.acooly.module.security.defence.XssDefenseFilter;
 import com.acooly.module.security.defence.csrf.CookieCsrfTokenRepository;
@@ -42,7 +41,6 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -52,7 +50,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.Ordered;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 
@@ -70,9 +67,6 @@ import java.util.Map;
 @EnableConfigurationProperties({ SecurityProperties.class, FrameworkProperties.class })
 @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = { "com.acooly.module.security" })
-@EntityScan(basePackages = "com.acooly.module.security.domain")
-@EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class,
-		basePackages = "com.acooly.module.security.dao")
 public class SecurityAutoConfig {
 	
 	@Configuration
@@ -332,6 +326,7 @@ public class SecurityAutoConfig {
 		}
 		
 	}
+	
 	@Bean
 	public AbstractDatabaseScriptIniter securityScriptIniter() {
 		return new AbstractDatabaseScriptIniter() {
@@ -339,7 +334,7 @@ public class SecurityAutoConfig {
 			public String getEvaluateSql(DatabaseType databaseType) {
 				return "SELECT count(*) FROM SYS_ROLE";
 			}
-
+			
 			@Override
 			public List<String> getInitSqlFile(DatabaseType databaseType) {
 				return Lists.newArrayList("META-INF/database/mysql/security.sql");

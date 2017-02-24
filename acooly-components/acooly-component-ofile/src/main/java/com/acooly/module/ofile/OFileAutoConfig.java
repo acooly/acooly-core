@@ -12,7 +12,6 @@ package com.acooly.module.ofile;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
-import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
 import com.acooly.module.security.config.SecurityAutoConfig;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -37,7 +35,6 @@ import static com.acooly.module.ofile.OFileProperties.PREFIX;
 @EnableConfigurationProperties({ OFileProperties.class })
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.module.ofile")
-@EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class, basePackages = "com.acooly.module.ofile.dao")
 @AutoConfigureAfter(SecurityAutoConfig.class)
 public class OFileAutoConfig extends WebMvcConfigurerAdapter {
 	@Autowired

@@ -18,6 +18,7 @@ import com.yiji.framework.openapi.core.servlet.OpenAPIDispatchServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -42,6 +43,7 @@ import static com.acooly.module.openapi.OpenAPIProperties.PREFIX;
 @ComponentScan(basePackages = "com.yiji.framework.openapi.manage.web")
 @EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class,
     basePackages = "com.yiji.framework.openapi.service.persistent")
+@EntityScan(basePackages = "com.yiji.framework.openapi.domain")
 @AutoConfigureAfter(SecurityAutoConfig.class)
 public class OpenAPIAutoConfig {
 	@Autowired

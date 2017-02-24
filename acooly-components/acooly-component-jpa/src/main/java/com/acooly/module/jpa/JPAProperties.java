@@ -17,6 +17,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.Map;
 
+import static com.acooly.core.common.boot.listener.ExApplicationRunListener.COMPONENTS_PACKAGE;
 import static com.acooly.module.jpa.JPAProperties.PREFIX;
 
 
@@ -34,7 +35,7 @@ public class JPAProperties {
 	private Map<String,String> entityPackagesToScan= Maps.newHashMap();
 
     public JPAProperties() {
-        entityPackagesToScan.put("app", Apps.getBasePackage());
-        entityPackagesToScan.put("components", "com.acooly.module");
+        entityPackagesToScan.put("app", Apps.getBasePackage()+".**.domain");
+        entityPackagesToScan.put("components", COMPONENTS_PACKAGE+".**.domain");
     }
 }

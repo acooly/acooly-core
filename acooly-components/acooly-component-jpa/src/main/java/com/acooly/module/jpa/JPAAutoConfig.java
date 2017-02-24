@@ -48,6 +48,8 @@ import java.util.Map;
 @Import(JPAAutoConfig.JpaRegistrar.class)
 @AutoConfigureAfter(HibernateJpaAutoConfiguration.class)
 @EnableConfigurationProperties({ JPAProperties.class })
+@EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class,
+    basePackages = "com.acooly.module.**.dao")
 public class JPAAutoConfig {
 
 	@Bean
@@ -100,7 +102,8 @@ public class JPAAutoConfig {
 			return new JpaRepositoryConfigExtension();
 		}
 		
-		@EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class)
+        @EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class,
+            basePackages = "com.acooly.module.**.dao")
 		private class EnableJpaRepositoriesConfiguration {
 		}
 	}

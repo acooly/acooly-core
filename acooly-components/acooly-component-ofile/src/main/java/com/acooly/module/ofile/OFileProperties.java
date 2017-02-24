@@ -9,7 +9,11 @@
  */
 package com.acooly.module.ofile;
 
+import com.acooly.core.common.boot.Apps;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.SystemUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.Assert;
 
@@ -20,7 +24,8 @@ import static com.acooly.module.ofile.OFileProperties.PREFIX;
  */
 @ConfigurationProperties(prefix = PREFIX)
 @Data
-public class OFileProperties {
+@Slf4j
+public class OFileProperties implements InitializingBean {
 	public static final String PREFIX = "acooly.ofile";
 	private String serverRoot = "/media";
 	private String storageRoot = "/data/media/";
@@ -32,17 +37,32 @@ public class OFileProperties {
 	private boolean checkReferer = true;
 	
 	public String getStorageRoot() {
-		Assert.notNull(storageRoot);
-		if (!storageRoot.endsWith("/")) {
-			storageRoot += "/";
-		}
 		return storageRoot;
 	}
-    public String getServerRoot() {
-        Assert.notNull(serverRoot);
-        if (serverRoot.endsWith("/")) {
-            serverRoot =serverRoot.substring(0,serverRoot.length());
-        }
-        return serverRoot;
-    }
+	
+	public String getServerRoot() {
+		return serverRoot;
+	}
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		Assert.notNull(serverRoot);
+		if (serverRoot.endsWith("/")) {
+			serverRoot = serverRoot.substring(0, serverRoot.length());
+		}
+		Assert.notNull(storageRoot);
+		if (SystemUtils.IS_OS_WINDOWS) {
+		    if(!storageRoot.contains(":")||!storageRoot.contains("\\")){
+                log.error("windows配置路径格式应该为:d:\\\\data\\\\projects");
+                Apps.shutdown();
+            }
+            if (!storageRoot.endsWith("\\")) {
+                storageRoot += "\\";
+            }
+		} else {
+			if (!storageRoot.endsWith("/")) {
+				storageRoot += "/";
+			}
+		}
+	}
 }

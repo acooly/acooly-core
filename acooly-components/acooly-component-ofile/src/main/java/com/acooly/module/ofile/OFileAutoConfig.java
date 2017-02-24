@@ -9,6 +9,7 @@
  */
 package com.acooly.module.ofile;
 
+import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
 import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
@@ -36,28 +37,32 @@ import static com.acooly.module.ofile.OFileProperties.PREFIX;
 @EnableConfigurationProperties({ OFileProperties.class })
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.module.ofile")
-@EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class,
-        basePackages = "com.acooly.module.ofile.dao")
+@EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class, basePackages = "com.acooly.module.ofile.dao")
 @AutoConfigureAfter(SecurityAutoConfig.class)
 public class OFileAutoConfig extends WebMvcConfigurerAdapter {
-    @Autowired
-    private OFileProperties oFileProperties;
-    @Bean
-    public AbstractDatabaseScriptIniter ofileScriptIniter() {
-        return new AbstractDatabaseScriptIniter() {
-            @Override
-            public String getEvaluateSql(DatabaseType databaseType) {
-                return "SELECT count(*) FROM sys_ofile";
-            }
-
-            @Override
-            public List<String> getInitSqlFile(DatabaseType databaseType) {
-                return Lists.newArrayList("META-INF/database/mysql/ofile.sql","META-INF/database/mysql/ofile_urls.sql");
-            }
-        };
-    }
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(oFileProperties.getServerRoot()+"/**").addResourceLocations("file:"+oFileProperties.getStorageRoot());
-    }
+	@Autowired
+	private OFileProperties oFileProperties;
+	
+	@Bean
+	public AbstractDatabaseScriptIniter ofileScriptIniter() {
+		return new AbstractDatabaseScriptIniter() {
+			@Override
+			public String getEvaluateSql(DatabaseType databaseType) {
+				return "SELECT count(*) FROM sys_ofile";
+			}
+			
+			@Override
+			public List<String> getInitSqlFile(DatabaseType databaseType) {
+				return Lists.newArrayList("META-INF/database/mysql/ofile.sql",
+					"META-INF/database/mysql/ofile_urls.sql");
+			}
+		};
+	}
+	
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		boolean useResourceCache = !Apps.isDevMode();
+		registry.addResourceHandler(oFileProperties.getServerRoot() + "/**")
+			.addResourceLocations("file:" + oFileProperties.getStorageRoot()).resourceChain(useResourceCache);
+	}
 }

@@ -35,7 +35,11 @@ public class JPAProperties {
 	private Map<String,String> entityPackagesToScan= Maps.newHashMap();
 
     public JPAProperties() {
-        entityPackagesToScan.put("app", Apps.getBasePackage()+".**.domain");
-        entityPackagesToScan.put("components", COMPONENTS_PACKAGE+".**.domain");
+        entityPackagesToScan.put("app0", Apps.getBasePackage()+".**.domain");
+        entityPackagesToScan.put("app1", Apps.getBasePackage()+".**.entity");
+
+        entityPackagesToScan.put("components0", COMPONENTS_PACKAGE+".**.domain");
+        entityPackagesToScan.put("components1", COMPONENTS_PACKAGE+".**.entity");
+
     }
 }

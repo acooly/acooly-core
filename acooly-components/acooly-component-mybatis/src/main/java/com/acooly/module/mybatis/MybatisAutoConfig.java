@@ -9,11 +9,13 @@
  */
 package com.acooly.module.mybatis;
 
+import com.acooly.core.common.domain.Entityable;
 import com.acooly.module.ds.JDBCAutoConfig;
-import com.acooly.module.mybatis.interceptor.PageExecutorInterceptor;
 import com.acooly.module.mybatis.interceptor.DateInterceptor;
+import com.acooly.module.mybatis.interceptor.PageExecutorInterceptor;
 import com.acooly.module.mybatis.page.PageObjectFactory;
 import com.acooly.module.mybatis.page.PageObjectWrapperFactory;
+import com.google.common.base.Joiner;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -68,9 +70,11 @@ public class MybatisAutoConfig {
 		if (this.databaseIdProvider != null) {
 			factory.setDatabaseIdProvider(this.databaseIdProvider);
 		}
-		if (StringUtils.hasLength(properties.getTypeAliasesPackage())) {
-			factory.setTypeAliasesPackage(properties.getTypeAliasesPackage());
+		if (!properties.getTypeAliasesPackage().isEmpty()) {
+		    String packages=Joiner.on(',').join(properties.getTypeAliasesPackage().values().iterator());
+			factory.setTypeAliasesPackage(packages);
 		}
+        factory.setTypeAliasesSuperType(Entityable.class);
 		if (StringUtils.hasLength(properties.getTypeHandlersPackage())) {
 			factory.setTypeHandlersPackage(properties.getTypeHandlersPackage());
 		}

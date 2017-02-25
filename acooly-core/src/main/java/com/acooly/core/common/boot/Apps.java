@@ -126,5 +126,6 @@ public class Apps {
 	public static <T> T buildProperties(Class<T> clazz){
 		return EnvironmentHolder.buildProperties(clazz);
 	}
+
 	
 }

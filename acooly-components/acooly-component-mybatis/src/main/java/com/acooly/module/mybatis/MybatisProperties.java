@@ -23,6 +23,8 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import java.io.IOException;
 import java.util.Map;
 
+import static com.acooly.core.common.boot.listener.ExApplicationRunListener.COMPONENTS_PACKAGE;
+
 /**
  * @author qiubo
  */
@@ -49,7 +51,7 @@ public class MybatisProperties implements InitializingBean {
 	 */
 	private String typeHandlersPackage;
 	
-	private String typeAliasesPackage = Apps.getBasePackage() + ".domain";
+	private Map<String,String>  typeAliasesPackage=Maps.newHashMap();
 	private String configLocation;
 	
 	@Override
@@ -66,7 +68,11 @@ public class MybatisProperties implements InitializingBean {
 		} else {
 			typeHandlersPackage += ",com.acooly.module.mybatis.typehandler";
 		}
-	}
+        typeAliasesPackage.put("app", Apps.getBasePackage());
+        typeAliasesPackage.put("components", COMPONENTS_PACKAGE);
+
+
+    }
 	
 	public Resource[] resolveMapperLocations() {
 		try {

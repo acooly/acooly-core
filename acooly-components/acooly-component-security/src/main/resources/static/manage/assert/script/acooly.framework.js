@@ -765,7 +765,7 @@
 			/**
 			 * KingEditor富文本框编辑器
 			 */
-			kingEditor :(opts){
+			kingEditor :function(opts){
 				var uploadUrl = opts.uploadUrl;
 				if (!uploadUrl)
 					uploadUrl = '/ofile/kindEditor.html';
@@ -776,7 +776,9 @@
 					allowFileManager : true, // true时显示浏览远程服务器按钮 ;默认值: false
 					allowMediaUpload : false, // true时显示视音频上传按钮。默认值: true
 					allowFlashUpload : false, // true时显示Flash上传按钮;默认值: true
-					items : [ 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline', 'removeformat','lineheight', '|', 'justifyleft', 'justifycenter', 'justifyright','anchor', 'plainpaste', 'wordpaste','clearhtml','quickformat','insertorderedlist', 'insertunorderedlist', '|', 'emoticons', 'image', 'multiimage',
+					items : [ 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline', 'removeformat',
+						'lineheight', '|', 'justifyleft', 'justifycenter', 'justifyright','anchor', 'plainpaste', 'wordpaste','clearhtml',
+						'quickformat','insertorderedlist', 'insertunorderedlist', '|', 'emoticons', 'image', 'multiimage',
 						'baidumap','link', 'unlink', 'source', 'preview' ],
 					// 上传的url
 					uploadJson : uploadUrl,

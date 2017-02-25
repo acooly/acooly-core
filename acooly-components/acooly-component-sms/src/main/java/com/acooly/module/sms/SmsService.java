@@ -9,7 +9,7 @@ import java.util.Map;
  * @author zhangpu
  *
  */
-public interface ShortMessageSendService {
+public interface SmsService {
 
 	/**
 	 * 单条发送

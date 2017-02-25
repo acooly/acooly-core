@@ -21,6 +21,9 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object> implem
 
 	private Messageable status = ResultStatus.success;
 
+    /**
+     * 参考 {@link ResultCode}
+     */
 	private String code;
 
 	private String detail;

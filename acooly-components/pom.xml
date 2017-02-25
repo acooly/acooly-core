@@ -30,6 +30,7 @@
         <module>acooly-component-portlet</module>
         <module>acooly-component-app</module>
         <module>acooly-component-sms</module>
+        <module>acooly-component-mail</module>
     </modules>
 
     <dependencies>

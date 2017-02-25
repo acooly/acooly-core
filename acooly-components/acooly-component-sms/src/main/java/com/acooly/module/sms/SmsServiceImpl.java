@@ -30,8 +30,8 @@ import java.util.Map;
  *
  */
 @Service("shortMessageSendService")
-public class ShortMessageSendServiceImpl implements ShortMessageSendService,InitializingBean {
-	private static final Logger logger = LoggerFactory.getLogger(ShortMessageSendServiceImpl.class);
+public class SmsServiceImpl implements SmsService,InitializingBean {
+	private static final Logger logger = LoggerFactory.getLogger(SmsServiceImpl.class);
 	@Resource
 	private ShortMessageSender shortMessageSender;
 	@Resource

@@ -30,15 +30,17 @@
 	</tr>					
 	<tr>
 		<th>创建时间:</th>
-		<td>${feedback.createTime}</td>
-	</tr>					
+		<td>${feedback.createTime?datetime}</td>
+
+
+    </tr>
 	<tr>
 		<th>修改时间:</th>
-		<td>${feedback.modifyTime}</td>
-	</tr>					
-	<tr>
+		<td>${feedback.updateTime?datetime}</td>
+	</tr>
+    <tr>
 		<th>备注:</th>
-		<td>${feedback.comments}</td>
+		<td>${feedback.comments!}</td>
 	</tr>					
 </table>
 </div>

@@ -39,7 +39,7 @@
 			</tr>					
 			<tr>
 				<th>修改时间：</th>
-				<td><input type="text" name="modifyTime" size="15" value="<fmt:formatDate value="${feedback.modifyTime}" pattern="yyyy-MM-dd HH:mm:ss"/>" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  /></td>
+				<td><input type="text" name="modifyTime" size="15" value="<fmt:formatDate value="${feedback.updateTime}" pattern="yyyy-MM-dd HH:mm:ss"/>" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  /></td>
 			</tr>					
 			<tr>
 				<th>备注：</th>

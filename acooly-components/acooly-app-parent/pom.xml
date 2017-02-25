@@ -105,6 +105,11 @@
                 <artifactId>acooly-component-mail</artifactId>
                 <version>4.0.0-SNAPSHOT</version>
             </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-app-openapi</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>

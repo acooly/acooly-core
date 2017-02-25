@@ -20,11 +20,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.List;
 
-import static com.acooly.module.ofile.OFileProperties.PREFIX;
+import static com.acooly.module.app.AppProperties.PREFIX;
 
 /**
  * @author kuli@yiji.com
@@ -34,7 +33,7 @@ import static com.acooly.module.ofile.OFileProperties.PREFIX;
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.module.app")
 @AutoConfigureAfter(SecurityAutoConfig.class)
-public class AppAutoConfig extends WebMvcConfigurerAdapter {
+public class AppAutoConfig {
 	@Autowired
 	private AppProperties appProperties;
 	
@@ -43,12 +42,12 @@ public class AppAutoConfig extends WebMvcConfigurerAdapter {
 		return new AbstractDatabaseScriptIniter() {
 			@Override
 			public String getEvaluateSql(DatabaseType databaseType) {
-				return "SELECT count(*) FROM app_version";
+				return "SELECT count(*) FROM app_banner";
 			}
 			
 			@Override
 			public List<String> getInitSqlFile(DatabaseType databaseType) {
-				return Lists.newArrayList("META-INF/database/mysql/app.sql");
+				return Lists.newArrayList("META-INF/database/mysql/app.sql", "META-INF/database/mysql/app_urls.sql");
 			}
 		};
 	}

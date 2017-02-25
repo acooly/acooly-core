@@ -11,7 +11,8 @@ com.acooly.core.common.boot.log.initializer.ConsoleLogInitializer,\
 com.acooly.core.common.boot.log.initializer.FileInfoLogInitializer,\
 com.acooly.core.common.boot.log.initializer.FileErrorLogInitializer,\
 com.acooly.core.common.boot.log.initializer.AutoConfigurationReportLogInitializer,\
-com.acooly.core.common.boot.log.initializer.LevelLogInitializer
+com.acooly.core.common.boot.log.initializer.LevelLogInitializer,\
+com.acooly.core.common.boot.log.initializer.ScriptUtilsLogInitializer
 
 org.springframework.context.ApplicationContextInitializer=\
 com.acooly.core.common.boot.component.ComponentExtensionContextInitializer,\

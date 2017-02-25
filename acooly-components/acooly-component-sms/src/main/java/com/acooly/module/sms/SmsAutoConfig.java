@@ -45,7 +45,7 @@ public class SmsAutoConfig {
 			
 			@Override
 			public List<String> getInitSqlFile(DatabaseType databaseType) {
-				return Lists.newArrayList("META-INF/database/mysql/sms.sql");
+				return Lists.newArrayList("META-INF/database/mysql/sms.sql","META-INF/database/mysql/sms_urls.sql");
 			}
 		};
 	}

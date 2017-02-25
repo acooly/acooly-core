@@ -31,6 +31,7 @@
         <module>acooly-component-app</module>
         <module>acooly-component-sms</module>
         <module>acooly-component-mail</module>
+        <module>acooly-component-app-openapi</module>
     </modules>
 
     <dependencies>

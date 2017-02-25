@@ -68,11 +68,9 @@ public class MybatisProperties implements InitializingBean {
 		} else {
 			typeHandlersPackage += ",com.acooly.module.mybatis.typehandler";
 		}
-        typeAliasesPackage.put("app0", Apps.getBasePackage()+".**.domain");
-        typeAliasesPackage.put("app1", Apps.getBasePackage()+".**.entity");
+        typeAliasesPackage.put("app", Apps.getBasePackage());
+        typeAliasesPackage.put("components", COMPONENTS_PACKAGE);
 
-        typeAliasesPackage.put("components0", COMPONENTS_PACKAGE+".**.domain");
-        typeAliasesPackage.put("components1", COMPONENTS_PACKAGE+".**.entity");
 
     }
 	

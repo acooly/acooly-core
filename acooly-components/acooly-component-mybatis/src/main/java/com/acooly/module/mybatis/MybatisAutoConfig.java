@@ -9,6 +9,7 @@
  */
 package com.acooly.module.mybatis;
 
+import com.acooly.core.common.domain.Entityable;
 import com.acooly.module.ds.JDBCAutoConfig;
 import com.acooly.module.mybatis.interceptor.DateInterceptor;
 import com.acooly.module.mybatis.interceptor.PageExecutorInterceptor;
@@ -73,6 +74,7 @@ public class MybatisAutoConfig {
 		    String packages=Joiner.on(',').join(properties.getTypeAliasesPackage().values().iterator());
 			factory.setTypeAliasesPackage(packages);
 		}
+        factory.setTypeAliasesSuperType(Entityable.class);
 		if (StringUtils.hasLength(properties.getTypeHandlersPackage())) {
 			factory.setTypeHandlersPackage(properties.getTypeHandlersPackage());
 		}

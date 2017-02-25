@@ -13,8 +13,8 @@
                     <#if parent??>${parent.name}<#else>顶级节点</#if>
                     <input type="hidden" name="parentId" value="<#if parent??>${parent.id}</#if>"/>
                 <#else>
-                    <#if contentType.parent??>contentType.parent.name<#else>顶级节点</#if>}
-                    <input type="hidden" name="parentId" value="<#if contentType.parent??>contentType.parent.id</#if>"/>
+                    <#if contentType.parent??>${contentType.parent.name}<#else>顶级节点</#if>
+                    <input type="hidden" name="parentId" value="<#if contentType.parent??>${contentType.parent.id}</#if>"/>
                 </#if>
                 </td>
             </tr>

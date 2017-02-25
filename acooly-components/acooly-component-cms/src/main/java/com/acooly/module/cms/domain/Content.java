@@ -1,6 +1,5 @@
 package com.acooly.module.cms.domain;
 
-import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.common.domain.Entityable;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -75,9 +74,9 @@ public class Content implements Entityable {
     private String comments;
 
     /**
-     * 扩展CODE(分类维度考虑，比如：所属商户，所属用户等编码)
-     **/
-    private String belongCode;
+     * 外链连接
+     */
+    private String link;
 
     private Date createTime;
 
@@ -95,7 +94,7 @@ public class Content implements Entityable {
      */
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @PrimaryKeyJoinColumn
-    @JoinColumn(name="id")
+    @JoinColumn(name = "id")
     private ContentBody contentBody;
 
     /**
@@ -223,14 +222,6 @@ public class Content implements Entityable {
         this.keycode = keycode;
     }
 
-    public String getBelongCode() {
-        return belongCode;
-    }
-
-    public void setBelongCode(String belongCode) {
-        this.belongCode = belongCode;
-    }
-
     public Long getId() {
         return id;
     }
@@ -255,6 +246,14 @@ public class Content implements Entityable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }
 

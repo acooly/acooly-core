@@ -25,20 +25,22 @@ CREATE TABLE `cms_content` (
   `TYPE` bigint(20) NOT NULL COMMENT '类型',
   `TITLE` varchar(128) NOT NULL COMMENT '标题',
   `COVER` varchar(128) DEFAULT NULL COMMENT '封面',
+  `LINK` varchar(128) DEFAULT NULL COMMENT '链接',
   `PUB_DATE` datetime NOT NULL COMMENT '发布时间',
   `KEYWORDS` varchar(128) DEFAULT NULL COMMENT '关键字\n            (SEO或本身简单搜索使用)',
   `SUBJECT` varchar(256) DEFAULT NULL COMMENT '主题介绍',
   `AUTHOR` varchar(16) DEFAULT NULL COMMENT '作者',
   `HITS` decimal(10,0) DEFAULT NULL COMMENT '点击数',
   `STATUS` int(11) NOT NULL DEFAULT '1' COMMENT '状态 (1:正常,2:禁用)',
+  `CREATE_TIME` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '最后更新时间',
   `COMMENTS` varchar(128) DEFAULT NULL COMMENT '备注',
-  `BELONG_CODE` varchar(64) DEFAULT NULL COMMENT '所属实体',
   PRIMARY KEY (`ID`),
-  KEY `FKF7BB0383EDA707C8` (`ID`),
-  KEY `FKF7BB0383EDE5DF7F` (`TYPE`),
-  CONSTRAINT `cms_content_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `cms_content_body` (`ID`),
-  CONSTRAINT `cms_content_ibfk_2` FOREIGN KEY (`TYPE`) REFERENCES `cms_content_type` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=316 DEFAULT CHARSET=utf8 COMMENT='内容主表';
+  KEY `idx_cms_content_id` (`ID`),
+  KEY `idx_cms_content_type` (`TYPE`),
+  CONSTRAINT `pk_cms_content_body_id` FOREIGN KEY (`ID`) REFERENCES `cms_content_body` (`ID`),
+  CONSTRAINT `pk_cms_content_type_id` FOREIGN KEY (`TYPE`) REFERENCES `cms_content_type` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='内容主表';
 
 DROP TABLE IF EXISTS `cms_attachment`;
 CREATE TABLE `cms_attachment` (
@@ -51,12 +53,17 @@ CREATE TABLE `cms_attachment` (
   PRIMARY KEY (`ID`),
   KEY `FK2731B5D9D02C81BF` (`CONTENTID`),
   CONSTRAINT `cms_attachment_ibfk_1` FOREIGN KEY (`CONTENTID`) REFERENCES `cms_content` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=216 DEFAULT CHARSET=utf8 COMMENT='内容附件';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='内容附件';
 
+INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102500', NULL, NULL, 'article', '文章', '');
+INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102501', '2015102500', NULL, 'aboutus', '关于我们', '');
+INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102502', '2015102500', NULL, 'contactus', '联系我们', '');
+INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102503', '2015102500', NULL, 'faq', '常见问题', '');
+INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102504', '2015102500', NULL, 'agreement', '服务协议', '');
+INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102505', '2015102500', NULL, 'notice', '最新公共', '');
+INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102506', '2015102500', NULL, 'news', '新闻动态', '');
+INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102600', NULL, NULL, 'banner', '横幅', '');
+INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102510', '2015102600', NULL, 'indexBanner', '首页横幅', '');
+INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102511', '2015102600', NULL, 'partner', '合作伙伴', '');
+INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102512', '2015102600', NULL, 'friend', '友情链接', '');
 
-INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102501', NULL, NULL, 'aboutus', '关于我们', '');
-INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102502', NULL, NULL, 'contactus', '联系我们', '');
-INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102503', NULL, NULL, 'faq', '常见问题', '');
-INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102504', NULL, NULL, 'agreement', '服务协议', '');
-INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102505', NULL, NULL, 'notice', '最新公共', '');
-INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102506', NULL, NULL, 'news', '新闻动态', '');

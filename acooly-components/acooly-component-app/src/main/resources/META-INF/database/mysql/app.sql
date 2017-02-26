@@ -117,7 +117,7 @@ CREATE TABLE `app_message` (
   `SEND_TIME` datetime NOT NULL COMMENT '发送时间',
   `TYPE` varchar(16) NOT NULL COMMENT '群发类型 {broadcast:广播,group:群发}',
   `SCHEDULER_TIME` datetime DEFAULT NULL COMMENT '定时发送时间(预留，暂不开发)',
-  `CONTENT_TYPE` varchar(16) NOT NULL COMMENTS '内容类型',
+  `CONTENT_TYPE` varchar(16) NOT NULL COMMENT '内容类型',
   `CONTENT` varchar(1024) NOT NULL COMMENT '发送内容',
   `CONTEXT` varchar(256) DEFAULT NULL COMMENT '会话参数',
   `SENDER` varchar(16) DEFAULT NULL COMMENT '发送人',

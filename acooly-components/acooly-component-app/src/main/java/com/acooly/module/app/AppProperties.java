@@ -14,7 +14,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import static com.acooly.module.app.AppProperties.PREFIX;
 
-
 /**
  * @author qiubo@yiji.com
  */
@@ -22,9 +21,9 @@ import static com.acooly.module.app.AppProperties.PREFIX;
 @Data
 public class AppProperties {
 	public static final String PREFIX = "acooly.app";
-	
+	private Boolean enable = true;
 	private String storagePath = "app";
-
+	
 	private JPush jpush = new JPush();
 	
 	@Data

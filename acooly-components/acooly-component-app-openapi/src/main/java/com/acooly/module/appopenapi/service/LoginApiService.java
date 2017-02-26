@@ -86,6 +86,8 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
             log.warn("*****************************************************************************************************************************");
             log.warn("应用系统没有提供AppApiLoginService bean实现，默认启用匿名实现，即登录时不验证用户名密码，请业务开发者考虑app是否需要登录时验证密码！");
             log.warn("*****************************************************************************************************************************");
+        }else {
+		    log.info("app登录验证实现类:{}",appApiLoginService.getClass());
         }
 
     }

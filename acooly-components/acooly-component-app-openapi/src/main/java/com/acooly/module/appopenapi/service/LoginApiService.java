@@ -9,12 +9,15 @@ import com.acooly.module.appopenapi.enums.ApiOwners;
 import com.acooly.module.appopenapi.message.LoginRequest;
 import com.acooly.module.appopenapi.message.LoginResponse;
 import com.acooly.module.appopenapi.support.AppApiLoginService;
+import com.acooly.module.appopenapi.support.login.AnonymousAppApiLoginService;
 import com.google.common.collect.Maps;
 import com.yiji.framework.openapi.common.exception.ApiServiceException;
 import com.yiji.framework.openapi.core.meta.OpenApiService;
 import com.yiji.framework.openapi.core.service.base.BaseApiService;
 import com.yiji.framework.openapi.core.service.enums.ResponseType;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.AbstractEnvironment;
 
@@ -31,7 +34,8 @@ import java.util.Map;
  *
  */
 @OpenApiService(name = "login", desc = "用户登录", responseType = ResponseType.SYN, owner = ApiOwners.COMMON)
-public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse> {
+@Slf4j
+public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse> implements InitializingBean {
     @Autowired
     private AppOpenapiProperties appOpenapiProperties;
 
@@ -75,4 +79,14 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
 			throw new ApiServiceException(AppApiErrorCode.LOGIN_FAIL, e.getMessage());
 		}
 	}
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+		if (appApiLoginService.getClass() == AnonymousAppApiLoginService.class) {
+            log.warn("*****************************************************************************************************************************");
+            log.warn("应用系统没有提供AppApiLoginService bean实现，默认启用匿名实现，即登录时不验证用户名密码，请业务开发者考虑app是否需要登录时验证密码！");
+            log.warn("*****************************************************************************************************************************");
+        }
+
+    }
 }

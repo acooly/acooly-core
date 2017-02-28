@@ -28,7 +28,7 @@ public class AcoolyCoder {
 	}
 
     public static String getProjectPath() {
-        String file = Coder.class.getClassLoader().getResource(".").getFile();
+        String file = AcoolyCoder.class.getClassLoader().getResource(".").getFile();
         String testModulePath = file.substring(0, file.indexOf( "/target/"));
         String projectPath = testModulePath.substring(0, testModulePath.lastIndexOf("/"));
         return projectPath+"/";

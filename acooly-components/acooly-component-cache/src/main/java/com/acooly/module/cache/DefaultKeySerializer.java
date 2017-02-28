@@ -25,6 +25,9 @@ public class DefaultKeySerializer implements RedisSerializer<Object> {
         if (o == null) {
             return null;
         } else {
+            if(o instanceof byte[]){
+                return (byte[]) o;
+            }
             return o.toString().getBytes(charset);
         }
     }

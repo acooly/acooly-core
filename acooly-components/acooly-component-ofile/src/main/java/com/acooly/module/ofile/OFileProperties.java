@@ -58,7 +58,6 @@ public class OFileProperties implements InitializingBean {
 		        storageRoot=new File(storageRoot).getAbsolutePath();
             }
 		    if(!storageRoot.contains(":")||!storageRoot.contains("\\")){
-		        new File(storageRoot).getAbsolutePath();
                 log.error("windows配置路径格式应该为:d:\\\\data\\\\projects");
                 Apps.shutdown();
             }

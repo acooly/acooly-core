@@ -17,6 +17,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.Assert;
 
+import java.io.File;
+
 import static com.acooly.module.ofile.OFileProperties.PREFIX;
 
 /**
@@ -52,7 +54,11 @@ public class OFileProperties implements InitializingBean {
 		}
 		Assert.notNull(storageRoot);
 		if (SystemUtils.IS_OS_WINDOWS) {
+		    if( !new File(storageRoot).isAbsolute()){
+		        storageRoot=new File(storageRoot).getAbsolutePath();
+            }
 		    if(!storageRoot.contains(":")||!storageRoot.contains("\\")){
+		        new File(storageRoot).getAbsolutePath();
                 log.error("windows配置路径格式应该为:d:\\\\data\\\\projects");
                 Apps.shutdown();
             }

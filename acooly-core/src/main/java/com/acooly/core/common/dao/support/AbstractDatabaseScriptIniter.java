@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.EncodedResource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 
@@ -68,7 +69,8 @@ public abstract class AbstractDatabaseScriptIniter implements ApplicationListene
 		logger.info("发现数据库基础数据还没有初始化，开始初始化:{}", sqlpath);
 		try {
 			Resource scriptResource = ApplicationContextHolder.get().getResource("classpath:" + sqlpath);
-			ScriptUtils.executeSqlScript(dataSource.getConnection(), scriptResource);
+            EncodedResource encodedResource=new EncodedResource(scriptResource,Charsets.UTF_8);
+			ScriptUtils.executeSqlScript(dataSource.getConnection(), encodedResource);
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}

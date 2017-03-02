@@ -6,6 +6,7 @@ import com.acooly.core.common.service.EntityService;
 import com.acooly.module.cms.domain.Content;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 内容主表 Service
@@ -26,6 +27,10 @@ public interface ContentService extends EntityService<Content> {
 	void moveTop(Long valueOf);
 
 	void moveUp(Long valueOf);
+
+	List<Content> topByTypeCode(String typeCode, int count);
+
+	List<Content> topByTypeCodeNoLazy(String typeCode,int count);
 
 	Content getLatestByTypeCode(String typeCode);
 

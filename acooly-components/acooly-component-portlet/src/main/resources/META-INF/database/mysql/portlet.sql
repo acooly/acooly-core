@@ -12,3 +12,15 @@ CREATE TABLE `p_feedback` (
   `comments` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='客户反馈';
+
+
+CREATE TABLE `p_portlet_config` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `type` VARCHAR(45) NULL COMMENT '类型 {def:默认}',
+  `title` VARCHAR(45) NOT NULL COMMENT '标题',
+  `key` VARCHAR(45) NOT NULL COMMENT '参数键',
+  `value` VARCHAR(4000) NULL COMMENT '参数值',
+  `comments` VARCHAR(255) NULL COMMENT '备注',
+  `create_time` DATETIME NULL,
+  `update_time` DATETIME NULL,
+  PRIMARY KEY (`id`, `title`, `key`));

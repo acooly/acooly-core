@@ -9,9 +9,9 @@ CREATE TABLE `app_banner` (
   `media_url` varchar(128) NOT NULL COMMENT '广告栏图片',
   `link` varchar(128) DEFAULT NULL COMMENT '内容链接',
   `sort_time` datetime DEFAULT NULL COMMENT '排序时间',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `comments` varchar(255) DEFAULT NULL COMMENT '备注',
+    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+ `update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -27,9 +27,9 @@ CREATE TABLE `app_customer` (
   `device_type` varchar(16) DEFAULT NULL COMMENT '设备类型',
   `device_model` varchar(64) DEFAULT NULL COMMENT '设备型号',
   `device_id` varchar(64) NOT NULL COMMENT '设备标识',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `update_time` datetime NOT NULL COMMENT '更新时间',
   `status` varchar(255) NOT NULL COMMENT '状态{enable:有效,disable:无效}',
+    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+ `update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
@@ -44,10 +44,10 @@ CREATE TABLE `app_start_guide` (
   `image_iphone4` varchar(255) DEFAULT NULL COMMENT 'IPHONE4(640*960)',
   `image_iphone6` varchar(255) DEFAULT NULL COMMENT 'iphone5/6: 1242*2208',
   `image_android` varchar(255) DEFAULT NULL COMMENT 'android: 1080 * 1920',
-  `create_time` datetime NOT NULL,
-  `update_time` datetime NOT NULL,
   `status` varchar(255) NOT NULL COMMENT '状态{enable:可用,disable:禁用}',
   `comments` varchar(255) DEFAULT NULL COMMENT '备注',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+ `update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
@@ -69,6 +69,8 @@ CREATE TABLE `app_version` (
   `COMMENTS` varchar(255) DEFAULT NULL COMMENT '备注',
   `PATH` varchar(255) DEFAULT NULL COMMENT '物理存储路径',
   `APPLE_URL` varchar(255) DEFAULT NULL COMMENT '苹果安装地址',
+    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+ `update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_DEVICE_VCODE` (`DEVICE_TYPE`,`VERSION_CODE`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='手机客户端版本';
@@ -84,10 +86,10 @@ CREATE TABLE `app_welcome` (
   `image_iphone4` varchar(255) DEFAULT NULL COMMENT 'IPHONE4(640*960)',
   `image_iphone6` varchar(255) DEFAULT NULL COMMENT 'iphone5/6: 1242*2208',
   `image_android` varchar(255) DEFAULT NULL COMMENT 'android: 1080 * 1920',
-  `create_time` datetime NOT NULL,
-  `update_time` datetime NOT NULL,
   `status` varchar(255) NOT NULL COMMENT '状态{enable:可用,disable:禁用}',
   `comments` varchar(255) DEFAULT NULL COMMENT '备注',
+    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+ `update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
@@ -107,6 +109,8 @@ CREATE TABLE `app_crash` (
   `crash_date` datetime DEFAULT NULL COMMENT '崩溃的时间点',
   `package_name` varchar(128) DEFAULT NULL COMMENT '应用的包名',
   `stack_trace` text DEFAULT NULL COMMENT '崩溃的堆栈信息',
+    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+ `update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
@@ -124,6 +128,8 @@ CREATE TABLE `app_message` (
   `RECEIVERS` varchar(256) DEFAULT NULL COMMENT '类型为group时有效。多个用户使用逗号分隔',
   `STATUS` varchar(16) DEFAULT NULL COMMENT '状态.{apply:提交,sending:发送中,success:成功,fail:发送失败}',
   `COMMENTS` varchar(256) DEFAULT NULL COMMENT '备注',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+ `update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='群发消息';
 

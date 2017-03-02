@@ -23,6 +23,8 @@ CREATE TABLE SYS_OLOG
    OPERATE_MESSAGE      VARCHAR(512) COMMENT '消息',
    CLIENT_INFORMATIONS  VARCHAR(256) COMMENT '客户端信息',
    DESCN                VARCHAR(256) COMMENT '备注',
+   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+   `update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
    PRIMARY KEY (ID)
 );
 
@@ -43,6 +45,8 @@ CREATE TABLE SYS_PORTALLET
    SHOW_MODE			INT NULL COMMENT '加载方式 {1:ajax,2:iframe}',
    HREF                 VARCHAR(128) COMMENT '连接地址',
    CONTENT              VARCHAR(4000) COMMENT '内容',
+    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
    PRIMARY KEY (ID)
 );
 
@@ -63,6 +67,8 @@ CREATE TABLE SYS_RESOURCE
    SHOW_MODE            INT COMMENT '加载方式 (1:AJAXLOAD,2:IFRAME)',
    ICON                 VARCHAR(64) COMMENT '图标',
    DESCN                VARCHAR(256) COMMENT '描述',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+ `update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
    PRIMARY KEY (ID)
 );
 
@@ -77,6 +83,8 @@ CREATE TABLE SYS_ROLE
    NAME                 VARCHAR(64) NOT NULL,
    ORG_ID				INT,
    DESCN                VARCHAR(256),
+     `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+ `update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
    PRIMARY KEY (ID)
 );
 
@@ -114,6 +122,7 @@ CREATE TABLE SYS_USER
    LOGIN_TIME           DATETIME COMMENT '登陆时间',
    STATUS               INT NOT NULL COMMENT '状态 {1:有效,2:过期,3:锁定,4:禁用}',
    DESCN                VARCHAR(256) COMMENT '描述',
+   `update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
    PRIMARY KEY (ID)
 );
 
@@ -151,6 +160,8 @@ CREATE TABLE SYS_CONFIG
    NAME                 VARCHAR(64) NOT NULL COMMENT '名称',
    VALUE                VARCHAR(512) COMMENT '值',
    COMMENTS             VARCHAR(512) COMMENT '备注',
+    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
    PRIMARY KEY (ID)
 );
 

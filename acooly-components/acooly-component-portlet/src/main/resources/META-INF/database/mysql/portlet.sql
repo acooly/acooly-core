@@ -21,6 +21,6 @@ CREATE TABLE `p_portlet_config` (
   `key` VARCHAR(45) NOT NULL COMMENT '参数键',
   `value` VARCHAR(4000) NULL COMMENT '参数值',
   `comments` VARCHAR(255) NULL COMMENT '备注',
-  `create_time` DATETIME NULL,
-  `update_time` DATETIME NULL,
+   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+ `update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`, `title`, `key`));

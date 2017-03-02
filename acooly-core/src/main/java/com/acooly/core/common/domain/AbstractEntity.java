@@ -1,6 +1,7 @@
 package com.acooly.core.common.domain;
 
 import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.google.common.collect.Lists;
 import lombok.Getter;
@@ -81,4 +82,8 @@ public abstract class AbstractEntity implements Entityable {
         return ts;
     }
 
+    @Override
+    public String toString() {
+       return ToString.toString(this);
+    }
 }

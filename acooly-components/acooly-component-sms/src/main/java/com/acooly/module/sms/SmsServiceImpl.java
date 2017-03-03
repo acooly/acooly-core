@@ -29,7 +29,7 @@ import java.util.Map;
  * @author zhangpu
  *
  */
-@Service("shortMessageSendService")
+@Service("SmsService")
 public class SmsServiceImpl implements SmsService,InitializingBean {
 	private static final Logger logger = LoggerFactory.getLogger(SmsServiceImpl.class);
 	@Resource

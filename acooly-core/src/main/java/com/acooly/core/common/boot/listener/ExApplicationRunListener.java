@@ -87,12 +87,13 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
 	@Override
 	public void contextLoaded(ConfigurableApplicationContext context) {
 	}
-	
-	@Override
-	public void started() {
-	}
-	
-	private void initEnvVars(BootApp bootApp) {
+
+    @Override
+    public void starting() {
+
+    }
+
+    private void initEnvVars(BootApp bootApp) {
 		String sysName = bootApp.sysName();
 		Assert.hasLength(sysName, "系统名不能为空");
 		System.setProperty(Apps.APP_NAME, sysName);
@@ -159,7 +160,7 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
 	
 	@Override
 	public void contextPrepared(final ConfigurableApplicationContext context) {
-		new DevModeDetector().apply(context.getEnvironment());
+
 	}
 	
 	@Override

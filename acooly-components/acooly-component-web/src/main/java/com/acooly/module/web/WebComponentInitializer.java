@@ -54,5 +54,6 @@ public class WebComponentInitializer implements ComponentInitializer {
 		
 		//设置 jackson
 		setPropertyIfMissing("spring.jackson.date-format", "yyyy-MM-dd HH:mm:ss");
-	}
+        setPropertyIfMissing("spring.jackson.date-format", "yyyy-MM-dd HH:mm:ss");
+    }
 }

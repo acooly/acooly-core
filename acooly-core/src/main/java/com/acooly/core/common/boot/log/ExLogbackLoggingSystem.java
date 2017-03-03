@@ -13,6 +13,7 @@ package com.acooly.core.common.boot.log;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.core.util.OptionHelper;
 import com.acooly.core.common.boot.Env;
+import com.acooly.core.common.boot.listener.DevModeDetector;
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.common.boot.listener.ExApplicationRunListener;
 import com.acooly.core.common.boot.log.initializer.LogInitializer;
@@ -58,6 +59,7 @@ public class ExLogbackLoggingSystem extends LogbackLoggingSystem {
 	 */
 	@Override
 	protected void loadDefaults(LoggingInitializationContext initializationContext, LogFile logFile) {
+        new DevModeDetector().apply((ConfigurableEnvironment) initializationContext.getEnvironment());
 		LoggerContext context = getLoggerContext();
 		context.stop();
 		context.reset();

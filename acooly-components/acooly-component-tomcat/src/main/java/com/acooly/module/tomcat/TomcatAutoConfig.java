@@ -81,7 +81,7 @@ public class TomcatAutoConfig {
 				});
 				//2.2 设置访问日志目录和日志格式
 				if (tomcatProperties.isAccessLogEnable()) {
-					if (factory.getValves().stream().anyMatch((valve) -> valve instanceof AccessLogValve)) {
+					if (factory.getContextValves().stream().anyMatch((valve) -> valve instanceof AccessLogValve)) {
 						throw new AppConfigException("AccessLogValve已经配置，请不要启用默认spring-boot AccessLogValve配置");
 					}
 					AccessLogValve valve = new AccessLogValve();

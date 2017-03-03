@@ -32,7 +32,7 @@ public class DependencyCheckRunListener implements SpringApplicationRunListener 
     }
 
     @Override
-    public void started() {
+    public void starting() {
 
     }
 

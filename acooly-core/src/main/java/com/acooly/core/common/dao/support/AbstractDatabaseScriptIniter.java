@@ -11,6 +11,7 @@ package com.acooly.core.common.dao.support;
 
 import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.common.boot.Apps;
+import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.dao.dialect.DatabaseDialectManager;
 import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.exception.AppConfigException;
@@ -49,7 +50,7 @@ public abstract class AbstractDatabaseScriptIniter implements ApplicationListene
 				if (throwable.getClass().getName().endsWith("MySQLSyntaxErrorException")
 					&& msg.endsWith("doesn't exist")) {
 					List<String> files = getInitSqlFile(databaseType);
-                    if (!Apps.isDevMode()) {
+                    if (!Env.isOnline()) {
                         logger.error("组件相关表不存在，请初始化[{}]", files);
                         Apps.shutdown();
                     }

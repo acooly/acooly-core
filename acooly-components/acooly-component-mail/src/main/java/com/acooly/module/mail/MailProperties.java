@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
 import static com.acooly.module.mail.MailProperties.PREFIX;
 
@@ -24,6 +25,7 @@ import static com.acooly.module.mail.MailProperties.PREFIX;
 @ConfigurationProperties(prefix = PREFIX)
 @Data
 @Slf4j
+@Validated
 public class MailProperties implements InitializingBean {
 	public static final String PREFIX = "acooly.mail";
 	private boolean enable = true;

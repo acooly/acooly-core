@@ -31,6 +31,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.MediaType;
@@ -59,6 +60,7 @@ import java.util.Map;
 @EnableConfigurationProperties({ WebMvcProperties.class, ResourceProperties.class, WebProperties.class })
 @AutoConfigureAfter(WebMvcAutoConfiguration.class)
 @Slf4j
+@ComponentScan
 public class WebAutoConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware, InitializingBean {
 	
 	public static final String SIMPLE_URL_MAPPING_VIEW_CONTROLLER = "simpleUrlMappingViewController";

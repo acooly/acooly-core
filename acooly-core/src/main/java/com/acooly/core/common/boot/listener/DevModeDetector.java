@@ -13,7 +13,9 @@ import com.acooly.core.common.boot.Apps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
+import org.springframework.util.ClassUtils;
 
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
@@ -26,22 +28,34 @@ import java.util.Map;
  */
 @Slf4j
 public class DevModeDetector {
-	private static final Map<String, Object> PROPERTIES;
+	private static Map<String, Object> PROPERTIES;
 	private static volatile boolean inited = false;
 	static {
-		HashMap properties = new HashMap();
-		properties.put("spring.thymeleaf.cache", "false");
-		properties.put("spring.freemarker.cache", "false");
-		properties.put("spring.groovy.template.cache", "false");
-		properties.put("spring.velocity.cache", "false");
-		properties.put("spring.mustache.cache", "false");
-		properties.put("server.session.persistent", "true");
-		properties.put("spring.h2.console.enabled", "true");
-		properties.put("spring.resources.cache-period", "0");
-		properties.put("spring.resources.chain.cache", "false");
-		properties.put("spring.template.provider.cache", "false");
-		properties.put("spring.mvc.log-resolved-exception", "true");
-		PROPERTIES = Collections.unmodifiableMap(properties);
+		
+		try {
+			Class<?> clazz = ClassUtils.forName(
+				"org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor",
+				ClassUtils.getDefaultClassLoader());
+			Field properties = clazz.getDeclaredField("PROPERTIES");
+            properties.setAccessible(true);
+            PROPERTIES= (Map<String, Object>) properties.get(null);
+		} catch (Exception e) {
+			HashMap properties = new HashMap();
+			properties.put("spring.thymeleaf.cache", "false");
+			properties.put("spring.freemarker.cache", "false");
+			properties.put("spring.groovy.template.cache", "false");
+			properties.put("spring.velocity.cache", "false");
+			properties.put("spring.mustache.cache", "false");
+			properties.put("server.session.persistent", "true");
+			properties.put("spring.h2.console.enabled", "true");
+			properties.put("spring.resources.cache-period", "0");
+			properties.put("spring.resources.chain.cache", "false");
+			properties.put("spring.template.provider.cache", "false");
+			properties.put("spring.mvc.log-resolved-exception", "true");
+			properties.put("server.jsp-servlet.init-parameters.development", "true");
+			PROPERTIES = Collections.unmodifiableMap(properties);
+		}
+		
 	}
 	
 	public void apply(ConfigurableEnvironment environment) {

@@ -55,14 +55,22 @@ public class TomcatAutoConfig {
 			//1. disable jsp if possible
 			if (!EnvironmentHolder.get().getProperty("acooly.web.jsp.enable", Boolean.class, Boolean.TRUE)) {
 				JspServlet jspServlet = new JspServlet();
-				Map<String,String> param= Maps.newHashMap();
-				param.put("compilerTargetVM","1.8");
-				param.put("compilerSourceVM","1.8");
-				jspServlet.setInitParameters(param);
 				jspServlet.setRegistered(false);
 				container.setJspServlet(jspServlet);
-			}
-			
+			}else {
+                JspServlet jspServlet = new JspServlet();
+                Map<String,String> param= Maps.newHashMap();
+                param.put("compilerTargetVM","1.8");
+                param.put("compilerSourceVM","1.8");
+                if(Apps.isDevMode()){
+                    param.put("development",Boolean.TRUE.toString());
+                }else {
+                    param.put("development",Boolean.FALSE.toString());
+                }
+                jspServlet.setInitParameters(param);
+                container.setJspServlet(jspServlet);
+            }
+
 			//2. 定制tomcat
 			if (container instanceof TomcatEmbeddedServletContainerFactory) {
 				TomcatEmbeddedServletContainerFactory factory = (TomcatEmbeddedServletContainerFactory) container;

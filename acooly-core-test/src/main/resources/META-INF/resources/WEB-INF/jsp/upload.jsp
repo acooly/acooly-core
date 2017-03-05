@@ -3,10 +3,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>上传文件测试</title>
+<title>上传文件测试1</title>
 </head>
 <body>
-	<h3>上传文件测试</h3>
+	<h3>上传文件测试2</h3>
 
 	<form action="/ofile/upload.html?csrf=${requestScope['org.springframework.security.web.csrf.CsrfToken'].token}" enctype="multipart/form-data" method="post">
 		<div>

@@ -13,6 +13,9 @@ import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.Ids;
 import com.acooly.module.sms.SmsProperties;
 import com.acooly.module.sms.sender.ShortMessageSendException;
+import com.github.kevinsawicki.http.HttpRequest;
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
@@ -37,16 +40,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author qiubo@yiji.com
  */
 @Service("emayShortMessageSender")
 public class EmayShortMessageSender extends AbstractShortMessageSender {
-	private final String SEND_URL999 = "http://sdk999ws.eucp.b2m.cn:8080/sdkproxy/sendtimesms.action";
+	private final String SEND_URL999 = "http://sdk999in.eucp.b2m.cn:8080/sdkproxy/sendsms.action";
 	@Autowired
 	private SmsProperties properties;
 	private List<String> tagNames = Arrays.asList("error", "message");
@@ -58,7 +59,67 @@ public class EmayShortMessageSender extends AbstractShortMessageSender {
 	
 	@Override
 	public String send(String mobileNo, String content) {
-		logger.debug("mobileNo:{}", mobileNo);
+		ArrayList<String> list = Lists.newArrayListWithCapacity(1);
+		list.add(mobileNo);
+		return send(list, content);
+	}
+	
+	protected String unmashall(HttpResponse result) {
+		StatusLine statusLine = result.getStatusLine();
+		if (statusLine.getStatusCode() != 200) {
+			throw new BusinessException("http StatusCode=" + statusLine.getStatusCode());
+		} else {
+			Map<String, String> response;
+			try {
+				response = convertXML(
+					org.apache.commons.lang.StringUtils.trim(EntityUtils.toString(result.getEntity())), tagNames);
+			} catch (IOException e) {
+				throw new BusinessException(e.getMessage(), e);
+			}
+			if (response != null) {
+				String errorCode = response.get("error");
+				String message = response.get("message");
+				if (SUCCESS_CODE == Integer.parseInt(errorCode)) {
+					return errorCode;
+				} else {
+					if (Strings.isNullOrEmpty(message)) {
+						message = codeMapping.get(errorCode);
+					}
+					throw new BusinessException(message, errorCode);
+				}
+			} else {
+				throw new BusinessException("response null");
+			}
+		}
+	}
+	
+	private Map<String, String> convertXML(String xml, List<String> tagNames) {
+		Map<String, String> map = Maps.newHashMap();
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder;
+			builder = factory.newDocumentBuilder();
+			Document doc = builder.parse(new InputSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));
+			for (String tagName : tagNames) {
+				String tagText = doc.getElementsByTagName(tagName).item(0).getTextContent();
+				map.put(tagName, tagText);
+			}
+		} catch (Exception e) {
+			logger.error("解析XML{}失败{}", xml, e.getMessage());
+		}
+		return map;
+	}
+	
+	public void register(String cdkey, String password) {
+		logger.info("亿美短信帐号注册");
+		HttpRequest request = HttpRequest
+			.get("http://sdk999in.eucp.b2m.cn:8080/sdkproxy/regist.action?cdkey=" + cdkey + "&password=" + password);
+		logger.info("亿美短信帐号注册响应:{}", request.body());
+	}
+	
+	@Override
+	public String send(List<String> mobileNos, String content) {
+		String mobileNo = Joiner.on(",").join(mobileNos);
 		content = getContent(content);
 		
 		String sn = properties.getEmay().getSn();
@@ -69,6 +130,7 @@ public class EmayShortMessageSender extends AbstractShortMessageSender {
 		formparams.add(new BasicNameValuePair("seqid", Ids.getDid()));
 		formparams.add(new BasicNameValuePair("phone", mobileNo));
 		formparams.add(new BasicNameValuePair("addserial", ""));
+		formparams.add(new BasicNameValuePair("smspriority", "1"));
 		try {
 			formparams.add(new BasicNameValuePair("message", new String(content.getBytes(), "utf-8")));
 		} catch (UnsupportedEncodingException e) {
@@ -95,65 +157,64 @@ public class EmayShortMessageSender extends AbstractShortMessageSender {
 			return result;
 		} catch (Exception e) {
 			logger.warn("发送短信失败 {号码:" + mobileNo + ",内容:" + content + "}, 原因:" + e.getMessage());
-			throw new ShortMessageSendException("-1000", "", e.getMessage());
-		}
-	}
-	
-	protected String unmashall(HttpResponse result) {
-		StatusLine statusLine = result.getStatusLine();
-		if (statusLine.getStatusCode() != 200) {
-			throw new BusinessException("http StatusCode=" + statusLine.getStatusCode());
-		} else {
-			Map<String, String> response;
-			try {
-				response = convertXML(
-					org.apache.commons.lang.StringUtils.trim(EntityUtils.toString(result.getEntity())), tagNames);
-			} catch (IOException e) {
-				throw new BusinessException(e.getMessage(), e);
-			}
-			if (response != null) {
-				String errorCode = response.get("error");
-				String message = response.get("message");
-				if (SUCCESS_CODE == Integer.parseInt(errorCode)) {
-					logger.info("短信投递通道 {} 成功");
-					return errorCode;
-				} else {
-					throw new BusinessException("errorCode=" + errorCode + ", message=" + message);
+			if (e instanceof BusinessException) {
+				String code = ((BusinessException) e).getCode();
+				if ("-1105".equals(code)) {
+					register(sn, passwd);
 				}
-			} else {
-				throw new BusinessException("response null");
+				throw new ShortMessageSendException(code, ((BusinessException) e).message(), e.getMessage());
 			}
+			throw new ShortMessageSendException("-1", "请求失败", e.getMessage());
+			
 		}
-	}
-	
-	private Map<String, String> convertXML(String xml, List<String> tagNames) {
-		Map<String, String> map = Maps.newHashMap();
-		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder;
-			builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(new InputSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));
-			for (String tagName : tagNames) {
-				String tagText = doc.getElementsByTagName(tagName).item(0).getTextContent();
-				map.put(tagName, tagText);
-			}
-		} catch (Exception e) {
-			logger.error("解析XML{}失败{}", xml, e.getMessage());
-		}
-		return map;
-	}
-	
-	@Override
-	public String send(List<String> mobileNos, String content) {
-		return null;
 	}
 	
 	private String getContent(String content) {
-		return StringUtils.trimToEmpty(prefix) + content + StringUtils.trimToEmpty(posfix);
+		return properties.getEmay().getSign() + content;
 	}
 	
 	@Override
 	public String getProvider() {
 		return "亿美";
+	}
+	
+	private static Map<String, String> codeMapping = new HashMap<>();
+	static {
+		codeMapping.put("-1", "系统异常");
+		codeMapping.put("-101", "命令不被支持");
+		codeMapping.put("-102", "RegistryTransInfo删除信息失败");
+		codeMapping.put("-103", "RegistryInfo更新信息失败");
+		codeMapping.put("-104", "请求超过限制");
+		codeMapping.put("-111", "企业注册失败");
+		codeMapping.put("-117", "发送短信失败");
+		codeMapping.put("-118", "接收MO失败");
+		codeMapping.put("-119", "接收Report失败");
+		codeMapping.put("-120", "修改密码失败");
+		codeMapping.put("-122", "号码注销激活失败");
+		codeMapping.put("-110", "号码注册激活失败");
+		codeMapping.put("-123", "查询单价失败");
+		codeMapping.put("-124", "查询余额失败");
+		codeMapping.put("-125", "设置MO转发失败");
+		codeMapping.put("-126", "路由信息失败");
+		codeMapping.put("-127", "计费失败0余额");
+		codeMapping.put("-128", "计费失败余额不足");
+		codeMapping.put("-1100", "序列号错误,序列号不存在内存中,或尝试攻击的用户");
+		codeMapping.put("-1103", "序列号Key错误");
+		codeMapping.put("-1102", "序列号密码错误");
+		codeMapping.put("-1104", "路由失败，请联系系统管理员");
+		codeMapping.put("-1105", "注册号状态异常, 未用 1");
+		codeMapping.put("-1107", "注册号状态异常, 停用 3");
+		codeMapping.put("-1108", "注册号状态异常, 停止 5");
+		codeMapping.put("-113", "充值失败");
+		codeMapping.put("-1131", "充值卡无效");
+		codeMapping.put("-1132", "充值密码无效");
+		codeMapping.put("-1133", "充值卡绑定异常");
+		codeMapping.put("-1134", "充值状态无效");
+		codeMapping.put("-1135", "充值金额无效");
+		codeMapping.put("-190", "数据操作失败");
+		
+		codeMapping.put("-1901", "数据库插入操作失败");
+		codeMapping.put("-1902", "数据库更新操作失败");
+		codeMapping.put("-1903", "数据库删除操作失败");
 	}
 }

@@ -30,7 +30,7 @@ public class TestController {
 	
 	@RequestMapping("sms")
 	public void testSms() {
-		smsService.send("18580039996", "xxx");
+		smsService.send("15021507995", "xxx");
 	}
 	
 	@GetMapping("mail")

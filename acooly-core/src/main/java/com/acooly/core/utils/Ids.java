@@ -186,32 +186,7 @@ public class Ids {
 	}
 
 	public static void main(String[] args) throws Exception {
-		// int threads = 10;
-		// final int threadsRunCount = 10000;
-		// System.out.println("request:" + threads * threadsRunCount);
-		// final Set<String> sequs = Sets.newCopyOnWriteArraySet();
-		// final CountDownLatch latch = new CountDownLatch(threads);
-		// ExecutorService fixedThreadPool =
-		// Executors.newFixedThreadPool(threads);
-		// for (int i = 0; i < threads; i++) {
-		// fixedThreadPool.execute(new Runnable() {
-		// @Override
-		// public void run() {
-		// String id = null;
-		// for (int j = 0; j < threadsRunCount; j++) {
-		// id = getDid();
-		// System.out.println(id);
-		// sequs.add(id);
-		// }
-		// latch.countDown();
-		// System.out.println(Thread.currentThread().getName() + ": countdown");
-		// }
-		// });
-		// }
-		// latch.await();
-		// System.out.println("result:" + sequs.size());
-		// fixedThreadPool.shutdown();
-		System.out.println(Strings.leftPad("H001", 3, '0'));
-	}
+        System.out.println(Ids.getDid());
+    }
 
 }

@@ -49,9 +49,9 @@ public class SmsProperties {
 	private String batchPswd;
 	private String prefix;
 	private String posfix;
-    /**
-     * 仅当使用亿美通道时配置
-     */
+	/**
+	 * 仅当使用亿美通道时配置
+	 */
 	private Emay emay;
 	private int timeout = 20000;
 	/**
@@ -63,17 +63,17 @@ public class SmsProperties {
 	 * 单号码发送间隔（秒）
 	 */
 	private int sendInterval = 10;
-
-    /**
-     * 黑名单
-     */
+	
+	/**
+	 * 黑名单
+	 */
 	private List<String> blacklist = Lists.newArrayList();
 	/**
 	 * 短信模板定义
 	 */
 	private Map<String, String> template = Maps.newHashMap();
 	
-	private int threadMin = 1;
+	private int threadMin = 10;
 	private int threadMax = 20;
 	private int threadQueue = 20;
 	
@@ -87,6 +87,11 @@ public class SmsProperties {
 		 * 密码,请通过亿美销售人员获取
 		 */
 		private String password;
+		
+		/**
+		 * 短信签名
+		 */
+		private String sign;
 	}
 	
 	public enum Provider implements Messageable {
@@ -131,6 +136,10 @@ public class SmsProperties {
 			Assert.notNull(this.emay);
 			Assert.hasText(this.emay.getSn());
 			Assert.hasText(this.emay.getPassword());
+			Assert.hasText(this.emay.getSign());
+			if (!emay.getSign().startsWith("【")) {
+				emay.sign = "【" + emay.sign.trim() + "】";
+			}
 		}
 	}
 }

@@ -274,7 +274,7 @@ public class OfilePortalController extends AbstractJQueryEntityController<Online
 	protected String getFilePath(HttpServletRequest request, File file) {
 		String filePath = file.getPath();
 		filePath = filePath.replaceAll("\\\\", "/");
-		return StringUtils.substringAfter(filePath, getStorageRoot());
+		return "/"+StringUtils.substringAfter(filePath, getStorageRoot());
 	}
 
 	protected String getStorageRoot() {

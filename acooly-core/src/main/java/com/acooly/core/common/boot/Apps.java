@@ -12,6 +12,8 @@ package com.acooly.core.common.boot;
 import com.acooly.core.common.boot.listener.ExApplicationRunListener;
 import com.acooly.core.common.exception.AppConfigException;
 import com.google.common.base.Strings;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 
 /**
@@ -126,6 +128,12 @@ public class Apps {
 	public static <T> T buildProperties(Class<T> clazz){
 		return EnvironmentHolder.buildProperties(clazz);
 	}
+    public static Environment getEnvironment(){
+        return EnvironmentHolder.get();
+    }
 
+    public static ApplicationContext getApplicationContext(){
+        return ApplicationContextHolder.get();
+    }
 	
 }

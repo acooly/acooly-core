@@ -13,6 +13,8 @@ package com.acooly.core.utils.kryos;
 import java.util.Arrays;
 
 import com.acooly.core.utils.ShutdownHooks;
+import com.esotericsoftware.kryo.serializers.DefaultSerializers;
+import com.esotericsoftware.kryo.serializers.EnumNameSerializer;
 import org.springframework.util.Assert;
 
 import com.esotericsoftware.kryo.Kryo;
@@ -45,6 +47,7 @@ public class Kryos {
             kryo.setDefaultSerializer(DuplicateFieldNameAcceptedCompatibleFieldSerializer.class);
             //注册kryo不能序列化的类
             kryo.register(Arrays.asList("a").getClass(), new JavaSerializer());
+            kryo.addDefaultSerializer(Enum.class, EnumNameSerializer.class);
             return kryo;
         }
     };

@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
-            <artifactId>druid-ex</artifactId>
+            <artifactId>druid</artifactId>
         </dependency>
     </dependencies>
 </project>

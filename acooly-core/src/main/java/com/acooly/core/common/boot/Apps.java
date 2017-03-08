@@ -1,9 +1,4 @@
 /*
- * www.acooly.com Inc.
- * Copyright (c) 2016 All Rights Reserved
- */
-
-/*
  * 修订记录:
  * qiubo 2016-12-14 22:32 创建
  */

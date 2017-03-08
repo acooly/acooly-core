@@ -14,7 +14,6 @@
 
 	<name>acooly-core-parent</name>
 	<description>Acooly Common Basic Framework. Provide unified package for domian, dao, service, cache, webservice, etc.</description>
-	<url>http://www.acooly.com/framwork/acooly-core</url>
 	<modules>
 		<module>acooly-core</module>
 		<module>acooly-core-test</module>

@@ -8,7 +8,7 @@
 
 ### 2. maven
 
-开发环境统一使用nexus地址为：`http://acooly.cn/nexus`
+开发环境统一使用nexus地址为：`http://192.168.45.35:8081/nexus`
 
 请使用[maven setting](maven/settings.xml)替换`maven`默认setting文件
 

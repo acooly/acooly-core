@@ -14,13 +14,17 @@ Acooly框架是基于目前业界最常用的J2EE开发基础技术栈开发的�
 5. 在工程中根据业务需求，调整生成的代码，添加新的功能
 6. run，运行测试验证~
 
-![](http://acooly.cn/resource/project/acooly/top_arche.png)
+![](res/top_arche.png)
 
 # 技术架构
 
-![](http://acooly.cn/resource/project/acooly/dev_arche.png)
+![](res/dev_arche.png)
 
-上图是acooly框架的主线架构，采用开源的轻量级J2EE解决方案。* 主线技术栈：JDK8/spring boot/JPA/Mybatis/Spring4/jsp/freemarker* 服务采用：Dubbo（RPC）方案/CXF(SOAP)/HTTP-OpenApi开放平台解决方案
+上图是acooly框架的主线架构，采用开源的轻量级J2EE解决方案。
+
+* 主线技术栈：JDK8/spring boot/JPA/Mybatis/Spring4/jsp/freemarker
+
+* 服务采用：Dubbo（RPC）方案/CXF(SOAP)/HTTP-OpenApi开放平台解决方案
 
 # 设计规范和约定
 
@@ -336,7 +340,7 @@ Jdbc的Dao实现主要是使用JdbcTemplate的Acooly扩展实现AbstractJdbcTemp
 #### 继承体系
 
 
-![](http://acooly.cn/resource/project/acooly/controller-arche.png)
+![](res/controller-arche.png)
 
 针对我们的目的，我们总体封装的思路包括以下几点：
 
@@ -355,7 +359,7 @@ Jdbc的Dao实现主要是使用JdbcTemplate的Acooly扩展实现AbstractJdbcTemp
 
 #### AJAX处理流程
 
-![](http://acooly.cn/resource/project/acooly/views_Interactive_mode.png)
+![](res/views_Interactive_mode.png)
 
 视图与控制层的交易模式，如果采用AJAX方式，上图是框架中推荐的交互模式。
 

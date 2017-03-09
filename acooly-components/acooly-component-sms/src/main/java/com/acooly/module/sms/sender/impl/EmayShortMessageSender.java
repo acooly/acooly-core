@@ -113,7 +113,7 @@ public class EmayShortMessageSender extends AbstractShortMessageSender {
 	public void register(String cdkey, String password) {
 		logger.info("亿美短信帐号注册");
 		HttpRequest request = HttpRequest
-			.get("http://sdk999in.eucp.b2m.cn:8080/sdkproxy/regist.action?cdkey=" + cdkey + "&password=" + password);
+			.get("http://sdk999in.eucp.b2m.cn:8080/sdkproxy/regist.action?cdkey=" + cdkey + "&password=" + password).connectTimeout(timeout/2).readTimeout(timeout/2);
 		logger.info("亿美短信帐号注册响应:{}", request.body());
 	}
 	

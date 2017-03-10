@@ -9,7 +9,7 @@ import static com.acooly.module.event.EventProperties.PREFIX;
 @ConfigurationProperties(PREFIX)
 @Data
 public class EventProperties {
-	public static final String PREFIX = "zds.event";
+	public static final String PREFIX = "acooly.event";
 	private boolean enable = true;
 
     private int threadMin = 5;

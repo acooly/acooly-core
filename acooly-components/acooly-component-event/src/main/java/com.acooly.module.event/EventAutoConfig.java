@@ -9,6 +9,7 @@ import net.engio.mbassy.bus.error.IPublicationErrorHandler;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.annotation.PostConstruct;
@@ -23,6 +24,7 @@ public class EventAutoConfig {
 	private Map<String, Object> beansWithAnnotation;
 	
 	@Bean
+    @Lazy
 	public EventBus messageBus(ThreadPoolTaskExecutor asyncEventExecutorService) {
 		Feature.AsynchronousHandlerInvocation asynchronousHandlerInvocation = new Feature.AsynchronousHandlerInvocation();
 		asynchronousHandlerInvocation.setExecutor(asyncEventExecutorService.getThreadPoolExecutor());

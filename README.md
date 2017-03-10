@@ -3,61 +3,20 @@ acooly-core
 -------------------------
 
 ## 项目简介
-acooly框架核心
 
-## 集成说明
+acooly框架是基于spring-boot提供快速开发、最佳实践，组件化的框架。
 
-### MyBatis集成
-
-在v3.2.0开始，MyBatis集成到acooly-core中，仍然在DAO层植入。兼容Dao层的EntityDao接口，所有MyBatis的mapper都可以继承EntityDao，然后在对应的mapper.xml中配置（后续有专门的自动生成支持）接口方法对应的SQL后，可以透明的兼容服务层，控制层和试图层，直接代替JPA的DAO实现，JPA和Mybatis共用实体类。
-
-封装特性：
-
-* 支持了分页查询，并支持直接返回PageInfo对象。如果MyBatis的mapper接口入参中保护PageInfo对象，则会自动处理飞分页查询，并回填入参中的PageInfo对象; 如果返回参数定义为PageInfo,则会自动包装返回PageInfo对象（对Mybatis的扩展实现）
-* 支持Money自定义类型的自动转换。
-* Enum类型直接采用MyBatis的默认解决方案：String方式写入Enum.name
-
-
->MyBatis的持久化方案可以与现有的JPA和JdbcTemplate混用，Spring事务也兼容（本质是JDBC Connection的事务），但是强烈建议在同一个项目中只选择其中一种持久化方案！
-
-MyBatis的版本我们选择：3.4.0版本，集成方案如下：
-
-1. 在原来的import配置的基础上，增加import新的MyBatis配置。
-
-	```xml
-	<import resource="classpath:spring/acooly/acooly-database-mybatis.xml" />
-	```
-	
-2. 在resource目录下建立：mybatis/mapper只目录，专门用于存放MyBatis的mapper.xml文件。
-3. 在原有的功能模块中增加包：mapper，在该包中开发和定义MyBatis的dao，我们建议命名为${Entity}Mapper,便于与现有的Dao区别，他们可以同时运行。需要为Mapper接口类增加自定义的annotation：@MyBatisMapper，用于自动扫描代理识别。
-
-	```java
-	package com.acooly.showcase.demo.mapper;
-
-	import com.acooly.core.common.dao.EntityDao;
-	import com.acooly.core.common.dao.mybatis.MyBatisMapper;
-	import com.acooly.showcase.demo.domain.Customer;
-
-	@MyBatisMapper
-	public interface CustomerMapper extends EntityDao<Customer> {
-
-	}
-	```
-	
-	>注意：这里CustomerMapper直接继承EntityDao，那么这直接使用EntityDao中所有的接口声明，如果对应的CustomerMapper.xml配置了对应的MyBatis-SQL配置，则可以正常运作。可以按需配置部分，后期后使用自动代码生成+MyBatis的annotation方案解决工作量的问题。
-
-4. 默认情况下，框架只对com.acooly下的所有标注为@MyBatisMapper的类代理为MyBatis的mapper，你可以根据目标项目的需求，使用:\<mybatis:scan/>，新增自定义扫描配置，但是注意配置正确的factory-ref="sqlSessionFactory",annotation="com.acooly.core.common.dao.mybatis.MyBatisMapper",例如：
-
-```xml
-<mybatis:scan base-package="com.yiji.finacePay" factory-ref="sqlSessionFactory"
-		annotation="com.acooly.core.common.dao.mybatis.MyBatisMapper" />
-```
-
-OK,你可以Half-Happy的使用MyBatis了，等基于框架的自动代码生成完成（之前你可以使用Mybatis generator生成通用的mapper文件进行调整），就真的Happy了哈~
-
-
+您可以从[框架介绍](acooly-core-docs/README.md)开始。
 
 ## 版本说明
+
+### v4.x
+
+* 基于jdk8、spring4、spring-boot重构框架
+* 提供统一的jpa、mybatis支持
+* 提供分布式session、分布式cache能力
+* 引入dubbo组件支持
+* 引入开发者模式，提供开发效率
 
 ### v3.2.2
 

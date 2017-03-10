@@ -47,6 +47,20 @@
             <version>${project.version}</version>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-core-docs</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
-
+    <build>
+        <resources>
+            <resource>
+                <directory>.</directory>
+                <includes>
+                    <include>*.md</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 </project>

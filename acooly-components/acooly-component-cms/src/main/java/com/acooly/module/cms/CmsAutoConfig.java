@@ -38,7 +38,7 @@ public class CmsAutoConfig extends WebMvcConfigurerAdapter {
 			public String getEvaluateSql(DatabaseType databaseType) {
 				return "SELECT count(*) FROM cms_content";
 			}
-			
+
 			@Override
 			public List<String> getInitSqlFile(DatabaseType databaseType) {
 				return Lists.newArrayList("META-INF/database/mysql/cms.sql", "META-INF/database/mysql/cms_urls.sql");

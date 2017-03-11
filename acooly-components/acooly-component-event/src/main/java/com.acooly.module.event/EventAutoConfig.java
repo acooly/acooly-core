@@ -6,10 +6,11 @@ import net.engio.mbassy.bus.config.BusConfiguration;
 import net.engio.mbassy.bus.config.Feature;
 import net.engio.mbassy.bus.config.IBusConfiguration;
 import net.engio.mbassy.bus.error.IPublicationErrorHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.annotation.PostConstruct;
@@ -19,12 +20,11 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 @Configuration
 @EnableConfigurationProperties({ EventProperties.class })
+@ConditionalOnProperty(value = "acooly.event.enable", matchIfMissing = true)
 @Slf4j
 public class EventAutoConfig {
-	private Map<String, Object> beansWithAnnotation;
 	
 	@Bean
-    @Lazy
 	public EventBus messageBus(ThreadPoolTaskExecutor asyncEventExecutorService) {
 		Feature.AsynchronousHandlerInvocation asynchronousHandlerInvocation = new Feature.AsynchronousHandlerInvocation();
 		asynchronousHandlerInvocation.setExecutor(asyncEventExecutorService.getThreadPoolExecutor());
@@ -49,23 +49,30 @@ public class EventAutoConfig {
 		return bean;
 	}
 	
-	@PostConstruct
-	public void subscribeEventHandler() {
-		beansWithAnnotation = Apps.getApplicationContext().getBeansWithAnnotation(EventHandler.class);
-		EventBus eventBus = Apps.getApplicationContext().getBean(EventBus.class);
-		for (Object o : beansWithAnnotation.values()) {
-			eventBus.subscribe(o);
-			log.info("注册事件处理器:", o.getClass().getName());
+	@Configuration
+	public static class EventHandlerConfig {
+		@Autowired
+		private EventBus eventBus;
+		
+		@PostConstruct
+		public void afterPropertiesSet() throws Exception {
+			Map<String, Object> beansWithAnnotation = Apps.getApplicationContext()
+				.getBeansWithAnnotation(EventHandler.class);
+			for (Object o : beansWithAnnotation.values()) {
+				eventBus.subscribe(o);
+				log.info("注册事件处理器:", o.getClass().getName());
+			}
+		}
+		
+		@PreDestroy
+		public void destroy() throws Exception {
+			Map<String, Object> beansWithAnnotation = Apps.getApplicationContext()
+				.getBeansWithAnnotation(EventHandler.class);
+			for (Object o : beansWithAnnotation.values()) {
+				eventBus.unsubscribe(o);
+				log.info("销毁事件处理器:", o.getClass().getName());
+			}
 		}
 	}
 	
-	@PreDestroy
-	public void registerEventHandler() {
-		beansWithAnnotation = Apps.getApplicationContext().getBeansWithAnnotation(EventHandler.class);
-		EventBus eventBus = Apps.getApplicationContext().getBean(EventBus.class);
-		for (Object o : beansWithAnnotation.values()) {
-			eventBus.unsubscribe(o);
-			log.info("销毁事件处理器:", o.getClass().getName());
-		}
-	}
 }

@@ -32,7 +32,7 @@
         <module>acooly-component-sms</module>
         <module>acooly-component-mail</module>
         <module>acooly-component-app-openapi</module>
-        <module>acooly-component-lottery</module>
+        <module>acooly-component-event</module>
     </modules>
 
     <dependencies>
@@ -47,6 +47,23 @@
             <version>${project.version}</version>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-core-docs</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
-
+    <build>
+        <resources>
+            <resource>
+                <directory>.</directory>
+                <includes>
+                    <include>*.md</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+    </build>
 </project>

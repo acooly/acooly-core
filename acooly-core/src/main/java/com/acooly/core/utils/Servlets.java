@@ -18,6 +18,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -54,6 +55,20 @@ public class Servlets {
 			IOUtils.closeQuietly(input);
 		}
 	}
+
+    public static void writeText(HttpServletResponse response, String data) {
+        OutputStream output = null;
+        try {
+            response.setCharacterEncoding("UTF-8");
+            output = response.getOutputStream();
+            output.write(data.getBytes(Charsets.UTF_8));
+            output.flush();
+        } catch (Exception e) {
+            throw new RuntimeException("响应请求(flushResponse)失败:" + e.getMessage());
+        } finally {
+            IOUtils.closeQuietly(output);
+        }
+    }
 
 	public static void writeResponse(HttpServletResponse response, String data, String contentType) {
 		OutputStream output = null;
@@ -233,7 +248,7 @@ public class Servlets {
 	 * 
 	 * @see #getParametersStartingWith
 	 */
-	public static String encodeParameterStringWithPrefix(Map<String, Object> params, String prefix) {
+	public static String encodeParameterStringWithPrefix(Map<String, ?> params, String prefix) {
 		if (params == null || params.size() == 0) {
 			return "";
 		}
@@ -243,9 +258,9 @@ public class Servlets {
 		}
 
 		StringBuilder queryStringBuilder = new StringBuilder();
-		Iterator<Entry<String, Object>> it = params.entrySet().iterator();
+		Iterator<? extends Entry<String, ?>> it = params.entrySet().iterator();
 		while (it.hasNext()) {
-			Entry<String, Object> entry = it.next();
+			Entry<String, ?> entry = it.next();
 			queryStringBuilder.append(prefix).append(entry.getKey()).append('=').append(entry.getValue());
 			if (it.hasNext()) {
 				queryStringBuilder.append('&');

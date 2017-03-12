@@ -26,6 +26,7 @@ DROP TABLE IF EXISTS `cms_content`;
 CREATE TABLE `cms_content` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `KEYCODE` varchar(32) DEFAULT NULL,
+  `body_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `TYPE` bigint(20) NOT NULL COMMENT '类型',
   `TITLE` varchar(128) NOT NULL COMMENT '标题',
   `COVER` varchar(128) DEFAULT NULL COMMENT '封面',

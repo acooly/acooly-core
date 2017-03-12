@@ -1,35 +1,36 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>com.acooly</groupId>
-		<artifactId>acooly-parent</artifactId>
-		<version>4.0.0-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>com.acooly</groupId>
+        <artifactId>acooly-parent</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>acooly-core-parent</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
+    <artifactId>acooly-core-parent</artifactId>
+    <version>4.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-	<name>acooly-core-parent</name>
-	<description>Acooly Common Basic Framework. Provide unified package for domian, dao, service, cache, webservice, etc.</description>
-	<modules>
-		<module>acooly-core</module>
-		<module>acooly-core-test</module>
-		<module>acooly-components</module>
+    <name>acooly-core-parent</name>
+    <description>Acooly Common Basic Framework. Provide unified package for domian, dao, service, cache, webservice, etc.</description>
+    <modules>
+        <module>acooly-core</module>
+        <module>acooly-core-test</module>
+        <module>acooly-components</module>
         <module>acooly-configuration-processor</module>
         <module>acooly-archetype</module>
+        <module>acooly-core-docs</module>
     </modules>
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-configuration-processor</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
 </project>

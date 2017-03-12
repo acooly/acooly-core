@@ -32,7 +32,7 @@ public class LotteryWinnerManagerController
 	@Autowired
 	private LotteryAwardService lotteryAwardService;
 
-	@Override
+//	@Override
 	protected List<String> doMarshalEntityToXls(LotteryWinner entity) {
 		List<String> row = Lists.newArrayList();
 		row.add(String.valueOf(entity.getId()));
@@ -47,8 +47,8 @@ public class LotteryWinnerManagerController
 	}
 
 	@Override
-	protected String[] getExportTitles() {
-		return new String[] { "id", "活动名称", "抽奖人", "类型", "奖项", "金额", "抽奖时间", "状态" };
+	protected List<String> getExportTitles() {
+		return Lists.newArrayList( "id", "活动名称", "抽奖人", "类型", "奖项", "金额", "抽奖时间", "状态" );
 	}
 
 	@Override

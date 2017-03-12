@@ -39,7 +39,7 @@ public class LotteryAutoConfig extends WebMvcConfigurerAdapter {
     private LotteryProperties lotteryProperties;
 
     @Bean
-    public AbstractDatabaseScriptIniter ofileScriptIniter() {
+    public AbstractDatabaseScriptIniter lotteryScriptIniter() {
         return new AbstractDatabaseScriptIniter() {
             @Override
             public String getEvaluateSql(DatabaseType databaseType) {

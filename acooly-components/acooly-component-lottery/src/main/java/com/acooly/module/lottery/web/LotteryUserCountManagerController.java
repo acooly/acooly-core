@@ -22,11 +22,11 @@ public class LotteryUserCountManagerController
 	private LotteryUserCountService lotteryUserCountService;
 
 	@Override
-	protected String[] getExportTitles() {
-		return new String[] { "ID", "活动ID", "活动标题", "参与人", "获参次数", "已参与次数", "剩余次数", "创建时间", "最后修改时间" };
+	protected List<String> getExportTitles() {
+		return Lists.newArrayList( "ID", "活动ID", "活动标题", "参与人", "获参次数", "已参与次数", "剩余次数", "创建时间", "最后修改时间" );
 	}
 
-	@Override
+//	@Override
 	protected List<String> marshalEntity(LotteryUserCount entity) {
 		List<String> line = Lists.newArrayList();
 		line.add(String.valueOf(entity.getId()));

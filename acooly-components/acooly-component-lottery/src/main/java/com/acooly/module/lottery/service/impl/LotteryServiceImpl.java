@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.acooly.core.utils.enums.SimpleStatus;
 import org.apache.commons.lang.math.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,7 +88,7 @@ public class LotteryServiceImpl extends EntityServiceImpl<Lottery, LotteryDao> i
 			} else {
 				// 如果抽中的奖项已超过最大中奖数，则重新抽奖，
 				// 注意，這裡要求至少一個獎項的最大數量要設置為无限，否則會出現死循環（一般是未中奖这个奖项）。
-				award = (awards);
+				award = (awards.get(0));
 			}
 
 			// lock
@@ -132,7 +133,7 @@ public class LotteryServiceImpl extends EntityServiceImpl<Lottery, LotteryDao> i
 	 * @param comments
 	 */
 	protected void saveLotteryWinner(Lottery lottery, LotteryAward award, String user, String comments) {
-		if (award.getRecordWinner() == EntityStatus.disable) {
+		if (award.getRecordWinner() == SimpleStatus.disable) {
 			return;
 		}
 		LotteryWinner lotteryWinner = new LotteryWinner();
@@ -241,7 +242,7 @@ public class LotteryServiceImpl extends EntityServiceImpl<Lottery, LotteryDao> i
 	 * @param order
 	 */
 	protected void checkUserCount(Lottery lottery, LotteryOrder order){
-		if(lottery.getUserCounter() == null || lottery.getUserCounter() == EntityStatus.disable){
+		if(lottery.getUserCounter() == null || lottery.getUserCounter() == SimpleStatus.disable){
 			return;
 		}
 		//lock

@@ -33,6 +33,7 @@
         <module>acooly-component-mail</module>
         <module>acooly-component-app-openapi</module>
         <module>acooly-component-event</module>
+        <module>acooly-component-lottery</module>
     </modules>
 
     <dependencies>

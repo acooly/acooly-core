@@ -1,8 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
-<%@ include file="/manage/common/taglibs.jsp"%>
+<#assign jodd=JspTaglibs["http://www.springside.org.cn/jodd_form"] />
 <div style="margin-top: 10px;">
-    <form id="manage_lotteryAward_editform" action="${pageContext.request.contextPath}/manage/module/lottery/lotteryAward/${action=='create'?'saveJson':'updateJson'}.html" method="post">
-      <jodd:form bean="lotteryAward" scope="request">
+    <form id="manage_lotteryAward_editform" action="/manage/module/lottery/lotteryAward/<#if action == 'create'>save<#else>update</#if>.html" method="post">
+      <@jodd.form bean="lotteryAward" scope="request">
         <input name="id" type="hidden" />
         <input name="lotteryId" value="${lotteryId}" type="hidden">
         <table class="tableForm" width="100%">
@@ -33,6 +32,6 @@
 				<td><textarea rows="3" cols="40" name="comments" class="easyui-validatebox"  validType="byteLength[1,256]"></textarea></td>
 			</tr>					
         </table>
-      </jodd:form>
+      </@jodd.form>
     </form>
 </div>

@@ -4,15 +4,15 @@
  */
 package com.acooly.module.lottery.facade;
 
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
-import com.acooly.module.lottery.dto.LotteryOrder;
-import com.acooly.module.lottery.dto.LotteryResult;
+import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.module.lottery.exception.LotteryException;
 import com.acooly.module.lottery.exception.VoteLotteryException;
+import com.acooly.module.lottery.facade.order.LotteryOrder;
+import com.acooly.module.lottery.facade.result.LotteryResult;
 import com.acooly.module.lottery.service.LotteryService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * @author zhangpu
@@ -21,30 +21,30 @@ import com.acooly.module.lottery.service.LotteryService;
 @Service
 public class LotteryFacadeImpl implements LotteryFacade {
 
-	@Resource
-	private LotteryService lotteryService;
+    @Resource
+    private LotteryService lotteryService;
 
-	@Override
-	public LotteryResult lottery(LotteryOrder order) {
-		LotteryResult result = new LotteryResult();
-		while (true) {
-			try {
-				result = lotteryService.lottery(order);
-				result.setSuccess(true);
-				break;
-			} catch (VoteLotteryException lve) {
-				continue;
-			} catch (LotteryException le) {
-				result.setSuccess(false);
-				result.setCode(le.getCode());
-				result.setMessage(le.getMessage());
-				break;
-			} catch (Exception e) {
-				result.setSuccess(false);
-				result.setMessage(e.getMessage());
-				break;
-			}
-		}
-		return result;
-	}
+    @Override
+    public LotteryResult lottery(LotteryOrder order) {
+        LotteryResult result = new LotteryResult();
+        while (true) {
+            try {
+                result = lotteryService.lottery(order);
+                break;
+            } catch (VoteLotteryException lve) {
+                continue;
+            } catch (LotteryException le) {
+                result.setStatus(ResultStatus.failure);
+                result.setCode(le.getCode());
+                result.setDetail(le.getMessage());
+                break;
+            } catch (Exception e) {
+                result.setStatus(ResultStatus.failure);
+                result.setDetail(e.getMessage());
+                break;
+            }
+        }
+        return result;
+    }
+
 }

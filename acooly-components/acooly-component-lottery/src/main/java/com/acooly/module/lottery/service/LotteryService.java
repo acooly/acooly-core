@@ -4,8 +4,8 @@ import java.util.Map;
 
 import com.acooly.core.common.service.EntityService;
 import com.acooly.module.lottery.domain.Lottery;
-import com.acooly.module.lottery.dto.LotteryOrder;
-import com.acooly.module.lottery.dto.LotteryResult;
+import com.acooly.module.lottery.facade.order.LotteryOrder;
+import com.acooly.module.lottery.facade.result.LotteryResult;
 import com.acooly.module.lottery.enums.LotteryStatus;
 
 /**

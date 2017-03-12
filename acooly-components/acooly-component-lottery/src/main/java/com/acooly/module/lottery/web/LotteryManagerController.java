@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.acooly.core.utils.enums.SimpleStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -66,11 +67,16 @@ public class LotteryManagerController extends AbstractJQueryEntityController<Lot
 		return result;
 	}
 
+
+
+
+
+
 	@Override
 	protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
 		model.put("allTypes", LotteryType.mapping());
 		model.put("allStatuss", LotteryStatus.mapping());
-		model.put("allUserCounters", EntityStatus.mapping());
+		model.put("allUserCounters", SimpleStatus.mapping());
 	}
 
 	@InitBinder

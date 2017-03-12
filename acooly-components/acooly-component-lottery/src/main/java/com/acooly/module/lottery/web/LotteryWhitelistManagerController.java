@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.acooly.module.lottery.service.LotteryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,9 +24,13 @@ public class LotteryWhitelistManagerController extends
 	@Autowired
 	private LotteryWhitelistService lotteryWhitelistService;
 
+	@Autowired
+	private LotteryService lotteryService;
+
 	@Override
 	protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
 		model.put("allStatuss", allStatuss);
+		model.put("allLotterys", lotteryService.getAll());
 	}
 
 }

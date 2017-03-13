@@ -13,6 +13,7 @@ package com.acooly.module.ds;
 import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.common.dao.support.DataSourceReadyEvent;
 import com.acooly.core.common.exception.AppConfigException;
+import com.acooly.module.ds.check.DatabaseTableChecker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -82,4 +83,10 @@ public class JDBCAutoConfig {
 	public TransactionTemplate transactionTemplate(PlatformTransactionManager platformTransactionManager) {
 		return new TransactionTemplate(platformTransactionManager);
 	}
+
+    @Bean
+    @ConditionalOnProperty(value = "acooly.ds.checker.checkColumn")
+    public DatabaseTableChecker databaseTableChecker(DruidProperties druidProperties) {
+        return new DatabaseTableChecker(druidProperties);
+    }
 }

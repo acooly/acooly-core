@@ -17,6 +17,8 @@ import com.acooly.core.common.exception.AppConfigException;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.vendor.MySqlValidConnectionChecker;
 import com.alibaba.druid.pool.vendor.OracleValidConnectionChecker;
+import com.google.common.collect.Maps;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.BeanClassLoaderAware;
@@ -25,6 +27,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -102,7 +105,21 @@ public class DruidProperties implements BeanClassLoaderAware {
 	private boolean showSql = true;
 	
 	private ClassLoader beanClassLoader;
-	
+
+    private Checker checker = new Checker();
+
+    @Data
+    public class Checker {
+        /**
+         * 检查createTime和updateTime
+         */
+        private boolean checkColumn;
+        /**
+         * 排除的表名在启动的时候不检查 创建时间、更新时间 这两个字段
+         */
+        private Map<String, String> excludedColumnTables = Maps.newHashMap();
+    }
+
 	public void check() {
 		if (enable) {
 			Assert.hasText(url, "数据库连接" + PREFIX + ".url不能为空");

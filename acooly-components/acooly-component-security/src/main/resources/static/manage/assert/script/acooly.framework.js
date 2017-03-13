@@ -497,7 +497,7 @@
 					'onUploadSuccess' : function(file, data, response) {
 						var result = $.parseJSON(data);
 						if (result.success) {
-							$('#' + options.messager).html('导入成功.');
+                            $('#' + options.messager).html(result.message);
 						} else {
 							$('#' + options.messager).html('导入失败:' + result.message);
 						}

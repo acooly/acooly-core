@@ -10,6 +10,7 @@
  */
 package com.acooly.module.web;
 
+import com.google.common.base.Strings;
 import lombok.Data;
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -61,10 +62,13 @@ public class WebProperties {
 		}
 		String simplePageMaps="";
         for (String s : simplePageMap.values()) {
-            simplePageMaps+=s;
+            simplePageMaps+=","+s;
         }
         String[] settingEntries = simplePageMaps.split(",");
 		for (String settingEntry : settingEntries) {
+		    if(Strings.isNullOrEmpty(settingEntry)){
+		        continue;
+            }
 			String[] singleMapping = settingEntry.split("->");
 			if (singleMapping == null || singleMapping.length != 2) {
 				throw new RuntimeException("直接返回模板页面的配置格式不正确");
@@ -85,10 +89,13 @@ public class WebProperties {
 		}
         String simplePageMaps="";
         for (String s : simplePageMap.values()) {
-            simplePageMaps+=s;
+            simplePageMaps+=","+s;
         }
 		String[] settingEntries = simplePageMaps.split(",");
 		for (String settingEntry : settingEntries) {
+            if(Strings.isNullOrEmpty(settingEntry)){
+                continue;
+            }
 			String[] singleMapping = settingEntry.split("->");
 			if (singleMapping == null || singleMapping.length != 2) {
 				throw new RuntimeException("直接返回模板页面的配置格式不正确");

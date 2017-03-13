@@ -113,13 +113,15 @@ public class SecurityProperties {
 	@Setter
 	public static class CSRF {
 		private boolean enable = true;
-		private List<String> exclusions = Lists.newArrayList();
+		private Map<String,List<String>> exclusions = Maps.newHashMap();
 		private String errorPage="/error/csrf.htm";
 		
 		public CSRF() {
-			exclusions.add("/gateway.html");
-			exclusions.add("/ofile/upload.html");
-			exclusions.add("/mock/gateway/**");
+		    List<String> list=Lists.newArrayList();
+            list.add("/gateway.html");
+            list.add("/ofile/upload.html");
+            list.add("/mock/gateway/**");
+            exclusions.put("security",list);
 		}
 	}
 	

@@ -294,8 +294,11 @@ public class SecurityAutoConfig {
 		public Filter csrfFilter(SecurityProperties securityProperties) {
 			CookieCsrfTokenRepository tokenRepository = new CookieCsrfTokenRepository();
 			CsrfFilter csrfFilter = new CsrfFilter(tokenRepository);
-			csrfFilter.setRequireCsrfProtectionMatcher(
-				new RequireCsrfProtectionMatcher(securityProperties.getCsrf().getExclusions()));
+			List<String> excludes = Lists.newArrayList();
+			for (List<String> list : securityProperties.getCsrf().getExclusions().values()) {
+				excludes.addAll(list);
+			}
+			csrfFilter.setRequireCsrfProtectionMatcher(new RequireCsrfProtectionMatcher(excludes));
 			CsrfAccessDeniedHandlerImpl csrfAccessDeniedHandler = new CsrfAccessDeniedHandlerImpl();
 			csrfAccessDeniedHandler.setErrorPage(securityProperties.getCsrf().getErrorPage());
 			csrfFilter.setAccessDeniedHandler(csrfAccessDeniedHandler);

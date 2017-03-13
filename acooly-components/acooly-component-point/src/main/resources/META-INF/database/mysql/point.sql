@@ -35,6 +35,8 @@ CREATE TABLE `point_account` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分账户';
 
+ALTER TABLE `point_account`
+  ADD UNIQUE INDEX `acc_username_idx` (`user_name` ASC)  COMMENT '';
 -- ----------------------------
 -- Records of point_account
 -- ----------------------------

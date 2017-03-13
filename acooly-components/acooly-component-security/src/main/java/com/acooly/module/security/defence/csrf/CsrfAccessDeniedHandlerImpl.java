@@ -10,8 +10,8 @@
  */
 package com.acooly.module.security.defence.csrf;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -23,9 +23,8 @@ import java.io.IOException;
  * @author qiubo
  */
 public class CsrfAccessDeniedHandlerImpl implements AccessDeniedHandler {
+	private static final Logger logger = LoggerFactory.getLogger(CsrfAccessDeniedHandlerImpl.class);
 	
-	protected static final Log logger = LogFactory
-		.getLog(CsrfAccessDeniedHandlerImpl.class);
 	private String errorPage;
 	
 	public CsrfAccessDeniedHandlerImpl() {
@@ -34,6 +33,7 @@ public class CsrfAccessDeniedHandlerImpl implements AccessDeniedHandler {
 	public void handle(	HttpServletRequest request, HttpServletResponse response,
 						AccessDeniedException accessDeniedException) throws IOException, ServletException {
 		if (!response.isCommitted()) {
+			logger.error("csrf校验异常,url={}", getRequestUrl(request), accessDeniedException);
 			if (this.errorPage != null) {
 				request.setAttribute("SPRING_SECURITY_403_EXCEPTION", accessDeniedException);
 				response.setStatus(403);
@@ -44,6 +44,10 @@ public class CsrfAccessDeniedHandlerImpl implements AccessDeniedHandler {
 			}
 		}
 		
+	}
+	
+	private String getRequestUrl(HttpServletRequest request) {
+		return request.getRequestURI() + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
 	}
 	
 	public void setErrorPage(String errorPage) {

@@ -4,7 +4,10 @@
  */
 package com.acooly.module.lottery.facade;
 
+import com.acooly.core.common.facade.ResultBase;
+import com.acooly.module.lottery.facade.order.LotteryCountOrder;
 import com.acooly.module.lottery.facade.order.LotteryOrder;
+import com.acooly.module.lottery.facade.result.LotteryCountResult;
 import com.acooly.module.lottery.facade.result.LotteryResult;
 
 /**
@@ -24,12 +27,19 @@ public interface LotteryFacade {
     LotteryResult lottery(LotteryOrder order);
 
     /**
-     * 根据抽奖编码查询奖项
+     * 增加用户抽奖次数
      *
-     * @param lotteryCode
+     * @param order
      * @return
      */
-//    ListResult<LotteryAwardInfo> queryAward(SingleOrder<String> lotteryCode);
+    ResultBase addLotteryCount(LotteryCountOrder order);
 
+    /**
+     * 查询用户的可抽奖次数
+     *
+     * @param order
+     * @return
+     */
+    LotteryCountResult getLotteryCount(LotteryCountOrder order);
 
 }

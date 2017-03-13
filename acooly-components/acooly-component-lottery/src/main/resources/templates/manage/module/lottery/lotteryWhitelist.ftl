@@ -10,10 +10,10 @@ $(function() {
       <table class="tableForm" width="100%">
         <tr>
           <td align="left">
-					抽奖ID:<input type="text" size="15" name="search_EQ_lotteryId" />
-					奖项ID:<input type="text" size="15" name="search_EQ_awardId"  />
-					用户:<input type="text" size="15" name="search_LIKE_user" />
-					状态:<select style="width:80px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option>
+					抽奖ID:<input type="text" class="text" size="15" name="search_EQ_lotteryId" />
+					奖项ID:<input type="text" class="text" size="15" name="search_EQ_awardId"  />
+					用户:<input type="text" class="text" size="15" name="search_LIKE_user" />
+					状态:<select style="width:80px;height:26px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option>
 					<#list allStatuss as key,val><option value="${key}">${val}</option></#list>
 					</select>
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:false" onclick="$.acooly.framework.search('manage_lotteryWhitelist_searchform','manage_lotteryWhitelist_datagrid');">查询</a> 

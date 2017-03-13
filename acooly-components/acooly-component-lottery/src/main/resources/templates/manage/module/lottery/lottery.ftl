@@ -56,6 +56,8 @@ function manage_lotteryAward_add(){
 }
 
 
+
+
 </script>
 <div class="easyui-layout" data-options="fit:true,border : false">
   <div data-options="region:'north',border:false" style="height:250px;">
@@ -85,7 +87,7 @@ function manage_lotteryAward_add(){
     <!-- 每行的Action动作模板 -->
     <div id="manage_lottery_action" style="display: none;">
     	<a class="line-action icon-edit" onclick="$.acooly.framework.edit({url:'/manage/module/lottery/lottery/edit.html',id:'{0}',entity:'lottery',width:500,height:500});" href="#" title="编辑"></a>
-    	<a class="line-action icon-play" onclick="$.acooly.framework.confirmSubmit('/manage/module/lottery/lottery/status.html','{0}','manage_lottery_datagrid');" href="#" title="暂停/恢复"></a>
+    	<a class="line-action icon-pause" onclick="$.acooly.framework.confirmSubmit('/manage/module/lottery/lottery/status.html','{0}','manage_lottery_datagrid');" href="#" title="暂停/恢复"></a>
     	<a class="line-action icon-delete" onclick="$.acooly.framework.remove('/manage/module/lottery/lottery/deleteJson.html','{0}','manage_lottery_datagrid');" href="#" title="删除"></a>
     </div>
     <!-- 表格的工具栏 -->

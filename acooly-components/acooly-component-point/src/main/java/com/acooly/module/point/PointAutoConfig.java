@@ -29,7 +29,7 @@ public class PointAutoConfig {
 			
 			@Override
 			public List<String> getInitSqlFile(DatabaseType databaseType) {
-				return Lists.newArrayList("META-INF/database/mysql/point.sql");
+				return Lists.newArrayList("META-INF/database/mysql/point.sql","META-INF/database/mysql/point_urls.sql");
 			}
 		};
 	}

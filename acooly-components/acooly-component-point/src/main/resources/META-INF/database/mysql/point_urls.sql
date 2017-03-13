@@ -1,4 +1,4 @@
-INSERT INTO `sys_resource` VALUES ('20170313', null, '积分系统', 'URL', '0', '2017-02-03 23:59:29', '', '1', 'icons-resource-transmit', null, '2017-02-03 23:59:29', '2017-02-03 23:59:29');
+INSERT INTO `sys_resource` VALUES ('20170313', null, '积分', 'URL', '0', '2017-02-03 23:59:29', '', '1', 'icons-resource-transmit', null, '2017-02-03 23:59:29', '2017-02-03 23:59:29');
 INSERT INTO `sys_resource` VALUES ('201703131', '20170313', '积分账户管理', 'URL', '0', '2017-02-04 00:01:54', '/manage/point/pointAccount/index.html', '1', 'icons-resource-bianmin', null, '2017-02-04 00:00:09', '2017-02-04 00:04:42');
 INSERT INTO `sys_resource` VALUES ('201703132', '20170313', '积分等级设置', 'URL', '0', '2017-02-04 00:01:54', '/manage/point/pointGrade/index.html', '1', 'icons-resource-shezhi1', null, '2017-02-04 00:01:05', '2017-02-04 00:04:35');
 INSERT INTO `sys_resource` VALUES ('201703133', '20170313', '积分交易记录', 'URL', '0', '2017-02-04 00:01:53', '/manage/point/pointTrade/index.html', '1', 'icons-resource-jiekuanbiaoxinxi', null, '2017-02-04 00:01:53', '2017-02-04 00:01:53');

@@ -31,6 +31,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
+ * 数据库初始化组件：
+ * 1. 仅在非online环境执行
+ * 2. 他判断数据库存在与否，不存在执行sql文件
+ *
  * @author qiubo@yiji.com
  */
 public abstract class AbstractDatabaseScriptIniter implements ApplicationListener<DataSourceReadyEvent> {
@@ -61,9 +65,15 @@ public abstract class AbstractDatabaseScriptIniter implements ApplicationListene
 			throw new AppConfigException(e);
 		}
 	}
-	
+
+    /**
+     * 判断表是否存在
+     */
 	public abstract String getEvaluateSql(DatabaseType databaseType);
-	
+
+    /**
+     * 数据库初始化脚本
+     */
 	public abstract List<String> getInitSqlFile(DatabaseType databaseType);
 	
 	private void exeSqlFile(DataSource dataSource, String sqlpath) {

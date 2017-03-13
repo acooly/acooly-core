@@ -3,6 +3,8 @@ package com.acooly.core.common.web;
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.service.EntityService;
+import com.acooly.core.common.web.support.JsonResult;
+import com.acooly.core.utils.enums.Messageable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -374,6 +376,28 @@ public abstract class AbstractStandardEntityController<T extends Entityable, M e
         }
         return requestMapperValue;
     }
+
+    /**
+     * 错误处理重载( for json )
+     *
+     * @param result
+     * @param action
+     * @param e
+     */
+    protected void handleException(JsonResult result, String action, Exception e) {
+        String message = getExceptionMessage(action, e);
+        logger.error(message, e);
+        result.setSuccess(false);
+        if (e instanceof Messageable) {
+            Messageable be = (Messageable) e;
+            result.setCode(be.code());
+            result.setMessage(be.message());
+        } else {
+            result.setCode(e.getClass().toString());
+            result.setMessage(message);
+        }
+    }
+
 
     protected void handleException(String action, Exception e, HttpServletRequest request) {
         String message = getExceptionMessage(action, e);

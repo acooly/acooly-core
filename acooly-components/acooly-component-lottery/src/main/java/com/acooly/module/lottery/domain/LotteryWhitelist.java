@@ -36,7 +36,7 @@ public class LotteryWhitelist extends AbstractEntity {
      * 状态
      */
     @Enumerated(EnumType.STRING)
-    private LotteryWhitelistStatus status;
+    private LotteryWhitelistStatus status = LotteryWhitelistStatus.apply;
     /**
      * 备注
      */

@@ -23,6 +23,11 @@ public class LotteryUserCount extends AbstractEntity {
      */
     @Column(name = "lottery_id", nullable = false, columnDefinition = "bigint  not null comment '抽奖ID'")
     private Long lotteryId;
+
+    /**
+     * 活动唯一编码
+     */
+    private String lotteryCode;
     /**
      * 活动标题
      */
@@ -104,4 +109,11 @@ public class LotteryUserCount extends AbstractEntity {
         this.comments = comments;
     }
 
+    public String getLotteryCode() {
+        return lotteryCode;
+    }
+
+    public void setLotteryCode(String lotteryCode) {
+        this.lotteryCode = lotteryCode;
+    }
 }

@@ -6,6 +6,8 @@ src/main/webapp/WEB-INF/logs
 target/
 .idea/
 *.iml
+/**/*/.DS_Store
+.DS_Store
 acooly-archetype/.apt_generated/
 acooly-archetype/target/
 acooly-components/.settings/

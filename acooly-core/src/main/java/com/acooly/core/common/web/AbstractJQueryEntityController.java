@@ -182,26 +182,6 @@ public abstract class AbstractJQueryEntityController<T extends Entityable, M ext
 		return sortMap;
 	}
 
-	/**
-	 * 错误处理重载( for json )
-	 * 
-	 * @param result
-	 * @param action
-	 * @param e
-	 */
-	protected void handleException(JsonResult result, String action, Exception e) {
-		String message = getExceptionMessage(action, e);
-		logger.error(message, e);
-		result.setSuccess(false);
-		if (e instanceof Messageable) {
-			Messageable be = (Messageable) e;
-			result.setCode(be.code());
-			result.setMessage(be.message());
-		} else {
-			result.setCode(e.getClass().toString());
-			result.setMessage(message);
-		}
-	}
 
 	@Override
 	public String getListView() {

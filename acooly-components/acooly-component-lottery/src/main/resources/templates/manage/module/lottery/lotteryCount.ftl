@@ -1,7 +1,3 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
-<%@ include file="/manage/common/taglibs.jsp"%>
-
-
 <script type="text/javascript">
 $(function() {
 	$.acooly.framework.registerKeydown('manage_lotteryCount_searchform','manage_lotteryCount_datagrid');
@@ -14,13 +10,7 @@ $(function() {
       <table class="tableForm" width="100%">
         <tr>
           <td align="left">
-					关键字:<input type="text" size="15" name="search_LIKE_key" value="${param.search_LIKE_key}"  />
-					计数值:<input type="text" size="15" name="search_EQ_value" value="${param.search_EQ_value}"  />
-					创建时间:<input size="15" id="search_GTE_createTime" name="search_GTE_createTime" size="15" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
-					至<input size="15" id="search_LTE_createTime" name="search_LTE_createTime" size="15" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" /> 			
-					更新时间:<input size="15" id="search_GTE_updateTime" name="search_GTE_updateTime" size="15" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
-					至<input size="15" id="search_LTE_updateTime" name="search_LTE_updateTime" size="15" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" /> 			
-					备注:<input type="text" size="15" name="search_LIKE_comment" value="${param.search_LIKE_comment}"  />
+					关键字:<input type="text" size="15" name="search_EQ_ukey" />
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:false" onclick="$.acooly.framework.search('manage_lotteryCount_searchform','manage_lotteryCount_datagrid');">查询</a> 
           </td>
         </tr>
@@ -30,18 +20,19 @@ $(function() {
 
   <!-- 列表和工具栏 -->
   <div data-options="region:'center',border:false">
-    <table id="manage_lotteryCount_datagrid" class="easyui-datagrid" url="${pageContext.request.contextPath}/manage/module/lottery/lotteryCount/listJson.html" toolbar="#manage_lotteryCount_toolbar" fit="true" border="false" fitColumns="true"
+    <table id="manage_lotteryCount_datagrid" class="easyui-datagrid" url="${rc.contextPath}/manage/module/lottery/lotteryCount/listJson.html" toolbar="" fit="true" border="false" fitColumns="true"
       pagination="true" idField="id" pageSize="20" pageList="[ 10, 20, 30, 40, 50 ]" sortName="id" sortOrder="desc" checkOnSelect="true" selectOnCheck="true">
       <thead>
         <tr>
         	<th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
 			<th field="id">ID</th>
-			<th field="key">关键字</th>
-			<th field="value">计数值</th>
+			<th field="ukey">关键字</th>
+			<th field="count">计数值</th>
+			<th field="lotteryId">抽奖ID</th>
+			<th field="awardId">奖项ID</th>
 		    <th field="createTime" formatter="formatDate">创建时间</th>
 		    <th field="updateTime" formatter="formatDate">更新时间</th>
 			<th field="comment">备注</th>
-          	<th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_lotteryCount_action',value,row)}">动作</th>
         </tr>
       </thead>
     </table>

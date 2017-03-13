@@ -119,6 +119,11 @@ a.button1 span img{ width:16px; height:16px; border:none; vertical-align:middle;
     line-height: 25px;
 }
 
+.tableForm .select {
+	height: 26px;
+	width: 80px;
+}
+
 .tableForm textarea {
     padding: 2px 5px;
     border: 1px solid #cecece;

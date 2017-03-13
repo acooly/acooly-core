@@ -28,7 +28,7 @@ public class WebProperties {
 	/**
 	 * 配置直接返回静态模板页面的映射 /index.htm->index,/test/test.htm->test/detail
 	 */
-	private String simplePageMap;
+	private Map<String,String> simplePageMap;
 	
 	/**
 	 * 是否启用hiddenHttpMethodFilter
@@ -59,7 +59,11 @@ public class WebProperties {
 		if (simplePageMap == null) {
 			return mappingUrlList;
 		}
-		String[] settingEntries = simplePageMap.split(",");
+		String simplePageMaps="";
+        for (String s : simplePageMap.values()) {
+            simplePageMaps+=s;
+        }
+        String[] settingEntries = simplePageMaps.split(",");
 		for (String settingEntry : settingEntries) {
 			String[] singleMapping = settingEntry.split("->");
 			if (singleMapping == null || singleMapping.length != 2) {
@@ -79,7 +83,11 @@ public class WebProperties {
 		if (simplePageMap == null) {
 			return viewNameMap;
 		}
-		String[] settingEntries = simplePageMap.split(",");
+        String simplePageMaps="";
+        for (String s : simplePageMap.values()) {
+            simplePageMaps+=s;
+        }
+		String[] settingEntries = simplePageMaps.split(",");
 		for (String settingEntry : settingEntries) {
 			String[] singleMapping = settingEntry.split("->");
 			if (singleMapping == null || singleMapping.length != 2) {

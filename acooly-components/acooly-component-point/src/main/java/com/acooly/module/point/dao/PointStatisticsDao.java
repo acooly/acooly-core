@@ -7,7 +7,7 @@
  package com.acooly.module.point.dao;
 
 import com.acooly.module.mybatis.EntityMybatisDao;
-import com.acooly.module.point.entity.PointStatistics;
+import com.acooly.module.point.domain.PointStatistics;
 
 /**
  * 积分统计 Mybatis Dao

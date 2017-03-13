@@ -27,7 +27,7 @@ import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Collections3;
 import com.acooly.module.point.domain.PointAccount;
 import com.acooly.module.point.domain.PointGrade;
-import com.acooly.module.point.entity.PointStatistics;
+import com.acooly.module.point.domain.PointStatistics;
 import com.acooly.module.point.enums.PointAccountStatus;
 import com.acooly.module.point.enums.PointStaticsStatus;
 import com.acooly.module.point.service.PointAccountService;

@@ -4,7 +4,7 @@
 * create by acooly
 * date:2017-03-13
 */
-package com.acooly.module.point.entity;
+package com.acooly.module.point.domain;
 
 import java.util.Date;
 
@@ -22,7 +22,7 @@ import com.acooly.module.point.enums.PointStaticsStatus;
  * @author acooly Date: 2017-03-13 11:51:10
  */
 @Entity
-@Table(name = "pt_point_statistics")
+@Table(name = "point_statistics")
 public class PointStatistics extends AbstractEntity {
 	/** serialVersionUID */
 	private static final long serialVersionUID = 1L;

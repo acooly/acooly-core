@@ -21,7 +21,7 @@ import com.acooly.module.point.domain.PointGrade;
  */
 public interface PointGradeDao extends EntityMybatisDao<PointGrade> {
 
-	@Select("select * from pt_point_grade where start_point<=#{point} and end_point>=#{point}")
+	@Select("select * from point_grade where start_point<=#{point} and end_point>=#{point}")
 	PointGrade getSectionPoint(@Param("point") Long point);
 
 }

@@ -10,7 +10,7 @@ package com.acooly.module.point.service;
 import java.util.Date;
 
 import com.acooly.core.common.service.EntityService;
-import com.acooly.module.point.entity.PointStatistics;
+import com.acooly.module.point.domain.PointStatistics;
 
 /**
  * 积分统计 Service接口

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.module.point.dao.PointStatisticsDao;
 import com.acooly.module.point.dao.PointStatisticsExtDao;
-import com.acooly.module.point.entity.PointStatistics;
+import com.acooly.module.point.domain.PointStatistics;
 import com.acooly.module.point.service.PointStatisticsService;
 
 /**

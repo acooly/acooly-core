@@ -21,7 +21,7 @@ import com.acooly.module.point.domain.PointAccount;
  */
 public interface PointAccountDao extends EntityMybatisDao<PointAccount> {
 
-	@Select("select * from pt_point_account where user_name=#{userName}")
+	@Select("select * from point_account where user_name=#{userName}")
 	PointAccount findByUserName(@Param("userName") String userName);
 
 }

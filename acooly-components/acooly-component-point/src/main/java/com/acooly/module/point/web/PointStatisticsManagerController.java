@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.acooly.core.common.web.AbstractJQueryEntityController;
-import com.acooly.module.point.entity.PointStatistics;
+import com.acooly.module.point.domain.PointStatistics;
 import com.acooly.module.point.enums.PointStaticsStatus;
 import com.acooly.module.point.service.PointStatisticsService;
 

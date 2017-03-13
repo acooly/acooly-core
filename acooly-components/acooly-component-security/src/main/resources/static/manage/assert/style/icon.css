@@ -1,6 +1,8 @@
 .line-action {width:16px;height:16px;vertical-align:middle; display:inline-block; margin-right:2px;}
 
 /* 动作 */
+.icon-pause {background:url('icons/action/pause.png') no-repeat;}
+.icon-resume {background:url('icons/action/resume.png') no-repeat;}
 .icon-contract {background:url('icons/action/contract.png') no-repeat;}
 .icon-switch {background:url('icons/action/switch.png') no-repeat;}
 .icon-audit {background:url('icons/action/audit.png') no-repeat;}

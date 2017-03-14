@@ -73,20 +73,25 @@ public class DatabaseTableChecker implements ApplicationListener<DataSourceReady
                     //获取表信息
                     Table table = tableLoader.loadTable(schema, tableName);
                     //获取列信息并比较
-                    boolean hasColums = checkTableColums(table);
+                    boolean hasColums = tableLoader.checkTableColums(table);
                     if (!hasColums) {
                         tableNamesNotPassCheck.add(tableName);
                     }
                 });
                 //输出检查没通过的表名
                 if (!tableNamesNotPassCheck.isEmpty()) {
-                    //logger.error("{}表没有正确设置创建时间和更新时间", tableNamesNotPassCheck.toString());
                     // 是否退出 System.exit(0);
-                    throw new AppConfigException("数据库表检查，有 "+tableNamesNotPassCheck.size()+" 个表没有按照标准设置createTime和updateTime:" + tableNamesNotPassCheck.toString() + "\n"
-                        + "如果是关联用的表或者系统表，请用例如'acooly.ds.Checker.excludedColumnTables.a=sys_role_resc,sys_user_role' 排除掉\n"
-                        + "createTime updateTime标准格式为：\n"
-                        + "create_time timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'\n"
-                        + "update_time timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'");
+                    StringBuffer expMsg = new StringBuffer();
+                    expMsg.append("数据库表检查，有")
+                        .append(tableNamesNotPassCheck.size())
+                        .append("个表没有按照标准设置id或createTime或updateTime:")
+                        .append(tableNamesNotPassCheck.toString()).append("\n")
+                        .append("如果是关联用的表或者系统表，请用例如'acooly.ds.Checker.excludedColumnTables.a=sys_role_resc,sys_user_role' 排除掉\n")
+                        .append("标准的id、createTime、updateTime 格式分别为：\n")
+                        .append("id  bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID' \n")
+                        .append("create_time timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'\n")
+                        .append("update_time timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'");
+                    throw new AppConfigException(expMsg.toString());
                 }
             } catch (SQLException e) {
                 logger.error("异步检查所有表结构异常", e.getMessage());
@@ -95,35 +100,7 @@ public class DatabaseTableChecker implements ApplicationListener<DataSourceReady
         });
     }
 
-    /**
-     * 检查createTime updateTime 格式为：
-     * create_time timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-     * update_time timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
-     */
-    private boolean checkTableColums(Table table) {
-        boolean hasCreateTime = false;
-        boolean hasUpdateTime = false;
-        for (Column column : table.getColumns()) {
-            String name = column.getName();
-            String type = column.getDataType();
-            String defaultValue = String.valueOf(column.getDefaultValue());
-            String extra = column.getExtra();
-            if (StringUtils.equalsIgnoreCase("datetime", type) && StringUtils.equalsIgnoreCase("CURRENT_TIMESTAMP", defaultValue)) {
-                if (StringUtils.equalsIgnoreCase("create_time", name) || StringUtils.equalsIgnoreCase("raw_add_time", name)) {
-                    hasCreateTime = true;
-                    continue;
-                }
-            }
-            if (StringUtils.equalsIgnoreCase("datetime", type) && StringUtils.equalsIgnoreCase("CURRENT_TIMESTAMP", defaultValue) && StringUtils.equalsIgnoreCase("ON update CURRENT_TIMESTAMP", extra)) {
-                if (StringUtils.equalsIgnoreCase("update_time", name) || StringUtils.equalsIgnoreCase("raw_update_time", name)) {
-                    hasUpdateTime = true;
-                }
-            }
-        }
-        return hasCreateTime && hasUpdateTime;
-    }
-
-    private static String getMysqlschema(DataSource dataSource) throws SQLException {
+    private  String getMysqlschema(DataSource dataSource) throws SQLException {
         String scheme = StringUtils.substringAfterLast(dataSource.getConnection().getMetaData().getURL(), "/");
         if (StringUtils.contains(scheme, "?")) {
             scheme = StringUtils.substringBefore(scheme, "?");

@@ -4,6 +4,7 @@
  */
 package com.acooly.module.appopenapi.enums;
 
+import com.acooly.core.utils.enums.Messageable;
 import com.google.common.collect.Maps;
 
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Map;
  * @author zhangpu
  *
  */
-public enum CommissionType {
+public enum CommissionType implements Messageable{
 
 	withdraw("withdraw", "提现手续费");
 
@@ -40,8 +41,19 @@ public enum CommissionType {
 		return map;
 	}
 
+
 	@Override
 	public String toString() {
 		return this.code + " : " + this.message;
 	}
+
+    @Override
+    public String code() {
+        return code;
+    }
+
+    @Override
+    public String message() {
+        return message;
+    }
 }

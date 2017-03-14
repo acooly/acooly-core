@@ -74,7 +74,8 @@ function manage_lotteryAward_add(){
 		    <th field="maxWinners">最大人数</th>
 		    <th field="multiPlay">单人次数</th>
 		    <th field="userCounter" data-options="formatter:function(value){ return formatRefrence('manage_lottery_datagrid','allUserCounters',value);}">用户抽奖计数</th>
-		    <th field="startTime" formatter="dateFormatter">开始日期</th>
+            <th field="publishEvent" data-options="formatter:function(value){ return formatRefrence('manage_lottery_datagrid','allUserCounters',value);}">发布事件</th>
+			<th field="startTime" formatter="dateFormatter">开始日期</th>
 		    <th field="endTime" formatter="dateFormatter">结束日期</th>
 		    <th field="createTime">创建时间</th>
 		    <th field="updateTime">修改时间</th>
@@ -86,21 +87,21 @@ function manage_lotteryAward_add(){
 
     <!-- 每行的Action动作模板 -->
     <div id="manage_lottery_action" style="display: none;">
-    	<a class="line-action icon-edit" onclick="$.acooly.framework.edit({url:'/manage/module/lottery/lottery/edit.html',id:'{0}',entity:'lottery',width:500,height:500});" href="#" title="编辑"></a>
-    	<a class="line-action icon-pause" onclick="$.acooly.framework.confirmSubmit('/manage/module/lottery/lottery/status.html','{0}','manage_lottery_datagrid');" href="#" title="暂停/恢复"></a>
+    	<a class="line-action icon-edit" onclick="$.acooly.framework.edit({url:'/manage/module/lottery/lottery/edit.html',id:'{0}',entity:'lottery',width:650,height:600});" href="#" title="编辑"></a>
+    	<a class="line-action icon-resume" onclick="$.acooly.framework.confirmSubmit('/manage/module/lottery/lottery/status.html','{0}','manage_lottery_datagrid');" href="#" title="暂停/恢复"></a>
     	<a class="line-action icon-delete" onclick="$.acooly.framework.remove('/manage/module/lottery/lottery/deleteJson.html','{0}','manage_lottery_datagrid');" href="#" title="删除"></a>
     </div>
     <!-- 表格的工具栏 -->
     <div id="manage_lottery_toolbar">
     <form id="manage_lottery_searchform" onsubmit="return false" class="tableForm" style="padding: 2px 2px;">
-      <a href="#" class="easyui-linkbutton" style="float: left;" iconCls="icon-add" plain="true" onclick="$.acooly.framework.create({url:'/manage/module/lottery/lottery/create.html',entity:'lottery',width:500,height:500})">添加</a>
+      <a href="#" class="easyui-linkbutton" style="float: left;" iconCls="icon-add" plain="true" onclick="$.acooly.framework.create({url:'/manage/module/lottery/lottery/create.html',entity:'lottery',width:650,height:600})">添加</a>
 	  <div class="datagrid-btn-separator"></div>
 	  &nbsp;标题:<input class="text" type="text" size="15" name="search_LIKE_title" />
 	  类型:<select style="width:80px;height:26px;" name="search_EQ_type" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option>
 		<#list allTypes as k,v><option value="${k}">${v}</option></#list>
 	  </select>
 	  开始日期:<input class="text" size="15" id="search_GTE_startTime" name="search_GTE_startTime" size="10" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-	  至<input size="15" class="text" id="search_LTE_startTime" name="search_LTE_startTime" size="10" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+	  至 <input size="15" class="text" id="search_LTE_startTime" name="search_LTE_startTime" size="10" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
       <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:false" onclick="$.acooly.framework.search('manage_lottery_searchform','manage_lottery_datagrid');">查询</a>
     </form>
     </div>
@@ -117,13 +118,13 @@ function manage_lotteryAward_add(){
 					<th field="id">ID</th>
 					<th field="awardType">奖项类型</th>
 					<th field="award">奖项</th>
-					<th field="awardAmount" formatter="centMoneyFormatter">金额</th>
+					<th field="awardValue" data-options="formatter:function(v,r,i){ if(r.awardType == 'money'){ return centMoneyFormatter(v) } else { return v } }">奖项值</th>
 					<th field="awardNote">奖项说明</th>
 					<th field="awardPosition">奖项位置(360度坐标)</th>
 					<th field="weight">权重</th>
                     <th field="maxPeriod">周期</th>
 					<th field="maxWiner">最大数量</th>
-					<th field="recordWinner">保存中奖记录</th>
+					<th field="recordWinner">保存中奖</th>
 				    <th field="createTime">创建时间</th>
 					<th field="comments">备注</th>
 		          	<th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_lotteryAward_action',value,row)}">动作</th>

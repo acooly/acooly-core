@@ -7,6 +7,7 @@ import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.SimpleStatus;
 import com.acooly.core.utils.mapper.BeanCopier;
+import com.acooly.module.event.EventBus;
 import com.acooly.module.lottery.dao.LotteryDao;
 import com.acooly.module.lottery.domain.*;
 import com.acooly.module.lottery.dto.LotteryAwardInfo;
@@ -14,6 +15,7 @@ import com.acooly.module.lottery.enums.LotteryStatus;
 import com.acooly.module.lottery.enums.LotteryWhitelistStatus;
 import com.acooly.module.lottery.enums.MaxPeriod;
 import com.acooly.module.lottery.enums.WinnerStatus;
+import com.acooly.module.lottery.event.LotteryEvent;
 import com.acooly.module.lottery.exception.NotOpportunityLotteryException;
 import com.acooly.module.lottery.exception.VoteLotteryException;
 import com.acooly.module.lottery.facade.order.LotteryOrder;
@@ -24,6 +26,7 @@ import com.google.common.collect.Maps;
 import org.apache.commons.lang.math.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +51,10 @@ public class LotteryServiceImpl extends EntityServiceImpl<Lottery, LotteryDao> i
     private LotteryWhitelistService lotteryWhitelistService;
     @Resource
     private LotteryUserCountService lotteryUserCountService;
+
+
+    @Autowired
+    private EventBus eventBus;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
@@ -87,7 +94,7 @@ public class LotteryServiceImpl extends EntityServiceImpl<Lottery, LotteryDao> i
             }
 
             // 保存中奖记录
-            saveLotteryWinner(lottery, award, user, comments);
+            LotteryWinner lotteryWinner = saveLotteryWinner(lottery, award, user, comments);
             lotteryCountService.appendCount(counter.getUkey());
 
             // 如果达到活动最大抽奖人数，则停止
@@ -102,6 +109,17 @@ public class LotteryServiceImpl extends EntityServiceImpl<Lottery, LotteryDao> i
             result.setPosition(getPosition(award.getAwardPosition()));
             result.setUkey(counter.getUkey());
             logger.info("抽奖成功:{}", result);
+
+            // 发布抽奖成功事件
+            if (lottery.getPublishEvent() != null && lottery.getPublishEvent() == SimpleStatus.enable) {
+                LotteryEvent lotteryEvent = new LotteryEvent();
+                lotteryEvent.setLotteryId(lotteryId);
+                lotteryEvent.setLotteryCode(lottery.getCode());
+                lotteryEvent.setLotteryAwardInfo(convertLotteryAward(award));
+                lotteryEvent.setLotteryWinner(lotteryWinner);
+                eventBus.publishAfterTransactionCommitted(lotteryEvent);
+            }
+
             return result;
         } catch (VoteLotteryException e) {
             throw e;
@@ -114,6 +132,10 @@ public class LotteryServiceImpl extends EntityServiceImpl<Lottery, LotteryDao> i
         }
     }
 
+    private LotteryAwardInfo convertLotteryAward(LotteryAward lotteryAward) {
+        return BeanCopier.copy(lotteryAward, LotteryAwardInfo.class, BeanCopier.CopyStrategy.IGNORE_NULL);
+    }
+
     /**
      * 保持中奖记录
      *
@@ -122,9 +144,9 @@ public class LotteryServiceImpl extends EntityServiceImpl<Lottery, LotteryDao> i
      * @param user
      * @param comments
      */
-    protected void saveLotteryWinner(Lottery lottery, LotteryAward award, String user, String comments) {
+    protected LotteryWinner saveLotteryWinner(Lottery lottery, LotteryAward award, String user, String comments) {
         if (award.getRecordWinner() == SimpleStatus.disable) {
-            return;
+            return null;
         }
         LotteryWinner lotteryWinner = new LotteryWinner();
         lotteryWinner.setAward(award.getAward());
@@ -135,8 +157,9 @@ public class LotteryServiceImpl extends EntityServiceImpl<Lottery, LotteryDao> i
         lotteryWinner.setWinner(user);
         lotteryWinner.setComments(comments);
         lotteryWinner.setAwardType(award.getAwardType());
-        lotteryWinner.setAwardAmount(award.getAwardAmount());
+        lotteryWinner.setAwardAmount(award.getAwardValue());
         lotteryWinnerService.save(lotteryWinner);
+        return lotteryWinner;
     }
 
     /**

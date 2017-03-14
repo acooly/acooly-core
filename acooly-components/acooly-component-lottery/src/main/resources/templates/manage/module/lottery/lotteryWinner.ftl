@@ -41,7 +41,7 @@ $(function() {
 			<th field="winner">抽奖人</th>
 			<th field="awardType" data-options="formatter:function(value){ return formatRefrence('manage_lotteryWinner_datagrid','allAwardTypes',value);}">奖项类型</th>
 			<th field="award">奖项</th>
-			<th field="awardAmount" data-options="formatter:function(value){return '￥'+formatCurrency(value/100);}"  sum="true">奖项金额</th>
+			<th field="awardValue" data-options="formatter:function(value){return '￥'+formatCurrency(value/100);}"  sum="true">奖项金额</th>
 		    <th field="createTime" formatter="formatDate">抽奖时间</th>
 			<th field="status" data-options="formatter:function(value){ return formatRefrence('manage_lotteryWinner_datagrid','allStatuss',value);}">状态</th>
           	<th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_lotteryWinner_action',value,row)}">动作</th>

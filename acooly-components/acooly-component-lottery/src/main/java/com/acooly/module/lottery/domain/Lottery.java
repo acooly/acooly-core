@@ -85,6 +85,13 @@ public class Lottery extends AbstractEntity {
     private LotteryStatus status = LotteryStatus.enable;
 
     /**
+     * 发布事件标志
+     *
+     * 开启后，抽奖成功会发布事件，便于后续业务处理扩展。
+     */
+    private SimpleStatus publishEvent = SimpleStatus.disable;
+
+    /**
      * 备注
      */
     @Column(name = "comments", length = 128, nullable = true, columnDefinition = "varchar(128) comment '备注'")
@@ -179,4 +186,11 @@ public class Lottery extends AbstractEntity {
         this.userCounter = userCounter;
     }
 
+    public SimpleStatus getPublishEvent() {
+        return publishEvent;
+    }
+
+    public void setPublishEvent(SimpleStatus publishEvent) {
+        this.publishEvent = publishEvent;
+    }
 }

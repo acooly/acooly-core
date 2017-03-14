@@ -48,11 +48,15 @@ public class LotteryAward extends AbstractEntity {
     @Column(name = "award", length = 32, nullable = false, columnDefinition = "varchar(32)  not null comment '奖项'")
     private String award;
 
+
     /**
-     * 奖项金额(分)
+     * 奖项值
+     * <p>
+     * 如果奖项类型是现金，则这里保存的是分；如果是其他则可选，也可以为对应的外部业务的标志，
+     * 如：如果是积分时，可以是积分额度，如果是卡券，则是卡券id，然后通过订阅事件处理中奖后的业务操作。
      */
-    @Column(name = "award_amount", nullable = false, columnDefinition = "bigint  null comment '奖项金额(分)'")
-    private Long awardAmount = 0l;
+    @Column(name = "award_value", nullable = false, columnDefinition = "bigint  null comment '奖项值'")
+    private Long awardValue = 0l;
 
 
     /**
@@ -202,12 +206,11 @@ public class LotteryAward extends AbstractEntity {
         this.awardType = awardType;
     }
 
-    public Long getAwardAmount() {
-        return awardAmount;
+    public Long getAwardValue() {
+        return awardValue;
     }
 
-    public void setAwardAmount(Long awardAmount) {
-        this.awardAmount = awardAmount;
+    public void setAwardValue(Long awardValue) {
+        this.awardValue = awardValue;
     }
-
 }

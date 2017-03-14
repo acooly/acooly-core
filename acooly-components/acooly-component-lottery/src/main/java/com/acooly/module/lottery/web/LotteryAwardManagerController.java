@@ -43,9 +43,7 @@ public class LotteryAwardManagerController extends AbstractJQueryEntityControlle
             entity.setCode(Ids.getDid());
         }
         if (LotteryAwardType.money.equals(entity.getAwardType())) {
-            entity.setAwardAmount(Money.amout(request.getParameter("awardAmount")).getCent());
-        } else {
-            entity.setAwardAmount(0l);
+            entity.setAwardValue(Money.amout(request.getParameter("awardValue")).getCent());
         }
         if (entity.getMaxPeriod() == MaxPeriod.ulimit) {
             entity.setMaxWiner(0);

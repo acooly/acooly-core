@@ -45,7 +45,7 @@ public class LotteryAwardInfo implements Serializable {
     /**
      * 奖项金额(分)
      */
-    private Long awardAmount;
+    private Long awardValue;
 
 
     /**
@@ -103,12 +103,12 @@ public class LotteryAwardInfo implements Serializable {
         this.award = award;
     }
 
-    public Long getAwardAmount() {
-        return awardAmount;
+    public Long getAwardValue() {
+        return awardValue;
     }
 
-    public void setAwardAmount(Long awardAmount) {
-        this.awardAmount = awardAmount;
+    public void setAwardValue(Long awardValue) {
+        this.awardValue = awardValue;
     }
 
     public String getAwardNote() {

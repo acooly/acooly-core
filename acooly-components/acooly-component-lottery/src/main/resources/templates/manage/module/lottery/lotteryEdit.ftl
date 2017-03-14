@@ -6,7 +6,7 @@
 			<table class="tableForm" width="100%">
 				<tr>
 					<th width="25%">标题：</th>
-					<td><input type="text" class="text" name="title" style="width: 300px;" class="easyui-validatebox" validType="byteLength[1,64]" /></td>
+					<td><input type="text" class="text" name="title" style="width: 300px;" class="easyui-validatebox" data-options="required:true" validType="byteLength[1,64]"/></td>
 				</tr>
 				<tr>
 					<th>说明：</th>
@@ -20,12 +20,12 @@
 				</tr>
 				<tr>
 					<th width="25%">活动最大人数：</th>
-					<td><input type="text" class="text" name="maxWinners" style="width: 300px;" class="easyui-numberbox" validType="byteLength[1,10]" />
+					<td><input type="text" class="text" name="maxWinners" style="width: 300px;" class="easyui-numberbox" validType="byteLength[1,10]" data-options="required:true"/>
 						<div style="margin-top: 5px">0表示无限制。达到最大参与人数后，活动自动结束</div></td>
 				</tr>
 				<tr>
 					<th width="25%">单人最大次数：</th>
-					<td><input type="text" class="text" name="multiPlay" style="width: 300px;" class="easyui-numberbox" validType="byteLength[1,10]" />
+					<td><input type="text" class="text" name="multiPlay" style="width: 300px;" class="easyui-numberbox" validType="byteLength[1,10]" data-options="required:true"/>
 						<div style="margin-top: 5px">0表示无限制,每个用户最大可参与的次数定义。</div></td>
 				</tr>
                 <tr>
@@ -35,16 +35,25 @@
                     </select>
                         <div style="margin-top: 5px">如果开启，则表示每个参与抽奖的用户都必须在"用户抽奖计数"功能中设置明确次数。</div></td>
                 </tr>
+
+                <tr>
+                    <th width="25%">发布事件：</th>
+                    <td><select style="width: 80px;height: 28px;" name="publishEvent" editable="false" panelHeight="auto" class="easyui-combobox">
+						<#list allUserCounters as key,v><option value="${key}">${v}</option></#list>
+                    </select>
+                        <div style="margin-top: 5px">如果开启，则表示每次中奖都发布通知事件(LotteryEvent)。</div></td>
+                </tr>
+
 				<tr>
 					<th>活动周期：</th>
-					<td><input type="text" class="text" name="startTime" size="15" value="<#if lottery??>${lottery.startTime?string("yyyy-MM-dd")}</#if>" />
-					到 <input type="text" class="text" name="endTime" size="15" value="<#if lottery??>${(lottery.endTime)?string("yyyy-MM-dd")}</#if>" />
+					<td><input type="text" class="text" name="startTime" size="15" value="<#if lottery??>${lottery.startTime?string("yyyy-MM-dd")}</#if>" data-options="required:true"/>
+					到 <input type="text" class="text" name="endTime" size="15" value="<#if lottery??>${(lottery.endTime)?string("yyyy-MM-dd")}</#if>" data-options="required:true"/>
                         <div style="margin-top: 5px">活动到期后，活动自动结束。</div>
 					</td>
 				</tr>
 				<tr>
 					<th>备注：</th>
-					<td><textarea rows="4" style="width: 300px;" cols="40" name="comments" class="easyui-validatebox" validType="byteLength[1,255]"></textarea></td>
+					<td><textarea rows="3" style="width: 300px;" cols="40" name="comments" class="easyui-validatebox" validType="byteLength[1,255]"></textarea></td>
 				</tr>
 			</table>
 		</@jodd.form>

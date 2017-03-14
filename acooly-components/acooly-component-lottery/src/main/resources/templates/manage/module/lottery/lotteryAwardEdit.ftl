@@ -1,32 +1,4 @@
 <#assign jodd=JspTaglibs["http://www.springside.org.cn/jodd_form"] />
-<script type="text/javascript">
-	$(function(){
-		changeAwardType();
-	});
-
-	function changeAwardType(){
-		if ($('#awardType').val() == 'money'){
-			$('#awardAmountTr').show();
-		}else{
-			$('#awardAmountTr').hide();
-		}
-	}
-
-	function manage_lotteryAward_editform_onSubmit(){
-		var awardType = $('#awardType').val();
-		if (awardType == 'money'){
-			var awardAmount = $('#awardAmount').val();
-			if (awardAmount <= 0){
-				$.messager.show({
-					title : '提示',
-					msg : '奖励类型为现金时，奖励金额必须大于0'
-				});
-				return false;
-			}
-		}
-		return true;
-	}
-</script>
 <div style="margin-top: 10px;">
     <form id="manage_lotteryAward_editform" action="${rc.contextPath}/manage/module/lottery/lotteryAward/<#if action == 'create'>save<#else>update</#if>Json.html" method="post">
       <@jodd.form bean="lotteryAward" scope="request">
@@ -35,7 +7,7 @@
         <table class="tableForm" width="100%">
 			<th width="25%">奖项类型：</th>
 				<td>
-					<select id="awardType" name="awardType" onchange="changeAwardType()" editable="false" panelHeight="auto"  >
+					<select id="awardType" name="awardType" editable="false" panelHeight="auto"  >
 						<#list allAwardTypes as k,v><option value="${k}" <#if lotteryAward?? && lotteryAward.awardType.code == k>selected</#if> >${v}</option></#list>
 					</select>
 				</td>
@@ -44,9 +16,9 @@
 				<th width="30%">奖项：</th>
 				<td><input type="text" class="text" name="award" class="easyui-validatebox" data-options="required:true" validType="byteLength[1,64]"/></td>
 			</tr>
-			<tr id="awardAmountTr">
+			<tr>
 				<th width="30%">奖项金额：</th>
-				<td><input type="text" class="text" id="awardAmount" name="awardAmount" value="<#if lotteryAward??>${lotteryAward.awardAmount/100}</#if>" class="easyui-numberbox" data-options="required:true" validType="byteLength[1,19]"/>
+				<td><input type="text" class="text" name="awardValue" value="<#if lotteryAward?? && lotteryAward.awardType == 'money'>${lotteryAward.awardValue/100}<#else>${lotteryAward.awardValue}</#if>" class="easyui-numberbox" data-options="required:true" validType="byteLength[1,19]"/>
 			</tr>
 			<tr>
 				<th>奖项说明：</th>

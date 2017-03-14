@@ -70,5 +70,67 @@ public interface LotteryFacade {
 * 增加次数, 访问地址: /portal/lottery/demo/addCount.html?count=10
 * 查询次数, 访问地址: /portal/lottery/demo/getCount.html
 
+# 版本
+
+## 20170315
+
+### 特性说明
+
+新增特性：**支持抽奖中奖时，发布事件**。
+
+在抽奖活动的管理模块新增发布事件的开关，如果打开，则表示每次抽奖后都会发布事件。事件为：com.acooly.module.lottery.event.LotteryEvent。请参考acooly-component-event组件按需开发EventHandler进行处理。
+
+该特性主要用于在抽奖完成后对中奖的奖项进行扩展业务处理。包括以下几种情况：
+
+1. 如果中奖的是现金：调用对用的逻辑发放awardValue对应值的现金。
+2. 如果是虚拟产品：如积分或卡券，根据配置的awardValue发放对应的积分和卡券
+3. 如果是实物商品：根据配置的awardValue的商品编号进行处理，或通过通用的后台中奖列表进行处理。
+
+>特别的：如果在这里处理自动发奖，请注入：lotteryWinnerService服务，变更发放的记录状态。
+
+处理事件Demo
+
+```java
+/**
+ * @author acooly
+ */
+@EventHandler
+public class LotteryEventHandler {
+
+    private static final Logger logger = LoggerFactory.getLogger(LotteryEventHandler.class);
+
+    /**
+     * 抽奖事件处理（异步）
+     *
+     * 1、如果中奖的是现金：调用对用的逻辑发放awardValue对应值的现金。
+     * 2、如果是虚拟产品：如积分或卡券，根据配置的awardValue发放对应的积分和卡券
+     * 3、如果是实物商品：根据配置的awardValue的商品编号进行处理，或通过通用的后台中奖列表进行处理。
+     *
+     * 如果在这里处理自动发奖，请注入：lotteryWinnerService服务，变更发放的记录状态。
+     *
+     * @param lotteryEvent
+     */
+    @Handler(delivery = Invoke.Asynchronously)
+    public void handleEventAsync(LotteryEvent lotteryEvent) {
+        logger.info("中奖事件处理：lotteryEvent：{}", lotteryEvent);
+    }
+
+}
+```
+
+
+### 升级说明
+如果你原已集成了lottery组件，你可以选择删除集成数据（删除权限数据和所有的lottery表）重新集成（推荐方式），或者更新下面的SQL。
+
+```sql
+ALTER TABLE `lottery_award` 
+CHANGE COLUMN `award_amount` `award_value` BIGINT(20) NULL DEFAULT NULL COMMENT '奖项值' ;
+  
+ALTER TABLE `lottery` 
+ADD COLUMN `publish_event` VARCHAR(16) NULL COMMENT '发布事件' AFTER `user_counter`;
+```
+
+
+
 
 

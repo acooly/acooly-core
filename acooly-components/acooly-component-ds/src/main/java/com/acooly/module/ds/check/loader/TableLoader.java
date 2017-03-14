@@ -23,7 +23,12 @@ public interface TableLoader {
     List<String> getTableNames(String schema);
 
     /**
-     * 获取数据库版本
+     * 检查数据库版本
      */
     boolean checkDatabaseVersion();
+
+    /**
+     * 检查字段
+     */
+    boolean checkTableColums(Table table);
 }

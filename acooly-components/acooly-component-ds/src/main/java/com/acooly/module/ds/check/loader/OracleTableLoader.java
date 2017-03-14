@@ -37,4 +37,9 @@ public class OracleTableLoader implements TableLoader {
     public boolean checkDatabaseVersion() {
         return false;
     }
+
+    @Override
+    public boolean checkTableColums(Table table) {
+        return false;
+    }
 }

@@ -149,6 +149,47 @@ public class MysqlTableLoader implements TableLoader {
         return false;
     }
 
+
+    /**
+     * 检查id、createTime、updateTime 格式分别为：
+     * id  bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+     * create_time timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+     * update_time timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
+     */
+    @Override
+    public boolean checkTableColums(Table table) {
+        boolean isIdValid = false;
+        boolean hasCreateTime = false;
+        boolean hasUpdateTime = false;
+        for (Column column : table.getColumns()) {
+            String name = column.getName();
+            String type = column.getDataType();
+            String defaultValue = String.valueOf(column.getDefaultValue());
+            String extra = column.getExtra();
+            //检查id
+            //bigint(20)和bigint(10)在存储上长度都为 8 bytes
+            //@see https://dev.mysql.com/doc/refman/5.7/en/integer-types.html
+            if (StringUtils.equalsIgnoreCase("id", name) && StringUtils.equalsIgnoreCase("bigint", type) && StringUtils.equalsIgnoreCase("auto_increment", extra)) {
+                isIdValid = true;
+                continue;
+            }
+            //检查createTime
+            if (StringUtils.equalsIgnoreCase("datetime", type) && StringUtils.equalsIgnoreCase("CURRENT_TIMESTAMP", defaultValue)) {
+                if (StringUtils.equalsIgnoreCase("create_time", name) || StringUtils.equalsIgnoreCase("raw_add_time", name)) {
+                    hasCreateTime = true;
+                    continue;
+                }
+            }
+            //检查updateTime
+            if (StringUtils.equalsIgnoreCase("datetime", type) && StringUtils.equalsIgnoreCase("CURRENT_TIMESTAMP", defaultValue) && StringUtils.equalsIgnoreCase("ON update CURRENT_TIMESTAMP", extra)) {
+                if (StringUtils.equalsIgnoreCase("update_time", name) || StringUtils.equalsIgnoreCase("raw_update_time", name)) {
+                    hasUpdateTime = true;
+                }
+            }
+        }
+        return isIdValid && hasCreateTime && hasUpdateTime;
+    }
+
     private boolean checkVersion(String version) {
         //5.7.15-9-log
         String[] versionSplit = version.split("\\.");

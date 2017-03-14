@@ -20,3 +20,6 @@
         acooly.openapidoc.copyright=xxoo
 
 
+5. 访问页面
+
+    http://ip:port/docs

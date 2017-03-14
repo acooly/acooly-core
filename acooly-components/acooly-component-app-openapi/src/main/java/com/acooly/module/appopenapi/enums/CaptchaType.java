@@ -4,6 +4,7 @@
  */
 package com.acooly.module.appopenapi.enums;
 
+import com.acooly.core.utils.enums.Messageable;
 import com.google.common.collect.Maps;
 
 import java.util.Map;
@@ -14,7 +15,7 @@ import java.util.Map;
  * @author zhangpu
  *
  */
-public enum CaptchaType {
+public enum CaptchaType implements Messageable{
 
 	DEDUCT("DEDUCT", "充值", "amount"),
 
@@ -55,4 +56,13 @@ public enum CaptchaType {
 		return this.code + " : " + this.message + "(" + this.detail + ")";
 	}
 
+    @Override
+    public String code() {
+        return code;
+    }
+
+    @Override
+    public String message() {
+        return message;
+    }
 }

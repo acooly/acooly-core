@@ -48,6 +48,9 @@ public class DatabaseTableChecker implements ApplicationListener<DataSourceReady
 
     @Override
     public void onApplicationEvent(DataSourceReadyEvent event) {
+        //tofix 在开发者模式下 AbstractDatabaseScriptIniter 同样监听DataSourceReadyEvent
+        //      在执行数据库脚本初始化未完成的时候 执行了表检查 第一次检查结果会不准确
+
         //开发者模式下检查
         if (!Apps.isDevMode()) {
             return;

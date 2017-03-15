@@ -174,14 +174,14 @@ public class MysqlTableLoader implements TableLoader {
                 continue;
             }
             //检查createTime
-            if (StringUtils.equalsIgnoreCase("datetime", type) && StringUtils.equalsIgnoreCase("CURRENT_TIMESTAMP", defaultValue)) {
+            if (StringUtils.equalsIgnoreCase("timestamp", type) && StringUtils.equalsIgnoreCase("CURRENT_TIMESTAMP", defaultValue)) {
                 if (StringUtils.equalsIgnoreCase("create_time", name) || StringUtils.equalsIgnoreCase("raw_add_time", name)) {
                     hasCreateTime = true;
                     continue;
                 }
             }
             //检查updateTime
-            if (StringUtils.equalsIgnoreCase("datetime", type) && StringUtils.equalsIgnoreCase("CURRENT_TIMESTAMP", defaultValue) && StringUtils.equalsIgnoreCase("ON update CURRENT_TIMESTAMP", extra)) {
+            if (StringUtils.equalsIgnoreCase("timestamp", type) && StringUtils.equalsIgnoreCase("CURRENT_TIMESTAMP", defaultValue) && StringUtils.equalsIgnoreCase("ON update CURRENT_TIMESTAMP", extra)) {
                 if (StringUtils.equalsIgnoreCase("update_time", name) || StringUtils.equalsIgnoreCase("raw_update_time", name)) {
                     hasUpdateTime = true;
                 }

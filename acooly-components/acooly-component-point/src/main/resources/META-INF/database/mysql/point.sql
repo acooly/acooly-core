@@ -29,8 +29,8 @@ CREATE TABLE `point_account` (
   `statistics_balance` bigint(20) DEFAULT NULL COMMENT '统计积分',
   `status` varchar(50) NOT NULL COMMENT '状态 {invalid:无效,valid:有效}',
   `grade_id` int(11) NOT NULL COMMENT '用户等级',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `update_time` datetime NOT NULL COMMENT '修改时间',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `memo` varchar(256) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分账户';
@@ -51,8 +51,8 @@ CREATE TABLE `point_grade` (
   `title` varchar(63) NOT NULL COMMENT '标题',
   `start_point` bigint(11) NOT NULL DEFAULT '0' COMMENT '积分区间_开始',
   `end_point` bigint(11) NOT NULL DEFAULT '0' COMMENT '积分区间_结束',
-  `create_time` datetime NOT NULL,
-  `update_time` datetime NOT NULL,
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `picture` varchar(255) DEFAULT NULL COMMENT ' 图标',
   `memo` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
@@ -80,8 +80,8 @@ CREATE TABLE `point_statistics` (
   `start_time` datetime NOT NULL COMMENT '开始时间',
   `end_time` datetime NOT NULL COMMENT '结束时间',
   `status` varchar(32) NOT NULL COMMENT '状态 {init:初始化,finish:完成}',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `update_time` datetime NOT NULL COMMENT '修改时间',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `memo` varchar(256) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分统计';
@@ -105,8 +105,8 @@ CREATE TABLE `point_trade` (
   `end_balance` bigint(20) NOT NULL DEFAULT '0' COMMENT '交易后积分',
   `end_available` bigint(20) NOT NULL COMMENT '交易后有效积分',
   `business_data` varchar(256) DEFAULT NULL COMMENT '相关业务数据',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `update_time` datetime NOT NULL COMMENT '修改时间',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `memo` varchar(256) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分交易信息';

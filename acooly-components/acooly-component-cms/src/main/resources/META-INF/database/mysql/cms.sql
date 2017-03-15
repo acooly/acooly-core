@@ -6,8 +6,8 @@ CREATE TABLE `cms_content_type` (
   `CODE` varchar(64) DEFAULT NULL COMMENT '类型编码 (4位业务编码,如：1000)',
   `NAME` varchar(32) NOT NULL COMMENT '类型名称',
   `COMMENTS` varchar(128) DEFAULT NULL COMMENT '备注',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
- `update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`ID`),
   KEY `FK_CONTENTTYPE_REF_CONTENTTYPE` (`PARENTID`) USING BTREE,
   CONSTRAINT `cms_content_type_ibfk_1` FOREIGN KEY (`PARENTID`) REFERENCES `cms_content_type` (`ID`)
@@ -17,8 +17,8 @@ DROP TABLE IF EXISTS `cms_content_body`;
 CREATE TABLE `cms_content_body` (
   `ID` bigint(20) NOT NULL COMMENT '主键',
   `BODY` text NOT NULL COMMENT '内容主体',
-    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
- `update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='内容主体';
 
@@ -37,8 +37,8 @@ CREATE TABLE `cms_content` (
   `AUTHOR` varchar(16) DEFAULT NULL COMMENT '作者',
   `HITS` decimal(10,0) DEFAULT NULL COMMENT '点击数',
   `STATUS` int(11) NOT NULL DEFAULT '1' COMMENT '状态 (1:正常,2:禁用)',
-  `CREATE_TIME` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '最后更新时间',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `COMMENTS` varchar(128) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`ID`),
   KEY `idx_cms_content_id` (`ID`),
@@ -55,8 +55,8 @@ CREATE TABLE `cms_attachment` (
   `FILE_SIZE` bigint(20) DEFAULT NULL COMMENT '文件大小',
   `COMMENTS` varchar(256) DEFAULT NULL COMMENT '备注',
   `FILE_NAME` varchar(128) DEFAULT NULL,
-    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
- `update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`ID`),
   KEY `FK2731B5D9D02C81BF` (`CONTENTID`),
   CONSTRAINT `cms_attachment_ibfk_1` FOREIGN KEY (`CONTENTID`) REFERENCES `cms_content` (`ID`)

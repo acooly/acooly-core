@@ -8,8 +8,8 @@ CREATE TABLE `lottery` (
   `type` varchar(16) DEFAULT NULL COMMENT '类型 {roulette:轮盘抽奖,other:其他}',
   `start_time` datetime DEFAULT NULL COMMENT '开始时间',
   `end_time` datetime DEFAULT NULL COMMENT '结束时间',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `status` varchar(16) DEFAULT NULL COMMENT '状态{enable:正常,pause:暂停,disable:完结}',
   `comments` varchar(256) DEFAULT NULL COMMENT '备注',
   `note` varchar(512) DEFAULT NULL COMMENT '说明',
@@ -25,7 +25,7 @@ CREATE TABLE `lottery` (
 --  Records of `lottery`
 -- ----------------------------
 BEGIN;
-INSERT INTO `lottery` VALUES ('1', '20150316000000000001', '抽奖活动案例', 'roulette', '2017-03-01 00:00:00', '2018-03-30 00:00:00', '2015-03-25 00:00:00', '2017-03-13 10:59:20', 'enable','disable', '周年庆抽奖活动', '1213', '0', '1000', 'disable');
+INSERT INTO `lottery` VALUES ('1', '20150316000000000001', '抽奖活动案例', 'roulette', '2017-03-01 00:00:00', '2018-03-30 00:00:00', '2015-03-25 00:00:00', '2017-03-13 10:59:20', 'enable','disable', '周年庆抽奖活动', '1213', '0', 'disable', 'disable');
 COMMIT;
 
 
@@ -46,8 +46,8 @@ CREATE TABLE `lottery_award` (
   `max_period` varchar(16) DEFAULT NULL COMMENT '最大人数周期',
   `max_winer` int(11) NOT NULL COMMENT '最大中奖数',
   `record_winner` varchar(16) DEFAULT NULL COMMENT '保持中奖纪录',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `update_time` datetime DEFAULT NULL COMMENT '最后修改时间',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `comments` varchar(256) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
@@ -70,8 +70,8 @@ CREATE TABLE `lottery_count` (
   `count` int(11) NOT NULL COMMENT '计数值',
   `award_id` bigint(20) NOT NULL COMMENT '奖项ID',
   `lottery_id` bigint(20) NOT NULL COMMENT '抽奖ID',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `update_time` datetime NOT NULL COMMENT '更新时间',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `comments` varchar(128) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_L_COUNT_UKEY` (`ukey`),
@@ -90,8 +90,8 @@ CREATE TABLE `lottery_user_count` (
   `user` varchar(64) NOT NULL COMMENT '参与人',
   `total_times` int(11) NOT NULL DEFAULT '0' COMMENT '获参次数',
   `play_times` int(11) NOT NULL COMMENT '参与次数',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime DEFAULT NULL COMMENT '最后修改时间',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `comments` varchar(128) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_LOTTERY_USER_COUNT` (`lottery_id`,`user`) USING BTREE
@@ -105,8 +105,8 @@ CREATE TABLE `lottery_whitelist` (
   `lottery_id` bigint(20) NOT NULL COMMENT '抽奖ID',
   `award_id` bigint(20) NOT NULL COMMENT '奖项ID',
   `user` varchar(64) NOT NULL COMMENT '抽奖用户',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `status` varchar(16) DEFAULT NULL COMMENT '状态 {enable:有效,disable:禁用,finish:完成}',
   `comments` varchar(128) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
@@ -125,8 +125,8 @@ CREATE TABLE `lottery_winner` (
   `order_no` varchar(64) DEFAULT NULL COMMENT '放款订单号',
   `award` varchar(32) NOT NULL COMMENT '奖项',
   `winner` varchar(32) NOT NULL COMMENT '中奖人',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `update_time` datetime DEFAULT NULL COMMENT '最后修改时间',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `status` varchar(16) NOT NULL COMMENT '状态 {winning:中奖,award:已发奖}',
   `comments` varchar(256) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)

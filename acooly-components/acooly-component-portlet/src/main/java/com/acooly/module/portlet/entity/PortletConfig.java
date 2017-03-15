@@ -23,7 +23,7 @@ import java.util.Date;
  *         Date: 2017-03-01 00:53:18
  */
 @Entity
-@Table(name = "p_portlet_config")
+@Table(name = "portlet_config")
 public class PortletConfig extends AbstractEntity {
     /**
      * serialVersionUID

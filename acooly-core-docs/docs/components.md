@@ -4,6 +4,8 @@
 
 所有组件的maven坐标为`com.acooly:acooly-component-*`，当依赖了组件时，应用就有具有相关的能力。在`spring`的世界里，能力由`Bean`提供，所以组件就是一系列能力相关`Bean`的集合。
 
+对于业务型组件，我们还提供更多能力：数据库初始化能力、页面、boss管理。
+
 ### 1. 相关概念介绍：
 
 
@@ -14,6 +16,7 @@
 * 组件初始化器
 
  `组件初始化器`用于在spring容器初始化之前控制、改变组件的默认行为。比如`com.acooly.module.tomcat.TomcatComponentInitializer`配置反向代理相关参数。
+
 * 组件自动配置
 
  `组件自动配置`用于创建spring beans。比如`com.acooly.module.tomcat.TomcatAutoConfig`扩展spring-boot tomcat。

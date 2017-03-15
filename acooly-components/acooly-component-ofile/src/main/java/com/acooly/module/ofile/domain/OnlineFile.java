@@ -20,7 +20,7 @@ import java.util.Date;
  *
  */
 @Entity
-@Table(name = "sys_ofile")
+@Table(name = "ofile")
 @Getter
 @Setter
 public class OnlineFile extends AbstractEntity {

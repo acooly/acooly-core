@@ -10,8 +10,7 @@
 package com.acooly.module.ofile;
 
 import com.acooly.core.common.boot.Apps;
-import com.acooly.core.common.dao.dialect.DatabaseType;
-import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
+import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
 import com.acooly.module.security.config.SecurityAutoConfig;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,18 +40,25 @@ public class OFileAutoConfig extends WebMvcConfigurerAdapter {
 	private OFileProperties oFileProperties;
 	
 	@Bean
-	public AbstractDatabaseScriptIniter ofileScriptIniter() {
-		return new AbstractDatabaseScriptIniter() {
-			@Override
-			public String getEvaluateSql(DatabaseType databaseType) {
-				return "SELECT count(*) FROM sys_ofile";
-			}
-			
-			@Override
-			public List<String> getInitSqlFile(DatabaseType databaseType) {
-				return Lists.newArrayList("META-INF/database/mysql/ofile.sql",
-					"META-INF/database/mysql/ofile_urls.sql");
-			}
+	public StandardDatabaseScriptIniter ofileScriptIniter() {
+
+		return new StandardDatabaseScriptIniter() {
+            @Override
+            public String getEvaluateTable() {
+                return "ofile";
+            }
+
+            @Override
+            public String getComponentName() {
+                return "ofile";
+            }
+
+            @Override
+            public List<String> getInitSqlFile() {
+                return Lists.newArrayList("ofile",
+                    "ofile_urls");
+            }
+
 		};
 	}
 	

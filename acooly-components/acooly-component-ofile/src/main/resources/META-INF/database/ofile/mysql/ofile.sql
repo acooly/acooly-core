@@ -1,4 +1,4 @@
-CREATE TABLE `sys_ofile` (
+CREATE TABLE `ofile` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `input_name` varchar(64) DEFAULT NULL COMMENT '表单名称',
   `comments` varchar(255) DEFAULT NULL COMMENT '备注',

@@ -9,8 +9,7 @@
  */
 package com.acooly.module.lottery;
 
-import com.acooly.core.common.dao.dialect.DatabaseType;
-import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
+import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
 import com.acooly.module.security.config.SecurityAutoConfig;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,17 +38,22 @@ public class LotteryAutoConfig extends WebMvcConfigurerAdapter {
     private LotteryProperties lotteryProperties;
 
     @Bean
-    public AbstractDatabaseScriptIniter lotteryScriptIniter() {
-        return new AbstractDatabaseScriptIniter() {
+    public StandardDatabaseScriptIniter lotteryScriptIniter() {
+        return new StandardDatabaseScriptIniter() {
             @Override
-            public String getEvaluateSql(DatabaseType databaseType) {
-                return "SELECT count(*) FROM lottery";
+            public String getEvaluateTable() {
+                return "lottery";
             }
 
             @Override
-            public List<String> getInitSqlFile(DatabaseType databaseType) {
-                return Lists.newArrayList("META-INF/database/mysql/lottery.sql",
-                        "META-INF/database/mysql/lottery_urls.sql");
+            public String getComponentName() {
+                return "lottery";
+            }
+
+            @Override
+            public List<String> getInitSqlFile() {
+               return Lists.newArrayList("lottery",
+                    "lottery_urls");
             }
         };
     }

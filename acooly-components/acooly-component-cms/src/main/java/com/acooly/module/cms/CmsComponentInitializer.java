@@ -23,6 +23,6 @@ public class CmsComponentInitializer implements ComponentInitializer {
 
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
-
+        setPropertyIfMissing("acooly.ds.Checker.excludedColumnTables.cms","cms_content_body");
     }
 }

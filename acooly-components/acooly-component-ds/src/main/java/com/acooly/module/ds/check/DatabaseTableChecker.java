@@ -89,7 +89,7 @@ public class DatabaseTableChecker implements ApplicationListener<DataSourceReady
                         .append(tableNamesNotPassCheck.size())
                         .append("个表没有按照标准设置id或createTime或updateTime:")
                         .append(tableNamesNotPassCheck.toString()).append("\n")
-                        .append("如果是关联用的表或者系统表，请用例如'acooly.ds.Checker.excludedColumnTables.a=sys_role_resc,sys_user_role' 排除掉\n")
+                        .append("如果是关联用的表或者系统表，请用例如'acooly.ds.Checker.excludedColumnTables.${componentName}=sys_role_resc,sys_user_role' 排除掉\n")
                         .append("标准的id、createTime、updateTime 格式分别为：\n")
                         .append("id  bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID' \n")
                         .append("create_time timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'\n")

@@ -1,4 +1,4 @@
-CREATE TABLE `p_feedback` (
+CREATE TABLE `portlet_feedback` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `type` varchar(16) NOT NULL COMMENT '类型 {suggest:建议,complaint:投诉}',
   `title` varchar(64) NOT NULL COMMENT '标题',
@@ -14,7 +14,7 @@ CREATE TABLE `p_feedback` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='客户反馈';
 
 
-CREATE TABLE `p_portlet_config` (
+CREATE TABLE `portlet_config` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `type` VARCHAR(45) NULL COMMENT '类型 {def:默认}',
   `title` VARCHAR(45) NOT NULL COMMENT '标题',

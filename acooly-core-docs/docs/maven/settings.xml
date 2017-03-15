@@ -9,12 +9,12 @@
     </pluginGroups>
     <servers>
         <server>
-            <id>nexus-releases</id>
+            <id>yiji-releases</id>
             <username>admin</username>
             <password>admin123</password>
         </server>
         <server>
-            <id>nexus-snapshot</id>
+            <id>yiji-snapshots</id>
             <username>admin</username>
             <password>admin123</password>
         </server>
@@ -22,7 +22,7 @@
 
     <mirrors>
         <mirror>
-            <id>acooly-mirror</id>
+            <id>mirror</id>
             <mirrorOf>*</mirrorOf>
             <name>nexue repository mirror for acooly.</name>
             <url>http://192.168.45.35:8081/nexus/content/groups/public</url>

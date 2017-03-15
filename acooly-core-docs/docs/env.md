@@ -4,9 +4,11 @@
 
 ### 1. jdk
 
-使用oracle jdk8
+使用oracle jdk8最新版本
 
 ### 2. maven
+
+使用maven最新版本
 
 开发环境统一使用nexus地址为：`http://192.168.45.35:8081/nexus`
 
@@ -14,7 +16,15 @@
 
 ### 3. IDE
 
-使用`eclipse`的同学请使用[sts](https://spring.io/tools/sts),并配置[codetemplates](ide/acooly-eclipse-codetemplates.xml),[formatter](ide/acooly-eclipse-formatter.xml).
+推荐使用`IDEA`、[sts](https://spring.io/tools/sts)
+
+配置[codetemplates](ide/acooly-eclipse-codetemplates.xml),[formatter](ide/acooly-eclipse-formatter.xml).
+
+不要使用eclipse！！！
+
+### 4. 数据库
+
+使用mysql 5.7最新版本
 
 ## 资源清单
 

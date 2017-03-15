@@ -9,8 +9,7 @@
  */
 package com.acooly.module.app;
 
-import com.acooly.core.common.dao.dialect.DatabaseType;
-import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
+import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
 import com.acooly.module.security.config.SecurityAutoConfig;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,16 +37,21 @@ public class AppAutoConfig {
 	private AppProperties appProperties;
 	
 	@Bean
-	public AbstractDatabaseScriptIniter appScriptIniter() {
-		return new AbstractDatabaseScriptIniter() {
-			@Override
-			public String getEvaluateSql(DatabaseType databaseType) {
-				return "SELECT count(*) FROM app_banner";
-			}
-			
-			@Override
-			public List<String> getInitSqlFile(DatabaseType databaseType) {
-				return Lists.newArrayList("META-INF/database/mysql/app.sql", "META-INF/database/mysql/app_urls.sql");
+	public StandardDatabaseScriptIniter appScriptIniter() {
+		return new StandardDatabaseScriptIniter() {
+            @Override
+            public String getEvaluateTable() {
+                return "app_banner";
+            }
+
+            @Override
+            public String getComponentName() {
+                return "app";
+            }
+
+            @Override
+			public List<String> getInitSqlFile() {
+				return Lists.newArrayList("app", "app_urls");
 			}
 		};
 	}

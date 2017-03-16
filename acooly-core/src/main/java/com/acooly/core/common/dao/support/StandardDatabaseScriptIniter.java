@@ -85,12 +85,12 @@ public abstract class StandardDatabaseScriptIniter implements ApplicationListene
 	}
 	
 	/**
-	 * 判断表是否存在
+	 * 判断表是否存在,表名必须已组件或模块名称开头
 	 */
 	public abstract String getEvaluateTable();
 	
 	/**
-	 * 组件名称
+	 * 组件或应用模块名称
 	 */
 	public abstract String getComponentName();
 	

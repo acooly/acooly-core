@@ -9,6 +9,8 @@
  */
 package com.acooly.module.security.config;
 
+import com.acooly.core.common.dao.dialect.DatabaseType;
+import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
 import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
 import com.acooly.module.jpa.JPAAutoConfig;
 import com.acooly.module.security.captche.CaptchaServlet;
@@ -328,25 +330,19 @@ public class SecurityAutoConfig {
 		}
 		
 	}
-	
-	@Bean
-	public StandardDatabaseScriptIniter securityScriptIniter() {
-		return new StandardDatabaseScriptIniter() {
-			
-			@Override
-			public String getEvaluateTable() {
-				return "SYS_USER";
-			}
-			
-			@Override
-			public String getComponentName() {
-				return "security";
-			}
-			
-			@Override
-			public List<String> getInitSqlFile() {
-				return Lists.newArrayList("security");
-			}
-		};
-	}
+
+    @Bean
+    public AbstractDatabaseScriptIniter securityScriptIniter() {
+        return new AbstractDatabaseScriptIniter() {
+            @Override
+            public String getEvaluateSql(DatabaseType databaseType) {
+                return "SELECT count(*) FROM SYS_ROLE";
+            }
+
+            @Override
+            public List<String> getInitSqlFile(DatabaseType databaseType) {
+                return Lists.newArrayList("META-INF/database/mysql/security.sql");
+            }
+        };
+    }
 }

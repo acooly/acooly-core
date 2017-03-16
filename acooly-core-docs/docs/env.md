@@ -10,11 +10,14 @@
 
 使用maven最新版本
 
-开发环境统一使用nexus地址为：`http://192.168.45.35:8081/nexus`
+### 3. nexus
+
+* 开发环境统一使用nexus地址为：`http://192.168.45.35:8081/nexus`
+* 驻场开发时，使用nexus地址为: `http://nexus.yijifu.net/nexus/`,此nexus不对外提供源代码访问。
 
 请使用[maven setting](maven/settings.xml)替换`maven`默认setting文件
 
-### 3. IDE
+### 4. IDE
 
 推荐使用`IDEA`、[sts](https://spring.io/tools/sts)
 
@@ -22,7 +25,7 @@
 
 不要使用eclipse！！！
 
-### 4. 数据库
+### 5. 数据库
 
 使用mysql 5.7最新版本
 

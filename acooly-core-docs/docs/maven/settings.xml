@@ -27,6 +27,13 @@
             <name>nexue repository mirror for acooly.</name>
             <url>http://192.168.45.35:8081/nexus/content/groups/public</url>
         </mirror>
+        <!--下面的配置在驻场开发时开启-->
+        <!--<mirror>-->
+            <!--<id>mirror</id>-->
+            <!--<mirrorOf>*</mirrorOf>-->
+            <!--<name>nexue repository mirror for acooly.</name>-->
+            <!--<url>http://nexus.yijifu.net/nexus/content/groups/public/</url>-->
+        <!--</mirror>-->
     </mirrors>
 
 

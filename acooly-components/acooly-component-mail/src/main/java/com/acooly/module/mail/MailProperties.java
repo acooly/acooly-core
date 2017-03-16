@@ -30,16 +30,32 @@ public class MailProperties implements InitializingBean {
 	public static final String PREFIX = "acooly.mail";
 	private boolean enable = true;
 	private boolean debug = false;
+    /**
+     * 邮件服务器地址
+     */
 	@NotEmpty
 	private String hostname;
+    /**
+     * 邮件服务器用户名
+     */
 	@NotEmpty
 	private String username;
+    /**
+     * 邮件服务器密码
+     */
 	@NotEmpty
 	private String password;
+    /**
+     * 邮件发送者名称：比如 xx客服
+     */
 	@NotEmpty
 	private String fromName;
+    /**
+     * 邮件发送者邮箱地址：比如 xx@xx.com
+     */
 	@NotEmpty
 	private String fromAddress;
+
 	private final String charset = Charsets.UTF_8.name();
 	private int threadMin = 1;
 	private int threadMax = 20;

@@ -1,5 +1,9 @@
 ## 快速开始
 
+开始之前，您可以把[acooly-showcase](http://gitlab.yiji/fintech/acooly-showcase)代码下载下来，在本地启动试试，
+然后按照下面的步骤one by one...
+
+
 ### 1. 使用`archtype`生成项目
 
 框架提供了`maven archtype`快速生成项目工程。在生成项目之前，我们需要确认如下参数：
@@ -36,7 +40,7 @@
 
 * acooly-demo-test
 
-	测试工程。默认有`com.acooly.demo.test.DemoTest`测试用例。
+	测试工程。默认有`com.acooly.demo.test.DemoTest`测试用例和代码生成工具`com.acooly.demo.test.AcoolyCoder`。
 	
 ### 3. 启动项目
 
@@ -76,3 +80,51 @@
 ### 5. 使用代码生成工具
 		
 测试工程中有`AcoolyCoder`，它读取`acoolycoder.properties`配置文件，生成代码。
+
+### 6. 资源文件存放路径
+
+1. 配置文件
+
+    主配置文件
+
+        src/main/resources/application.properties
+
+
+    环境配置文件：
+
+        src/main/resources/application-${env}.properties
+
+    公共属性可以放在主配置文件中，仅环境相关的配置放在环境配置文件中。
+
+2. 静态资源文件存放路径
+
+        src/main/resources/static
+
+    静态资源文件必须存放在上面的路径
+
+3. 模板文件存放路径
+
+        src/main/resources/templates
+
+    框架提供freemarker集成，使用freemarker模板放在此路径
+
+4. jsp存放路径
+
+        src/main/resources/META-INF/resources/WEB-INF/jsp
+
+   框架提供jsp集成，使用jsp放在此路径
+
+5. 数据库脚本存放路径
+
+        src/main/resources/META-INF/database/mysql
+        src/main/resources/META-INF/database/oracle
+
+    组件或者模块需提供数据库初始化脚本(包括建表和初始数据导入)
+
+### 7. 包扫描
+
+1. `Main`类所在的包(basePackage)会被扫描到spring 容器
+2. 应用实体扫描包：${basePackage}.**.entity
+3. 组件实体扫描包: com.acooly.module.**.entity
+4. 应用数据访问层包扫描路径：${basePackage}.**.entity
+5. 组件数据访问层包扫描路径：com.acooly.module.**.dao

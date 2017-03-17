@@ -17,7 +17,7 @@ import java.util.Date;
  * @author Acooly Code Generator
  */
 @Entity
-@Table(name = "SYS_SMS_LOG")
+@Table(name = "sms_log")
 @Getter
 @Setter
 public class SmsLog extends AbstractEntity {

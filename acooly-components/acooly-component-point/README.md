@@ -2,9 +2,10 @@ acooly-components-point(积分组件)
 ====
 
 ## 简介
+
 acooly-components-point以acooly框架为基础开发的积分业务组件
 
-##接口说明：
+## 接口说明：
 
 	1：积分账户查询 
 	com.acooly.point.service.PointAccountService#findByUserName

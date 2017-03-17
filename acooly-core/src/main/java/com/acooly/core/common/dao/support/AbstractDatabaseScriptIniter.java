@@ -5,7 +5,7 @@
 
 /*
  * 修订记录:
- * qiubo@yiji.com 2017-02-14 17:24 创建
+ * qiubo@yiji.com 2017-03-15 18:08 创建
  */
 package com.acooly.core.common.dao.support;
 
@@ -31,59 +31,55 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * 数据库初始化组件：
- * 1. 仅在非online环境执行
- * 2. 他判断数据库存在与否，不存在执行sql文件
- *
  * @author qiubo@yiji.com
  */
 public abstract class AbstractDatabaseScriptIniter implements ApplicationListener<DataSourceReadyEvent> {
-	private static final Logger logger = LoggerFactory.getLogger(AbstractDatabaseScriptIniter.class);
-	
-	@Override
-	public void onApplicationEvent(DataSourceReadyEvent event) {
-		DataSource dataSource = (DataSource) event.getSource();
-		try {
-			DatabaseType databaseType = DatabaseDialectManager.getDatabaseType(dataSource.getConnection());
-			try {
-				ScriptUtils.executeSqlScript(dataSource.getConnection(),
-					new ByteArrayResource(getEvaluateSql(databaseType).getBytes(Charsets.UTF_8)));
-			} catch (DataAccessException e) {
-				Throwable throwable = Throwables.getRootCause(e);
-				String msg = throwable.getMessage();
-				if (throwable.getClass().getName().endsWith("MySQLSyntaxErrorException")
-					&& msg.endsWith("doesn't exist")) {
-					List<String> files = getInitSqlFile(databaseType);
+    private static final Logger logger = LoggerFactory.getLogger(StandardDatabaseScriptIniter.class);
+
+    @Override
+    public void onApplicationEvent(DataSourceReadyEvent event) {
+        DataSource dataSource = (DataSource) event.getSource();
+        try {
+            DatabaseType databaseType = DatabaseDialectManager.getDatabaseType(dataSource.getConnection());
+            try {
+                ScriptUtils.executeSqlScript(dataSource.getConnection(),
+                    new ByteArrayResource(getEvaluateSql(databaseType).getBytes(Charsets.UTF_8)));
+            } catch (DataAccessException e) {
+                Throwable throwable = Throwables.getRootCause(e);
+                String msg = throwable.getMessage();
+                if (throwable.getClass().getName().endsWith("MySQLSyntaxErrorException")
+                    && msg.endsWith("doesn't exist")) {
+                    List<String> files = getInitSqlFile(databaseType);
                     if (Env.isOnline()) {
                         logger.error("组件相关表不存在，请初始化[{}]", files);
                         Apps.shutdown();
                     }
                     files.forEach(sqlPath -> exeSqlFile(dataSource, sqlPath));
-				}
-			}
-		} catch (SQLException e) {
-			throw new AppConfigException(e);
-		}
-	}
+                }
+            }
+        } catch (SQLException e) {
+            throw new AppConfigException(e);
+        }
+    }
 
     /**
      * 判断表是否存在
      */
-	public abstract String getEvaluateSql(DatabaseType databaseType);
+    public abstract String getEvaluateSql(DatabaseType databaseType);
 
     /**
      * 数据库初始化脚本
      */
-	public abstract List<String> getInitSqlFile(DatabaseType databaseType);
-	
-	private void exeSqlFile(DataSource dataSource, String sqlpath) {
-		logger.info("发现数据库基础数据还没有初始化，开始初始化:{}", sqlpath);
-		try {
-			Resource scriptResource = ApplicationContextHolder.get().getResource("classpath:" + sqlpath);
+    public abstract List<String> getInitSqlFile(DatabaseType databaseType);
+
+    private void exeSqlFile(DataSource dataSource, String sqlpath) {
+        logger.info("发现数据库基础数据还没有初始化，开始初始化:{}", sqlpath);
+        try {
+            Resource scriptResource = ApplicationContextHolder.get().getResource("classpath:" + sqlpath);
             EncodedResource encodedResource=new EncodedResource(scriptResource,Charsets.UTF_8);
-			ScriptUtils.executeSqlScript(dataSource.getConnection(), encodedResource);
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-	}
+            ScriptUtils.executeSqlScript(dataSource.getConnection(), encodedResource);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -9,8 +9,7 @@
  */
 package com.acooly.module.portlet;
 
-import com.acooly.core.common.dao.dialect.DatabaseType;
-import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
+import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
 import com.google.common.collect.Lists;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -29,17 +28,24 @@ import java.util.List;
 public class PortletAutoConfig extends WebMvcConfigurerAdapter {
 
     @Bean
-    public AbstractDatabaseScriptIniter PortletScriptIniter() {
-        return new AbstractDatabaseScriptIniter() {
+    public StandardDatabaseScriptIniter PortletScriptIniter() {
+
+        return new StandardDatabaseScriptIniter() {
             @Override
-            public String getEvaluateSql(DatabaseType databaseType) {
-                return "SELECT count(*) FROM p_feedback";
+            public String getEvaluateTable() {
+                return "portlet_feedback";
             }
 
             @Override
-            public List<String> getInitSqlFile(DatabaseType databaseType) {
-                return Lists.newArrayList("META-INF/database/mysql/portlet.sql","META-INF/database/mysql/portlet_urls.sql");
+            public String getComponentName() {
+                return "portlet";
             }
+
+            @Override
+            public List<String> getInitSqlFile() {
+                return Lists.newArrayList("portlet", "portlet_urls");
+            }
+
         };
     }
 

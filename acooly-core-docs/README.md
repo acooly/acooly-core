@@ -15,6 +15,7 @@ acooly框架主要设计目的为快速，规范的构建业务层系统和平�
 ## 文档
 * [初始化环境](docs/env.md)
 * [快速开始](docs/quick-start.md)
+* [规范](docs/spec.md)
 * [代码生成指南](docs/acooly-coder.md)
 * [框架组件介绍](docs/components.md)
 * [Acooly框架开发指南](docs/acooly-guide.md)

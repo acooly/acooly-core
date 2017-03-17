@@ -9,8 +9,7 @@
  */
 package com.acooly.module.sms;
 
-import com.acooly.core.common.dao.dialect.DatabaseType;
-import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
+import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
 import com.acooly.module.security.config.SecurityAutoConfig;
 import com.google.common.collect.Lists;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -36,17 +35,22 @@ import static com.acooly.module.sms.SmsProperties.PREFIX;
 @AutoConfigureAfter(SecurityAutoConfig.class)
 public class SmsAutoConfig {
 	@Bean
-	public AbstractDatabaseScriptIniter smsScriptIniter() {
-		return new AbstractDatabaseScriptIniter() {
-			@Override
-			public String getEvaluateSql(DatabaseType databaseType) {
-				return "SELECT count(*) FROM sys_sms_log";
-			}
-			
-			@Override
-			public List<String> getInitSqlFile(DatabaseType databaseType) {
-				return Lists.newArrayList("META-INF/database/mysql/sms.sql","META-INF/database/mysql/sms_urls.sql");
-			}
+	public StandardDatabaseScriptIniter smsScriptIniter() {
+		return new StandardDatabaseScriptIniter() {
+            @Override
+            public String getEvaluateTable() {
+                return "sys_sms_log";
+            }
+
+            @Override
+            public String getComponentName() {
+                return "sms";
+            }
+
+            @Override
+            public List<String> getInitSqlFile() {
+                return Lists.newArrayList("sms","sms_urls");
+            }
 		};
 	}
 	

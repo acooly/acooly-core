@@ -16,7 +16,7 @@ import javax.persistence.Table;
  *
  * @author Acooly Code Generator
  */
-@Table(name = "p_feedback")
+@Table(name = "portlet_feedback")
 @Getter
 @Setter
 public class Feedback extends AbstractEntity {

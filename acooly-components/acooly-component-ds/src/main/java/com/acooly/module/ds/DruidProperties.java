@@ -43,8 +43,8 @@ public class DruidProperties implements BeanClassLoaderAware {
 	
 	public static final int DEFAULT_SLOW_SQL_THRESHOLD = 1000;
 	
-	private static final int ORACLE_MAX_ACTIVE = 200;
-	private static final int MYSQL_MAX_ACTIVE = 100;
+	private static final int ORACLE_MAX_ACTIVE = 300;
+	private static final int MYSQL_MAX_ACTIVE = 300;
 	
 	private String prefix = PREFIX;
 	/**
@@ -82,7 +82,7 @@ public class DruidProperties implements BeanClassLoaderAware {
 	/**
 	 * 最大连接数,支持hera动态修改
 	 */
-	private Integer maxActive = 100;
+	private Integer maxActive = 300;
 	
 	/**
 	 * 获取连接等待超时的时间

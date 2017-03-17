@@ -15,35 +15,34 @@ acooly coder的发布包采用maven方式发布，目前只提供cli工具。
 
 v1.x坐标：
 
-```xml
-<dependency>
-  <groupId>com.acooly</groupId>
-  <artifactId>acooly-module-coder</artifactId>
-  <version>${acooly.coder.version}</version>
-  <classifier>distribution</classifier>
-  <type>zip</type>
-</dependency>
-```
+		<dependency>
+  			<groupId>com.acooly</groupId>
+  			<artifactId>acooly-module-coder</artifactId>
+  			<version>${acooly.coder.version}</version>
+  			<classifier>distribution</classifier>
+  			<type>zip</type>
+		</dependency>
+
+>>使用说明：拉取发布包后直接解压，application.properties为配置文件，请跟进生成的需求配置，然后运行start.sh/start.bat生成代码。
+
 v4.x坐标：
 
-```xml
-<dependency>
-  <groupId>com.acooly</groupId>
-  <artifactId>acooly-coder</artifactId>
-  <version>${acooly.coder.version}</version>
-  <classifier>distribution</classifier>
-  <type>zip</type>
-</dependency>
-```
+		<dependency>
+	  		<groupId>com.acooly</groupId>
+	  		<artifactId>acooly-coder</artifactId>
+	  		<version>4.0.0-SNAPSHOT</version>
+		</dependency>
 
->使用说明：拉取发布包后直接解压，application.properties为配置文件，请跟进生成的需求配置，然后运行start.sh/start.bat生成代码。
+>>使用说明：v4版本已经集成到项目中。
 
 ## 使用手册
 
 ### 框架约定
+
 acooly框架为了方便开发和设计，以开发经验为基础，对使用acooly进行了部分设计上的约定，通过约定降低设计和开发难度，提高效率。当然，这也符合流行的约定大于配置的设计理念。
 
 #### 程序结构约定
+
 工程结构完全按maven j2ee工程骨架，这个可以通过acooly-archetype生成后就可以清楚展现，程序模块的设计开发有一下基本约定。
 
 * 实体类（entity）必须继承AbstractEntity,并提供一个名称为id的属性作为实体的唯一标识，同时也映射到数据库的物理主键。
@@ -53,12 +52,22 @@ acooly框架为了方便开发和设计，以开发经验为基础，对使用ac
 
 为了方便自动生成结构性代码，对数据库表结构设计进行部分约定，但都符合常规习惯。
 
-* 表名全部小写，不能以数字开头，必须添加备注
-* 每个表必须有以id命名的物理主键，且为数字类型，如：mysql为bigint, oracle为number。
+* 表名全部小写，不能以数字开头，必须添加备注，表名应该以模块或组件为前缀
+* 每个表必须有以id命名的物理主键，且为数字类型，
+
+
+	如：mysql为`id  bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID'`, oracle为number。
+
 * 列名称全部小写，不能以数字开头；如果存在多个自然单词的组合，使用下划线分隔(\_)。如："user\_type"
 * 列定义必须添加备注 （这个备注则为生成的页面及表单的label）
-* 每个表必须添加create\_time和update\_time两个日期时间类型的字段，但无需手动管理 （在save/update时，框架会自己维护创建时间和最后修改时间）。
-* 如果有选项类型的字段，其选项值使用类json格式写入列备注字段，自动生成工具会自动为该列对应的属性和页面生成选项。如：表列为：user\_type ,备注可以为：用户类型 {normal:普通,vip:高级}
+* 每个表必须添加`create_time`和`update_time`两个日期时间类型的字段
+
+	mysql如下：
+	
+		create_time timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+		update_time timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
+
+* 如果有选项类型的字段，其选项值使用类json格式写入列备注字段，自动生成工具会自动为该列对应的属性和页面生成选项。如：表列为：`user_type` ,备注可以为：`用户类型 {normal:普通,vip:高级}`
 * 特别注意，强烈要求选项类（自动生成枚举类的）字段项目全局唯一名称，否则会生成enum名称相同的枚举相互覆盖。
 
 ### 代码生成
@@ -69,7 +78,7 @@ acooly框架为了方便开发和设计，以开发经验为基础，对使用ac
 * 通过freemarker作为模板引擎，定义一套或多套框架业务代码的最佳实践模板。
 * 工具化自动生成目标代码，作为业务开发的start...
 
-目前的工具，形态只有cil和swt的简单界面（太懒，忘记开发插件）。 主要通过配置文件驱动工具行为，主配置文件为application.properties.
+目前的工具主要通过配置文件驱动工具行为，主配置文件为`acoolycoder.properties`.
 
 下面以一个案例来简单说明这个开发过程。
 
@@ -91,8 +100,8 @@ CREATE TABLE `dm_customer` (
   `subject` varchar(128) DEFAULT NULL COMMENT '摘要',
   `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态 {0:无效,1:有效}',
   `customer_type` varchar(16) NOT NULL COMMENT '客户类型 {normal:普通,vip:重要,sepc:特别}',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+  create_time timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  update_time timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `comments` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -104,7 +113,7 @@ CREATE TABLE `dm_customer` (
 
 #### 配置
 
-打开工具包后，你会看到根目录下有application.properties文件，请打开进行配置。
+打开工具包后，你会看到根目录下有`acoolycoder.properties`文件，请打开进行配置。
 
 application.propertes
 
@@ -175,7 +184,7 @@ OK，如果上步成功，请回到你的IDE，刷新工程，你应该看到在
 
 #### 添加资源及菜单
 
-下面我们打开 CustomerManageController.java文件，如下：
+下面我们打开 `CustomerManageController.java`文件，如下：
 
 ```java
 @Controller
@@ -209,7 +218,7 @@ OK,acooly声称的70%的工作已完成，下面就要靠程序员来完成该�
 
 ### 程序员定制
 
-调整定制前，先不要shutdown服务器，我们首先要调整的是界面，回到IDE，进入src/main/webapp/manage/demo目录，我们主要调整的是列表界面和编辑界面（添加和修改界面合一）。
+调整定制前，先不要shutdown服务器，我们首先要调整的是界面，回到IDE，进入`src/main/resources/META-INF/resources/WEB-INF/jsp/manage/demo`目录，我们主要调整的是列表界面和编辑界面（添加和修改界面合一）。
 
 #### 视图界面
 

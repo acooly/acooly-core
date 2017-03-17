@@ -1,7 +1,6 @@
 package com.acooly.module.point;
 
-import com.acooly.core.common.dao.dialect.DatabaseType;
-import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
+import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
 import com.acooly.module.security.config.SecurityAutoConfig;
 import com.google.common.collect.Lists;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -20,17 +19,23 @@ import static com.acooly.module.point.PointProperties.PREFIX;
 @AutoConfigureAfter(SecurityAutoConfig.class)
 public class PointAutoConfig {
 	@Bean
-	public AbstractDatabaseScriptIniter pointScriptIniter() {
-		return new AbstractDatabaseScriptIniter() {
+	public StandardDatabaseScriptIniter pointScriptIniter() {
+		return new StandardDatabaseScriptIniter() {
 			@Override
-			public String getEvaluateSql(DatabaseType databaseType) {
-				return "SELECT count(*) FROM point_trade";
+			public String getEvaluateTable() {
+				return "point_trade";
 			}
 			
 			@Override
-			public List<String> getInitSqlFile(DatabaseType databaseType) {
-				return Lists.newArrayList("META-INF/database/mysql/point.sql","META-INF/database/mysql/point_urls.sql");
+			public String getComponentName() {
+				return "point";
 			}
+			
+			@Override
+			public List<String> getInitSqlFile() {
+				return Lists.newArrayList("point", "point_urls");
+			}
+			
 		};
 	}
 }

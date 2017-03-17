@@ -89,6 +89,7 @@ public class Lottery extends AbstractEntity {
      *
      * 开启后，抽奖成功会发布事件，便于后续业务处理扩展。
      */
+    @Enumerated(EnumType.STRING)
     private SimpleStatus publishEvent = SimpleStatus.disable;
 
     /**

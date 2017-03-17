@@ -22,7 +22,7 @@ import java.util.Date;
  *
  * @author acooly Date: 2016-08-14 22:10:17
  */
-@Table(name = "p_action_log")
+@Table(name = "portlet_action_log")
 @Getter
 @Setter
 public class ActionLog extends AbstractEntity {

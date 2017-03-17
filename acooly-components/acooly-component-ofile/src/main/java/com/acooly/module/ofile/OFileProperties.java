@@ -29,7 +29,13 @@ import static com.acooly.module.ofile.OFileProperties.PREFIX;
 @Slf4j
 public class OFileProperties implements InitializingBean {
 	public static final String PREFIX = "acooly.ofile";
+    /**
+     * 文件访问路径
+     */
 	private String serverRoot = "/media";
+    /**
+     * 文件存储路径
+     */
 	private String storageRoot = "/data/media/";
 	private String allowExtentions = "txt,zip,csv,xls,word,jpg,gif,png";
 	private long maxSize = 5242880;

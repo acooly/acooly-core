@@ -340,7 +340,7 @@ public class SecurityAutoConfig {
 
             @Override
             public List<String> getInitSqlFile(DatabaseType databaseType) {
-                return Lists.newArrayList("META-INF/database/mysql/security.sql");
+                return Lists.newArrayList("META-INF/database/security/"+databaseType.name()+"/security.sql");
             }
         };
     }

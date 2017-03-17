@@ -1,7 +1,6 @@
 package com.acooly.core.common.web;
 
 import com.acooly.core.common.boot.ApplicationContextHolder;
-import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.UnMappingMethodException;
 import com.acooly.core.common.service.EntityService;
@@ -89,6 +88,7 @@ public abstract class AbstractGenericsController<T extends Entityable, M extends
         try {
             response.sendError(404);
         } catch (Exception e) {
+            logger.error("response.sendError",e);
         }
         return null;
     }
@@ -131,9 +131,9 @@ public abstract class AbstractGenericsController<T extends Entityable, M extends
                     entityService = (M) BeanUtils.getDeclaredProperty(this, fields.get(0).getName());
                 }
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                logger.error("获得EntityManager类失败",e);
             } catch (NoSuchFieldException e) {
-                e.printStackTrace();
+                logger.error("获得EntityManager类失败",e);
             }
             Assert.notNull(entityService, "EntityService未能成功初始化");
         }

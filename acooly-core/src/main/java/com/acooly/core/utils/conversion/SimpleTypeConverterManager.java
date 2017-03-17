@@ -201,7 +201,7 @@ public class SimpleTypeConverterManager implements TypeConverterManager {
 		}
 		TypeConverter<?> typeConverter = m.get(sourceType);
 		if (typeConverter == null) {
-			if (typeConverter == null && !m.notSourceTypeConverter(sourceType)) {
+			if (!m.notSourceTypeConverter(sourceType)) {
 				typeConverter = m.getCache(sourceType);
 			}
 			if (typeConverter == null) {

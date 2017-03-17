@@ -56,7 +56,7 @@ public class CertNoPredicate implements Predicate<String> {
 		switch (certNo.length()) {
 		case 15:
 			// 15位身份号码检测
-			Pattern p = null;
+			Pattern p;
 			int year = Integer.parseInt(String.copyValueOf(certNoArr, 6, 2)) + 1900;
 			if (year % 4 == 0 || (year % 100 == 0 && year % 4 == 0)) {
 				p = LEAP_YEAR_15;

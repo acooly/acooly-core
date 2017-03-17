@@ -13,7 +13,6 @@ package com.acooly.core.utils.kryos;
 import java.util.Arrays;
 
 import com.acooly.core.utils.ShutdownHooks;
-import com.esotericsoftware.kryo.serializers.DefaultSerializers;
 import com.esotericsoftware.kryo.serializers.EnumNameSerializer;
 import org.springframework.util.Assert;
 

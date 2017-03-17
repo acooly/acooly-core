@@ -157,7 +157,8 @@ public class Dates {
 	}
 
 	public static Date minusDay(Date date) {
-		long oneDayMillisecond = 24 * 60 * 60 * 1000;
+	    //24 * 60 * 60 * 1000= 86400 000
+		long oneDayMillisecond = 86400000;
 		return addDate(date, -oneDayMillisecond);
 	}
 

@@ -90,7 +90,7 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
 
     @Override
     public void starting() {
-
+        // Do nothing
     }
 
     private void initEnvVars(BootApp bootApp) {

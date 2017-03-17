@@ -1,18 +1,12 @@
 package com.acooly.core.utils;
 
-import java.io.FileOutputStream;
+import jxl.Workbook;
+import jxl.write.*;
+import jxl.write.biff.CellValue;
+
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import jxl.Workbook;
-import jxl.write.Blank;
-import jxl.write.DateTime;
-import jxl.write.Label;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.biff.CellValue;
 
 /**
  * Excel 处理工具
@@ -142,7 +136,7 @@ public class ExcelUtils {
 
 	}
 
-	public static void main(String[] args) throws Exception {
+	/*public static void main(String[] args) throws Exception {
 		List<String> headerNames = new ArrayList<String>();
 		headerNames.add("编号");
 		headerNames.add("名称");
@@ -171,5 +165,5 @@ public class ExcelUtils {
 			System.out.println("Close stream after finished excel");
 			stream.close();
 		}
-	}
+	}*/
 }

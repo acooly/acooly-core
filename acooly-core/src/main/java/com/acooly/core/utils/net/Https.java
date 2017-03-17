@@ -318,7 +318,7 @@ public class Https {
 
 	private Map<String, String> readHeaders(HttpResponse httpResponse) {
 		Map<String, String> result = Maps.newHashMap();
-		List<String> headerValues = null;
+		List<String> headerValues;
 		for (Header header : httpResponse.getAllHeaders()) {
 			if (Strings.isNotBlank(header.getName())) {
 				if (result.containsKey(header.getName())) {
@@ -375,7 +375,9 @@ public class Https {
 			}
 			sb.append("]");
 		}
-		logger.debug(sb.toString());
+		if (logger.isDebugEnabled()){
+            logger.debug(sb.toString());
+        }
 		return post;
 	}
 
@@ -395,7 +397,7 @@ public class Https {
 			} else {
 				sb.append("?");
 			}
-			String value = null;
+			String value;
 			for (Entry<String, ?> entry : dataMap.entrySet()) {
 				if (entry.getValue() != null && Strings.isBlank(entry.getValue().toString()) && includeBlank) {
 					sb.append(entry.getKey()).append("=");
@@ -409,7 +411,10 @@ public class Https {
 			url = sb.toString();
 		}
 
-		logger.debug("get：{}", url);
+		if (logger.isDebugEnabled()){
+            logger.debug("get：{}", url);
+        }
+
 		HttpGet get = new HttpGet(url);
 		return get;
 	}
@@ -422,9 +427,13 @@ public class Https {
 	}
 
 	private void loggerRequest(HttpRequest request) {
-		logger.debug(request.getRequestLine().toString());
+        if (logger.isDebugEnabled()){
+            logger.debug(request.getRequestLine().toString());
+        }
 		for (Header header : request.getAllHeaders()) {
-			logger.debug("{}: {}", header.getName(), header.getValue());
+            if (logger.isDebugEnabled()){
+                logger.debug("{}: {}", header.getName(), header.getValue());
+            }
 		}
 	}
 

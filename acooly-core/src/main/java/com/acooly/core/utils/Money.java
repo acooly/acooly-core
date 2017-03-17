@@ -897,7 +897,10 @@ public class Money implements Serializable, Comparable<Object> {
 			total += ratios[i];
 		}
 
-		long remainder = cent;
+		//确保除数不能为零
+        total = total == 0 ? 1 : total;
+
+        long remainder = cent;
 
 		for (int i = 0; i < results.length; i++) {
 			results[i] = newMoneyWithSameCurrency((cent * ratios[i]) / total);
@@ -981,7 +984,7 @@ public class Money implements Serializable, Comparable<Object> {
 	public String dump() {
 		String lineSeparator = System.getProperty("line.separator");
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		sb.append("cent = ").append(cent).append(lineSeparator);
 		sb.append("currency = ").append(currency);

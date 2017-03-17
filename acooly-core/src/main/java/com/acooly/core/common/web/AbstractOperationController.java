@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.acooly.core.common.domain.Entityable;
+import com.acooly.core.common.exception.BusinessException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.ui.Model;
@@ -121,8 +122,9 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
 	 */
 	protected void doRemove(HttpServletRequest request, HttpServletResponse response, Model model, Serializable... ids)
 			throws Exception {
+
 		if (ids == null || ids.length == 0) {
-			throw new RuntimeException("请求参数中没有指定需要删除的实体Id");
+			throw new IllegalArgumentException("请求参数中没有指定需要删除的实体Id");
 		}
 		if (ids.length == 1) {
 			getEntityService().removeById(ids[0]);
@@ -148,22 +150,9 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
 	protected void doRemove(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
 		String[] ids = request.getParameterValues(getEntityIdName());
 		List<Long> idList = Lists.newArrayList();
-		if (ids != null && ids.length > 0) {
-			for (String id : ids) {
-				if (StringUtils.isNotBlank(id)) {
-					if (StringUtils.contains(id, ",")) {
-						String[] subIds = StringUtils.split(id, ",");
-						for (String subId : subIds) {
-							idList.add(Long.valueOf(subId));
-						}
-					} else {
-						idList.add(Long.valueOf(id));
-					}
-				}
-			}
-		}
-		if (idList.size() == 0) {
-			throw new RuntimeException("请求参数中没有指定需要删除的实体Id");
+        getIds(idList, ids);
+		if (idList.isEmpty()) {
+			throw new IllegalArgumentException("请求参数中没有指定需要删除的实体Id");
 		}
 		Serializable[] lid = idList.toArray(new Long[] {});
 		doRemove(request, response, model, lid);
@@ -183,25 +172,29 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
 	protected Serializable[] getRequestIds(HttpServletRequest request) {
 		String[] ids = request.getParameterValues(getEntityIdName());
 		List<Long> idList = Lists.newArrayList();
-		if (ids != null && ids.length > 0) {
-			for (String id : ids) {
-				if (StringUtils.isNotBlank(id)) {
-					if (StringUtils.contains(id, ",")) {
-						String[] subIds = StringUtils.split(id, ",");
-						for (String subId : subIds) {
-							idList.add(Long.valueOf(subId));
-						}
-					} else {
-						idList.add(Long.valueOf(id));
-					}
-				}
-			}
-		}
-		if (idList.size() == 0) {
+        getIds(idList, ids);
+        if (idList.size() == 0) {
 			throw new RuntimeException("请求参数中没有指定需要删除的实体Id");
 		}
 		return idList.toArray(new Long[] {});
 	}
+
+	private void getIds(List<Long> idList,String[] ids){
+        if (ids != null && ids.length > 0) {
+            for (String id : ids) {
+                if (StringUtils.isNotBlank(id)) {
+                    if (StringUtils.contains(id, ",")) {
+                        String[] subIds = StringUtils.split(id, ",");
+                        for (String subId : subIds) {
+                            idList.add(Long.valueOf(subId));
+                        }
+                    } else {
+                        idList.add(Long.valueOf(id));
+                    }
+                }
+            }
+        }
+    }
 
 	/**
 	 * 加载实体

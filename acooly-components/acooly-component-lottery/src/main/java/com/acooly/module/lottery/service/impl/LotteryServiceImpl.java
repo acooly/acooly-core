@@ -89,7 +89,7 @@ public class LotteryServiceImpl extends EntityServiceImpl<Lottery, LotteryDao> i
 
             // lock
             counter = getAwardCounter(award);
-            if ((award.getMaxWiner() > 0 && counter.getCount() >= award.getMaxWiner())) {
+            if ((award !=null && award.getMaxWiner() > 0 && counter.getCount() >= award.getMaxWiner())) {
                 throw new VoteLotteryException();
             }
 

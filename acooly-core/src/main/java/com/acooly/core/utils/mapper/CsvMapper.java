@@ -52,7 +52,6 @@ public class CsvMapper {
 			str = StringUtils.replace(str, "\"\"", "\"");
 			result.add(str);
 		}
-		matcher = null;
 		return result;
 	}
 
@@ -64,7 +63,7 @@ public class CsvMapper {
 	 */
 	public static String marshal(List<String> data) {
 		StringBuilder sb = new StringBuilder();
-		String field = null;
+		String field;
 		for (int i = 0; i < data.size(); i++) {
 			field = StringUtils.trimToEmpty(data.get(i));
 			if (StringUtils.contains(field, "\"")) {

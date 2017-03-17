@@ -34,8 +34,8 @@ import com.google.common.net.HttpHeaders;
 @Deprecated
 public class Servlets {
 
-	// -- 常用数值定义 --//
-	public static final long ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
+	// -- 常用数值定义 60 * 60 * 24 * 365 = 31536000- -//
+	public static final long ONE_YEAR_SECONDS = 31536000;
 
 	/**
 	 * 设置客户端缓存过期时间 的Header.

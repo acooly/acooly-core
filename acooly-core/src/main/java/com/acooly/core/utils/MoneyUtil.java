@@ -65,7 +65,7 @@ public class MoneyUtil {
 		char[] tmp_int_char = tmp_int.toCharArray();
 		String[] tmp_chs = new String[tmp_int_char.length];
 
-		int tab = 0;
+		int tab;
 		for (int i = 0; i < tmp_int_char.length; i++) {
 
 			tab = tmp_int_char.length - i - 1;

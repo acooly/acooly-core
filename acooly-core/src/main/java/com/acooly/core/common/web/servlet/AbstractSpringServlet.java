@@ -58,8 +58,8 @@ public abstract class AbstractSpringServlet extends HttpServlet {
 		try {
 			return Long.parseLong(getStringParameter(name));
 		} catch (Exception e) {
-			throw new RuntimeException("Parse init parameter to long failure.[" + name + ":" + getStringParameter(name)
-					+ "]");
+			throw new IllegalArgumentException("Parse init parameter to long failure.[" + name + ":" + getStringParameter(name)
+					+ "]"+e.getMessage());
 		}
 	}
 
@@ -67,8 +67,8 @@ public abstract class AbstractSpringServlet extends HttpServlet {
 		try {
 			return Integer.parseInt(getStringParameter(name));
 		} catch (Exception e) {
-			throw new RuntimeException("Parse init parameter to int failure.[" + name + ":" + getStringParameter(name)
-					+ "]");
+			throw new IllegalArgumentException("Parse init parameter to int failure.[" + name + ":" + getStringParameter(name)
+					+ "]"+e.getMessage());
 		}
 	}
 

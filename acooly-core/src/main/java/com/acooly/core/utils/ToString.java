@@ -46,9 +46,9 @@ import javassist.CtNewMethod;
 /**
  * 转换对象为字符串.
  * <p/>
- * 不输出的请在getter或者field上标注{@link com.yjf.common.util.ToString.Invisible}
+ * 不输出的请在getter或者field上标注{@link com.acooly.core.utils.ToString.Invisible}
  * <p/>
- * 需要掩码的请在getter或者field上标注{@link com.yjf.common.util.ToString.Maskable}
+ * 需要掩码的请在getter或者field上标注{@link com.acooly.core.utils.ToString.Maskable}
  * <p/>
  * java.util.Date会按照"yyyy-MM-dd HH:mm:ss"格式输出
  * <p/>

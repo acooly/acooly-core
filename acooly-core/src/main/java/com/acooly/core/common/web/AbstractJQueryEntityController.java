@@ -149,7 +149,6 @@ public abstract class AbstractJQueryEntityController<T extends Entityable, M ext
 		try {
 			List<T> entities = doImport(request, response);
 			result.setMessage("导入成功，批量插入数据" + entities.size() + "条");
-			entities = null;
 		} catch (Exception e) {
 			handleException(result, "Excel导入", e);
 		}

@@ -72,12 +72,13 @@ public class SpringResourceTemplateLoader implements TemplateLoader, Application
 		this.applicationContext = applicationContext;
 	}
 
-	public void setTemplateLoaderPath(String templateLoaderPath) {
-		if (!templateLoaderPath.endsWith("/")) {
-			templateLoaderPath += "/";
-		}
-		this.templateLoaderPath = templateLoaderPath;
-		this.templateLoaderPath = templateLoaderPath;
-	}
+    public void setTemplateLoaderPath(String templateLoaderPath) {
+        String temLoaderPath = templateLoaderPath;
+        if (!templateLoaderPath.endsWith("/")) {
+            temLoaderPath = templateLoaderPath + "/";
+        }
+        this.templateLoaderPath = temLoaderPath;
+        this.templateLoaderPath = temLoaderPath;
+    }
 
 }

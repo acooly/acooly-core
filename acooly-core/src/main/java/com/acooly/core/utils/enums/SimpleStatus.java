@@ -29,7 +29,7 @@ public enum SimpleStatus implements Messageable {
     private final String code;
     private final String message;
 
-    private SimpleStatus(String code, String message) {
+    SimpleStatus(String code, String message) {
         this.code = code;
         this.message = message;
     }

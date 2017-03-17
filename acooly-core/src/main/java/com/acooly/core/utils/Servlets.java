@@ -18,6 +18,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.acooly.core.common.exception.BusinessException;
 import com.google.common.base.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -39,21 +40,7 @@ public class Servlets {
 	public static final long ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
 
 	public static void writeResponse(HttpServletResponse response, String data) {
-		OutputStream output = null;
-		InputStream input = null;
-		try {
-			response.setCharacterEncoding("UTF-8");
-			response.setContentType(MediaType.JSON_UTF_8.toString());
-			output = response.getOutputStream();
-			input = new ByteArrayInputStream(data.getBytes(Charset.forName("UTF-8")));
-			IOUtils.copy(input, output);
-			output.flush();
-		} catch (Exception e) {
-			throw new RuntimeException("响应请求(flushResponse)失败:" + e.getMessage());
-		} finally {
-			IOUtils.closeQuietly(output);
-			IOUtils.closeQuietly(input);
-		}
+        writeResponse(response,data,MediaType.JSON_UTF_8.toString());
 	}
 
     public static void writeText(HttpServletResponse response, String data) {
@@ -83,7 +70,7 @@ public class Servlets {
 			IOUtils.copy(input, output);
 			output.flush();
 		} catch (Exception e) {
-			throw new RuntimeException("响应请求(flushResponse)失败:" + e.getMessage());
+			throw new BusinessException("响应请求(flushResponse)失败:" + e.getMessage());
 		} finally {
 			IOUtils.closeQuietly(output);
 			IOUtils.closeQuietly(input);

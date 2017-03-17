@@ -52,7 +52,7 @@ public class DateTypeConverter extends AbstractTypeConverter<Date> {
 			if (java.sql.Time.class == toType) {
 				df = DateFormat.getTimeInstance(DateFormat.MEDIUM, locale);
 			} else if (java.sql.Timestamp.class == toType) {
-				Date check = null;
+				Date check;
 				SimpleDateFormat dtfmt = (SimpleDateFormat) DateFormat.getDateTimeInstance(DateFormat.SHORT,
 						DateFormat.MEDIUM, locale);
 				SimpleDateFormat fullfmt = new SimpleDateFormat(dtfmt.toPattern() + MILLISECOND_FORMAT, locale);

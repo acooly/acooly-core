@@ -87,7 +87,7 @@ public class IPUtil {
 	 */
 	public static String long2IP(long ipLong) {
 
-		StringBuffer ip = new StringBuffer(String.valueOf(ipLong >> 24) + ".");
+		StringBuilder ip = new StringBuilder(String.valueOf(ipLong >> 24) + ".");
 
 		ip.append(String.valueOf((ipLong & 16711680) >> 16) + ".");
 		ip.append(String.valueOf((ipLong & 65280) >> 8) + ".");
@@ -439,7 +439,7 @@ public class IPUtil {
 		} catch (SocketException e) {
 			throw Exceptions.unchecked(e);
 		}
-		StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
 		for (int i = 0; i < mac.length; i++) {
 			if (i != 0) {
@@ -452,7 +452,7 @@ public class IPUtil {
 	}
 
 	private static String formatMac(byte[] mac) {
-		StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
 		for (int i = 0; i < mac.length; i++) {
 			if (i != 0) {

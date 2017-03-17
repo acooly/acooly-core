@@ -11,7 +11,6 @@ package com.acooly.module.security.config;
 
 import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
-import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
 import com.acooly.module.jpa.JPAAutoConfig;
 import com.acooly.module.security.captche.CaptchaServlet;
 import com.acooly.module.security.defence.XssDefenseFilter;
@@ -341,7 +340,7 @@ public class SecurityAutoConfig {
 
             @Override
             public List<String> getInitSqlFile(DatabaseType databaseType) {
-                return Lists.newArrayList("META-INF/database/mysql/security.sql");
+                return Lists.newArrayList("META-INF/database/security/"+databaseType.name()+"/security.sql");
             }
         };
     }

@@ -68,7 +68,7 @@ public class Paths {
 
 		String allClasspath = System.getProperty("java.class.path");
 		if (Strings.isNotBlank(allClasspath) && Strings.contains(allClasspath, WEB_INF)) {
-			String[] classpaths = null;
+			String[] classpaths;
 			if (Strings.contains(allClasspath, ":")) {
 				classpaths = Strings.split(":"); // unix
 			} else if (Strings.contains(allClasspath, ";")) {

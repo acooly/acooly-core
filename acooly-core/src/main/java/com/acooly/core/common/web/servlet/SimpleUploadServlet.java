@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.acooly.core.common.exception.BusinessException;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -71,11 +72,8 @@ public class SimpleUploadServlet extends HttpServlet {
 					config.getInitParameter("needRename"), "true") ? true
 					: false;
 		}
-		logger.info("Init parameters [root:" + root + " ,accessRoot:"
-				+ accessRoot + ", allowedExtensions:" + allowedExtensions
-				+ ", uploadFieldName:" + uploadFieldName + " ,needRename="
-				+ needRename + "]");
-		super.init(config);
+        logger.info("Init parameters [root:{} ,accessRoot: {}, allowedExtensions:{}, uploadFieldName:{} ,needRename={}]", root, accessRoot, allowedExtensions, uploadFieldName, needRename);
+        super.init(config);
 	}
 
 	/**
@@ -113,14 +111,14 @@ public class SimpleUploadServlet extends HttpServlet {
 					fields.put(item.getFieldName(), item);
 				}
 			}
-			logger.info("request fileds --> " + fields);
+			logger.info("request fileds --> {}",fields);
 
 			FileItem uploadFileItem = (FileItem) fields.get("upload");
 			String requestFileName = uploadFileItem.getName();
 
 			validateExtension(requestFileName);
 
-			logger.info("requestFileName --> " + requestFileName);
+			logger.info("requestFileName --> {}",requestFileName);
 			if (needRename) {
 				fileName = getFileRename() + "."
 						+ getFileExtension(requestFileName);
@@ -135,7 +133,7 @@ public class SimpleUploadServlet extends HttpServlet {
 			uploadFileItem.write(pathToSave);
 			return pathToSave;
 		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage());
+			throw new BusinessException(e);
 		}
 	}
 
@@ -196,10 +194,8 @@ public class SimpleUploadServlet extends HttpServlet {
 	protected void validateExtension(String requestFileName) {
 		String extName = getFileExtension(requestFileName);
 		if (!StringUtils.containsIgnoreCase(allowedExtensions, extName)) {
-			logger.warn("Extension is not allowed : [" + extName
-					+ "], we can support the following extensions:["
-					+ allowedExtensions + "]");
-			throw new RuntimeException("支持扩展名:" + extName + ", 目前支持扩展名："
+            logger.warn("Extension is not allowed : [{}], we can support the following extensions:[{}]", extName, allowedExtensions);
+            throw new BusinessException("支持扩展名:" + extName + ", 目前支持扩展名："
 					+ allowedExtensions);
 		}
 	}

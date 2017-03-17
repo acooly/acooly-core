@@ -17,6 +17,8 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.Map;
 
+import static com.acooly.core.utils.Servlets.getHost;
+
 @Controller
 @RequestMapping(value = "/manage/module/app/appVersion")
 public class AppVersionManagerController extends AppAbstractManageController<AppVersion, AppVersionService> {
@@ -71,19 +73,6 @@ public class AppVersionManagerController extends AppAbstractManageController<App
         return hostAndPath + "/" + getAppStorageRoot() + "/" + fileName;
     }
 
-
-    protected String getHost(HttpServletRequest request) {
-        String host = null;
-        try {
-            URL url = new URL(request.getRequestURL().toString());
-            host = url.getProtocol() + "://" + url.getHost();
-            if (url.getPort() != 80 && url.getPort() != -1) {
-                host += ":" + url.getPort();
-            }
-        } catch (Exception e) {
-        }
-        return host;
-    }
 
     @Override
     protected void doRemove(HttpServletRequest request, HttpServletResponse response, Model model, Serializable... ids)

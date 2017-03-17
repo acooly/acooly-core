@@ -2,6 +2,7 @@ package com.acooly.core.common.web;
 
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.domain.Entityable;
+import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.enums.Messageable;
@@ -194,7 +195,7 @@ public abstract class AbstractStandardEntityController<T extends Entityable, M e
             model.addAllAttributes(referenceData(request));
             T entity = loadEntity(request);
             if (entity == null) {
-                throw new RuntimeException("LoadEntity failure.");
+                throw new AppConfigException("LoadEntity failure.");
             }
             onShow(request, response, model, entity);
             model.addAttribute(getEntityName(), entity);

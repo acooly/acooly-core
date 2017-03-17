@@ -33,7 +33,7 @@ public class DependencyCheckRunListener implements SpringApplicationRunListener 
 
     @Override
     public void starting() {
-
+        // Do nothing
     }
 
     @Override

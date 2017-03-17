@@ -151,7 +151,10 @@ public class Ids {
 			return Strings.leftPad(String.valueOf(sn), SEQU_LENGTH, '0');
 		}
 
-		private String getNodeFlag() {
+		//Double-checked locking
+        //It does not work reliably in a platform-independent manner without additional synchronization for mutable instances of anything other than float or int
+		//为提高性能改为synchronized 方法
+        /*private String getNodeFlag() {
 			if (this.nodeFlag == null) {
 				synchronized (nodeFlagLock) {
 					if (this.nodeFlag == null) {
@@ -160,15 +163,21 @@ public class Ids {
 				}
 			}
 			return this.nodeFlag;
-		}
+		}*/
+		private synchronized String  getNodeFlag(){
+            if (this.nodeFlag == null) {
+                this.nodeFlag = generateNodeFlag();
+            }
+            return this.nodeFlag;
+        }
 
-		/**
-		 * 简单节点编码
-		 * 
-		 * 逻辑：Ip地址后三位，便于快速知道是哪个节点
-		 * 
-		 * @return
-		 */
+        /**
+         * 简单节点编码
+         *
+         * 逻辑：Ip地址后三位，便于快速知道是哪个节点
+         *
+         * @return
+         */
 		private String generateNodeFlag() {
 			String ipPostfix = null;
 			try {
@@ -184,9 +193,5 @@ public class Ids {
 			super();
 		}
 	}
-
-	public static void main(String[] args) throws Exception {
-        System.out.println(Ids.getDid());
-    }
 
 }

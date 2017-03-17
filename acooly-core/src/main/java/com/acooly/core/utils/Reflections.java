@@ -57,7 +57,7 @@ public class Reflections {
 	public static List<Object> invokeGetter(Object obj, String[] propertyNames) {
 		List<Object> list = new ArrayList<Object>(propertyNames.length);
 		for (String propertyName : propertyNames) {
-			Object propertyValue = null;
+			Object propertyValue;
 			if (StringUtils.contains(propertyName, ".")) {
 				String[] propertyNamePaths = StringUtils.split(propertyName, ".");
 				Object temp = obj;
@@ -115,7 +115,7 @@ public class Reflections {
 		try {
 			result = field.get(obj);
 		} catch (IllegalAccessException e) {
-			logger.error("不可能抛出的异常{}", e.getMessage());
+			logger.error("不可能抛出的异常{}", e);
 		}
 		return result;
 	}
@@ -313,9 +313,8 @@ public class Reflections {
 		Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
 
 		if (index >= params.length || index < 0) {
-			logger.warn("Index: " + index + ", Size of " + clazz.getSimpleName() + "'s Parameterized Type: "
-					+ params.length);
-			return Object.class;
+            logger.warn("Index: {}, Size of {}'s Parameterized Type: {}", params.length, index, clazz.getSimpleName());
+            return Object.class;
 		}
 		if (!(params[index] instanceof Class)) {
 			logger.warn(clazz.getSimpleName() + " not set the actual class on superclass generic parameter");

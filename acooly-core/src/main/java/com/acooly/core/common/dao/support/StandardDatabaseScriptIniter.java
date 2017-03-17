@@ -54,7 +54,7 @@ public abstract class StandardDatabaseScriptIniter implements ApplicationListene
 			String evaluateTable = getEvaluateTable();
 			Assert.notNull(componentName);
 			Assert.notNull(evaluateTable);
-			if (!evaluateTable.equals("SYS_USER")) {
+			if (!"SYS_USER".equals(evaluateTable)) {
 				Assert.isTrue(evaluateTable.contains(componentName));
 			}
 			String evaluateSql = String.format(EVALUATE_SQL_PATTERN, evaluateTable);
@@ -106,7 +106,7 @@ public abstract class StandardDatabaseScriptIniter implements ApplicationListene
 			EncodedResource encodedResource = new EncodedResource(scriptResource, Charsets.UTF_8);
 			ScriptUtils.executeSqlScript(dataSource.getConnection(), encodedResource);
 		} catch (SQLException e) {
-			throw new RuntimeException("初始化" + componentName + "失败", e);
+			throw new AppConfigException("初始化" + componentName + "失败", e);
 		}
 	}
 }

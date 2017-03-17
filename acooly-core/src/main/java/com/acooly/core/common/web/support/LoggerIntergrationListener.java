@@ -103,7 +103,7 @@ public class LoggerIntergrationListener extends Log4jConfigListener {
 					Log4jConfigurer.initLogging(location);
 				}
 			} catch (FileNotFoundException ex) {
-				throw new IllegalArgumentException("Invalid 'log4jConfigLocation' parameter: " + ex.getMessage());
+				throw new IllegalArgumentException("Invalid 'log4jConfigLocation' parameter: " + ex);
 			}
 		}
 	}

@@ -3,6 +3,7 @@ package com.acooly.core.common.web;
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.common.domain.Entityable;
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Encodes;
@@ -369,7 +370,7 @@ public abstract class AbstractFileOperationController<T extends Entityable, M ex
             out.flush();
         } catch (Exception e) {
             logger.warn("do export excel failure -> " + e.getMessage(), e);
-            throw new RuntimeException("执行导出过程失败[" + e.getMessage() + "]");
+            throw new BusinessException("执行导出过程失败[" + e.getMessage() + "]");
         } finally {
             IOUtils.closeQuietly(out);
             IOUtils.closeQuietly(workbook);
@@ -379,9 +380,9 @@ public abstract class AbstractFileOperationController<T extends Entityable, M ex
 
     protected int doExportExcelPage(List<T> list, int startRow, Sheet sheet) throws Exception {
         int rowNum = startRow;
-        String value = null;
-        Row row = null;
-        Cell cell = null;
+        String value;
+        Row row;
+        Cell cell;
         for (T entity : list) {
             List<String> entityData = doExportEntity(entity);
             row = sheet.createRow(rowNum);
@@ -441,7 +442,7 @@ public abstract class AbstractFileOperationController<T extends Entityable, M ex
             p.close();
         } catch (Exception e) {
             logger.warn("do export csv failure -> " + e.getMessage(), e);
-            throw new RuntimeException("CSV输出失败[" + e.getMessage() + "]");
+            throw new BusinessException("CSV输出失败[" + e.getMessage() + "]");
         } finally {
             IOUtils.closeQuietly(p);
         }
@@ -509,12 +510,12 @@ public abstract class AbstractFileOperationController<T extends Entityable, M ex
             }
             String filename = mfile.getOriginalFilename();
             if (mfile.getSize() > uploadConfig.getMaxSize()) {
-                throw new RuntimeException("文件[" + filename + "]大小操作限制，最大限制:" + uploadConfig.getMaxSize() / 1024 / 1024
+                throw new BusinessException("文件[" + filename + "]大小操作限制，最大限制:" + uploadConfig.getMaxSize() / 1024 / 1024
                         + "M");
             }
             String fileExtention = getFileExtention(filename);
             if (!StringUtils.containsIgnoreCase(uploadConfig.getAllowExtentions(), fileExtention)) {
-                throw new RuntimeException("文件[" + filename + "]类型不支持，支持类型:" + uploadConfig.getAllowExtentions());
+                throw new BusinessException("文件[" + filename + "]类型不支持，支持类型:" + uploadConfig.getAllowExtentions());
             }
 
             if (uploadConfig.isUseMemery()) {
@@ -571,7 +572,7 @@ public abstract class AbstractFileOperationController<T extends Entityable, M ex
                 pathFile.mkdirs();
             }
         } catch (Exception e) {
-            logger.warn("Build path failure --> " + e.getMessage());
+            logger.warn("Build path failure --> " + e);
         }
         return path;
 
@@ -676,7 +677,8 @@ public abstract class AbstractFileOperationController<T extends Entityable, M ex
     }
 
     protected static class UploadConfig {
-        private long maxSize = 1024 * 1024 * 32;
+        //1024 * 1024 * 32 = 33554432
+        private long maxSize = 33554432;
         private String allowExtentions = "txt,zip,csv,xls,jpg,gif,png";
         private String storageRoot = System.getenv("java.tmp");
         private boolean useMemery = true;

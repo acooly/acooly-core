@@ -200,7 +200,7 @@ public class BeanUtils {
 		Assert.hasText(fieldName, "FieldName required");
 		Assert.notNull(type, "Type required");
 
-		if (type.getName().equals("boolean")) {
+		if ("boolean".equals(type.getName())) {
 			return "is" + StringUtils.capitalize(fieldName);
 		} else {
 			return "get" + StringUtils.capitalize(fieldName);

@@ -84,7 +84,7 @@ public class DatabaseTableChecker implements ApplicationListener<DataSourceReady
                 //输出检查没通过的表名
                 if (!tableNamesNotPassCheck.isEmpty()) {
                     // 是否退出 System.exit(0);
-                    StringBuffer expMsg = new StringBuffer();
+                    StringBuilder expMsg = new StringBuilder();
                     expMsg.append("数据库表检查，有")
                         .append(tableNamesNotPassCheck.size())
                         .append("个表没有按照标准设置id或createTime或updateTime:")

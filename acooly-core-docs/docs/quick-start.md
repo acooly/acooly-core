@@ -1,5 +1,9 @@
 ## 快速开始
 
+开始之前，您可以把[acooly-showcase](http://gitlab.yiji/fintech/acooly-showcase)代码下载下来，在本地启动试试，
+然后按照下面的步骤one by one...
+
+
 ### 1. 使用`archtype`生成项目
 
 框架提供了`maven archtype`快速生成项目工程。在生成项目之前，我们需要确认如下参数：

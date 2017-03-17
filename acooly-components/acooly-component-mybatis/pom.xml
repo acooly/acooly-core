@@ -18,7 +18,7 @@
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>1.1.1</version>
         </dependency>
-        <!--mapper-->
+        <!--mapper  https://github.com/abel533/Mapper -->
         <dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-spring-boot-starter</artifactId>
@@ -27,8 +27,17 @@
                     <groupId>javax.persistence</groupId>
                     <artifactId>persistence-api</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>tk.mybatis</groupId>
+                    <artifactId>mapper</artifactId>
+                </exclusion>
             </exclusions>
-            <version>1.0.0</version>
+            <version>1.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper</artifactId>
+            <version>3.4.0</version>
         </dependency>
         <!--pagehelper-->
         <dependency>

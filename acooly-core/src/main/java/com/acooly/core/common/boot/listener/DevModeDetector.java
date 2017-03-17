@@ -40,7 +40,6 @@ public class DevModeDetector {
             properties.setAccessible(true);
             PROPERTIES= (Map<String, Object>) properties.get(null);
 		} catch (Exception e) {
-		    log.info("get dev properties catch exp");
 			HashMap properties = new HashMap();
 			properties.put("spring.thymeleaf.cache", "false");
 			properties.put("spring.freemarker.cache", "false");

@@ -11,6 +11,8 @@ package com.acooly.module.sms.sender.impl;
 
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.Ids;
+import com.acooly.core.utils.net.HttpResult;
+import com.acooly.core.utils.net.Https;
 import com.acooly.module.sms.SmsProperties;
 import com.acooly.module.sms.sender.ShortMessageSendException;
 import com.github.kevinsawicki.http.HttpRequest;
@@ -18,17 +20,6 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.CoreConnectionPNames;
-import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -38,8 +29,6 @@ import javax.annotation.PostConstruct;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 /**
@@ -64,18 +53,12 @@ public class EmayShortMessageSender extends AbstractShortMessageSender {
 		return send(list, content);
 	}
 	
-	protected String unmashall(HttpResponse result) {
-		StatusLine statusLine = result.getStatusLine();
-		if (statusLine.getStatusCode() != 200) {
-			throw new BusinessException("http StatusCode=" + statusLine.getStatusCode());
+	protected String unmashall(HttpResult result) {
+		if (result.getStatus() != 200) {
+			throw new BusinessException("http StatusCode=" + result.getStatus());
 		} else {
 			Map<String, String> response;
-			try {
-				response = convertXML(
-					org.apache.commons.lang.StringUtils.trim(EntityUtils.toString(result.getEntity())), tagNames);
-			} catch (IOException e) {
-				throw new BusinessException(e.getMessage(), e);
-			}
+			response = convertXML(org.apache.commons.lang.StringUtils.trim(result.getBody()), tagNames);
 			if (response != null) {
 				String errorCode = response.get("error");
 				String message = response.get("message");
@@ -113,7 +96,8 @@ public class EmayShortMessageSender extends AbstractShortMessageSender {
 	public void register(String cdkey, String password) {
 		logger.info("亿美短信帐号注册");
 		HttpRequest request = HttpRequest
-			.get("http://sdk999in.eucp.b2m.cn:8080/sdkproxy/regist.action?cdkey=" + cdkey + "&password=" + password).connectTimeout(timeout/2).readTimeout(timeout/2);
+			.get("http://sdk999in.eucp.b2m.cn:8080/sdkproxy/regist.action?cdkey=" + cdkey + "&password=" + password)
+			.connectTimeout(timeout / 2).readTimeout(timeout / 2);
 		logger.info("亿美短信帐号注册响应:{}", request.body());
 	}
 	
@@ -124,35 +108,23 @@ public class EmayShortMessageSender extends AbstractShortMessageSender {
 		
 		String sn = properties.getEmay().getSn();
 		String passwd = properties.getEmay().getPassword();
-		List<NameValuePair> formparams = Lists.newArrayList();
-		formparams.add(new BasicNameValuePair("cdkey", sn));
-		formparams.add(new BasicNameValuePair("password", passwd));
-		formparams.add(new BasicNameValuePair("seqid", Ids.getDid()));
-		formparams.add(new BasicNameValuePair("phone", mobileNo));
-		formparams.add(new BasicNameValuePair("addserial", ""));
-		formparams.add(new BasicNameValuePair("smspriority", "1"));
-		try {
-			formparams.add(new BasicNameValuePair("message", new String(content.getBytes(), "utf-8")));
-		} catch (UnsupportedEncodingException e) {
-			logger.error("短信内容编码不支持" + e.getMessage());
-		}
-		HttpClient httpclient = new DefaultHttpClient();
-		// 请求超时
-		httpclient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, timeout / 2);
-		// 读取超时
-		httpclient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, timeout / 2);
+		Map<String, String> dataMap = Maps.newHashMap();
+		dataMap.put("cdkey", sn);
+		dataMap.put("password", passwd);
 		
-		UrlEncodedFormEntity entity;
+		dataMap.put("seqid", Ids.getDid());
+		
+		dataMap.put("phone", mobileNo);
+		
+		dataMap.put("addserial", "");
+		dataMap.put("smspriority", "1");
+		dataMap.put("message", content);
+		Https instance = Https.getInstance();
+		instance.connectTimeout(timeout / 2);
+		instance.readTimeout(timeout / 2);
 		try {
-			try {
-				entity = new UrlEncodedFormEntity(formparams, "utf-8");
-			} catch (UnsupportedEncodingException e1) {
-				throw e1;
-			}
-			HttpPost httpPost = new HttpPost(SEND_URL999);
-			httpPost.setEntity(entity);
-			HttpResponse response = httpclient.execute(httpPost);
-			String result = unmashall(response);
+			HttpResult httpResult = instance.post(SEND_URL999, dataMap);
+			String result = unmashall(httpResult);
 			logger.info("发送短信完成 {mobile:{},content:{},result:{}}", mobileNo, content, result);
 			return result;
 		} catch (Exception e) {

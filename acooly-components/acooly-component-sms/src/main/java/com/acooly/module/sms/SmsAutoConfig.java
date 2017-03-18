@@ -39,7 +39,7 @@ public class SmsAutoConfig {
 		return new StandardDatabaseScriptIniter() {
             @Override
             public String getEvaluateTable() {
-                return "sys_sms_log";
+                return "sms_log";
             }
 
             @Override

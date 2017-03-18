@@ -100,7 +100,7 @@ public class OpenAPIAutoConfig {
             @Override
             public List<String> getInitSqlFile(DatabaseType databaseType) {
                 if (databaseType == DatabaseType.mysql) {
-                    return Lists.newArrayList("META-INF/database/mysql/openapi-manage.sql","META-INF/database/mysql/openapi-manage-urls.sql");
+                    return Lists.newArrayList("META-INF/database/mysql/openapi-manage.sql","META-INF/database/openapi/mysql/initTest.sql","META-INF/database/mysql/openapi-manage-urls.sql");
                 } else {
                     throw new UnsupportedOperationException("还不支持oracle");
                 }

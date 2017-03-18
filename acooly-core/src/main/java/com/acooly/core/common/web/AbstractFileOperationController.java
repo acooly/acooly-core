@@ -1,7 +1,6 @@
 package com.acooly.core.common.web;
 
 import com.acooly.core.common.dao.support.PageInfo;
-import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityService;
@@ -10,12 +9,14 @@ import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.Reflections;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.mapper.CsvMapper;
-import com.google.common.net.HttpHeaders;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -389,8 +390,15 @@ public abstract class AbstractFileOperationController<T extends Entityable, M ex
             for (int cellNum = 0; cellNum < entityData.size(); cellNum++) {
                 value = Strings.trimToEmpty(entityData.get(cellNum));
                 cell = row.createCell(cellNum);
-                if (Strings.isNumeric(value)) {
-                    cell.setCellValue(Double.valueOf(value));
+                // 简单特殊操作处理一些特殊的数字，不采用反射和类型判断处理。
+                if (Strings.isNumber(value)) {
+                    if (Strings.length(value) > 1 && Strings.startsWith(value, "0") && !Strings.startsWith(value, "0.")) {
+                        cell.setCellValue(value);
+                    } else if (Strings.length(value) > 11) {
+                        cell.setCellValue(value);
+                    } else {
+                        cell.setCellValue(Double.valueOf(value));
+                    }
                 } else {
                     cell.setCellValue(value);
                 }

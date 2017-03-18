@@ -29,8 +29,8 @@ public class AppClientAuthInfoRealm extends CacheableAuthInfoRealm {
 	
 	@Override
 	public String getSecretKey(String partnerId) {
-		if (partnerId.equals(appOpenapiProperties.getAnonymonsAccessKey())) {
-			return appOpenapiProperties.getAnonymonsSecretKey();
+		if (partnerId.equals(appOpenapiProperties.getAnonymous().getAccessKey())) {
+			return appOpenapiProperties.getAnonymous().getSecretKey();
 		} else {
 			AppCustomer appCustomer = appCustomerService.loadAppCustomer(partnerId, EntityStatus.Enable);
 			return appCustomer == null ? "" : appCustomer.getSecretKey();
@@ -40,8 +40,8 @@ public class AppClientAuthInfoRealm extends CacheableAuthInfoRealm {
 	
 	@Override
 	public List<String> getAuthorizedServices(String partnerId) {
-		if (partnerId.equals(appOpenapiProperties.getAnonymonsAccessKey())) {
-			return appOpenapiProperties.getAnonymonsService();
+		if (partnerId.equals(appOpenapiProperties.getAnonymous().getAccessKey())) {
+			return appOpenapiProperties.getAnonymous().getServices();
 		} else {
 			return Lists.newArrayList("*");
 		}

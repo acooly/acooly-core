@@ -2,6 +2,8 @@
 
 提供app访问的openapi接口
 
+1. app通过匿名帐号，访问匿名服务服务。参考showcase:`com.ac.test.openapi.AnonymousAppApiServiceTest#testBannerList`
+2. 访问非匿名服务时，先放问登录接口，下发动态密钥，再通过动态密钥访问服务。参考showcase:`com.ac.test.openapi.AnonymousAppApiServiceTest#testLogin`
 
 ## 2. 配置
 

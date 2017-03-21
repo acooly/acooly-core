@@ -135,6 +135,9 @@ public class SecurityProperties {
 		@Getter
 		@Setter
 		private boolean enable = true;
+        /**
+         * 路径支持ant表达式
+         */
 		@Getter
 		@Setter
 		private Map<String, List<String>> exclusions = Maps.newHashMap();

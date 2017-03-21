@@ -10,6 +10,8 @@
 package com.acooly.module.cache;
 
 import com.acooly.module.cache.declarative.DefaultCachingConfigurer;
+import com.acooly.module.cache.declarative.RedisInfoChecker;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.CachingConfigurer;
 import org.springframework.cache.annotation.EnableCaching;
@@ -36,7 +38,15 @@ public class CacheAutoConfig {
 		template.setDefaultSerializer(springSessionDefaultRedisSerializer());
 		return template;
 	}
-	
+
+    @Bean
+    @ConditionalOnProperty(value = "acooly.cache.checkVersion",matchIfMissing = true)
+    public RedisInfoChecker checkRedisVersion(RedisTemplate redisTemplate) {
+        RedisInfoChecker checker = new RedisInfoChecker(redisTemplate);
+        checker.checkRedisVersion();
+        return checker;
+    }
+
 	@Bean
 	public CachingConfigurer cachingConfigurer(RedisTemplate redisTemplate, CacheProperties cacheProperties) {
 		return new DefaultCachingConfigurer(redisTemplate, cacheProperties.getExpireTime());

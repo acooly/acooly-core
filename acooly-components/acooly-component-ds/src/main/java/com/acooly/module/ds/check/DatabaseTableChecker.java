@@ -5,7 +5,6 @@ import com.acooly.core.common.dao.support.DataSourceReadyEvent;
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.module.ds.DruidProperties;
 import com.acooly.module.ds.check.dic.Column;
-import com.acooly.module.ds.check.dic.Table;
 import com.acooly.module.ds.check.loader.TableLoader;
 import com.acooly.module.ds.check.loader.TableLoaderProvider;
 import com.google.common.base.Splitter;
@@ -50,7 +49,6 @@ public class DatabaseTableChecker implements ApplicationListener<DataSourceReady
     public void onApplicationEvent(DataSourceReadyEvent event) {
         //tofix 在开发者模式下 AbstractDatabaseScriptIniter 同样监听DataSourceReadyEvent
         //      在执行数据库脚本初始化未完成的时候 执行了表检查 第一次检查结果会不准确
-
         //开发者模式下检查
         if (!Apps.isDevMode()) {
             return;
@@ -66,21 +64,20 @@ public class DatabaseTableChecker implements ApplicationListener<DataSourceReady
                 if (!passVersion) {
                     throw new AppConfigException("为正常运行，mysql数据库版本5.6以上版本 !!!");
                 }
-                //先获取所有表名
-                List<String> tableNames = tableLoader.getTableNames(schema);
-                //去掉排除的表
-                String excludedDatabaseStr = excludedDatabaseTables.values().toString();
-                tableNames.removeAll(Splitter.on(',').trimResults().omitEmptyStrings().splitToList(excludedDatabaseStr.substring(1, excludedDatabaseStr.length() - 1)));
+                Map<String, List<Column>> allTables = tableLoader.loadAllTables(schema);
 
-                tableNames.forEach(tableName -> {
-                    //获取表信息
-                    Table table = tableLoader.loadTable(schema, tableName);
-                    //获取列信息并比较
-                    boolean hasColums = tableLoader.checkTableColums(table);
+                //去掉不需要检查的表
+                String excludedDatabaseStr = excludedDatabaseTables.values().toString();
+                allTables.keySet().removeAll(Splitter.on(',').trimResults().omitEmptyStrings().splitToList(excludedDatabaseStr.substring(1, excludedDatabaseStr.length() - 1)));
+                //检查表结构
+                for (Map.Entry<String, List<Column>> entry : allTables.entrySet()) {
+                    String tableName = entry.getKey();
+                    List<Column> columns = entry.getValue();
+                    boolean hasColums = tableLoader.checkTableColums(columns);
                     if (!hasColums) {
                         tableNamesNotPassCheck.add(tableName);
                     }
-                });
+                }
                 //输出检查没通过的表名
                 if (!tableNamesNotPassCheck.isEmpty()) {
                     // 是否退出 System.exit(0);
@@ -103,7 +100,7 @@ public class DatabaseTableChecker implements ApplicationListener<DataSourceReady
         });
     }
 
-    private  String getMysqlschema(DataSource dataSource) throws SQLException {
+    private String getMysqlschema(DataSource dataSource) throws SQLException {
         String scheme = StringUtils.substringAfterLast(dataSource.getConnection().getMetaData().getURL(), "/");
         if (StringUtils.contains(scheme, "?")) {
             scheme = StringUtils.substringBefore(scheme, "?");

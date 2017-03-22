@@ -1,19 +1,12 @@
 package com.acooly.core.utils;
 
-import java.lang.management.ManagementFactory;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
-
-import com.acooly.core.common.boot.Apps;
-import com.google.common.collect.Lists;
+import com.acooly.core.utils.system.IPUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.acooly.core.utils.system.IPUtil;
-import sun.jvmstat.monitor.MonitoredHost;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * orderNo生成器

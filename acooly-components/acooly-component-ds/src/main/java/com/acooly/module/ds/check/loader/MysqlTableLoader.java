@@ -87,8 +87,6 @@ public class MysqlTableLoader implements TableLoader {
             }
             tableMetadata.setColumns(columnMetadatas);
             //logger.info("Load table metadata: " + tableName);
-            rs.close();
-            stmt.close();
             return tableMetadata;
         } catch (Exception e) {
             throw new RuntimeException("获取表名失败：" + e.getMessage());
@@ -200,8 +198,6 @@ public class MysqlTableLoader implements TableLoader {
             while (rs.next()) {
                 tables.add(rs.getString(1));
             }
-            rs.close();
-            stmt.close();
         } catch (Exception e) {
             e.printStackTrace(System.out);
             throw new RuntimeException("获取表名失败：" + e.getMessage(), e);
@@ -240,8 +236,6 @@ public class MysqlTableLoader implements TableLoader {
             while (rs.next()) {
                 return checkVersion(rs.getString(1));
             }
-            rs.close();
-            stmt.close();
         } catch (Exception e) {
             e.printStackTrace(System.out);
             throw new RuntimeException("获取数据库版本失败：" + e.getMessage(), e);

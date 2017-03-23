@@ -119,6 +119,10 @@ Mybatis增加单表增删改查通用能力，不用写一行sql语句，单表�
              */
             @Select("SELECT * FROM city WHERE state = #{state}")
             List<City> findByState(String state);
+            
+            @Delete("DELETE FROM city WHERE name =#{name}")
+            void deleteByName(String name);
+            
         }
 
 

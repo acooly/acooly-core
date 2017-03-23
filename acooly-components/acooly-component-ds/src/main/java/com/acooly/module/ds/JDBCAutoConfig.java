@@ -84,9 +84,4 @@ public class JDBCAutoConfig {
 		return new TransactionTemplate(platformTransactionManager);
 	}
 
-    @Bean
-    @ConditionalOnProperty(value = "acooly.ds.checker.checkColumn")
-    public DatabaseTableChecker databaseTableChecker(DruidProperties druidProperties) {
-        return new DatabaseTableChecker(druidProperties);
-    }
 }

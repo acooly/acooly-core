@@ -10,15 +10,19 @@
 package com.acooly.module.appservice;
 
 import com.acooly.core.common.boot.EnvironmentHolder;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import static com.acooly.module.appservice.AppServiceProperties.PREFIX;
 
 /**
  * @author qiubo@yiji.com
  */
 @Configuration
 @EnableConfigurationProperties({ AppServiceProperties.class })
+@ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 public class AppServiceAutoConfiguration {
 	
 	@Bean

@@ -120,3 +120,39 @@ Mybatis增加单表增删改查通用能力，不用写一行sql语句，单表�
             @Select("SELECT * FROM city WHERE state = #{state}")
             List<City> findByState(String state);
         }
+
+
+## 2.3 使用多个数据源
+
+### 2.3.1 配置
+
+    #配置第一个数据源accout
+    accout.ds.url=jdbc:mysql://127.0.0.1:3306/accout
+    accout.ds.username=root
+    accout.ds.password=123456
+    #配置第二个数据源trade
+    trade.ds.url=jdbc:mysql://192.168.57.22:3306/trade
+    trade.ds.username=root
+    trade.ds.password=root
+    #启用多数据源支持
+    acooly.mybatis.supportMultiDataSource=true
+    
+    #配置accout mybatis
+    
+    # 数据源前缀
+    acooly.mybatis.multi.accout.dsPrefix=accout.ds
+    # dao包路径，位于此包下的dao会使用accout数据库
+    acooly.mybatis.multi.accout.scanPackage=com.fintech.it.account
+    # 配置为主数据库，多个数据源时只能配置一个主数据库
+    acooly.mybatis.multi.accout.primary=true
+    
+    #配置trade mybatis
+    acooly.mybatis.multi.trade.dsPrefix=trade.ds
+    # dao包路径，位于此包下的dao会使用trade数据库
+    acooly.mybatis.multi.trade.scanPackage=com.fintech.it.trade
+
+### 2.3.2 使用注意
+
+1. 主数据源提供的相关beanName为:dataSource、jdbcTemplate、pagedJdbcTemplate、sqlSessionFactory
+2. 非主数据源提供的相关beanName为(以上面为例):tradeDataSource、tradeJdbcTemplate、tradePagedJdbcTemplate、tradeSqlSessionFactory
+3. 目前不支持进程内的多数据源分布式事务！

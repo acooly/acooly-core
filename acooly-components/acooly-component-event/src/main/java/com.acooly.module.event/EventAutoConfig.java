@@ -60,7 +60,7 @@ public class EventAutoConfig {
 				.getBeansWithAnnotation(EventHandler.class);
 			for (Object o : beansWithAnnotation.values()) {
 				eventBus.subscribe(o);
-				log.info("注册事件处理器:", o.getClass().getName());
+				log.info("注册事件处理器:{}", o.getClass().getName());
 			}
 		}
 		
@@ -70,7 +70,7 @@ public class EventAutoConfig {
 				.getBeansWithAnnotation(EventHandler.class);
 			for (Object o : beansWithAnnotation.values()) {
 				eventBus.unsubscribe(o);
-				log.info("销毁事件处理器:", o.getClass().getName());
+				log.info("销毁事件处理器:{}", o.getClass().getName());
 			}
 		}
 	}

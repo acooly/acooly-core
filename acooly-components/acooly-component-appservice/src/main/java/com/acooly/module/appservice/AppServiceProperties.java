@@ -9,7 +9,6 @@
  */
 package com.acooly.module.appservice;
 
-
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.utils.validate.Validators;
 import com.acooly.module.appservice.ex.ExceptionHandler;
@@ -25,6 +24,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 public class AppServiceProperties {
 	
+	private boolean enable;
+	
 	public static final String PREFIX = "acooly.appService";
 	
 	private static final String INTERNAL_EXCEPTION_HANDLER_PACKAGE = "com.acooly.module.appservice.ex,"
@@ -33,7 +34,7 @@ public class AppServiceProperties {
 	 * {@link AppService} annotation扫描路径
 	 */
 	@NotBlank
-	private String appServiceScanPackage=Apps.getBasePackage();
+	private String appServiceScanPackage = Apps.getBasePackage();
 	
 	/**
 	 * {@link ExceptionHandler} 实现类扫描路径
@@ -51,7 +52,6 @@ public class AppServiceProperties {
 		}
 		return INTERNAL_EXCEPTION_HANDLER_PACKAGE;
 	}
-
 	
 	public void check() {
 		Validators.assertJSR303(this);

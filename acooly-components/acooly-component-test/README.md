@@ -79,7 +79,7 @@
     	@CsvParameter(value = "test.csv")
     	//测试命名，方便测试用例失败时，IDE可视化展示
     	@TestCaseName("id={0}")
-    	//参数自动转换
+    	//参数自动转换,我们可以充分利用代码生成器生成的entity
     	public void test2(MultiDSTest.ParamDTO dto) {
     		log.info("{}", dto);
     	}

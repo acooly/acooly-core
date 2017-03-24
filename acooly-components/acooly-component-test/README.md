@@ -2,6 +2,9 @@
 
 此组件提供测试支持
 
+关于spring-boot对测试的支持，参考[blog](https://spring.io/blog/2016/04/15/testing-improvements-in-spring-boot-1-4)
+
+
 ## 2. 使用说明
 
 ### 2.1 单元测试

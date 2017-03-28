@@ -81,3 +81,8 @@
 ### 2.4 如何修改http缓存时间？
     
 通过`acooly.web.cacheMaxAge`修改http 缓存时间,-1=不设置,0=第二次请求需要和服务器协商,大于0=经过多少秒后才过期。
+
+### 2.5 关于jsp
+
+1. jsp不能放在`assemble`模块，这会导致应用打成jar包后找不到jsp文件(spring-boot-maven-plugin插件生成了自定义jar包，并自定义了classloader，在初始化tomcat时，不会把assemble包下的`resources/META-INF`加入到tomcat的`StandardRoot`，代码参考`TomcatResources#addClasspathResources`)
+2. jsp文件必须放非`assemble`模块下的`src/main/resources/META-INF/resources/WEB-INF/jsp`路径

@@ -80,6 +80,6 @@ public interface PointTradeService extends EntityService<PointTrade> {
 	 * @param endTime
 	 * @param memo
 	 */
-	public void pointClear(String startTime, String endTime, String businessData);
+	public void pointClearThread(String startTime, String endTime, String memo);
 
 }

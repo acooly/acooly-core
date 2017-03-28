@@ -47,13 +47,13 @@ public class PointAccountServiceImpl extends EntityServiceImpl<PointAccount, Poi
 			pointAccount.setUserName(userName);
 			pointAccount.setBalance(pointAccount.getBalance() + point);
 			pointAccount.setTotalProducePoint(pointAccount.getTotalProducePoint() + point);
-			PointGrade pointGrade = pointGradeService.getSectionPoint(pointAccount.getTotalProducePoint());
+			PointGrade pointGrade = pointGradeService.getSectionPoint(pointAccount);
 			pointAccount.setGradeId(pointGrade.getId());
 			getEntityDao().create(pointAccount);
 		} else {
 			pointAccount.setBalance(pointAccount.getBalance() + point);
 			pointAccount.setTotalProducePoint(pointAccount.getTotalProducePoint() + point);
-			PointGrade pointGrade = pointGradeService.getSectionPoint(pointAccount.getTotalProducePoint());
+			PointGrade pointGrade = pointGradeService.getSectionPoint(pointAccount);
 			pointAccount.setGradeId(pointGrade.getId());
 			getEntityDao().update(pointAccount);
 		}
@@ -79,7 +79,7 @@ public class PointAccountServiceImpl extends EntityServiceImpl<PointAccount, Poi
 		if (pointAccount.getBalance() - pointAccount.getFreeze() < 0) {
 			throw new BusinessException(userName + ":积分余额不足,无法完成积分消费");
 		}
-		PointGrade pointGrade = pointGradeService.getSectionPoint(pointAccount.getTotalProducePoint());
+		PointGrade pointGrade = pointGradeService.getSectionPoint(pointAccount);
 		pointAccount.setGradeId(pointGrade.getId());
 		getEntityDao().update(pointAccount);
 		return pointAccount;

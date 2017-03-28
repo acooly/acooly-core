@@ -8,7 +8,12 @@ package com.acooly.module.point.service.impl;
 
 import java.util.Map;
 
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
 import com.acooly.core.common.dao.support.PageInfo;
@@ -36,10 +41,15 @@ import com.google.common.collect.Maps;
 @Service("pointTradeService")
 public class PointTradeServiceImpl extends EntityServiceImpl<PointTrade, PointTradeDao> implements PointTradeService {
 
+	private static final Logger logger = LoggerFactory.getLogger(PointTradeServiceImpl.class);
+
 	@Autowired
 	private PointAccountService pointAccountService;
 	@Autowired
 	private PointStatisticsService pointStatisticsService;
+
+	@Resource(name = "asyncTaskExecutor")
+	private TaskExecutor asyncTaskExecutor;
 
 	@Override
 	public PointTrade pointProduce(String userName, long point, String businessData) {
@@ -73,6 +83,21 @@ public class PointTradeServiceImpl extends EntityServiceImpl<PointTrade, PointTr
 		return pointTrade;
 	}
 
+	public void pointClearThread(String startTime, String endTime, String businessData) {
+		logger.info("启动新建线程,处理积分清零");
+		asyncTaskExecutor.execute(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(3 * 1000);
+				} catch (Exception e) {
+					logger.warn("启动新建线程,处理积分清零失败");
+				}
+				pointClear(startTime, endTime, businessData);
+			}
+		});
+	}
+
 	public void pointClear(String startTime, String endTime, String businessData) {
 		pointStatisticsService.pointStatistics(startTime, endTime);
 		PageInfo<PointStatistics> pageInfo = new PageInfo<PointStatistics>();
@@ -81,14 +106,13 @@ public class PointTradeServiceImpl extends EntityServiceImpl<PointTrade, PointTr
 		maps.put("LTE_endTime", endTime);
 		PageInfo<PointStatistics> pageInfos = pointStatisticsService.query(pageInfo, maps);
 		long totalPage = pageInfos.getTotalPage();
-		for (int i = 1; i < totalPage + 1; i++) {
-			pageInfo.setCurrentPage(i);
+		for (int i = 0; i < totalPage + 1; i++) {
+			pageInfo.setCurrentPage(1);
 			PageInfo<PointStatistics> pages = pointStatisticsService.query(pageInfo, maps);
 			for (PointStatistics pointStatistics : pages.getPageResults()) {
 				if (pointStatistics.getStatus() == PointStaticsStatus.init) {
 					Long point = pointStatistics.getPoint();
 					pointStatistics.setStatus(PointStaticsStatus.finish);
-
 					PointAccount pointAccount = pointAccountService.findByUserName(pointStatistics.getUserName());
 					Long availablePoint = pointAccount.getAvailable();
 					if (availablePoint <= point) {

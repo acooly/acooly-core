@@ -6,6 +6,7 @@
  */
 package com.acooly.module.point.service.impl;
 
+import com.acooly.module.event.EventBus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,6 @@ import com.acooly.module.point.domain.PointAccount;
 import com.acooly.module.point.domain.PointGrade;
 import com.acooly.module.point.event.PointEvent;
 import com.acooly.module.point.service.PointGradeService;
-import com.google.common.eventbus.EventBus;
 
 /**
  * 积分等级 Service实现

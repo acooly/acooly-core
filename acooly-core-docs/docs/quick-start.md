@@ -126,5 +126,5 @@
 1. `Main`类所在的包(basePackage)会被扫描到spring 容器
 2. 应用实体扫描包：${basePackage}.**.entity
 3. 组件实体扫描包: com.acooly.module.**.entity
-4. 应用数据访问层包扫描路径：${basePackage}.**.entity
+4. 应用数据访问层包扫描路径：${basePackage}.**.dao
 5. 组件数据访问层包扫描路径：com.acooly.module.**.dao

@@ -9,9 +9,11 @@
  */
 package com.acooly.module.test.param;
 
+import com.google.common.base.Charsets;
 import junitparams.custom.ParametersProvider;
 import junitparams.internal.Utils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.runners.model.FrameworkMethod;
 import org.springframework.beans.BeanWrapper;
@@ -22,9 +24,8 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
+import java.lang.reflect.Parameter;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class CsvProvider implements ParametersProvider<CsvParameter> {
 	private FrameworkMethod frameworkMethod;
 	private boolean needConvert = false;
 	private Class<?> parameterType = null;
-	private ConversionService conversionService=new DefaultConversionService();
+	private ConversionService conversionService = new DefaultConversionService();
 	
 	public CsvProvider(FrameworkMethod frameworkMethod) {
 		this.frameworkMethod = frameworkMethod;
@@ -59,6 +60,9 @@ public class CsvProvider implements ParametersProvider<CsvParameter> {
 	@Override
 	public Object[] getParameters() {
 		Reader reader = buildReader();
+		if (reader == null) {
+			return new Object[0];
+		}
 		BufferedReader br = new BufferedReader(reader);
 		String line;
 		List<Object> result = new LinkedList<>();
@@ -66,12 +70,15 @@ public class CsvProvider implements ParametersProvider<CsvParameter> {
 		String[] header = null;
 		try {
 			while ((line = br.readLine()) != null) {
-
+				
 				lineNo++;
 				if (lineNo == 1) {
 					log.info("header:{}", line);
 					header = Utils.splitAtCommaOrPipe(line);
 				} else {
+					if (line.contains("~")) {
+						line = line.replace("~", "");
+					}
 					result.add(parseLine(header, line, lineNo));
 				}
 				
@@ -112,8 +119,25 @@ public class CsvProvider implements ParametersProvider<CsvParameter> {
 			}
 			
 		} else {
-			throw new RuntimeException("数据文件[" + filepath + "]不存在");
+			String file = this.frameworkMethod.getDeclaringClass().getClassLoader().getResource(".").getFile();
+			file = file.substring(0, file.indexOf("target/test-classes/"));
+			String baseDir = file + "src/test/resources/";
+			String csvFile = baseDir + filepath;
+			StringBuilder header = new StringBuilder();
+			Parameter[] parameters = this.frameworkMethod.getMethod().getParameters();
+			for (Parameter parameter : parameters) {
+				String paramName = parameter.getName();
+				header.append(paramName).append(",");
+			}
+			header.deleteCharAt(header.length() - 1);
+			header.append("\n");
+			log.warn("csv文件不存在，创建默认csv文件:[{}]", csvFile);
+			try {
+				FileUtils.write(new File(csvFile), header.toString(), Charsets.UTF_8);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			return null;
 		}
-		
 	}
 }

@@ -104,7 +104,7 @@
 
 ### 2.5.3  **@includePage**
 
-该标签的作用是将path中指定的请求地址html内容导入到当前模板。其原理是在容器内发起include请求。参考`javax.servlet.RequestDispatcher#include`.此标签特别适合做服务端页面模块重用。
+该标签的作用是将path中指定的请求地址html内容导入到当前模板。其原理是在指令内发起include请求。参考`javax.servlet.RequestDispatcher#include`.此标签特别适合做服务端页面模块重用。
 
      <@includePage path="/testFtl.html"/>
 

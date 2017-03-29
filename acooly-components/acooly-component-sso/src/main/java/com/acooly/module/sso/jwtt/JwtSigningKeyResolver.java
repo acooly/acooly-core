@@ -6,7 +6,7 @@ import java.security.Key;
 import javax.crypto.spec.SecretKeySpec;
 
 
-import com.acooly.module.sso.dic.AuthConstants;
+import com.acooly.core.utils.security.JWTUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwsHeader;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -26,7 +26,7 @@ public class JwtSigningKeyResolver extends SigningKeyResolverAdapter {
 
     @Override
     public byte[] resolveSigningKeyBytes(JwsHeader header, Claims claims) {
-        return AuthConstants.SIGN_KEY.getBytes();
+        return JWTUtils.SIGN_KEY.getBytes();
     }
 
 }

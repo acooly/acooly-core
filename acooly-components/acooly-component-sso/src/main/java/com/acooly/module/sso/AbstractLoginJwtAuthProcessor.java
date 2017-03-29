@@ -3,7 +3,7 @@ package com.acooly.module.sso;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.acooly.module.sso.dic.AuthConstants;
+import com.acooly.core.utils.security.JWTUtils;
 import com.acooly.module.sso.jwtt.JwtSigningKeyResolver;
 import org.apache.commons.lang3.StringUtils;
 
@@ -37,11 +37,11 @@ public abstract class AbstractLoginJwtAuthProcessor<T> implements LoginAuthProce
      */
     protected void setRequestAttributes(HttpServletRequest request, Jwt<Header, Claims> jwt) {
         Claims claims = jwt.getBody();
-        request.setAttribute(AuthConstants.KEY_ISS, claims.get(AuthConstants.CLAIMS_KEY_ISS));
-        request.setAttribute(AuthConstants.KEY_SUB_NAME, claims.get(AuthConstants.CLAIMS_KEY_SUB));
-        request.setAttribute(AuthConstants.KEY_AUD, claims.get(AuthConstants.CLAIMS_KEY_AUD));
-        request.setAttribute(AuthConstants.KEY_IAT, claims.get(AuthConstants.CLAIMS_KEY_IAT));
-        request.setAttribute(AuthConstants.KEY_EXP, claims.get(AuthConstants.CLAIMS_KEY_EXP));
+        request.setAttribute(JWTUtils.KEY_ISS, claims.get(JWTUtils.CLAIMS_KEY_ISS));
+        request.setAttribute(JWTUtils.KEY_SUB_NAME, claims.get(JWTUtils.CLAIMS_KEY_SUB));
+        request.setAttribute(JWTUtils.KEY_AUD, claims.get(JWTUtils.CLAIMS_KEY_AUD));
+        request.setAttribute(JWTUtils.KEY_IAT, claims.get(JWTUtils.CLAIMS_KEY_IAT));
+        request.setAttribute(JWTUtils.KEY_EXP, claims.get(JWTUtils.CLAIMS_KEY_EXP));
     }
 
     /**
@@ -51,7 +51,7 @@ public abstract class AbstractLoginJwtAuthProcessor<T> implements LoginAuthProce
      * @return
      */
     protected boolean validateTimeout(Jwt<Header, Claims> jwt) {
-        long expTime = Long.valueOf(String.valueOf(jwt.getBody().get(AuthConstants.CLAIMS_KEY_EXP)));
+        long expTime = Long.valueOf(String.valueOf(jwt.getBody().get(JWTUtils.CLAIMS_KEY_EXP)));
         return (System.currentTimeMillis() >= expTime);
     }
 

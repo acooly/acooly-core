@@ -4,7 +4,7 @@ package com.acooly.module.sso;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.acooly.module.sso.dic.AuthConstants;
+import com.acooly.core.utils.security.JWTUtils;
 import com.acooly.module.sso.dic.AuthResult;
 import io.jsonwebtoken.Jwt;
 
@@ -17,14 +17,14 @@ public class DefaultLoginAuth extends AbstractLoginJwtAuthProcessor<AuthResult> 
     @Override
     public AuthResult loginAuthentication(String authentication, String loginUrl,
                                           HttpServletRequest request, HttpServletResponse response) {
-        String requestURL = request.getRequestURL().toString();
+        // String requestURL = request.getRequestURL().toString();
         if (!isAuthenticationExist(authentication)) {
             if (!isLoginUrlExist(loginUrl)) {
                 return AuthResult.LOGIN_URL_NULL;
             }
-            if (!isDomainMatch(requestURL)) {
-                return AuthResult.LOGIN_ERROR_DOMAIN;
-            }
+//            if (!isDomainMatch(requestURL)) {
+//                return AuthResult.LOGIN_ERROR_DOMAIN;
+//            }
             return AuthResult.LOGIN_REDIRECT;
         }
         return validateAuthentication(request, authentication);
@@ -54,13 +54,7 @@ public class DefaultLoginAuth extends AbstractLoginJwtAuthProcessor<AuthResult> 
         }
     }
 
-    /**
-     * 检查域名,二级域名下 cookie 共享才能进行 jwt 信息认证
-     *
-     * @param requestURL
-     * @return
-     */
     private boolean isDomainMatch(String requestURL) {
-        return requestURL.contains(AuthConstants.COOKIE_DOMAIN);
+        return requestURL.contains(JWTUtils.COOKIE_DOMAIN);
     }
 }

@@ -8,8 +8,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.acooly.module.sso.dic.AuthConstants;
-import org.apache.commons.lang3.ArrayUtils;
+import com.acooly.core.utils.security.JWTUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 
@@ -18,24 +17,6 @@ import org.springframework.context.ApplicationContext;
  * @author shuijing
  */
 public class AuthFilterUtil {
-
-
-    /**
-     * 从 cookie 中获取 jwt
-     *
-     * @param cookies
-     * @return
-     */
-    public static String getJwtFromCookie(Cookie[] cookies) {
-        if (ArrayUtils.isNotEmpty(cookies)) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(AuthConstants.TYPE_JWT)) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return StringUtils.EMPTY;
-    }
 
     /**
      * 重定向登录
@@ -52,7 +33,7 @@ public class AuthFilterUtil {
             requestURL += "?" + queryString;
         }
         //String targetUrl = Base64.encodeBase64String(requestURL.getBytes("utf-8"));
-
+        response.setHeader("targetUrl", requestURL);
         response.sendRedirect(loginUrl + "?targetUrl=" + requestURL);
     }
 
@@ -74,28 +55,26 @@ public class AuthFilterUtil {
 
     /**
      * 获取 jwt 信息
-     * 先从请求中获取(暂时没有应用场景), 获取不到则从 cookie 中获取
      *
      * @param httpServletRequest
      * @return
      */
     public static String getCompactJwt(HttpServletRequest httpServletRequest) {
-        // 从 request 中获取 jwt
-        String compactJws = httpServletRequest.getParameter(AuthConstants.TYPE_JWT);
-        // request 中获取不到,就从 cookies 中获取 jwt
+        /**
+         * 获取jwt顺序
+         * 1、header
+         * 2、request
+         * 3、cookie
+         */
+        String compactJws = httpServletRequest.getHeader("Authorization");
         if (StringUtils.isEmpty(compactJws)) {
-            Cookie[] cookies = httpServletRequest.getCookies();
-            compactJws = getJwtFromCookie(cookies);
+            compactJws = httpServletRequest.getParameter(JWTUtils.TYPE_JWT);
+            if (StringUtils.isEmpty(compactJws)) {
+                Cookie[] cookies = httpServletRequest.getCookies();
+                compactJws = JWTUtils.getJwtFromCookie(cookies);
+            }
         }
         return compactJws;
     }
 
-    /**
-     * 根据环境获取重定向地址
-     *
-     * @return
-     */
-    public static String getAdLoginUrl() {
-        return AuthConstants.LOGIN_ADDRESS;
-    }
 }

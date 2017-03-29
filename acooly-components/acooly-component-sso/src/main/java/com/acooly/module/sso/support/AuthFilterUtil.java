@@ -66,6 +66,7 @@ public class AuthFilterUtil {
          * 2、request
          * 3、cookie
          */
+        //TODO 跨越登录成功 url返回jwt 在cookie设置jwt
         String compactJws = httpServletRequest.getHeader("Authorization");
         if (StringUtils.isEmpty(compactJws)) {
             compactJws = httpServletRequest.getParameter(JWTUtils.TYPE_JWT);

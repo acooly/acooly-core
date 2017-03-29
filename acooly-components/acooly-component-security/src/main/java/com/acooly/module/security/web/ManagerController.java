@@ -68,7 +68,8 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
             /**
              * 如果已经登录的情况，其他系统集成sso则重定向目标地址，否则直接跳主页
              */
-            String targetUrl = (String) ServletUtil.getSessionAttribute(JWTUtils.KEY_TARGETURL);
+            String targetUrl = ServletUtil.getRequestParameter(JWTUtils.KEY_TARGETURL);
+            //targetUrl = (String) ServletUtil.getSessionAttribute(JWTUtils.KEY_TARGETURL);
             if (StringUtils.isNotBlank(targetUrl)) {
                 String jwt = JWTUtils.getJwtFromCookie(request.getCookies());
                 return "redirect:" + fomartRederectUrl(targetUrl, jwt);

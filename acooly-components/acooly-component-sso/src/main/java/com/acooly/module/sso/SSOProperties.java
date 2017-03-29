@@ -1,6 +1,7 @@
 package com.acooly.module.sso;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -14,6 +15,7 @@ public class SSOProperties {
 
     private boolean enable = true;
 
+    @NotEmpty
     private String ssoServerUrl;
 
     /**

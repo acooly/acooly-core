@@ -33,7 +33,8 @@ public class SSOAutoConfig {
         authenticationFilter.setLoginUrl(ssoProperties.getSsoServerUrl());
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(authenticationFilter);
-        registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp", "*.json").toArray(new String[0]));
+        //registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp", "*.json").toArray(new String[0]));
+        registration.addUrlPatterns("/*");
         registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
         registration.setName("ssoFilter");
         return registration;

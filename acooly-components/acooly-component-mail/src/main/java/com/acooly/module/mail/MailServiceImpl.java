@@ -29,7 +29,7 @@ public class MailServiceImpl implements MailService {
 	private MailTemplateService mailTemplateService;
 	@Autowired
 	private MailProperties mailProperties;
-	@Resource(name = "mailTaskExecutor")
+    @Autowired
 	private TaskExecutor taskExecutor;
 	
 	@Override

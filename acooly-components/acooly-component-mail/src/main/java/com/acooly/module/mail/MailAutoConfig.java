@@ -12,12 +12,8 @@ package com.acooly.module.mail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-
-import java.util.concurrent.ThreadPoolExecutor;
 
 import static com.acooly.module.mail.MailProperties.PREFIX;
 
@@ -31,16 +27,4 @@ import static com.acooly.module.mail.MailProperties.PREFIX;
 public class MailAutoConfig {
 	@Autowired
 	private MailProperties mailProperties;
-    @Bean
-    public ThreadPoolTaskExecutor mailTaskExecutor() {
-        ThreadPoolTaskExecutor bean = new ThreadPoolTaskExecutor();
-        bean.setCorePoolSize(mailProperties.getThreadMin());
-        bean.setMaxPoolSize(mailProperties.getThreadMax());
-        bean.setQueueCapacity(mailProperties.getThreadQueue());
-        bean.setKeepAliveSeconds(300);
-        bean.setWaitForTasksToCompleteOnShutdown(true);
-        bean.setAllowCoreThreadTimeOut(true);
-        bean.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-        return bean;
-    }
 }

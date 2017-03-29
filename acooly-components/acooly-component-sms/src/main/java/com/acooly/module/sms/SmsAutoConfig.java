@@ -18,10 +18,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.List;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import static com.acooly.module.sms.SmsProperties.PREFIX;
 
@@ -37,33 +35,20 @@ public class SmsAutoConfig {
 	@Bean
 	public StandardDatabaseScriptIniter smsScriptIniter() {
 		return new StandardDatabaseScriptIniter() {
-            @Override
-            public String getEvaluateTable() {
-                return "sms_log";
-            }
-
-            @Override
-            public String getComponentName() {
-                return "sms";
-            }
-
-            @Override
-            public List<String> getInitSqlFile() {
-                return Lists.newArrayList("sms","sms_urls");
-            }
+			@Override
+			public String getEvaluateTable() {
+				return "sms_log";
+			}
+			
+			@Override
+			public String getComponentName() {
+				return "sms";
+			}
+			
+			@Override
+			public List<String> getInitSqlFile() {
+				return Lists.newArrayList("sms", "sms_urls");
+			}
 		};
-	}
-	
-	@Bean
-	public ThreadPoolTaskExecutor smsTaskExecutor(SmsProperties properties) {
-		ThreadPoolTaskExecutor bean = new ThreadPoolTaskExecutor();
-		bean.setCorePoolSize(properties.getThreadMin());
-		bean.setMaxPoolSize(properties.getThreadMax());
-		bean.setQueueCapacity(properties.getThreadQueue());
-		bean.setKeepAliveSeconds(300);
-		bean.setWaitForTasksToCompleteOnShutdown(true);
-		bean.setAllowCoreThreadTimeOut(true);
-		bean.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-		return bean;
 	}
 }

@@ -83,11 +83,12 @@ public class PointTradeServiceImpl extends EntityServiceImpl<PointTrade, PointTr
 	public void pointClearThread(String startTime, String endTime, String businessData) {
 		logger.info("启动新建线程,处理积分清零");
 		try {
-			new Thread(new Runnable() {
+			Thread thread = new Thread(new Runnable() {
 				public void run() {
 					pointClear(startTime, endTime, businessData);
 				}
 			});
+			thread.start();
 		} catch (Exception e) {
 			logger.warn("启动新建线程,处理积分清零失败");
 		}

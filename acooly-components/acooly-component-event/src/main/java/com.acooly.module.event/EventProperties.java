@@ -12,7 +12,4 @@ public class EventProperties {
 	public static final String PREFIX = "acooly.event";
 	private boolean enable = true;
 
-    private int threadMin = 5;
-    private int threadMax = 20;
-    private int threadQueue = 20;
 }

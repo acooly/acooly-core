@@ -73,10 +73,6 @@ public class SmsProperties {
 	 */
 	private Map<String, String> template = Maps.newHashMap();
 	
-	private int threadMin = 10;
-	private int threadMax = 20;
-	private int threadQueue = 20;
-	
 	@Data
 	public static class Emay {
 		/**

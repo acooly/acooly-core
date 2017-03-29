@@ -81,3 +81,83 @@
 ### 2.4 如何修改http缓存时间？
     
 通过`acooly.web.cacheMaxAge`修改http 缓存时间,-1=不设置,0=第二次请求需要和服务器协商,大于0=经过多少秒后才过期。
+
+### 2.5 关于jsp
+
+1. jsp不能放在`assemble`模块，这会导致应用打成jar包后找不到jsp文件(spring-boot-maven-plugin插件生成了自定义jar包，并自定义了classloader，在初始化tomcat时，不会把assemble包下的`resources/META-INF`加入到tomcat的`StandardRoot`，代码参考`TomcatResources#addClasspathResources`)
+2. jsp文件必须放非`assemble`模块下的`src/main/resources/META-INF/resources/WEB-INF/jsp`路径
+
+### 2.5 freemarker include支持
+
+### 2.5.1. **#include**
+
+该标签的作用是将便签中指定的路径的ftl文件导入到使用标签的ftl文件中，包括macro\\funtion\\variable等所有被引用的ftl内容。
+
+    <#include "../../header.ftl">
+
+### 2.5.2. **#import**
+
+该标签的作用是将标签中指定的模板中的已定义的宏、函数等导入到当前模板中，并在当前文档中指定一个变量作为该模板命名空间，以便当前文档引用。与include的区别是该指令不会讲import指定的模板内容渲染到引用的模板的输出中。
+
+    <#import "../../service.ftl as service>
+
+
+### 2.5.3  **@includePage**
+
+该标签的作用是将path中指定的请求地址html内容导入到当前模板。其原理是在指令内发起include请求。参考`javax.servlet.RequestDispatcher#include`.此标签特别适合做服务端页面模块重用。
+
+     <@includePage path="/testFtl.html"/>
+
+#### 2.5.3.1 使用场景
+
+1. 定义了两个http服务地址
+
+        @RequestMapping("/testFtl")
+        public String testFtl(ModelMap modelMap) {
+            modelMap.put("name", "na");
+            modelMap.put("message", "hi");
+            return "test";
+        }
+    
+        @RequestMapping("/testInclude")
+        public String testInclude(ModelMap modelMap) {
+            modelMap.put("where", "out");
+            return "testInclude";
+        }
+
+2. 定义两个模板页面
+
+    `templates/test.ftl`：
+
+         <h1>${message},${name}</h1>
+
+    `templates/testInclude.ftl`
+
+        <html>
+          <head>
+                <title>include 测试</title>
+            </head>
+            <body>
+            ${where}
+            <@includePage path="/testFtl.html"/>
+            </body>
+        </html>
+
+3. 访问
+
+    访问`testFtl.html`，输出：
+
+        <h1>hi,na</h1>
+
+
+    访问`testInclude.html`,输出：
+
+        <html>
+          <head>
+                <title>include 测试</title>
+            </head>
+            <body>
+            out
+        <h1>hi,na</h1>    </body>
+        </html>
+

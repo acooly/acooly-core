@@ -25,29 +25,16 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class EventAutoConfig {
 	
 	@Bean
-	public EventBus messageBus(ThreadPoolTaskExecutor asyncEventExecutorService) {
+	public EventBus messageBus(ThreadPoolTaskExecutor poolTaskExecutor) {
 		Feature.AsynchronousHandlerInvocation asynchronousHandlerInvocation = new Feature.AsynchronousHandlerInvocation();
-		asynchronousHandlerInvocation.setExecutor(asyncEventExecutorService.getThreadPoolExecutor());
+		asynchronousHandlerInvocation.setExecutor(poolTaskExecutor.getThreadPoolExecutor());
 		EventBus bus = new EventBus(new BusConfiguration().addFeature(Feature.SyncPubSub.Default())
 			.addFeature(asynchronousHandlerInvocation).addFeature(Feature.AsynchronousMessageDispatch.Default())
 			.addPublicationErrorHandler(new IPublicationErrorHandler.ConsoleLogger())
 			.setProperty(IBusConfiguration.Properties.BusId, "global bus"));
 		return bus;
 	}
-	
-	@Bean
-	public ThreadPoolTaskExecutor asyncEventExecutorService(EventProperties properties) {
-		ThreadPoolTaskExecutor bean = new ThreadPoolTaskExecutor();
-		bean.setCorePoolSize(properties.getThreadMin());
-		bean.setMaxPoolSize(properties.getThreadMax());
-		bean.setQueueCapacity(properties.getThreadQueue());
-		bean.setKeepAliveSeconds(300);
-		bean.setThreadNamePrefix("async-event-");
-		bean.setWaitForTasksToCompleteOnShutdown(true);
-		bean.setAllowCoreThreadTimeOut(true);
-		bean.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-		return bean;
-	}
+
 	
 	@Configuration
 	public static class EventHandlerConfig {

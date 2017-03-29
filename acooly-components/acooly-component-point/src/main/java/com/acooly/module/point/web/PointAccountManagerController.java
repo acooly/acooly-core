@@ -101,8 +101,8 @@ public class PointAccountManagerController extends AbstractJQueryEntityControlle
 			if (Collections3.isEmpty(userNameList)) {
 				throw new RuntimeException("用户名不能为空，多个用户名使用英文逗号分隔");
 			}
-			if (userNameList.size() > 30) {
-				throw new RuntimeException("最多支持30个用户名");
+			if (userNameList.size() > 50) {
+				throw new RuntimeException("最多支持50个用户名");
 			}
 			for (String userName : userNameList) {
 				pointTradeService.pointProduce(userName, Long.parseLong(point), memo);
@@ -141,7 +141,7 @@ public class PointAccountManagerController extends AbstractJQueryEntityControlle
 			String startTime = request.getParameter("startTime");
 			String endTime = request.getParameter("endTime");
 			String memo = request.getParameter("memo");
-			pointTradeService.pointClear(startTime, endTime, memo);
+			pointTradeService.pointClearThread(startTime, endTime, memo);
 			result.setMessage("积分清零正在处理中,之后刷新查看结果");
 		} catch (Exception e) {
 			handleException(result, "新增", e);

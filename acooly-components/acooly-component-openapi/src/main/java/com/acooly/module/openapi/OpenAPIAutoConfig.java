@@ -57,20 +57,7 @@ public class OpenAPIAutoConfig {
 		bean.setServlet(openAPIDispatchServlet);
 		return bean;
 	}
-	
-	@Bean
-	public ThreadPoolTaskExecutor openApiTaskExecutor(OpenAPIProperties properties) {
-		ThreadPoolTaskExecutor bean = new ThreadPoolTaskExecutor();
-		bean.setCorePoolSize(1);
-		bean.setMaxPoolSize(20);
-		bean.setQueueCapacity(100);
-		bean.setKeepAliveSeconds(300);
-		bean.setWaitForTasksToCompleteOnShutdown(true);
-		bean.setAllowCoreThreadTimeOut(true);
-		bean.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-		return bean;
-	}
-	
+
 	@Bean
 	public AbstractDatabaseScriptIniter openapiCoreScriptIniter() {
 		return new AbstractDatabaseScriptIniter() {

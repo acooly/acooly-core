@@ -11,6 +11,7 @@
 package com.acooly.module.web;
 
 import com.acooly.core.common.boot.EnvironmentHolder;
+import com.acooly.module.web.freemarker.IncludePage;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import freemarker.cache.ClassTemplateLoader;
@@ -171,6 +172,9 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter implements Applicatio
 					
 				}
 			};
+            Map<String, Object> variables=Maps.newHashMap();
+            variables.put("includePage",new IncludePage());
+            configurer.setFreemarkerVariables(variables);
 			applyProperties(configurer);
 			return configurer;
 		}

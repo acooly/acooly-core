@@ -75,7 +75,7 @@
     	}
         
     	@Test
-    	//读取csv文件，csv文件第一行为头信息
+    	//读取csv文件，csv文件第一行为头信息，当文件不存在时，会自动创建csv文件(这里使用了jdk8特性，请给java compiler加上-parameters参数,保证参数名正确)
     	@CsvParameter(value = "test.csv")
     	//测试命名，方便测试用例失败时，IDE可视化展示
     	@TestCaseName("id={0}")

@@ -40,15 +40,33 @@
 				$(document).ajaxComplete(function(event, xhr, settings) {
 					var sessionState = xhr.getResponseHeader("SessionState");
 					if (sessionState && sessionState == '1') {
-						$.messager.alert('提示', '会话过期，请重新登录', 'info', function() {
-							window.location.href = '/manage/logout.html';
-						});
+                        $.messager.alert('提示', '会话过期，请重新登录', 'info', function() {
+                            window.location.href = '/manage/logout.html';
+                        });
 					}
+					//TODO boss集成
+					//重定向
+                    //debugger;
+                    // if(xhr.status === 302){
+                    //     var targetUrl = xhr.getResponseHeader("targetUrl");
+                    //     if(targetUrl.contains('login')){
+                    //         $.messager.alert('提示', '令牌过期，请重新登录', 'info', function() {
+                    //             window.location.href = '/manage/logout.html';
+                    //         });
+                    //     }
+                    // }
 				});
 				var token = $("meta[name='X-CSRF-TOKEN']").attr("content");// 从meta中获取token
 				$(document).ajaxSend(function(e, xhr, options) {
 					xhr.setRequestHeader("X-CSRF-TOKEN", token);// 每次ajax提交请求都会加入此token
 				});
+                // set jwt token
+                //debugger;
+                // var jwt=localStorage.getItem('jwt');
+                // $(document).ajaxSend(function(e, xhr, options) {
+                //     xhr.setRequestHeader("Authorization", jwt);// 每次ajax提交请求都会加入jwt
+                // });
+
 			},
 			
 			/** 获取当前的csrf-token */

@@ -8,12 +8,9 @@ package com.acooly.module.point.service.impl;
 
 import java.util.Map;
 
-import javax.annotation.Resource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
 import com.acooly.core.common.dao.support.PageInfo;
@@ -48,8 +45,8 @@ public class PointTradeServiceImpl extends EntityServiceImpl<PointTrade, PointTr
 	@Autowired
 	private PointStatisticsService pointStatisticsService;
 
-	@Resource(name = "asyncTaskExecutor")
-	private TaskExecutor asyncTaskExecutor;
+	// @Resource(name = "asyncTaskExecutor")
+	// private TaskExecutor asyncTaskExecutor;
 
 	@Override
 	public PointTrade pointProduce(String userName, long point, String businessData) {
@@ -85,17 +82,25 @@ public class PointTradeServiceImpl extends EntityServiceImpl<PointTrade, PointTr
 
 	public void pointClearThread(String startTime, String endTime, String businessData) {
 		logger.info("启动新建线程,处理积分清零");
-		asyncTaskExecutor.execute(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					Thread.sleep(3 * 1000);
-				} catch (Exception e) {
-					logger.warn("启动新建线程,处理积分清零失败");
+		try {
+			new Thread(new Runnable() {
+				public void run() {
+					pointClear(startTime, endTime, businessData);
 				}
-				pointClear(startTime, endTime, businessData);
-			}
-		});
+			});
+		} catch (Exception e) {
+			logger.warn("启动新建线程,处理积分清零失败");
+		}
+		// asyncTaskExecutor.execute(new Runnable() {
+		// public void run() {
+		// try {
+		// Thread.sleep(3 * 1000);
+		// } catch (Exception e) {
+		// logger.warn("启动新建线程,处理积分清零失败");
+		// }
+		// pointClear(startTime, endTime, businessData);
+		// }
+		// });
 	}
 
 	public void pointClear(String startTime, String endTime, String businessData) {

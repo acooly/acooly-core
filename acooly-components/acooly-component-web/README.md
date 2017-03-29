@@ -127,37 +127,37 @@
 
 2. 定义两个模板页面
 
-`templates/test.ftl`：
+    `templates/test.ftl`：
 
-    <h1>${message},${name}</h1>
+         <h1>${message},${name}</h1>
 
-`templates/testInclude.ftl`
+    `templates/testInclude.ftl`
 
-    <html>
-      <head>
-            <title>include 测试</title>
-        </head>
-        <body>
-        ${where}
-        <@includePage path="/testFtl.html"/>
-        </body>
-    </html>
+        <html>
+          <head>
+                <title>include 测试</title>
+            </head>
+            <body>
+            ${where}
+            <@includePage path="/testFtl.html"/>
+            </body>
+        </html>
 
 3. 访问
 
-访问`testFtl.html`，输出：
+    访问`testFtl.html`，输出：
 
-    <h1>hi,na</h1>
+        <h1>hi,na</h1>
 
 
-访问`testInclude.html`,输出：
+    访问`testInclude.html`,输出：
 
-    <html>
-      <head>
-            <title>include 测试</title>
-        </head>
-        <body>
-        out
-    <h1>hi,na</h1>    </body>
-    </html>
+        <html>
+          <head>
+                <title>include 测试</title>
+            </head>
+            <body>
+            out
+        <h1>hi,na</h1>    </body>
+        </html>
 

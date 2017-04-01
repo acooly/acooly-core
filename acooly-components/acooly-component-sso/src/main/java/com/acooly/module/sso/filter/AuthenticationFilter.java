@@ -92,6 +92,7 @@ public class AuthenticationFilter implements Filter {
                 logger.error(AuthResult.AUTHENTICATION_TAMPER.getDescription());
                 throw new RuntimeException(AuthResult.AUTHENTICATION_TAMPER.getDescription());
             case AUTHENTICATION_ACCESS:
+                AuthFilterUtil.parameterAccessAddJwt2Cookie(httpServletRequest, httpServletResponse);
                 chain.doFilter(request, response);
                 break;
             default:

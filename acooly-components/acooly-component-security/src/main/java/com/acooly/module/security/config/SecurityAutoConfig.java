@@ -319,7 +319,7 @@ public class SecurityAutoConfig {
 		@Bean
 		public FilterRegistrationBean xssFilter(SecurityProperties securityProperties) {
 			XssDefenseFilter filter = new XssDefenseFilter();
-			
+			filter.setSecurityProperties(securityProperties);
 			FilterRegistrationBean registration = new FilterRegistrationBean();
 			registration.setFilter(filter);
 			registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp").toArray(new String[0]));

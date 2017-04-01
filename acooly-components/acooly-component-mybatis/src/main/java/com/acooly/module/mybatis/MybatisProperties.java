@@ -11,6 +11,7 @@
 package com.acooly.module.mybatis;
 
 import com.acooly.core.common.boot.Apps;
+import com.acooly.core.common.exception.AppConfigException;
 import com.google.common.collect.Maps;
 import lombok.Data;
 import org.apache.ibatis.session.LocalCacheScope;
@@ -19,6 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.util.Map;
@@ -51,8 +53,27 @@ public class MybatisProperties implements InitializingBean {
 	 */
 	private String typeHandlersPackage;
 	
-	private Map<String,String>  typeAliasesPackage=Maps.newHashMap();
+	private Map<String, String> typeAliasesPackage = Maps.newHashMap();
 	private String configLocation;
+	
+	private boolean supportMultiDataSource;
+	private Map<String, Multi> multi = Maps.newHashMap();
+	
+	@Data
+	public static class Multi {
+		/**
+		 * 数据源配置前缀
+		 */
+		private String dsPrefix;
+		/**
+		 * 当前数据源Dao包路径
+		 */
+		private String scanPackage;
+		/**
+		 * 是否为主数据库
+		 */
+		private boolean primary;
+	}
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -62,17 +83,29 @@ public class MybatisProperties implements InitializingBean {
 		if (!settings.containsKey("localCacheScope")) {
 			settings.put("localCacheScope", LocalCacheScope.STATEMENT.name());
 		}
-		settings.put("mapUnderscoreToCamelCase",Boolean.TRUE.toString());
+		settings.put("mapUnderscoreToCamelCase", Boolean.TRUE.toString());
 		if (typeHandlersPackage == null) {
 			typeHandlersPackage = "com.acooly.module.mybatis.typehandler";
 		} else {
 			typeHandlersPackage += ",com.acooly.module.mybatis.typehandler";
 		}
-        typeAliasesPackage.put("app", Apps.getBasePackage());
-        typeAliasesPackage.put("components", COMPONENTS_PACKAGE);
-
-
-    }
+		typeAliasesPackage.put("app", Apps.getBasePackage());
+		typeAliasesPackage.put("components", COMPONENTS_PACKAGE);
+		
+		if (supportMultiDataSource) {
+			Assert.notEmpty(multi, "启用多数据源时，必须配置数据源信息");
+			int primaryCount = 0;
+			for (Multi m : multi.values()) {
+				if (m.isPrimary()) {
+					primaryCount++;
+				}
+			}
+			if (primaryCount != 1) {
+				throw new AppConfigException("有且只能有一个主数据源：" + this.getMulti());
+			}
+		}
+		
+	}
 	
 	public Resource[] resolveMapperLocations() {
 		try {

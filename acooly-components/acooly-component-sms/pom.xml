@@ -20,7 +20,11 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-threadpool</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

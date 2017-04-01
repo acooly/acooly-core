@@ -40,7 +40,7 @@ public class SmsServiceImpl implements SmsService,InitializingBean {
 	private SmsLogService smsLogService;
 	@Resource
 	private SmsBlacklistService smsBlacklistService;
-	@Resource(name = "smsTaskExecutor")
+	@Autowired
 	private TaskExecutor taskExecutor;
 	@Autowired
     private SmsProperties smsProperties;

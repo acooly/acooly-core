@@ -41,6 +41,7 @@ public class CacheComponentInitializer implements ComponentInitializer {
 						log.info("发现redis服务没有启动，使用内置redis用于开发测试");
 						com.github.zxl0714.redismock.RedisServer server = com.github.zxl0714.redismock.RedisServer.newRedisServer(6379);
 						server.start();
+                        System.setProperty("isInternalRedis", "true");
 						ShutdownHooks.addShutdownHook(server::stop, "内置redis关闭");
 					} catch (IOException e) {
 						throw new RuntimeException(e);

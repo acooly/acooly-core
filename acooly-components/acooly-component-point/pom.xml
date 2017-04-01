@@ -21,6 +21,11 @@
             <artifactId>acooly-component-mybatis</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-event</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -10,7 +10,9 @@
 package com.acooly.module.appopenapi;
 
 import com.acooly.core.utils.validate.Validators;
+import com.google.common.collect.Lists;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -26,6 +28,7 @@ import static com.acooly.module.appopenapi.AppOpenapiProperties.PREFIX;
  */
 @ConfigurationProperties(prefix = PREFIX)
 @Data
+@Slf4j
 public class AppOpenapiProperties{
 	public static final String PREFIX = "acooly.appopenapi";
 	private boolean enable;
@@ -45,21 +48,27 @@ public class AppOpenapiProperties{
          * 匿名accessKey
          */
         @NotBlank
-		private String accessKey;
+		private String accessKey="anonymous";
         /**
          * 匿名secretKey
          */
         @NotBlank
         @Length(min = 16)
-		private String secretKey;
+		private String secretKey="anonymouanonymou";
         /**
          * 匿名services
          */
         @NotNull
-		private List<String> services;
+		private List<String> services= Lists.newArrayList();
 	}
 	@PostConstruct
     public void init(){
+        this.getAnonymous().getServices().add("login");
+        this.getAnonymous().getServices().add("bannerList");
+        this.getAnonymous().getServices().add("appLatestVersion");
+        this.getAnonymous().getServices().add("appCrashReport");
+        this.getAnonymous().getServices().add("welcomeInfo");
+        log.info("AppOpenapi匿名配置:{}",this.getAnonymous());
         Validators.assertJSR303(anonymous);
     }
 }

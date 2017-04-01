@@ -16,5 +16,10 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-email</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-threadpool</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

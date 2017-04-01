@@ -39,7 +39,7 @@ public final class MACAddressParser {
 	 *            the String, may not be <code>null</code>
 	 * @return the substring that matches this pattern or <code>null</code>
 	 */
-	static String parse(String in) {
+    public 	static String parse(String in) {
 
 		String out = in;
 

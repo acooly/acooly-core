@@ -1,13 +1,12 @@
 package com.acooly.core.utils;
 
-import java.util.Date;
-import java.util.concurrent.atomic.AtomicLong;
-
+import com.acooly.core.utils.system.IPUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.acooly.core.utils.system.IPUtil;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * orderNo生成器
@@ -25,7 +24,7 @@ public class Ids {
 	/**
 	 * 生产GID
 	 * 
-	 * 长度：32 格式：系统编码(4字节)+保留(8字节)+did(20字节)
+	 * 长度：36 格式：系统编码(4字节)+保留(8字节)+gid(24字节)
 	 * 
 	 * @return
 	 */
@@ -33,7 +32,7 @@ public class Ids {
 		StringBuilder sb = new StringBuilder();
 		sb.append(padding(systemCode, 4));
 		sb.append(padding(reserved, 8));
-		sb.append(Did.getInstance().getId(20));
+		sb.append(new ObjectId().toHexString());
 		return sb.toString();
 	}
 
@@ -41,8 +40,11 @@ public class Ids {
 		return gid(systemCode, null);
 	}
 
+    /**
+     * 长度24位全球唯一标识
+     */
 	public static String gid() {
-		return gid("G001", null);
+        return new ObjectId().toHexString();
 	}
 
 	/**

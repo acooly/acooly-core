@@ -8,6 +8,7 @@
 package com.acooly.module.point.service;
 
 import com.acooly.core.common.service.EntityService;
+import com.acooly.module.point.domain.PointAccount;
 import com.acooly.module.point.domain.PointGrade;
 
 /**
@@ -26,6 +27,6 @@ public interface PointGradeService extends EntityService<PointGrade> {
 	 * @param point
 	 * @return
 	 */
-	PointGrade getSectionPoint(Long point);
+	PointGrade getSectionPoint(PointAccount pointAccount);
 
 }

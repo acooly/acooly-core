@@ -76,10 +76,13 @@ public abstract class FilterChainBase<C extends Context> implements FilterChain<
 			filters.add((Filter<C>) applicationContext.getBean(beanName));
 		}
 		OrderComparator.sort(filters);
+        adjustFilters();
 		filters.forEach(filter -> logger.info("加载filter:{}->{}", filter.getName(), filter.getClass().getName()));
 	}
 
-	
+    protected void  adjustFilters(){
+
+    }
 	@Override
 	public void setBeanName(String name) {
 		this.beanName = name;

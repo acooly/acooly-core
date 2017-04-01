@@ -23,21 +23,6 @@ import org.springframework.util.Assert;
  * @author qiubo@yiji.com
  */
 public class AppServiceFilterChain extends FilterChainBase<AppServiceContext> {
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		logger.info("FilterChain:{}初始化", beanName);
-		Class<?> genricType = AppServiceContext.class;
-		ResolvableType resolvableType = ResolvableType.forClassWithGenerics(Filter.class, genricType);
-		String[] beanNames = applicationContext.getBeanNamesForType(resolvableType);
-		Assert.notEmpty(beanNames, this.getClass().getSimpleName() + " load  filters failed,cause of no Filter<"
-									+ genricType.getSimpleName() + ">  found");
-		for (String beanName : beanNames) {
-			filters.add((Filter<AppServiceContext>) applicationContext.getBean(beanName));
-		}
-		OrderComparator.sort(filters);
-		replaceDefaultCheckFilter();
-		filters.forEach(filter -> logger.info("加载filter:{}->{}", filter.getName(), filter.getClass().getName()));
-	}
 
 	private void replaceDefaultCheckFilter() {
 		String parameterCheckFilterImpl = EnvironmentHolder.get().getProperty(
@@ -65,4 +50,9 @@ public class AppServiceFilterChain extends FilterChainBase<AppServiceContext> {
 			filters.remove(defaultCheckFilter);
 		}
 	}
+
+    @Override
+    protected void adjustFilters() {
+        replaceDefaultCheckFilter();
+    }
 }

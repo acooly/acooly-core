@@ -20,6 +20,10 @@
                 </td>
             </tr>
             <tr>
+                <th>简介：</th>
+                <td><textarea name="subject" cols="80" rows="2" style="width:700px;"></textarea></td>
+            </tr>
+            <tr>
                 <th>图片：</th>
                 <td>
                     <input type="file" name="cover_f" id="cover_f" class="easyui-validatebox" validType="validImg['jpg,gif,png','只能上传jpg,gif,png格式的图片']"/>

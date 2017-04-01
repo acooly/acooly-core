@@ -11,6 +11,9 @@
 
 单元测试继承`AppTestBase`或者`AppWebTestBase`,`archtype`生成的测试module中有`TestBase`对象，应用开发者集成即可。
 
+* `AppTestBase` 不会启动web环境
+* `AppWebTestBase` 会启动web环境
+
 ### 2.2 参数化测试
 
 相关代码:[JUnitParams](http://gitlab.yiji/fintech/JUnitParams)，对官方代码进行增强，使之支持类型转换。

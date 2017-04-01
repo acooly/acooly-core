@@ -2,12 +2,14 @@
 package com.acooly.module.sso.support;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.acooly.core.utils.net.ServletUtil;
 import com.acooly.core.utils.security.JWTUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
@@ -66,7 +68,6 @@ public class AuthFilterUtil {
          * 2、request
          * 3、cookie
          */
-        //TODO 跨越登录成功 url返回jwt 在cookie设置jwt
         String compactJws = httpServletRequest.getHeader("Authorization");
         if (StringUtils.isEmpty(compactJws)) {
             compactJws = httpServletRequest.getParameter(JWTUtils.TYPE_JWT);
@@ -78,4 +79,13 @@ public class AuthFilterUtil {
         return compactJws;
     }
 
+    /**
+     * 如果是从参数里面拿的返回jwt且已经验证成功，兼容跨域，在引用sso组件的域cookie设置jwt
+     */
+    public static void parameterAccessAddJwt2Cookie(HttpServletRequest request, HttpServletResponse response) {
+        String compactJws = request.getParameter(JWTUtils.TYPE_JWT);
+        if (StringUtils.isNotEmpty(compactJws)) {
+            JWTUtils.addJwtCookie(response, compactJws, JWTUtils.getDomainName());
+        }
+    }
 }

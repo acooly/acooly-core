@@ -1,5 +1,6 @@
 package com.acooly.core.utils.security;
 
+import com.acooly.core.utils.net.ServletUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.impl.DefaultClaims;
@@ -13,6 +14,10 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -120,6 +125,12 @@ public class JWTUtils {
      * JWT 接收方 (暂无用)
      */
     private static String aud = "boss";
+
+    /**
+     * response 设置header
+     */
+    public static final String TOKEN_PREFIX = "Bearer";
+    public static final String HEADER_STRING = "Authorization";
     /**
      * header
      */
@@ -263,13 +274,36 @@ public class JWTUtils {
      * @param response
      * @param jwtValue
      */
-    public static void addJwtCookie(HttpServletResponse response, String jwtValue) {
+    public static void addJwtCookie(HttpServletResponse response, String jwtValue,String domain) {
         Cookie cookie = new Cookie(JWTUtils.TYPE_JWT, jwtValue);
         cookie.setHttpOnly(Boolean.TRUE);
         cookie.setPath("/");
-        //TODO 域名可变
-        cookie.setDomain("acooly.com");
+        cookie.setDomain(domain);
         response.addCookie(cookie);
+        //response.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + jwtValue);
     }
 
+    public static void removeCookie(String key, String domain) {
+        Cookie[] cookies = ServletUtil.getRequest().getCookies();
+        for (Cookie cookie : cookies) {
+            if (StringUtils.equals(cookie.getName(), key)) {
+                cookie.setHttpOnly(Boolean.TRUE);
+                cookie.setPath("/");
+                cookie.setDomain(domain);
+                cookie.setMaxAge(0);
+                ServletUtil.getResponse().addCookie(cookie);
+            }
+        }
+    }
+
+    public static String getDomainName() {
+        String host = "";
+        try {
+            URL url = new URL(ServletUtil.getRequest().getRequestURL().toString());
+            host = url.getHost();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return host.startsWith("www.") ? host.substring(4) : host;
+    }
 }

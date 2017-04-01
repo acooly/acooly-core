@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 
 import static com.acooly.module.security.shiro.realm.ShiroDbRealm.SESSION_USER;
@@ -96,12 +97,10 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
             String jwt = JWTUtils.createJwt(username, JWTUtils.SIGN_KEY);
             HashMap<Object, Object> resmap = Maps.newHashMap();
 
-            JWTUtils.addJwtCookie(ServletUtil.getResponse(), jwt);
+            JWTUtils.addJwtCookie(ServletUtil.getResponse(), jwt, JWTUtils.getDomainName());
 
             String targetUrl = (String) ServletUtil.getSessionAttribute(JWTUtils.KEY_TARGETURL);
             if (StringUtils.isNotBlank(targetUrl)) {
-                // 不保留其他系统的会话
-                //SecurityUtils.getSubject().logout();
                 resmap.put("isRedirect", true);
                 resmap.put(JWTUtils.KEY_TARGETURL, fomartRederectUrl(targetUrl, jwt));
             } else {

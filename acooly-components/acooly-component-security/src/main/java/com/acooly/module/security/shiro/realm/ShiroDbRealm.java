@@ -29,8 +29,9 @@ import java.util.Set;
 public class ShiroDbRealm extends AuthorizingRealm {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ShiroDbRealm.class);
-	
-	protected UserService userService;
+    public static final String SESSION_USER = "user";
+
+    protected UserService userService;
 	
 	/**
 	 * 设定Password校验的Hash算法与迭代次数.
@@ -56,6 +57,9 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		UsernamePasswordToken captchaToken = (UsernamePasswordToken) token;
 		User user = getUserService().getAndCheckUser(captchaToken.getUsername());
 		if (user != null) {
+            //设置用户
+            SecurityUtils.getSubject().getSession().setAttribute(SESSION_USER,user);
+
 			byte[] salt = Encodes.decodeHex(user.getSalt());
 			logger.debug("load user info from database. token --> " + token);
 			return new SimpleAuthenticationInfo(user, user.getPassword(), ByteSource.Util.bytes(salt), getName());
@@ -78,7 +82,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	@Transactional
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		User sessionUser = (User) principals.getPrimaryPrincipal();
-		User user = null;
+		User user;
 		try {
 			user = getUserService().findUserByUsername(sessionUser.getUsername());
 		} catch (Exception e) {

@@ -89,7 +89,7 @@ public abstract class AbstractFileOperationController<T extends Entityable, M ex
         Map<String, UploadResult> uploadResults = doUpload(request);
         List<List<String>> lines = loadImportFile(uploadResults, fileType, getCharsetName(request));
         beforeUnmarshal(lines);
-        List<T> entities = unmarshal(lines);
+        List<T> entities = unmarshal(lines, request);
         afterUnmarshal(entities);
         getEntityService().saves(entities);
         return entities;
@@ -241,17 +241,31 @@ public abstract class AbstractFileOperationController<T extends Entityable, M ex
 
     }
 
+
     /**
      * 导入时: 批量转换读取的数据为实体
      *
      * @param lines
      */
-    protected List<T> unmarshal(List<List<String>> lines) {
+    protected List<T> unmarshal(List<List<String>> lines, HttpServletRequest request) {
         List<T> entities = new LinkedList<T>();
-        for (List<String> line : lines) {
-            entities.add(doImportEntity(line));
+        for (int i = 0; i < lines.size(); i++) {
+            if (i == 0 && isIgnoreTitle(request)) {
+                continue;
+            }
+            entities.add(doImportEntity(lines.get(i), request));
         }
         return entities;
+    }
+
+    /**
+     * 忽略导入到标题行
+     *
+     * @param request
+     * @return
+     */
+    protected boolean isIgnoreTitle(HttpServletRequest request) {
+        return Strings.equals(request.getParameter(WebRequestParameterEnum.importIgnoreTitle.code()), Boolean.TRUE.toString());
     }
 
 
@@ -268,6 +282,11 @@ public abstract class AbstractFileOperationController<T extends Entityable, M ex
     }
 
 
+    protected T doImportEntity(List<String> fields, HttpServletRequest request) {
+        return doImportEntity(fields);
+    }
+
+
     protected void doExport(HttpServletRequest request, HttpServletResponse response) throws Exception {
         FileType fileType = getFileType(request);
         if (fileType == FileType.CSV) {
@@ -280,7 +299,7 @@ public abstract class AbstractFileOperationController<T extends Entityable, M ex
     }
 
     protected FileType getFileType(HttpServletRequest request) throws Exception {
-        String fType = request.getParameter("fileType");
+        String fType = request.getParameter(WebRequestParameterEnum.importFileType.code());
         FileType fileType = FileType.findOf(fType);
         if (fileType == null) {
             fileType = FileType.CSV;
@@ -492,7 +511,7 @@ public abstract class AbstractFileOperationController<T extends Entityable, M ex
      */
     protected String getExportFileName(HttpServletRequest request) {
         String fileName = getEntityName();
-        String exportFileName = request.getParameter("exportFileName");
+        String exportFileName = request.getParameter(WebRequestParameterEnum.exportFileName.code());
         if (StringUtils.isNotBlank(exportFileName)) {
             fileName = exportFileName;
         }
@@ -601,6 +620,9 @@ public abstract class AbstractFileOperationController<T extends Entityable, M ex
     private String getCharsetName(HttpServletRequest request) {
         String charset = "UTF-8";
         String requestCharset = StringUtils.trimToEmpty(request.getParameter("charset"));
+        if (Strings.isBlank(requestCharset)) {
+            requestCharset = StringUtils.trimToEmpty(request.getParameter(WebRequestParameterEnum.exportCharset.code()));
+        }
         if (StringUtils.isNotBlank(requestCharset)) {
             charset = requestCharset;
         }

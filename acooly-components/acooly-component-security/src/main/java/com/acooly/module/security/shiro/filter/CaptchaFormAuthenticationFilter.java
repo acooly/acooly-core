@@ -2,6 +2,8 @@ package com.acooly.module.security.shiro.filter;
 
 import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.net.ServletUtil;
+import com.acooly.core.utils.security.JWTUtils;
 import com.acooly.module.security.captche.Captchas;
 import com.acooly.module.security.config.FrameworkPropertiesHolder;
 import com.acooly.module.security.domain.User;
@@ -9,6 +11,7 @@ import com.acooly.module.security.service.UserService;
 import com.acooly.module.security.shiro.exception.InvaildCaptchaException;
 import com.acooly.module.security.shiro.listener.ShireLoginLogoutSubject;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -58,7 +61,10 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 	 */
 	@Override
 	protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
-		HttpServletRequest httpServletRequest=(HttpServletRequest)request;
+
+        setTargetUrlToSession();
+
+	    HttpServletRequest httpServletRequest=(HttpServletRequest)request;
 		AuthenticationToken token = createToken(httpServletRequest, response);
 		if (token == null) {
 			String msg = "createToken method implementation returned null. A valid non-null AuthenticationToken "
@@ -120,7 +126,19 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 		}
 		return user;
 	}
-	
+
+    /**
+     * 登录认证,获取重定向地址,并存入 session
+     * @return
+     */
+    private String setTargetUrlToSession() {
+        String targetUrl = ServletUtil.getRequestParameter(JWTUtils.KEY_TARGETURL);
+        if (StringUtils.isNotBlank(targetUrl)) {
+            ServletUtil.setSessionAttribute(JWTUtils.KEY_TARGETURL,targetUrl);
+        }
+        return targetUrl;
+    }
+
 	/**
 	 * 验证图片验证码
 	 * 

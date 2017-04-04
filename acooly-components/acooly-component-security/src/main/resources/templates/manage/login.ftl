@@ -107,7 +107,8 @@
     	if($('#form-username').val() == "" || $('#form-password').val() == ""){
     		return;
     	}
-    	var jsonData = {username:$('#form-username').val(),password:$('#form-password').val(),captcha:$('#form-captcha').val(),_csrf:$('#_csrf').val()};
+        var targetUrl = getParameterByName('targetUrl');
+    	var jsonData = {username:$('#form-username').val(),password:$('#form-password').val(),captcha:$('#form-captcha').val(),_csrf:$('#_csrf').val(),targetUrl:targetUrl};
     	
     	loading();
     	$.ajax({
@@ -116,7 +117,12 @@
 			method : 'POST',
 			success : function(result) {
 				if (result.success) {
-					window.location.href = "/manage/index.html";
+					var isRedirect=result.data.isRedirect;
+					if(isRedirect){
+                        window.location.href = result.data.targetUrl;
+                    }else {
+                        window.location.href = "/manage/index.html";
+                    }
 				} else {
 					refreshCaptcha();
 					var message = result.message;
@@ -141,7 +147,11 @@
 	function loaded(){
 		$('#loginButton').html('登录');
 	}
-	
+
+    function getParameterByName(name) {
+        var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+        return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+    }
 	
 	$(function() {
 	    $('.login-form input[type="text"], .login-form input[type="password"], .login-form textarea').on('focus', function() {

@@ -11,6 +11,7 @@ package com.acooly.module.mybatis.ex;
 
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.dao.support.SearchFilter;
+import com.acooly.core.utils.Strings;
 import com.acooly.module.mybatis.SearchFilterParser;
 import com.google.common.collect.Maps;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -127,7 +128,7 @@ public interface ListMapper<T> {
 				sqlResult.append(" id desc");
 			} else {
 				for (Map.Entry<String, Boolean> entry : sortMap.entrySet()) {
-					sqlResult.append(entry.getKey() + "  " + (entry.getValue() ? "ASC" : "DESC"));
+					sqlResult.append(Strings.camelToUnderline(entry.getKey()) + "  " + (entry.getValue() ? "ASC" : "DESC"));
 					sqlResult.append(",");
 				}
 				sqlResult.deleteCharAt(sqlResult.length() - 1);

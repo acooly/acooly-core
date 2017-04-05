@@ -12,6 +12,7 @@ package com.acooly.module.mybatis;
 import com.acooly.core.common.dao.support.EnhanceDefaultConversionService;
 import com.acooly.core.common.dao.support.SearchFilter;
 import com.acooly.core.utils.Dates;
+import com.acooly.core.utils.Strings;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import org.springframework.core.convert.ConversionService;
@@ -31,7 +32,7 @@ public class SearchFilterParser {
 	public static String parseSqlField(SearchFilter searchFilter, Class proType) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(" ");
-		sb.append(camelToUnderline(searchFilter.fieldName));
+		sb.append(Strings.camelToUnderline(searchFilter.fieldName));
 		sb.append(" ");
 		Object value = convert(searchFilter, proType);
 		if(value instanceof Date){
@@ -188,21 +189,5 @@ public class SearchFilterParser {
 		
 		return value;
 	}
-	private static String camelToUnderline(String param){
-		if (param==null||"".equals(param.trim())){
-			return "";
-		}
-		int len=param.length();
-		StringBuilder sb=new StringBuilder(len);
-		for (int i = 0; i < len; i++) {
-			char c=param.charAt(i);
-			if (Character.isUpperCase(c)){
-				sb.append(UNDERLINE);
-				sb.append(Character.toLowerCase(c));
-			}else{
-				sb.append(c);
-			}
-		}
-		return sb.toString();
-	}
+
 }

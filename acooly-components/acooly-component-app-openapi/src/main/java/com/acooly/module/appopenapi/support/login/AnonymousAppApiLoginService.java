@@ -6,6 +6,7 @@ package com.acooly.module.appopenapi.support.login;
 
 
 import com.acooly.module.appopenapi.support.AppApiLoginService;
+import com.acooly.module.appopenapi.support.LoginDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,9 +21,12 @@ public class AnonymousAppApiLoginService implements AppApiLoginService {
     private static final Logger logger = LoggerFactory.getLogger(AnonymousAppApiLoginService.class);
 
     @Override
-    public String login(String userName, String password, Map<String, Object> context) {
+    public LoginDto login(String userName, String password, Map<String, Object> context) {
         logger.info("登录认证回调扩展信息:{}", context);
-        return userName;
+        LoginDto loginDto=new LoginDto();
+        loginDto.setAccessKey(userName);
+        loginDto.setCustomerId("0");
+        return loginDto;
     }
 
 

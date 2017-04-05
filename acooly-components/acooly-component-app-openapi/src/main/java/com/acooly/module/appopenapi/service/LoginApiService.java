@@ -9,6 +9,7 @@ import com.acooly.module.appopenapi.enums.ApiOwners;
 import com.acooly.module.appopenapi.message.LoginRequest;
 import com.acooly.module.appopenapi.message.LoginResponse;
 import com.acooly.module.appopenapi.support.AppApiLoginService;
+import com.acooly.module.appopenapi.support.LoginDto;
 import com.acooly.module.appopenapi.support.login.AnonymousAppApiLoginService;
 import com.google.common.collect.Maps;
 import com.yiji.framework.openapi.common.exception.ApiServiceException;
@@ -50,13 +51,13 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
 			// 登录验证
 			Map<String, Object> context = Maps.newHashMap();
 			context.put("request", request);
-			String accessKey = appApiLoginService.login(request.getUsername(), request.getPassword(), context);
-			AppCustomer appCustomer = appCustomerService.loadAppCustomer(accessKey, EntityStatus.Enable);
+            LoginDto dto = appApiLoginService.login(request.getUsername(), request.getPassword(), context);
+			AppCustomer appCustomer = appCustomerService.loadAppCustomer(dto.getAccessKey(), EntityStatus.Enable);
 			// 生成动态安全码
 			if (appCustomer == null) {
 				appCustomer = new AppCustomer();
 				appCustomer.setUserName(request.getUsername());
-				appCustomer.setAccessKey(accessKey);
+				appCustomer.setAccessKey(dto.getAccessKey());
 				appCustomer.setDeviceId(request.getDeviceId());
 				appCustomer.setDeviceType(request.getDeviceType());
 				appCustomer.setDeviceModel(request.getDeviceModel());
@@ -73,6 +74,7 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
 				}
 
 			}
+            response.setCustomerId(dto.getCustomerId());
 			response.setAccessKey(appCustomer.getAccessKey());
 			response.setSecretKey(appCustomer.getSecretKey());
 		} catch (Exception e) {

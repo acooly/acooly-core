@@ -12,6 +12,5 @@ import java.util.Map;
  */
 public interface AppApiLoginService {
 
-	String login(String userName, String password, Map<String, Object> context);
-
+    LoginDto login(String userName, String password, Map<String, Object> context);
 }

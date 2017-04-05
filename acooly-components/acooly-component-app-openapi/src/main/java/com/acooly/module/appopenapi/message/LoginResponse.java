@@ -23,6 +23,9 @@ public class LoginResponse extends ApiResponse {
 	@Size(min = 40, max = 40)
 	@OpenApiField(desc = "安全码", constraint = "登录后所有接口的签名秘钥")
 	private String secretKey;
+    @NotEmpty
+    @OpenApiField(desc = "客户id", constraint = "客户id")
+	private String customerId;
 
 	public String getAccessKey() {
 		return accessKey;
@@ -40,4 +43,11 @@ public class LoginResponse extends ApiResponse {
 		this.secretKey = secretKey;
 	}
 
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
 }

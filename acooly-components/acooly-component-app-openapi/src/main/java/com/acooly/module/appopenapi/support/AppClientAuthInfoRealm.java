@@ -6,6 +6,7 @@ import com.acooly.module.app.service.AppCustomerService;
 import com.acooly.module.appopenapi.AppOpenapiProperties;
 import com.google.common.collect.Lists;
 import com.yiji.framework.openapi.core.auth.realm.impl.CacheableAuthInfoRealm;
+import com.yiji.framework.openapi.core.exception.impl.ApiServiceAuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +34,10 @@ public class AppClientAuthInfoRealm extends CacheableAuthInfoRealm {
 			return appOpenapiProperties.getAnonymous().getSecretKey();
 		} else {
 			AppCustomer appCustomer = appCustomerService.loadAppCustomer(partnerId, EntityStatus.Enable);
-			return appCustomer == null ? "" : appCustomer.getSecretKey();
+			if(appCustomer==null){
+                throw new ApiServiceAuthenticationException("app认证用户信息不存在，partnerId="+partnerId);
+            }
+			return appCustomer.getSecretKey();
 		}
 		
 	}

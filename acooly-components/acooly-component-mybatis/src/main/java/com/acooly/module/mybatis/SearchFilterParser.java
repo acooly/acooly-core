@@ -130,6 +130,11 @@ public class SearchFilterParser {
 	
 	private static Object convert(SearchFilter searchFilter, Class proType) {
 		if(proType.isEnum()){
+		    if(searchFilter.value instanceof String){
+                return searchFilter.value;
+            }else if( searchFilter.value instanceof  Enum){
+                return ((Enum) searchFilter.value).name();
+            }
 			return searchFilter.value;
 		}
 		Object value = null;

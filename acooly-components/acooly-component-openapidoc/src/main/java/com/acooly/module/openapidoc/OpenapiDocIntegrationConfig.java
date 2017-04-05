@@ -12,6 +12,7 @@ package com.acooly.module.openapidoc;
 import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
 import com.acooly.module.security.config.SecurityAutoConfig;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -20,6 +21,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * @author qiubo@yiji.com
  */
 @Configuration
+@ConditionalOnProperty(value = "acooly.openapidoc.enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.yiji.framework.openapidoc")
 @EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class, basePackages = "com.yiji.framework.openapidoc")
 @AutoConfigureAfter(SecurityAutoConfig.class)

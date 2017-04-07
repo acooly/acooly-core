@@ -9,6 +9,7 @@
  */
 package com.acooly.module.test.param;
 
+import com.acooly.core.common.dao.support.EnhanceDefaultConversionService;
 import com.google.common.base.Charsets;
 import junitparams.custom.ParametersProvider;
 import junitparams.internal.Utils;
@@ -39,7 +40,7 @@ public class CsvProvider implements ParametersProvider<CsvParameter> {
 	private FrameworkMethod frameworkMethod;
 	private boolean needConvert = false;
 	private Class<?> parameterType = null;
-	private ConversionService conversionService = new DefaultConversionService();
+	private ConversionService conversionService = EnhanceDefaultConversionService.INSTANCE;
 	
 	public CsvProvider(FrameworkMethod frameworkMethod) {
 		this.frameworkMethod = frameworkMethod;

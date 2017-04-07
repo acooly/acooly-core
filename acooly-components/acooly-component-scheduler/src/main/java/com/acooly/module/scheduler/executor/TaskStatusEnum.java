@@ -4,13 +4,16 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * @author shuijing
  */
 public enum TaskStatusEnum {
 
-	NORMAL("NORMAL", "正常执行"),
-	CANCELED("CANCELED", "已经作废");
+	NORMAL("NORMAL", "正常"),
+	CANCELED("CANCELED", "作废");
 
 	@Setter
 	@Getter
@@ -33,5 +36,12 @@ public enum TaskStatusEnum {
 		}
 		return null;
 	}
-	
+
+    public static Map<String, String> mapping() {
+        Map<String, String> map = new LinkedHashMap<>();
+        for (TaskStatusEnum type : values()) {
+            map.put(type.getCode(), type.getMessage());
+        }
+        return map;
+    }
 }

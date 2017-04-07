@@ -48,7 +48,7 @@ public class ScheduleEngineImpl implements ScheduleEngine {
     private static final String TRIGGER_PREFIX = "trigger";
 
     @Override
-    public long addJobToEngine(SchedulerRule rule) {
+    public Long addJobToEngine(SchedulerRule rule) {
         try {
             addJobOrUpdateTriggerToEngine(rule);
         } catch (SchedulerException e) {
@@ -124,7 +124,7 @@ public class ScheduleEngineImpl implements ScheduleEngine {
      */
     public void addJobOrUpdateTriggerToEngine(final SchedulerRule rule) throws SchedulerException {
 
-        long taskId = rule.getId();
+        Long taskId = rule.getId() == null ? -1 : rule.getId();
         String logPrefix = getLogPrefix(taskId);
 
         if (!scheduler.isStarted()) {
@@ -150,7 +150,7 @@ public class ScheduleEngineImpl implements ScheduleEngine {
 
         Trigger newTrigger;
         // 在重启 或者宕机时候处理 Misfired 任务
-        // 策略为 withMisfireHandlingInstructionDoNothing
+        // 策略为什么都不做 withMisfireHandlingInstructionDoNothing
         //Trigger不存在，创建一个
         if (null == oldTrigger) {
             Set<Trigger> triggerSet = new HashSet<>();
@@ -207,7 +207,7 @@ public class ScheduleEngineImpl implements ScheduleEngine {
     }
 
     public void validateRule(SchedulerRule rule) {
-        long taskId = rule.getId() == null ? -1 : rule.getId();
+        Long taskId = rule.getId() == null ? -1 : rule.getId();
         String logPrefix = getLogPrefix(taskId);
 
         if (StringUtils.isBlank(rule.getCronString())) {
@@ -243,7 +243,7 @@ public class ScheduleEngineImpl implements ScheduleEngine {
         return false;
     }
 
-    public static String getLogPrefix(long id) {
+    public static String getLogPrefix(Long id) {
         return "[task" + id + "]";
     }
 

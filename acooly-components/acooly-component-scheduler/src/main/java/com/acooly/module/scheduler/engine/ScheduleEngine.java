@@ -10,7 +10,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
  */
 public interface ScheduleEngine extends ApplicationListener<ContextRefreshedEvent>, DisposableBean {
 
-    long addJobToEngine(SchedulerRule rule);
+    Long addJobToEngine(SchedulerRule rule);
 
     void update(SchedulerRule rule);
 

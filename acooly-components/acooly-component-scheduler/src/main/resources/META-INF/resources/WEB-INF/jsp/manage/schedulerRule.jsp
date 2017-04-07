@@ -15,19 +15,9 @@ $(function() {
         <tr>
           <td align="left">
           	<div>
-					创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					修改时间: <input size="15" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_updateTime" name="search_LTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					execute_num: <input type="text" class="text" size="15" name="search_EQ_executeNum"/>
-					last_execute_time: <input size="15" class="text" id="search_GTE_lastExecuteTime" name="search_GTE_lastExecuteTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_lastExecuteTime" name="search_LTE_lastExecuteTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					retry_time_on_exception: <input type="text" class="text" size="15" name="search_EQ_retryTimeOnException"/>
-					validity_end: <input size="15" class="text" id="search_GTE_validityEnd" name="search_GTE_validityEnd" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_validityEnd" name="search_LTE_validityEnd" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					validity_start: <input size="15" class="text" id="search_GTE_validityStart" name="search_GTE_validityStart" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_validityStart" name="search_LTE_validityStart" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					是否删除: <input type="text" class="text" size="15" name="search_LIKE_isDel"/>
+                任务id: <input type="text" class="text" size="15" name="search_EQ_id"/>
+                任务名: <input type="text" class="text" size="15" name="search_LIKE_memo"/>
+                任务类型: <select style="width:100px;height:27px;" name="search_EQ_actionType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allTaskTypes}"><option value="${e.key}" ${param.search_EQ_actionType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_schedulerRule_searchform','manage_schedulerRule_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
           </td>
@@ -44,24 +34,16 @@ $(function() {
         <tr>
         	<th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
 			<th field="id" sum="true">id</th>
-		    <th field="createTime" formatter="formatDate">创建时间</th>
-		    <th field="updateTime" formatter="formatDate">修改时间</th>
-			<th field="actionType">action_type</th>
-			<th field="className">class_name</th>
-			<th field="creater">creater</th>
-			<th field="cronString">cron_string</th>
-			<th field="exceptionAtLastExecute">exception_at_last_execute</th>
-			<th field="executeNum" >execute_num</th>
-		    <th field="lastExecuteTime" formatter="formatDate">last_execute_time</th>
-			<th field="memo">memo</th>
-			<th field="methodName">method_name</th>
-			<th field="modifyer">modifyer</th>
-			<th field="properties">properties</th>
-			<th field="retryTimeOnException" >retry_time_on_exception</th>
-			<th field="status">status</th>
-		    <th field="validityEnd" formatter="formatDate">validity_end</th>
-		    <th field="validityStart" formatter="formatDate">validity_start</th>
-			<th field="isDel">是否删除</th>
+            <th field="memo">任务名</th>
+            <th field="cronString">cron_string</th>
+            <th field="actionType" data-options="formatter:function(value){ return formatRefrence('manage_schedulerRule_datagrid','allTaskTypes',value);} ">任务类型</th>
+            <th field="properties">HTTP地址</th>
+            <th field="className">类名</th>
+            <th field="methodName">方法名</th>
+            <th field="status" data-options="formatter:function(value){ return formatRefrence('manage_schedulerRule_datagrid','allStatuss',value);} ">状态</th>
+            <th field="lastExecuteTime" formatter="dateTimeFormatter">上次执行时间</th>
+            <th field="exceptionAtLastExecute">上次执行结果</th>
+            <th field="creater">任务创建人</th>
           	<th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_schedulerRule_action',value,row)}">动作</th>
         </tr>
       </thead>
@@ -69,21 +51,15 @@ $(function() {
 
     <!-- 每行的Action动作模板 -->
     <div id="manage_schedulerRule_action" style="display: none;">
-      <a onclick="$.acooly.framework.edit({url:'/manage/schedulerRule/edit.html',id:'{0}',entity:'schedulerRule',width:500,height:400});" href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
-      <a onclick="$.acooly.framework.show('/manage/schedulerRule/show.html?id={0}',500,400);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>
-      <a onclick="$.acooly.framework.remove('/manage/schedulerRule/deleteJson.html','{0}','manage_schedulerRule_datagrid');" href="#" title="删除"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>
+        <a class="line-action icon-resume" onclick="$.acooly.framework.confirmSubmit('/manage/schedulerRule/runjob.html','{0}','manage_schedulerRule_datagrid');" href="#" title="立即执行"></a>
+        <a  onclick="$.acooly.framework.edit({url:'/manage/schedulerRule/edit.html',id:'{0}',entity:'schedulerRule',width:620,height:520});" href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
+        <a  onclick="$.acooly.framework.show('/manage/schedulerRule/show.html?id={0}',500,600);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>
+        <a  onclick="$.acooly.framework.remove('/manage/schedulerRule/deleteJson.html','{0}','manage_schedulerRule_datagrid');" href="#" title="删除"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>
     </div>
 
     <!-- 表格的工具栏 -->
     <div id="manage_schedulerRule_toolbar">
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/schedulerRule/create.html',entity:'schedulerRule',width:500,height:400})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.removes('/manage/schedulerRule/deleteJson.html','manage_schedulerRule_datagrid')"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i>批量删除</a>
-      <a href="#" class="easyui-menubutton" data-options="menu:'#manage_schedulerRule_exports_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>批量导出</a>
-      <div id="manage_schedulerRule_exports_menu" style="width:150px;">
-        <div onclick="$.acooly.framework.exports('/manage/schedulerRule/exportXls.html','manage_schedulerRule_searchform','scheduler_rule')"><i class="fa fa-file-excel-o fa-lg fa-fw fa-col"></i>Excel</div>
-        <div onclick="$.acooly.framework.exports('/manage/schedulerRule/exportCsv.html','manage_schedulerRule_searchform','scheduler_rule')"><i class="fa fa-file-text-o fa-lg fa-fw fa-col"></i>CSV</div>
-      </div>
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.imports({url:'/manage/schedulerRule/importView.html',uploader:'manage_schedulerRule_import_uploader_file'});"><i class="fa fa-arrow-circle-o-up fa-lg fa-fw fa-col"></i>批量导入</a>
+      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/schedulerRule/create.html',entity:'schedulerRule',width:620,height:520})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
     </div>
   </div>
 

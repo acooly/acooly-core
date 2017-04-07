@@ -70,6 +70,4 @@ public class LocalTaskExecutor implements TaskExecutor {
         classMap = Maps.newConcurrentMap();
         beanMap = Maps.newConcurrentMap();
     }
-
-
 }

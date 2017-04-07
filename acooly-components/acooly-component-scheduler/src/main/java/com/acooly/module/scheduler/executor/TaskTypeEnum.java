@@ -4,14 +4,17 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * @author shuijing
  */
 public enum TaskTypeEnum {
-	
-	LOCAL_TASK("LOCAL", "本地任务"),
-	HTTP_TASK("HTTP", "HTTP调用的任务"),
-	PLAYBOOK_TASK("PLAYBOOK", "PLAYBOOK任务");
+
+    HTTP_TASK("HTTP", "HTTP任务"),
+    //DUBBO_TASK("DUBBO", "DUBBO任务"),
+    LOCAL_TASK("LOCAL", "本地任务");
 	
 	@Setter
 	@Getter
@@ -34,5 +37,12 @@ public enum TaskTypeEnum {
 		}
 		return null;
 	}
-	
+
+    public static Map<String, String> mapping() {
+        Map<String, String> map = new LinkedHashMap<>();
+        for (TaskTypeEnum type : values()) {
+            map.put(type.getCode(), type.getMessage());
+        }
+        return map;
+    }
 }

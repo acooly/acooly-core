@@ -14,5 +14,6 @@ public class SchedulerComponentInitializer implements ComponentInitializer {
 
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
+        setPropertyIfMissing("acooly.ds.Checker.excludedColumnTables.scheduler", "QRTZ_CALENDARS, QRTZ_JOB_DETAILS,QRTZ_TRIGGERS,QRTZ_BLOB_TRIGGERS,QRTZ_CRON_TRIGGERS,QRTZ_SIMPROP_TRIGGERS,QRTZ_SIMPLE_TRIGGERS,QRTZ_LOCKS,QRTZ_SCHEDULER_STATE,QRTZ_PAUSED_TRIGGER_GRPS,QRTZ_FIRED_TRIGGERS");
     }
 }

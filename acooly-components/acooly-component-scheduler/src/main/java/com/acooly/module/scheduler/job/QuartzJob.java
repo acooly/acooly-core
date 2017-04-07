@@ -5,7 +5,7 @@ import com.acooly.module.scheduler.domain.SchedulerRule;
 import com.acooly.module.scheduler.executor.TaskExecutor;
 import com.acooly.module.scheduler.executor.TaskExecutorProvider;
 import com.acooly.module.scheduler.executor.TaskTypeEnum;
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -20,7 +20,6 @@ import javax.xml.ws.http.HTTPException;
 import java.net.ConnectException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.util.Date;
 import java.util.concurrent.TimeoutException;
 
 import static com.acooly.module.scheduler.engine.ScheduleEngineImpl.getLogPrefix;
@@ -41,6 +40,8 @@ public class QuartzJob implements Job {
 
     @Autowired
     private SchedulerRuleDao schedulerRuleRepository;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public void execute(JobExecutionContext context) {
@@ -50,7 +51,7 @@ public class QuartzJob implements Job {
         try {
             JobDataMap dataMap = context.getJobDetail().getJobDataMap();
 
-            schedulerRule = JSON.parseObject((String) dataMap.get(SCHEDULER_RULE_DO_KEY), SchedulerRule.class);
+            schedulerRule = objectMapper.readValue((String) dataMap.get(SCHEDULER_RULE_DO_KEY), SchedulerRule.class);
 
             if (schedulerRule == null) {
                 logger.error("任务执行失败,没有找到任务实体,context：{}", context.toString());
@@ -86,8 +87,7 @@ public class QuartzJob implements Job {
             }
 
         } finally {
-            Date sysdate = schedulerRuleRepository.getSysdate();
-            schedulerRuleRepository.updateExceptionAtLastExecute(msgAtLastExecute, sysdate, schedulerRule.getId());
+            schedulerRuleRepository.updateExceptionAtLastExecute(msgAtLastExecute, schedulerRule.getId());
             MDC.clear();
         }
     }

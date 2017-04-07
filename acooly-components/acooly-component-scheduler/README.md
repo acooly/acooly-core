@@ -6,9 +6,10 @@
 
 1. 任务类型
 
-    目前支持本地任务、http任务两种，后期可扩展dubbo、webservice
-    本地任务只需要填全路径类名、方法名，并把此类注解为spring bean;
-    HTTP任务只需要填HTTP地址
+    目前支持本地任务、http任务两种:
+
+    * 本地任务只需要填全路径类名、方法名，并把此类标注@Component;
+    * HTTP任务只需要填HTTP地址
 
 2. 配置
 

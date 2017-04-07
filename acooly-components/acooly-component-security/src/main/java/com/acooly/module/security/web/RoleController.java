@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.acooly.module.security.utils.ShiroUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class RoleController extends AbstractJQueryEntityController<Role, RoleSer
 		JsonListResult<ResourceNode> result = new JsonListResult<ResourceNode>();
 		String roleId = request.getParameter("roleId");
 		try {
-			User user = (User) SecurityUtils.getSubject().getPrincipal();
+			User user =  ShiroUtils.getCurrentUser();
 			result.appendData(referenceData(request));
 			List<ResourceNode> resources = null;
 

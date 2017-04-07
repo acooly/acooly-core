@@ -4,10 +4,13 @@ import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.module.scheduler.domain.SchedulerRule;
 import com.acooly.module.scheduler.exceptions.SchedulerExecuteException;
 import com.google.common.collect.Maps;
+import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.util.ReflectionUtils;
+import sun.tools.attach.HotSpotVirtualMachine;
 
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.concurrent.*;
 
 /**
  * @author shuijing
@@ -21,6 +24,8 @@ public class LocalTaskExecutor implements TaskExecutor {
     //缓存 class
     private Map<String, Class<?>> classMap;
 
+    private ExecutorService executorService=Executors.newCachedThreadPool(new CustomizableThreadFactory("scheduler-LocalTaskExecutor-"));
+
     @Override
     public Boolean execute(SchedulerRule schedulerRule) {
         String className = schedulerRule.getClassName();
@@ -30,7 +35,7 @@ public class LocalTaskExecutor implements TaskExecutor {
             String methodName = schedulerRule.getMethodName();
             Method declaredMethod = clazz.getDeclaredMethod(methodName, null);
             declaredMethod.setAccessible(true);
-            ReflectionUtils.invokeMethod(declaredMethod, bean);
+            CompletableFuture.runAsync(()->ReflectionUtils.invokeMethod(declaredMethod, bean),executorService).get(TIME_OUT, TimeUnit.SECONDS);
         } catch (Exception e) {
             throw new SchedulerExecuteException(e);
         }

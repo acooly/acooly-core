@@ -10,6 +10,8 @@ import com.acooly.module.scheduler.exceptions.SchedulerExecuteException;
 import com.acooly.module.scheduler.executor.TaskStatusEnum;
 import com.acooly.module.scheduler.executor.TaskTypeEnum;
 import com.acooly.module.scheduler.service.SchedulerRuleService;
+import com.acooly.module.security.utils.ShiroUtils;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +53,12 @@ public class SchedulerRuleManagerController extends AbstractJQueryEntityControll
     @Override
     protected SchedulerRule onSave(HttpServletRequest request, HttpServletResponse response, Model model,
                                    SchedulerRule entity, boolean isCreate) throws Exception {
-        //TODO 设置创建人
-        // entity.setCreater(user.getName());
+        if(isCreate){
+            entity.setCreater(ShiroUtils.getCurrentUser().getUsername());
+            entity.setExecuteNum(0);
+        }else {
+            entity.setModifyer(ShiroUtils.getCurrentUser().getUsername());
+        }
         //执行定时任务规则检查
         try {
             scheduleEngine.validateRule(entity);
@@ -66,7 +72,7 @@ public class SchedulerRuleManagerController extends AbstractJQueryEntityControll
     @Override
     protected SchedulerRule doSave(HttpServletRequest request, HttpServletResponse response, Model model, boolean isCreate)
         throws Exception {
-        SchedulerRule schedulerRule = super.doSave(request, response, model, true);
+        SchedulerRule schedulerRule = super.doSave(request, response, model, isCreate);
         //添加定时任务到quartz引擎
         scheduleEngine.addJobToEngine(schedulerRule);
         return schedulerRule;
@@ -113,6 +119,7 @@ public class SchedulerRuleManagerController extends AbstractJQueryEntityControll
 //            logger.error("越权修改定时任务,任务id：[task{}]", rule.getId());
 //            return fail("不是本人，不能修改此定时任务");
 //        }
+
         JsonEntityResult<SchedulerRule> result = super.updateJson(request, response);
         SchedulerRule resultEntity = result.getEntity();
 

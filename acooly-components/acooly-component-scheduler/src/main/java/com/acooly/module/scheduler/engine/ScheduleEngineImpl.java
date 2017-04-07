@@ -2,12 +2,12 @@ package com.acooly.module.scheduler.engine;
 
 import com.acooly.core.utils.Exceptions;
 import com.acooly.module.scheduler.dao.SchedulerRuleDao;
-import com.alibaba.fastjson.JSON;
 import com.acooly.module.scheduler.domain.SchedulerRule;
 import com.acooly.module.scheduler.exceptions.SchedulerEngineException;
 import com.acooly.module.scheduler.executor.TaskStatusEnum;
 import com.acooly.module.scheduler.job.QuartzJob;
 import com.acooly.module.scheduler.service.SchedulerRuleService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.*;
 import org.slf4j.Logger;
@@ -42,6 +42,9 @@ public class ScheduleEngineImpl implements ScheduleEngine {
     @Autowired
     private SchedulerRuleService schedulerRuleService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     private Object schedulerLock = new Object();
 
     private static final String JOB_PREFIX = "job";
@@ -51,7 +54,7 @@ public class ScheduleEngineImpl implements ScheduleEngine {
     public Long addJobToEngine(SchedulerRule rule) {
         try {
             addJobOrUpdateTriggerToEngine(rule);
-        } catch (SchedulerException e) {
+        } catch (Exception e) {
             throw new SchedulerEngineException(getLogPrefix(rule.getId()) + "启动失败:" + e.getMessage());
         }
         return rule.getId();
@@ -61,7 +64,7 @@ public class ScheduleEngineImpl implements ScheduleEngine {
     public void update(SchedulerRule rule) {
         try {
             addJobOrUpdateTriggerToEngine(rule);
-        } catch (SchedulerException e) {
+        } catch (Exception e) {
             throw new SchedulerEngineException(getLogPrefix(rule.getId()) + "更新失败:" + e.getMessage());
         }
     }
@@ -122,7 +125,7 @@ public class ScheduleEngineImpl implements ScheduleEngine {
     /**
      * 添加任务或者更新到quarz引擎
      */
-    public void addJobOrUpdateTriggerToEngine(final SchedulerRule rule) throws SchedulerException {
+    public void addJobOrUpdateTriggerToEngine(final SchedulerRule rule) throws Exception {
 
         Long taskId = rule.getId() == null ? -1 : rule.getId();
         String logPrefix = getLogPrefix(taskId);
@@ -146,7 +149,7 @@ public class ScheduleEngineImpl implements ScheduleEngine {
         JobDetail job = JobBuilder.newJob(QuartzJob.class).storeDurably(true).withIdentity(jobKey, groupKey).build();
 
         //注意,当存储到db时候,JobDataMap只支持string. 切勿存储有复杂对象引用bean，集群时解析bean会失败
-        job.getJobDataMap().put(QuartzJob.SCHEDULER_RULE_DO_KEY, JSON.toJSONString(rule));
+        job.getJobDataMap().put(QuartzJob.SCHEDULER_RULE_DO_KEY, objectMapper.writeValueAsString(rule));
 
         Trigger newTrigger;
         // 在重启 或者宕机时候处理 Misfired 任务

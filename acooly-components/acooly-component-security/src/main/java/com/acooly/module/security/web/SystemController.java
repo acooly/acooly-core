@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.AbstractStandardEntityController;
+import com.acooly.module.security.utils.ShiroUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class SystemController extends AbstractJQueryEntityController<User, UserS
 	@RequestMapping("authorisedMenus")
 	@ResponseBody
 	public List<ResourceNode> authorisedMenus(HttpServletRequest request, HttpServletResponse response) {
-		User user = (User) SecurityUtils.getSubject().getPrincipal();
+		User user = ShiroUtils.getCurrentUser();
 		List<ResourceNode> resourceNodes = resourceService.getAuthorizedResourceNode(user.getId());
 		return resourceNodes;
 	}
@@ -60,7 +61,7 @@ public class SystemController extends AbstractJQueryEntityController<User, UserS
 	@ResponseBody
 	public List<Portallet> portallets(Model model, HttpServletRequest request, HttpServletResponse response) {
 		try {
-			User user = (User) SecurityUtils.getSubject().getPrincipal();
+			User user = ShiroUtils.getCurrentUser();
 			List<Portallet> portallets = portalletService.queryByUserName(user.getUsername());
 			List<Portallet> authPortallets = Lists.newArrayList();
 			for (Portallet p : portallets) {
@@ -82,7 +83,7 @@ public class SystemController extends AbstractJQueryEntityController<User, UserS
 
 	@RequestMapping(value = "changePasswordView")
 	public String changePasswordView(Model model, HttpServletRequest request, HttpServletResponse response) {
-		User user = (User) SecurityUtils.getSubject().getPrincipal();
+		User user = ShiroUtils.getCurrentUser();
 		model.addAttribute("user", user);
 		return "/manage/system/changePassword";
 	}
@@ -95,7 +96,7 @@ public class SystemController extends AbstractJQueryEntityController<User, UserS
 
 		JsonResult result = new JsonResult();
 		try {
-			User user = (User) SecurityUtils.getSubject().getPrincipal();
+			User user =  ShiroUtils.getCurrentUser();
 			if (user != null) {
 				boolean checkResult = userService.validatePassword(user, orginalPassword);
 				if (checkResult) {

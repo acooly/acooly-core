@@ -18,8 +18,8 @@ public interface SchedulerRuleDao extends EntityJpaDao<SchedulerRule, Long> {
     @Transactional
     @Modifying
     @Query(
-        value = "UPDATE scheduler_rule SET exception_at_last_execute= :lastExecute , last_execute_time= :lastTime  WHERE id= :id ",
+        value = "UPDATE scheduler_rule SET exception_at_last_execute= :lastExecute , last_execute_time= current_timestamp,execute_num=execute_num+1  WHERE id= :id ",
         nativeQuery = true)
-    void updateExceptionAtLastExecute(@Param("lastExecute") String lastExecute, @Param("lastTime") Date lastTime,
+    void updateExceptionAtLastExecute(@Param("lastExecute") String lastExecute,
                                       @Param("id") Long id);
 }

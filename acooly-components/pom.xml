@@ -38,6 +38,7 @@
         <module>acooly-component-point</module>
         <module>acooly-component-openapidoc</module>
         <module>acooly-component-threadpool</module>
+        <module>acooly-component-scheduler</module>
     </modules>
 
     <dependencies>

@@ -130,6 +130,16 @@
                 <artifactId>acooly-component-openapidoc</artifactId>
                 <version>4.0.0-SNAPSHOT</version>
             </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-threadpool</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-scheduler</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>

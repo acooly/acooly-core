@@ -12,10 +12,6 @@
     <artifactId>acooly-component-scheduler</artifactId>
     <dependencies>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-threadpool</artifactId>
             <version>${project.version}</version>
@@ -30,11 +26,7 @@
             <artifactId>acooly-component-mybatis</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.11</version>
-        </dependency>
+
     </dependencies>
 
 </project>

@@ -11,6 +11,7 @@ import java.lang.annotation.*;
  * @author shuijing
  */
 public interface TaskExecutor extends InitializingBean, DisposableBean {
+    int TIME_OUT = 5 * 1000;
 
     Boolean execute(SchedulerRule schedulerRule);
 

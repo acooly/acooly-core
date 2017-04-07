@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.acooly.module.security.config.FrameworkPropertiesHolder;
+import com.acooly.module.security.utils.ShiroUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,7 +35,7 @@ public class PortalletController extends AbstractJQueryEntityController<Portalle
 	@Override
 	protected Map<String, Object> getSearchParams(HttpServletRequest request) {
 		Map<String, Object> map = super.getSearchParams(request);
-		User user = (User) SecurityUtils.getSubject().getPrincipal();
+		User user =  ShiroUtils.getCurrentUser();
 		if (user.getUserType() != User.USER_TYPE_ADMIN) {
 			map.put("EQ_userName", user.getUsername());
 		}
@@ -44,7 +45,7 @@ public class PortalletController extends AbstractJQueryEntityController<Portalle
 	@Override
 	protected Portallet onSave(HttpServletRequest request, HttpServletResponse response, Model model, Portallet entity,
 			boolean isCreate) throws Exception {
-		User user = (User) SecurityUtils.getSubject().getPrincipal();
+		User user =  ShiroUtils.getCurrentUser();
 		if (user.getUserType() != User.USER_TYPE_ADMIN) {
 			entity.setUserName(user.getUsername());
 		} else {

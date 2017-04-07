@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.shiro.authz.Permission;
+import org.apache.shiro.authz.permission.WildcardPermission;
 import org.apache.shiro.util.AntPathMatcher;
 import org.apache.shiro.util.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PathMatchPermission implements Permission {
+public class PathMatchPermission extends WildcardPermission {
 
 	private static final Logger logger = LoggerFactory.getLogger(PathMatchPermission.class);
 
@@ -19,15 +20,18 @@ public class PathMatchPermission implements Permission {
 	private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
 	private String stringPermission;
-	private List<String> parts = new ArrayList<String>();
+	private List<String> parts = new ArrayList<>();
 
-	public PathMatchPermission(String stringPermission) {
-		super();
+	private boolean isFunction=false;
+
+	public PathMatchPermission(String stringPermission,boolean isFunction) {
+		super(stringPermission);
 		this.stringPermission = stringPermission;
-		setParts(stringPermission, DEFAULT_CASE_SENSITIVE);
+		this.isFunction=isFunction;
+        parts(stringPermission, DEFAULT_CASE_SENSITIVE);
 	}
 
-	protected void setParts(String stringPermission, boolean caseSensitive) {
+	protected void parts(String stringPermission, boolean caseSensitive) {
 		if (stringPermission == null || stringPermission.trim().length() == 0) {
 			throw new IllegalArgumentException("Wildcard string cannot be null or empty. Make sure permission strings are properly formatted.");
 		}
@@ -45,14 +49,16 @@ public class PathMatchPermission implements Permission {
 
 	@Override
 	public boolean implies(Permission p) {
-
+        if(isFunction){
+            return super.implies(p);
+        }
 		if (!(p instanceof PathMatchPermission)) {
 			logger.debug("PathMatchPermission does not support other permission implements...");
 			return false;
 		}
 
 		PathMatchPermission pmp = (PathMatchPermission) p;
-		List<String> otherParts = pmp.getParts();
+		List<String> otherParts = pmp.getPartList();
 		if (this.parts.size() != otherParts.size()) {
 			logger.debug("Two Permissions structure does not match.");
 			return false;
@@ -73,7 +79,7 @@ public class PathMatchPermission implements Permission {
 		return stringPermission;
 	}
 
-	public List<String> getParts() {
+	public List<String> getPartList() {
 		return parts;
 	}
 

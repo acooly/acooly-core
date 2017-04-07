@@ -15,10 +15,10 @@ $(function() {
         <tr>
           <td align="left">
           	<div>
-					创建时间: <input size="15" class="text" id="search_GTE_rawAddTime" name="search_GTE_rawAddTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_rawAddTime" name="search_LTE_rawAddTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					修改时间: <input size="15" class="text" id="search_GTE_rawUpdateTime" name="search_GTE_rawUpdateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_rawUpdateTime" name="search_LTE_rawUpdateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					修改时间: <input size="15" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					至<input size="15" class="text" id="search_LTE_updateTime" name="search_LTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
 					execute_num: <input type="text" class="text" size="15" name="search_EQ_executeNum"/>
 					last_execute_time: <input size="15" class="text" id="search_GTE_lastExecuteTime" name="search_GTE_lastExecuteTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
 					至<input size="15" class="text" id="search_LTE_lastExecuteTime" name="search_LTE_lastExecuteTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
@@ -44,8 +44,8 @@ $(function() {
         <tr>
         	<th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
 			<th field="id" sum="true">id</th>
-		    <th field="rawAddTime" formatter="formatDate">创建时间</th>
-		    <th field="rawUpdateTime" formatter="formatDate">修改时间</th>
+		    <th field="createTime" formatter="formatDate">创建时间</th>
+		    <th field="updateTime" formatter="formatDate">修改时间</th>
 			<th field="actionType">action_type</th>
 			<th field="className">class_name</th>
 			<th field="creater">creater</th>

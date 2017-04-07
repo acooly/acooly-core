@@ -8,11 +8,11 @@
 	</tr>					
 	<tr>
 		<th width="25%">创建时间:</th>
-		<td><fmt:formatDate value="${schedulerRule.rawAddTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+		<td><fmt:formatDate value="${schedulerRule.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 	</tr>					
 	<tr>
 		<th>修改时间:</th>
-		<td><fmt:formatDate value="${schedulerRule.rawUpdateTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+		<td><fmt:formatDate value="${schedulerRule.updateTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 	</tr>					
 	<tr>
 		<th>action_type:</th>

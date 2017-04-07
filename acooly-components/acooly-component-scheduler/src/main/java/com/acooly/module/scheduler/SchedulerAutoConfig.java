@@ -1,9 +1,11 @@
 package com.acooly.module.scheduler;
 
+import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
 import com.acooly.module.scheduler.job.AutowiringSpringBeanJobFactory;
 import com.google.common.collect.Lists;
 import org.quartz.spi.JobFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -12,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import javax.sql.DataSource;
@@ -29,6 +32,10 @@ import static com.acooly.module.scheduler.SchedulerProperties.PREFIX;
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.module.scheduler")
 public class SchedulerAutoConfig {
+
+    @Autowired
+    private SchedulerProperties schedulerProperties;
+
     @Bean
     public StandardDatabaseScriptIniter schedulerScriptIniter() {
         return new StandardDatabaseScriptIniter() {
@@ -44,11 +51,10 @@ public class SchedulerAutoConfig {
 
             @Override
             public List<String> getInitSqlFile() {
-                return Lists.newArrayList("scheduler");
+                return Lists.newArrayList("scheduler", "scheduler_urls");
             }
         };
     }
-
 
     @Bean
     public JobFactory jobFactory(ApplicationContext applicationContext) {
@@ -65,15 +71,18 @@ public class SchedulerAutoConfig {
         factory.setDataSource(dataSource);
         factory.setJobFactory(jobFactory);
         factory.setQuartzProperties(quartzProperties());
-
         return factory;
     }
 
     @Bean
     public Properties quartzProperties() throws IOException {
         PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
-        propertiesFactoryBean.setLocation(new ClassPathResource("/quartz.properties"));
+        Resource quartzResource = ApplicationContextHolder.get().getResource("classpath:META-INF/quartz.properties");
+        propertiesFactoryBean.setLocation(quartzResource);
         propertiesFactoryBean.afterPropertiesSet();
-        return propertiesFactoryBean.getObject();
+        Properties properties = propertiesFactoryBean.getObject();
+        properties.setProperty("org.quartz.threadPool.threadCount", String.valueOf(schedulerProperties.getThreadCount()));
+        properties.setProperty("org.quartz.jobStore.clusterCheckinInterval", String.valueOf(schedulerProperties.getClusterCheckinInterval()));
+        return properties;
     }
 }

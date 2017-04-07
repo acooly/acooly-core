@@ -7,11 +7,11 @@
         <table class="tableForm" width="100%">
 			<tr>
 				<th width="25%">创建时间：</th>
-				<td><input type="text" name="rawAddTime" size="20" class="easyui-validatebox text" value="<fmt:formatDate value="${schedulerRule.rawAddTime}" pattern="yyyy-MM-dd HH:mm:ss"/>" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" data-options="required:true" /></td>
+				<td><input type="text" name="createTime" size="20" class="easyui-validatebox text" value="<fmt:formatDate value="${schedulerRule.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" data-options="required:true" /></td>
 			</tr>					
 			<tr>
 				<th>修改时间：</th>
-				<td><input type="text" name="rawUpdateTime" size="20" class="easyui-validatebox text" value="<fmt:formatDate value="${schedulerRule.rawUpdateTime}" pattern="yyyy-MM-dd HH:mm:ss"/>" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  /></td>
+				<td><input type="text" name="updateTime" size="20" class="easyui-validatebox text" value="<fmt:formatDate value="${schedulerRule.updateTime}" pattern="yyyy-MM-dd HH:mm:ss"/>" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  /></td>
 			</tr>					
 			<tr>
 				<th>action_type：</th>

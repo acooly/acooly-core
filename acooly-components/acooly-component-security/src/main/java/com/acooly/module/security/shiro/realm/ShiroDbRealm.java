@@ -30,7 +30,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ShiroDbRealm.class);
     public static final String SESSION_USER = "user";
-
+    public static final String IS_FUNCTION_PREFIX="IS_FUNCTION_PREFIX";
     protected UserService userService;
 	
 	/**
@@ -109,7 +109,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 				if (resource.getType().equalsIgnoreCase(FrameworkProperties.RESOURCE_TYPE_URL)) {
 					urls.add("*:" + getCanonicalResource(contextPath, resource.getValue()));
 				} else if (resource.getType().equalsIgnoreCase(FrameworkProperties.RESOURCE_TYPE_FUNCTION)) {
-					urls.add(resource.getValue());
+					urls.add(IS_FUNCTION_PREFIX+resource.getValue());
 				}
 			}
 			info.addStringPermissions(urls);

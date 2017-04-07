@@ -10,6 +10,7 @@
 package com.acooly.module.test.param;
 
 import com.acooly.core.common.dao.support.EnhanceDefaultConversionService;
+import com.acooly.core.utils.Money;
 import com.google.common.base.Charsets;
 import junitparams.custom.ParametersProvider;
 import junitparams.internal.Utils;
@@ -25,6 +26,7 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
+import java.beans.PropertyEditorManager;
 import java.io.*;
 import java.lang.reflect.Parameter;
 import java.util.LinkedList;
@@ -41,6 +43,10 @@ public class CsvProvider implements ParametersProvider<CsvParameter> {
 	private boolean needConvert = false;
 	private Class<?> parameterType = null;
 	private ConversionService conversionService = EnhanceDefaultConversionService.INSTANCE;
+
+	static {
+        PropertyEditorManager.registerEditor(Money.class,MoneyEditor.class);
+    }
 	
 	public CsvProvider(FrameworkMethod frameworkMethod) {
 		this.frameworkMethod = frameworkMethod;

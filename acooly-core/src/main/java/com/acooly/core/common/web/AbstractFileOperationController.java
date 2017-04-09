@@ -13,10 +13,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -153,6 +150,7 @@ public abstract class AbstractFileOperationController<T extends Entityable, M ex
                 for (Row r : sheet) {
                     row = new ArrayList<String>(r.getLastCellNum());
                     for (Cell cell : r) {
+                        cell.setCellType(CellType.STRING);
                         row.add(cell.getStringCellValue());
                     }
                     lines.add(row);

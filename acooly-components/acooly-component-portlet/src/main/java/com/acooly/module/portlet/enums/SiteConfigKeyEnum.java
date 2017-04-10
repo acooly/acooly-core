@@ -15,19 +15,31 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * p_portlet_config Type 枚举定义
+ * 常见 site config的key
  *
  * @author acooly
  *         Date: 2017-03-01 00:53:18
  */
-public enum PortletConfigTypeEnum implements Messageable {
+public enum SiteConfigKeyEnum implements Messageable {
 
-    def("def", "默认"),;
+    serviceTel("serviceTel", "客服热线"),
+
+    serviceTime("serviceWorkHours", "服务时间"),
+
+    serviceEmail("serviceEmail", "服务邮箱"),
+
+    serviceWeibo("serviceWeibo", "服务微博"),
+
+    serviceQQ("serviceQQ", "服务QQ"),
+
+    serviceQQGroup("serviceQQGroup", "服务QQ群"),
+
+    serviceWeChat("serviceWeChat", "微信");
 
     private final String code;
     private final String message;
 
-    private PortletConfigTypeEnum(String code, String message) {
+    private SiteConfigKeyEnum(String code, String message) {
         this.code = code;
         this.message = message;
     }
@@ -50,7 +62,7 @@ public enum PortletConfigTypeEnum implements Messageable {
 
     public static Map<String, String> mapping() {
         Map<String, String> map = new LinkedHashMap<String, String>();
-        for (PortletConfigTypeEnum type : values()) {
+        for (SiteConfigKeyEnum type : values()) {
             map.put(type.getCode(), type.getMessage());
         }
         return map;
@@ -63,8 +75,8 @@ public enum PortletConfigTypeEnum implements Messageable {
      * @return 枚举值码对应的枚举值。
      * @throws IllegalArgumentException 如果 code 没有对应的 Status 。
      */
-    public static PortletConfigTypeEnum find(String code) {
-        for (PortletConfigTypeEnum status : values()) {
+    public static SiteConfigKeyEnum find(String code) {
+        for (SiteConfigKeyEnum status : values()) {
             if (status.getCode().equals(code)) {
                 return status;
             }
@@ -77,9 +89,9 @@ public enum PortletConfigTypeEnum implements Messageable {
      *
      * @return 全部枚举值。
      */
-    public static List<PortletConfigTypeEnum> getAll() {
-        List<PortletConfigTypeEnum> list = new ArrayList<PortletConfigTypeEnum>();
-        for (PortletConfigTypeEnum status : values()) {
+    public static List<SiteConfigKeyEnum> getAll() {
+        List<SiteConfigKeyEnum> list = new ArrayList<SiteConfigKeyEnum>();
+        for (SiteConfigKeyEnum status : values()) {
             list.add(status);
         }
         return list;
@@ -92,7 +104,7 @@ public enum PortletConfigTypeEnum implements Messageable {
      */
     public static List<String> getAllCode() {
         List<String> list = new ArrayList<String>();
-        for (PortletConfigTypeEnum status : values()) {
+        for (SiteConfigKeyEnum status : values()) {
             list.add(status.code());
         }
         return list;

@@ -27,7 +27,7 @@ public class Coder {
 		if (StringUtils.isBlank(service.getGenerateConfiguration().getRootPackage())) {
 			service.getGenerateConfiguration().setRootPackage(getRootPackage());
 		}
-		service.generateTable("dm_customer");
+		service.generateTable("portlet_action_mapping");
 	}
 
 	public static String getProjectPath() {

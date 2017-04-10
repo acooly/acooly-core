@@ -60,6 +60,8 @@ public class AnonymousAppBannerListApiServiceTest extends AbstractApiServieTests
 		request.setPassword(Encodes.encodeBase64(Cryptos.aesEncrypt(password, Encodes.encodeHex(key.getBytes()))));
 		request.setDeviceType(DeviceType.IPHONE6);
 		request.setDeviceModel("xxxxx");
+		request.setChannel("Web");
+		request.setCustomerIp("218.239.78.70");
 		LoginResponse response = request(request, LoginResponse.class);
 		log.info("response:{}", response);
 		

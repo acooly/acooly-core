@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -55,6 +56,11 @@ public class AppManagerController extends AbstractJQueryEntityController<App, Ap
         return super.doImportEntity(fields);
     }
 
+
+    @Override
+    protected boolean isIgnoreTitle(HttpServletRequest request) {
+        return true;
+    }
 
     /**
      * 导出

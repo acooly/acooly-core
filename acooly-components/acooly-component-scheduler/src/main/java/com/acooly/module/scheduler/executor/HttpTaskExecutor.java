@@ -10,7 +10,7 @@ import com.github.kevinsawicki.http.HttpRequest;
 @TaskExecutor.Type(type = TaskTypeEnum.HTTP_TASK)
 public class HttpTaskExecutor implements TaskExecutor {
 
-    public static final String HTTP = "http://";
+    public static final String HTTP = "http";
     public static int TIME_OUT = 5 * 1000;
 	
 	@Override

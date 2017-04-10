@@ -251,7 +251,7 @@ public class ScheduleEngineImpl implements ScheduleEngine {
     }
 
     private String getGroupKey(final SchedulerRule rule) {
-        return "lunaQuartz";
+        return "acooly";
     }
 
     private String getJobKey(final SchedulerRule rule) {

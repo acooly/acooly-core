@@ -11,6 +11,7 @@ import com.acooly.module.scheduler.executor.TaskStatusEnum;
 import com.acooly.module.scheduler.executor.TaskTypeEnum;
 import com.acooly.module.scheduler.service.SchedulerRuleService;
 import com.acooly.module.security.utils.ShiroUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -48,6 +50,8 @@ public class SchedulerRuleManagerController extends AbstractJQueryEntityControll
     protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
         model.put("allTaskTypes", TaskTypeEnum.mapping());
         model.put("allStatuss", TaskStatusEnum.mapping());
+        model.put("createValidityStart", DateUtils.addDays(new Date(), -1));
+        model.put("createValidityEnd", DateUtils.addYears(new Date(), 100));
     }
 
     @Override
@@ -74,7 +78,9 @@ public class SchedulerRuleManagerController extends AbstractJQueryEntityControll
         throws Exception {
         SchedulerRule schedulerRule = super.doSave(request, response, model, isCreate);
         //添加定时任务到quartz引擎
-        scheduleEngine.addJobToEngine(schedulerRule);
+        if (isCreate){
+            scheduleEngine.addJobToEngine(schedulerRule);
+        }
         return schedulerRule;
     }
 

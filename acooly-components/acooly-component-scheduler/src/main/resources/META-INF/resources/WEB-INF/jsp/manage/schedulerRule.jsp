@@ -15,10 +15,11 @@ $(function() {
         <tr>
           <td align="left">
           	<div>
-                任务id: <input type="text" class="text" size="15" name="search_EQ_id"/>
+                任务id: <input type="text" class="text" size="2" name="search_EQ_id"/>
                 任务名: <input type="text" class="text" size="15" name="search_LIKE_memo"/>
                 任务类型: <select style="width:100px;height:27px;" name="search_EQ_actionType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allTaskTypes}"><option value="${e.key}" ${param.search_EQ_actionType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-          	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_schedulerRule_searchform','manage_schedulerRule_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
+                状态: <select style="width:100px;height:27px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allStatuss}"><option value="${e.key}" ${param.search_EQ_status == e.key?'selected':''}>${e.value}</option></c:forEach></select>
+                <a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_schedulerRule_searchform','manage_schedulerRule_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
           </td>
         </tr>

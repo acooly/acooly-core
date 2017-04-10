@@ -19,6 +19,7 @@ import com.acooly.core.common.boot.log.ExLogbackLoggingSystem;
 import com.acooly.core.common.boot.log.initializer.ConsoleLogInitializer;
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.utils.ShutdownHooks;
+import com.acooly.core.utils.system.IPUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -171,7 +172,7 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
 			// when system startup ,register shutdown hooks to clean resouces.
 			new ShutdownThread().register();
 			//log startup info
-			LoggerFactory.getLogger(ExApplicationRunListener.class).info("启动成功: http://127.0.0.1:{}",
+			LoggerFactory.getLogger(ExApplicationRunListener.class).info("启动成功: http://{}:{}", IPUtil.getFirstNoLoopbackIPV4Address(),
 				context.getEnvironment().getProperty(Apps.HTTP_PORT));
 		} else {
 			ConsoleLogInitializer.addConsoleAppender();

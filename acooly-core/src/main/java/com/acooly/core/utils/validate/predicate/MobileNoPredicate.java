@@ -21,7 +21,7 @@ import com.google.common.base.Predicate;
 public final class MobileNoPredicate implements Predicate<String> {
 
 	public static final Pattern VALID_MOBILE_NUMBER_REGEX = Pattern
-			.compile("^(13[0-9]|15[0-9]|17[0678]|18[0-9]|14[57])[0-9]{8}$", Pattern.CASE_INSENSITIVE);
+			.compile("^(13[0-9]|15[0-9]|17[03678]|18[0-9]|14[57])[0-9]{8}$", Pattern.CASE_INSENSITIVE);
 
 	public static final MobileNoPredicate INSTANCE = new MobileNoPredicate();
 

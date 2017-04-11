@@ -47,7 +47,7 @@ public class CL253ShortMessageSender extends AbstractShortMessageSender {
         dataMap.put("pw", passwd);
         dataMap.put("phone", mobileNo);
         dataMap.put("msg", content);
-        dataMap.put("rd", "0");
+        dataMap.put("rd", "1");
 
         Https instance = Https.getInstance();
         instance.connectTimeout(timeout / 2);
@@ -77,10 +77,14 @@ public class CL253ShortMessageSender extends AbstractShortMessageSender {
             if (StringUtils.isEmpty(body)) {
                 throw new BusinessException("返回数据为空");
             }
+            if (body.contains("\n")) {
+                body = body.replace("\n", ",");
+            }
             String[] bodySplit = body.split(",");
             String resCode = bodySplit[1];
             Date responseTime = Dates.parse(bodySplit[0], "yyyyMMddHHmmss");
             logger.info("短信响应时间：{}", Dates.format(responseTime));
+            logger.info("短信返回的messageid：{}", bodySplit[2]);
             if (0 == Integer.parseInt(resCode)) {
                 return codeMapping.get(resCode);
             } else {
@@ -100,6 +104,7 @@ public class CL253ShortMessageSender extends AbstractShortMessageSender {
     }
 
     private static Map<String, String> codeMapping = new HashMap<>();
+
     static {
         codeMapping.put("0", "提交成功");
         codeMapping.put("101", "无此用户");

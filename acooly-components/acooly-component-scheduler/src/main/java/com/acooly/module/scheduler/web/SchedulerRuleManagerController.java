@@ -1,7 +1,6 @@
 package com.acooly.module.scheduler.web;
 
 import com.acooly.core.common.web.AbstractJQueryEntityController;
-import com.acooly.core.common.web.MappingMethod;
 import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.module.scheduler.domain.SchedulerRule;
@@ -14,14 +13,10 @@ import com.acooly.module.scheduler.executor.TaskTypeEnum;
 import com.acooly.module.scheduler.service.SchedulerRuleService;
 import com.acooly.module.security.utils.ShiroUtils;
 import org.apache.commons.lang.time.DateUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 

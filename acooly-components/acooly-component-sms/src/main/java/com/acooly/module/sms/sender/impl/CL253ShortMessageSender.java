@@ -84,7 +84,7 @@ public class CL253ShortMessageSender extends AbstractShortMessageSender {
             String resCode = bodySplit[1];
             Date responseTime = Dates.parse(bodySplit[0], "yyyyMMddHHmmss");
             logger.info("短信响应时间：{}", Dates.format(responseTime));
-            logger.info("短信返回的messageid：{}", bodySplit[2]);
+            //logger.info("短信返回的messageid：{}", bodySplit[2]);
             if (0 == Integer.parseInt(resCode)) {
                 return codeMapping.get(resCode);
             } else {

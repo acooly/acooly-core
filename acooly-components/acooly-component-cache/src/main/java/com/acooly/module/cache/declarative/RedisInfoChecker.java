@@ -2,9 +2,11 @@ package com.acooly.module.cache.declarative;
 
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.exception.AppConfigException;
+import com.google.common.base.Throwables;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.net.ConnectException;
 import java.util.Properties;
 
 /**
@@ -28,7 +30,14 @@ public class RedisInfoChecker {
                 return;
             }
         }
-        Properties info = redisTemplate.getConnectionFactory().getConnection().info();
+        Properties info = null;
+        try {
+            info = redisTemplate.getConnectionFactory().getConnection().info();
+        } catch (Exception e) {
+            if(Throwables.getRootCause(e) instanceof ConnectException){
+                return;
+            }
+        }
         String redis_version = (String) info.get("redis_version");
         if (!checkVersion(redis_version)) {
             throw new AppConfigException("为支持集群模式，redis版本必须为3.x.x !");

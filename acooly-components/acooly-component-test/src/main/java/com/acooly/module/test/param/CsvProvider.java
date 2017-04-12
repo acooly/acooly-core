@@ -20,6 +20,8 @@ import org.apache.commons.io.IOUtils;
 import org.junit.runners.model.FrameworkMethod;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.NotWritablePropertyException;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -109,8 +111,12 @@ public class CsvProvider implements ParametersProvider<CsvParameter> {
 				throw new RuntimeException("数据文件:" + parameter.value() + " 第" + lineNo + "行格式错误");
 			}
 			for (int i = 0; i < header.length; i++) {
-				beanWrapper.setPropertyValue(header[i], params[i]);
-			}
+                try {
+                    beanWrapper.setPropertyValue(header[i], params[i]);
+                } catch (NotWritablePropertyException e) {
+                    //ignore
+                }
+            }
 			return beanWrapper.getWrappedInstance();
 		}
 	}

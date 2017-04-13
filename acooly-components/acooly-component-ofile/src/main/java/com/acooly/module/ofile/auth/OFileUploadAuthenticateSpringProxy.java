@@ -18,52 +18,53 @@ import java.util.Map;
 
 /**
  * OFile上传认证代理实现
- * 
+ * <p>
  * 如果使用端需要对上传文件进行身份验证，可以自行实现该接口并放置于spring容器，组件会自动加载并使用客户化实现。
  * 多个认证实现，只要一个通过则表示认证通过
- * 
- * @author zhangpu
  *
+ * @author zhangpu
  */
 @Service("ofileUploadAuthenticateSpringProxy")
 public class OFileUploadAuthenticateSpringProxy implements OFileUploadAuthenticate, ApplicationContextAware,
-		InitializingBean {
+        InitializingBean {
 
-	private static final Logger logger = LoggerFactory.getLogger(OFileUploadAuthenticateSpringProxy.class);
-	private ApplicationContext applicationContext;
-	private Map<String, OFileUploadAuthenticate> servicesMap = Maps.newHashMap();
+    private static final Logger logger = LoggerFactory.getLogger(OFileUploadAuthenticateSpringProxy.class);
+    private ApplicationContext applicationContext;
+    private Map<String, OFileUploadAuthenticate> servicesMap = Maps.newHashMap();
 
-	@Override
-	public void authenticate(HttpServletRequest request) {
-		for (Map.Entry<String, OFileUploadAuthenticate> entry : servicesMap.entrySet()) {
-			try {
-				entry.getValue().authenticate(request);
-				return;
-			} catch (Exception e) {
-				logger.debug("认证器（" + entry.getValue().getClass() + "）认证失败.");
-			}
-		}
-		logger.info("没有一个认证实现通过，判断本次上传认证失败");
-		throw new RuntimeException("认证未通过");
-	}
+    @Override
+    public void authenticate(HttpServletRequest request) {
+        String latestErrorMessage = null;
+        for (Map.Entry<String, OFileUploadAuthenticate> entry : servicesMap.entrySet()) {
+            try {
+                entry.getValue().authenticate(request);
+                return;
+            } catch (Exception e) {
+                latestErrorMessage = e.getMessage();
+                logger.debug("认证器（" + entry.getValue().getClass() + "）认证失败.");
+            }
+        }
+        logger.info("没有一个认证实现通过，判断本次上传认证失败");
+        throw new RuntimeException("认证未通过:" + latestErrorMessage);
+    }
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		servicesMap = Maps.newHashMap();
-		Map<String, OFileUploadAuthenticate> services = applicationContext
-				.getBeansOfType(OFileUploadAuthenticate.class);
-		for (Map.Entry<String, OFileUploadAuthenticate> entry : services.entrySet()) {
-			if (entry.getValue() == this) {
-				continue;
-			}
-			servicesMap.put(entry.getKey(), entry.getValue());
-			logger.info("加载ofile文件上传认证实现:{}", entry.getKey());
-		}
-	}
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        servicesMap = Maps.newHashMap();
+        Map<String, OFileUploadAuthenticate> services = applicationContext
+                .getBeansOfType(OFileUploadAuthenticate.class);
+        for (Map.Entry<String, OFileUploadAuthenticate> entry : services.entrySet()) {
+            if (entry.getValue() == this) {
+                continue;
+            }
+            servicesMap.put(entry.getKey(), entry.getValue());
+            logger.info("加载ofile文件上传认证实现:{}", entry.getKey());
+        }
+    }
 
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
-	}
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 
 }

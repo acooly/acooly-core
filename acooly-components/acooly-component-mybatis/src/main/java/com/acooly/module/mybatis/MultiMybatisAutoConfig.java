@@ -84,7 +84,6 @@ public class MultiMybatisAutoConfig {
         return new JdbcTemplate(dataSource);
     }
     @Bean
-    @Primary
     public PagedJdbcTemplate pagedJdbcTemplate(DataSource dataSource) {
         return new PagedJdbcTemplate(dataSource);
     }

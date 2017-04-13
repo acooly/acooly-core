@@ -43,7 +43,7 @@ public class MaidaoShortMessageSender extends AbstractShortMessageSender {
 		httpclient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, timeout / 2);
 		HttpGet get = new HttpGet(url);
 		String result = null;
-		String responseBody = null;
+		String responseBody;
 		try {
 			HttpResponse response = httpclient.execute(get);
 			responseBody = StringUtils.trimToEmpty(EntityUtils.toString(response.getEntity()));

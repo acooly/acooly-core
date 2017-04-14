@@ -50,6 +50,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 
@@ -332,16 +333,18 @@ public class SecurityAutoConfig {
 
     @Bean
     public AbstractDatabaseScriptIniter securityScriptIniter() {
-        return new AbstractDatabaseScriptIniter() {
-            @Override
-            public String getEvaluateSql(DatabaseType databaseType) {
-                return "SELECT count(*) FROM SYS_ROLE";
-            }
+        return new SecurityDatabaseScriptIniter();
+    }
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    private static class SecurityDatabaseScriptIniter extends AbstractDatabaseScriptIniter{
+        @Override
+        public String getEvaluateSql(DatabaseType databaseType) {
+            return "SELECT count(*) FROM SYS_ROLE";
+        }
 
-            @Override
-            public List<String> getInitSqlFile(DatabaseType databaseType) {
-                return Lists.newArrayList("META-INF/database/security/"+databaseType.name()+"/security.sql");
-            }
-        };
+        @Override
+        public List<String> getInitSqlFile(DatabaseType databaseType) {
+            return Lists.newArrayList("META-INF/database/security/"+databaseType.name()+"/security.sql");
+        }
     }
 }

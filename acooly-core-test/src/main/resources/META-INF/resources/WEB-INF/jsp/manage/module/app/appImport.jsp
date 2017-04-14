@@ -18,7 +18,7 @@ $(function() {
   <tr>
     <th width="30%">文件类型：</th>
     <td>
-    根据文件扩展名自动适配导入文件类型，目前支持的格式包括：Excel2000(*.xls)和CSV(*.csv)。 请<a href="javascript:alert('请开发人员根据业务需求定义模板。')">下载模板文件</a>。
+    根据文件扩展名自动适配导入文件类型，目前支持的格式包括：Excel(xls,xlsx)和CSV(csv)。 请<a href="javascript:alert('请开发人员根据业务需求定义模板。')">下载模板文件</a>。
     </td>
   </tr>	
   <tr>

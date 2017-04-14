@@ -19,7 +19,7 @@ import java.util.Map;
  * 
  * @author acooly Date: 2016-08-14 22:10:17
  */
-public enum ActionChannel implements Messageable {
+public enum ActionChannelEnum implements Messageable {
 
 	wechat("wechat", "微信"),
 
@@ -36,7 +36,7 @@ public enum ActionChannel implements Messageable {
 	private final String code;
 	private final String message;
 
-	ActionChannel(String code, String message) {
+	ActionChannelEnum(String code, String message) {
 		this.code = code;
 		this.message = message;
 	}
@@ -59,7 +59,7 @@ public enum ActionChannel implements Messageable {
 
 	public static Map<String, String> mapping() {
 		Map<String, String> map = new LinkedHashMap<String, String>();
-		for (ActionChannel type : values()) {
+		for (ActionChannelEnum type : values()) {
 			map.put(type.getCode(), type.getMessage());
 		}
 		return map;
@@ -74,8 +74,8 @@ public enum ActionChannel implements Messageable {
 	 * @throws IllegalArgumentException
 	 *             如果 code 没有对应的 Status 。
 	 */
-	public static ActionChannel find(String code) {
-		for (ActionChannel status : values()) {
+	public static ActionChannelEnum find(String code) {
+		for (ActionChannelEnum status : values()) {
 			if (status.getCode().equals(code)) {
 				return status;
 			}
@@ -88,9 +88,9 @@ public enum ActionChannel implements Messageable {
 	 * 
 	 * @return 全部枚举值。
 	 */
-	public static List<ActionChannel> getAll() {
-		List<ActionChannel> list = new ArrayList<ActionChannel>();
-		for (ActionChannel status : values()) {
+	public static List<ActionChannelEnum> getAll() {
+		List<ActionChannelEnum> list = new ArrayList<ActionChannelEnum>();
+		for (ActionChannelEnum status : values()) {
 			list.add(status);
 		}
 		return list;
@@ -103,7 +103,7 @@ public enum ActionChannel implements Messageable {
 	 */
 	public static List<String> getAllCode() {
 		List<String> list = new ArrayList<String>();
-		for (ActionChannel status : values()) {
+		for (ActionChannelEnum status : values()) {
 			list.add(status.code());
 		}
 		return list;

@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
@@ -144,7 +145,7 @@ public abstract class AbstractFileOperationController<T extends Entityable, M ex
                     File file = uResult.getFile();
                     in = new FileInputStream(file);
                 }
-                workBook = new HSSFWorkbook(in);
+                workBook = WorkbookFactory.create(in);
                 Sheet sheet = workBook.getSheetAt(0);
                 List<String> row = null;
                 for (Row r : sheet) {
@@ -707,7 +708,7 @@ public abstract class AbstractFileOperationController<T extends Entityable, M ex
     protected static class UploadConfig {
         //1024 * 1024 * 32 = 33554432
         private long maxSize = 33554432;
-        private String allowExtentions = "txt,zip,csv,xls,jpg,gif,png";
+        private String allowExtentions = "txt,zip,csv,xls,xlsx,jpg,gif,png";
         private String storageRoot = System.getenv("java.tmp");
         private boolean useMemery = true;
         private boolean needTimePartPath = true;

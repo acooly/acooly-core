@@ -53,6 +53,10 @@ public class SmsProperties {
 	 * 仅当使用亿美通道时配置
 	 */
 	private Emay emay;
+    /**
+     * 仅当使用创蓝253短信平台时配置
+     */
+    private CL253 cl253;
 	private int timeout = 20000;
 	/**
 	 * IP最大频率(分钟)
@@ -89,7 +93,22 @@ public class SmsProperties {
 		 */
 		private String sign;
 	}
-	
+    @Data
+    public static class CL253 {
+        /**
+         * 用户账号
+         */
+        private String un;
+        /**
+         * 用户密码
+         */
+        private String pw;
+
+        /**
+         * 短信签名,正式账号支持
+         */
+        private String sign;
+    }
 	public enum Provider implements Messageable {
 													/**
 													 * 亿美
@@ -103,6 +122,10 @@ public class SmsProperties {
 													 * 重庆客亲通
 													 */
 													KLUM("chinaklumShortMessageSender", "重庆客亲通"),
+                                                    /**
+                                                     * 创蓝253
+                                                     */
+                                                    CL253("cl253ShortMessageSender", "创蓝253"),
 													/**
 													 * 测试
 													 */
@@ -136,5 +159,15 @@ public class SmsProperties {
 				emay.sign = "【" + emay.sign.trim() + "】";
 			}
 		}
+        if (this.provider == Provider.CL253) {
+            Assert.notNull(this.cl253);
+            Assert.hasText(this.cl253.getUn());
+            Assert.hasText(this.cl253.getPw());
+            Assert.hasText(this.cl253.getSign());
+            if (!cl253.getSign().startsWith("【")) {
+                cl253.sign = "【" + cl253.sign.trim() + "】";
+            }
+        }
 	}
+
 }

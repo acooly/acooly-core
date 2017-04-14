@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * @author zhangpu
  */
-public enum FeedbackType implements Messageable {
+public enum FeedbackTypeEnum implements Messageable {
 
     suggest("suggest", "建议"),
 
@@ -23,7 +23,7 @@ public enum FeedbackType implements Messageable {
     private final String code;
     private final String message;
 
-    FeedbackType(String code, String message) {
+    FeedbackTypeEnum(String code, String message) {
         this.code = code;
         this.message = message;
     }
@@ -46,7 +46,7 @@ public enum FeedbackType implements Messageable {
 
     public static Map<String, String> mapping() {
         Map<String, String> map = Maps.newLinkedHashMap();
-        for (FeedbackType type : values()) {
+        for (FeedbackTypeEnum type : values()) {
             map.put(type.getCode(), type.getMessage());
         }
         return map;
@@ -59,8 +59,8 @@ public enum FeedbackType implements Messageable {
      * @return 枚举值码对应的枚举值。
      * @throws IllegalArgumentException 如果 code 没有对应的 Status 。
      */
-    public static FeedbackType find(String code) {
-        for (FeedbackType status : values()) {
+    public static FeedbackTypeEnum find(String code) {
+        for (FeedbackTypeEnum status : values()) {
             if (status.getCode().equals(code)) {
                 return status;
             }
@@ -73,9 +73,9 @@ public enum FeedbackType implements Messageable {
      *
      * @return 全部枚举值。
      */
-    public static List<FeedbackType> getAll() {
-        List<FeedbackType> list = new ArrayList<FeedbackType>();
-        for (FeedbackType status : values()) {
+    public static List<FeedbackTypeEnum> getAll() {
+        List<FeedbackTypeEnum> list = new ArrayList<FeedbackTypeEnum>();
+        for (FeedbackTypeEnum status : values()) {
             list.add(status);
         }
         return list;
@@ -88,7 +88,7 @@ public enum FeedbackType implements Messageable {
      */
     public static List<String> getAllCode() {
         List<String> list = new ArrayList<String>();
-        for (FeedbackType status : values()) {
+        for (FeedbackTypeEnum status : values()) {
             list.add(status.code());
         }
         return list;

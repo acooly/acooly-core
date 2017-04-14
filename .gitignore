@@ -5,7 +5,7 @@ src/main/webapp/WEB-INF/lib
 src/main/webapp/WEB-INF/logs
 target/
 .idea/
-*.iml
+/**/*.iml
 /**/*/.DS_Store
 .DS_Store
 acooly-archetype/.apt_generated/

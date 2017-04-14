@@ -487,7 +487,7 @@
 					'multi' : false,
 					'queueSizeLimit' : 1,
 					'fileTypeDesc' : '支持格式:Excel2000和CSV',
-					'fileTypeExts' : '*.xls;*.csv',
+					'fileTypeExts' : '*.xls;*.xlsx;*.csv',
 					'fileSizeLimit' : '200MB',
 					'swf' : '/manage/assert/plugin/jquery-uploadify/uploadify.swf',
 					'uploader' : contextPath + options.url + ";jsessionid=" + options.jsessionid,

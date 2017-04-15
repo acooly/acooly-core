@@ -11,6 +11,7 @@ package com.acooly.module.portlet.integration;
 
 import com.acooly.core.utils.Strings;
 import com.acooly.module.portlet.service.ActionLogService;
+import com.acooly.module.security.utils.ShiroUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -50,15 +51,7 @@ public class PortalActionLogFilter implements Filter {
     }
 
     protected String getSessionUserName(HttpServletRequest request) {
-        if (Strings.isBlank(this.sessionUserKey)) {
-            return null;
-        }
-        Object sessionUser = request.getSession().getAttribute(this.sessionUserKey);
-        if (sessionUser != null) {
-            return sessionUser.toString();
-        } else {
-            return null;
-        }
+       return ShiroUtils.getCurrentUser().getUsername();
     }
 
     @Override

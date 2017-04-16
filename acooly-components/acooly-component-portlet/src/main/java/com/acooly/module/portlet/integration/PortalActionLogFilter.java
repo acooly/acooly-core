@@ -51,7 +51,11 @@ public class PortalActionLogFilter implements Filter {
     }
 
     protected String getSessionUserName(HttpServletRequest request) {
-       return ShiroUtils.getCurrentUser().getUsername();
+        try {
+            return ShiroUtils.getCurrentUser().getUsername();
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     @Override

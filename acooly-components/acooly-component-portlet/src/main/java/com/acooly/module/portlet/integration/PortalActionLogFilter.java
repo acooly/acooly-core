@@ -12,7 +12,6 @@ package com.acooly.module.portlet.integration;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.portlet.service.ActionLogService;
 import com.acooly.module.security.utils.ShiroUtils;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.servlet.*;
@@ -24,7 +23,7 @@ import java.io.IOException;
  *
  * @author acooly
  */
-@Component
+//@Component
 public class PortalActionLogFilter implements Filter {
 
     private static final String SESSION_USER_KEY_PARAMETER_NAME = "sessionUserKey";

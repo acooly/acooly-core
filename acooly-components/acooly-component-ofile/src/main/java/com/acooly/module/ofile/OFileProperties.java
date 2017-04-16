@@ -30,7 +30,7 @@ import static com.acooly.module.ofile.OFileProperties.PREFIX;
 public class OFileProperties implements InitializingBean {
 	public static final String PREFIX = "acooly.ofile";
     /**
-     * 文件访问路径
+     * 文件访问路径,可以配置为域名的形式，建议为//www.test.com/media,不区分协议
      */
 	private String serverRoot = "/media";
     /**
@@ -51,8 +51,33 @@ public class OFileProperties implements InitializingBean {
 	public String getServerRoot() {
 		return serverRoot;
 	}
-	
-	@Override
+    String getServerRootMappingPath(){
+	    String path="";
+	    boolean containDomain=false;
+	    if(serverRoot.startsWith("http://")){
+            path=serverRoot.substring(7);
+            containDomain=true;
+        }
+        if(serverRoot.startsWith("https://")){
+            path=serverRoot.substring(8);
+            containDomain=true;
+        }
+        if(serverRoot.startsWith("//")){
+            path=serverRoot.substring(2);
+            containDomain=true;
+        }
+        if(containDomain){
+            path=path.substring(path.indexOf('/'));
+        }
+        return path;
+    }
+
+    public static void main(String[] args) {
+        String serverRoot="www.test.com/media/";
+            System.out.println(serverRoot.substring(serverRoot.indexOf('/')));
+    }
+
+    @Override
 	public void afterPropertiesSet() throws Exception {
 		Assert.notNull(serverRoot);
 		if (serverRoot.endsWith("/")) {

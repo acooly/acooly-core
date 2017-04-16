@@ -65,7 +65,7 @@ public class OFileAutoConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		boolean useResourceCache = !Apps.isDevMode();
-		registry.addResourceHandler(oFileProperties.getServerRoot() + "/**")
+		registry.addResourceHandler(oFileProperties.getServerRootMappingPath() + "/**")
 			.addResourceLocations("file:" + oFileProperties.getStorageRoot()).resourceChain(useResourceCache);
 	}
 }

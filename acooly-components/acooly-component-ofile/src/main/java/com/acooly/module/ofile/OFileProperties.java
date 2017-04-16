@@ -68,20 +68,19 @@ public class OFileProperties implements InitializingBean {
         }
         if(containDomain){
             path=path.substring(path.indexOf('/'));
+        }else{
+            path=serverRoot;
         }
         return path;
     }
 
-    public static void main(String[] args) {
-        String serverRoot="www.test.com/media/";
-            System.out.println(serverRoot.substring(serverRoot.indexOf('/')));
-    }
+
 
     @Override
 	public void afterPropertiesSet() throws Exception {
 		Assert.notNull(serverRoot);
 		if (serverRoot.endsWith("/")) {
-			serverRoot = serverRoot.substring(0, serverRoot.length());
+			serverRoot = serverRoot.substring(0, serverRoot.length()-1);
 		}
 		Assert.notNull(storageRoot);
 		if (SystemUtils.IS_OS_WINDOWS) {

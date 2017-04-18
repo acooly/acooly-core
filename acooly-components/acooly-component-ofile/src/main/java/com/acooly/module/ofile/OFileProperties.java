@@ -68,12 +68,14 @@ public class OFileProperties implements InitializingBean {
         }
         if(containDomain){
             path=path.substring(path.indexOf('/'));
+        }else{
+            path=serverRoot;
         }
         return path;
     }
 
     public static void main(String[] args) {
-        String serverRoot="www.test.com/media/";
+        String serverRoot="/media/";
             System.out.println(serverRoot.substring(serverRoot.indexOf('/')));
     }
 

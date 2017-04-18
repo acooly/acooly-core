@@ -74,8 +74,6 @@ public class OFileProperties implements InitializingBean {
         return path;
     }
 
-
-
     @Override
 	public void afterPropertiesSet() throws Exception {
 		Assert.notNull(serverRoot);

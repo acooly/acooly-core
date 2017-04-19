@@ -115,4 +115,15 @@ public class PointAccountServiceImpl extends EntityServiceImpl<PointAccount, Poi
 		return pointAccount;
 	}
 
+	@Override
+	public int pointRank(String userName, Long gradeId) {
+		int pointRank = 1;
+		if (gradeId != null) {
+			pointRank = getEntityDao().pointRank(userName, gradeId);
+		} else {
+			pointRank = getEntityDao().pointRank(userName);
+		}
+		return pointRank;
+	}
+
 }

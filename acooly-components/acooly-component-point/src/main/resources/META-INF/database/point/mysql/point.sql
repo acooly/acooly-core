@@ -114,3 +114,20 @@ CREATE TABLE `point_trade` (
 -- ----------------------------
 -- Records of point_trade
 -- ----------------------------
+
+
+CREATE TABLE `point_clear_config` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `start_trade_time` datetime NOT NULL COMMENT '开始交易时间',
+  `end_trade_time` datetime NOT NULL COMMENT '结束交易时间',
+  `start_clear_time` datetime NOT NULL COMMENT '开始清理时间',
+  `end_clear_time` datetime NOT NULL COMMENT '结束清理时间',
+  `clear_time` datetime NOT NULL COMMENT '清零时间',
+  `status` varchar(32) NOT NULL COMMENT '状态 {init:未完成,finish:完成}',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '修改时间',
+  `memo` varchar(256) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='积分清零设置';
+
+

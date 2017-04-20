@@ -82,4 +82,14 @@ public interface PointTradeService extends EntityService<PointTrade> {
 	 */
 	public void pointClearThread(String startTime, String endTime, String memo);
 
+	/**
+	 * 获取清零的积分
+	 * 
+	 * @param userName
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public long getClearPoint(String userName, String startTime, String endTime);
+
 }

@@ -72,7 +72,7 @@ $(function() {
 <!--       </div> -->
       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/point/pointAccount/grant.html',entity:'pointAccount',width:500,height:400,addButton:'积分发放',reload:true})"><i class="fa fa-plus-circle fa-lg fa-location-arrow fa-col"></i>积分发放</a>
       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.imports({url:'/manage/point/pointAccount/importView.html',uploader:'manage_pointAccount_import_uploader_file',width:500,height:400,});"><i class="fa fa-arrow-circle-o-up fa-lg fa-fw fa-col"></i>导入文件发放</a>
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/point/pointAccount/clear.html',entity:'pointAccount',width:500,height:400,addButton:'积分清零',reload:true})"><i class="fa fa-plus-circle fa-lg fa-arrow-up fa-col"></i>积分清零</a>
+<!--       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/point/pointAccount/clear.html',entity:'pointAccount',width:500,height:400,addButton:'积分清零',reload:true})"><i class="fa fa-plus-circle fa-lg fa-arrow-up fa-col"></i>积分清零</a> -->
     </div>
   </div>
 

@@ -37,24 +37,24 @@ import java.util.Map;
  */
 @Service("pointTradeService")
 public class PointTradeServiceImpl extends EntityServiceImpl<PointTrade, PointTradeDao> implements PointTradeService {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(PointTradeServiceImpl.class);
-	
+
 	@Autowired
 	private PointAccountService pointAccountService;
 	@Autowired
 	private PointStatisticsService pointStatisticsService;
-	
+
 	@Autowired
 	private TaskExecutor taskExecutor;
-	
+
 	@Override
 	public PointTrade pointProduce(String userName, long point, String businessData) {
 		PointAccount pointAccount = pointAccountService.pointProduce(userName, point);
 		PointTrade pointTrade = saveTrade(pointAccount, point, PointTradeType.produce, businessData);
 		return pointTrade;
 	}
-	
+
 	@Override
 	public PointTrade pointExpense(String userName, long point, boolean isFreeze, String businessData) {
 		PointAccount pointAccount = pointAccountService.pointExpense(userName, point, isFreeze);
@@ -64,34 +64,38 @@ public class PointTradeServiceImpl extends EntityServiceImpl<PointTrade, PointTr
 		PointTrade pointTrade = saveTrade(pointAccount, point, PointTradeType.expense, businessData);
 		return pointTrade;
 	}
-	
+
 	@Override
 	public PointTrade pointFreeze(String userName, long point, String businessData) {
 		PointAccount pointAccount = pointAccountService.pointFreeze(userName, point);
 		PointTrade pointTrade = saveTrade(pointAccount, point, PointTradeType.freeze, businessData);
 		return pointTrade;
-		
+
 	}
-	
+
 	@Override
 	public PointTrade pointUnfreeze(String userName, long point, String businessData) {
 		PointAccount pointAccount = pointAccountService.pointUnfreeze(userName, point);
 		PointTrade pointTrade = saveTrade(pointAccount, point, PointTradeType.unfreeze, businessData);
 		return pointTrade;
 	}
-	
+
+	public long getClearPoint(String userName, String startTime, String endTime) {
+		return getEntityDao().getClearPoint(userName, startTime, endTime);
+	}
+
 	public void pointClearThread(String startTime, String endTime, String businessData) {
 		logger.info("启动新建线程,处理积分清零");
-        taskExecutor.execute(() -> {
-            try {
-                Thread.sleep(3 * 1000);
-            } catch (Exception e) {
-                logger.warn("启动新建线程,处理积分清零失败");
-            }
-            pointClear(startTime, endTime, businessData);
-        });
+		taskExecutor.execute(() -> {
+			try {
+				Thread.sleep(3 * 1000);
+			} catch (Exception e) {
+				logger.warn("启动新建线程,处理积分清零失败");
+			}
+			pointClear(startTime, endTime, businessData);
+		});
 	}
-	
+
 	public void pointClear(String startTime, String endTime, String businessData) {
 		pointStatisticsService.pointStatistics(startTime, endTime);
 		PageInfo<PointStatistics> pageInfo = new PageInfo<PointStatistics>();
@@ -123,7 +127,7 @@ public class PointTradeServiceImpl extends EntityServiceImpl<PointTrade, PointTr
 			}
 		}
 	}
-	
+
 	private PointTrade saveTrade(PointAccount pointAccount, long point, PointTradeType tradeType, String businessData) {
 		PointTrade pointTrade = new PointTrade();
 		pointTrade.setTradeNo(Ids.oid());

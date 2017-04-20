@@ -1,0 +1,52 @@
+## 1. 组件介绍
+
+此组件提供html转换pdf能力
+
+转换流程为：dataVO + html模板 -> freeMarker模板引擎 -> 输出HTML -> iTextRender -> 输出pdf
+## 2. 使用说明
+
+
+### 2.1 配置
+
+* `acooly.pdf.templatePath=classpath:/pdf/templates/` 
+    模板路径模板默认为：/pdf/templates/，文件名作为key(带后缀)，文件内容为模板内容，模板写法参考
+    [The Flying Saucer User's Guide](https://flyingsaucerproject.github.io/flyingsaucer/r8/guide/users-guide-R8.html)
+    
+* `acooly.pdf.imagePath=classpath:/pdf/images/` 
+    图片路径默认为：/pdf/images/,这个路径下面的图片，在模板上不需要再写路径，如：
+        ```html
+          <img src="logo.png"/>
+        ```
+* `acooly.pdf.fontsPath=classpath:/pdf/fonts/` 
+    自定义字体路径默认为：/pdf/fonts/，由于flying-saucer-pdf对中文支持不好，已默认添加Adobe思源宋体(可商用)，在模板中只需要指定family即可
+        ```css
+           font-family: Source Han Serif SC;
+        ```
+### 2.2 接口使用
+        ```java
+             @Autowired
+             private PdfDocumentGenerator pdfDocumentGenerator;
+            
+             public void test() throws DocumentGeneratingException, FileNotFoundException {
+            
+                        // 模板对象,须继承AbstractDocumentVo
+                        PdfDemoVo pdfDemoVo = new PdfDemoVo();
+                        //设置模板对应的值
+                        pdfDemoVo.setPolicyNo("0000000000000000000000000");
+                        pdfDemoVo.setHolderName("张三123abc");
+                                                           ...
+                                                           ...
+                                                           ...
+                        pdfDemoVo.setNames(names);
+            
+                        //模板名
+                        String template = "pdftest.html";
+                        // 生成pdf路径
+                        File outputFile = new File("d:\\" + "\\tmp\\" + System.currentTimeMillis() + ".pdf");
+                        // 生成pdf
+                        pdfDocumentGenerator.generate(template, pdfDemoVo, outputFile);
+            
+                    }
+        ```
+        接口见：`PdfDocumentGenerator`
+        详细demo请参考`PdfGeneratorTest`

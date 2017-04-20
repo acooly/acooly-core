@@ -39,6 +39,7 @@
         <module>acooly-component-openapidoc</module>
         <module>acooly-component-threadpool</module>
         <module>acooly-component-scheduler</module>
+        <module>acooly-component-pdf</module>
     </modules>
 
     <dependencies>

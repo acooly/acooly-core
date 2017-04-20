@@ -13,7 +13,6 @@ package com.acooly.module.ds;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.boot.EnvironmentHolder;
-import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.exception.AppConfigException;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.vendor.MySqlValidConnectionChecker;
@@ -109,7 +108,6 @@ public class DruidProperties implements BeanClassLoaderAware {
 
     private Checker checker = new Checker();
 
-    private Map<String,DBIniter> dbIniters=Maps.newHashMap();
 
     @Data
     public class Checker {
@@ -234,10 +232,4 @@ public class DruidProperties implements BeanClassLoaderAware {
 		
 		return dataSource;
 	}
-	@Data
-    public static class DBIniter{
-	    private String evaluateTable;
-	    private String sqlFile;
-        private DatabaseType dbType;
-    }
 }

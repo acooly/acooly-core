@@ -11,11 +11,8 @@
 package com.acooly.module.ds;
 
 import com.acooly.core.common.boot.ApplicationContextHolder;
-import com.acooly.core.common.dao.dialect.DatabaseType;
-import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
 import com.acooly.core.common.dao.support.DataSourceReadyEvent;
 import com.acooly.core.common.exception.AppConfigException;
-import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -23,7 +20,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
@@ -32,7 +28,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
-import java.util.List;
 
 /**
  * @author qiubo
@@ -56,7 +51,6 @@ public class JDBCAutoConfig {
 				dataSource = druidProperties.build();
 			}
 			ApplicationContextHolder.get().publishEvent(new DataSourceReadyEvent(dataSource));
-			druidProperties.getDbIniters().forEach((s, dbIniter) -> ApplicationContextHolder.get().addApplicationListener(new AppDatabaseScriptIniter(dbIniter)));
 			return dataSource;
 		} catch (Exception e) {
 			//这种方式有点挫，先就这样吧
@@ -88,28 +82,4 @@ public class JDBCAutoConfig {
 	public TransactionTemplate transactionTemplate(PlatformTransactionManager platformTransactionManager) {
 		return new TransactionTemplate(platformTransactionManager);
 	}
-	@Order
-    public static class AppDatabaseScriptIniter extends AbstractDatabaseScriptIniter {
-	    private DruidProperties.DBIniter dbIniter;
-
-        public AppDatabaseScriptIniter(DruidProperties.DBIniter dbIniter) {
-            this.dbIniter = dbIniter;
-        }
-
-        @Override
-        public String getEvaluateSql(DatabaseType databaseType) {
-            if(databaseType==dbIniter.getDbType()){
-                return "SELECT count(*) FROM "+dbIniter.getEvaluateTable();
-            }
-            return null;
-        }
-
-        @Override
-        public List<String> getInitSqlFile(DatabaseType databaseType) {
-            if(databaseType==dbIniter.getDbType()){
-                return Lists.newArrayList(dbIniter.getSqlFile());
-            }
-            return null;
-        }
-    }
 }

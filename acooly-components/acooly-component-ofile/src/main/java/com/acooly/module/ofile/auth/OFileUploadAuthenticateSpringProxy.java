@@ -4,6 +4,7 @@
  */
 package com.acooly.module.ofile.auth;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,18 +36,18 @@ public class OFileUploadAuthenticateSpringProxy implements OFileUploadAuthentica
 
     @Override
     public void authenticate(HttpServletRequest request) {
-        String latestErrorMessage = null;
+        List<String> messages = Lists.newArrayList();
         for (Map.Entry<String, OFileUploadAuthenticate> entry : servicesMap.entrySet()) {
             try {
                 entry.getValue().authenticate(request);
                 return;
             } catch (Exception e) {
-                latestErrorMessage = e.getMessage();
+                messages.add(e.getMessage());
                 logger.debug("认证器（" + entry.getValue().getClass() + "）认证失败.");
             }
         }
         logger.info("没有一个认证实现通过，判断本次上传认证失败");
-        throw new RuntimeException("认证未通过:" + latestErrorMessage);
+        throw new RuntimeException("认证未通过:" + messages);
     }
 
     @Override

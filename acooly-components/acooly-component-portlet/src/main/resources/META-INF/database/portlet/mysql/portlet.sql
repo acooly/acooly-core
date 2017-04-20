@@ -9,6 +9,7 @@ CREATE TABLE `portlet_feedback` (
   `contact_info` varchar(255) DEFAULT NULL COMMENT '联系信息',
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `status` VARCHAR(16) DEFAULT NULL COMMENT '状态',
   `comments` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='客户反馈';

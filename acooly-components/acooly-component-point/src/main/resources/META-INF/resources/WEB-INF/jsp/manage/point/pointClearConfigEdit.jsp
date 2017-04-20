@@ -26,14 +26,6 @@
 				<td><input type="text" name="clearTime" size="20" class="easyui-validatebox text" value="<fmt:formatDate value="${pointClearConfig.clearTime}" pattern="yyyy-MM-dd"/>" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" data-options="required:true" /></td>
 			</tr>					
 			<tr>
-				<th>状态：</th>
-				<td><select name="status" editable="false" style="height:27px;" panelHeight="auto" class="easyui-combobox" data-options="required:true">
-					<c:forEach items="${allStatuss}" var="e">
-						<option value="${e.key}">${e.value}</option>
-					</c:forEach>
-				</select></td>
-			</tr>					
-			<tr>
 				<th>备注：</th>
 				<td><textarea rows="3" cols="40" style="width:300px;" name="memo" class="easyui-validatebox"  validType="byteLength[1,256]"></textarea></td>
 			</tr>					

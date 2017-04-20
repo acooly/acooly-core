@@ -16,10 +16,12 @@ import com.acooly.core.common.dao.dialect.DatabaseDialectManager;
 import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.exception.AppConfigException;
 import com.google.common.base.Charsets;
+import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
@@ -33,6 +35,7 @@ import java.util.List;
 /**
  * @author qiubo@yiji.com
  */
+@Order(0)
 public abstract class AbstractDatabaseScriptIniter implements ApplicationListener<DataSourceReadyEvent> {
     private static final Logger logger = LoggerFactory.getLogger(StandardDatabaseScriptIniter.class);
 
@@ -42,8 +45,12 @@ public abstract class AbstractDatabaseScriptIniter implements ApplicationListene
         try {
             DatabaseType databaseType = DatabaseDialectManager.getDatabaseType(dataSource.getConnection());
             try {
+                String evSql=getEvaluateSql(databaseType);
+                if(Strings.isNullOrEmpty(evSql)){
+                    return;
+                }
                 ScriptUtils.executeSqlScript(dataSource.getConnection(),
-                    new ByteArrayResource(getEvaluateSql(databaseType).getBytes(Charsets.UTF_8)));
+                    new ByteArrayResource(evSql.getBytes(Charsets.UTF_8)));
             } catch (DataAccessException e) {
                 Throwable throwable = Throwables.getRootCause(e);
                 String msg = throwable.getMessage();

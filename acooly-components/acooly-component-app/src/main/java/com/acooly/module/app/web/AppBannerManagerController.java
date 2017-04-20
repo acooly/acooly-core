@@ -75,7 +75,7 @@ public class AppBannerManagerController extends AppAbstractManageController<AppB
     protected UploadConfig getUploadConfig() {
         UploadConfig config = super.getUploadConfig();
         String storageRoot = getStorageRoot();
-        config.setStorageRoot(storageRoot + File.separator + appProperties.getStoragePath());
+        config.setStorageRoot(storageRoot);
         config.setUseMemery(false);
         config.setAllowExtentions("jpg,gif,png");
         return config;

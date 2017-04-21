@@ -1,7 +1,5 @@
 package com.acooly.module.pdf.factory;
 
-import com.acooly.core.common.boot.ApplicationContextHolder;
-import com.acooly.core.common.boot.Apps;
 import com.acooly.module.pdf.PdfProperties;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
@@ -25,6 +23,11 @@ import java.io.IOException;
  */
 public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRenderer> {
     private static GenericObjectPool itextRendererObjectPool = null;
+    private PdfProperties pdfProperties;
+
+    public ITextRendererObjectFactory(PdfProperties pdfProperties) {
+        this.pdfProperties = pdfProperties;
+    }
 
     @Override
     public ITextRenderer create() throws Exception {
@@ -40,11 +43,11 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
     /**
      * 获取对象池,配置对象工厂
      */
-    public static GenericObjectPool<ITextRenderer> getObjectPool() {
+    public static GenericObjectPool<ITextRenderer> getObjectPool(PdfProperties pdfProperties) {
         synchronized (ITextRendererObjectFactory.class) {
             if (itextRendererObjectPool == null) {
                 itextRendererObjectPool = new GenericObjectPool<>(
-                    new ITextRendererObjectFactory());
+                    new ITextRendererObjectFactory(pdfProperties));
                 GenericObjectPoolConfig config = new GenericObjectPoolConfig();
                 config.setLifo(false);
                 config.setMaxTotal(15);
@@ -62,14 +65,13 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
     public synchronized ITextRenderer createTextRenderer()
         throws DocumentException, IOException {
         ITextRenderer renderer = new ITextRenderer();
-        PdfProperties pdfProperties = Apps.buildProperties(PdfProperties.class);
         setSharedContext(renderer, pdfProperties);
         addFonts(renderer, pdfProperties);
         return renderer;
     }
 
     private void setSharedContext(ITextRenderer iTextRenderer, PdfProperties pdfProperties) throws IOException {
-        Resource imageResource = ApplicationContextHolder.get().getResource(pdfProperties.getImagePath());
+        Resource imageResource = pdfProperties.getResourceLoader().getResource(pdfProperties.getImagePath());
         if (imageResource.exists()) {
             iTextRenderer.getSharedContext().setBaseURL(imageResource.getFile().toURI().toURL().toExternalForm());
         }
@@ -82,12 +84,12 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
         throws DocumentException, IOException {
         //添加默认中文字体
         ITextFontResolver fontResolver = iTextRenderer.getFontResolver();
-        Resource fontsResource = ApplicationContextHolder.get().getResource("classpath:META-INF/fonts");
+        Resource fontsResource = pdfProperties.getResourceLoader().getResource("classpath:META-INF/fonts");
         File fontsDir = fontsResource.getFile();
         addFonts(fontsDir, fontResolver);
 
         //添加自定义字体
-        Resource customFontsResource = ApplicationContextHolder.get().getResource(pdfProperties.getFontsPath());
+        Resource customFontsResource = pdfProperties.getResourceLoader().getResource(pdfProperties.getFontsPath());
         if (customFontsResource.exists()) {
             addFonts(customFontsResource.getFile(), fontResolver);
         }

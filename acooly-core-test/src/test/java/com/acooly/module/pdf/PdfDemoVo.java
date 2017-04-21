@@ -1,4 +1,4 @@
-package com.acooly.core.test.pdf;
+package com.acooly.module.pdf;
 
 
 import com.acooly.module.pdf.vo.AbstractDocumentVo;

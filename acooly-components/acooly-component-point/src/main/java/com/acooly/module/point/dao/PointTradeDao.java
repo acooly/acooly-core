@@ -21,7 +21,7 @@ import com.acooly.module.point.domain.PointTrade;
  */
 public interface PointTradeDao extends EntityMybatisDao<PointTrade> {
 
-	@Select("select sum(case trade_type when 'produce' then amount else 0 end)-(case trade_type when 'expense' then amount else 0 end) as point "
+	@Select("select coalesce(sum(case trade_type when 'produce' then amount else 0 end)-(case trade_type when 'expense' then amount else 0 end) ,0) as point "
 			+ "from point_trade where user_name=#{userName} "//
 			+ "and create_time>=#{startTime} and create_time<=#{endTime} "//
 			+ "and trade_type in('produce','expense')")

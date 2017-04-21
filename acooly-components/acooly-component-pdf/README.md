@@ -48,7 +48,7 @@
                         //模板名
                         String template = "pdftest.html";
                         // 生成pdf路径
-                        File outputFile = new File("d:\\" + "\\tmp\\" + System.currentTimeMillis() + ".pdf");
+                        File outputFile = new File("test.pdf");
                         // 生成pdf
                         pdfService.generate(template, pdfDemoVo, outputFile);
             
@@ -67,7 +67,7 @@
                                      //模板名
                                      String template = "pdftest.html";
                                      // 生成pdf路径
-                                     File outputFile = new File("d:\\" + "\\tmp\\" + System.currentTimeMillis() + ".pdf");
+                                     File outputFile = new File("test.pdf");
                                      // 生成pdf
                                      pdfService.generate(template, params, outputFile);
 

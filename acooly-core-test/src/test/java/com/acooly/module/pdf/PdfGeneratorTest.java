@@ -57,7 +57,7 @@ public class PdfGeneratorTest {
 		//模板名
 		String template = "pdftest.html";
 		// 生成pdf路径
-		File outputFile = File.createTempFile("PdfGeneratorTest", "pdf");
+		File outputFile = File.createTempFile("PdfGeneratorTest", ".pdf");
 		// 生成pdf
         pdfService.generate(template, pdfDemoVo, outputFile);
 		log.info("生成pdf路径:{}", outputFile.getAbsolutePath());

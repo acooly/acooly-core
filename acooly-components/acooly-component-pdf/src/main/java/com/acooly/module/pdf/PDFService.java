@@ -217,8 +217,7 @@ public class PDFService {
 		String t = pdfTemplates.get(key);
 		if (Strings.isNullOrEmpty(t)) {
 			String ptp = pdfProperties.getTemplatePath() + key;
-			Resource resource = null;
-			resource = pdfProperties.getResourceLoader().getResource(ptp);
+            Resource resource = pdfProperties.getResourceLoader().getResource(ptp);
 			if (resource.exists()) {
 				try {
 					t = Resources.toString(resource.getURL(), Charsets.UTF_8);

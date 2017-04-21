@@ -74,5 +74,5 @@
                           }
 
 
-接口见：`PdfDocumentGenerator`
+接口见：`PDFService`
 详细demo请参考`PdfGeneratorTest`

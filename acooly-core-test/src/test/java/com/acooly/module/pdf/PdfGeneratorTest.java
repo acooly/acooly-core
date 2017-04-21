@@ -65,7 +65,8 @@ public class PdfGeneratorTest {
 	}
 	
 	@Test
-	public void testApp() {
-		
+	public void testWartermark() throws Exception{
+        pdfService.addWatermark(new File("D:\\tmp\\1492769764686.pdf"),"版权所有 重庆笨熊科技");
+        Thread.sleep(10000);
 	}
 }

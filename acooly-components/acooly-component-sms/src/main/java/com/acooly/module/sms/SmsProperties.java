@@ -155,9 +155,13 @@ public class SmsProperties {
 			Assert.notNull(this.emay);
 			Assert.hasText(this.emay.getSn());
 			Assert.hasText(this.emay.getPassword());
-			if (emay.getSign()!=null &&!emay.getSign().startsWith("【")) {
-				emay.sign = "【" + emay.sign.trim() + "】";
-			}
+			if(emay.getSign()==null){
+			    emay.sign="";
+            }else{
+			    if(!emay.getSign().startsWith("【")){
+                    emay.sign = "【" + emay.sign.trim() + "】";
+                }
+            }
 		}
         if (this.provider == Provider.CL253) {
             Assert.notNull(this.cl253);

@@ -1,6 +1,8 @@
 package com.acooly.module.pdf.factory;
 
 import com.acooly.module.pdf.PdfProperties;
+import com.acooly.module.pdf.exception.DocumentGeneratingException;
+import com.google.common.io.Files;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
 import org.apache.commons.pool2.BasePooledObjectFactory;
@@ -23,6 +25,11 @@ import java.io.*;
 public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRenderer> {
     private static GenericObjectPool itextRendererObjectPool = null;
     private PdfProperties pdfProperties;
+    private static final String fontsPath = System.getProperty("user.home")
+        + File.separator + "appdata"
+        + File.separator + "pdf"
+        + File.separator + "fonts"
+        + File.separator;
 
     public ITextRendererObjectFactory(PdfProperties pdfProperties) {
         this.pdfProperties = pdfProperties;
@@ -32,6 +39,11 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
     public ITextRenderer create() throws Exception {
         ITextRenderer renderer = createTextRenderer();
         return renderer;
+    }
+
+    public static void main(String[] args) {
+        String s = "classpath:META-INF/fonts/SourceHanSerifSC-Regular.otf";
+        System.out.println("classpath:META-INF/fonts/SourceHanSerifSC-Regular.otf".substring(s.lastIndexOf("/") + 1));
     }
 
     @Override
@@ -96,12 +108,14 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
 
     private void addFonts(String jarFontsPath, ITextFontResolver fontResolver) throws IOException, DocumentException {
         InputStream is = pdfProperties.getResourceLoader().getResource(jarFontsPath).getInputStream();
-        File pdfFontsTmp = File.createTempFile("pdfFontsTmp", ".otf");
-        BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(pdfFontsTmp));
+        //File pdfFontsTmp = File.createTempFile("pdfFontsTmp", ".otf");
+        File fontsDataFile = getFontsDataFile(jarFontsPath.substring(jarFontsPath.lastIndexOf("/") + 1));
+        BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(fontsDataFile));
         copyBytes(is, writer, 2048);
-        fontResolver.addFont(pdfFontsTmp.getAbsolutePath(), BaseFont.IDENTITY_H,
+        fontResolver.addFont(fontsDataFile.getAbsolutePath(), BaseFont.IDENTITY_H,
             BaseFont.NOT_EMBEDDED);
     }
+
 
     private void addFonts(File fontsDir, ITextFontResolver fontResolver) throws IOException, DocumentException {
         if (fontsDir != null && fontsDir.isDirectory()) {
@@ -115,6 +129,17 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
                     BaseFont.NOT_EMBEDDED);
             }
         }
+    }
+
+    private static File getFontsDataFile(String fontsName) {
+        //目录不存在就创建目录
+        final String s = fontsPath + fontsName;
+        try {
+            Files.createParentDirs(new File(s));
+        } catch (IOException e) {
+            throw new DocumentGeneratingException("创建字体文件夹失败", e);
+        }
+        return new File(s);
     }
 
     private void copyBytes(InputStream in, OutputStream out, int buffSize)

@@ -232,7 +232,8 @@ public class ScheduleEngineImpl implements ScheduleEngine {
         Date sysdate = schedulerRuleRepository.getSysdate();
 
         if (validityEnd.before(sysdate)) {
-            throw new SchedulerEngineException(logPrefix + "启动失败:结束时间比当前时间早");
+            //启动的时候不需要检查
+            //throw new SchedulerEngineException(logPrefix + "启动失败:结束时间比当前时间早");
         }
     }
 

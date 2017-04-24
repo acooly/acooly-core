@@ -3,7 +3,6 @@ package com.acooly.module.pdf.factory;
 import com.acooly.module.pdf.PdfProperties;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
@@ -14,7 +13,6 @@ import org.xhtmlrenderer.pdf.ITextFontResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.*;
-import java.util.zip.GZIPInputStream;
 
 
 /**
@@ -85,23 +83,24 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
         throws DocumentException, IOException {
         //添加默认中文字体
         ITextFontResolver fontResolver = iTextRenderer.getFontResolver();
-        //Resource fontsResource = pdfProperties.getResourceLoader().getResource("classpath:META-INF/fonts");
         //在jar中的文件不能获取绝对路径，拷贝到临时文件夹中加载
-        InputStream is = pdfProperties.getResourceLoader().getClassLoader().getResourceAsStream("META-INF/fonts/");
-        BufferedInputStream bis = new BufferedInputStream(is);
-        File pdfFontsTmp = File.createTempFile("pdfFontsTmp", "");
-        BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(pdfFontsTmp));
-        IOUtils.copy(bis, writer);
-
-        //File fontsDir = fontsResource.getFile();
-        addFonts(pdfFontsTmp, fontResolver);
-
+        addFonts("classpath:META-INF/fonts/SourceHanSerifSC-Regular.otf", fontResolver);
+        addFonts("classpath:META-INF/fonts/SourceHanSerifSC-SemiBold.otf", fontResolver);
         //添加自定义字体
         Resource customFontsResource = pdfProperties.getResourceLoader().getResource(pdfProperties.getFontsPath());
         if (customFontsResource.exists()) {
             addFonts(customFontsResource.getFile(), fontResolver);
         }
         return fontResolver;
+    }
+
+    private void addFonts(String jarFontsPath, ITextFontResolver fontResolver) throws IOException, DocumentException {
+        InputStream is = pdfProperties.getResourceLoader().getResource(jarFontsPath).getInputStream();
+        File pdfFontsTmp = File.createTempFile("pdfFontsTmp", ".otf");
+        BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(pdfFontsTmp));
+        copyBytes(is, writer, 2048);
+        fontResolver.addFont(pdfFontsTmp.getAbsolutePath(), BaseFont.IDENTITY_H,
+            BaseFont.NOT_EMBEDDED);
     }
 
     private void addFonts(File fontsDir, ITextFontResolver fontResolver) throws IOException, DocumentException {
@@ -116,5 +115,20 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
                     BaseFont.NOT_EMBEDDED);
             }
         }
+    }
+
+    private void copyBytes(InputStream in, OutputStream out, int buffSize)
+        throws IOException {
+        PrintStream ps = out instanceof PrintStream ? (PrintStream) out : null;
+        byte buf[] = new byte[buffSize];
+        int bytesRead = in.read(buf);
+        while (bytesRead >= 0) {
+            out.write(buf, 0, bytesRead);
+            if ((ps != null) && ps.checkError()) {
+                throw new IOException("Unable to write to output stream.");
+            }
+            bytesRead = in.read(buf);
+        }
+        out.flush();
     }
 }

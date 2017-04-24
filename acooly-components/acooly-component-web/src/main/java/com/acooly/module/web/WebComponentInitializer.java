@@ -19,8 +19,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class WebComponentInitializer implements ComponentInitializer {
 	@Override
 	public void initialize(ConfigurableApplicationContext applicationContext) {
-		setPropertyIfMissing("multipart.maxFileSize", "100Mb");
-		setPropertyIfMissing("multipart.maxFileSize", "300Mb");
+		setPropertyIfMissing("spring.http.multipart.maxFileSize", "50Mb");
+		setPropertyIfMissing("spring.http.multipart.maxRequestSize", "300Mb");
 		
 		setPropertyIfMissing("spring.freemarker.expose-session-attributes", false);
 		setPropertyIfMissing("spring.freemarker.expose-request-attributes", false);

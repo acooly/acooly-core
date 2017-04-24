@@ -3,6 +3,7 @@ package com.acooly.module.pdf.factory;
 import com.acooly.module.pdf.PdfProperties;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
@@ -12,8 +13,8 @@ import org.springframework.core.io.Resource;
 import org.xhtmlrenderer.pdf.ITextFontResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.zip.GZIPInputStream;
 
 
 /**
@@ -84,9 +85,16 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
         throws DocumentException, IOException {
         //添加默认中文字体
         ITextFontResolver fontResolver = iTextRenderer.getFontResolver();
-        Resource fontsResource = pdfProperties.getResourceLoader().getResource("classpath:META-INF/fonts");
-        File fontsDir = fontsResource.getFile();
-        addFonts(fontsDir, fontResolver);
+        //Resource fontsResource = pdfProperties.getResourceLoader().getResource("classpath:META-INF/fonts");
+        //在jar中的文件不能获取绝对路径，拷贝到临时文件夹中加载
+        InputStream is = pdfProperties.getResourceLoader().getClassLoader().getResourceAsStream("META-INF/fonts/");
+        BufferedInputStream bis = new BufferedInputStream(is);
+        File pdfFontsTmp = File.createTempFile("pdfFontsTmp", "");
+        BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(pdfFontsTmp));
+        IOUtils.copy(bis, writer);
+
+        //File fontsDir = fontsResource.getFile();
+        addFonts(pdfFontsTmp, fontResolver);
 
         //添加自定义字体
         Resource customFontsResource = pdfProperties.getResourceLoader().getResource(pdfProperties.getFontsPath());

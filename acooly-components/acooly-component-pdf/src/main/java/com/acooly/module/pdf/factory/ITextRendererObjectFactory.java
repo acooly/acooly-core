@@ -41,11 +41,6 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
         return renderer;
     }
 
-    public static void main(String[] args) {
-        String s = "classpath:META-INF/fonts/SourceHanSerifSC-Regular.otf";
-        System.out.println("classpath:META-INF/fonts/SourceHanSerifSC-Regular.otf".substring(s.lastIndexOf("/") + 1));
-    }
-
     @Override
     public PooledObject wrap(ITextRenderer obj) {
         return new DefaultPooledObject<>(obj);

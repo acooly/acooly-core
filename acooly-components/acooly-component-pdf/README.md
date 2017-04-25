@@ -75,4 +75,4 @@
 
 
 接口见：`PDFService`
-详细demo请参考`PdfGeneratorTest`
+详细demo请参考`PdfGeneratorTest`、`PdfServletTest`

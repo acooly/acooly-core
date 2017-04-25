@@ -103,7 +103,6 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
 
     private void addFonts(String jarFontsPath, ITextFontResolver fontResolver) throws IOException, DocumentException {
         InputStream is = pdfProperties.getResourceLoader().getResource(jarFontsPath).getInputStream();
-        //File pdfFontsTmp = File.createTempFile("pdfFontsTmp", ".otf");
         File fontsDataFile = getFontsDataFile(jarFontsPath.substring(jarFontsPath.lastIndexOf("/") + 1));
         BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(fontsDataFile));
         copyBytes(is, writer, 2048);

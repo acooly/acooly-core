@@ -35,11 +35,6 @@
             <artifactId>commons-pool2</artifactId>
             <version>${commons-pool2.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-threadpool</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 
 </project>

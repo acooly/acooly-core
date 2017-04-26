@@ -12,6 +12,9 @@ INSERT INTO `sys_resource` (`ID`, `PARENTID`, `NAME`, `TYPE`, `SHOW_STATE`, `ORD
 INSERT INTO `sys_resource` (`ID`, `PARENTID`, `NAME`, `TYPE`, `SHOW_STATE`, `ORDER_TIME`, `VALUE`, `SHOW_MODE`, `ICON`, `DESCN`) VALUES ('201510262', '20151026', '友情链接', 'URL', '0', '2015-10-25 02:14:40', '/manage/module/cms/content/index.html?code=friend&cmsType=banner', '1', 'icons-resource-friend', NULL);
 INSERT INTO `sys_resource` (`ID`, `PARENTID`, `NAME`, `TYPE`, `SHOW_STATE`, `ORDER_TIME`, `VALUE`, `SHOW_MODE`, `ICON`, `DESCN`) VALUES ('201510263', '20151026', '合作伙伴', 'URL', '0', '2015-10-25 02:14:40', '/manage/module/cms/content/index.html?code=partner&cmsType=banner', '1', 'icons-resource-partner', NULL);
 
+INSERT INTO `sys_resource` (`ID`, `PARENTID`, `NAME`, `TYPE`, `SHOW_STATE`, `ORDER_TIME`, `VALUE`, `SHOW_MODE`, `ICON`, `DESCN`) VALUES ('2016093008', '20151024', '编码管理', 'URL', '0', '2017-04-26 02:14:40', '/manage/module/cms/cmsCode/index.html', '1', 'icons-resource-choujiang2', NULL);
+
+
 
 INSERT INTO `sys_role_resc` (`ROLE_ID`, `RESC_ID`) VALUES ('1', '20151024');
 INSERT INTO `sys_role_resc` (`ROLE_ID`, `RESC_ID`) VALUES ('1', '201510241');
@@ -26,3 +29,5 @@ INSERT INTO `sys_role_resc` (`ROLE_ID`, `RESC_ID`) VALUES ('1', '20151026');
 INSERT INTO `sys_role_resc` (`ROLE_ID`, `RESC_ID`) VALUES ('1', '201510261');
 INSERT INTO `sys_role_resc` (`ROLE_ID`, `RESC_ID`) VALUES ('1', '201510262');
 INSERT INTO `sys_role_resc` (`ROLE_ID`, `RESC_ID`) VALUES ('1', '201510263');
+
+INSERT INTO `sys_role_resc` (`ROLE_ID`, `RESC_ID`) VALUES ('1', '2016093008');

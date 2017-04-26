@@ -62,6 +62,15 @@ CREATE TABLE `cms_attachment` (
   CONSTRAINT `cms_attachment_ibfk_1` FOREIGN KEY (`CONTENTID`) REFERENCES `cms_content` (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='内容附件';
 
+CREATE TABLE `cms_code` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `KEYCODE` varchar(32) DEFAULT NULL,
+  `STATUS` int(2) NOT NULL DEFAULT '1' COMMENT '状态 (1:正常,2:禁用)',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='编码';
+
 INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102500', NULL, NULL, 'article', '文章', '');
 INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102501', '2015102500', NULL, 'aboutus', '关于我们', '');
 INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102502', '2015102500', NULL, 'contactus', '联系我们', '');

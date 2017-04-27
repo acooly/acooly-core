@@ -14,8 +14,9 @@
                     <#if RequestParameters.cmsType != 'banner'>
                     <span>关键字：<input type="text" class="text" name="keywords" size="20"
                                      class="easyui-validatebox" validType="byteLength[1,128]"/></span>
-                    <span>编码：<input type="text" class="text" name="keycode" size="15"
-                                    class="easyui-validatebox" validType="byteLength[1,32]"/> 唯一标识</span>
+                    <span>编码:<select name="keycode" editable="false" style="width: 80px;" panelHeight="auto" class="easyui-combobox"><option value="">选择编码</option>
+                                     <#list allCodes as v><option value="${v}">${v}</option></#list>
+                               </select></span>
                     </#if>
                 </td>
             </tr>

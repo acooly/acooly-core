@@ -5,11 +5,9 @@ import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Servlets;
-import com.acooly.module.cms.domain.Attachment;
-import com.acooly.module.cms.domain.Content;
-import com.acooly.module.cms.domain.ContentBody;
-import com.acooly.module.cms.domain.ContentType;
+import com.acooly.module.cms.domain.*;
 import com.acooly.module.cms.service.AttachmentService;
+import com.acooly.module.cms.service.CmsCodeService;
 import com.acooly.module.cms.service.ContentService;
 import com.acooly.module.cms.service.ContentTypeService;
 import com.acooly.module.ofile.OFileProperties;
@@ -25,11 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 @Controller
 @RequestMapping(value = "/manage/module/cms/content")
@@ -45,6 +40,8 @@ public class ContentManagerController
     @Autowired
     private OFileProperties oFileProperties;
 
+    @Autowired
+    private CmsCodeService cmsCodeService;
 
     @RequestMapping(value = "removeAttachment")
     @ResponseBody
@@ -160,9 +157,18 @@ public class ContentManagerController
 
         model.put("allStatuss", allStatuss);
         model.put("mediaRoot", getFileServerRoot());
+
+        List<CmsCode> allCode = cmsCodeService.getAll();
+        List<String> codes = new ArrayList<>();
+        allCode.forEach(cmsCode -> {
+            if (1 == cmsCode.getStatus()) {
+                codes.add(cmsCode.getKeycode());
+            }
+        });
+        model.put("allCodes", codes);
     }
 
-    private static Map<Integer, String> allStatuss = Maps.newTreeMap();
+    public static Map<Integer, String> allStatuss = Maps.newTreeMap();
 
     static {
         allStatuss.put(Content.STATUS_ENABLED, "正常");

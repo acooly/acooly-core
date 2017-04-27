@@ -7,7 +7,9 @@
  * 修订记录:
  * qiubo@yiji.com 2017-02-25 11:17 创建
  */
-package com.acooly.module.mail;
+package com.acooly.module.mail.service;
+
+import com.acooly.module.mail.MailDto;
 
 /**
  * @author qiubo@yiji.com

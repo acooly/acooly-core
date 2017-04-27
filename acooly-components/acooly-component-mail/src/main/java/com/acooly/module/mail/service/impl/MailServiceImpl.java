@@ -7,17 +7,18 @@
  * 修订记录:
  * qiubo@yiji.com 2017-02-25 11:26 创建
  */
-package com.acooly.module.mail;
+package com.acooly.module.mail.service.impl;
 
 import com.acooly.core.utils.validate.Validators;
+import com.acooly.module.mail.MailDto;
+import com.acooly.module.mail.MailProperties;
+import com.acooly.module.mail.service.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 
 /**
  * @author qiubo@yiji.com
@@ -49,7 +50,7 @@ public class MailServiceImpl implements MailService {
 	public String validateAndParse(MailDto dto) {
 		Validators.assertJSR303(dto);
 		dto.getTo().forEach(EmailValidator.getInstance()::isValid);
-		return mailTemplateService.parse(dto.getTemplateName(), dto.getParams());
+		return mailTemplateService.parse(dto.getTemplateName(), dto);
 	}
 	
 	private void send0(MailDto dto, String content) {
@@ -68,6 +69,7 @@ public class MailServiceImpl implements MailService {
 			email.setHtmlMsg(content);
 			email.setCharset(mailProperties.getCharset());
 			email.send();
+            log.info("发送邮件成功,{}",dto.toString());
 		} catch (Exception e) {
 			log.error("发送邮件失败", e);
 		}

@@ -39,14 +39,11 @@ public class PDFService {
 
     private PdfProperties pdfProperties;
 
-    private TaskExecutor taskExecutor;
-
     //缓存 baseFont
     private Map baseFontMap = new HashMap(4);
 
-    public PDFService(PdfProperties pdfProperties, TaskExecutor taskExecutor) {
+    public PDFService(PdfProperties pdfProperties) {
         this.pdfProperties = pdfProperties;
-        this.taskExecutor = taskExecutor;
     }
 
     private Map<String, String> pdfTemplates = Maps.newConcurrentMap();
@@ -54,14 +51,14 @@ public class PDFService {
     /**
      * 生成pdf
      *
-     * @param templateName 模板名(带后缀)
-     * @param documentVo 数据对象
+     * @param templateName   模板名(带后缀)
+     * @param documentVo     数据对象
      * @param outputFilePath 文件
      * @throws DocumentGeneratingException
      * @throws FileNotFoundException
      */
-    public void generate(	String templateName, DocumentVo documentVo,
-                             String outputFilePath) throws DocumentGeneratingException, FileNotFoundException {
+    public void generate(String templateName, DocumentVo documentVo,
+                         String outputFilePath) throws DocumentGeneratingException, FileNotFoundException {
         File outputFile = new File(outputFilePath);
         this.generate(templateName, documentVo, outputFile);
     }
@@ -70,26 +67,26 @@ public class PDFService {
      * 生成pdf
      *
      * @param templateName 模板名(带后缀)
-     * @param documentVo 数据对象
-     * @param outputFile 输出流
+     * @param documentVo   数据对象
+     * @param outputFile   输出流
      * @throws DocumentGeneratingException
      * @throws FileNotFoundException
      */
-    public void generate(	String templateName, DocumentVo documentVo,
-                             File outputFile) throws DocumentGeneratingException, FileNotFoundException {
+    public void generate(String templateName, DocumentVo documentVo,
+                         File outputFile) throws DocumentGeneratingException, FileNotFoundException {
         generate(templateName, documentVo, new FileOutputStream(outputFile));
     }
 
     /**
      * 生成pdf
      *
-     * @param templateName 模板名(带后缀)
-     * @param documentVo 数据对象
+     * @param templateName           模板名(带后缀)
+     * @param documentVo             数据对象
      * @param outputFileOutputStream 输出流
      * @throws DocumentGeneratingException
      */
-    public void generate(	String templateName, DocumentVo documentVo,
-                             FileOutputStream outputFileOutputStream) throws DocumentGeneratingException {
+    public void generate(String templateName, DocumentVo documentVo,
+                         FileOutputStream outputFileOutputStream) throws DocumentGeneratingException {
         try {
             Map<String, Object> dataMap = documentVo.getDataMap();
             String htmlContent = this.parseTemplate(templateName, dataMap);
@@ -98,6 +95,14 @@ public class PDFService {
             String error = "pdf文档生成失败!";
             log.error(error);
             throw new DocumentGeneratingException(error, e);
+        } finally {
+            if (outputFileOutputStream != null) {
+                try {
+                    outputFileOutputStream.close();
+                } catch (IOException e) {
+                    //ig
+                }
+            }
         }
     }
 
@@ -105,19 +110,29 @@ public class PDFService {
      * 生成pdf
      *
      * @param templateName 模板名(带后缀)
-     * @param params 模板参数
-     * @param outputFile 输出文件
+     * @param params       模板参数
+     * @param outputFile   输出文件
      * @throws DocumentGeneratingException
      */
-    public void generate(	String templateName, Map<String, Object> params,
-                             File outputFile) throws DocumentGeneratingException {
+    public void generate(String templateName, Map<String, Object> params,
+                         File outputFile) throws DocumentGeneratingException {
+        OutputStream os = null;
         try {
+            os = new FileOutputStream(outputFile);
             String htmlContent = this.parseTemplate(templateName, params);
-            this.generate(htmlContent, new FileOutputStream(outputFile));
+            this.generate(htmlContent, os);
         } catch (Exception e) {
             String error = "pdf文档生成失败!";
             log.error(error);
             throw new DocumentGeneratingException(error, e);
+        } finally {
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    //ig
+                }
+            }
         }
     }
 
@@ -125,12 +140,12 @@ public class PDFService {
      * 生成pdf
      *
      * @param templateName 模板名(带后缀)
-     * @param params 模板参数
+     * @param params       模板参数
      * @param outputStream 输出流
      * @throws DocumentGeneratingException
      */
-    public void generate(	String templateName, Map<String, Object> params,
-                             OutputStream outputStream) throws DocumentGeneratingException {
+    public void generate(String templateName, Map<String, Object> params,
+                         OutputStream outputStream) throws DocumentGeneratingException {
         try {
             String htmlContent = this.parseTemplate(templateName, params);
             this.generate(htmlContent, outputStream);
@@ -138,6 +153,14 @@ public class PDFService {
             String error = "pdf文档生成失败!";
             log.error(error);
             throw new DocumentGeneratingException(error, e);
+        } finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    //ig
+                }
+            }
         }
     }
 
@@ -145,65 +168,69 @@ public class PDFService {
      * 生成pdf
      *
      * @param htmlContent html文本
-     * @param outputFile 输出文件
+     * @param outputFile  输出文件
      * @throws DocumentGeneratingException
      * @throws FileNotFoundException
      */
-    public void generate(String htmlContent, File outputFile)	throws DocumentGeneratingException,
+    public void generate(String htmlContent, File outputFile) throws DocumentGeneratingException,
         FileNotFoundException {
-        if (outputFile != null && !outputFile.getParentFile().exists()) {
-            outputFile.getParentFile().mkdir();
+        OutputStream os = null;
+        try {
+            if (outputFile != null && !outputFile.getParentFile().exists()) {
+                outputFile.getParentFile().mkdir();
+            }
+            os = new FileOutputStream(outputFile);
+            this.generate(htmlContent, os);
+        } finally {
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    //ig
+                }
+            }
         }
-        this.generate(htmlContent, new FileOutputStream(outputFile));
+
     }
 
     /**
      * 生成pdf
      *
-     * @param htmlContent html文本
+     * @param htmlContent  html文本
      * @param outputStream 输出流
      * @throws DocumentGeneratingException
      */
     public void generate(String htmlContent, OutputStream outputStream) throws DocumentGeneratingException {
-        taskExecutor.execute(() -> {
-            OutputStream out = outputStream;
-            ITextRenderer iTextRenderer = null;
-            GenericObjectPool<ITextRenderer> objectPool = ITextRendererObjectFactory.getObjectPool(pdfProperties);
+        OutputStream out = outputStream;
+        ITextRenderer iTextRenderer = null;
+        GenericObjectPool<ITextRenderer> objectPool = ITextRendererObjectFactory.getObjectPool(pdfProperties);
+        try {
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document doc = builder.parse(new ByteArrayInputStream(htmlContent.getBytes("UTF-8")));
+            //获取对象池中对象
+            iTextRenderer = objectPool.borrowObject();
             try {
-                DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-                Document doc = builder.parse(new ByteArrayInputStream(htmlContent.getBytes("UTF-8")));
-                //获取对象池中对象
-                iTextRenderer = objectPool.borrowObject();
-                try {
-                    iTextRenderer.setDocument(doc, iTextRenderer.getSharedContext().getBaseURL());
-                    iTextRenderer.layout();
-                    iTextRenderer.createPDF(out);
-                } catch (Exception e) {
-                    objectPool.invalidateObject(iTextRenderer);
-                    iTextRenderer = null;
-                    throw new DocumentGeneratingException(e);
-                }
-                out.flush();
-                log.info("pdf文档生成成功!");
+                iTextRenderer.setDocument(doc, iTextRenderer.getSharedContext().getBaseURL());
+                iTextRenderer.layout();
+                iTextRenderer.createPDF(out);
             } catch (Exception e) {
-                log.error("pdf文档生成失败!", e);
-            } finally {
-                if (out != null) {
-                    try {
-                        out.close();
-                    } catch (IOException e) {
-                        //ig
-                    }
-                }
-                if (iTextRenderer != null) {
-                    try {
-                        objectPool.returnObject(iTextRenderer);
-                    } catch (Exception ex) {
-                        log.error("ITextRenderer对象池回收对象失败.", ex);
-                    }
+                objectPool.invalidateObject(iTextRenderer);
+                iTextRenderer = null;
+                throw new DocumentGeneratingException(e);
+            }
+            out.flush();
+            log.info("pdf文档生成成功!");
+        } catch (Exception e) {
+            log.error("pdf文档生成失败!", e);
+        } finally {
+            if (iTextRenderer != null) {
+                try {
+                    objectPool.returnObject(iTextRenderer);
+                } catch (Exception ex) {
+                    log.error("ITextRenderer对象池回收对象失败.", ex);
                 }
             }
-        });
+        }
     }
 
 
@@ -228,10 +255,24 @@ public class PDFService {
      * @throws DocumentException
      */
     public void addWatermark(File src, String markStr) throws IOException, DocumentException {
-        File tmpFile = File.createTempFile("pdfWatermarkTmp", ".pdf");
-        this.addWatermark(new FileInputStream(src), new FileOutputStream(tmpFile), markStr);
-        FileUtils.copyFile(tmpFile, src);
-        FileUtils.deleteQuietly(tmpFile);
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            File tmpFile = File.createTempFile("pdfWatermarkTmp", ".pdf");
+            is = new FileInputStream(src);
+            os = new FileOutputStream(tmpFile);
+            this.addWatermark(is, os, markStr);
+            FileUtils.copyFile(tmpFile, src);
+            FileUtils.deleteQuietly(tmpFile);
+        } finally {
+            if (is != null) {
+                is.close();
+            }
+            if (os != null) {
+                os.close();
+            }
+        }
+
     }
 
     /**
@@ -244,9 +285,21 @@ public class PDFService {
      * @throws DocumentException
      */
     public void addWatermark(File src, File dest, String markStr) throws IOException, DocumentException {
-        FileOutputStream fileOutputStream = new FileOutputStream(dest);
-        FileInputStream fileInputStream = new FileInputStream(src);
-        this.addWatermark(fileInputStream, fileOutputStream, markStr);
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            os = new FileOutputStream(dest);
+            is = new FileInputStream(src);
+            this.addWatermark(is, os, markStr);
+        } finally {
+            if (is != null) {
+                is.close();
+            }
+            if (os != null) {
+                os.close();
+            }
+        }
+
     }
 
     /**
@@ -300,12 +353,6 @@ public class PDFService {
             }
             if (reader != null) {
                 reader.close();
-            }
-            if (inputStream != null) {
-                inputStream.close();
-            }
-            if (outputStream != null) {
-                outputStream.close();
             }
         }
     }

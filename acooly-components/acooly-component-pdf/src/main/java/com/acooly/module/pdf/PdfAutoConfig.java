@@ -18,7 +18,7 @@ import static com.acooly.module.pdf.PdfProperties.PREFIX;
 public class PdfAutoConfig {
 
     @Bean
-    public PDFService pdfService(PdfProperties pdfProperties, TaskExecutor taskExecutor){
-        return new PDFService(pdfProperties,taskExecutor);
+    public PDFService pdfService(PdfProperties pdfProperties){
+        return new PDFService(pdfProperties);
     }
 }

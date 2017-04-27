@@ -1,4 +1,4 @@
-package com.acooly.module.pdf;
+package com.acooly.core.test.vo;
 
 
 import com.acooly.module.pdf.vo.AbstractDocumentVo;
@@ -62,7 +62,6 @@ public class PdfDemoVo extends AbstractDocumentVo {
 
     private String companyName;
 
-    private Map<String,String> names= Maps.newHashMap();
-
+    private Map<String, String> names = Maps.newHashMap();
 
 }

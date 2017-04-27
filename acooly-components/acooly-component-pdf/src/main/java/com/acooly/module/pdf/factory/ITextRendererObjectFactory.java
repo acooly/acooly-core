@@ -1,9 +1,10 @@
 package com.acooly.module.pdf.factory;
 
 import com.acooly.module.pdf.PdfProperties;
+import com.acooly.module.pdf.exception.DocumentGeneratingException;
+import com.google.common.io.Files;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
@@ -14,7 +15,6 @@ import org.xhtmlrenderer.pdf.ITextFontResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.*;
-import java.util.zip.GZIPInputStream;
 
 
 /**
@@ -25,6 +25,11 @@ import java.util.zip.GZIPInputStream;
 public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRenderer> {
     private static GenericObjectPool itextRendererObjectPool = null;
     private PdfProperties pdfProperties;
+    private static final String fontsPath = System.getProperty("user.home")
+        + File.separator + "appdata"
+        + File.separator + "pdf"
+        + File.separator + "fonts"
+        + File.separator;
 
     public ITextRendererObjectFactory(PdfProperties pdfProperties) {
         this.pdfProperties = pdfProperties;
@@ -85,17 +90,9 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
         throws DocumentException, IOException {
         //添加默认中文字体
         ITextFontResolver fontResolver = iTextRenderer.getFontResolver();
-        //Resource fontsResource = pdfProperties.getResourceLoader().getResource("classpath:META-INF/fonts");
         //在jar中的文件不能获取绝对路径，拷贝到临时文件夹中加载
-        InputStream is = pdfProperties.getResourceLoader().getClassLoader().getResourceAsStream("META-INF/fonts/");
-        BufferedInputStream bis = new BufferedInputStream(is);
-        File pdfFontsTmp = File.createTempFile("pdfFontsTmp", "");
-        BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(pdfFontsTmp));
-        IOUtils.copy(bis, writer);
-
-        //File fontsDir = fontsResource.getFile();
-        addFonts(pdfFontsTmp, fontResolver);
-
+        addFonts("classpath:META-INF/fonts/SourceHanSerifSC-Regular.otf", fontResolver);
+        addFonts("classpath:META-INF/fonts/SourceHanSerifSC-SemiBold.otf", fontResolver);
         //添加自定义字体
         Resource customFontsResource = pdfProperties.getResourceLoader().getResource(pdfProperties.getFontsPath());
         if (customFontsResource.exists()) {
@@ -103,6 +100,16 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
         }
         return fontResolver;
     }
+
+    private void addFonts(String jarFontsPath, ITextFontResolver fontResolver) throws IOException, DocumentException {
+        InputStream is = pdfProperties.getResourceLoader().getResource(jarFontsPath).getInputStream();
+        File fontsDataFile = getFontsDataFile(jarFontsPath.substring(jarFontsPath.lastIndexOf("/") + 1));
+        BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(fontsDataFile));
+        copyBytes(is, writer, 2048);
+        fontResolver.addFont(fontsDataFile.getAbsolutePath(), BaseFont.IDENTITY_H,
+            BaseFont.NOT_EMBEDDED);
+    }
+
 
     private void addFonts(File fontsDir, ITextFontResolver fontResolver) throws IOException, DocumentException {
         if (fontsDir != null && fontsDir.isDirectory()) {
@@ -116,5 +123,31 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
                     BaseFont.NOT_EMBEDDED);
             }
         }
+    }
+
+    private static File getFontsDataFile(String fontsName) {
+        //目录不存在就创建目录
+        final String s = fontsPath + fontsName;
+        try {
+            Files.createParentDirs(new File(s));
+        } catch (IOException e) {
+            throw new DocumentGeneratingException("创建字体文件夹失败", e);
+        }
+        return new File(s);
+    }
+
+    private void copyBytes(InputStream in, OutputStream out, int buffSize)
+        throws IOException {
+        PrintStream ps = out instanceof PrintStream ? (PrintStream) out : null;
+        byte buf[] = new byte[buffSize];
+        int bytesRead = in.read(buf);
+        while (bytesRead >= 0) {
+            out.write(buf, 0, bytesRead);
+            if ((ps != null) && ps.checkError()) {
+                throw new IOException("Unable to write to output stream.");
+            }
+            bytesRead = in.read(buf);
+        }
+        out.flush();
     }
 }

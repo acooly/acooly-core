@@ -38,6 +38,9 @@ public class RedisInfoChecker {
                 return;
             }
         }
+        if(info==null){
+            return;
+        }
         String redis_version = (String) info.get("redis_version");
         if (!checkVersion(redis_version)) {
             throw new AppConfigException("为支持集群模式，redis版本必须为3.x.x !");

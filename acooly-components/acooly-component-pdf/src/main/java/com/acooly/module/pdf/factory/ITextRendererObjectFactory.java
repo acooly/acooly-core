@@ -2,6 +2,7 @@ package com.acooly.module.pdf.factory;
 
 import com.acooly.module.pdf.PdfProperties;
 import com.acooly.module.pdf.exception.DocumentGeneratingException;
+import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
@@ -15,6 +16,7 @@ import org.xhtmlrenderer.pdf.ITextFontResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.*;
+import java.util.Map;
 
 
 /**
@@ -30,6 +32,7 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
         + File.separator + "pdf"
         + File.separator + "fonts"
         + File.separator;
+    private Map<String,Boolean> fontsCopy= Maps.newHashMap();
 
     public ITextRendererObjectFactory(PdfProperties pdfProperties) {
         this.pdfProperties = pdfProperties;
@@ -102,12 +105,32 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
     }
 
     private void addFonts(String jarFontsPath, ITextFontResolver fontResolver) throws IOException, DocumentException {
-        InputStream is = pdfProperties.getResourceLoader().getResource(jarFontsPath).getInputStream();
-        File fontsDataFile = getFontsDataFile(jarFontsPath.substring(jarFontsPath.lastIndexOf("/") + 1));
-        BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(fontsDataFile));
-        copyBytes(is, writer, 2048);
-        fontResolver.addFont(fontsDataFile.getAbsolutePath(), BaseFont.IDENTITY_H,
-            BaseFont.NOT_EMBEDDED);
+        InputStream is = null;
+        BufferedOutputStream writer = null;
+        FileOutputStream fos = null;
+        try {
+            is = pdfProperties.getResourceLoader().getResource(jarFontsPath).getInputStream();
+            File fontsDataFile = getFontsDataFile(jarFontsPath.substring(jarFontsPath.lastIndexOf("/") + 1));
+            Boolean isCopyExists = fontsCopy.get(jarFontsPath);
+            if (isCopyExists == null || !isCopyExists) {
+                fos = new FileOutputStream(fontsDataFile);
+                writer = new BufferedOutputStream(fos);
+                copyBytes(is, writer, 2048);
+                fontsCopy.put(jarFontsPath, Boolean.TRUE);
+            }
+            fontResolver.addFont(fontsDataFile.getAbsolutePath(), BaseFont.IDENTITY_H,
+                BaseFont.NOT_EMBEDDED);
+        } finally {
+            if (is != null) {
+                is.close();
+            }
+            if (writer != null) {
+                writer.close();
+            }
+            if (fos != null) {
+                fos.close();
+            }
+        }
     }
 
 

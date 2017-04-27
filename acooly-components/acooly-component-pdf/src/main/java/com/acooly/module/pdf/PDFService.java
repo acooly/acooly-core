@@ -153,7 +153,8 @@ public class PDFService {
             String error = "pdf文档生成失败!";
             log.error(error);
             throw new DocumentGeneratingException(error, e);
-        } finally {
+        }
+        finally {
             if (outputStream != null) {
                 try {
                     outputStream.close();

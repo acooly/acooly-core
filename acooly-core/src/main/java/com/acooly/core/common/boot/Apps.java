@@ -6,7 +6,6 @@ package com.acooly.core.common.boot;
 
 import com.acooly.core.common.boot.listener.ExApplicationRunListener;
 import com.acooly.core.common.exception.AppConfigException;
-import com.google.common.base.Strings;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
@@ -93,9 +92,6 @@ public class Apps {
 	 */
 	public static void exposeInfo(String key, Object value) {
 		String infoKey = "info." + key;
-		if (!Strings.isNullOrEmpty(System.getProperty(infoKey))) {
-			throw new AppConfigException("暴露信息到info endpoint异常，key=" + key + " 已经存在");
-		}
 		System.setProperty(infoKey, String.valueOf(value));
 	}
 	

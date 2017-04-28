@@ -2,6 +2,7 @@ package com.acooly.core.test.pdf;
 
 import com.acooly.module.pdf.PDFService;
 import com.acooly.module.pdf.PdfProperties;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,13 +33,11 @@ public class PdfGeneratorTest {
         // 生成pdf
         pdfService.generate(template, getVO(), outputFile);
         log.info("生成pdf路径:{}", outputFile.getAbsolutePath());
-        Thread.sleep(10000);
     }
 
 
     @Test
     public void testWartermark() throws Exception {
-        pdfService.addWatermark(new File("C:\\Users\\shuijing\\AppData\\Local\\Temp\\PdfGeneratorTest8263544598473906703.pdf"), "版权所有 重庆笨熊科技");
-        Thread.sleep(10000);
+        pdfService.addWatermark(new File("D:\\tmp\\1492763802969.pdf"), new File("D:\\tmp\\1492763802969___.pdf"), "D:\\tmp\\logo.png", Lists.newArrayList(3, 4));
     }
 }

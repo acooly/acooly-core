@@ -1,5 +1,6 @@
 package com.acooly.module.pdf.factory;
 
+import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.module.pdf.PdfProperties;
 import com.acooly.module.pdf.exception.DocumentGeneratingException;
 import com.google.common.collect.Maps;
@@ -81,8 +82,9 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
 
     private void setSharedContext(ITextRenderer iTextRenderer, PdfProperties pdfProperties) throws IOException {
         Resource imageResource = pdfProperties.getResourceLoader().getResource(pdfProperties.getImagePath());
+        //Resource imageResource = ApplicationContextHolder.get().getResource(pdfProperties.getImagePath());
         if (imageResource.exists()) {
-            iTextRenderer.getSharedContext().setBaseURL(imageResource.getFile().toURI().toURL().toExternalForm());
+            //iTextRenderer.getSharedContext().setBaseURL(imageResource.getFile().toURI().toURL().toExternalForm());
         }
     }
 
@@ -99,7 +101,7 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
         //添加自定义字体
         Resource customFontsResource = pdfProperties.getResourceLoader().getResource(pdfProperties.getFontsPath());
         if (customFontsResource.exists()) {
-            addFonts(customFontsResource.getFile(), fontResolver);
+            //addFonts(customFontsResource.getFile(), fontResolver);
         }
         return fontResolver;
     }
@@ -118,7 +120,7 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
                 copyBytes(is, writer, 2048);
                 fontsCopy.put(jarFontsPath, Boolean.TRUE);
             }
-            fontResolver.addFont(fontsDataFile.getAbsolutePath(), BaseFont.IDENTITY_H,
+            fontResolver.addFont(fontsDataFile.getPath(), BaseFont.IDENTITY_H,
                 BaseFont.NOT_EMBEDDED);
         } finally {
             if (is != null) {
@@ -142,7 +144,7 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
                 if (f == null || f.isDirectory()) {
                     break;
                 }
-                fontResolver.addFont(f.getAbsolutePath(), BaseFont.IDENTITY_H,
+                fontResolver.addFont(f.getPath(), BaseFont.IDENTITY_H,
                     BaseFont.NOT_EMBEDDED);
             }
         }

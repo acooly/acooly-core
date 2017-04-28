@@ -34,6 +34,7 @@ import static com.acooly.core.common.boot.listener.ExApplicationRunListener.COMP
 public class ComponentExtensionContextInitializer implements ApplicationContextInitializer {
 	@Override
 	public void initialize(ConfigurableApplicationContext applicationContext) {
+	    new DevModeDetector().apply(applicationContext.getEnvironment());
 		RelaxedPropertyResolver resolver = new RelaxedPropertyResolver(applicationContext.getEnvironment(),
 			"spring.autoconfigure.");
 		String[] exclude = resolver.getProperty("exclude", String[].class);

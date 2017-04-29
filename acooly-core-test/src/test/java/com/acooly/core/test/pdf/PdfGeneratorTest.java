@@ -10,6 +10,7 @@ import org.springframework.core.io.DefaultResourceLoader;
 
 import java.io.File;
 
+import static com.acooly.core.common.boot.Apps.DEV_MODE_KEY;
 import static com.acooly.core.test.web.PdfServletTest.getVO;
 
 @Slf4j
@@ -22,6 +23,7 @@ public class PdfGeneratorTest {
         PdfProperties pdfProperties = new PdfProperties();
         pdfProperties.setResourceLoader(new DefaultResourceLoader());
         pdfService = new PDFService(pdfProperties);
+        System.setProperty(DEV_MODE_KEY,"true");
     }
 
     @Test

@@ -454,14 +454,8 @@ public class PDFService {
         if (baseFontMap.containsKey(fontName)) {
             baseFont = (BaseFont) baseFontMap.get(fontName);
         } else {
-            Resource fontsResource = pdfProperties.getResourceLoader().getResource("classpath:META-INF/fonts/SourceHanSerifSC-Regular.otf");
-            if (fontsResource.exists()) {
-                File fontsFile = fontsResource.getFile();
-                if (!fontsFile.exists()) {
-                    throw new DocumentGeneratingException("pdf加水印失败，默认字体不存在!");
-                }
-                baseFont = BaseFont.createFont(fontsFile.getAbsolutePath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            }
+            String baseFontPath = ITextRendererObjectFactory.FONTS_PATH + "SourceHanSerifSC-Regular.otf";
+            baseFont = BaseFont.createFont(baseFontPath, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             baseFontMap.put(fontName, baseFont);
         }
         return baseFont;

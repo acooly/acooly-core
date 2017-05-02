@@ -37,7 +37,7 @@ public class ITextRendererObjectFactory extends BasePooledObjectFactory<ITextRen
     private PdfProperties pdfProperties;
 
     private static final String BASE_PATH = System.getProperty("user.home") + File.separator + "appdata" + File.separator + "pdf";
-    private static final String FONTS_PATH = BASE_PATH + File.separator + "fonts" + File.separator;
+    public static final String FONTS_PATH = BASE_PATH + File.separator + "fonts" + File.separator;
     private static final String IMAGE_PATH = BASE_PATH + File.separator + "image" + File.separator;
     private static final String CUSTOM_FONTS_PATH = BASE_PATH + File.separator + "customfonts" + File.separator;
 

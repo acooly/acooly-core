@@ -21,6 +21,6 @@ public class MailComponentInitializer implements ComponentInitializer {
 	
 	@Override
 	public void initialize(ConfigurableApplicationContext applicationContext) {
-		
+		setPropertyIfMissing("acooly.security.xss.exclusions.mail","/manage/module/mail/emailTemplate/*");
 	}
 }

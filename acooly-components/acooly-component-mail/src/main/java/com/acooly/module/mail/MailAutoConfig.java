@@ -9,11 +9,16 @@
  */
 package com.acooly.module.mail;
 
+import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 import static com.acooly.module.mail.MailProperties.PREFIX;
 
@@ -27,4 +32,24 @@ import static com.acooly.module.mail.MailProperties.PREFIX;
 public class MailAutoConfig {
 	@Autowired
 	private MailProperties mailProperties;
+
+    @Bean
+    public StandardDatabaseScriptIniter mailScriptIniter() {
+        return new StandardDatabaseScriptIniter() {
+            @Override
+            public String getEvaluateTable() {
+                return "email_template";
+            }
+
+            @Override
+            public String getComponentName() {
+                return "mail";
+            }
+
+            @Override
+            public List<String> getInitSqlFile() {
+                return Lists.newArrayList("mail", "mail_urls");
+            }
+        };
+    }
 }

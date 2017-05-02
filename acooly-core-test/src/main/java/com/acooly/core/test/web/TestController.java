@@ -11,7 +11,7 @@ package com.acooly.core.test.web;
 
 import com.acooly.core.test.domain.City;
 import com.acooly.module.mail.MailDto;
-import com.acooly.module.mail.MailService;
+import com.acooly.module.mail.service.MailService;
 import com.acooly.module.sms.SmsService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;

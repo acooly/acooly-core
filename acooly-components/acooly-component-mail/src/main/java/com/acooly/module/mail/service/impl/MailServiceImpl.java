@@ -12,7 +12,7 @@ package com.acooly.module.mail.service.impl;
 import com.acooly.core.utils.validate.Validators;
 import com.acooly.module.mail.MailDto;
 import com.acooly.module.mail.MailProperties;
-import com.acooly.module.mail.MailService;
+import com.acooly.module.mail.service.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.validator.routines.EmailValidator;

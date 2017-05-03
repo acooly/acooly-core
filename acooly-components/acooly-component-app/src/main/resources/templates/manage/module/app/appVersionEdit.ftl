@@ -44,7 +44,7 @@
 			<tr>
 				<th>是否强制更新：</th>
 				<td><select name="forceUpdate" editable="false" panelHeight="auto" class="easyui-combobox" >
-					<#list allForceUpdates.keySet() as key><option value="${key}">${allForceUpdates.get(key)}</option></#list>
+					<#list allForceUpdates as k,v><option value="${k}">${v}</option></#list>
 				</select></td>
 			</tr>										
 			<tr>

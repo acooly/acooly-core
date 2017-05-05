@@ -12,7 +12,7 @@ import com.google.common.base.Splitter;
  */
 public class DefaultRequestMatcher implements RequestMatcher {
 
-    private static final String DEFAULT_IGNORE_URI = "/mgt/**,**.js,**.css,**.ico,**.jpg,**.gif,**.png";
+    private static final String DEFAULT_IGNORE_URI = "/index.html,/manage/index.html,/manage/login.html,/manage/logout.html,/mgt/**,/**/*.js,/**/*.css,/**/*.ico,/**/*.jpg,/**/*.gif,/**/*.png,/**/*.map,/**/*.jsp,/**/*.woff2,/**/*.ttf";
     private Iterable<String> ignoreUrls;
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
 

@@ -54,7 +54,7 @@ public class AuthenticationFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
-        ServletException {
+            ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         String requestURL = httpServletRequest.getRequestURL().toString();
@@ -73,7 +73,7 @@ public class AuthenticationFilter implements Filter {
         String compactJws = AuthFilterUtil.getCompactJwt(httpServletRequest);
 
         AuthResult result = (AuthResult) defaultLoginAuthentication
-            .loginAuthentication(compactJws, loginUrl, httpServletRequest, httpServletResponse);
+                .loginAuthentication(compactJws, loginUrl, httpServletRequest, httpServletResponse);
         // 根据认证结果处理逻辑
         switch (result) {
             case LOGIN_URL_NULL:
@@ -92,7 +92,7 @@ public class AuthenticationFilter implements Filter {
                 logger.error(AuthResult.AUTHENTICATION_TAMPER.getDescription());
                 throw new RuntimeException(AuthResult.AUTHENTICATION_TAMPER.getDescription());
             case AUTHENTICATION_ACCESS:
-                AuthFilterUtil.parameterAccessAddJwt2Cookie(httpServletRequest, httpServletResponse);
+                // AuthFilterUtil.parameterAccessAddJwt2Cookie(httpServletRequest, httpServletResponse);
                 chain.doFilter(request, response);
                 break;
             default:

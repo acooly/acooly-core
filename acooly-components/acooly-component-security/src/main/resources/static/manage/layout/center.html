@@ -59,8 +59,9 @@
 						try {
 							if (frame.length > 0) {
 								for ( var i = 0; i < frame.length; i++) {
-									frame[i].contentWindow.document.write('');
-									frame[i].contentWindow.close();
+								    //跨域情况会报错，注释掉
+									//frame[i].contentWindow.document.write('');
+									//frame[i].contentWindow.close();
 									frame[i].src = frame[i].src;
 								}
 								if ($.browser.msie) {

@@ -169,8 +169,8 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter implements Applicatio
 				@Override
 				protected void postProcessTemplateLoaders(List<TemplateLoader> templateLoaders) {
 					templateLoaders.add(new ClassTemplateLoader(FreeMarkerConfigurer.class, "/templates"));
-					
-				}
+                    templateLoaders.add(new ClassTemplateLoader(FreeMarkerConfigurer.class, "/templates/common"));
+                }
 			};
             Map<String, Object> variables=Maps.newHashMap();
             variables.put("includePage",new IncludePage());

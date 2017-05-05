@@ -6,6 +6,6 @@
 
 配置组件参数,如下：
 
-   1) `acooly.sso.ssoServerUrl=http://www.acooly.com/manage/login.html` 登录服务端地址，此系统需要为`.acooly.com`的子域名,如`api.acooly.com`
+   1) `acooly.sso.ssoServerUrl=http://www.acooly.com/manage/login.html` 登录服务端地址 
    2) `acooly.sso.ssoExcludeUrl=/manage/logout.html,/manage/error/**` 不需要登录认证的地址，Ant-style path patterns
    3) `acooly.sso.unauthorizedUrl=http://www.acooly.com/unauthorizedUrl.html` 没有权限时跳转的链接

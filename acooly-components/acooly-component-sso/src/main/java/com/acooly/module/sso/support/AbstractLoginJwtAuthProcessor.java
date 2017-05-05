@@ -1,5 +1,5 @@
 
-package com.acooly.module.sso;
+package com.acooly.module.sso.support;
 
 import javax.servlet.http.HttpServletRequest;
 

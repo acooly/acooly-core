@@ -7,11 +7,8 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.acooly.module.sso.*;
 import com.acooly.module.sso.dic.AuthResult;
-import com.acooly.module.sso.support.AuthFilterUtil;
-import com.acooly.module.sso.support.DefaultRequestMatcher;
-import com.acooly.module.sso.support.RequestMatcher;
+import com.acooly.module.sso.support.*;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

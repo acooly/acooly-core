@@ -2,8 +2,8 @@
 package com.acooly.module.sso.filter;
 
 import com.acooly.core.utils.security.JWTUtils;
-import com.acooly.module.sso.DefaultLoginAuth;
-import com.acooly.module.sso.LoginAuthProcessor;
+import com.acooly.module.sso.support.DefaultLoginAuth;
+import com.acooly.module.sso.support.LoginAuthProcessor;
 import com.acooly.module.sso.SSOProperties;
 import com.acooly.module.sso.support.DefaultRequestMatcher;
 import com.acooly.module.sso.support.RequestMatcher;
@@ -87,7 +87,13 @@ public class AuthorizationFilter implements Filter {
         String rootPath = http + url.getHost() + (url.getPort() == -1 ? "" : ":" + url.getPort());
         String permittedPath = rootPath + "/role/facade/isPermitted";
         String username = (String) request.getAttribute(JWTUtils.KEY_SUB_NAME);
-        String body = HttpRequest.post(permittedPath.trim()).form("uri", requestURI).form("username", username).readTimeout(TIME_OUT).connectTimeout(TIME_OUT).trustAllCerts().trustAllHosts().body();
+        String body;
+        try {
+            body = HttpRequest.post(permittedPath.trim()).form("uri", requestURI).form("username", username).readTimeout(TIME_OUT).connectTimeout(TIME_OUT).trustAllCerts().trustAllHosts().body();
+        } catch (HttpRequest.HttpRequestException e) {
+            logger.error("权限校验出错 uri is {}", requestURI, e);
+            return false;
+        }
         return Boolean.valueOf(body);
     }
 

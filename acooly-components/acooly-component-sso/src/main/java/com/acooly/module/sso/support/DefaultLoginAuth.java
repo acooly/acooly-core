@@ -1,5 +1,5 @@
 
-package com.acooly.module.sso;
+package com.acooly.module.sso.support;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +17,6 @@ public class DefaultLoginAuth extends AbstractLoginJwtAuthProcessor<AuthResult> 
     @Override
     public AuthResult loginAuthentication(String authentication, String loginUrl,
                                           HttpServletRequest request, HttpServletResponse response) {
-        // String requestURL = request.getRequestURL().toString();
         if (!isAuthenticationExist(authentication)) {
             if (!isLoginUrlExist(loginUrl)) {
                 return AuthResult.LOGIN_URL_NULL;

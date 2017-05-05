@@ -243,7 +243,7 @@ public class PDFService {
      * @throws DocumentException
      */
     public void addWatermark(String src, String markStr) throws IOException, DocumentException {
-        this.addWatermark(new File(src), null, null, null, null, null, null, null, markStr);
+        this.addWatermark(new File(src), null, null, null, null, null,null, null, null, markStr);
     }
 
 
@@ -256,7 +256,7 @@ public class PDFService {
      * @throws DocumentException
      */
     public void addWatermark(File src, String watermarkImagePath) throws IOException, DocumentException {
-        this.addWatermark(src, null, null, null, null, null, null, watermarkImagePath, null);
+        this.addWatermark(src, null, null, null, null,null, null, null, watermarkImagePath, null);
     }
 
     /**
@@ -268,7 +268,7 @@ public class PDFService {
      * @throws DocumentException
      */
     public void addWatermark(File src, File desc, String watermarkImagePath) throws IOException, DocumentException {
-        this.addWatermark(src, desc, null, null, null, null, null, null, watermarkImagePath, null);
+        this.addWatermark(src, desc, null, null, null, null, null,null, null, watermarkImagePath, null);
     }
 
     /**
@@ -281,7 +281,7 @@ public class PDFService {
      * @throws DocumentException
      */
     public void addWatermark(File src, File desc, String watermarkImagePath, List<Integer> pages) throws IOException, DocumentException {
-        this.addWatermark(src, desc, pages, null, null, null, null, null, watermarkImagePath, null);
+        this.addWatermark(src, desc, pages, null, null, null, null,null, null, watermarkImagePath, null);
     }
 
 
@@ -295,19 +295,20 @@ public class PDFService {
      * @param fillOpacity        水印透明度0-1f
      * @param fontSize           文字大小
      * @param rotation           字体倾斜度
+     * @param scalePercent       图片缩放比例0-100f
      * @param watermarkImagePath 水印图片绝对路径
      * @param markStr            水印文字
      * @throws IOException
      * @throws DocumentException
      */
-    public void addWatermark(File src, List<Integer> pages, Float x, Float y, Float fillOpacity, Float fontSize, Float rotation, String watermarkImagePath, String markStr) throws IOException, DocumentException {
+    public void addWatermark(File src, List<Integer> pages, Float x, Float y, Float fillOpacity, Float fontSize, Float rotation,Float scalePercent, String watermarkImagePath, String markStr) throws IOException, DocumentException {
         InputStream is = null;
         OutputStream os = null;
         try {
             File tmpFile = File.createTempFile("pdfWatermarkTmp", ".pdf");
             is = new FileInputStream(src);
             os = new FileOutputStream(tmpFile);
-            this.addWatermark(is, os, pages, x, y, fillOpacity, fontSize, rotation, watermarkImagePath, markStr);
+            this.addWatermark(is, os, pages, x, y, fillOpacity, fontSize, rotation,scalePercent, watermarkImagePath, markStr);
             FileUtils.copyFile(tmpFile, src);
             FileUtils.deleteQuietly(tmpFile);
         } finally {
@@ -332,18 +333,19 @@ public class PDFService {
      * @param fillOpacity        水印透明度0-1f
      * @param fontSize           文字大小
      * @param rotation           字体倾斜度
+     * @param scalePercent       图片缩放比例0-100f
      * @param watermarkImagePath 水印图片绝对路径
      * @param markStr            水印文字
      * @throws IOException
      * @throws DocumentException
      */
-    public void addWatermark(File src, File dest, List<Integer> pages, Float x, Float y, Float fillOpacity, Float fontSize, Float rotation, String watermarkImagePath, String markStr) throws IOException, DocumentException {
+    public void addWatermark(File src, File dest, List<Integer> pages, Float x, Float y, Float fillOpacity, Float fontSize, Float rotation,Float scalePercent, String watermarkImagePath, String markStr) throws IOException, DocumentException {
         InputStream is = null;
         OutputStream os = null;
         try {
             os = new FileOutputStream(dest);
             is = new FileInputStream(src);
-            this.addWatermark(is, os, pages, x, y, fillOpacity, fontSize, rotation, watermarkImagePath, markStr);
+            this.addWatermark(is, os, pages, x, y, fillOpacity, fontSize, rotation,scalePercent, watermarkImagePath, markStr);
         } finally {
             if (is != null) {
                 is.close();
@@ -366,12 +368,13 @@ public class PDFService {
      * @param fillOpacity        水印透明度0-1f
      * @param fontSize           文字大小
      * @param rotation           字体倾斜度
+     * @param scalePercent       图片缩放比例0-100f
      * @param watermarkImagePath 水印图片绝对路径
      * @param markStr            水印文字
      * @throws IOException
      * @throws DocumentException
      */
-    public void addWatermark(InputStream inputStream, OutputStream outputStream, List<Integer> pages, Float x, Float y, Float fillOpacity, Float fontSize, Float rotation, String watermarkImagePath, String markStr) throws IOException, DocumentException {
+    public void addWatermark(InputStream inputStream, OutputStream outputStream, List<Integer> pages, Float x, Float y, Float fillOpacity, Float fontSize, Float rotation,Float scalePercent, String watermarkImagePath, String markStr) throws IOException, DocumentException {
         PdfReader reader = null;
         PdfStamper stamper = null;
         BaseFont base = getBaseFontByCache("sourceHanSerifSC-Regular");
@@ -383,6 +386,8 @@ public class PDFService {
         float fs = fontSize == null ? 30 : rotation;
         //水印透明度0-1f
         float fo = fillOpacity == null ? 0.3f : rotation;
+        //图片缩放比例0-100f
+        float sp = scalePercent == null ? 50f : scalePercent;
         try {
             reader = new PdfReader(inputStream);
             stamper = new PdfStamper(reader, outputStream);
@@ -425,6 +430,7 @@ public class PDFService {
                 if (!StringUtils.isEmpty(watermarkImagePath)) {
                     com.lowagie.text.Image img = com.lowagie.text.Image.getInstance(new File(watermarkImagePath).toURI().toURL());
                     img.setAbsolutePosition(xx, yy);
+                    img.scalePercent(sp);
                     content.addImage(img);
                 }
                 content.fill();

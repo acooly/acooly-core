@@ -10,6 +10,9 @@ setenforce 0
 sed -i 's/=enforcing/=disabled/g' /etc/selinux/config
 echo "1.selinux disabled successful."
 
+service  iptables stop
+chkconfig  iptables off
+
 # change host name
 echo "please enter a new host name:"
 read -p "new host name:" -t 30 newHostName

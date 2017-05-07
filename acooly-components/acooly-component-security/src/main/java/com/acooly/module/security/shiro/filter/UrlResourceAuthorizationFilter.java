@@ -8,6 +8,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.acooly.module.security.shiro.realm.PathMatchPermission;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authz.AuthorizationFilter;
 
@@ -23,7 +24,7 @@ public class UrlResourceAuthorizationFilter extends AuthorizationFilter {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String resource = httpRequest.getRequestURI();
 		// 对资源的所有操作
-		String permission = "do:" + resource;
+		String permission = "do"+ PathMatchPermission.PART_DIVIDER_TOKEN + resource;
 		boolean isPermitted = subject.isPermitted(permission);
 		return isPermitted;
 	}

@@ -3,6 +3,7 @@ package com.acooly.module.security.web;
 import com.acooly.module.security.domain.User;
 import com.acooly.module.security.service.UserService;
 import com.acooly.module.security.shiro.cache.ShiroCacheManager;
+import com.acooly.module.security.shiro.realm.PathMatchPermission;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.subject.SimplePrincipalCollection;
@@ -49,7 +50,7 @@ public class RoleFacadeController {
                 SimplePrincipalCollection simplePrincipal = new SimplePrincipalCollection(user, ShiroCacheManager.KEY_AUTHC);
                 Subject subject = new Subject.Builder().principals(simplePrincipal).authenticated(true).buildSubject();
                 ThreadContext.bind(subject);
-                String permission = "do:" + uri;
+                String permission = "do"+ PathMatchPermission.PART_DIVIDER_TOKEN + uri;
                 result = subject.isPermitted(permission);
             }
         }

@@ -14,7 +14,7 @@ public class PathMatchPermission extends WildcardPermission {
 
 	private static final Logger logger = LoggerFactory.getLogger(PathMatchPermission.class);
 
-	protected static final String PART_DIVIDER_TOKEN = ":";
+	public static final String PART_DIVIDER_TOKEN = ",";
 	protected static final boolean DEFAULT_CASE_SENSITIVE = false;
 
 	private AntPathMatcher antPathMatcher = new AntPathMatcher();

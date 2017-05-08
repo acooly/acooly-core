@@ -23,4 +23,9 @@ public class SSOProperties {
      */
     private String ssoExcludeUrl;
 
+    /**
+     * 没有权限时跳转的链接
+     */
+    private String unauthorizedUrl = "/unauthorized.html";
+
 }

@@ -5,6 +5,7 @@ src/main/webapp/WEB-INF/lib
 src/main/webapp/WEB-INF/logs
 target/
 .idea/
+*.iml
 /**/*.iml
 /**/*/.DS_Store
 .DS_Store
@@ -70,3 +71,6 @@ acooly-core/.apt_generated/
 acooly-core/target/
 acooly-components/acooly-component-cms/.DS_Store
 acooly-components/acooly-component-openapi/target/
+acooly-components/acooly-component-app/src/test/
+acooly-components/acooly-component-lottery/src/test/
+acooly-components/acooly-component-portlet/src/test/

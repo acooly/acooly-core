@@ -44,6 +44,17 @@ public abstract class AppAbstractManageController<T extends Entityable, M extend
         return home;
     }
 
+    @Override
+    protected UploadConfig getUploadConfig() {
+        UploadConfig config = super.getUploadConfig();
+        String storageRoot = getStorageRoot();
+        config.setStorageRoot(storageRoot);
+        config.setUseMemery(false);
+        config.setAllowExtentions("jpg,gif,png");
+        return config;
+    }
+
+
     /**
      * APP模块的存储相对路径
      *
@@ -54,9 +65,9 @@ public abstract class AppAbstractManageController<T extends Entityable, M extend
     }
 
 
-    private String getDatabasePath(UploadResult uploadResult) {
+    protected String getDatabasePath(UploadResult uploadResult) {
         String filePath = uploadResult.getFile().getPath();
-        String rootPath = new File(getStorageRoot()).getPath();
+        String rootPath = new File(oFileProperties.getStorageRoot()).getPath();
         return StringUtils.substringAfter(filePath, rootPath);
     }
 

@@ -1,6 +1,5 @@
 package com.acooly.module.app.web;
 
-import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.module.app.domain.AppStartGuide;
 import com.acooly.module.app.enums.EntityStatus;
 import com.acooly.module.app.service.AppStartGuideService;
@@ -19,7 +18,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/manage/module/app/appStartGuide")
-public class AppStartGuideManagerController extends AbstractJQueryEntityController<AppStartGuide, AppStartGuideService> {
+public class AppStartGuideManagerController extends AppAbstractManageController<AppStartGuide, AppStartGuideService> {
 
     private static Map<String, String> allStatuss = EntityStatus.mapping();
 
@@ -35,19 +34,19 @@ public class AppStartGuideManagerController extends AbstractJQueryEntityControll
         if (uploadResults != null && !uploadResults.isEmpty()) {
             UploadResult uploadResult = uploadResults.get("fileDefault");
             if (uploadResult != null) {
-                entity.setImageDefault(getImagePath(uploadResult));
+                entity.setImageDefault(getDatabasePath(uploadResult));
             }
             uploadResult = uploadResults.get("fileIphone4");
             if (uploadResult != null) {
-                entity.setImageIphone4(getImagePath(uploadResult));
+                entity.setImageIphone4(getDatabasePath(uploadResult));
             }
             uploadResult = uploadResults.get("fileIphone6");
             if (uploadResult != null) {
-                entity.setImageIphone6(getImagePath(uploadResult));
+                entity.setImageIphone6(getDatabasePath(uploadResult));
             }
             uploadResult = uploadResults.get("fileAndroid");
             if (uploadResult != null) {
-                entity.setImageAndroid(getImagePath(uploadResult));
+                entity.setImageAndroid(getDatabasePath(uploadResult));
             }
         }
         if (isCreate) {
@@ -91,30 +90,6 @@ public class AppStartGuideManagerController extends AbstractJQueryEntityControll
         }
     }
 
-    private String getImagePath(UploadResult uploadResult) {
-        String filePath = uploadResult.getFile().getPath();
-        String rootPath = new File(getStorageRoot()).getPath();
-        return StringUtils.substringAfter(filePath, rootPath).replace("\\", "/");
-    }
-
-    @Override
-    protected UploadConfig getUploadConfig() {
-        UploadConfig config = super.getUploadConfig();
-        String storageRoot = getStorageRoot();
-        config.setStorageRoot(storageRoot);
-        config.setUseMemery(false);
-        config.setAllowExtentions("jpg,gif,png");
-        return config;
-    }
-
-    private String getStorageRoot() {
-        String home = oFileProperties.getStorageRoot();
-        File file = new File(home);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        return home;
-    }
 
     @Override
     protected void referenceData(HttpServletRequest request, Map<String, Object> model) {

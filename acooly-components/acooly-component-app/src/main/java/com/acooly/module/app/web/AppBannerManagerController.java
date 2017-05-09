@@ -3,7 +3,6 @@ package com.acooly.module.app.web;
 import com.acooly.module.app.AppProperties;
 import com.acooly.module.app.domain.AppBanner;
 import com.acooly.module.app.service.AppBannerService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,7 +33,7 @@ public class AppBannerManagerController extends AppAbstractManageController<AppB
         if (uploadResults != null && !uploadResults.isEmpty()) {
             UploadResult uploadResult = uploadResults.get("bannerFile");
             if (uploadResult != null) {
-                entity.setMediaUrl(getImagePath(uploadResult));
+                entity.setMediaUrl(getDatabasePath(uploadResult));
             }
         }
         entity.setUpdateTime(new Date());
@@ -63,22 +62,6 @@ public class AppBannerManagerController extends AppAbstractManageController<AppB
             }
         } catch (Exception e) {
         }
-    }
-
-    private String getImagePath(UploadResult uploadResult) {
-        String filePath = uploadResult.getFile().getPath();
-        String rootPath = new File(getStorageRoot()).getPath();
-        return StringUtils.substringAfter(filePath, rootPath);
-    }
-
-    @Override
-    protected UploadConfig getUploadConfig() {
-        UploadConfig config = super.getUploadConfig();
-        String storageRoot = getStorageRoot();
-        config.setStorageRoot(storageRoot);
-        config.setUseMemery(false);
-        config.setAllowExtentions("jpg,gif,png");
-        return config;
     }
 
     @Override

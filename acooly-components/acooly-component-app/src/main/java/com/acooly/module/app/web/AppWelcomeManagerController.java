@@ -31,19 +31,19 @@ public class AppWelcomeManagerController extends AppAbstractManageController<App
         if (uploadResults != null && !uploadResults.isEmpty()) {
             UploadResult uploadResult = uploadResults.get("fileDefault");
             if (uploadResult != null) {
-                entity.setImageDefault(getImagePath(uploadResult));
+                entity.setImageDefault(getDatabasePath(uploadResult));
             }
             uploadResult = uploadResults.get("fileIphone4");
             if (uploadResult != null) {
-                entity.setImageIphone4(getImagePath(uploadResult));
+                entity.setImageIphone4(getDatabasePath(uploadResult));
             }
             uploadResult = uploadResults.get("fileIphone6");
             if (uploadResult != null) {
-                entity.setImageIphone6(getImagePath(uploadResult));
+                entity.setImageIphone6(getDatabasePath(uploadResult));
             }
             uploadResult = uploadResults.get("fileAndroid");
             if (uploadResult != null) {
-                entity.setImageAndroid(getImagePath(uploadResult));
+                entity.setImageAndroid(getDatabasePath(uploadResult));
             }
         }
         if (isCreate) {
@@ -85,22 +85,6 @@ public class AppWelcomeManagerController extends AppAbstractManageController<App
             }
         } catch (Exception e) {
         }
-    }
-
-    private String getImagePath(UploadResult uploadResult) {
-        String filePath = uploadResult.getFile().getPath();
-        String rootPath = new File(getStorageRoot()).getPath();
-        return "/" + getAppStorageRoot() + StringUtils.substringAfter(filePath, rootPath).replace("\\", "/");
-    }
-
-    @Override
-    protected UploadConfig getUploadConfig() {
-        UploadConfig config = super.getUploadConfig();
-        String storageRoot = getStorageRoot();
-        config.setStorageRoot(storageRoot);
-        config.setUseMemery(false);
-        config.setAllowExtentions("jpg,gif,png");
-        return config;
     }
 
 

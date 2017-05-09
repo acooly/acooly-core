@@ -3,10 +3,13 @@
 此组件提供分布式缓存的能力
 
 对于spring 声明式缓存，加入如下能力：
+
 1. 根据codis特性优化性能
 2. 响应结果为null时不缓存数据，需要缓存null时，建议用空对象代替(我们的使用场景很少会对结果为null时缓存)
 3. 当缓存操作异常时不抛出异常
-4. 缓存key格式为:namespace+cacheName+":"+param,(cacheName为@Cacheable上的cacheName参数)
+4. 缓存key格式为:cacheName+":"+param,(cacheName为@Cacheable上的cacheName参数)
+
+配置命名空间`spring.redis`
 
 ## 2. 使用 (参考测试用例)
          

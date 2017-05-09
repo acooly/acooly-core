@@ -12,6 +12,7 @@ package com.acooly.module.app.web;
 import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.utils.Strings;
 import com.acooly.module.app.AppProperties;
 import com.acooly.module.ofile.OFileProperties;
 import org.apache.commons.lang3.StringUtils;
@@ -67,8 +68,13 @@ public abstract class AppAbstractManageController<T extends Entityable, M extend
 
     protected String getDatabasePath(UploadResult uploadResult) {
         String filePath = uploadResult.getFile().getPath();
+        filePath = Strings.replace(filePath, "\\", "/");
         String rootPath = new File(oFileProperties.getStorageRoot()).getPath();
-        return StringUtils.substringAfter(filePath, rootPath);
+        String relativePath = StringUtils.substringAfter(filePath, rootPath);
+        if (!Strings.startsWith(relativePath, "/")) {
+            relativePath = "/" + relativePath;
+        }
+        return relativePath;
     }
 
 }

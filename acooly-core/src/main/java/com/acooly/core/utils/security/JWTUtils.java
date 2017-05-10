@@ -14,10 +14,6 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -62,7 +58,7 @@ public class JWTUtils {
     /**
      * jwt 加密密钥
      */
-    public final static String SIGN_KEY = "ssoSecret";
+    public static final String SIGN_KEY = "ssoSecretlkj";
 
     /**
      * JWT 签发者 key
@@ -101,19 +97,10 @@ public class JWTUtils {
 
 
     /**
-     * 只有 .acooly.com 子域名才支持 sso 登录
-     */
-    public final static String COOKIE_DOMAIN = ".acooly.com";
-
-
-    /**
      * 规范类型
      */
     public final static String PROTOCOL_TYPE_JWT = "jwt";
-    /**
-     * 加密类型 value
-     */
-    public final static String ALG_SH256 = "SH256";
+
     public static final char SEPARATOR_CHAR = '.';
 
 
@@ -126,11 +113,8 @@ public class JWTUtils {
      */
     private static String aud = "boss";
 
-    /**
-     * response 设置header
-     */
-    public static final String TOKEN_PREFIX = "Bearer";
-    public static final String HEADER_STRING = "Authorization";
+
+    public static JwtSigningKeyResolver jwtSigningKeyResolver = new JwtSigningKeyResolver();
     /**
      * header
      */
@@ -140,15 +124,15 @@ public class JWTUtils {
     static {
         headerMap = new HashMap<>();
         headerMap.put(HEADER_KEY_TYP, PROTOCOL_TYPE_JWT);
-        headerMap.put(HEADER_KEY_ALG, ALG_SH256);
+        headerMap.put(HEADER_KEY_ALG, SignatureAlgorithm.HS256.getValue());
         objectMapper = new ObjectMapper();
     }
 
 
-    public static String createJwt(String sub, String signKey) {
+    public static String createJwt(String sub) {
         Date iat = new Date();
-        // 实效时间为 30分钟
-        Date expTime = new Date(iat.getTime() + 30 * 60 * 60 * 1000);
+        // 实效时间为 120分钟
+        Date expTime = new Date(iat.getTime() + 120 * 60 * 60 * 1000);
         Map claims = new HashMap<>();
         claims.put(CLAIMS_KEY_ISS, iss);
         claims.put(CLAIMS_KEY_SUB, sub);
@@ -156,7 +140,7 @@ public class JWTUtils {
         claims.put(CLAIMS_KEY_IAT, iat);
         claims.put(CLAIMS_KEY_EXP, expTime);
         String compactJws = Jwts.builder().setHeader(headerMap).setClaims(claims)
-            .signWith(SignatureAlgorithm.HS256, signKey.getBytes()).compact();
+            .signWith(SignatureAlgorithm.HS256, SIGN_KEY.getBytes()).compact();
         return compactJws;
     }
 
@@ -237,6 +221,29 @@ public class JWTUtils {
     }
 
     /**
+     * 解密并验证信息有无被篡改
+     *
+     * @param authentication
+     * @return
+     * @throws Exception
+     */
+    public static Jwt<Header, Claims> parseAuthentication(String authentication) throws Exception {
+        return Jwts.parser().setSigningKeyResolver(jwtSigningKeyResolver).parse(authentication);
+    }
+
+    /**
+     * 验证 jwt 是否过期
+     *
+     * @param jwt
+     * @return
+     */
+    public static boolean validateTimeout(Jwt<Header, Claims> jwt) {
+        long expTime = Long.valueOf(String.valueOf(jwt.getBody().get(JWTUtils.CLAIMS_KEY_EXP)));
+        return (System.currentTimeMillis() >= expTime);
+    }
+
+
+    /**
      * 验证 jwt 信息
      *
      * @param jwt
@@ -274,13 +281,12 @@ public class JWTUtils {
      * @param response
      * @param jwtValue
      */
-    public static void addJwtCookie(HttpServletResponse response, String jwtValue,String domain) {
+    public static void addJwtCookie(HttpServletResponse response, String jwtValue, String domain) {
         Cookie cookie = new Cookie(JWTUtils.TYPE_JWT, jwtValue);
         cookie.setHttpOnly(Boolean.TRUE);
         cookie.setPath("/");
         cookie.setDomain(domain);
         response.addCookie(cookie);
-        //response.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + jwtValue);
     }
 
     public static void removeCookie(String key, String domain) {
@@ -297,13 +303,23 @@ public class JWTUtils {
     }
 
     public static String getDomainName() {
-        String host = "";
-        try {
-            URL url = new URL(ServletUtil.getRequest().getRequestURL().toString());
-            host = url.getHost();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return host.startsWith("www.") ? host.substring(4) : host;
+        return ServletUtil.getRequest().getServerName().replaceAll(".*\\.(?=.*\\.)", "");
     }
+
+    private static class JwtSigningKeyResolver extends SigningKeyResolverAdapter {
+
+        @Override
+        public Key resolveSigningKey(JwsHeader header, Claims claims) {
+            SignatureAlgorithm alg = SignatureAlgorithm.forName(header.getAlgorithm());
+            byte[] keyBytes = this.resolveSigningKeyBytes(header, claims);
+            return new SecretKeySpec(keyBytes, alg.getJcaName());
+        }
+
+        @Override
+        public byte[] resolveSigningKeyBytes(JwsHeader header, Claims claims) {
+            return JWTUtils.SIGN_KEY.getBytes();
+        }
+
+    }
+
 }

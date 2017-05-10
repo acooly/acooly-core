@@ -1,6 +1,7 @@
 package com.acooly.module.security.shiro.filter;
 
 import com.acooly.core.utils.Dates;
+import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.net.ServletUtil;
 import com.acooly.core.utils.security.JWTUtils;
@@ -133,6 +134,7 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
      */
     private String setTargetUrlToSession() {
         String targetUrl = ServletUtil.getRequestParameter(JWTUtils.KEY_TARGETURL);
+        targetUrl = Encodes.urlDecode(targetUrl);
         if (StringUtils.isNotBlank(targetUrl)) {
             ServletUtil.setSessionAttribute(JWTUtils.KEY_TARGETURL,targetUrl);
         }

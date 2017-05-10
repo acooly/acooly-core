@@ -5,8 +5,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.acooly.module.security.config.SecurityProperties;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import com.acooly.core.common.dao.support.PageInfo;
@@ -25,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Service("resourceService")
+@ConditionalOnProperty(value  = SecurityProperties.PREFIX + ".shiro.auth.enable",matchIfMissing = true)
 @Transactional
 public class ResourceServiceImpl extends EntityServiceImpl<Resource, ResourceDao> implements ResourceService {
 

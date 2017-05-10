@@ -12,8 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.acooly.module.security.config.FrameworkPropertiesHolder;
+import com.acooly.module.security.config.SecurityProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -32,6 +34,7 @@ import com.acooly.module.security.service.UserService;
 @SuppressWarnings("unchecked")
 @Controller
 @RequestMapping(value = "/manage/system/user")
+@ConditionalOnProperty(value  = SecurityProperties.PREFIX + ".shiro.auth.enable",matchIfMissing = true)
 public class UserController extends AbstractJQueryEntityController<User, UserService> {
 
 	private static Map<Integer, String> allUserTypes = FrameworkPropertiesHolder.get().getUserTypes();

@@ -1,5 +1,6 @@
 package com.acooly.module.security.web;
 
+import com.acooly.module.security.config.SecurityProperties;
 import com.acooly.module.security.domain.User;
 import com.acooly.module.security.service.UserService;
 import com.acooly.module.security.shiro.cache.ShiroCacheManager;
@@ -11,6 +12,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.web.mgt.WebSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Slf4j
 @Controller
 @RequestMapping(value = "/role/facade")
+@ConditionalOnProperty(value  = SecurityProperties.PREFIX + ".shiro.auth.enable",matchIfMissing = true)
 public class RoleFacadeController {
 
     @Autowired
@@ -34,14 +37,14 @@ public class RoleFacadeController {
     @ResponseBody
     public Boolean isPermitted(String uri, String username) {
         try {
-            return checkJwt(uri, username);
+            return permitted(uri, username);
         } catch (Exception e) {
             log.error("检查权限异常", e);
             return false;
         }
     }
 
-    private boolean checkJwt(String uri, String username) throws Exception {
+    private boolean permitted(String uri, String username) throws Exception {
         boolean result = false;
         if (!StringUtils.isEmpty(username)) {
             User user = userService.getAndCheckUser(username);

@@ -5,13 +5,13 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
-import com.acooly.core.common.web.AbstractStandardEntityController;
+import com.acooly.module.security.config.SecurityProperties;
 import com.acooly.module.security.utils.ShiroUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +35,7 @@ import com.google.common.collect.Lists;
 
 @Controller
 @RequestMapping(value = "/manage/system/")
+@ConditionalOnProperty(value  = SecurityProperties.PREFIX + ".shiro.auth.enable",matchIfMissing = true)
 public class SystemController extends AbstractJQueryEntityController<User, UserService> {
 
 	@Autowired

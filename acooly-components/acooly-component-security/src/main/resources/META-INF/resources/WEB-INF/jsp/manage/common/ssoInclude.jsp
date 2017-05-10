@@ -1,4 +1,9 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<meta http-equiv="cache-control" content="max-age=86400">
+<meta http-equiv="expires" content="1440">
+<meta http-equiv="keywords" content="acooly">
+<meta http-equiv="description" content="spring+jpa+hibernate+easyui+springmvc+jstl/freemarker">
+<meta name="X-CSRF-TOKEN" content="${requestScope["org.springframework.security.web.csrf.CsrfToken"].token}"/>
 <!-- easyui控件 -->
 <link id="easyuiTheme" rel="stylesheet" href="/manage/assert/plugin/jquery-easyui/themes/acooly/easyui.css" type="text/css" />
 <link rel="stylesheet" href="/manage/assert/plugin/jquery-easyui/themes/icon.css" type="text/css" />
@@ -46,5 +51,8 @@
 
 <script type="text/javascript">
     var contextPath = '';
+    $(function() {
+        $.acooly.system.init();
+    });
 </script>
 

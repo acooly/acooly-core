@@ -9,6 +9,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.net.ServletUtil;
 import com.acooly.core.utils.security.JWTUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -34,9 +35,9 @@ public class AuthFilterUtil {
         if (StringUtils.isNotBlank(queryString)) {
             requestURL += "?" + queryString;
         }
-        //String targetUrl = Base64.encodeBase64String(requestURL.getBytes("utf-8"));
-        response.setHeader("targetUrl", requestURL);
-        response.sendRedirect(loginUrl + "?targetUrl=" + requestURL);
+        String targetUrl = Encodes.urlEncode((requestURL));
+        response.setHeader("targetUrl", targetUrl);
+        response.sendRedirect(loginUrl + "?targetUrl=" + targetUrl);
     }
 
     /**

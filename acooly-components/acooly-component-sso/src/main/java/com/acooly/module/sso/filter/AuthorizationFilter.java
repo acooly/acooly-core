@@ -57,7 +57,6 @@ public class AuthorizationFilter implements Filter {
         ServletException {
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
         if (!requestMatcher.matches(httpServletRequest)) {
             chain.doFilter(request, response);

@@ -7,6 +7,7 @@ import io.jsonwebtoken.impl.DefaultClaims;
 import io.jsonwebtoken.impl.TextCodec;
 import io.jsonwebtoken.lang.Assert;
 import io.jsonwebtoken.lang.Strings;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -22,6 +23,7 @@ import java.util.Map;
 /**
  * @author shuijing
  */
+@Slf4j
 public class JWTUtils {
 
     public final static String KEY_TARGETURL = "targetUrl";
@@ -81,6 +83,11 @@ public class JWTUtils {
     public final static String CLAIMS_KEY_SUB = "sub";
 
     /**
+     * user
+     */
+    public final static String CLAIMS_KEY_SUBJECT = "subject";
+
+    /**
      * 接收地址 key
      */
     public final static String CLAIMS_KEY_AUD = "aud";
@@ -129,7 +136,7 @@ public class JWTUtils {
     }
 
 
-    public static String createJwt(String sub) {
+    public static String createJwt(String sub, String subjectStr) {
         Date iat = new Date();
         // 实效时间为 120分钟
         Date expTime = new Date(iat.getTime() + 120 * 60 * 60 * 1000);
@@ -139,6 +146,7 @@ public class JWTUtils {
         claims.put(CLAIMS_KEY_AUD, aud);
         claims.put(CLAIMS_KEY_IAT, iat);
         claims.put(CLAIMS_KEY_EXP, expTime);
+        claims.put(CLAIMS_KEY_SUBJECT, subjectStr);
         String compactJws = Jwts.builder().setHeader(headerMap).setClaims(claims)
             .signWith(SignatureAlgorithm.HS256, SIGN_KEY.getBytes()).compact();
         return compactJws;

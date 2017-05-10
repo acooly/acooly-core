@@ -3,6 +3,7 @@ package com.acooly.module.security.web;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Servlets;
+import com.acooly.core.utils.mapper.JsonMapper;
 import com.acooly.core.utils.net.ServletUtil;
 import com.acooly.core.utils.security.JWTUtils;
 import com.acooly.module.security.config.FrameworkProperties;
@@ -10,6 +11,7 @@ import com.acooly.module.security.config.FrameworkPropertiesHolder;
 import com.acooly.module.security.config.SecurityProperties;
 import com.acooly.module.security.domain.User;
 import com.acooly.module.security.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -36,6 +38,7 @@ import static com.acooly.module.security.shiro.realm.ShiroDbRealm.SESSION_USER;
  * 
  * @author zhangpu
  */
+
 @Controller
 @RequestMapping(value = "/manage/")
 @ConditionalOnProperty(value  = SecurityProperties.PREFIX + ".shiro.auth.enable",matchIfMissing = true)
@@ -91,11 +94,16 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
     public JsonResult onLoginSuccess(HttpServletRequest request) {
         logger.debug("OnLoginSuccess, redirect to index.jsp");
         JsonResult jsonResult = new JsonResult();
-
         User user = (User) SecurityUtils.getSubject().getSession().getAttribute(SESSION_USER);
         if (user != null) {
             String username = user.getUsername();
-            String jwt = JWTUtils.createJwt(username);
+            String subjectStr = "";
+            try {
+                subjectStr = JsonMapper.nonEmptyMapper().getMapper().writeValueAsString(user);
+            } catch (JsonProcessingException e) {
+                logger.error("创建jwt时user转String失败", e.getMessage());
+            }
+            String jwt = JWTUtils.createJwt(username,subjectStr);
             HashMap<Object, Object> resmap = Maps.newHashMap();
 
             JWTUtils.addJwtCookie(ServletUtil.getResponse(), jwt, JWTUtils.getDomainName());

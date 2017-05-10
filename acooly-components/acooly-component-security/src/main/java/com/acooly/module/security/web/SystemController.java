@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.module.security.config.SecurityProperties;
+import com.acooly.module.security.shiro.realm.PathMatchPermission;
 import com.acooly.module.security.utils.ShiroUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -69,7 +70,7 @@ public class SystemController extends AbstractJQueryEntityController<User, UserS
 				String url = p.getHref();
 				if (StringUtils.isNotBlank(url) && (Strings.endsWith(url, ".html") || Strings.endsWith(url, ".jsp"))) {
 					if (SecurityUtils.getSecurityManager().isPermitted(SecurityUtils.getSubject().getPrincipals(),
-							"do:" + url)) {
+							"do"+ PathMatchPermission.PART_DIVIDER_TOKEN + url)) {
 						authPortallets.add(p);
 					}
 				} else {

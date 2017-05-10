@@ -111,7 +111,6 @@ public class DefaultLoginAuth extends AbstractLoginJwtAuthProcessor<AuthResult> 
             Subject subject = new Subject.Builder().sessionId(request.getSession().getId()).session(shiroSession).principals(simplePrincipal).authenticated(true).buildSubject();
             ThreadContext.bind(subject);
         }
-        SecurityUtils.getSubject().getSession().setAttribute("aaa", "wocao");
     }
 
 }

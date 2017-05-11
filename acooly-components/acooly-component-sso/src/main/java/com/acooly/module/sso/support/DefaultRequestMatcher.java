@@ -31,10 +31,6 @@ public class DefaultRequestMatcher implements RequestMatcher {
                 return false;
             }
         }
-        //2.验证是否登录
-        /*if (isLogin(request)) {
-            return false;
-		}*/
         return true;
     }
 }

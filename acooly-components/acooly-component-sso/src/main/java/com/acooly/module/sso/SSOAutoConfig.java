@@ -1,7 +1,6 @@
 
 package com.acooly.module.sso;
 
-import com.acooly.core.utils.Encodes;
 import com.acooly.module.sso.filter.AuthenticationFilter;
 import com.acooly.module.sso.filter.AuthorizationFilter;
 import org.springframework.beans.factory.annotation.Autowired;

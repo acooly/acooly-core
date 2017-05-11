@@ -1,19 +1,16 @@
 
 package com.acooly.module.sso.support;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
+import com.acooly.core.utils.Encodes;
+import com.acooly.core.utils.security.JWTUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationContext;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.acooly.core.utils.Encodes;
-import com.acooly.core.utils.net.ServletUtil;
-import com.acooly.core.utils.security.JWTUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.ApplicationContext;
+import java.io.IOException;
 
 
 /**

@@ -17,6 +17,8 @@ public class SSOComponentInitializer implements ComponentInitializer {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         //静态文件缓存
-        System.setProperty("spring.resources.cache-period", "-1");
+        if (!Apps.isDevMode()){
+            System.setProperty("spring.resources.cache-period", "-1");
+        }
     }
 }

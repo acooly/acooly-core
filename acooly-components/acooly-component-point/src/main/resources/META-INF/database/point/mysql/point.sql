@@ -120,7 +120,7 @@ CREATE TABLE `point_trade` (
 -- Records of point_trade
 -- ----------------------------
 
-
+DROP TABLE IF EXISTS `point_clear_config`;
 CREATE TABLE `point_clear_config` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `start_trade_time` datetime NOT NULL COMMENT '开始交易时间',

@@ -1,3 +1,11 @@
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<#--<meta http-equiv="pragma" content="no-cache">-->
+<meta http-equiv="cache-control" content="max-age=86400">
+<meta http-equiv="expires" content="1440">
+<meta http-equiv="keywords" content="acooly">
+<meta http-equiv="description" content="spring+jpa+hibernate+easyui+springmvc+jstl/freemarker">
+<meta name="X-CSRF-TOKEN" content="${Request['org.springframework.security.web.csrf.CsrfToken'].token}"/>
+
 <!-- easyui控件 -->
 <script type="text/javascript" src="/manage/assert/plugin/jquery/jquery-1.9.1.min.js" charset="utf-8"></script>
 <link id="easyuiTheme" rel="stylesheet" href="/manage/assert/plugin/jquery-easyui/themes/acooly/easyui.css" type="text/css" />
@@ -42,8 +50,11 @@
 
 <link rel="stylesheet" href="/manage/assert/plugin/awesome/4.6.3/css/font-awesome.min.css">
 
-
 <script type="text/javascript">
     var contextPath = '';
+    $(function() {
+        $.acooly.system.init();
+    });
 </script>
+
 

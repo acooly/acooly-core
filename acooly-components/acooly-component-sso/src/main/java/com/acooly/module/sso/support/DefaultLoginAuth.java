@@ -1,16 +1,20 @@
 
 package com.acooly.module.sso.support;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.acooly.core.utils.security.JWTUtils;
 import com.acooly.module.sso.dic.AuthResult;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwt;
+import lombok.extern.slf4j.Slf4j;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author shuijing
  */
+@Slf4j
 public class DefaultLoginAuth extends AbstractLoginJwtAuthProcessor<AuthResult> {
 
 
@@ -21,29 +25,27 @@ public class DefaultLoginAuth extends AbstractLoginJwtAuthProcessor<AuthResult> 
             if (!isLoginUrlExist(loginUrl)) {
                 return AuthResult.LOGIN_URL_NULL;
             }
-//            if (!isDomainMatch(requestURL)) {
-//                return AuthResult.LOGIN_ERROR_DOMAIN;
-//            }
+            if (!isDomainMatch(request.getRequestURL().toString(), loginUrl)) {
+                return AuthResult.LOGIN_ERROR_DOMAIN;
+            }
             return AuthResult.LOGIN_REDIRECT;
         }
         return validateAuthentication(request, authentication);
     }
 
     /**
-     * jwt 信息验证(篡改与过期)
-     *
-     * @param request
-     * @param authentication
-     * @return
+     * jwt 验证篡改与过期
      */
     private AuthResult validateAuthentication(HttpServletRequest request, String authentication) {
         try {
             // 验证jwt是否被篡改
-            Jwt jwt = parseAuthentication(authentication);
+            Jwt<Header, Claims> jwt = JWTUtils.parseAuthentication(authentication);
             // 验证 jwt 是否过期
-            if (!validateTimeout(jwt)) {
+            if (!JWTUtils.validateTimeout(jwt)) {
                 // 将解析后的信息存入 request 属性中
                 setRequestAttributes(request, jwt);
+                //将subject绑定到线程
+                bindSubjectToThread(jwt, request);
 
                 return AuthResult.AUTHENTICATION_ACCESS;
             }
@@ -53,7 +55,4 @@ public class DefaultLoginAuth extends AbstractLoginJwtAuthProcessor<AuthResult> 
         }
     }
 
-    private boolean isDomainMatch(String requestURL) {
-        return requestURL.contains(JWTUtils.COOKIE_DOMAIN);
-    }
 }

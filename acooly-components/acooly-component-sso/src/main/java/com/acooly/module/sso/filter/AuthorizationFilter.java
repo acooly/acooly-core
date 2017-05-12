@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 
 /**
@@ -53,10 +54,9 @@ public class AuthorizationFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
-            ServletException {
+        ServletException {
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
         if (!requestMatcher.matches(httpServletRequest)) {
             chain.doFilter(request, response);
@@ -70,7 +70,8 @@ public class AuthorizationFilter implements Filter {
         if (isPermitted(httpServletRequest)) {
             chain.doFilter(request, response);
         } else {
-            httpServletResponse.sendRedirect(ssoProperties.getUnauthorizedUrl());
+            response.setContentType("text/html;charset=UTF-8");
+            response.getOutputStream().write("没有权限!请联系管理员!".getBytes(Charset.forName("UTF-8")));
         }
     }
 
@@ -94,7 +95,10 @@ public class AuthorizationFilter implements Filter {
             logger.error("权限校验出错 uri is {}", requestURI, e);
             return false;
         }
-        return Boolean.valueOf(body);
+        if (!StringUtils.isEmpty(body) && (body.contains("true") || body.contains("false"))) {
+            return Boolean.valueOf(body);
+        }
+        return false;
     }
 
 

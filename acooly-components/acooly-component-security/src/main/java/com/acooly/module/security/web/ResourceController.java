@@ -11,11 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.acooly.module.security.config.FrameworkPropertiesHolder;
+import com.acooly.module.security.config.SecurityProperties;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.io.AbstractFileResolvingResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
@@ -38,6 +40,7 @@ import com.google.common.collect.Sets;
 
 @Controller
 @RequestMapping(value = "/manage/system/resource")
+@ConditionalOnProperty(value  = SecurityProperties.PREFIX + ".shiro.auth.enable",matchIfMissing = true)
 public class ResourceController extends AbstractJQueryEntityController<Resource, ResourceService> {
 
 	private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);

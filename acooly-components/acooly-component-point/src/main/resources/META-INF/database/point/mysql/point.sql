@@ -18,7 +18,6 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 -- Table structure for `point_account`
 -- ----------------------------
-DROP TABLE IF EXISTS `point_account`;
 CREATE TABLE `point_account` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `user_name` varchar(32) NOT NULL COMMENT '用户名',
@@ -44,7 +43,6 @@ ALTER TABLE `point_account`
 -- ----------------------------
 -- Table structure for `point_grade`
 -- ----------------------------
-DROP TABLE IF EXISTS `point_grade`;
 CREATE TABLE `point_grade` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `num` int(11) NOT NULL DEFAULT '1' COMMENT '等级',
@@ -70,7 +68,6 @@ INSERT INTO `point_grade` VALUES ('5', '5', '等级5', '100000000', '999999999',
 -- ----------------------------
 -- Table structure for `point_statistics`
 -- ----------------------------
-DROP TABLE IF EXISTS `point_statistics`;
 CREATE TABLE `point_statistics` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID(与customer共主键)',
   `user_name` varchar(32) NOT NULL COMMENT '用户名',
@@ -93,7 +90,6 @@ CREATE TABLE `point_statistics` (
 -- ----------------------------
 -- Table structure for `point_trade`
 -- ----------------------------
-DROP TABLE IF EXISTS `point_trade`;
 CREATE TABLE `point_trade` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `trade_no` varchar(32) NOT NULL COMMENT '交易订单号',
@@ -120,7 +116,6 @@ CREATE TABLE `point_trade` (
 -- Records of point_trade
 -- ----------------------------
 
-DROP TABLE IF EXISTS `point_clear_config`;
 CREATE TABLE `point_clear_config` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `start_trade_time` datetime NOT NULL COMMENT '开始交易时间',

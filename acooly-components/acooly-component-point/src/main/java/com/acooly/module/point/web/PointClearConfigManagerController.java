@@ -21,6 +21,7 @@ import com.acooly.core.common.web.MappingMethod;
 import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.utils.Dates;
 import com.acooly.module.point.domain.PointClearConfig;
+import com.acooly.module.point.dto.PointTradeDto;
 import com.acooly.module.point.enums.PointClearConfigStatus;
 import com.acooly.module.point.service.PointClearConfigService;
 import com.acooly.module.point.service.PointTradeService;
@@ -64,7 +65,15 @@ public class PointClearConfigManagerController
 			String memo = pointClearConfig.getMemo();
 			pointClearConfig.setStatus(PointClearConfigStatus.finish);
 			pointClearConfigService.update(pointClearConfig);
-			pointTradeService.pointClearThread(startTime, endTime, memo);
+			
+			PointTradeDto pointTradeDto = new PointTradeDto();
+			pointTradeDto.setBusiId("0");
+			pointTradeDto.setBusiType("pointClear");
+			pointTradeDto.setBusiTypeText("清分清零");
+			pointTradeDto.setBusiData(memo);
+			pointTradeDto.setMemo(memo);
+
+			pointTradeService.pointClearThread(startTime, endTime, pointTradeDto);
 			result.setMessage("积分清零正在处理中,之后刷新查看结果");
 		} catch (Exception e) {
 			handleException(result, "新增", e);

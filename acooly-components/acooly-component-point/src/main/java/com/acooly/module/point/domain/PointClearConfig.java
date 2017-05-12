@@ -11,6 +11,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.hibernate.validator.constraints.*;
 import javax.validation.constraints.NotNull;
 
@@ -46,7 +48,7 @@ public class PointClearConfig extends AbstractEntity {
 
 	/** 状态 */
 	@Enumerated(EnumType.STRING)
-	private PointClearConfigStatus status=PointClearConfigStatus.init;
+	private PointClearConfigStatus status = PointClearConfigStatus.init;
 
 	/** 备注 */
 	private String memo;
@@ -107,4 +109,8 @@ public class PointClearConfig extends AbstractEntity {
 		this.memo = memo;
 	}
 
+	@Override
+	public String toString() {
+		return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+	}
 }

@@ -13,6 +13,9 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.module.point.enums.PointStaticsStatus;
 
@@ -137,5 +140,8 @@ public class PointStatistics extends AbstractEntity {
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
-
+	@Override
+	public String toString() {
+		return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+	}
 }

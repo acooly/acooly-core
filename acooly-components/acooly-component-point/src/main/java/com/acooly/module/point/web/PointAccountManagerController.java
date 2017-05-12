@@ -28,6 +28,7 @@ import com.acooly.core.utils.Collections3;
 import com.acooly.module.point.domain.PointAccount;
 import com.acooly.module.point.domain.PointGrade;
 import com.acooly.module.point.domain.PointStatistics;
+import com.acooly.module.point.dto.PointTradeDto;
 import com.acooly.module.point.enums.PointAccountStatus;
 import com.acooly.module.point.enums.PointStaticsStatus;
 import com.acooly.module.point.service.PointAccountService;
@@ -82,7 +83,10 @@ public class PointAccountManagerController extends AbstractJQueryEntityControlle
 			String userName = lines.get(0);
 			String point = lines.get(1);
 			String memo = lines.get(2);
-			pointTradeService.pointProduce(userName, Long.parseLong(point), memo);
+			PointTradeDto pointTradeDto = new PointTradeDto();
+			pointTradeDto.setBusiData(memo);
+			pointTradeDto.setMemo(memo);
+			pointTradeService.pointProduce(userName, Long.parseLong(point), pointTradeDto);
 			lists.add(pointAccountService.findByUserName(userName));
 		}
 		return lists;
@@ -105,7 +109,10 @@ public class PointAccountManagerController extends AbstractJQueryEntityControlle
 				throw new RuntimeException("最多支持50个用户名");
 			}
 			for (String userName : userNameList) {
-				pointTradeService.pointProduce(userName, Long.parseLong(point), memo);
+				PointTradeDto pointTradeDto = new PointTradeDto();
+				pointTradeDto.setBusiData(memo);
+				pointTradeDto.setMemo(memo);
+				pointTradeService.pointProduce(userName, Long.parseLong(point), pointTradeDto);
 			}
 			result.setMessage("积分发放成功");
 		} catch (Exception e) {
@@ -141,7 +148,14 @@ public class PointAccountManagerController extends AbstractJQueryEntityControlle
 			String startTime = request.getParameter("startTime");
 			String endTime = request.getParameter("endTime");
 			String memo = request.getParameter("memo");
-			pointTradeService.pointClearThread(startTime, endTime, memo);
+
+			PointTradeDto pointTradeDto = new PointTradeDto();
+			pointTradeDto.setBusiId("0");
+			pointTradeDto.setBusiType("pointClear");
+			pointTradeDto.setBusiTypeText("清分清零");
+			pointTradeDto.setBusiData(memo);
+			pointTradeDto.setMemo(memo);
+			pointTradeService.pointClearThread(startTime, endTime, pointTradeDto);
 			result.setMessage("积分清零正在处理中,之后刷新查看结果");
 		} catch (Exception e) {
 			handleException(result, "新增", e);

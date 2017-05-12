@@ -104,12 +104,17 @@ CREATE TABLE `point_trade` (
   `end_freeze` bigint(20) NOT NULL DEFAULT '0',
   `end_balance` bigint(20) NOT NULL DEFAULT '0' COMMENT '交易后积分',
   `end_available` bigint(20) NOT NULL COMMENT '交易后有效积分',
-  `business_data` varchar(256) DEFAULT NULL COMMENT '相关业务数据',
-  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `busi_id` varchar(32) DEFAULT NULL COMMENT '相关业务id',
+  `busi_type` varchar(40) DEFAULT NULL COMMENT '相关业务类型',
+  `busi_type_text` varchar(64) DEFAULT NULL COMMENT '相关业务类型描述',
+  `busi_data` varchar(256) DEFAULT NULL COMMENT '相关业务数据',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `memo` varchar(256) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分交易信息';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='积分交易信息';
+
+
 
 -- ----------------------------
 -- Records of point_trade

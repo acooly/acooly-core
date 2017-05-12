@@ -38,20 +38,6 @@ public class PointTradeManagerController extends AbstractJQueryEntityController<
 	@Autowired
 	private PointTradeService pointTradeService;
 
-	@RequestMapping(value = "point")
-	public String point(HttpServletRequest request, HttpServletResponse response, Model model) {
-		try {
-			String userName = "cuifuq7";
-			long point = 1000l;
-			pointTradeService.pointProduce(userName, point, "");
-			pointTradeService.pointExpense(userName, point, false, "");
-
-		} catch (Exception e) {
-			handleException("主界面", e, request);
-		}
-		return getListView();
-	}
-
 	@Override
 	protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
 		model.put("allTradeTypes", PointTradeType.mapping());

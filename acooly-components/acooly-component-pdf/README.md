@@ -26,6 +26,8 @@
     自定义字体路径默认为：/pdf/fonts/，由于flying-saucer-pdf对中文支持不好，已默认添加Adobe思源宋体(可商用)，在模板中只需要指定family即可
 
            font-family: Source Han Serif SC;
+           
+**以上资源需要放在项目assemble -> resources下,请勿放在其他包下面，否则会导致在linux环境下资源找不到情况**
 
 ### 2.2 接口使用
 

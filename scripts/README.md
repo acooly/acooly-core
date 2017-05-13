@@ -1,0 +1,1 @@
+http://gitlab.yiji/fintech/acooly-script

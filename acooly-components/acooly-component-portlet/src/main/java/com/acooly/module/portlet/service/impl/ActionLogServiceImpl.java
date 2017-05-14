@@ -76,22 +76,7 @@ public class ActionLogServiceImpl extends EntityServiceImpl<ActionLog, ActionLog
         if (actionMapping != null) {
             actionName = actionMapping.getTitle();
         }
-        try {
-            ActionLog actionLog = new ActionLog();
-            actionLog.setActionKey(actionKey);
-            actionLog.setActionName(actionName);
-            actionLog.setChannel(parseChannelForReqeust(request));
-            actionLog.setUserName(userName);
-            actionLog.setUserIp(IPUtil.getIpAddr(request));
-            if (request != null) {
-                actionLog.setChannelInfo(Strings.substring(Servlets.getHeaderValue(request, "User-Agent"), 0, 255));
-            }
-            save(actionLog);
-            return actionLog;
-        } catch (Exception e) {
-            logger.warn("保持action日志失败:{}", e.getMessage());
-        }
-        return null;
+        return logger(actionKey, actionName, userName, parseChannelForReqeust(request), null, null, request);
     }
 
     protected ActionChannelEnum parseChannelForReqeust(HttpServletRequest request) {
@@ -102,7 +87,7 @@ public class ActionLogServiceImpl extends EntityServiceImpl<ActionLog, ActionLog
         String[] iosMobiles = {"iPod", "iPad", "iPhone", "Android", "SymbianOS", "Windows Phone"};
         for (String s : iosMobiles) {
             if (Strings.containsIgnoreCase(userAgent, s)) {
-                return ActionChannelEnum.mweb;
+                return ActionChannelEnum.wap;
             }
         }
         return ActionChannelEnum.web;

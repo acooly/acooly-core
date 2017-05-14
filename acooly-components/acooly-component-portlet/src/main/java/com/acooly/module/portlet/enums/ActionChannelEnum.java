@@ -16,102 +16,100 @@ import java.util.Map;
 
 /**
  * site_action_log Channel 枚举定义
- * 
+ *
  * @author acooly Date: 2016-08-14 22:10:17
  */
 public enum ActionChannelEnum implements Messageable {
 
-	wechat("wechat", "微信"),
+    wechat("wechat", "微信"),
 
-	web("web", "网站"),
-	
-	mweb("mweb","移动web"),
+    web("web", "网站"),
 
-	android("android", "安卓"),
+    wap("wap", "移动web"),
 
-	ios("ios", "苹果"),
+    android("android", "安卓"),
 
-	other("other", "其他");
+    ios("ios", "苹果"),
 
-	private final String code;
-	private final String message;
+    other("other", "其他");
 
-	ActionChannelEnum(String code, String message) {
-		this.code = code;
-		this.message = message;
-	}
+    private final String code;
+    private final String message;
 
-	public String getCode() {
-		return code;
-	}
+    ActionChannelEnum(String code, String message) {
+        this.code = code;
+        this.message = message;
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public String code() {
-		return code;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	public String message() {
-		return message;
-	}
+    public String code() {
+        return code;
+    }
 
-	public static Map<String, String> mapping() {
-		Map<String, String> map = new LinkedHashMap<String, String>();
-		for (ActionChannelEnum type : values()) {
-			map.put(type.getCode(), type.getMessage());
-		}
-		return map;
-	}
+    public String message() {
+        return message;
+    }
 
-	/**
-	 * 通过枚举值码查找枚举值。
-	 * 
-	 * @param code
-	 *            查找枚举值的枚举值码。
-	 * @return 枚举值码对应的枚举值。
-	 * @throws IllegalArgumentException
-	 *             如果 code 没有对应的 Status 。
-	 */
-	public static ActionChannelEnum find(String code) {
-		for (ActionChannelEnum status : values()) {
-			if (status.getCode().equals(code)) {
-				return status;
-			}
-		}
-		throw new IllegalArgumentException("Channel not legal:" + code);
-	}
+    public static Map<String, String> mapping() {
+        Map<String, String> map = new LinkedHashMap<String, String>();
+        for (ActionChannelEnum type : values()) {
+            map.put(type.getCode(), type.getMessage());
+        }
+        return map;
+    }
 
-	/**
-	 * 获取全部枚举值。
-	 * 
-	 * @return 全部枚举值。
-	 */
-	public static List<ActionChannelEnum> getAll() {
-		List<ActionChannelEnum> list = new ArrayList<ActionChannelEnum>();
-		for (ActionChannelEnum status : values()) {
-			list.add(status);
-		}
-		return list;
-	}
+    /**
+     * 通过枚举值码查找枚举值。
+     *
+     * @param code 查找枚举值的枚举值码。
+     * @return 枚举值码对应的枚举值。
+     * @throws IllegalArgumentException 如果 code 没有对应的 Status 。
+     */
+    public static ActionChannelEnum find(String code) {
+        for (ActionChannelEnum status : values()) {
+            if (status.getCode().equals(code)) {
+                return status;
+            }
+        }
+        throw new IllegalArgumentException("Channel not legal:" + code);
+    }
 
-	/**
-	 * 获取全部枚举值码。
-	 * 
-	 * @return 全部枚举值码。
-	 */
-	public static List<String> getAllCode() {
-		List<String> list = new ArrayList<String>();
-		for (ActionChannelEnum status : values()) {
-			list.add(status.code());
-		}
-		return list;
-	}
+    /**
+     * 获取全部枚举值。
+     *
+     * @return 全部枚举值。
+     */
+    public static List<ActionChannelEnum> getAll() {
+        List<ActionChannelEnum> list = new ArrayList<ActionChannelEnum>();
+        for (ActionChannelEnum status : values()) {
+            list.add(status);
+        }
+        return list;
+    }
 
-	@Override
-	public String toString() {
-		return String.format("%s:%s", this.code, this.message);
-	}
+    /**
+     * 获取全部枚举值码。
+     *
+     * @return 全部枚举值码。
+     */
+    public static List<String> getAllCode() {
+        List<String> list = new ArrayList<String>();
+        for (ActionChannelEnum status : values()) {
+            list.add(status.code());
+        }
+        return list;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s:%s", this.code, this.message);
+    }
 
 }

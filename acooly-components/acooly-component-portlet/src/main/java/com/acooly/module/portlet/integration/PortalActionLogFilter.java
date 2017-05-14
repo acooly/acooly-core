@@ -9,13 +9,19 @@
  */
 package com.acooly.module.portlet.integration;
 
+import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.portlet.service.ActionLogService;
-import com.acooly.module.security.utils.ShiroUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.annotation.Resource;
-import javax.servlet.*;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -23,42 +29,62 @@ import java.io.IOException;
  *
  * @author acooly
  */
-//@Component
-public class PortalActionLogFilter implements Filter {
-
-    private static final String SESSION_USER_KEY_PARAMETER_NAME = "sessionUserKey";
-
-    private String sessionUserKey;
+@Slf4j
+public class PortalActionLogFilter extends OncePerRequestFilter {
 
     @Resource
     private ActionLogService actionLogService;
+    private String sessionUserKey;
+    private String filterUrlPatterns;
+
+    PathMatcher pathMatcher = new AntPathMatcher();
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        String configSessionUserKey = filterConfig.getInitParameter(SESSION_USER_KEY_PARAMETER_NAME);
-        if (Strings.isNotBlank(configSessionUserKey)) {
-            this.sessionUserKey = configSessionUserKey;
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        doActionLog(request);
+        filterChain.doFilter(request, response);
+    }
+
+    protected void doActionLog(HttpServletRequest request) {
+        if (!allow(request)) {
+            return;
+        }
+        try {
+            actionLogService.logger(request, getSessionUserName(request));
+        } catch (Exception e) {
+            log.warn("PortalActionLogFilter记录访问日志失败: {}", e.getMessage());
         }
     }
 
-    @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
-        actionLogService.logger(request, getSessionUserName(request));
-        filterChain.doFilter(servletRequest, servletResponse);
+    protected boolean allow(HttpServletRequest request) {
+        String requestPath = Servlets.getRequestPath(request);
+        for (String allowPattern : Strings.split(filterUrlPatterns, ",")) {
+            if (pathMatcher.match(allowPattern, requestPath)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected String getSessionUserName(HttpServletRequest request) {
-        try {
-            return ShiroUtils.getCurrentUser().getUsername();
-        } catch (Exception e) {
-            return "";
+        Object object = request.getSession().getAttribute(sessionUserKey);
+        if (object == null) {
+            return null;
+        } else {
+            return object.toString();
         }
     }
 
-    @Override
-    public void destroy() {
 
+    public void setActionLogService(ActionLogService actionLogService) {
+        this.actionLogService = actionLogService;
+    }
+
+    public void setSessionUserKey(String sessionUserKey) {
+        this.sessionUserKey = sessionUserKey;
+    }
+
+    public void setFilterUrlPatterns(String filterUrlPatterns) {
+        this.filterUrlPatterns = filterUrlPatterns;
     }
 }

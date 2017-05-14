@@ -19,7 +19,7 @@
 			</tr>					
 			<tr>
 				<th>参数键：</th>
-				<td><input type="text" name="key" size="48" class="easyui-validatebox text" data-options="required:true" validType="byteLength[1,45]"/></td>
+				<td><input type="text" name="name" size="48" class="easyui-validatebox text" data-options="required:true" validType="byteLength[1,45]"/></td>
 			</tr>					
 			<tr>
 				<th>参数值：</th>

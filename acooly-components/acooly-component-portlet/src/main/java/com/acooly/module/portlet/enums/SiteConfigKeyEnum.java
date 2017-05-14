@@ -24,7 +24,7 @@ public enum SiteConfigKeyEnum implements Messageable {
 
     serviceTel("serviceTel", "客服热线"),
 
-    serviceTime("serviceWorkHours", "服务时间"),
+    serviceWorkHours("serviceWorkHours", "服务时间"),
 
     serviceEmail("serviceEmail", "服务邮箱"),
 
@@ -34,7 +34,7 @@ public enum SiteConfigKeyEnum implements Messageable {
 
     serviceQQGroup("serviceQQGroup", "服务QQ群"),
 
-    serviceWeChat("serviceWeChat", "微信");
+    serviceWeChat("serviceWeChat", "微信公众号");
 
     private final String code;
     private final String message;

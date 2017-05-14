@@ -45,8 +45,16 @@ public class PointTrade extends AbstractEntity {
 	private Long endBalance = 0l;
 	/** 交易后有效积分 */
 	private Long endAvailable = 0l;
-	/** 相关业务数据 */
-	private String businessData;
+
+	/** 相关业务Id **/
+	private String busiId;
+	/** 相关业务类型 **/
+	private String busiType;
+	/** 相关业务类型描述 **/
+	private String busiTypeText;
+	/** 相关业务数据 **/
+	private String busiData;
+
 	/** 备注 */
 	private String memo;
 
@@ -114,12 +122,36 @@ public class PointTrade extends AbstractEntity {
 		this.endAvailable = endAvailable;
 	}
 
-	public String getBusinessData() {
-		return this.businessData;
+	public String getBusiId() {
+		return busiId;
 	}
 
-	public void setBusinessData(String businessData) {
-		this.businessData = businessData;
+	public void setBusiId(String busiId) {
+		this.busiId = busiId;
+	}
+
+	public String getBusiType() {
+		return busiType;
+	}
+
+	public void setBusiType(String busiType) {
+		this.busiType = busiType;
+	}
+
+	public String getBusiTypeText() {
+		return busiTypeText;
+	}
+
+	public void setBusiTypeText(String busiTypeText) {
+		this.busiTypeText = busiTypeText;
+	}
+
+	public String getBusiData() {
+		return busiData;
+	}
+
+	public void setBusiData(String busiData) {
+		this.busiData = busiData;
 	}
 
 	public String getMemo() {

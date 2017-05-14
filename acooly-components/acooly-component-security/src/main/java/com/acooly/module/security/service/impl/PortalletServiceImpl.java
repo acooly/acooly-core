@@ -2,6 +2,8 @@ package com.acooly.module.security.service.impl;
 
 import java.util.List;
 
+import com.acooly.module.security.config.SecurityProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import com.acooly.core.common.service.EntityServiceImpl;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service("portalletService")
 @Transactional
+@ConditionalOnProperty(value  = SecurityProperties.PREFIX + ".shiro.auth.enable",matchIfMissing = true)
 public class PortalletServiceImpl extends EntityServiceImpl<Portallet, PortalletDao> implements PortalletService {
 
 	@Override

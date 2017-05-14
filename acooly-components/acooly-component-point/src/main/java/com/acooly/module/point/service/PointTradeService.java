@@ -9,6 +9,7 @@ package com.acooly.module.point.service;
 
 import com.acooly.core.common.service.EntityService;
 import com.acooly.module.point.domain.PointTrade;
+import com.acooly.module.point.dto.PointTradeDto;
 
 /**
  * 积分交易信息 Service接口
@@ -27,10 +28,10 @@ public interface PointTradeService extends EntityService<PointTrade> {
 	 *            用户名
 	 * @param point
 	 *            交易积分(产生)
-	 * @param businessData
+	 * @param pointTradeDto
 	 *            业务数据
 	 */
-	public PointTrade pointProduce(String userName, long point, String businessData);
+	public PointTrade pointProduce(String userName, long point, PointTradeDto pointTradeDto);
 
 	/**
 	 * 积分消费
@@ -41,11 +42,11 @@ public interface PointTradeService extends EntityService<PointTrade> {
 	 *            交易积分(消费)
 	 * @param isFreeze
 	 *            是否存在冻结（true:存在冻结积分,false:不存在冻结积分）
-	 * @param businessData
+	 * @param pointTradeDto
 	 *            业务数据
 	 * @return
 	 */
-	public PointTrade pointExpense(String userName, long point, boolean isFreeze, String businessData);
+	public PointTrade pointExpense(String userName, long point, boolean isFreeze, PointTradeDto pointTradeDto);
 
 	/**
 	 * 积分冻结
@@ -54,11 +55,11 @@ public interface PointTradeService extends EntityService<PointTrade> {
 	 *            用户名
 	 * @param point
 	 *            交易积分(冻结积分)
-	 * @param businessData
+	 * @param pointTradeDto
 	 *            业务数据
 	 * @return
 	 */
-	public PointTrade pointFreeze(String userName, long point, String businessData);
+	public PointTrade pointFreeze(String userName, long point, PointTradeDto pointTradeDto);
 
 	/**
 	 * 积分解冻
@@ -67,11 +68,11 @@ public interface PointTradeService extends EntityService<PointTrade> {
 	 *            用户名
 	 * @param point
 	 *            交易积分(解冻积分)
-	 * @param businessData
+	 * @param pointTradeDto
 	 *            业务数据
 	 * @return
 	 */
-	public PointTrade pointUnfreeze(String userName, long point, String businessData);
+	public PointTrade pointUnfreeze(String userName, long point, PointTradeDto pointTradeDto);
 
 	/**
 	 * 积分清零
@@ -80,6 +81,16 @@ public interface PointTradeService extends EntityService<PointTrade> {
 	 * @param endTime
 	 * @param memo
 	 */
-	public void pointClearThread(String startTime, String endTime, String memo);
+	public void pointClearThread(String startTime, String endTime, PointTradeDto pointTradeDto);
+
+	/**
+	 * 获取清零的积分
+	 * 
+	 * @param userName
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public long getClearPoint(String userName, String startTime, String endTime);
 
 }

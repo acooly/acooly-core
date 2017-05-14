@@ -6,7 +6,6 @@ import com.acooly.module.scheduler.exceptions.SchedulerExecuteException;
 import com.google.common.collect.Maps;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.util.ReflectionUtils;
-import sun.tools.attach.HotSpotVirtualMachine;
 
 import java.lang.reflect.Method;
 import java.util.Map;

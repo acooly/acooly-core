@@ -19,7 +19,6 @@ public class PointStatisticsExtDaoImpl implements PointStatisticsExtDao {
 				+ "'" + startTime + "','" + endTime + "','init',now(),now() from point_trade " //
 				+ "where create_time<=('" + endTime + "') and create_time>=('" + startTime + "') "//
 				+ "and trade_type in('produce','expense') group by user_name)";
-		System.out.println(sql);
 		jdbcTemplate.execute(sql);
 	}
 

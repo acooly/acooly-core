@@ -2,7 +2,7 @@
 package com.acooly.module.sso;
 
 import com.acooly.module.sso.filter.AuthenticationFilter;
-import com.google.common.collect.Lists;
+import com.acooly.module.sso.filter.AuthorizationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -27,16 +27,38 @@ public class SSOAutoConfig {
     private SSOProperties ssoProperties;
 
     @Bean
-    public FilterRegistrationBean ssoFilter() {
+    public AuthenticationFilter ssoFilter() {
         AuthenticationFilter authenticationFilter = new AuthenticationFilter();
         authenticationFilter.setSSOExcludeUrl(ssoProperties.getSsoExcludeUrl());
         authenticationFilter.setLoginUrl(ssoProperties.getSsoServerUrl());
+        return authenticationFilter;
+    }
+
+    @Bean
+    public AuthorizationFilter autzFilter() {
+        AuthorizationFilter autzFilter = new AuthorizationFilter(ssoProperties);
+        return autzFilter;
+    }
+
+    @Bean
+    public FilterRegistrationBean ssoRegistrationBean(AuthenticationFilter ssoFilter) {
         FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(authenticationFilter);
-        //registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp", "*.json").toArray(new String[0]));
+        registration.setFilter(ssoFilter);
         registration.addUrlPatterns("/*");
         registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
         registration.setName("ssoFilter");
+        registration.setOrder(Integer.MIN_VALUE);
+        return registration;
+    }
+
+    @Bean
+    public FilterRegistrationBean autzRegistrationBean(AuthorizationFilter autzFilter) {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(autzFilter);
+        registration.addUrlPatterns("/manage/*");
+        registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
+        registration.setName("autzFilter");
+        registration.setOrder(Integer.MIN_VALUE + 1);
         return registration;
     }
 }

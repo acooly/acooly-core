@@ -28,8 +28,10 @@ import org.springframework.core.Ordered;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.jpa.repository.config.JpaRepositoryConfigExtension;
 import org.springframework.data.repository.config.RepositoryConfigurationExtension;
+import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
+import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 
 import javax.persistence.EntityManagerFactory;
 import javax.servlet.DispatcherType;
@@ -67,7 +69,15 @@ public class JPAAutoConfig {
 
 		return registration;
 	}
-	
+    @Bean
+    public JpaVendorAdapter jpaVendorAdapter(JpaProperties properties, DataSource dataSource) {
+        AbstractJpaVendorAdapter adapter = new ExHibernateJpaVendorAdapter();
+        adapter.setShowSql(properties.isShowSql());
+        adapter.setDatabase(properties.determineDatabase(dataSource));
+        adapter.setDatabasePlatform(properties.getDatabasePlatform());
+        adapter.setGenerateDdl(properties.isGenerateDdl());
+        return adapter;
+    }
 	@Bean
 	public SessionFactory sessionFactory(EntityManagerFactory factory) {
 		return factory.unwrap(SessionFactory.class);

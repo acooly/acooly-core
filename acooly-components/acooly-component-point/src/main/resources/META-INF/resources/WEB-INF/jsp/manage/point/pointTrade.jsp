@@ -17,9 +17,10 @@ $(function() {
           	<div>	
 					用户名: <input type="text" class="text" size="15" name="search_LIKE_userName"/>
 					交易类型: <select style="width:80px;height:27px;" name="search_EQ_tradeType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allTradeTypes}"><option value="${e.key}" ${param.search_EQ_tradeType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
+					业务类型: <input type="text" class="text" size="15" name="search_EQ_busiType"/>
 					交易订单号: <input type="text" class="text" size="15" name="search_LIKE_tradeNo"/>
-					创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					创建时间: <input size="10" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					至<input size="10" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_pointTrade_searchform','manage_pointTrade_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
           </td>
@@ -43,7 +44,10 @@ $(function() {
 			<th field="endFreeze" sum="true">交易后冻结积分</th>
 			<th field="endBalance" sum="true">交易后积分</th>
 			<th field="endAvailable" sum="true">交易后有效积分</th>
-			<th field="businessData">相关业务数据</th>
+			<th field="busiId">业务Id</th>
+			<th field="busiType">业务类型</th>
+			<th field="busiTypeText">业务类型描述 </th>
+			<th field="busiData">相关业务数据</th>
 		    <th field="createTime" formatter="formatDate">创建时间</th>
 		    <th field="updateTime" formatter="formatDate">修改时间</th>
 			<th field="memo">备注</th>

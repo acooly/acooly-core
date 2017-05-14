@@ -6,7 +6,7 @@
 
 ### 2.1 邮件服务类
 
-    com.acooly.module.mail.MailService
+    com.acooly.module.mail.service.MailService
 
 ### 2.2 如何使用邮件模板
 
@@ -14,6 +14,10 @@
 
     邮件模板为`freemarker`模板
 
+    直接在boss上配置邮件模板和主题。模板查找顺序为：
+    1. 优先使用boss上配置的模板，根据模板名匹配
+    2. 再从项目中classpath:/mail/下查找模板
+    
     `src/main/resources/mail/register_success.ftl`：
 
             <html>

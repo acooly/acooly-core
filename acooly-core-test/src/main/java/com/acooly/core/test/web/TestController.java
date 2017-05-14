@@ -10,8 +10,9 @@
 package com.acooly.core.test.web;
 
 import com.acooly.core.test.domain.City;
+import com.acooly.module.certification.CertificationService;
 import com.acooly.module.mail.MailDto;
-import com.acooly.module.mail.MailService;
+import com.acooly.module.mail.service.MailService;
 import com.acooly.module.sms.SmsService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,36 +27,44 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/test")
 public class TestController {
-	@Autowired
-	private SmsService smsService;
-	@Autowired
-	private MailService mailService;
+    @Autowired
+    private SmsService smsService;
+    @Autowired
+    private MailService mailService;
     @Value("${prop}")
     private String valueFromProp;
-	
-	@RequestMapping("sms")
-	public void testSms() {
-		smsService.send("15021507995", "xxx");
-	}
-	
-	@GetMapping("testPermission")
-	public Boolean testPermission() {
-		return SecurityUtils.getSubject().isPermitted("xxxx");
-	}
-	
-	@GetMapping("mail")
-	public void testMail() {
-		MailDto dto = new MailDto();
-		dto.to("qiuboboy@qq.com").subject("测试").param("name", "x").param("message", "how are you!")
-			.templateName("register1");
-		mailService.send(dto);
-	}
-	
-	@GetMapping("testPojo")
-	public City testPojo() {
-		City city = new City();
-		
-		return city;
-	}
-	
+
+    @Autowired
+    private CertificationService certificationService;
+
+    @RequestMapping("sms")
+    public void testSms() {
+        smsService.send("15021507995", "xxx");
+    }
+
+    @GetMapping("testPermission")
+    public Boolean testPermission() {
+        return SecurityUtils.getSubject().isPermitted("xxxx");
+    }
+
+    @GetMapping("mail")
+    public void testMail() {
+        MailDto dto = new MailDto();
+        dto.to("qiuboboy@qq.com").subject("测试").param("name", "x").param("message", "how are you!")
+            .templateName("register1");
+        mailService.send(dto);
+    }
+
+    @GetMapping("testPojo")
+    public City testPojo() {
+        City city = new City();
+
+        return city;
+    }
+
+    @RequestMapping("cert")
+    public void testCert() {
+        certificationService.certification("韦崇凯", "500221198810192313");
+    }
+
 }

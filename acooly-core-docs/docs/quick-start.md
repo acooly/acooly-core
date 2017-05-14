@@ -114,12 +114,19 @@
 
    框架提供jsp集成，使用jsp放在此路径
 
-5. 数据库脚本存放路径
+5. 数据库脚本初始化
 
-        src/main/resources/META-INF/database/mysql
-        src/main/resources/META-INF/database/oracle
+    对于组件开发者，请实现`StandardDatabaseScriptIniter`,参考代码`com.acooly.module.sms.SmsAutoConfig#smsScriptIniter`，脚本路径如下：
 
-    组件或者模块需提供数据库初始化脚本(包括建表和初始数据导入)
+        src/main/resources/META-INF/database/${componentName}/${dbType}
+
+    对于应用开发者，框架支持自动执行初始化脚本，脚本路径如下：
+
+        src/main/resources/META-INF/database/${dbType}/dml.sql
+        src/main/resources/META-INF/database/${dbType}/ddl.sql
+
+
+    框架发现数据库文件存在，会依次执行这两个文件。(此逻辑在jpa初始化完成后才执行，所以我们可以依赖jpa`@Entity`创建表，然后初始化数据)。
 
 ### 7. 包扫描
 

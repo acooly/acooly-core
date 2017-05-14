@@ -23,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -107,7 +109,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 			Set<String> urls = new HashSet<String>();
 			for (Resource resource : resources) {
 				if (resource.getType().equalsIgnoreCase(FrameworkProperties.RESOURCE_TYPE_URL)) {
-					urls.add("*:" + getCanonicalResource(contextPath, resource.getValue()));
+					urls.add("*"+PathMatchPermission.PART_DIVIDER_TOKEN + getCanonicalResource(contextPath, resource.getValue()));
 				} else if (resource.getType().equalsIgnoreCase(FrameworkProperties.RESOURCE_TYPE_FUNCTION)) {
 					urls.add(IS_FUNCTION_PREFIX+resource.getValue());
 				}
@@ -116,8 +118,17 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		}
 		return info;
 	}
-	
-	private String getCanonicalResource(String contextPath, String resource) {
-		return contextPath + StringUtils.left(resource, resource.lastIndexOf("/") + 1) + "*";
-	}
+
+    private String getCanonicalResource(String contextPath, String resource) {
+        if (resource.contains("://")) {
+            try {
+                URL url = new URL(resource);
+                resource = url.getPath();
+            } catch (MalformedURLException e) {
+                logger.error("获取权限url异常", e);
+            }
+        }
+        return contextPath + StringUtils.left(resource, resource.lastIndexOf("/") + 1) + "*";
+    }
+
 }

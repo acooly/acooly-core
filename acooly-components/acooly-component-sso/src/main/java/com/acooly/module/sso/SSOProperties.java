@@ -15,12 +15,15 @@ public class SSOProperties {
 
     private boolean enable = true;
 
+    /**
+     * 主boss登录地址
+     */
     @NotEmpty
     private String ssoServerUrl;
 
     /**
-     * 不需要拦截处理的静态资源(ant规则，以逗号分隔)
-     */
+     * 不需要拦截处理的静态资源(ant匹配规则 @link https://github.com/spring-projects/spring-framework/blob/master/spring-core/src/test/java/org/springframework/util/AntPathMatcherTests.java)
+     **/
     private String ssoExcludeUrl;
 
 }

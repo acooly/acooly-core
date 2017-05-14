@@ -30,4 +30,13 @@ public interface PointAccountService extends EntityService<PointAccount> {
 
 	PointAccount pointUnfreeze(String userName, long point);
 
+	/**
+	 * 同一个等级的排名
+	 * 
+	 * @param userName
+	 * @param gradeId
+	 * @return
+	 */
+	public int pointRank(String userName, Long gradeId);
+
 }

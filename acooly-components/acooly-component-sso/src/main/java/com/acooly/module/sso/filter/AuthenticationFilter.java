@@ -7,11 +7,9 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.acooly.module.sso.*;
 import com.acooly.module.sso.dic.AuthResult;
-import com.acooly.module.sso.support.AuthFilterUtil;
-import com.acooly.module.sso.support.DefaultRequestMatcher;
-import com.acooly.module.sso.support.RequestMatcher;
+import com.acooly.module.sso.exceptions.SSOException;
+import com.acooly.module.sso.support.*;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +53,13 @@ public class AuthenticationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
         ServletException {
+        /**
+         * 1、去掉排除的路径
+         * 2、判断是否登录
+         * 3、未登录则重定向到server登录
+         * 4、主boss认证成功后 重定向回业务系统，在cookie设置jwt并在url中带回jwt
+         */
+
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         String requestURL = httpServletRequest.getRequestURL().toString();
@@ -63,13 +68,6 @@ public class AuthenticationFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        /**
-         * 获取jwt
-         * 1、判断是否登录
-         * 2、未登录则重定向到server登录
-         * 3、登录成功后server 重定向到访问页，在cookie设置jwt并在url中带回jwt
-         * 4、拦截验证jwt成功，进入下个过滤器
-         */
         String compactJws = AuthFilterUtil.getCompactJwt(httpServletRequest);
 
         AuthResult result = (AuthResult) defaultLoginAuthentication
@@ -78,10 +76,10 @@ public class AuthenticationFilter implements Filter {
         switch (result) {
             case LOGIN_URL_NULL:
                 logger.error(AuthResult.LOGIN_URL_NULL.getDescription());
-                throw new RuntimeException(AuthResult.LOGIN_URL_NULL.getDescription());
-//            case LOGIN_ERROR_DOMAIN:
-//                logger.error(AuthResult.LOGIN_ERROR_DOMAIN.getDescription());
-//                throw new RuntimeException(AuthResult.LOGIN_ERROR_DOMAIN.getDescription());
+                throw new SSOException(AuthResult.LOGIN_URL_NULL.getDescription());
+            case LOGIN_ERROR_DOMAIN:
+                logger.error(AuthResult.LOGIN_ERROR_DOMAIN.getDescription());
+                throw new SSOException(AuthResult.LOGIN_ERROR_DOMAIN.getDescription());
             case LOGIN_REDIRECT:
                 AuthFilterUtil.doRedirectLogin(httpServletResponse, loginUrl, requestURL, queryString);
                 break;
@@ -90,9 +88,8 @@ public class AuthenticationFilter implements Filter {
                 break;
             case AUTHENTICATION_TAMPER:
                 logger.error(AuthResult.AUTHENTICATION_TAMPER.getDescription());
-                throw new RuntimeException(AuthResult.AUTHENTICATION_TAMPER.getDescription());
+                throw new SSOException(AuthResult.AUTHENTICATION_TAMPER.getDescription());
             case AUTHENTICATION_ACCESS:
-                AuthFilterUtil.parameterAccessAddJwt2Cookie(httpServletRequest, httpServletResponse);
                 chain.doFilter(request, response);
                 break;
             default:

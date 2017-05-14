@@ -3,12 +3,15 @@ package com.acooly.module.security.web;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Servlets;
+import com.acooly.core.utils.mapper.JsonMapper;
 import com.acooly.core.utils.net.ServletUtil;
 import com.acooly.core.utils.security.JWTUtils;
 import com.acooly.module.security.config.FrameworkProperties;
 import com.acooly.module.security.config.FrameworkPropertiesHolder;
+import com.acooly.module.security.config.SecurityProperties;
 import com.acooly.module.security.domain.User;
 import com.acooly.module.security.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -16,6 +19,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +27,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 
 import static com.acooly.module.security.shiro.realm.ShiroDbRealm.SESSION_USER;
@@ -35,8 +38,10 @@ import static com.acooly.module.security.shiro.realm.ShiroDbRealm.SESSION_USER;
  * 
  * @author zhangpu
  */
+
 @Controller
 @RequestMapping(value = "/manage/")
+@ConditionalOnProperty(value  = SecurityProperties.PREFIX + ".shiro.auth.enable",matchIfMissing = true)
 public class ManagerController extends AbstractJQueryEntityController<User, UserService> {
 
 	private static final Logger logger = LoggerFactory.getLogger(ManagerController.class);
@@ -64,7 +69,6 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
 	@RequestMapping(value = "login")
 	public String login(HttpServletRequest request, Model model) {
 		Subject subject = SecurityUtils.getSubject();
-		//TODO jwt 超时后, 正常登录运维系统的 session 没失效情况
         if (subject.isAuthenticated()) {
             /**
              * 如果已经登录的情况，其他系统集成sso则重定向目标地址，否则直接跳主页
@@ -90,11 +94,16 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
     public JsonResult onLoginSuccess(HttpServletRequest request) {
         logger.debug("OnLoginSuccess, redirect to index.jsp");
         JsonResult jsonResult = new JsonResult();
-
         User user = (User) SecurityUtils.getSubject().getSession().getAttribute(SESSION_USER);
         if (user != null) {
             String username = user.getUsername();
-            String jwt = JWTUtils.createJwt(username, JWTUtils.SIGN_KEY);
+            String subjectStr = "";
+            try {
+                subjectStr = JsonMapper.nonEmptyMapper().getMapper().writeValueAsString(user);
+            } catch (JsonProcessingException e) {
+                logger.error("创建jwt时user转String失败", e.getMessage());
+            }
+            String jwt = JWTUtils.createJwt(username,subjectStr);
             HashMap<Object, Object> resmap = Maps.newHashMap();
 
             JWTUtils.addJwtCookie(ServletUtil.getResponse(), jwt, JWTUtils.getDomainName());

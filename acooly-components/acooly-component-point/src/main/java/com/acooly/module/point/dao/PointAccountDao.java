@@ -24,4 +24,10 @@ public interface PointAccountDao extends EntityMybatisDao<PointAccount> {
 	@Select("select * from point_account where user_name=#{userName}")
 	PointAccount findByUserName(@Param("userName") String userName);
 
+	@Select("SELECT count(id) FROM point_account where grade_id=#{gradeId} and balance>=(SELECT balance FROM point_account where user_name=#{userName})")
+	int pointRankByUserNameAndGradeId(@Param("userName") String userName, @Param("gradeId") Long gradeId);
+
+	@Select("SELECT count(id) FROM point_account where balance>=(SELECT balance FROM point_account where user_name=#{userName})")
+	int pointRankByUserName(@Param("userName") String userName);
+
 }

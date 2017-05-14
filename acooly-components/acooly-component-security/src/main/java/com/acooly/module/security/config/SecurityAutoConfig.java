@@ -108,7 +108,8 @@ public class SecurityAutoConfig {
 		}
 		
 		@Bean
-		public ShiroFilterFactoryBean shiroFilterFactoryBean(	@Qualifier("shiroSecurityManager") WebSecurityManager shiroSecurityManager,
+        @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".shiro.auth.enable", matchIfMissing = true)
+        public ShiroFilterFactoryBean shiroFilterFactoryBean(	@Qualifier("shiroSecurityManager") WebSecurityManager shiroSecurityManager,
 																SecurityProperties securityProperties) {
 			ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
 			shiroFilter.setSecurityManager(shiroSecurityManager);
@@ -123,13 +124,15 @@ public class SecurityAutoConfig {
 		
 		@Bean
 		@DependsOn({ "logout", "urlAuthr", "authc" })
-		public Filter shiroFilter(ShiroFilterFactoryBean shiroFilterFactoryBean, Realm shiroRealm) throws Exception {
+        @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".shiro.auth.enable", matchIfMissing = true)
+        public Filter shiroFilter(ShiroFilterFactoryBean shiroFilterFactoryBean, Realm shiroRealm) throws Exception {
 			((DefaultWebSecurityManager) shiroFilterFactoryBean.getSecurityManager()).setRealm(shiroRealm);
 			return (Filter) shiroFilterFactoryBean.getObject();
 		}
 		
 		@Bean
-		public FilterRegistrationBean shiroFilterRegistrationBean(	@Qualifier("shiroFilter") Filter shiroFilter,
+        @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".shiro.auth.enable", matchIfMissing = true)
+        public FilterRegistrationBean shiroFilterRegistrationBean(	@Qualifier("shiroFilter") Filter shiroFilter,
 																	SecurityProperties securityProperties) {
 			FilterRegistrationBean registration = new FilterRegistrationBean();
 			registration.setFilter(shiroFilter);

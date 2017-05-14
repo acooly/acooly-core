@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @Entity
 @Table(name = "SYS_USER")
-@JsonIgnoreProperties({ "password", "salt" })
+@JsonIgnoreProperties({ "password", "roles", "salt","hibernateLazyInitializer"})
 @Getter
 @Setter
 public class User extends AbstractEntity {

@@ -18,7 +18,6 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 -- Table structure for `point_account`
 -- ----------------------------
-DROP TABLE IF EXISTS `point_account`;
 CREATE TABLE `point_account` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `user_name` varchar(32) NOT NULL COMMENT '用户名',
@@ -44,7 +43,6 @@ ALTER TABLE `point_account`
 -- ----------------------------
 -- Table structure for `point_grade`
 -- ----------------------------
-DROP TABLE IF EXISTS `point_grade`;
 CREATE TABLE `point_grade` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `num` int(11) NOT NULL DEFAULT '1' COMMENT '等级',
@@ -70,7 +68,6 @@ INSERT INTO `point_grade` VALUES ('5', '5', '等级5', '100000000', '999999999',
 -- ----------------------------
 -- Table structure for `point_statistics`
 -- ----------------------------
-DROP TABLE IF EXISTS `point_statistics`;
 CREATE TABLE `point_statistics` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID(与customer共主键)',
   `user_name` varchar(32) NOT NULL COMMENT '用户名',
@@ -93,7 +90,6 @@ CREATE TABLE `point_statistics` (
 -- ----------------------------
 -- Table structure for `point_trade`
 -- ----------------------------
-DROP TABLE IF EXISTS `point_trade`;
 CREATE TABLE `point_trade` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `trade_no` varchar(32) NOT NULL COMMENT '交易订单号',
@@ -104,13 +100,34 @@ CREATE TABLE `point_trade` (
   `end_freeze` bigint(20) NOT NULL DEFAULT '0',
   `end_balance` bigint(20) NOT NULL DEFAULT '0' COMMENT '交易后积分',
   `end_available` bigint(20) NOT NULL COMMENT '交易后有效积分',
-  `business_data` varchar(256) DEFAULT NULL COMMENT '相关业务数据',
-  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `busi_id` varchar(32) DEFAULT NULL COMMENT '相关业务id',
+  `busi_type` varchar(40) DEFAULT NULL COMMENT '相关业务类型',
+  `busi_type_text` varchar(64) DEFAULT NULL COMMENT '相关业务类型描述',
+  `busi_data` varchar(256) DEFAULT NULL COMMENT '相关业务数据',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `memo` varchar(256) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分交易信息';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='积分交易信息';
+
+
 
 -- ----------------------------
 -- Records of point_trade
 -- ----------------------------
+
+CREATE TABLE `point_clear_config` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `start_trade_time` datetime NOT NULL COMMENT '开始交易时间',
+  `end_trade_time` datetime NOT NULL COMMENT '结束交易时间',
+  `start_clear_time` datetime NOT NULL COMMENT '开始清理时间',
+  `end_clear_time` datetime NOT NULL COMMENT '结束清理时间',
+  `clear_time` datetime NOT NULL COMMENT '清零时间',
+  `status` varchar(32) NOT NULL COMMENT '状态 {init:未完成,finish:完成}',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '修改时间',
+  `memo` varchar(256) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='积分清零设置';
+
+

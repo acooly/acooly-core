@@ -1,18 +1,16 @@
 
 package com.acooly.module.sso.support;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
+import com.acooly.core.utils.Encodes;
+import com.acooly.core.utils.security.JWTUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationContext;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.acooly.core.utils.net.ServletUtil;
-import com.acooly.core.utils.security.JWTUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.ApplicationContext;
+import java.io.IOException;
 
 
 /**
@@ -34,9 +32,9 @@ public class AuthFilterUtil {
         if (StringUtils.isNotBlank(queryString)) {
             requestURL += "?" + queryString;
         }
-        //String targetUrl = Base64.encodeBase64String(requestURL.getBytes("utf-8"));
-        response.setHeader("targetUrl", requestURL);
-        response.sendRedirect(loginUrl + "?targetUrl=" + requestURL);
+        String targetUrl = Encodes.urlEncode((requestURL));
+        response.setHeader("targetUrl", targetUrl);
+        response.sendRedirect(loginUrl + "?targetUrl=" + targetUrl);
     }
 
     /**

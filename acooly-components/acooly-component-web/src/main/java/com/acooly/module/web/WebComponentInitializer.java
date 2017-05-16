@@ -38,7 +38,10 @@ public class WebComponentInitializer implements ComponentInitializer {
 			setPropertyIfMissing("spring.session.store-type", "REDIS");
 		}
 		setPropertyIfMissing("spring.redis.pool.max-active", 100);
-		
+        //静态文件缓存
+        if (!Apps.isDevMode()) {
+            System.setProperty("spring.resources.cache-period", "-1");
+        }
 		//设置freemarker
 		setPropertyIfMissing("spring.freemarker.settings.classic_compatible", true);
 		setPropertyIfMissing("spring.freemarker.settings.whitespace_stripping", true);

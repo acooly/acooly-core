@@ -21,7 +21,7 @@ CREATE TABLE `app_banner` (
 DROP TABLE IF EXISTS `app_customer`;
 CREATE TABLE `app_customer` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `user_name` varchar(32) NOT NULL COMMENT '用户名',
+  `user_name` varchar(50) NOT NULL COMMENT '用户名',
   `access_key` varchar(64) NOT NULL COMMENT '访问码',
   `secret_key` varchar(64) NOT NULL COMMENT '安全码',
   `device_type` varchar(16) DEFAULT NULL COMMENT '设备类型',

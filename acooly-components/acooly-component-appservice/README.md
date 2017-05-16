@@ -37,6 +37,7 @@
 
 现在只需要这样写：
 
+    //类上面需要加@AppService
  	@AppService.ValidationGroup(AppDto.Test1.class)
  	public SingleValueResult<AppDto> test1(SingleValueOrder<AppDto> appRequest) {
  		//do what you like

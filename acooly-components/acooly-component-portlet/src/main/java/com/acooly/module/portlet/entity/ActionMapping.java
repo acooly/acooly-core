@@ -11,7 +11,6 @@ import com.acooly.core.common.domain.AbstractEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.util.Date;
 
 /**
  * 访问映射 Entity
@@ -37,17 +36,6 @@ public class ActionMapping extends AbstractEntity {
      * 名称
      */
     private String title;
-
-    /**
-     * create_time
-     */
-    private Date createTime;
-
-    /**
-     * update_time
-     */
-    private Date updateTime;
-
     /**
      * 备注
      */
@@ -68,22 +56,6 @@ public class ActionMapping extends AbstractEntity {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public Date getCreateTime() {
-        return this.createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return this.updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 
     public String getComments() {

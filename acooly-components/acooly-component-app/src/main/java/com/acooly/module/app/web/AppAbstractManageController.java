@@ -12,6 +12,7 @@ package com.acooly.module.app.web;
 import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.utils.Strings;
 import com.acooly.module.app.AppProperties;
 import com.acooly.module.ofile.OFileProperties;
 import org.apache.commons.lang3.StringUtils;
@@ -44,6 +45,17 @@ public abstract class AppAbstractManageController<T extends Entityable, M extend
         return home;
     }
 
+    @Override
+    protected UploadConfig getUploadConfig() {
+        UploadConfig config = super.getUploadConfig();
+        String storageRoot = getStorageRoot();
+        config.setStorageRoot(storageRoot);
+        config.setUseMemery(false);
+        config.setAllowExtentions("jpg,gif,png");
+        return config;
+    }
+
+
     /**
      * APP模块的存储相对路径
      *
@@ -54,10 +66,15 @@ public abstract class AppAbstractManageController<T extends Entityable, M extend
     }
 
 
-    private String getDatabasePath(UploadResult uploadResult) {
+    protected String getDatabasePath(UploadResult uploadResult) {
         String filePath = uploadResult.getFile().getPath();
-        String rootPath = new File(getStorageRoot()).getPath();
-        return StringUtils.substringAfter(filePath, rootPath);
+        filePath = Strings.replace(filePath, "\\", "/");
+        String rootPath = new File(oFileProperties.getStorageRoot()).getPath();
+        String relativePath = StringUtils.substringAfter(filePath, rootPath);
+        if (!Strings.startsWith(relativePath, "/")) {
+            relativePath = "/" + relativePath;
+        }
+        return relativePath;
     }
 
 }

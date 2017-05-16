@@ -38,9 +38,9 @@ public class ExHibernateJpaVendorAdapter extends HibernateJpaVendorAdapter {
 			} else {
 				throw new UnsupportedOperationException("不支持此数据库");
 			}
-			String dml = "classpath:META-INF/database/" + dbType + "/" + "dml.sql";
 			String ddl = "classpath:META-INF/database/" + dbType + "/" + "ddl.sql";
-			List<String> sqls = Lists.newArrayList(ddl, dml);
+            String dml = "classpath:META-INF/database/" + dbType + "/" + "dml.sql";
+            List<String> sqls = Lists.newArrayList(ddl, dml);
 			sqls.forEach(s -> {
 				Resource scriptResource = ApplicationContextHolder.get().getResource(s);
 				if (scriptResource.exists()) {

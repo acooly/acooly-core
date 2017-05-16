@@ -96,7 +96,7 @@ public class CL253ShortMessageSender extends AbstractShortMessageSender {
 
     @Override
     public String getProvider() {
-        return null;
+        return "创蓝253";
     }
 
     private String getContent(String content) {

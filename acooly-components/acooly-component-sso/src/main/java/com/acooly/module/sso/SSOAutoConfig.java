@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -44,8 +45,8 @@ public class SSOAutoConfig {
     public FilterRegistrationBean ssoRegistrationBean(AuthenticationFilter ssoFilter) {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(ssoFilter);
-        registration.addUrlPatterns("/*");
-        registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
+        registration.addUrlPatterns("/manage/*");
+        registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST));
         registration.setName("ssoFilter");
         registration.setOrder(Integer.MIN_VALUE);
         return registration;
@@ -56,9 +57,15 @@ public class SSOAutoConfig {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(autzFilter);
         registration.addUrlPatterns("/manage/*");
-        registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
+        registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST));
         registration.setName("autzFilter");
         registration.setOrder(Integer.MIN_VALUE + 1);
         return registration;
+    }
+    @Bean
+    public ServletContextInitializer ssoContextInitializer() {
+        return (servletContext) -> {
+            servletContext.setInitParameter("ssoEnable", "true");
+        };
     }
 }

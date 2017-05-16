@@ -61,7 +61,7 @@ public class RequestContextFilter implements Filter {
 		
 	}
 	
-	private static class RequestContext {
+	 static class RequestContext {
 		private static final ThreadLocal<RequestContext> LOCAL = ThreadLocal.withInitial(() -> new RequestContext());
 		
 		public static RequestContext getContext() {
@@ -75,5 +75,13 @@ public class RequestContextFilter implements Filter {
 		private String partnerId;
 		
 		private String gid;
-	}
+
+         public String getPartnerId() {
+             return partnerId;
+         }
+
+         public String getGid() {
+             return gid;
+         }
+     }
 }

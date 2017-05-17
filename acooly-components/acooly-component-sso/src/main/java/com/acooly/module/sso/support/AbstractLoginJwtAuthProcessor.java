@@ -35,7 +35,17 @@ public abstract class AbstractLoginJwtAuthProcessor<T> implements LoginAuthProce
 
     private WebSecurityManager securityManager;
 
+    private static String baseLoginDomain = null;
+
+
     protected boolean isDomainMatch(String requestURL, String loginUrl) {
+        if (baseLoginDomain == null) {
+            baseLoginDomain = getRootDomain(loginUrl);
+        }
+        return requestURL.contains(baseLoginDomain);
+    }
+
+    private String getRootDomain(String loginUrl) {
         URL url = null;
         try {
             url = new URL(loginUrl);
@@ -43,8 +53,9 @@ public abstract class AbstractLoginJwtAuthProcessor<T> implements LoginAuthProce
             log.error("登录地址格式有误", e);
         }
         String host = url.getHost();
-        return requestURL.contains(host.replaceAll(".*\\.(?=.*\\.)", ""));
+        return host.replaceAll(".*\\.(?=.*\\.)", "");
     }
+
 
     public WebSecurityManager getSecurityManager() {
         if (securityManager == null) {

@@ -35,7 +35,7 @@ public abstract class AbstractLoginJwtAuthProcessor<T> implements LoginAuthProce
 
     private WebSecurityManager securityManager;
 
-    private static String baseLoginDomain = null;
+    private String baseLoginDomain = null;
 
 
     protected boolean isDomainMatch(String requestURL, String loginUrl) {

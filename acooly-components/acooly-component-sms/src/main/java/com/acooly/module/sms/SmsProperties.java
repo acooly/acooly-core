@@ -57,6 +57,13 @@ public class SmsProperties {
      * 仅当使用创蓝253短信平台时配置
      */
     private CL253 cl253;
+
+    /**
+     * 仅当使用阿里云短信平台时配置
+     * 用阿里云，短信接口 String send(String mobileNo, String content)中content不用设置，阿里云统一用模板发送
+     */
+    private Aliyun aliyun;
+
 	private int timeout = 20000;
 	/**
 	 * IP最大频率(分钟)
@@ -109,6 +116,27 @@ public class SmsProperties {
          */
         private String sign;
     }
+    @Data
+    public static class Aliyun {
+        /**
+         * 签名名称
+         */
+        private String signName;
+        /**
+         * 模板CODE
+         */
+        private String templateCode;
+        /**
+         * 模板参数
+         */
+        private Map<String,String> templateParam;
+        /**
+         * aliyun appCode
+         */
+        private String appCode;
+
+    }
+
 	public enum Provider implements Messageable {
 													/**
 													 * 亿美
@@ -126,6 +154,10 @@ public class SmsProperties {
                                                      * 创蓝253
                                                      */
                                                     CL253("cl253ShortMessageSender", "创蓝253"),
+                                                    /**
+                                                     * 阿里云
+                                                     */
+                                                    Aliyun("aliyunMessageSender", "阿里云"),
 													/**
 													 * 测试
 													 */
@@ -171,6 +203,12 @@ public class SmsProperties {
             if (!cl253.getSign().startsWith("【")) {
                 cl253.sign = "【" + cl253.sign.trim() + "】";
             }
+        }
+        if (this.provider == Provider.Aliyun) {
+            Assert.notNull(this.aliyun);
+            Assert.hasText(this.aliyun.getAppCode());
+            Assert.hasText(this.aliyun.getSignName());
+            Assert.hasText(this.aliyun.getTemplateCode());
         }
 	}
 

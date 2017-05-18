@@ -16,7 +16,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -30,8 +29,6 @@ public class AuthorizationFilter implements Filter {
     private Logger logger = LoggerFactory.getLogger(AuthorizationFilter.class);
     public static int TIME_OUT = 5 * 1000;
 
-    private static final LoginAuthProcessor defaultLoginAuthentication = new DefaultLoginAuth();
-
     private ApplicationContext applicationContext;
 
     private ServletContext servletContext;
@@ -44,6 +41,7 @@ public class AuthorizationFilter implements Filter {
 
     private RequestMatcher requestMatcher;
 
+    private String rootPath = null;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -81,11 +79,13 @@ public class AuthorizationFilter implements Filter {
     }
 
     private boolean isPermitted(HttpServletRequest request) throws MalformedURLException {
-        String ssoServerUrl = ssoProperties.getSsoServerUrl();
+        if (rootPath == null) {
+            String ssoServerUrl = ssoProperties.getSsoServerUrl();
+            URL url = new URL(ssoServerUrl);
+            String http = ssoServerUrl.substring(0, ssoServerUrl.indexOf("//") + 2);
+            rootPath = http + url.getHost() + (url.getPort() == -1 ? "" : ":" + url.getPort());
+        }
         String requestURI = request.getRequestURI();
-        URL url = new URL(ssoServerUrl);
-        String http = ssoServerUrl.substring(0, ssoServerUrl.indexOf("//") + 2);
-        String rootPath = http + url.getHost() + (url.getPort() == -1 ? "" : ":" + url.getPort());
         String permittedPath = rootPath + "/role/facade/isPermitted";
         String username = (String) request.getAttribute(JWTUtils.KEY_SUB_NAME);
         String body;

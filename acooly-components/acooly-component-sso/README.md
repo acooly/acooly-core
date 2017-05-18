@@ -16,11 +16,12 @@
 1. 业务页面引入公共静态文件(只需要主页面添加，如：point.jsp需要添加，子页面pointEidt.jsp,pointImport.jsp,pointShow.jsp不用添加)
 
    * freemarker 的需要在第一行引入`<#include "*/include.ftl">`
-   * jsp 的需要引入 `<%@ include file="/WEB-INF/jsp/manage/common/ssoInclude.jsp"%>`
+   * jsp 的需要引入 `<c:if test="${initParam['ssoEnable']=='true'}">
+                    <%@ include file="/WEB-INF/jsp/manage/common/ssoInclude.jsp" %>
+                   </c:if>`
    
 2. 资源菜单 加载方式由之前的 ajax 改为 IFrame
-3. 资源菜单 资源串 需要改为全路径，如：`http://lottery.acooly.com:8080/manage/module/lottery/lottery/index.html`
-4. 主boss统一登录后，需要关掉子应用系统认证授权，设置`acooly.security.shiro.auth.enable=false`
+3. 资源菜单 资源串 需要改为全路径，如：`http://point.acooly.com:8080/manage/module/point/point/index.html`
    
 ## 4. 注意事项
    

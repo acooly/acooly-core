@@ -29,17 +29,19 @@
 		<td>${feedback.contactInfo}</td>
 	</tr>					
 	<tr>
-		<th>创建时间:</th>
+		<th>提交时间:</th>
 		<td>${feedback.createTime?datetime}</td>
-
-
     </tr>
 	<tr>
-		<th>修改时间:</th>
+		<th>处理时间:</th>
 		<td>${feedback.updateTime?datetime}</td>
 	</tr>
     <tr>
-		<th>备注:</th>
+        <th width="25%">处理状态:</th>
+        <td>${feedback.status}</td>
+    </tr>
+    <tr>
+		<th>处理意见:</th>
 		<td>${feedback.comments!}</td>
 	</tr>					
 </table>

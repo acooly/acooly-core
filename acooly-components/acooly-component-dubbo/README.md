@@ -33,4 +33,8 @@
 	private UserService userService;
 
 
+### 4. FAQ
 
+#### 4.1 获取请求上下文信息
+
+参考`com.acooly.module.dubbo.DubboRequestContext`

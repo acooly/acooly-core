@@ -2,22 +2,26 @@
 
 此组件提供多系统集成单点登录能力
 
+主boss系统不需要依赖此组件，仅子boss系统依赖
+
 ## 2. 使用说明
 
 配置组件参数,如下：
 
-   1) `acooly.sso.ssoServerUrl=http://boss.acooly.com:8070/manage/login.html` 登录服务端地址，url为全路径，ssoServer为主boss系统，统一管理认证权限，可只添加security组件单独启动
-   2) `acooly.sso.ssoExcludeUrl=/manage/logout.html,/manage/error/**` 不需要登录认证的地址，ant路径匹配规则， 用,分割[Ant-style path patterns](https://github.com/spring-projects/spring-framework/blob/master/spring-core/src/test/java/org/springframework/util/AntPathMatcherTests.java)
+   * `acooly.sso.ssoServerUrl=http://boss.acooly.com:8070/manage/login.html` 登录服务端地址，url为全路径，ssoServer为主boss系统，统一管理认证权限，可只添加security组件单独启动
+   * `acooly.sso.ssoExcludeUrl=/manage/logout.html,/manage/error/**` 不需要登录认证的地址，ant路径匹配规则， 用,分割[Ant-style path patterns](https://github.com/spring-projects/spring-framework/blob/master/spring-core/src/test/java/org/springframework/util/AntPathMatcherTests.java)
 
 ## 4. 子系统集成单点登录步骤
 
 1. 业务页面引入公共静态文件(只需要主页面添加，如：point.jsp需要添加，子页面pointEidt.jsp,pointImport.jsp,pointShow.jsp不用添加)
-   1. freemarker 的需要在第一行引入`<#include "*/include.ftl">`
-   2. jsp 的需要引入 `<%@ include file="/WEB-INF/jsp/manage/common/ssoInclude.jsp"%>` 
+
+   * freemarker 的需要在第一行引入`<#include "*/include.ftl">`
+   * jsp 的需要引入 `<c:if test="${initParam['ssoEnable']=='true'}">
+                    <%@ include file="/WEB-INF/jsp/manage/common/ssoInclude.jsp" %>
+                   </c:if>`
    
 2. 资源菜单 加载方式由之前的 ajax 改为 IFrame
-3. 资源菜单 资源串 需要改为全路径，如：`http://lottery.acooly.com:8080/manage/module/lottery/lottery/index.html`
-4. 主boss统一登录后，需要关掉子应用系统认证授权，设置`acooly.security.shiro.auth.enable=false`
+3. 资源菜单 资源串 需要改为全路径，如：`http://point.acooly.com:8080/manage/module/point/point/index.html`
    
 ## 4. 注意事项
    

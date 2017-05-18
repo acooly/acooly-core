@@ -9,6 +9,8 @@
  */
 package com.acooly.module.security.captche;
 
+import com.acooly.core.common.boot.Apps;
+import com.acooly.module.security.config.SecurityProperties;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 import com.google.common.base.Strings;
@@ -62,7 +64,12 @@ public class Captchas {
     }
 
     public Captchas() {
-        this(30, 80, "34,114,200", 24, 4);
+        SecurityProperties.Captcha.Kaptcha kaptcha = Apps.buildProperties(SecurityProperties.class).getCaptcha().getKaptcha();
+        this.height=kaptcha.getHeight();
+        this.width=kaptcha.getWidth();
+        this.fontColor=kaptcha.getFontColor();
+        this.charCount=kaptcha.getCharCount();
+        this.fontSize=kaptcha.getFontSize();
         initConfig();
     }
 

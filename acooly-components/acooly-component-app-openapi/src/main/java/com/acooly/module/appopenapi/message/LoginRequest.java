@@ -19,7 +19,7 @@ import javax.validation.constraints.Size;
 public class LoginRequest extends ApiRequest {
 
     @NotEmpty
-    @Size(max = 16)
+    @Size(max = 50)
     @OpenApiField(desc = "用户名", constraint = "登录的ID")
     private String username;
 

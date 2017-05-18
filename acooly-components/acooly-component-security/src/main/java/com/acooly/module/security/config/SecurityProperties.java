@@ -174,6 +174,31 @@ public class SecurityProperties {
 	public static class Captcha {
 		private boolean enable = true;
 		private String url = "/jcaptcha.jpg";
+		private Kaptcha kaptcha=new Kaptcha();
+
+		@Data
+		public static class Kaptcha {
+            /**
+             * 图片高
+             */
+			private int height=30;
+            /**
+             * 图片宽
+             */
+			private int width=80;
+            /**
+             *  验证码文字颜色
+             */
+			private String fontColor="34,114,200";
+            /**
+             *  验证码文字大小
+             */
+			private int fontSize=24;
+            /**
+             * 验证码长度
+             */
+			private int charCount=4;
+		}
 	}
 	
 }

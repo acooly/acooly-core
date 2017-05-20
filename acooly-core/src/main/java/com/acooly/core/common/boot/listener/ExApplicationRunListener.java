@@ -18,6 +18,7 @@ import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.boot.log.ExLogbackLoggingSystem;
 import com.acooly.core.common.boot.log.initializer.ConsoleLogInitializer;
 import com.acooly.core.common.exception.AppConfigException;
+import com.acooly.core.common.exception.UncaughtExceptionHandlerWrapper;
 import com.acooly.core.utils.ShutdownHooks;
 import com.acooly.core.utils.system.IPUtil;
 import com.google.common.base.Preconditions;
@@ -168,7 +169,8 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
 	public void finished(ConfigurableApplicationContext context, Throwable exception) {
 		if (exception == null) {
 			//install UncaughtExceptionHandler
-			//fixme			
+            UncaughtExceptionHandlerWrapper.install();
+            //fixme
 			// when system startup ,register shutdown hooks to clean resouces.
 			new ShutdownThread().register();
 			//log startup info

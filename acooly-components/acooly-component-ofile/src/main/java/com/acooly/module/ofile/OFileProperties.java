@@ -43,7 +43,7 @@ public class OFileProperties implements InitializingBean {
 	private boolean checkSession = false;
 	private String checkSessionKey = "sessionCustomer,sessionUser,org.apache.shiro.subject.support.DefaultSubjectContext_PRINCIPALS_SESSION_KEY";
 	private boolean checkReferer = true;
-	
+	private boolean enableLocalMapping = true;
 	public String getStorageRoot() {
 		return storageRoot;
 	}

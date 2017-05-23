@@ -94,9 +94,4 @@ public enum FeedbackTypeEnum implements Messageable {
         return list;
     }
 
-    @Override
-    public String toString() {
-        return String.format("%s:%s", this.code, this.message);
-    }
-
 }

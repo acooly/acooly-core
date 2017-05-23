@@ -21,6 +21,6 @@ public class DefaultFeedbackHandler implements FeedbackHandler {
 
     @Override
     public void handle(Feedback feedback) {
-        log.debug("acooly-component-portlet组件默认FeedbackHandler实现:{}", feedback);
+        log.info("acooly-component-portlet组件默认FeedbackHandler实现:{}", feedback);
     }
 }

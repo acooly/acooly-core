@@ -43,34 +43,35 @@ public class OFileAutoConfig extends WebMvcConfigurerAdapter {
 	
 	@Bean
 	public StandardDatabaseScriptIniter ofileScriptIniter() {
-
+		
 		return new StandardDatabaseScriptIniter() {
-            @Override
-            public String getEvaluateTable() {
-                return "ofile";
-            }
-
-            @Override
-            public String getComponentName() {
-                return "ofile";
-            }
-
-            @Override
-            public List<String> getInitSqlFile() {
-                return Lists.newArrayList("ofile",
-                    "ofile_urls");
-            }
-
+			@Override
+			public String getEvaluateTable() {
+				return "ofile";
+			}
+			
+			@Override
+			public String getComponentName() {
+				return "ofile";
+			}
+			
+			@Override
+			public List<String> getInitSqlFile() {
+				return Lists.newArrayList("ofile", "ofile_urls");
+			}
+			
 		};
 	}
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		boolean useResourceCache = !Apps.isDevMode();
-		String pathPatterns=oFileProperties.getServerRootMappingPath() + "/**";
-		String resourceLocations="file:" + oFileProperties.getStorageRoot();
-		log.info("ofile pathPatterns={},resourceLocations={}",pathPatterns,resourceLocations);
-		registry.addResourceHandler(pathPatterns)
-			.addResourceLocations(resourceLocations).resourceChain(useResourceCache);
+		if (oFileProperties.isEnableLocalMapping()) {
+			boolean useResourceCache = !Apps.isDevMode();
+			String pathPatterns = oFileProperties.getServerRootMappingPath() + "/**";
+			String resourceLocations = "file:" + oFileProperties.getStorageRoot();
+			log.info("ofile pathPatterns={},resourceLocations={}", pathPatterns, resourceLocations);
+			registry.addResourceHandler(pathPatterns).addResourceLocations(resourceLocations)
+				.resourceChain(useResourceCache);
+		}
 	}
 }

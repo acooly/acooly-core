@@ -33,6 +33,7 @@ public class FeedbackManagerController extends AbstractJQueryEntityController<Fe
     @Override
     protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
         model.put("allTypes", allTypes);
+        model.put("allStatuss", FeedbackStatusEnum.mapping());
     }
 
     @Override
@@ -51,11 +52,13 @@ public class FeedbackManagerController extends AbstractJQueryEntityController<Fe
             String requId = request.getParameter(getEntityIdName());
             String requStatus = request.getParameter("status");
             String requComments = request.getParameter("comments");
-            getEntityService().handle(Long.valueOf(requId), FeedbackStatusEnum.find(requStatus), requComments);
+            feedbackService.handle(Long.valueOf(requId), FeedbackStatusEnum.find(requStatus), requComments);
             result.setMessage("处理成功");
         } catch (Exception e) {
             handleException(result, "处理", e);
         }
         return result;
     }
+
+
 }

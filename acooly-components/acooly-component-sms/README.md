@@ -22,3 +22,15 @@
    `@PropertySource("classpath:/smstemplate.properties")`
 
     把此注解加到配置类(标注了@Configuration注解的类)。
+    
+### 2.3 注意
+   
+1. 阿里云短信通道,阿里云通道只支持模板和签名为短信内容,
+   发送接口send(String mobileNo, String content) content内容需为json格式 如：
+   `AliyunSmsSendVo vo=new AliyunSmsSendVo();
+    params.put("customer", "Testcustomer");
+    asa.setFreeSignName("观世宇");
+    asa.setSmsParamsMap(params);
+    asa.setTemplateCode("SMS_67185863");
+    content = asa.toJson();`
+    测试用例见 `com.acooly.core.test.web.TestController#testAliyunSms()`

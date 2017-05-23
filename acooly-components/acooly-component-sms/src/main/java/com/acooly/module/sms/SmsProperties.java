@@ -33,26 +33,26 @@ import static com.acooly.module.sms.SmsProperties.PREFIX;
 @Slf4j
 @Validated
 public class SmsProperties {
-	public static final String PREFIX = "acooly.sms";
-	
-	public boolean enable;
-	/**
-	 * 短信服务提供商
-	 */
-	@NotNull
-	private Provider provider;
-	private String url;
-	private String username;
-	
-	private String password;
-	private String batchUser;
-	private String batchPswd;
-	private String prefix;
-	private String posfix;
-	/**
-	 * 仅当使用亿美通道时配置
-	 */
-	private Emay emay;
+    public static final String PREFIX = "acooly.sms";
+
+    public boolean enable;
+    /**
+     * 短信服务提供商
+     */
+    @NotNull
+    private Provider provider;
+    private String url;
+    private String username;
+
+    private String password;
+    private String batchUser;
+    private String batchPswd;
+    private String prefix;
+    private String posfix;
+    /**
+     * 仅当使用亿美通道时配置
+     */
+    private Emay emay;
     /**
      * 仅当使用创蓝253短信平台时配置
      */
@@ -60,46 +60,46 @@ public class SmsProperties {
 
     /**
      * 仅当使用阿里云短信平台时配置
-     * 用阿里云，短信接口 String send(String mobileNo, String content)中content不用设置，阿里云统一用模板发送
      */
     private Aliyun aliyun;
 
-	private int timeout = 20000;
-	/**
-	 * IP最大频率(分钟)
-	 */
-	private int ipFreq = 200;
-	
-	/**
-	 * 单号码发送间隔（秒）
-	 */
-	private int sendInterval = 10;
-	
-	/**
-	 * 黑名单
-	 */
-	private List<String> blacklist = Lists.newArrayList();
-	/**
-	 * 短信模板定义
-	 */
-	private Map<String, String> template = Maps.newHashMap();
-	
-	@Data
-	public static class Emay {
-		/**
-		 * 序列号,请通过亿美销售人员获取
-		 */
-		private String sn;
-		/**
-		 * 密码,请通过亿美销售人员获取
-		 */
-		private String password;
-		
-		/**
-		 * 短信签名
-		 */
-		private String sign;
-	}
+    private int timeout = 20000;
+    /**
+     * IP最大频率(分钟)
+     */
+    private int ipFreq = 200;
+
+    /**
+     * 单号码发送间隔（秒）
+     */
+    private int sendInterval = 10;
+
+    /**
+     * 黑名单
+     */
+    private List<String> blacklist = Lists.newArrayList();
+    /**
+     * 短信模板定义
+     */
+    private Map<String, String> template = Maps.newHashMap();
+
+    @Data
+    public static class Emay {
+        /**
+         * 序列号,请通过亿美销售人员获取
+         */
+        private String sn;
+        /**
+         * 密码,请通过亿美销售人员获取
+         */
+        private String password;
+
+        /**
+         * 短信签名
+         */
+        private String sign;
+    }
+
     @Data
     public static class CL253 {
         /**
@@ -116,85 +116,98 @@ public class SmsProperties {
          */
         private String sign;
     }
+
+    /**
+     * 阿里云短信通道
+     * 阿里云通道只支持模板和签名为短信内容
+     * 发送接口send(String mobileNo, String content) content内容需为json格式 如：
+     * AliyunSmsSendVo vo=new AliyunSmsSendVo();
+     * params.put("customer", "Testcustomer");
+     * asa.setFreeSignName("观世宇");
+     * asa.setSmsParamsMap(params);
+     * asa.setTemplateCode("SMS_67185863");
+     * content = asa.toJson();
+     *
+     * @See com.acooly.core.test.web.TestController#testAliyunSms()
+     */
     @Data
     public static class Aliyun {
         /**
-         * 签名名称
+         * 主账号id
          */
-        private String signName;
+        private String accountId;
         /**
-         * 模板CODE
+         * 接入keyId
          */
-        private String templateCode;
+        private String accessKeyId;
         /**
-         * 模板参数
+         * 接入key秘钥
          */
-        private Map<String,String> templateParam;
+        private String accessKeySecret;
         /**
-         * aliyun appCode
+         * 主题名称，如：sms.topic-cn-hangzhou
          */
-        private String appCode;
-
+        private String topicName;
     }
 
-	public enum Provider implements Messageable {
-													/**
-													 * 亿美
-													 */
-													EMAY("emayShortMessageSender", "亿美"),
-													/**
-													 * 漫道
-													 */
-													MAIDAO("maidaoShortMessageSender", "漫道"),
-													/**
-													 * 重庆客亲通
-													 */
-													KLUM("chinaklumShortMessageSender", "重庆客亲通"),
-                                                    /**
-                                                     * 创蓝253
-                                                     */
-                                                    CL253("cl253ShortMessageSender", "创蓝253"),
-                                                    /**
-                                                     * 阿里云
-                                                     */
-                                                    Aliyun("aliyunMessageSender", "阿里云"),
-													/**
-													 * 测试
-													 */
-													MOCK("mockShortMessageSender", "测试");
-		private final String code;
-		private final String message;
-		
-		Provider(String code, String message) {
-			this.code = code;
-			this.message = message;
-		}
-		
-		@Override
-		public String code() {
-			return this.code;
-		}
-		
-		@Override
-		public String message() {
-			return this.message;
-		}
-	}
-	
-	@PostConstruct
-	public void init() {
-		if (this.provider == Provider.EMAY) {
-			Assert.notNull(this.emay);
-			Assert.hasText(this.emay.getSn());
-			Assert.hasText(this.emay.getPassword());
-			if(emay.getSign()==null){
-			    emay.sign="";
-            }else{
-			    if(!emay.getSign().startsWith("【")){
+    public enum Provider implements Messageable {
+        /**
+         * 亿美
+         */
+        EMAY("emayShortMessageSender", "亿美"),
+        /**
+         * 漫道
+         */
+        MAIDAO("maidaoShortMessageSender", "漫道"),
+        /**
+         * 重庆客亲通
+         */
+        KLUM("chinaklumShortMessageSender", "重庆客亲通"),
+        /**
+         * 创蓝253
+         */
+        CL253("cl253ShortMessageSender", "创蓝253"),
+        /**
+         * 阿里云
+         */
+        Aliyun("aliyunMessageSender", "阿里云"),
+        /**
+         * 测试
+         */
+        MOCK("mockShortMessageSender", "测试");
+        private final String code;
+        private final String message;
+
+        Provider(String code, String message) {
+            this.code = code;
+            this.message = message;
+        }
+
+        @Override
+        public String code() {
+            return this.code;
+        }
+
+        @Override
+        public String message() {
+            return this.message;
+        }
+    }
+
+    @PostConstruct
+    public void init() {
+        if (this.provider == Provider.EMAY) {
+            Assert.notNull(this.emay);
+            Assert.hasText(this.emay.getSn());
+            Assert.hasText(this.emay.getPassword());
+            if (emay.getSign() == null) {
+                emay.sign = "";
+            } else {
+                if (!emay.getSign().startsWith("【")) {
                     emay.sign = "【" + emay.sign.trim() + "】";
                 }
             }
-		}
+        }
         if (this.provider == Provider.CL253) {
             Assert.notNull(this.cl253);
             Assert.hasText(this.cl253.getUn());
@@ -206,10 +219,11 @@ public class SmsProperties {
         }
         if (this.provider == Provider.Aliyun) {
             Assert.notNull(this.aliyun);
-            Assert.hasText(this.aliyun.getAppCode());
-            Assert.hasText(this.aliyun.getSignName());
-            Assert.hasText(this.aliyun.getTemplateCode());
+            Assert.hasText(this.aliyun.getAccessKeyId());
+            Assert.hasText(this.aliyun.getAccessKeySecret());
+            Assert.hasText(this.aliyun.getAccountId());
+            Assert.hasText(this.aliyun.getTopicName());
         }
-	}
+    }
 
 }

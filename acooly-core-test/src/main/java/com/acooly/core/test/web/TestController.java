@@ -14,12 +14,16 @@ import com.acooly.module.certification.CertificationService;
 import com.acooly.module.mail.MailDto;
 import com.acooly.module.mail.service.MailService;
 import com.acooly.module.sms.SmsService;
+import com.acooly.module.sms.sender.support.AliyunSmsSendVo;
+import com.google.common.collect.Maps;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 /**
  * @author qiubo@yiji.com
@@ -40,6 +44,19 @@ public class TestController {
     @RequestMapping("sms")
     public void testSms() {
         smsService.send("15021507995", "xxx");
+    }
+
+    @RequestMapping("aliyunSms")
+    public void testAliyunSms() {
+        AliyunSmsSendVo asa = new AliyunSmsSendVo();
+
+        Map<String, String> params = Maps.newHashMap();
+        params.put("customer", "Testcustomer");
+        asa.setFreeSignName("观世宇");
+        asa.setSmsParamsMap(params);
+        asa.setTemplateCode("SMS_67185863");
+
+        smsService.send("18612299409", asa.toJson());
     }
 
     @GetMapping("testPermission")

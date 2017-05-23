@@ -18,6 +18,7 @@ import com.acooly.module.security.defence.csrf.CookieCsrfTokenRepository;
 import com.acooly.module.security.defence.csrf.CsrfAccessDeniedHandlerImpl;
 import com.acooly.module.security.defence.csrf.CsrfFilter;
 import com.acooly.module.security.defence.csrf.RequireCsrfProtectionMatcher;
+import com.acooly.module.security.health.HealthCheckServlet;
 import com.acooly.module.security.shiro.cache.ShiroCacheManager;
 import com.acooly.module.security.shiro.filter.CaptchaFormAuthenticationFilter;
 import com.acooly.module.security.shiro.filter.NotifyLogoutFilter;
@@ -333,6 +334,18 @@ public class SecurityAutoConfig {
 		}
 		
 	}
+    @Configuration
+    @ConditionalOnWebApplication
+	public static class HealthCheckConfigration{
+        @Bean
+        public ServletRegistrationBean jcaptchaServlet() {
+            ServletRegistrationBean bean = new ServletRegistrationBean();
+            bean.setUrlMappings(Lists.newArrayList("/healthCheck"));
+            HealthCheckServlet healthCheckServlet = new HealthCheckServlet();
+            bean.setServlet(healthCheckServlet);
+            return bean;
+        }
+    }
 
     @Bean
     public AbstractDatabaseScriptIniter securityScriptIniter() {
@@ -350,4 +363,5 @@ public class SecurityAutoConfig {
             return Lists.newArrayList("META-INF/database/security/"+databaseType.name()+"/security.sql");
         }
     }
+
 }

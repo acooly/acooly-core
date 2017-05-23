@@ -13,7 +13,6 @@ import com.acooly.module.sms.sender.support.AliyunSmsSendVo;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.InputStreamEntity;
@@ -21,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
+import org.apache.commons.codec.binary.Base64;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
@@ -125,7 +125,7 @@ public class AliyunMessageSender extends AbstractShortMessageSender {
             .append("x-mns-version:2015-06-06").append("\n")
             .append("/topics/").append(topicName).append("/messages");
         String signStr = sign.toString();
-        return Base64.encode(Cryptos.hmacSha1(signStr.getBytes(), accessKeySecret.getBytes()));
+        return new String(Base64.encodeBase64(Cryptos.hmacSha1(signStr.getBytes(), accessKeySecret.getBytes())));
     }
 
     private static String getCharacterDataFromElement(Element e) {

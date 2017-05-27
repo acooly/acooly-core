@@ -16,6 +16,14 @@
 		return $(this).form('validate');
 	</#if>
 	}
+
+    //树初始化，设置默认值
+    $('#orgEdit').combotree({
+        url: '${pageContext.request.contextPath}/manage/module/security/org/listOrganize.html',
+        required: true
+    })
+    $('#orgEdit').combotree('setValue', '${user.orgId}');
+
 </script>
 
 <div align="center">
@@ -71,6 +79,11 @@
 							<#list allRoles as e><option <#if user??> <#if user.roles?seq_contains(e)>selected</#if>  </#if> value="${e.id}">${e.name}</option></#list>
 					</select></td>
 				</tr>
+                <tr>
+                    <th>所属机构</th>
+                    <td><input type="text" editable="false"  name="orgId" id="orgEdit"
+                               class="easyui-combobox"/></td>
+                </tr>
 				<tr>
 					<th>备注</th>
 					<td><textarea name="descn" rows="3" cols="40" class="easyui-validatebox"></textarea></td>

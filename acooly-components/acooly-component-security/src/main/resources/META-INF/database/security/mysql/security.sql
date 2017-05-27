@@ -164,8 +164,28 @@ CREATE TABLE SYS_CONFIG
    `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
    PRIMARY KEY (ID)
 );
-
 ALTER TABLE SYS_CONFIG COMMENT '基础框架配置表';
+
+DROP TABLE IF EXISTS `SYS_ORG`;
+CREATE TABLE `SYS_ORG` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `parent_id` bigint(20) NOT NULL COMMENT '父类id',
+  `name` varchar(32) DEFAULT NULL COMMENT '机构名称',
+  `status` varchar(32) DEFAULT NULL COMMENT '状态{valid:有效,invalid:无效}',
+  `province` varchar(64) DEFAULT NULL COMMENT '省',
+  `city` varchar(64) DEFAULT NULL COMMENT '市',
+  `county` varchar(64) DEFAULT NULL COMMENT '县',
+  `mobile_no` varchar(20) DEFAULT NULL COMMENT '手机号',
+  `address` varchar(255) DEFAULT NULL COMMENT '地址',
+  `contacts` varchar(64) DEFAULT NULL COMMENT '联系人',
+  `telephone` varchar(20) DEFAULT NULL COMMENT '固定电话',
+  `email` varchar(64) DEFAULT NULL COMMENT '机构邮箱',
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `memo` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='组织机构';
+
 
 insert into SYS_RESOURCE (ID, PARENTID, NAME, TYPE, VALUE, SHOW_STATE, SHOW_MODE, ORDER_TIME, ICON, DESCN)
 values (1, null, '系统管理', 'MENU', null, 0, 1, '2014-01-07', 'icons-resource-shezhi', null);
@@ -179,6 +199,7 @@ values (4, 1, '资源菜单', 'URL', '/manage/system/resource/index.html', 0, 1,
 -- values (5, 1, '操作日志', 'URL', '/manage/module/olog/olog/index.html', 0, 1, '2014-01-08 02:36:49', 'icons-resource-shouzhimingxi', null);
 -- insert into SYS_RESOURCE (ID, PARENTID, NAME, TYPE, VALUE, SHOW_STATE, SHOW_MODE, ORDER_TIME, ICON, DESCN)
 -- values (6, 1, '系统监控', 'URL', '/manage/druid/index.html', 0, 2, '2014-01-08 02:37:26', 'icons-resource-mac', null);
+INSERT INTO `sys_resource` VALUES ('2016093009', '1', '机构管理', 'URL', '0', '2014-01-09 02:39:40', '/manage/module/security/org/index.html', '1', 'icons-resource-bricks', null, '2017-05-26 17:51:13', '2017-05-27 13:39:38');
 insert into SYS_RESOURCE (ID, PARENTID, NAME, TYPE, VALUE, SHOW_STATE, SHOW_MODE, ORDER_TIME, ICON, DESCN)
 values (7, 1, '桌面管理', 'URL', '/manage/system/portallet/index.html', 0, 1, '2014-01-08 02:39:40', 'icons-resource-wangzhan1', null);
 
@@ -196,6 +217,8 @@ values (1, 4);
 -- values (1, 5);
 -- insert into SYS_ROLE_RESC (ROLE_ID, RESC_ID)
 -- values (1, 6);
+insert into SYS_ROLE_RESC (ROLE_ID, RESC_ID)
+values (1, 2016093009);
 insert into SYS_ROLE_RESC (ROLE_ID, RESC_ID)
 values (1, 7);
 

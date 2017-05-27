@@ -48,6 +48,14 @@ public class CityDaoController {
 	@Autowired
 	private CityMybatisDao cityDao;
 
+
+    @RequestMapping(value = "/selectAllByPage", method = RequestMethod.GET)
+    public   List<City> selectAllByPage() {
+        PageInfo<City> pageInfo=new PageInfo<>();
+        pageInfo.setCountOfCurrentPage(2);
+        return cityDao.selectAllByPage(pageInfo);
+    }
+
 	@RequestMapping(value = "/selectAll", method = RequestMethod.GET)
 	public  List<City> selectAll() {
 		return cityDao.selectAll();

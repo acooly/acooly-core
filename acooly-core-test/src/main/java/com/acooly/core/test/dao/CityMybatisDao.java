@@ -9,6 +9,7 @@
  */
 package com.acooly.core.test.dao;
 
+import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.test.domain.City;
 import com.acooly.module.mybatis.EntityMybatisDao;
 import org.apache.ibatis.annotations.Select;
@@ -21,4 +22,12 @@ import java.util.List;
 public interface CityMybatisDao extends EntityMybatisDao<City> {
     @Select("select * from City")
     List<City> selectAll();
+
+    /**
+     * 分页查询
+     * @param pageInfo
+     * @return
+     */
+    @Select("select * from City")
+    List<City> selectAllByPage(PageInfo<City> pageInfo);
 }

@@ -103,6 +103,8 @@ public class DruidProperties implements BeanClassLoaderAware {
 	 * 是否在非线上环境开启打印sql，默认开启
 	 */
 	private boolean showSql = true;
+
+	private boolean testOnBorrow = false;
 	
 	private ClassLoader beanClassLoader;
 
@@ -192,7 +194,7 @@ public class DruidProperties implements BeanClassLoaderAware {
 		dataSource.setMinEvictableIdleTimeMillis(600000);
 		dataSource.setTestWhileIdle(true);
 		//从连接池中获取连接时不测试
-		dataSource.setTestOnBorrow(false);
+		dataSource.setTestOnBorrow(testOnBorrow);
 		dataSource.setTestOnReturn(false);
 		dataSource.setValidationQueryTimeout(5);
 		

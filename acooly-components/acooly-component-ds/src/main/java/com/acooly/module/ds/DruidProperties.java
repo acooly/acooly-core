@@ -189,7 +189,7 @@ public class DruidProperties implements BeanClassLoaderAware {
 		dataSource.setMaxActive(maxActive);
 		dataSource.setMaxWait(this.getMaxWait());
 		//检测需要关闭的空闲连接间隔，单位是毫秒
-		dataSource.setTimeBetweenEvictionRunsMillis(600000);
+		dataSource.setTimeBetweenEvictionRunsMillis(300000);
 		//连接在池中最小生存的时间
 		dataSource.setMinEvictableIdleTimeMillis(600000);
 		dataSource.setTestWhileIdle(true);

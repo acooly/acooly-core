@@ -65,6 +65,10 @@ public class SecurityProperties {
 		 * 登录成功后的链接
 		 */
 		private String successUrl = "/manage/onLoginSuccess.html";
+        /**
+         * 登录失败后的链接
+         */
+        private String failedUrl = "/manage/onLoginFail.html";
 		/**
 		 * 对应shiro.ini中的[urls]标签，注意顺序，格式如：
 		 * <p>

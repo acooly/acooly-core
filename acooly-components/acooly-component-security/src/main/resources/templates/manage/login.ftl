@@ -126,9 +126,9 @@
 				} else {
 					refreshCaptcha();
 					var message = result.message;
-					if(result.data.lastTimes){
-						message += ". 再失败"+result.data.lastTimes+"次后锁定账户";
-					}
+//					if(result.data.lastTimes){
+//						message += ". 再失败"+result.data.lastTimes+"次后锁定账户";
+//					}
 					$('#message').html(message);
 					loaded();
 				}

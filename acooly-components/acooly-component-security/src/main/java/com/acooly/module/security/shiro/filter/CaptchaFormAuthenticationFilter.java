@@ -47,7 +47,7 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 	public String captchaInputName = "captcha";
 	
 	/** 登录失败Redirect URL */
-	private String failureUrl = "/login.jsp";
+	private String failureUrl = "/manage/onLoginFail.html";
 	
 	/** 监听处理 */
 	private ShireLoginLogoutSubject shireLoginLogoutSubject;
@@ -155,7 +155,7 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 			return;
 		}else{
 			if (!Captchas.verify(request,requestCaptcha)) {
-				throw new InvaildCaptchaException("captcha invaild.");
+				throw new InvaildCaptchaException("验证码错误.");
 			}
 		}
 	}

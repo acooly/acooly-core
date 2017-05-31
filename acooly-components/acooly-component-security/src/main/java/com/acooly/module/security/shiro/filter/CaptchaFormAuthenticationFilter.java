@@ -47,7 +47,7 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 	public String captchaInputName = "captcha";
 	
 	/** 登录失败Redirect URL */
-	private String failureUrl = "/manage/onLoginFail.html";
+	private String failureUrl = "/manage/onLoginFailure.html";
 	
 	/** 监听处理 */
 	private ShireLoginLogoutSubject shireLoginLogoutSubject;

@@ -122,20 +122,6 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
         return jsonResult;
     }
 
-    @RequestMapping(value = "onLoginFail")
-    @ResponseBody
-    public JsonResult onLoginFail(HttpServletRequest request) {
-        logger.debug("onLoginFail");
-        JsonResult jsonResult = new JsonResult();
-        String message = request.getParameter("message");
-        if (!StringUtils.isEmpty(message)&& message.contains("did not match the expected credentials")){
-            jsonResult.setMessage("用户名或密码错误.");
-        }else {
-            jsonResult.setMessage(message);
-        }
-        jsonResult.setSuccess(false);
-        return jsonResult;
-    }
 
 	private String fomartRederectUrl(String targetUrl,String jwt){
         if (targetUrl.contains("?")) {

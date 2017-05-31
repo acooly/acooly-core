@@ -122,6 +122,7 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
         return jsonResult;
     }
 
+
 	private String fomartRederectUrl(String targetUrl,String jwt){
         if (targetUrl.contains("?")) {
             targetUrl = String.format("%s&jwt=%s", targetUrl, jwt);

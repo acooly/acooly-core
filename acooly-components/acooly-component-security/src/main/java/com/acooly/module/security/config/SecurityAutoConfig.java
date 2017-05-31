@@ -214,7 +214,7 @@ public class SecurityAutoConfig {
 														SecurityProperties securityProperties) {
 			CaptchaFormAuthenticationFilter filter = new CaptchaFormAuthenticationFilter();
 			filter.setShireLoginLogoutSubject(shireLoginLogoutSubject);
-			filter.setFailureUrl(securityProperties.getShiro().getLoginUrl());
+			filter.setFailureUrl(securityProperties.getShiro().getFailedUrl());
 			filter.setSuccessUrl(securityProperties.getShiro().getSuccessUrl());
 			return filter;
 		}
@@ -281,14 +281,15 @@ public class SecurityAutoConfig {
 	@ConditionalOnWebApplication
 	@ConditionalOnProperty(value = SecurityProperties.PREFIX + ".captcha.enable", matchIfMissing = true)
 	public static class CaptchaAutoConfigration {
-		@Bean
-		public ServletRegistrationBean jcaptchaServlet(SecurityProperties securityProperties) {
-			ServletRegistrationBean bean = new ServletRegistrationBean();
-			bean.setUrlMappings(Lists.newArrayList(securityProperties.getCaptcha().getUrl()));
-			CaptchaServlet captchaServlet = new CaptchaServlet();
-			bean.setServlet(captchaServlet);
-			return bean;
-		}
+        @Bean
+        public ServletRegistrationBean mycaptcha(SecurityProperties securityProperties) {
+            ServletRegistrationBean bean = new ServletRegistrationBean();
+            bean.setUrlMappings(Lists.newArrayList(securityProperties.getCaptcha().getUrl()));
+            CaptchaServlet captchaServlet = new CaptchaServlet();
+            bean.setServlet(captchaServlet);
+            bean.setLoadOnStartup(1);
+            return bean;
+        }
 	}
 	
 	@Configuration
@@ -314,7 +315,7 @@ public class SecurityAutoConfig {
 			registration.setName("csrfDefenseFilter");
 			return csrfFilter;
 		}
-		
+
 	}
 	
 	@Configuration

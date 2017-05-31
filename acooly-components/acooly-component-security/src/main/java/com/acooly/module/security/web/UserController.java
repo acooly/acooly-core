@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.acooly.module.security.config.FrameworkPropertiesHolder;
 import com.acooly.module.security.config.SecurityProperties;
+import com.acooly.module.security.domain.Org;
+import com.acooly.module.security.service.OrgService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -44,6 +46,8 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
 	private UserService userService;
 	@Autowired
 	private RoleService roleService;
+    @Autowired
+    private OrgService orgService;
 
 	@RequestMapping(value = "alreadyExists")
 	@ResponseBody
@@ -112,6 +116,10 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
 			boolean isCreate) throws Exception {
 		entity.setRoles(loadRoleFormRequest(request));
 		entity.setLastModifyTime(new Date());
+        if (entity.getOrgId() != null) {
+            Org organize = orgService.get(entity.getOrgId());
+            entity.setOrgName(organize.getName());
+        }
 		return entity;
 	}
 

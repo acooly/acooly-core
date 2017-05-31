@@ -51,6 +51,12 @@ function manage_user_changePasswd(id){
 $(function() {
 	//注册按键回车直接提交查询
 	$.acooly.framework.registerKeydown('manage_user_searchform','manage_user_datagrid');
+
+    //树初始化，设置默认值
+    $('#orgId').combotree({
+        url: '${pageContext.request.contextPath}/manage/module/security/org/listOrganize.html',
+        required: false
+    })
 });
 </script>
 <div class="easyui-layout" data-options="fit : true,border : false">
@@ -70,6 +76,8 @@ $(function() {
               <option value="">所有</option>
               <#list allUserTypes as k,v><option value="${k}">${v}</option></#list>
           	  </select>
+          组织机构:<input type="text" id="orgId" name="search_EQ_orgId"
+                          class="easyui-combobox"/>
           <a href="javascript:void(0);" style="width:70px;" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_user_searchform','manage_user_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i> 查询</a>
           </td>
         </tr>
@@ -94,20 +102,21 @@ $(function() {
           <th field="roles" data-options="formatter:function(value){ return value?value[0]['name']:'';}">角色</th>
           <th field="status" data-options="formatter:function(value){ return formatRefrence('manage_user_datagrid','allStatus',value);} ">状态</th>
           <th field="userType" data-options="formatter:function(value){ return formatRefrence('manage_user_datagrid','allUserTypes',value);} ">用户类型</th>
+          <th field="orgName">所属机构</th>
           <th field="action" data-options="formatter:function(value, row, index){return formatAction('manage_user_action',value,row)}">动作</th>
         </tr>
       </thead>
     </table>
 
     <div id="manage_user_action" style="display: none;">
-      <a title="编辑"  onclick="$.acooly.framework.edit({url:'/manage/system/user/edit.html',id:'{0}',entity:'user',height:380});" href="#"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
+      <a title="编辑"  onclick="$.acooly.framework.edit({url:'/manage/system/user/edit.html',id:'{0}',entity:'user',height:450});" href="#"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
       <!--<a title="查看"  onclick="$.acooly.framework.show('/manage/system/user/show.html?id={0}',500,350);" href="#"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>-->
       <a title="修改密码"  onclick="manage_user_changePasswd('{0}');" href="#"><i class="fa fa-key fa-lg fa-fw fa-col"></i></a>
       <a title="删除" onclick="$.acooly.framework.remove('/manage/system/user/deleteJson.html','{0}','manage_user_datagrid');" href="#"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>
     </div>
 
     <div id="manage_user_toolbar">
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/system/user/create.html',entity:'user',height:480})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col" ></i>添加</a>
+      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/system/user/create.html',entity:'user',height:510})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col" ></i>添加</a>
     </div>
   </div>
 

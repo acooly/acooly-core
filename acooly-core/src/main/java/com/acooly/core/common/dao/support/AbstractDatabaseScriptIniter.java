@@ -41,6 +41,9 @@ public abstract class AbstractDatabaseScriptIniter implements ApplicationListene
 
     @Override
     public void onApplicationEvent(DataSourceReadyEvent event) {
+        if(Env.isOnline()){
+            return;
+        }
         DataSource dataSource = (DataSource) event.getSource();
         try {
             DatabaseType databaseType = DatabaseDialectManager.getDatabaseType(dataSource.getConnection());

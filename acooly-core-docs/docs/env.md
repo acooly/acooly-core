@@ -25,6 +25,8 @@
 
 不要使用eclipse！！！
 
+code format 请使用 [google-java-format](https://github.com/google/google-java-format)
+
 ### 5. lombok
 
 少写无意义的代码会长寿！

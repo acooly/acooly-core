@@ -30,6 +30,7 @@ import com.acooly.core.test.domain.City;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,6 +48,19 @@ public class CityDaoController {
 	
 	@Autowired
 	private CityMybatisDao cityDao;
+
+    @RequestMapping(value = "/selectById", method = RequestMethod.GET)
+    @Transactional
+    public   City selectById(Long id) {
+        City city = cityDao.selectById(id);
+        try {
+            Thread.sleep(100000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return city;
+    }
+
 
 
     @RequestMapping(value = "/selectAllByPage", method = RequestMethod.GET)

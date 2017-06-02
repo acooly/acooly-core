@@ -12,6 +12,7 @@ import com.acooly.module.security.service.UserService;
 import com.acooly.module.security.shiro.exception.InvaildCaptchaException;
 import com.acooly.module.security.shiro.listener.ShireLoginLogoutSubject;
 import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -37,7 +38,7 @@ import java.util.Map;
  * @author zhangpu
  * 
  */
-
+@Slf4j
 public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 
 	private static final Logger logger = LoggerFactory.getLogger(CaptchaFormAuthenticationFilter.class);
@@ -185,6 +186,7 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 	protected boolean onLoginFailure(	AuthenticationToken token, AuthenticationException e, ServletRequest request,
 										ServletResponse response) {
 		try {
+            log.error("登录失败",e);
 			String username = (String) token.getPrincipal();
 			User user = null;
 			if (!UnknownAccountException.class.isAssignableFrom(e.getClass()) && Strings.isNotBlank(username)) {

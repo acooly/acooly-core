@@ -18,26 +18,26 @@ import org.springframework.boot.jackson.JsonComponent;
 
 import java.io.IOException;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @JsonComponent
 public class MoneyJsonDeserializer extends StdDeserializer<Money> {
-    public MoneyJsonDeserializer() {
-        this(null);
-    }
+  public MoneyJsonDeserializer() {
+    this(null);
+  }
 
-    public MoneyJsonDeserializer(Class<?> vc) {
-        super(vc);
-    }
+  public MoneyJsonDeserializer(Class<?> vc) {
+    super(vc);
+  }
 
-    @Override
-    public Money deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        long  value = p.getLongValue();
-        return Money.cent(value);
-    }
-    @Override
-    public Class<Money> handledType() {
-        return Money.class;
-    }
+  @Override
+  public Money deserialize(JsonParser p, DeserializationContext ctxt)
+      throws IOException, JsonProcessingException {
+    long value = p.getLongValue();
+    return Money.cent(value);
+  }
+
+  @Override
+  public Class<Money> handledType() {
+    return Money.class;
+  }
 }

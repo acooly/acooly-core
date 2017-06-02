@@ -12,19 +12,20 @@ import com.acooly.module.certification.platform.entity.CertificationRecord;
 import com.acooly.module.certification.platform.service.CertificationRecordService;
 import org.springframework.stereotype.Service;
 
-
 /**
  * 实名认证记录表 Service实现
- * <p>
- * Date: 2017-04-20 16:53:33
+ *
+ * <p>Date: 2017-04-20 16:53:33
  *
  * @author acooly
  */
 @Service("certificationRecordService")
-public class CertificationRecordServiceImpl extends EntityServiceImpl<CertificationRecord, CertificationRecordDao> implements CertificationRecordService {
+public class CertificationRecordServiceImpl
+    extends EntityServiceImpl<CertificationRecord, CertificationRecordDao>
+    implements CertificationRecordService {
 
-    @Override
-    public CertificationRecord findEntityByCarNoAndRealName(String idCarNo,String realName) {
-        return getEntityDao().findEntityByCarNoAndRealName(idCarNo,realName);
-    }
+  @Override
+  public CertificationRecord findEntityByCarNoAndRealName(String idCarNo, String realName) {
+    return getEntityDao().findEntityByCarNoAndRealName(idCarNo, realName);
+  }
 }

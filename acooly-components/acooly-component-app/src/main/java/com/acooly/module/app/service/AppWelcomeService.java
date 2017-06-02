@@ -6,13 +6,11 @@ import com.acooly.module.app.domain.AppWelcome;
 /**
  * app_welcome Service
  *
- * Date: 2015-05-12 13:39:30
+ * <p>Date: 2015-05-12 13:39:30
  *
  * @author Acooly Code Generator
- *
  */
 public interface AppWelcomeService extends EntityService<AppWelcome> {
 
-	AppWelcome getLatestOne();
-
+  AppWelcome getLatestOne();
 }

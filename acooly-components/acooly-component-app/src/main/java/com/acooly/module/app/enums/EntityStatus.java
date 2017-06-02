@@ -1,50 +1,42 @@
-/**
- * create by zhangpu
- * date:2015年5月12日
- */
+/** create by zhangpu date:2015年5月12日 */
 package com.acooly.module.app.enums;
-
-import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-/**
- * @author zhangpu
- *
- */
+import java.util.Map;
+
+/** @author zhangpu */
 public enum EntityStatus {
+  Enable("Enable", "有效"),
 
-	Enable("Enable", "有效"),
+  Disable("Disable", "无效");
 
-	Disable("Disable", "无效");
+  private String code;
+  private String message;
 
-	private String code;
-	private String message;
+  private EntityStatus(String code, String message) {
+    this.code = code;
+    this.message = message;
+  }
 
-	private EntityStatus(String code, String message) {
-		this.code = code;
-		this.message = message;
-	}
+  public static Map<String, String> mapping() {
+    Map<String, String> map = Maps.newLinkedHashMap();
+    for (EntityStatus type : values()) {
+      map.put(type.getCode(), type.getMessage());
+    }
+    return map;
+  }
 
-	public String getCode() {
-		return code;
-	}
+  public String getCode() {
+    return code;
+  }
 
-	public String getMessage() {
-		return message;
-	}
+  public String getMessage() {
+    return message;
+  }
 
-	public static Map<String, String> mapping() {
-		Map<String, String> map = Maps.newLinkedHashMap();
-		for (EntityStatus type : values()) {
-			map.put(type.getCode(), type.getMessage());
-		}
-		return map;
-	}
-
-	@Override
-	public String toString() {
-		return this.code + " : " + this.message;
-	}
-
+  @Override
+  public String toString() {
+    return this.code + " : " + this.message;
+  }
 }

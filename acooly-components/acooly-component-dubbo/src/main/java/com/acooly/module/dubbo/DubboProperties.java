@@ -15,106 +15,67 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.Assert;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @ConfigurationProperties(DubboProperties.PREFIX)
 @Data
 public class DubboProperties implements InitializingBean {
-	public static final String PREFIX = "acooly.dubbo";
-	
-	/**
-	 * 是否启用dubbo
-	 */
-	private boolean enable = true;
-	
-	/**
-	 * 是否注册本应用的服务到注册中心(测试的时候可能需要本地服务不注册到注册中心)
-	 */
-	private boolean register = true;
+  public static final String PREFIX = "acooly.dubbo";
 
-	private String zkUrl="127.0.0.1:2181";
-	
-	/**
-	 * 只消费注册中心zk地址
-	 */
-	private String refOnlyZkUrl1 = "";
-	private String refOnlyZkUrl2 = "";
-	private String refOnlyZkUrl3 = "";
-	
-	/**
-	 * 必填：应用负责人,请填写邮箱前缀
-	 */
-	private String owner;
-	
-	/**
-	 *   选填：应用版本号，如果配置此版本号，服务可以不用指定版本号
-	 */
-	private String version;
-	
-	/**
-	 * 是否启用dubbo consumer请求provider日志
-	 */
-	private boolean consumerLog = true;
-	
-	/**
-	 * 是否启用dubbo provider提供服务被请求日志
-	 */
-	private boolean providerLog = true;
-	
-	private Provider provider = new Provider();
-	
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		if (enable) {
-			Assert.hasText(owner, "dubbo应用负责人acooly.dubbo.owner不能为空");
-		}
-	}
-	@Data
-	public static class Provider {
-		public static final int DEFAULT_THREAD = 400;
-		public static final int DEFAULT_TIMEOUT = 60000;
-		public static final boolean DEFAULT_REGISTER = true;
-		/**
-		 * 是否启用服务提供者
-		 */
-		private boolean enable = true;
-		
-		/**
-		 * 必填：服务提供者端口
-		 */
-		private Integer port;
-		
-		/**
-		 * 线程池最大线程数
-		 */
-		private Integer maxThreads = DEFAULT_THREAD;
-		
-		/**
-		 * 初始化核心线程数
-		 */
-		private Integer corethreads = 50;
-		
-		/**
-		 * 队列大小
-		 */
-		private Integer queue = 0;
-		
-		/**
-		 * 服务超时时间，默认60s
-		 */
-		private Integer timeout = DEFAULT_TIMEOUT;
-		
-		/**
-		 * 服务是否注册到zk
-		 */
-		private boolean register = DEFAULT_REGISTER;
-		
-		/**
-		 * provider 序列化，使用数据压缩协议
-		 */
-		private final String serialization = "hessian3";
-		
-	}
+  /** 是否启用dubbo */
+  private boolean enable = true;
 
+  /** 是否注册本应用的服务到注册中心(测试的时候可能需要本地服务不注册到注册中心) */
+  private boolean register = true;
+
+  private String zkUrl = "127.0.0.1:2181";
+
+  /** 只消费注册中心zk地址 */
+  private String refOnlyZkUrl1 = "";
+
+  private String refOnlyZkUrl2 = "";
+  private String refOnlyZkUrl3 = "";
+
+  /** 必填：应用负责人,请填写邮箱前缀 */
+  private String owner;
+
+  /**   选填：应用版本号，如果配置此版本号，服务可以不用指定版本号 */
+  private String version;
+
+  /** 是否启用dubbo consumer请求provider日志 */
+  private boolean consumerLog = true;
+
+  /** 是否启用dubbo provider提供服务被请求日志 */
+  private boolean providerLog = true;
+
+  private Provider provider = new Provider();
+
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    if (enable) {
+      Assert.hasText(owner, "dubbo应用负责人acooly.dubbo.owner不能为空");
+    }
+  }
+
+  @Data
+  public static class Provider {
+    public static final int DEFAULT_THREAD = 400;
+    public static final int DEFAULT_TIMEOUT = 60000;
+    public static final boolean DEFAULT_REGISTER = true;
+    /** provider 序列化，使用数据压缩协议 */
+    private final String serialization = "hessian3";
+    /** 是否启用服务提供者 */
+    private boolean enable = true;
+    /** 必填：服务提供者端口 */
+    private Integer port;
+    /** 线程池最大线程数 */
+    private Integer maxThreads = DEFAULT_THREAD;
+    /** 初始化核心线程数 */
+    private Integer corethreads = 50;
+    /** 队列大小 */
+    private Integer queue = 0;
+    /** 服务超时时间，默认60s */
+    private Integer timeout = DEFAULT_TIMEOUT;
+    /** 服务是否注册到zk */
+    private boolean register = DEFAULT_REGISTER;
+  }
 }

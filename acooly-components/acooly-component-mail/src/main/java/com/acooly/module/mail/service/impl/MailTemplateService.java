@@ -30,52 +30,48 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @Service
 public class MailTemplateService {
-	@Autowired
-	private MailProperties mailProperties;
-    @Autowired
-	private EmailTemplateService emailTemplateService;
+  @Autowired private MailProperties mailProperties;
+  @Autowired private EmailTemplateService emailTemplateService;
 
-	private Map<String, String> templates = Maps.newConcurrentMap();
+  private Map<String, String> templates = Maps.newConcurrentMap();
 
-    public String parse(String key, MailDto dto) {
-        //兼容之前，先查数据库模板，如果没有从classpath:/mail/下查找
-        String template = null;
-        List<EmailTemplate> emailTemplates = emailTemplateService.find("EQ_name", key);
-        if (!emailTemplates.isEmpty()) {
-            EmailTemplate emailTemplate = emailTemplates.get(0);
-            template = emailTemplate.getContent();
-            dto.setSubject(emailTemplate.getSubject());
-        }
-        if (StringUtils.isEmpty(template)) {
-            template = getTemplates(key);
-        }
-        return FreeMarkers.rendereString(template, dto.getParams());
+  public String parse(String key, MailDto dto) {
+    //兼容之前，先查数据库模板，如果没有从classpath:/mail/下查找
+    String template = null;
+    List<EmailTemplate> emailTemplates = emailTemplateService.find("EQ_name", key);
+    if (!emailTemplates.isEmpty()) {
+      EmailTemplate emailTemplate = emailTemplates.get(0);
+      template = emailTemplate.getContent();
+      dto.setSubject(emailTemplate.getSubject());
     }
+    if (StringUtils.isEmpty(template)) {
+      template = getTemplates(key);
+    }
+    return FreeMarkers.rendereString(template, dto.getParams());
+  }
 
-    private String getTemplates(String key) {
-		if (Apps.isDevMode()) {
-			templates.clear();
-		}
-		String t = templates.get(key);
-		if (Strings.isNullOrEmpty(t)) {
-			String loc = mailProperties.getMailTemplatePath() + key + ".ftl";
-			Resource resource = ApplicationContextHolder.get().getResource(loc);
-			if (resource.exists()) {
-				try {
-					t = Resources.toString(resource.getURL(), Charsets.UTF_8);
-					templates.put(key, t);
-				} catch (IOException e) {
-					throw new AppConfigException("邮件模板不存在:" + loc, e);
-				}
-			} else {
-				throw new AppConfigException("邮件模板不存在:" + loc);
-			}
-		}
-		return t;
-	}
+  private String getTemplates(String key) {
+    if (Apps.isDevMode()) {
+      templates.clear();
+    }
+    String t = templates.get(key);
+    if (Strings.isNullOrEmpty(t)) {
+      String loc = mailProperties.getMailTemplatePath() + key + ".ftl";
+      Resource resource = ApplicationContextHolder.get().getResource(loc);
+      if (resource.exists()) {
+        try {
+          t = Resources.toString(resource.getURL(), Charsets.UTF_8);
+          templates.put(key, t);
+        } catch (IOException e) {
+          throw new AppConfigException("邮件模板不存在:" + loc, e);
+        }
+      } else {
+        throw new AppConfigException("邮件模板不存在:" + loc);
+      }
+    }
+    return t;
+  }
 }

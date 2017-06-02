@@ -13,15 +13,14 @@ import com.google.common.collect.Lists;
 
 import java.util.List;
 
-/**
- * @author qiubo
- */
+/** @author qiubo */
 public interface AutoConfigExcluder {
-    /**
-     * 返回需要排除的autoconfig class 类名
-     * @return 列表
-     */
-    default List<String> excludeAutoconfigClassNames() {
-        return Lists.newArrayList();
-    }
+  /**
+   * 返回需要排除的autoconfig class 类名
+   *
+   * @return 列表
+   */
+  default List<String> excludeAutoconfigClassNames() {
+    return Lists.newArrayList();
+  }
 }

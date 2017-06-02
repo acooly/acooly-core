@@ -13,22 +13,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @Controller
 public class FreemarkerController {
 
-    @RequestMapping("/testFtl")
-    public String testFtl(ModelMap modelMap) {
-        modelMap.put("name", "na");
-        modelMap.put("message", "hi");
-        return "test";
-    }
+  @RequestMapping("/testFtl")
+  public String testFtl(ModelMap modelMap) {
+    modelMap.put("name", "na");
+    modelMap.put("message", "hi");
+    return "test";
+  }
 
-    @RequestMapping("/testInclude")
-    public String testInclude(ModelMap modelMap) {
-        modelMap.put("where", "out");
-        return "testInclude";
-    }
+  @RequestMapping("/testInclude")
+  public String testInclude(ModelMap modelMap) {
+    modelMap.put("where", "out");
+    return "testInclude";
+  }
 }

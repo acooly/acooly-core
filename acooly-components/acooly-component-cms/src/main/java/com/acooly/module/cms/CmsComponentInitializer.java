@@ -14,16 +14,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 
-/**
- * @author acooly
- */
+/** @author acooly */
 public class CmsComponentInitializer implements ComponentInitializer {
 
-    private static final Logger logger = LoggerFactory.getLogger(CmsComponentInitializer.class);
+  private static final Logger logger = LoggerFactory.getLogger(CmsComponentInitializer.class);
 
-    @Override
-    public void initialize(ConfigurableApplicationContext applicationContext) {
-        setPropertyIfMissing("acooly.ds.Checker.excludedColumnTables.cms","cms_content_body");
-        setPropertyIfMissing("acooly.security.xss.exclusions.cms[0]","/manage/module/cms/**");
-    }
+  @Override
+  public void initialize(ConfigurableApplicationContext applicationContext) {
+    setPropertyIfMissing("acooly.ds.Checker.excludedColumnTables.cms", "cms_content_body");
+    setPropertyIfMissing("acooly.security.xss.exclusions.cms[0]", "/manage/module/cms/**");
+  }
 }

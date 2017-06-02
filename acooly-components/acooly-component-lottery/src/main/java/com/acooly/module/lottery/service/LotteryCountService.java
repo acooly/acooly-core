@@ -6,20 +6,19 @@ import com.acooly.module.lottery.domain.LotteryCount;
 /**
  * lottery_count Service
  *
- * Date: 2015-11-28 17:08:35
+ * <p>Date: 2015-11-28 17:08:35
  *
  * @author Acooly Code Generator
- *
  */
 public interface LotteryCountService extends EntityService<LotteryCount> {
 
-	LotteryCount loadAndLock(String ukey);
+  LotteryCount loadAndLock(String ukey);
 
-	void saveInNewTrans(LotteryCount lotteryCount);
+  void saveInNewTrans(LotteryCount lotteryCount);
 
-	LotteryCount load(String ukey);
+  LotteryCount load(String ukey);
 
-	void appendCount(String ukey);
+  void appendCount(String ukey);
 
-	int getCount(Long lotteryId);
+  int getCount(Long lotteryId);
 }

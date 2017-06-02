@@ -20,74 +20,78 @@ import java.util.List;
 
 /**
  * 欢迎信息服务 API
- * 
- * @note <li>通过全站匿名获取当前最新的欢迎信息。</li> <li>包括：启动界面图和向导图组</li> <li>
- *       根据请求的设备类型，返回对应规格的图片</li>
- * 
- * @author zhangpu
  *
+ * @note
+ *     <li>通过全站匿名获取当前最新的欢迎信息。
+ *     <li>包括：启动界面图和向导图组
+ *     <li>根据请求的设备类型，返回对应规格的图片
+ * @author zhangpu
  */
-@OpenApiService(name = "welcomeInfo", desc = "欢迎信息", responseType = ResponseType.SYN, owner = ApiOwners.COMMON)
+@OpenApiService(
+  name = "welcomeInfo",
+  desc = "欢迎信息",
+  responseType = ResponseType.SYN,
+  owner = ApiOwners.COMMON
+)
 public class WelcomeInfoApiService extends BaseApiService<WelcomeInfoRequest, WelcomeInfoResponse> {
-    @Autowired
-    private OFileProperties oFileProperties;
-	@Autowired
-	private AppWelcomeService appWelcomeService;
+  @Autowired private OFileProperties oFileProperties;
+  @Autowired private AppWelcomeService appWelcomeService;
 
-	@Autowired
-	private AppStartGuideService appStartGuideService;
+  @Autowired private AppStartGuideService appStartGuideService;
 
-	@Override
-	protected void doService(WelcomeInfoRequest request, WelcomeInfoResponse response) {
-		List<AppStartGuide> guides = appStartGuideService.loadValidGuides();
-		if (!Collections3.isEmpty(guides)) {
-			String url = null;
-			for (AppStartGuide guide : guides) {
-				url = getImageUrl(guide, request.getDeviceType());
-				if (StringUtils.isNotBlank(url)) {
-					response.append(url);
-				}
-			}
-		}
-		AppWelcome welcome = appWelcomeService.getLatestOne();
-		if (welcome != null) {
-			response.setWelcome(getImageUrl(welcome, request.getDeviceType()));
-		}
-	}
+  @Override
+  protected void doService(WelcomeInfoRequest request, WelcomeInfoResponse response) {
+    List<AppStartGuide> guides = appStartGuideService.loadValidGuides();
+    if (!Collections3.isEmpty(guides)) {
+      String url = null;
+      for (AppStartGuide guide : guides) {
+        url = getImageUrl(guide, request.getDeviceType());
+        if (StringUtils.isNotBlank(url)) {
+          response.append(url);
+        }
+      }
+    }
+    AppWelcome welcome = appWelcomeService.getLatestOne();
+    if (welcome != null) {
+      response.setWelcome(getImageUrl(welcome, request.getDeviceType()));
+    }
+  }
 
-	private String getImageUrl(AppWelcome guide, DeviceType deviceType) {
-		String path = guide.getImageDefault();
-		if (deviceType == DeviceType.ANDROID && StringUtils.isNotBlank(guide.getImageAndroid())) {
-			path = guide.getImageAndroid();
-		} else if (deviceType == DeviceType.IPHONE4 && StringUtils.isNotBlank(guide.getImageIphone4())) {
-			path = guide.getImageIphone4();
-		} else if (deviceType == DeviceType.IPHONE5 || deviceType == DeviceType.IPHONE6) {
-			if (StringUtils.isNotBlank(guide.getImageIphone4())) {
-				path = guide.getImageIphone6();
-			}
-		}
-		if (StringUtils.isBlank(path)) {
-			return null;
-		} else {
-			return oFileProperties.getServerRoot() +'/'+ path;
-		}
-	}
+  private String getImageUrl(AppWelcome guide, DeviceType deviceType) {
+    String path = guide.getImageDefault();
+    if (deviceType == DeviceType.ANDROID && StringUtils.isNotBlank(guide.getImageAndroid())) {
+      path = guide.getImageAndroid();
+    } else if (deviceType == DeviceType.IPHONE4
+        && StringUtils.isNotBlank(guide.getImageIphone4())) {
+      path = guide.getImageIphone4();
+    } else if (deviceType == DeviceType.IPHONE5 || deviceType == DeviceType.IPHONE6) {
+      if (StringUtils.isNotBlank(guide.getImageIphone4())) {
+        path = guide.getImageIphone6();
+      }
+    }
+    if (StringUtils.isBlank(path)) {
+      return null;
+    } else {
+      return oFileProperties.getServerRoot() + '/' + path;
+    }
+  }
 
-	private String getImageUrl(AppStartGuide guide, DeviceType deviceType) {
-		String path = guide.getImageDefault();
-		if (deviceType == DeviceType.ANDROID && StringUtils.isNotBlank(guide.getImageAndroid())) {
-			path = guide.getImageAndroid();
-		} else if (deviceType == DeviceType.IPHONE4 && StringUtils.isNotBlank(guide.getImageIphone4())) {
-			path = guide.getImageIphone4();
-		} else if (deviceType == DeviceType.IPHONE5 || deviceType == DeviceType.IPHONE6) {
-			if (StringUtils.isNotBlank(guide.getImageIphone4())) {
-				path = guide.getImageIphone6();
-			}
-		}
-		if (StringUtils.isBlank(path)) {
-			return null;
-		} else {
-            return oFileProperties.getServerRoot() +'/'+ path;
-		}
-	}
+  private String getImageUrl(AppStartGuide guide, DeviceType deviceType) {
+    String path = guide.getImageDefault();
+    if (deviceType == DeviceType.ANDROID && StringUtils.isNotBlank(guide.getImageAndroid())) {
+      path = guide.getImageAndroid();
+    } else if (deviceType == DeviceType.IPHONE4
+        && StringUtils.isNotBlank(guide.getImageIphone4())) {
+      path = guide.getImageIphone4();
+    } else if (deviceType == DeviceType.IPHONE5 || deviceType == DeviceType.IPHONE6) {
+      if (StringUtils.isNotBlank(guide.getImageIphone4())) {
+        path = guide.getImageIphone6();
+      }
+    }
+    if (StringUtils.isBlank(path)) {
+      return null;
+    } else {
+      return oFileProperties.getServerRoot() + '/' + path;
+    }
+  }
 }

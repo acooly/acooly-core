@@ -4,7 +4,7 @@
  * create by acooly
  * date:2017-03-20
  */
- package com.acooly.module.portlet.dao;
+package com.acooly.module.portlet.dao;
 
 import com.acooly.module.mybatis.EntityMybatisDao;
 import com.acooly.module.portlet.entity.ActionLog;
@@ -12,9 +12,8 @@ import com.acooly.module.portlet.entity.ActionLog;
 /**
  * portlet_action_log Mybatis Dao
  *
- * Date: 2017-03-20 23:36:29
+ * <p>Date: 2017-03-20 23:36:29
+ *
  * @author acooly
  */
-public interface ActionLogDao extends EntityMybatisDao<ActionLog> {
-
-}
+public interface ActionLogDao extends EntityMybatisDao<ActionLog> {}

@@ -8,6 +8,4 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Component
-public @interface EventHandler {
-	
-}
+public @interface EventHandler {}

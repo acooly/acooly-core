@@ -14,19 +14,17 @@ import com.acooly.module.point.domain.PointGrade;
 /**
  * 积分等级 Service接口
  *
- * Date: 2017-02-03 22:47:28
- * 
- * @author cuifuqiang
+ * <p>Date: 2017-02-03 22:47:28
  *
+ * @author cuifuqiang
  */
 public interface PointGradeService extends EntityService<PointGrade> {
 
-	/**
-	 * 获取用户积分等级
-	 * 
-	 * @param point
-	 * @return
-	 */
-	PointGrade getSectionPoint(PointAccount pointAccount);
-
+  /**
+   * 获取用户积分等级
+   *
+   * @param point
+   * @return
+   */
+  PointGrade getSectionPoint(PointAccount pointAccount);
 }

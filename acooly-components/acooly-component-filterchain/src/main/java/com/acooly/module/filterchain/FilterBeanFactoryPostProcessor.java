@@ -19,28 +19,29 @@ import org.springframework.core.type.filter.AssignableTypeFilter;
 
 /**
  * 扫描指定包中的过滤器
+ *
  * @author qiubo@yiji.com
  */
 public class FilterBeanFactoryPostProcessor implements BeanDefinitionRegistryPostProcessor {
-	
-	private String scanPackage;
-	
-	public FilterBeanFactoryPostProcessor(String scanPackage) {
-		this.scanPackage = scanPackage;
-	}
-	
-	@Override
-	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-		
-	}
-	
-	@Override
-	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-		if (this.scanPackage != null) {
-			ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(registry, false);
-			scanner.addIncludeFilter(new AssignableTypeFilter(Filter.class));
-			scanner.addIncludeFilter(new AssignableTypeFilter(FilterChainBase.class));
-			scanner.scan(Splitter.on(",").splitToList(scanPackage).toArray(new String[0]));
-		}
-	}
+
+  private String scanPackage;
+
+  public FilterBeanFactoryPostProcessor(String scanPackage) {
+    this.scanPackage = scanPackage;
+  }
+
+  @Override
+  public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
+      throws BeansException {}
+
+  @Override
+  public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry)
+      throws BeansException {
+    if (this.scanPackage != null) {
+      ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(registry, false);
+      scanner.addIncludeFilter(new AssignableTypeFilter(Filter.class));
+      scanner.addIncludeFilter(new AssignableTypeFilter(FilterChainBase.class));
+      scanner.scan(Splitter.on(",").splitToList(scanPackage).toArray(new String[0]));
+    }
+  }
 }

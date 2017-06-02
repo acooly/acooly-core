@@ -6,11 +6,8 @@ import com.acooly.module.app.domain.AppCrash;
 /**
  * app_crash Service
  *
- * Date: 2015-09-11 23:05:38
+ * <p>Date: 2015-09-11 23:05:38
  *
  * @author Acooly Code Generator
- *
  */
-public interface AppCrashService extends EntityService<AppCrash> {
-
-}
+public interface AppCrashService extends EntityService<AppCrash> {}

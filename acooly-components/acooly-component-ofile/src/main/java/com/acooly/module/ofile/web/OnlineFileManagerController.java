@@ -21,47 +21,45 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/manage/module/ofile/onlineFile")
-public class OnlineFileManagerController extends AbstractJQueryEntityController<OnlineFile, OnlineFileService> {
+public class OnlineFileManagerController
+    extends AbstractJQueryEntityController<OnlineFile, OnlineFileService> {
 
-	private static final Logger logger = LoggerFactory.getLogger(OnlineFileManagerController.class);
+  private static final Logger logger = LoggerFactory.getLogger(OnlineFileManagerController.class);
 
-	private static Map<String, String> ofileTypes = OFileType.mapping();
-	@Autowired
-	private OFileProperties oFileProperties;
-	@Autowired
-	private OnlineFileService onlineFileService;
+  private static Map<String, String> ofileTypes = OFileType.mapping();
+  @Autowired private OFileProperties oFileProperties;
+  @Autowired private OnlineFileService onlineFileService;
 
-	@Override
-	protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-		model.put("ofileTypes", ofileTypes);
-	}
+  @Override
+  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+    model.put("ofileTypes", ofileTypes);
+  }
 
-	@Override
-	protected void onRemove(HttpServletRequest request, HttpServletResponse response, Model model, Serializable... ids)
-			throws Exception {
-		OnlineFile onlineFile = null;
-		for (Serializable id : ids) {
-			onlineFile = onlineFileService.get(id);
-			if (onlineFile == null) {
-				continue;
-			}
-			removeFile(onlineFile.getFilePath());
-			if (Strings.isNotBlank(onlineFile.getThumbnail())) {
-				removeFile(onlineFile.getThumbnail());
-			}
-		}
+  @Override
+  protected void onRemove(
+      HttpServletRequest request, HttpServletResponse response, Model model, Serializable... ids)
+      throws Exception {
+    OnlineFile onlineFile = null;
+    for (Serializable id : ids) {
+      onlineFile = onlineFileService.get(id);
+      if (onlineFile == null) {
+        continue;
+      }
+      removeFile(onlineFile.getFilePath());
+      if (Strings.isNotBlank(onlineFile.getThumbnail())) {
+        removeFile(onlineFile.getThumbnail());
+      }
+    }
+  }
 
-	}
-
-	protected void removeFile(String path) {
-		try {
-			File f = new File(oFileProperties.getStorageRoot() + path);
-			if (f.exists()) {
-				f.delete();
-			}
-		} catch (Exception e) {
-			logger.warn("删除文件失败:{}", e.getMessage());
-		}
-	}
-
+  protected void removeFile(String path) {
+    try {
+      File f = new File(oFileProperties.getStorageRoot() + path);
+      if (f.exists()) {
+        f.delete();
+      }
+    } catch (Exception e) {
+      logger.warn("删除文件失败:{}", e.getMessage());
+    }
+  }
 }

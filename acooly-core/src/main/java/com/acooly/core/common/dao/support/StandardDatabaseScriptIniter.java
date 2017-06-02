@@ -37,76 +37,72 @@ import java.util.List;
  *
  * @author qiubo@yiji.com
  */
-public abstract class StandardDatabaseScriptIniter implements ApplicationListener<DataSourceReadyEvent> {
-	private static final Logger logger = LoggerFactory.getLogger(StandardDatabaseScriptIniter.class);
-	private static final String EVALUATE_SQL_PATTERN = "SELECT count(*) FROM %s";
-	/**
-	 * 数据库脚本路径，第一个%s为组件名，第二个%s为数据库名，第三个为脚本文件名
-	 */
-	private static final String INIT_SQL_PATTERN = "META-INF/database/%s/%s/%s.sql";
-	
-	@Override
-	public void onApplicationEvent(DataSourceReadyEvent event) {
-		DataSource dataSource = (DataSource) event.getSource();
-		try {
-			DatabaseType databaseType = DatabaseDialectManager.getDatabaseType(dataSource.getConnection());
-			String componentName = getComponentName();
-			String evaluateTable = getEvaluateTable();
-			Assert.notNull(componentName);
-			Assert.notNull(evaluateTable);
-			if (!"SYS_USER".equals(evaluateTable)) {
-				Assert.isTrue(evaluateTable.contains(componentName));
-			}
-			String evaluateSql = String.format(EVALUATE_SQL_PATTERN, evaluateTable);
-			try {
-				ScriptUtils.executeSqlScript(dataSource.getConnection(), new ByteArrayResource(evaluateSql.getBytes()));
-			} catch (DataAccessException e) {
-				Throwable throwable = Throwables.getRootCause(e);
-				String msg = throwable.getMessage();
-				if (throwable.getClass().getName().endsWith("MySQLSyntaxErrorException")
-					&& msg.endsWith("doesn't exist")) {
-					List<String> files = getInitSqlFile();
-					List<String> abFiles = Lists.newArrayListWithCapacity(files.size());
-					for (String file : files) {
-						String initSql = String.format(INIT_SQL_PATTERN, componentName,
-							databaseType.name().toLowerCase(), file);
-						abFiles.add(initSql);
-					}
-					if (Env.isOnline()) {
-						logger.error("组件相关表不存在，请初始化[{}]", files);
-						Apps.shutdown();
-					}
-                    abFiles.forEach(sqlPath -> exeSqlFile(componentName, dataSource, sqlPath));
-				}
-			}
-		} catch (SQLException e) {
-			throw new AppConfigException(e);
-		}
-	}
-	
-	/**
-	 * 判断表是否存在,表名必须已组件或模块名称开头
-	 */
-	public abstract String getEvaluateTable();
-	
-	/**
-	 * 组件或应用模块名称
-	 */
-	public abstract String getComponentName();
-	
-	/**
-	 * 数据库初始化脚本文件名
-	 */
-	public abstract List<String> getInitSqlFile();
-	
-	private void exeSqlFile(String componentName, DataSource dataSource, String sqlpath) {
-		logger.info("发现组件或模块[{}]基础数据还没有初始化，开始初始化:{}", componentName, sqlpath);
-		try {
-			Resource scriptResource = ApplicationContextHolder.get().getResource("classpath:" + sqlpath);
-			EncodedResource encodedResource = new EncodedResource(scriptResource, Charsets.UTF_8);
-			ScriptUtils.executeSqlScript(dataSource.getConnection(), encodedResource);
-		} catch (SQLException e) {
-			throw new AppConfigException("初始化" + componentName + "失败", e);
-		}
-	}
+public abstract class StandardDatabaseScriptIniter
+    implements ApplicationListener<DataSourceReadyEvent> {
+  private static final Logger logger = LoggerFactory.getLogger(StandardDatabaseScriptIniter.class);
+  private static final String EVALUATE_SQL_PATTERN = "SELECT count(*) FROM %s";
+  /** 数据库脚本路径，第一个%s为组件名，第二个%s为数据库名，第三个为脚本文件名 */
+  private static final String INIT_SQL_PATTERN = "META-INF/database/%s/%s/%s.sql";
+
+  @Override
+  public void onApplicationEvent(DataSourceReadyEvent event) {
+    DataSource dataSource = (DataSource) event.getSource();
+    try {
+      DatabaseType databaseType =
+          DatabaseDialectManager.getDatabaseType(dataSource.getConnection());
+      String componentName = getComponentName();
+      String evaluateTable = getEvaluateTable();
+      Assert.notNull(componentName);
+      Assert.notNull(evaluateTable);
+      if (!"SYS_USER".equals(evaluateTable)) {
+        Assert.isTrue(evaluateTable.contains(componentName));
+      }
+      String evaluateSql = String.format(EVALUATE_SQL_PATTERN, evaluateTable);
+      try {
+        ScriptUtils.executeSqlScript(
+            dataSource.getConnection(), new ByteArrayResource(evaluateSql.getBytes()));
+      } catch (DataAccessException e) {
+        Throwable throwable = Throwables.getRootCause(e);
+        String msg = throwable.getMessage();
+        if (throwable.getClass().getName().endsWith("MySQLSyntaxErrorException")
+            && msg.endsWith("doesn't exist")) {
+          List<String> files = getInitSqlFile();
+          List<String> abFiles = Lists.newArrayListWithCapacity(files.size());
+          for (String file : files) {
+            String initSql =
+                String.format(
+                    INIT_SQL_PATTERN, componentName, databaseType.name().toLowerCase(), file);
+            abFiles.add(initSql);
+          }
+          if (Env.isOnline()) {
+            logger.error("组件相关表不存在，请初始化[{}]", files);
+            Apps.shutdown();
+          }
+          abFiles.forEach(sqlPath -> exeSqlFile(componentName, dataSource, sqlPath));
+        }
+      }
+    } catch (SQLException e) {
+      throw new AppConfigException(e);
+    }
+  }
+
+  /** 判断表是否存在,表名必须已组件或模块名称开头 */
+  public abstract String getEvaluateTable();
+
+  /** 组件或应用模块名称 */
+  public abstract String getComponentName();
+
+  /** 数据库初始化脚本文件名 */
+  public abstract List<String> getInitSqlFile();
+
+  private void exeSqlFile(String componentName, DataSource dataSource, String sqlpath) {
+    logger.info("发现组件或模块[{}]基础数据还没有初始化，开始初始化:{}", componentName, sqlpath);
+    try {
+      Resource scriptResource = ApplicationContextHolder.get().getResource("classpath:" + sqlpath);
+      EncodedResource encodedResource = new EncodedResource(scriptResource, Charsets.UTF_8);
+      ScriptUtils.executeSqlScript(dataSource.getConnection(), encodedResource);
+    } catch (SQLException e) {
+      throw new AppConfigException("初始化" + componentName + "失败", e);
+    }
+  }
 }

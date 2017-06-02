@@ -13,9 +13,6 @@ import com.yiji.framework.openapi.common.annotation.OpenApiMessage;
 import com.yiji.framework.openapi.common.enums.ApiMessageType;
 import com.yiji.framework.openapi.common.message.ApiResponse;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @OpenApiMessage(service = "payOrder", type = ApiMessageType.Response)
-public class PayOrderResponse extends ApiResponse {
-}
+public class PayOrderResponse extends ApiResponse {}

@@ -21,37 +21,33 @@ import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @Configuration
-@EnableConfigurationProperties({ MapperProperties.class })
+@EnableConfigurationProperties({MapperProperties.class})
 public class MapperConfig {
-	@Autowired
-	private MapperProperties mapperProperties;
-	private final List<SqlSessionFactory> sqlSessionFactoryList;
-	@Autowired
-	private ApplicationContext applicationContext;
-	
-	public MapperConfig(List<SqlSessionFactory> sqlSessionFactoryList) {
-		this.sqlSessionFactoryList = sqlSessionFactoryList;
-	}
-	
-	@PostConstruct
-	public void addPageInterceptor() {
-		MapperHelper mapperHelper = new MapperHelper();
-		mapperHelper.setConfig(mapperProperties);
-		if (mapperProperties.getMappers().size() > 0) {
-			for (Class mapper : mapperProperties.getMappers()) {
-				applicationContext.getBeansOfType(mapper);
-				mapperHelper.registerMapper(mapper);
-			}
-		} else {
-			applicationContext.getBeansOfType(Mapper.class);
-			mapperHelper.registerMapper(Mapper.class);
-		}
-		for (SqlSessionFactory sqlSessionFactory : sqlSessionFactoryList) {
-			mapperHelper.processConfiguration(sqlSessionFactory.getConfiguration());
-		}
-	}
+  private final List<SqlSessionFactory> sqlSessionFactoryList;
+  @Autowired private MapperProperties mapperProperties;
+  @Autowired private ApplicationContext applicationContext;
+
+  public MapperConfig(List<SqlSessionFactory> sqlSessionFactoryList) {
+    this.sqlSessionFactoryList = sqlSessionFactoryList;
+  }
+
+  @PostConstruct
+  public void addPageInterceptor() {
+    MapperHelper mapperHelper = new MapperHelper();
+    mapperHelper.setConfig(mapperProperties);
+    if (mapperProperties.getMappers().size() > 0) {
+      for (Class mapper : mapperProperties.getMappers()) {
+        applicationContext.getBeansOfType(mapper);
+        mapperHelper.registerMapper(mapper);
+      }
+    } else {
+      applicationContext.getBeansOfType(Mapper.class);
+      mapperHelper.registerMapper(Mapper.class);
+    }
+    for (SqlSessionFactory sqlSessionFactory : sqlSessionFactoryList) {
+      mapperHelper.processConfiguration(sqlSessionFactory.getConfiguration());
+    }
+  }
 }

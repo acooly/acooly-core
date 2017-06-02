@@ -14,56 +14,48 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * 可抽奖次数 order
- * <p>
- * 当查询时使用，则count可为空，不使用。
+ *
+ * <p>当查询时使用，则count可为空，不使用。
  *
  * @author acooly
  */
 public class LotteryCountOrder extends OrderBase {
 
-    @NotEmpty
-    private String lotteryCode;
+  @NotEmpty private String lotteryCode;
 
-    /**
-     * 抽奖用户
-     */
-    @NotEmpty
-    private String username;
-    /**
-     * 次数
-     */
-    private int count;
+  /** 抽奖用户 */
+  @NotEmpty private String username;
+  /** 次数 */
+  private int count;
 
+  public LotteryCountOrder() {}
 
-    public LotteryCountOrder() {
-    }
+  public LotteryCountOrder(String lotteryCode, String username) {
+    this.lotteryCode = lotteryCode;
+    this.username = username;
+  }
 
-    public LotteryCountOrder(String lotteryCode, String username) {
-        this.lotteryCode = lotteryCode;
-        this.username = username;
-    }
+  public String getLotteryCode() {
+    return lotteryCode;
+  }
 
-    public String getLotteryCode() {
-        return lotteryCode;
-    }
+  public void setLotteryCode(String lotteryCode) {
+    this.lotteryCode = lotteryCode;
+  }
 
-    public void setLotteryCode(String lotteryCode) {
-        this.lotteryCode = lotteryCode;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public String getUsername() {
-        return username;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  public int getCount() {
+    return count;
+  }
 
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
+  public void setCount(int count) {
+    this.count = count;
+  }
 }

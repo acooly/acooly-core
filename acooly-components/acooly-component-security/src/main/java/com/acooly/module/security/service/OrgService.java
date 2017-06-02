@@ -14,15 +14,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 组织机构 Service接口
- * Date: 2017-05-26 16:48:57
+ * 组织机构 Service接口 Date: 2017-05-26 16:48:57
  *
  * @author shuijing
  */
 public interface OrgService extends EntityService<Org> {
 
+  Map<Long, Object> getOrganizeInfo(long parentId);
 
-    Map<Long, Object> getOrganizeInfo(long parentId);
-
-    List<Org> getTreeList(Long orgId);
+  List<Org> getTreeList(Long orgId);
 }

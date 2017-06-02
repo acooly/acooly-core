@@ -8,46 +8,46 @@ import javax.validation.constraints.Size;
 
 /**
  * 登录 响应报文
- * 
- * @author zhangpu
  *
+ * @author zhangpu
  */
 public class LoginResponse extends ApiResponse {
 
-	@NotEmpty
-	@Size(min = 8, max = 16)
-	@OpenApiField(desc = "访问码", constraint = "客户的用户名,作为登录所有接口的签名accessKey")
-	private String accessKey;
+  @NotEmpty
+  @Size(min = 8, max = 16)
+  @OpenApiField(desc = "访问码", constraint = "客户的用户名,作为登录所有接口的签名accessKey")
+  private String accessKey;
 
-	@NotEmpty
-	@Size(min = 40, max = 40)
-	@OpenApiField(desc = "安全码", constraint = "登录后所有接口的签名秘钥")
-	private String secretKey;
-    @NotEmpty
-    @OpenApiField(desc = "客户id", constraint = "客户id")
-	private String customerId;
+  @NotEmpty
+  @Size(min = 40, max = 40)
+  @OpenApiField(desc = "安全码", constraint = "登录后所有接口的签名秘钥")
+  private String secretKey;
 
-	public String getAccessKey() {
-		return accessKey;
-	}
+  @NotEmpty
+  @OpenApiField(desc = "客户id", constraint = "客户id")
+  private String customerId;
 
-	public void setAccessKey(String accessKey) {
-		this.accessKey = accessKey;
-	}
+  public String getAccessKey() {
+    return accessKey;
+  }
 
-	public String getSecretKey() {
-		return secretKey;
-	}
+  public void setAccessKey(String accessKey) {
+    this.accessKey = accessKey;
+  }
 
-	public void setSecretKey(String secretKey) {
-		this.secretKey = secretKey;
-	}
+  public String getSecretKey() {
+    return secretKey;
+  }
 
-    public String getCustomerId() {
-        return customerId;
-    }
+  public void setSecretKey(String secretKey) {
+    this.secretKey = secretKey;
+  }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
+  public String getCustomerId() {
+    return customerId;
+  }
+
+  public void setCustomerId(String customerId) {
+    this.customerId = customerId;
+  }
 }

@@ -28,7 +28,6 @@ import org.springframework.boot.context.embedded.JspServlet;
 import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -36,86 +35,90 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.util.Map;
 
-/**
- * @author qiubo
- */
+/** @author qiubo */
 @Configuration
 @ConditionalOnWebApplication
 @ConditionalOnClass(Tomcat.class)
-@EnableConfigurationProperties({ TomcatProperties.class })
+@EnableConfigurationProperties({TomcatProperties.class})
 public class TomcatAutoConfig {
-	private static final Logger logger = LoggerFactory.getLogger(TomcatAutoConfig.class);
-	
-	@Autowired
-	private TomcatProperties tomcatProperties;
-	
-	@Bean(name = "embeddedServletContainerCustomizer")
-	public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer() {
-		return container -> {
-			//1. disable jsp if possible
-			if (!EnvironmentHolder.get().getProperty("acooly.web.jsp.enable", Boolean.class, Boolean.TRUE)) {
-				JspServlet jspServlet = new JspServlet();
-				jspServlet.setRegistered(false);
-				container.setJspServlet(jspServlet);
-			}else {
-                JspServlet jspServlet = new JspServlet();
-                Map<String,String> param= Maps.newHashMap();
-                param.put("compilerTargetVM","1.8");
-                param.put("compilerSourceVM","1.8");
-                if(Apps.isDevMode()){
-                    param.put("development",Boolean.TRUE.toString());
-                }else {
-                    param.put("development",Boolean.FALSE.toString());
-                }
-                jspServlet.setInitParameters(param);
-                container.setJspServlet(jspServlet);
-            }
+  private static final Logger logger = LoggerFactory.getLogger(TomcatAutoConfig.class);
 
-			//2. 定制tomcat
-			if (container instanceof TomcatEmbeddedServletContainerFactory) {
-				TomcatEmbeddedServletContainerFactory factory = (TomcatEmbeddedServletContainerFactory) container;
-				factory.setUriEncoding(Charset.forName(tomcatProperties.getUriEncoding()));
-				setTomcatWorkDir(factory);
-				//2.1 设置最大线程数为400
-				factory.addConnectorCustomizers((TomcatConnectorCustomizer) connector -> {
-					ProtocolHandler handler = connector.getProtocolHandler();
-					if (handler instanceof AbstractProtocol) {
-						@SuppressWarnings("rawtypes")
-						AbstractProtocol protocol = (AbstractProtocol) handler;
-						protocol.setMaxThreads(tomcatProperties.getMaxThreads());
-						protocol.setMinSpareThreads(tomcatProperties.getMinSpareThreads());
-					}
-					connector.setAttribute("acceptCount", "100");
-				});
-				//2.2 设置访问日志目录和日志格式
-				if (tomcatProperties.isAccessLogEnable()) {
-					if (factory.getContextValves().stream().anyMatch((valve) -> valve instanceof AccessLogValve)) {
-						throw new AppConfigException("AccessLogValve已经配置，请不要启用默认spring-boot AccessLogValve配置");
-					}
-					AccessLogValve valve = new AccessLogValve();
-					//参数含义参考AbstractAccessLogValve 注释
-					valve.setPattern(TomcatProperties.HTTP_ACCESS_LOG_FORMAT);
-					valve.setSuffix(".log");
-					//读取真实ip，参考：org.apache.catalina.valves.AbstractAccessLogValve.HostElement
-					valve.setRequestAttributesEnabled(true);
-					valve.setDirectory(Apps.getLogPath());
-					factory.addContextValves(valve);
-				}
-			}
-		};
-	}
+  @Autowired private TomcatProperties tomcatProperties;
 
-	private void setTomcatWorkDir(TomcatEmbeddedServletContainerFactory factory) {
-		//设置tomcat base dir
-		File file = new File(Apps.getAppDataPath() + "/tomcat-" + Apps.getHttpPort());
-		file.mkdirs();
-		factory.setBaseDirectory(file);
-		file.deleteOnExit();
-		//设置tomcat doc base dir
-		File docbase = new File(Apps.getAppDataPath() + "/tomcat-docbase-" + Apps.getHttpPort());
-		docbase.mkdirs();
-		factory.setDocumentRoot(docbase);
-		docbase.deleteOnExit();
-		logger.info("设置tomcat baseDir={},docbase={}", file, docbase);
-	}
+  @Bean(name = "embeddedServletContainerCustomizer")
+  public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer() {
+    return container -> {
+      //1. disable jsp if possible
+      if (!EnvironmentHolder.get()
+          .getProperty("acooly.web.jsp.enable", Boolean.class, Boolean.TRUE)) {
+        JspServlet jspServlet = new JspServlet();
+        jspServlet.setRegistered(false);
+        container.setJspServlet(jspServlet);
+      } else {
+        JspServlet jspServlet = new JspServlet();
+        Map<String, String> param = Maps.newHashMap();
+        param.put("compilerTargetVM", "1.8");
+        param.put("compilerSourceVM", "1.8");
+        if (Apps.isDevMode()) {
+          param.put("development", Boolean.TRUE.toString());
+        } else {
+          param.put("development", Boolean.FALSE.toString());
+        }
+        jspServlet.setInitParameters(param);
+        container.setJspServlet(jspServlet);
+      }
+
+      //2. 定制tomcat
+      if (container instanceof TomcatEmbeddedServletContainerFactory) {
+        TomcatEmbeddedServletContainerFactory factory =
+            (TomcatEmbeddedServletContainerFactory) container;
+        factory.setUriEncoding(Charset.forName(tomcatProperties.getUriEncoding()));
+        setTomcatWorkDir(factory);
+        //2.1 设置最大线程数为400
+        factory.addConnectorCustomizers(
+            (TomcatConnectorCustomizer)
+                connector -> {
+                  ProtocolHandler handler = connector.getProtocolHandler();
+                  if (handler instanceof AbstractProtocol) {
+                    @SuppressWarnings("rawtypes")
+                    AbstractProtocol protocol = (AbstractProtocol) handler;
+                    protocol.setMaxThreads(tomcatProperties.getMaxThreads());
+                    protocol.setMinSpareThreads(tomcatProperties.getMinSpareThreads());
+                  }
+                  connector.setAttribute("acceptCount", "100");
+                });
+        //2.2 设置访问日志目录和日志格式
+        if (tomcatProperties.isAccessLogEnable()) {
+          if (factory
+              .getContextValves()
+              .stream()
+              .anyMatch((valve) -> valve instanceof AccessLogValve)) {
+            throw new AppConfigException("AccessLogValve已经配置，请不要启用默认spring-boot AccessLogValve配置");
+          }
+          AccessLogValve valve = new AccessLogValve();
+          //参数含义参考AbstractAccessLogValve 注释
+          valve.setPattern(TomcatProperties.HTTP_ACCESS_LOG_FORMAT);
+          valve.setSuffix(".log");
+          //读取真实ip，参考：org.apache.catalina.valves.AbstractAccessLogValve.HostElement
+          valve.setRequestAttributesEnabled(true);
+          valve.setDirectory(Apps.getLogPath());
+          factory.addContextValves(valve);
+        }
+      }
+    };
+  }
+
+  private void setTomcatWorkDir(TomcatEmbeddedServletContainerFactory factory) {
+    //设置tomcat base dir
+    File file = new File(Apps.getAppDataPath() + "/tomcat-" + Apps.getHttpPort());
+    file.mkdirs();
+    factory.setBaseDirectory(file);
+    file.deleteOnExit();
+    //设置tomcat doc base dir
+    File docbase = new File(Apps.getAppDataPath() + "/tomcat-docbase-" + Apps.getHttpPort());
+    docbase.mkdirs();
+    factory.setDocumentRoot(docbase);
+    docbase.deleteOnExit();
+    logger.info("设置tomcat baseDir={},docbase={}", file, docbase);
+  }
 }

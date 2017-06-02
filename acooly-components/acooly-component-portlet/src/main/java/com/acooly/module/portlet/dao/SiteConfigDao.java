@@ -15,17 +15,16 @@ import java.util.List;
 
 /**
  * portlet_site_config Mybatis Dao
- * <p>
- * Date: 2017-03-20 23:36:29
+ *
+ * <p>Date: 2017-03-20 23:36:29
  *
  * @author acooly
  */
 public interface SiteConfigDao extends EntityMybatisDao<SiteConfig> {
 
-    @Select("select * from portlet_site_config where type = #{type} order by id")
-    List<SiteConfig> findByType(@Param("type") String type);
+  @Select("select * from portlet_site_config where type = #{type} order by id")
+  List<SiteConfig> findByType(@Param("type") String type);
 
-    @Select("select * from portlet_site_config where type = #{type} and name = #{name}")
-    SiteConfig findUnique(@Param("type") String type, @Param("name") String name);
-
+  @Select("select * from portlet_site_config where type = #{type} and name = #{name}")
+  SiteConfig findUnique(@Param("type") String type, @Param("name") String name);
 }

@@ -17,42 +17,49 @@ import java.util.List;
 
 import static org.springframework.jdbc.datasource.init.ScriptUtils.*;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @Slf4j
 public class ExHibernateJpaVendorAdapter extends HibernateJpaVendorAdapter {
-	@Override
-	public void postProcessEntityManagerFactory(EntityManagerFactory emf) {
-		super.postProcessEntityManagerFactory(emf);
-		EntityManager entityManager = emf.createEntityManager();
-		entityManager.getTransaction().begin();
-		Session session = entityManager.unwrap(Session.class);
-		session.doWork(connection -> {
-			String jdbcUrl = connection.getMetaData().getURL();
-			String dbType;
-			if (StringUtils.contains(jdbcUrl, ":mysql:")) {
-				dbType = "mysql";
-			} else if (StringUtils.contains(jdbcUrl, ":oracle:")) {
-				dbType = "oracle";
-			} else {
-				throw new UnsupportedOperationException("不支持此数据库");
-			}
-			String ddl = "classpath:META-INF/database/" + dbType + "/" + "ddl.sql";
-            String dml = "classpath:META-INF/database/" + dbType + "/" + "dml.sql";
-            List<String> sqls = Lists.newArrayList(ddl, dml);
-			sqls.forEach(s -> {
-				Resource scriptResource = ApplicationContextHolder.get().getResource(s);
-				if (scriptResource.exists()) {
-					log.info("执行自定义数据库脚本文件:{}", s);
-					EncodedResource encodedResource = new EncodedResource(scriptResource, Charsets.UTF_8);
-					ScriptUtils.executeSqlScript(connection, encodedResource, true, true, DEFAULT_COMMENT_PREFIX,
-						DEFAULT_STATEMENT_SEPARATOR, DEFAULT_BLOCK_COMMENT_START_DELIMITER,
-						DEFAULT_BLOCK_COMMENT_END_DELIMITER);
-				}
-			});
-		});
-		entityManager.getTransaction().commit();
-		session.close();
-	}
+  @Override
+  public void postProcessEntityManagerFactory(EntityManagerFactory emf) {
+    super.postProcessEntityManagerFactory(emf);
+    EntityManager entityManager = emf.createEntityManager();
+    entityManager.getTransaction().begin();
+    Session session = entityManager.unwrap(Session.class);
+    session.doWork(
+        connection -> {
+          String jdbcUrl = connection.getMetaData().getURL();
+          String dbType;
+          if (StringUtils.contains(jdbcUrl, ":mysql:")) {
+            dbType = "mysql";
+          } else if (StringUtils.contains(jdbcUrl, ":oracle:")) {
+            dbType = "oracle";
+          } else {
+            throw new UnsupportedOperationException("不支持此数据库");
+          }
+          String ddl = "classpath:META-INF/database/" + dbType + "/" + "ddl.sql";
+          String dml = "classpath:META-INF/database/" + dbType + "/" + "dml.sql";
+          List<String> sqls = Lists.newArrayList(ddl, dml);
+          sqls.forEach(
+              s -> {
+                Resource scriptResource = ApplicationContextHolder.get().getResource(s);
+                if (scriptResource.exists()) {
+                  log.info("执行自定义数据库脚本文件:{}", s);
+                  EncodedResource encodedResource =
+                      new EncodedResource(scriptResource, Charsets.UTF_8);
+                  ScriptUtils.executeSqlScript(
+                      connection,
+                      encodedResource,
+                      true,
+                      true,
+                      DEFAULT_COMMENT_PREFIX,
+                      DEFAULT_STATEMENT_SEPARATOR,
+                      DEFAULT_BLOCK_COMMENT_START_DELIMITER,
+                      DEFAULT_BLOCK_COMMENT_END_DELIMITER);
+                }
+              });
+        });
+    entityManager.getTransaction().commit();
+    session.close();
+  }
 }

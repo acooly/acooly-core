@@ -9,208 +9,227 @@ import javax.persistence.*;
 
 /**
  * lottery_award Entity
- * <p>
- * Date: 2014-12-12 04:40:07
+ *
+ * <p>Date: 2014-12-12 04:40:07
  *
  * @author Acooly Code Generator
  */
 @Entity
-@Table(name = "lottery_award", indexes = {@Index(columnList = "code", name = "UK_AWARD_CODE", unique = true)})
+@Table(
+  name = "lottery_award",
+  indexes = {@Index(columnList = "code", name = "UK_AWARD_CODE", unique = true)}
+)
 public class LotteryAward extends AbstractEntity {
-    /**
-     * UID
-     */
-    private static final long serialVersionUID = 603863256203920037L;
+  /** UID */
+  private static final long serialVersionUID = 603863256203920037L;
 
+  /** 抽奖ID */
+  @Column(
+    name = "lottery_id",
+    nullable = false,
+    columnDefinition = "bigint  not null comment '抽奖ID'"
+  )
+  private Long lotteryId;
 
-    /**
-     * 抽奖ID
-     */
-    @Column(name = "lottery_id", nullable = false, columnDefinition = "bigint  not null comment '抽奖ID'")
-    private Long lotteryId;
+  /** 编码 */
+  @Column(
+    name = "code",
+    length = 32,
+    nullable = false,
+    columnDefinition = "varchar(32)  not null comment '编码'"
+  )
+  private String code;
 
-    /**
-     * 编码
-     */
-    @Column(name = "code", length = 32, nullable = false, columnDefinition = "varchar(32)  not null comment '编码'")
-    private String code;
+  /** 奖励类型 */
+  @Column(
+    name = "award_type",
+    nullable = false,
+    columnDefinition = "varchar(32) not null comment '奖励类型'"
+  )
+  @Enumerated(EnumType.STRING)
+  private LotteryAwardType awardType;
 
-    /**
-     * 奖励类型
-     */
-    @Column(name = "award_type", nullable = false, columnDefinition = "varchar(32) not null comment '奖励类型'")
-    @Enumerated(EnumType.STRING)
-    private LotteryAwardType awardType;
+  /** 奖项 */
+  @Column(
+    name = "award",
+    length = 32,
+    nullable = false,
+    columnDefinition = "varchar(32)  not null comment '奖项'"
+  )
+  private String award;
 
-    /**
-     * 奖项
-     */
-    @Column(name = "award", length = 32, nullable = false, columnDefinition = "varchar(32)  not null comment '奖项'")
-    private String award;
+  /**
+   * 奖项值
+   *
+   * <p>如果奖项类型是现金，则这里保存的是分；如果是其他则可选，也可以为对应的外部业务的标志，
+   * 如：如果是积分时，可以是积分额度，如果是卡券，则是卡券id，然后通过订阅事件处理中奖后的业务操作。
+   */
+  @Column(name = "award_value", nullable = false, columnDefinition = "bigint  null comment '奖项值'")
+  private Long awardValue = 0l;
 
+  /** 奖项说明 */
+  @Column(
+    name = "award_note",
+    length = 256,
+    nullable = true,
+    columnDefinition = "varchar(256)  null comment '奖项说明'"
+  )
+  private String awardNote;
 
-    /**
-     * 奖项值
-     * <p>
-     * 如果奖项类型是现金，则这里保存的是分；如果是其他则可选，也可以为对应的外部业务的标志，
-     * 如：如果是积分时，可以是积分额度，如果是卡券，则是卡券id，然后通过订阅事件处理中奖后的业务操作。
-     */
-    @Column(name = "award_value", nullable = false, columnDefinition = "bigint  null comment '奖项值'")
-    private Long awardValue = 0l;
+  /** 奖品图片 */
+  @Column(
+    name = "award_photo",
+    length = 128,
+    nullable = true,
+    columnDefinition = "varchar(128)  null comment '奖项图片'"
+  )
+  private String awardPhoto;
 
+  /** 奖项位置 */
+  @Column(
+    name = "award_position",
+    length = 32,
+    nullable = true,
+    columnDefinition = "varchar(32)  null comment '奖项位置'"
+  )
+  private String awardPosition;
 
-    /**
-     * 奖项说明
-     */
-    @Column(name = "award_note", length = 256, nullable = true, columnDefinition = "varchar(256)  null comment '奖项说明'")
-    private String awardNote;
+  /** 权重 */
+  @Column(name = "weight", nullable = false, columnDefinition = "int  not null comment '权重'")
+  private int weight = 0;
 
-    /**
-     * 奖品图片
-     */
-    @Column(name = "award_photo", length = 128, nullable = true, columnDefinition = "varchar(128)  null comment '奖项图片'")
-    private String awardPhoto;
+  /** 最大中奖数 */
+  @Column(name = "max_winer", nullable = false, columnDefinition = "int not null comment '最大中奖数'")
+  private int maxWiner = 0;
 
-    /**
-     * 奖项位置
-     */
-    @Column(name = "award_position", length = 32, nullable = true, columnDefinition = "varchar(32)  null comment '奖项位置'")
-    private String awardPosition;
+  /** 最大中奖数周期 */
+  @Column(
+    name = "max_period",
+    nullable = false,
+    columnDefinition = "varchar(32) not null comment '最大中奖数周期'"
+  )
+  @Enumerated(EnumType.STRING)
+  private MaxPeriod maxPeriod = MaxPeriod.ulimit;
 
-    /**
-     * 权重
-     */
-    @Column(name = "weight", nullable = false, columnDefinition = "int  not null comment '权重'")
-    private int weight = 0;
+  /** 是否记录中奖记录 */
+  @Column(
+    name = "record_winner",
+    nullable = false,
+    columnDefinition = "varchar(32) not null comment '是否记录中奖记录'"
+  )
+  @Enumerated(EnumType.STRING)
+  private SimpleStatus recordWinner = SimpleStatus.enable;
 
-    /**
-     * 最大中奖数
-     */
-    @Column(name = "max_winer", nullable = false, columnDefinition = "int not null comment '最大中奖数'")
-    private int maxWiner = 0;
+  /** 备注 */
+  @Column(
+    name = "comments",
+    length = 128,
+    nullable = false,
+    columnDefinition = "varchar(128)  null comment '备注'"
+  )
+  private String comments;
 
-    /**
-     * 最大中奖数周期
-     */
-    @Column(name = "max_period", nullable = false, columnDefinition = "varchar(32) not null comment '最大中奖数周期'")
-    @Enumerated(EnumType.STRING)
-    private MaxPeriod maxPeriod = MaxPeriod.ulimit;
+  public Long getLotteryId() {
+    return lotteryId;
+  }
 
-    /**
-     * 是否记录中奖记录
-     */
-    @Column(name = "record_winner", nullable = false, columnDefinition = "varchar(32) not null comment '是否记录中奖记录'")
-    @Enumerated(EnumType.STRING)
-    private SimpleStatus recordWinner = SimpleStatus.enable;
+  public void setLotteryId(Long lotteryId) {
+    this.lotteryId = lotteryId;
+  }
 
-    /**
-     * 备注
-     */
-    @Column(name = "comments", length = 128, nullable = false, columnDefinition = "varchar(128)  null comment '备注'")
-    private String comments;
+  public String getAward() {
+    return award;
+  }
 
+  public void setAward(String award) {
+    this.award = award;
+  }
 
-    public Long getLotteryId() {
-        return lotteryId;
-    }
+  public String getAwardNote() {
+    return awardNote;
+  }
 
-    public void setLotteryId(Long lotteryId) {
-        this.lotteryId = lotteryId;
-    }
+  public void setAwardNote(String awardNote) {
+    this.awardNote = awardNote;
+  }
 
-    public String getAward() {
-        return award;
-    }
+  public String getAwardPhoto() {
+    return awardPhoto;
+  }
 
-    public void setAward(String award) {
-        this.award = award;
-    }
+  public void setAwardPhoto(String awardPhoto) {
+    this.awardPhoto = awardPhoto;
+  }
 
-    public String getAwardNote() {
-        return awardNote;
-    }
+  public String getAwardPosition() {
+    return awardPosition;
+  }
 
-    public void setAwardNote(String awardNote) {
-        this.awardNote = awardNote;
-    }
+  public void setAwardPosition(String awardPosition) {
+    this.awardPosition = awardPosition;
+  }
 
-    public String getAwardPhoto() {
-        return awardPhoto;
-    }
+  public int getWeight() {
+    return weight;
+  }
 
-    public void setAwardPhoto(String awardPhoto) {
-        this.awardPhoto = awardPhoto;
-    }
+  public void setWeight(int weight) {
+    this.weight = weight;
+  }
 
-    public String getAwardPosition() {
-        return awardPosition;
-    }
+  public int getMaxWiner() {
+    return maxWiner;
+  }
 
-    public void setAwardPosition(String awardPosition) {
-        this.awardPosition = awardPosition;
-    }
+  public void setMaxWiner(int maxWiner) {
+    this.maxWiner = maxWiner;
+  }
 
-    public int getWeight() {
-        return weight;
-    }
+  public String getComments() {
+    return comments;
+  }
 
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
+  public void setComments(String comments) {
+    this.comments = comments;
+  }
 
-    public int getMaxWiner() {
-        return maxWiner;
-    }
+  public MaxPeriod getMaxPeriod() {
+    return maxPeriod;
+  }
 
-    public void setMaxWiner(int maxWiner) {
-        this.maxWiner = maxWiner;
-    }
+  public void setMaxPeriod(MaxPeriod maxPeriod) {
+    this.maxPeriod = maxPeriod;
+  }
 
-    public String getComments() {
-        return comments;
-    }
+  public SimpleStatus getRecordWinner() {
+    return recordWinner;
+  }
 
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
+  public void setRecordWinner(SimpleStatus recordWinner) {
+    this.recordWinner = recordWinner;
+  }
 
-    public MaxPeriod getMaxPeriod() {
-        return maxPeriod;
-    }
+  public String getCode() {
+    return this.code;
+  }
 
-    public void setMaxPeriod(MaxPeriod maxPeriod) {
-        this.maxPeriod = maxPeriod;
-    }
+  public void setCode(String code) {
+    this.code = code;
+  }
 
-    public SimpleStatus getRecordWinner() {
-        return recordWinner;
-    }
+  public LotteryAwardType getAwardType() {
+    return awardType;
+  }
 
-    public void setRecordWinner(SimpleStatus recordWinner) {
-        this.recordWinner = recordWinner;
-    }
+  public void setAwardType(LotteryAwardType awardType) {
+    this.awardType = awardType;
+  }
 
-    public String getCode() {
-        return this.code;
-    }
+  public Long getAwardValue() {
+    return awardValue;
+  }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public LotteryAwardType getAwardType() {
-        return awardType;
-    }
-
-    public void setAwardType(LotteryAwardType awardType) {
-        this.awardType = awardType;
-    }
-
-    public Long getAwardValue() {
-        return awardValue;
-    }
-
-    public void setAwardValue(Long awardValue) {
-        this.awardValue = awardValue;
-    }
+  public void setAwardValue(Long awardValue) {
+    this.awardValue = awardValue;
+  }
 }

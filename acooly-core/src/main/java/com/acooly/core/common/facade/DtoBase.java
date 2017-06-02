@@ -17,28 +17,21 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @Getter
 @Setter
 public class DtoBase implements Serializable {
-	
-	/** 商户订单号 */
-	private String merchOrderNo;
-	/** 业务订单号 **/
-	@NotEmpty
-	private String bizOrderNo;
-	
-	@Override
-	public String toString() {
-		return ToString.toString(this);
-	}
-	
-	/**
-	 * 请求参数校验,在使用@AppService并且没有启用校验组@AppService.ValidationGroup时会被调用
-	 */
-	public void check() throws OrderCheckException {
-		
-	}
+
+  /** 商户订单号 */
+  private String merchOrderNo;
+  /** 业务订单号 * */
+  @NotEmpty private String bizOrderNo;
+
+  @Override
+  public String toString() {
+    return ToString.toString(this);
+  }
+
+  /** 请求参数校验,在使用@AppService并且没有启用校验组@AppService.ValidationGroup时会被调用 */
+  public void check() throws OrderCheckException {}
 }

@@ -6,13 +6,11 @@ import com.acooly.module.ofile.domain.OnlineFile;
 /**
  * app_banner JPA Dao
  *
- * Date: 2015-05-12 13:39:31
+ * <p>Date: 2015-05-12 13:39:31
  *
  * @author Acooly Code Generator
- *
  */
 public interface OnlineFileDao extends EntityJpaDao<OnlineFile, Long> {
 
-	OnlineFile findByObjectId(String objectId);
-
+  OnlineFile findByObjectId(String objectId);
 }

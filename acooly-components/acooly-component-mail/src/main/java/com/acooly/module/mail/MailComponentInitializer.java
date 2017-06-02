@@ -13,14 +13,13 @@ import com.acooly.core.common.boot.component.ComponentInitializer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ConfigurableApplicationContext;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @Slf4j
 public class MailComponentInitializer implements ComponentInitializer {
-	
-	@Override
-	public void initialize(ConfigurableApplicationContext applicationContext) {
-		setPropertyIfMissing("acooly.security.xss.exclusions.mail","/manage/module/mail/emailTemplate/*");
-	}
+
+  @Override
+  public void initialize(ConfigurableApplicationContext applicationContext) {
+    setPropertyIfMissing(
+        "acooly.security.xss.exclusions.mail", "/manage/module/mail/emailTemplate/*");
+  }
 }

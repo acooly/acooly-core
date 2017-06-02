@@ -14,12 +14,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import static com.acooly.module.openapi.OpenAPIProperties.PREFIX;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @ConfigurationProperties(prefix = PREFIX)
 @Data
 public class OpenAPIProperties {
-	public static final String PREFIX = "acooly.openpai";
-
+  public static final String PREFIX = "acooly.openpai";
 }

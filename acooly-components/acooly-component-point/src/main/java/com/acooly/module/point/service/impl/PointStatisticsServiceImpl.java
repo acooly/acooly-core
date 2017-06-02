@@ -6,35 +6,30 @@
  */
 package com.acooly.module.point.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.module.point.dao.PointStatisticsDao;
 import com.acooly.module.point.dao.PointStatisticsExtDao;
 import com.acooly.module.point.domain.PointStatistics;
 import com.acooly.module.point.service.PointStatisticsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 积分统计 Service实现
  *
- * Date: 2017-03-13 11:51:11
+ * <p>Date: 2017-03-13 11:51:11
  *
  * @author acooly
- *
  */
 @Service("pointStatisticsService")
-public class PointStatisticsServiceImpl extends EntityServiceImpl<PointStatistics, PointStatisticsDao>
-		implements PointStatisticsService {
+public class PointStatisticsServiceImpl
+    extends EntityServiceImpl<PointStatistics, PointStatisticsDao>
+    implements PointStatisticsService {
 
-	@Autowired
-	private PointStatisticsExtDao pointStatisticsExtDao;
+  @Autowired private PointStatisticsExtDao pointStatisticsExtDao;
 
-	/**
-	 * 格式化时间
-	 */
-	public void pointStatistics(String startTime, String endTime) {
-		pointStatisticsExtDao.pointStatistics(startTime, endTime);
-	}
-
+  /** 格式化时间 */
+  public void pointStatistics(String startTime, String endTime) {
+    pointStatisticsExtDao.pointStatistics(startTime, endTime);
+  }
 }

@@ -16,39 +16,34 @@ import static com.yiji.framework.openapi.core.auth.realm.AuthInfoRealm.APP_CLIEN
 
 /**
  * APP-API认证和授权realm实现
- * 
- * @author zhangpu
  *
+ * @author zhangpu
  */
 @Component(APP_CLIENT_REALM)
 public class AppClientAuthInfoRealm extends CacheableAuthInfoRealm {
-	
-	@Autowired
-	private AppCustomerService appCustomerService;
-	@Autowired
-	private AppOpenapiProperties appOpenapiProperties;
-	
-	@Override
-	public String getSecretKey(String partnerId) {
-		if (partnerId.equals(appOpenapiProperties.getAnonymous().getAccessKey())) {
-			return appOpenapiProperties.getAnonymous().getSecretKey();
-		} else {
-			AppCustomer appCustomer = appCustomerService.loadAppCustomer(partnerId, EntityStatus.Enable);
-			if(appCustomer==null){
-                throw new ApiServiceAuthenticationException("app认证用户信息不存在，partnerId="+partnerId);
-            }
-			return appCustomer.getSecretKey();
-		}
-		
-	}
-	
-	@Override
-	public List<String> getAuthorizedServices(String partnerId) {
-		if (partnerId.equals(appOpenapiProperties.getAnonymous().getAccessKey())) {
-			return appOpenapiProperties.getAnonymous().getServices();
-		} else {
-			return Lists.newArrayList("*");
-		}
-	}
-	
+
+  @Autowired private AppCustomerService appCustomerService;
+  @Autowired private AppOpenapiProperties appOpenapiProperties;
+
+  @Override
+  public String getSecretKey(String partnerId) {
+    if (partnerId.equals(appOpenapiProperties.getAnonymous().getAccessKey())) {
+      return appOpenapiProperties.getAnonymous().getSecretKey();
+    } else {
+      AppCustomer appCustomer = appCustomerService.loadAppCustomer(partnerId, EntityStatus.Enable);
+      if (appCustomer == null) {
+        throw new ApiServiceAuthenticationException("app认证用户信息不存在，partnerId=" + partnerId);
+      }
+      return appCustomer.getSecretKey();
+    }
+  }
+
+  @Override
+  public List<String> getAuthorizedServices(String partnerId) {
+    if (partnerId.equals(appOpenapiProperties.getAnonymous().getAccessKey())) {
+      return appOpenapiProperties.getAnonymous().getServices();
+    } else {
+      return Lists.newArrayList("*");
+    }
+  }
 }

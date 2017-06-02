@@ -16,13 +16,16 @@ import com.acooly.core.common.boot.log.initializer.AbstractLogInitializer;
 
 /**
  * 修改dubbo monitor的日志级别
+ *
  * @author qiubo@yiji.com
  */
 public class DubboMonitorLogInitializer extends AbstractLogInitializer {
-	@Override
-	public void init(LogbackConfigurator configurator) {
-		if (configurator.getEnvironment().getProperty("acooly.dubbo.enable", Boolean.class, Boolean.TRUE)) {
-			configurator.logger("com.alibaba.dubbo.monitor.dubbo.DubboMonitor", Level.WARN);
-		}
-	}
+  @Override
+  public void init(LogbackConfigurator configurator) {
+    if (configurator
+        .getEnvironment()
+        .getProperty("acooly.dubbo.enable", Boolean.class, Boolean.TRUE)) {
+      configurator.logger("com.alibaba.dubbo.monitor.dubbo.DubboMonitor", Level.WARN);
+    }
+  }
 }

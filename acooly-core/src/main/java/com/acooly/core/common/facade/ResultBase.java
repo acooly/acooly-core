@@ -1,7 +1,7 @@
 /*
  * acooly.cn Inc.
  * Copyright (c) 2016 All Rights Reserved.
- * create by zhangpu 
+ * create by zhangpu
  * date:2016年3月19日
  *
  */
@@ -11,63 +11,60 @@ import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.core.utils.enums.ResultStatus;
 
-/**
- * @author zhangpu
- */
-public class ResultBase extends LinkedHashMapParameterize<String, Object> implements Resultable,Messageable {
+/** @author zhangpu */
+public class ResultBase extends LinkedHashMapParameterize<String, Object>
+    implements Resultable, Messageable {
 
-	/** serialVersionUID */
-	private static final long serialVersionUID = -8702480923545642017L;
+  /** serialVersionUID */
+  private static final long serialVersionUID = -8702480923545642017L;
 
-	private Messageable status = ResultStatus.success;
+  private Messageable status = ResultStatus.success;
 
-    /**
-     * 参考 {@link ResultCode}
-     */
-	private String code;
+  /** 参考 {@link ResultCode} */
+  private String code;
 
-	private String detail;
+  private String detail;
 
-	public Messageable getStatus() {
-		return status;
-	}
+  public Messageable getStatus() {
+    return status;
+  }
 
-	public void setStatus(Messageable status) {
-		this.status = status;
-	}
+  public void setStatus(Messageable status) {
+    this.status = status;
+  }
 
-	public String getDetail() {
-		return detail;
-	}
+  public String getDetail() {
+    return detail;
+  }
 
-	public void setDetail(String detail) {
-		this.detail = detail;
-	}
+  public void setDetail(String detail) {
+    this.detail = detail;
+  }
 
-	public String getCode() {
-		return code;
-	}
+  public String getCode() {
+    return code;
+  }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+  public void setCode(String code) {
+    this.code = code;
+  }
 
-	public boolean success(){
-		return status==ResultStatus.success;
-	}
+  public boolean success() {
+    return status == ResultStatus.success;
+  }
 
-	@Override
-	public String toString() {
-		return ToString.toString(this);
-	}
+  @Override
+  public String toString() {
+    return ToString.toString(this);
+  }
 
-	@Override
-	public String code() {
-		return code;
-	}
+  @Override
+  public String code() {
+    return code;
+  }
 
-	@Override
-	public String message() {
-		return detail;
-	}
+  @Override
+  public String message() {
+    return detail;
+  }
 }

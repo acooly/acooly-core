@@ -20,59 +20,53 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @Service
 @Slf4j
 public class MailServiceImpl implements MailService {
-	@Autowired
-	private MailTemplateService mailTemplateService;
-	@Autowired
-	private MailProperties mailProperties;
-    @Autowired
-	private TaskExecutor taskExecutor;
-	
-	@Override
-	public void send(MailDto dto) {
-		log.info("发送邮件:{}", dto);
-		String content = validateAndParse(dto);
-		send0(dto, content);
-	}
-	
-	@Override
-	public void sendAsync(MailDto dto) {
-		log.info("发送邮件:{}", dto);
-		String content = validateAndParse(dto);
-		taskExecutor.execute(() -> send0(dto, content));
-	}
-	
-	public String validateAndParse(MailDto dto) {
-		Validators.assertJSR303(dto);
-		dto.getTo().forEach(EmailValidator.getInstance()::isValid);
-		return mailTemplateService.parse(dto.getTemplateName(), dto);
-	}
-	
-	private void send0(MailDto dto, String content) {
-		try {
-			HtmlEmail email = new HtmlEmail();
-			email.setDebug(mailProperties.isDebug());
-			email.setHostName(mailProperties.getHostname());
-			email.setAuthentication(mailProperties.getUsername(), mailProperties.getPassword());
-			
-			email.setFrom(mailProperties.getFromAddress(), mailProperties.getFromName());
-			email.setSSLOnConnect(true);
-			for (String toMail : dto.getTo()) {
-				email.addTo(toMail);
-			}
-			email.setSubject(dto.getSubject());
-			email.setHtmlMsg(content);
-			email.setCharset(mailProperties.getCharset());
-			email.send();
-            log.info("发送邮件成功,{}",dto.toString());
-		} catch (Exception e) {
-			log.error("发送邮件失败", e);
-		}
-	}
-	
+  @Autowired private MailTemplateService mailTemplateService;
+  @Autowired private MailProperties mailProperties;
+  @Autowired private TaskExecutor taskExecutor;
+
+  @Override
+  public void send(MailDto dto) {
+    log.info("发送邮件:{}", dto);
+    String content = validateAndParse(dto);
+    send0(dto, content);
+  }
+
+  @Override
+  public void sendAsync(MailDto dto) {
+    log.info("发送邮件:{}", dto);
+    String content = validateAndParse(dto);
+    taskExecutor.execute(() -> send0(dto, content));
+  }
+
+  public String validateAndParse(MailDto dto) {
+    Validators.assertJSR303(dto);
+    dto.getTo().forEach(EmailValidator.getInstance()::isValid);
+    return mailTemplateService.parse(dto.getTemplateName(), dto);
+  }
+
+  private void send0(MailDto dto, String content) {
+    try {
+      HtmlEmail email = new HtmlEmail();
+      email.setDebug(mailProperties.isDebug());
+      email.setHostName(mailProperties.getHostname());
+      email.setAuthentication(mailProperties.getUsername(), mailProperties.getPassword());
+
+      email.setFrom(mailProperties.getFromAddress(), mailProperties.getFromName());
+      email.setSSLOnConnect(true);
+      for (String toMail : dto.getTo()) {
+        email.addTo(toMail);
+      }
+      email.setSubject(dto.getSubject());
+      email.setHtmlMsg(content);
+      email.setCharset(mailProperties.getCharset());
+      email.send();
+      log.info("发送邮件成功,{}", dto.toString());
+    } catch (Exception e) {
+      log.error("发送邮件失败", e);
+    }
+  }
 }

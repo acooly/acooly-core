@@ -20,314 +20,272 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author shuijing
- */
+/** @author shuijing */
 @Slf4j
 public class JWTUtils {
 
-    public final static String KEY_TARGETURL = "targetUrl";
-    /**
-     * type Json Web Token
-     */
-    public final static String TYPE_JWT = "jwt";
+  public static final String KEY_TARGETURL = "targetUrl";
+  /** type Json Web Token */
+  public static final String TYPE_JWT = "jwt";
 
-    /**
-     * token 签发者 session Attribute
-     */
-    public final static String KEY_ISS = "keyIss";
+  /** token 签发者 session Attribute */
+  public static final String KEY_ISS = "keyIss";
 
-    /**
-     * token 所面向的用户名
-     */
-    public final static String KEY_SUB_NAME = "keySubName";
+  /** token 所面向的用户名 */
+  public static final String KEY_SUB_NAME = "keySubName";
 
-    /**
-     * 接收 token 的一方
-     */
-    public final static String KEY_AUD = "keyAud";
+  /** 接收 token 的一方 */
+  public static final String KEY_AUD = "keyAud";
 
-    /**
-     * token 签发时间
-     */
-    public final static String KEY_IAT = "keyIat";
+  /** token 签发时间 */
+  public static final String KEY_IAT = "keyIat";
 
-    /**
-     * token 失效时间
-     */
-    public final static String KEY_EXP = "keyExp";
+  /** token 失效时间 */
+  public static final String KEY_EXP = "keyExp";
 
-    /**
-     * jwt 加密密钥
-     */
-    public static final String SIGN_KEY = "ssoSecretlkj";
+  /** jwt 加密密钥 */
+  public static final String SIGN_KEY = "ssoSecretlkj";
 
-    /**
-     * JWT 签发者 key
-     */
-    public final static String CLAIMS_KEY_ISS = "iss";
+  /** JWT 签发者 key */
+  public static final String CLAIMS_KEY_ISS = "iss";
 
-    /**
-     * JWT 签发时间 key
-     */
-    public final static String CLAIMS_KEY_IAT = "iat";
+  /** JWT 签发时间 key */
+  public static final String CLAIMS_KEY_IAT = "iat";
 
-    /**
-     * JWT 过期时间 key
-     */
-    public final static String CLAIMS_KEY_EXP = "exp";
+  /** JWT 过期时间 key */
+  public static final String CLAIMS_KEY_EXP = "exp";
 
-    /**
-     * 用户名 key
-     */
-    public final static String CLAIMS_KEY_SUB = "sub";
+  /** 用户名 key */
+  public static final String CLAIMS_KEY_SUB = "sub";
 
-    /**
-     * user
-     */
-    public final static String CLAIMS_KEY_SUBJECT = "subject";
+  /** user */
+  public static final String CLAIMS_KEY_SUBJECT = "subject";
 
-    /**
-     * 接收地址 key
-     */
-    public final static String CLAIMS_KEY_AUD = "aud";
+  /** 接收地址 key */
+  public static final String CLAIMS_KEY_AUD = "aud";
 
-    /**
-     * 规范类型 key
-     */
-    public final static String HEADER_KEY_TYP = "typ";
+  /** 规范类型 key */
+  public static final String HEADER_KEY_TYP = "typ";
 
-    /**
-     * 加密算法 key
-     */
-    public final static String HEADER_KEY_ALG = "alg";
+  /** 加密算法 key */
+  public static final String HEADER_KEY_ALG = "alg";
 
+  /** 规范类型 */
+  public static final String PROTOCOL_TYPE_JWT = "jwt";
 
-    /**
-     * 规范类型
-     */
-    public final static String PROTOCOL_TYPE_JWT = "jwt";
+  public static final char SEPARATOR_CHAR = '.';
+  public static JwtSigningKeyResolver jwtSigningKeyResolver = new JwtSigningKeyResolver();
+  /** JWT 签发者 value */
+  private static String iss = "acooly";
+  /** JWT 接收方 (暂无用) */
+  private static String aud = "boss";
+  /** header */
+  private static Map headerMap;
 
-    public static final char SEPARATOR_CHAR = '.';
+  private static ObjectMapper objectMapper;
 
+  static {
+    headerMap = new HashMap<>();
+    headerMap.put(HEADER_KEY_TYP, PROTOCOL_TYPE_JWT);
+    headerMap.put(HEADER_KEY_ALG, SignatureAlgorithm.HS256.getValue());
+    objectMapper = new ObjectMapper();
+  }
 
-    /**
-     * JWT 签发者 value
-     */
-    private static String iss = "acooly";
-    /**
-     * JWT 接收方 (暂无用)
-     */
-    private static String aud = "boss";
+  public static String createJwt(String sub, String subjectStr) {
+    Date iat = new Date();
+    // 实效时间为 120分钟
+    Date expTime = new Date(iat.getTime() + 120 * 60 * 60 * 1000);
+    Map claims = new HashMap<>();
+    claims.put(CLAIMS_KEY_ISS, iss);
+    claims.put(CLAIMS_KEY_SUB, sub);
+    claims.put(CLAIMS_KEY_AUD, aud);
+    claims.put(CLAIMS_KEY_IAT, iat);
+    claims.put(CLAIMS_KEY_EXP, expTime);
+    claims.put(CLAIMS_KEY_SUBJECT, subjectStr);
+    String compactJws =
+        Jwts.builder()
+            .setHeader(headerMap)
+            .setClaims(claims)
+            .signWith(SignatureAlgorithm.HS256, SIGN_KEY.getBytes())
+            .compact();
+    return compactJws;
+  }
 
+  /**
+   * 根据jwt加密串获得 Claims
+   *
+   * @param jwt
+   * @return
+   */
+  public static Claims getClaims(String jwt) {
 
-    public static JwtSigningKeyResolver jwtSigningKeyResolver = new JwtSigningKeyResolver();
-    /**
-     * header
-     */
-    private static Map headerMap;
-    private static ObjectMapper objectMapper;
+    Assert.hasText(jwt, "JWT String argument cannot be null or empty.");
 
-    static {
-        headerMap = new HashMap<>();
-        headerMap.put(HEADER_KEY_TYP, PROTOCOL_TYPE_JWT);
-        headerMap.put(HEADER_KEY_ALG, SignatureAlgorithm.HS256.getValue());
-        objectMapper = new ObjectMapper();
-    }
+    String base64UrlEncodedPayload = null;
 
+    int delimiterCount = 0;
 
-    public static String createJwt(String sub, String subjectStr) {
-        Date iat = new Date();
-        // 实效时间为 120分钟
-        Date expTime = new Date(iat.getTime() + 120 * 60 * 60 * 1000);
-        Map claims = new HashMap<>();
-        claims.put(CLAIMS_KEY_ISS, iss);
-        claims.put(CLAIMS_KEY_SUB, sub);
-        claims.put(CLAIMS_KEY_AUD, aud);
-        claims.put(CLAIMS_KEY_IAT, iat);
-        claims.put(CLAIMS_KEY_EXP, expTime);
-        claims.put(CLAIMS_KEY_SUBJECT, subjectStr);
-        String compactJws = Jwts.builder().setHeader(headerMap).setClaims(claims)
-            .signWith(SignatureAlgorithm.HS256, SIGN_KEY.getBytes()).compact();
-        return compactJws;
-    }
+    StringBuilder sb = new StringBuilder(128);
 
-    /**
-     * 根据jwt加密串获得 Claims
-     *
-     * @param jwt
-     * @return
-     */
-    public static Claims getClaims(String jwt) {
+    for (char c : jwt.toCharArray()) {
 
-        Assert.hasText(jwt, "JWT String argument cannot be null or empty.");
+      if (c == SEPARATOR_CHAR) {
 
-        String base64UrlEncodedPayload = null;
+        String token = Strings.clean(sb.toString());
 
-        int delimiterCount = 0;
-
-        StringBuilder sb = new StringBuilder(128);
-
-        for (char c : jwt.toCharArray()) {
-
-            if (c == SEPARATOR_CHAR) {
-
-                String token = Strings.clean(sb.toString());
-
-                if (delimiterCount == 1) {
-                    base64UrlEncodedPayload = token;
-                }
-
-                delimiterCount++;
-                sb = new StringBuilder(128);
-            } else {
-                sb.append(c);
-            }
+        if (delimiterCount == 1) {
+          base64UrlEncodedPayload = token;
         }
 
-        String payload = TextCodec.BASE64URL.decodeToString(base64UrlEncodedPayload);
-
-        Claims claims = null;
-
-        if (payload.charAt(0) == '{' && payload.charAt(payload.length() - 1) == '}') {
-            Map<String, Object> claimsMap = readValue(payload);
-            claims = new DefaultClaims(claimsMap);
-        }
-        return claims;
+        delimiterCount++;
+        sb = new StringBuilder(128);
+      } else {
+        sb.append(c);
+      }
     }
 
-    @SuppressWarnings("unchecked")
-    protected static Map<String, Object> readValue(String val) {
-        try {
-            return objectMapper.readValue(val, Map.class);
-        } catch (IOException e) {
-            throw new MalformedJwtException("Unable to read JSON value: " + val, e);
-        }
-    }
+    String payload = TextCodec.BASE64URL.decodeToString(base64UrlEncodedPayload);
 
-    /**
-     * 解密并验证信息有无被篡改
-     *
-     * @param compactJws
-     * @return
-     * @throws Exception
-     */
-    public static Jwt parseJws(String compactJws, final String secretKey) throws Exception {
-        return Jwts.parser().setSigningKeyResolver(new SigningKeyResolverAdapter() {
-            @Override
-            public Key resolveSigningKey(JwsHeader header, Claims claims) {
+    Claims claims = null;
+
+    if (payload.charAt(0) == '{' && payload.charAt(payload.length() - 1) == '}') {
+      Map<String, Object> claimsMap = readValue(payload);
+      claims = new DefaultClaims(claimsMap);
+    }
+    return claims;
+  }
+
+  @SuppressWarnings("unchecked")
+  protected static Map<String, Object> readValue(String val) {
+    try {
+      return objectMapper.readValue(val, Map.class);
+    } catch (IOException e) {
+      throw new MalformedJwtException("Unable to read JSON value: " + val, e);
+    }
+  }
+
+  /**
+   * 解密并验证信息有无被篡改
+   *
+   * @param compactJws
+   * @return
+   * @throws Exception
+   */
+  public static Jwt parseJws(String compactJws, final String secretKey) throws Exception {
+    return Jwts.parser()
+        .setSigningKeyResolver(
+            new SigningKeyResolverAdapter() {
+              @Override
+              public Key resolveSigningKey(JwsHeader header, Claims claims) {
                 SignatureAlgorithm alg = SignatureAlgorithm.forName(header.getAlgorithm());
                 byte[] keyBytes = this.resolveSigningKeyBytes(header, claims);
                 return new SecretKeySpec(keyBytes, alg.getJcaName());
-            }
+              }
 
-            @Override
-            public byte[] resolveSigningKeyBytes(JwsHeader header, Claims claims) {
+              @Override
+              public byte[] resolveSigningKeyBytes(JwsHeader header, Claims claims) {
                 return secretKey.getBytes();
-            }
-        }).parse(compactJws);
-    }
+              }
+            })
+        .parse(compactJws);
+  }
 
-    /**
-     * 解密并验证信息有无被篡改
-     *
-     * @param authentication
-     * @return
-     * @throws Exception
-     */
-    public static Jwt<Header, Claims> parseAuthentication(String authentication) throws Exception {
-        return Jwts.parser().setSigningKeyResolver(jwtSigningKeyResolver).parse(authentication);
-    }
+  /**
+   * 解密并验证信息有无被篡改
+   *
+   * @param authentication
+   * @return
+   * @throws Exception
+   */
+  public static Jwt<Header, Claims> parseAuthentication(String authentication) throws Exception {
+    return Jwts.parser().setSigningKeyResolver(jwtSigningKeyResolver).parse(authentication);
+  }
 
-    /**
-     * 验证 jwt 是否过期
-     *
-     * @param jwt
-     * @return
-     */
-    public static boolean validateTimeout(Jwt<Header, Claims> jwt) {
-        long expTime = Long.valueOf(String.valueOf(jwt.getBody().get(JWTUtils.CLAIMS_KEY_EXP)));
-        return (System.currentTimeMillis() >= expTime);
-    }
+  /**
+   * 验证 jwt 是否过期
+   *
+   * @param jwt
+   * @return
+   */
+  public static boolean validateTimeout(Jwt<Header, Claims> jwt) {
+    long expTime = Long.valueOf(String.valueOf(jwt.getBody().get(JWTUtils.CLAIMS_KEY_EXP)));
+    return (System.currentTimeMillis() >= expTime);
+  }
 
+  /**
+   * 验证 jwt 信息
+   *
+   * @param jwt
+   * @return
+   */
+  public static boolean validateJwt(String jwt, String sub) {
+    if (sub == null) return false;
+    Claims claims = getClaims(jwt);
+    String subject = claims.getSubject();
+    long expTime = claims.getExpiration().getTime();
+    return (System.currentTimeMillis() <= expTime) && sub.equals(subject);
+  }
 
-    /**
-     * 验证 jwt 信息
-     *
-     * @param jwt
-     * @return
-     */
-    public static boolean validateJwt(String jwt, String sub) {
-        if (sub == null)
-            return false;
-        Claims claims = getClaims(jwt);
-        String subject = claims.getSubject();
-        long expTime = claims.getExpiration().getTime();
-        return (System.currentTimeMillis() <= expTime) && sub.equals(subject);
-    }
-
-    /**
-     * 从 cookie 中获取 jwt
-     *
-     * @param cookies
-     * @return
-     */
-    public static String getJwtFromCookie(Cookie[] cookies) {
-        if (ArrayUtils.isNotEmpty(cookies)) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(JWTUtils.TYPE_JWT)) {
-                    return cookie.getValue();
-                }
-            }
+  /**
+   * 从 cookie 中获取 jwt
+   *
+   * @param cookies
+   * @return
+   */
+  public static String getJwtFromCookie(Cookie[] cookies) {
+    if (ArrayUtils.isNotEmpty(cookies)) {
+      for (Cookie cookie : cookies) {
+        if (cookie.getName().equals(JWTUtils.TYPE_JWT)) {
+          return cookie.getValue();
         }
-        return StringUtils.EMPTY;
+      }
     }
+    return StringUtils.EMPTY;
+  }
 
-    /**
-     * cookie 中添加 jwt
-     *
-     * @param response
-     * @param jwtValue
-     */
-    public static void addJwtCookie(HttpServletResponse response, String jwtValue, String domain) {
-        Cookie cookie = new Cookie(JWTUtils.TYPE_JWT, jwtValue);
+  /**
+   * cookie 中添加 jwt
+   *
+   * @param response
+   * @param jwtValue
+   */
+  public static void addJwtCookie(HttpServletResponse response, String jwtValue, String domain) {
+    Cookie cookie = new Cookie(JWTUtils.TYPE_JWT, jwtValue);
+    cookie.setHttpOnly(Boolean.TRUE);
+    cookie.setPath("/");
+    cookie.setDomain(domain);
+    response.addCookie(cookie);
+  }
+
+  public static void removeCookie(String key, String domain) {
+    Cookie[] cookies = ServletUtil.getRequest().getCookies();
+    for (Cookie cookie : cookies) {
+      if (StringUtils.equals(cookie.getName(), key)) {
         cookie.setHttpOnly(Boolean.TRUE);
         cookie.setPath("/");
         cookie.setDomain(domain);
-        response.addCookie(cookie);
+        cookie.setMaxAge(0);
+        ServletUtil.getResponse().addCookie(cookie);
+      }
+    }
+  }
+
+  public static String getDomainName() {
+    return ServletUtil.getRequest().getServerName().replaceAll(".*\\.(?=.*\\.)", "");
+  }
+
+  private static class JwtSigningKeyResolver extends SigningKeyResolverAdapter {
+
+    @Override
+    public Key resolveSigningKey(JwsHeader header, Claims claims) {
+      SignatureAlgorithm alg = SignatureAlgorithm.forName(header.getAlgorithm());
+      byte[] keyBytes = this.resolveSigningKeyBytes(header, claims);
+      return new SecretKeySpec(keyBytes, alg.getJcaName());
     }
 
-    public static void removeCookie(String key, String domain) {
-        Cookie[] cookies = ServletUtil.getRequest().getCookies();
-        for (Cookie cookie : cookies) {
-            if (StringUtils.equals(cookie.getName(), key)) {
-                cookie.setHttpOnly(Boolean.TRUE);
-                cookie.setPath("/");
-                cookie.setDomain(domain);
-                cookie.setMaxAge(0);
-                ServletUtil.getResponse().addCookie(cookie);
-            }
-        }
+    @Override
+    public byte[] resolveSigningKeyBytes(JwsHeader header, Claims claims) {
+      return JWTUtils.SIGN_KEY.getBytes();
     }
-
-    public static String getDomainName() {
-        return ServletUtil.getRequest().getServerName().replaceAll(".*\\.(?=.*\\.)", "");
-    }
-
-    private static class JwtSigningKeyResolver extends SigningKeyResolverAdapter {
-
-        @Override
-        public Key resolveSigningKey(JwsHeader header, Claims claims) {
-            SignatureAlgorithm alg = SignatureAlgorithm.forName(header.getAlgorithm());
-            byte[] keyBytes = this.resolveSigningKeyBytes(header, claims);
-            return new SecretKeySpec(keyBytes, alg.getJcaName());
-        }
-
-        @Override
-        public byte[] resolveSigningKeyBytes(JwsHeader header, Claims claims) {
-            return JWTUtils.SIGN_KEY.getBytes();
-        }
-
-    }
-
+  }
 }

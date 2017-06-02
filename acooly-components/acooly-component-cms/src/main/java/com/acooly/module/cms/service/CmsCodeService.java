@@ -13,10 +13,8 @@ import com.acooly.module.cms.domain.CmsCode;
 /**
  * 编码 Service接口
  *
- * Date: 2017-04-26 17:16:38
- * @author acooly
+ * <p>Date: 2017-04-26 17:16:38
  *
+ * @author acooly
  */
-public interface CmsCodeService extends EntityService<CmsCode> {
-
-}
+public interface CmsCodeService extends EntityService<CmsCode> {}

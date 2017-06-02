@@ -9,18 +9,15 @@ package com.acooly.module.portlet.service;
 
 import com.acooly.core.common.service.EntityService;
 import com.acooly.module.portlet.entity.ActionMapping;
-import org.springframework.cache.annotation.Cacheable;
 
 /**
  * 访问映射 Service接口
- * <p>
- * Date: 2017-03-21 00:34:47
+ *
+ * <p>Date: 2017-03-21 00:34:47
  *
  * @author acooly
  */
 public interface ActionMappingService extends EntityService<ActionMapping> {
 
-
-    ActionMapping getActionMapping(String url);
-
+  ActionMapping getActionMapping(String url);
 }

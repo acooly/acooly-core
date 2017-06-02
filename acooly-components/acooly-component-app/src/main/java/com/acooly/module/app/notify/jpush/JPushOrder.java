@@ -1,7 +1,4 @@
-/**
- * create by zhangpu
- * date:2015年11月4日
- */
+/** create by zhangpu date:2015年11月4日 */
 package com.acooly.module.app.notify.jpush;
 
 import com.acooly.core.utils.mapper.JsonMapper;
@@ -14,78 +11,77 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * JPush 请求对象
- * 
+ *
  * @author zhangpu
  * @date 2015年11月4日
  */
 public class JPushOrder {
 
-	private String platform = "all";
+  private String platform = "all";
 
-	@JsonSerialize(using = JPushAudienceSerializer.class)
-	private JPushAudience audience = new JPushAudience();
+  @JsonSerialize(using = JPushAudienceSerializer.class)
+  private JPushAudience audience = new JPushAudience();
 
-	private JPushMessage message = new JPushMessage();
+  private JPushMessage message = new JPushMessage();
 
-	private JPushOptions options = new JPushOptions();
+  private JPushOptions options = new JPushOptions();
 
-	private JPushNotification notification = new JPushNotification();
+  private JPushNotification notification = new JPushNotification();
 
-	public void appendAlias(String alias) {
-		getAudience().appendAlias(alias);
-	}
+  public static void main(String[] args) {
+    JPushOrder context = new JPushOrder();
+    JPushAudience ja = new JPushAudience();
+    ja.appendAlias("zhangpu");
+    context.setAudience(ja);
+    System.out.println(context.toString());
+  }
 
-	public String getPlatform() {
-		return platform;
-	}
+  public void appendAlias(String alias) {
+    getAudience().appendAlias(alias);
+  }
 
-	public void setPlatform(String platform) {
-		this.platform = platform;
-	}
+  public String getPlatform() {
+    return platform;
+  }
 
-	public JPushAudience getAudience() {
-		return audience;
-	}
+  public void setPlatform(String platform) {
+    this.platform = platform;
+  }
 
-	public void setAudience(JPushAudience audience) {
-		this.audience = audience;
-	}
+  public JPushAudience getAudience() {
+    return audience;
+  }
 
-	public JPushMessage getMessage() {
-		return message;
-	}
+  public void setAudience(JPushAudience audience) {
+    this.audience = audience;
+  }
 
-	public void setMessage(JPushMessage message) {
-		this.message = message;
-	}
+  public JPushMessage getMessage() {
+    return message;
+  }
 
-	public JPushOptions getOptions() {
-		return options;
-	}
+  public void setMessage(JPushMessage message) {
+    this.message = message;
+  }
 
-	public void setOptions(JPushOptions options) {
-		this.options = options;
-	}
+  public JPushOptions getOptions() {
+    return options;
+  }
 
-	public JPushNotification getNotification() {
-		return notification;
-	}
+  public void setOptions(JPushOptions options) {
+    this.options = options;
+  }
 
-	public void setNotification(JPushNotification notification) {
-		this.notification = notification;
-	}
+  public JPushNotification getNotification() {
+    return notification;
+  }
 
-	@Override
-	public String toString() {
-		return JsonMapper.nonEmptyMapper().toJson(this);
-	}
+  public void setNotification(JPushNotification notification) {
+    this.notification = notification;
+  }
 
-	public static void main(String[] args) {
-		JPushOrder context = new JPushOrder();
-		JPushAudience ja = new JPushAudience();
-		ja.appendAlias("zhangpu");
-		context.setAudience(ja);
-		System.out.println(context.toString());
-	}
-
+  @Override
+  public String toString() {
+    return JsonMapper.nonEmptyMapper().toJson(this);
+  }
 }

@@ -1,9 +1,5 @@
-/**
- * create by zhangpu
- * date:2016年1月10日
- */
+/** create by zhangpu date:2016年1月10日 */
 package com.acooly.module.appopenapi.support.login;
-
 
 import com.acooly.module.appopenapi.support.AppApiLoginService;
 import com.acooly.module.appopenapi.support.LoginDto;
@@ -18,16 +14,14 @@ import java.util.Map;
  */
 public class AnonymousAppApiLoginService implements AppApiLoginService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AnonymousAppApiLoginService.class);
+  private static final Logger logger = LoggerFactory.getLogger(AnonymousAppApiLoginService.class);
 
-    @Override
-    public LoginDto login(String userName, String password, Map<String, Object> context) {
-        logger.info("登录认证回调扩展信息:{}", context);
-        LoginDto loginDto=new LoginDto();
-        loginDto.setAccessKey(userName);
-        loginDto.setCustomerId("0");
-        return loginDto;
-    }
-
-
+  @Override
+  public LoginDto login(String userName, String password, Map<String, Object> context) {
+    logger.info("登录认证回调扩展信息:{}", context);
+    LoginDto loginDto = new LoginDto();
+    loginDto.setAccessKey(userName);
+    loginDto.setCustomerId("0");
+    return loginDto;
+  }
 }

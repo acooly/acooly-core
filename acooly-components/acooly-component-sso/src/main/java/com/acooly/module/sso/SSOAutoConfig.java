@@ -16,56 +16,54 @@ import java.util.EnumSet;
 
 import static com.acooly.module.sso.SSOProperties.PREFIX;
 
-/**
- * @author shuijing
- */
+/** @author shuijing */
 @Configuration
 @EnableConfigurationProperties({SSOProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 public class SSOAutoConfig {
 
-    @Autowired
-    private SSOProperties ssoProperties;
+  @Autowired private SSOProperties ssoProperties;
 
-    @Bean
-    public AuthenticationFilter ssoFilter() {
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter();
-        authenticationFilter.setSSOExcludeUrl(ssoProperties.getSsoExcludeUrl());
-        authenticationFilter.setLoginUrl(ssoProperties.getSsoServerUrl());
-        return authenticationFilter;
-    }
+  @Bean
+  public AuthenticationFilter ssoFilter() {
+    AuthenticationFilter authenticationFilter = new AuthenticationFilter();
+    authenticationFilter.setSSOExcludeUrl(ssoProperties.getSsoExcludeUrl());
+    authenticationFilter.setLoginUrl(ssoProperties.getSsoServerUrl());
+    return authenticationFilter;
+  }
 
-    @Bean
-    public AuthorizationFilter autzFilter() {
-        AuthorizationFilter autzFilter = new AuthorizationFilter(ssoProperties);
-        return autzFilter;
-    }
+  @Bean
+  public AuthorizationFilter autzFilter() {
+    AuthorizationFilter autzFilter = new AuthorizationFilter(ssoProperties);
+    return autzFilter;
+  }
 
-    @Bean
-    public FilterRegistrationBean ssoRegistrationBean(AuthenticationFilter ssoFilter) {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(ssoFilter);
-        registration.addUrlPatterns("/manage/*");
-        registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST));
-        registration.setName("ssoFilter");
-        registration.setOrder(Integer.MIN_VALUE);
-        return registration;
-    }
+  @Bean
+  public FilterRegistrationBean ssoRegistrationBean(AuthenticationFilter ssoFilter) {
+    FilterRegistrationBean registration = new FilterRegistrationBean();
+    registration.setFilter(ssoFilter);
+    registration.addUrlPatterns("/manage/*");
+    registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST));
+    registration.setName("ssoFilter");
+    registration.setOrder(Integer.MIN_VALUE);
+    return registration;
+  }
 
-    @Bean
-    public FilterRegistrationBean autzRegistrationBean(AuthorizationFilter autzFilter) {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(autzFilter);
-        registration.addUrlPatterns("/manage/*");
-        registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST));
-        registration.setName("autzFilter");
-        registration.setOrder(Integer.MIN_VALUE + 1);
-        return registration;
-    }
-    @Bean
-    public ServletContextInitializer ssoContextInitializer() {
-        return (servletContext) -> {
-            servletContext.setInitParameter("ssoEnable", "true");
-        };
-    }
+  @Bean
+  public FilterRegistrationBean autzRegistrationBean(AuthorizationFilter autzFilter) {
+    FilterRegistrationBean registration = new FilterRegistrationBean();
+    registration.setFilter(autzFilter);
+    registration.addUrlPatterns("/manage/*");
+    registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST));
+    registration.setName("autzFilter");
+    registration.setOrder(Integer.MIN_VALUE + 1);
+    return registration;
+  }
+
+  @Bean
+  public ServletContextInitializer ssoContextInitializer() {
+    return (servletContext) -> {
+      servletContext.setInitParameter("ssoEnable", "true");
+    };
+  }
 }

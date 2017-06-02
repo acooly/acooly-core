@@ -20,46 +20,48 @@ import java.util.Map;
 
 /**
  * 首页banner API
- * 
- * @author zhangpu
  *
+ * @author zhangpu
  */
-@OpenApiService(name = "bannerList", desc = "横幅广告", responseType = ResponseType.SYN, owner = ApiOwners.COMMON)
+@OpenApiService(
+  name = "bannerList",
+  desc = "横幅广告",
+  responseType = ResponseType.SYN,
+  owner = ApiOwners.COMMON
+)
 public class BannerListApiService extends BaseApiService<BannerListRequest, BannerListResponse> {
 
-	@Autowired
-	private AppBannerService appBannerService;
-	@Autowired
-    private OFileProperties oFileProperties;
+  @Autowired private AppBannerService appBannerService;
+  @Autowired private OFileProperties oFileProperties;
 
-	@Override
-	protected void doService(BannerListRequest request, BannerListResponse response) {
-		Map<String, Boolean> sortMap = Maps.newHashMap();
-		sortMap.put("sortTime", false);
-		Map<String, Object> map = Maps.newHashMap();
-		List<AppBanner> appBanners = appBannerService.query(map, sortMap);
-		if (Collections3.isEmpty(appBanners)) {
-			return;
-		}
-		for (AppBanner appBanner : appBanners) {
-			response.append(convert(appBanner));
-		}
-	}
+  @Override
+  protected void doService(BannerListRequest request, BannerListResponse response) {
+    Map<String, Boolean> sortMap = Maps.newHashMap();
+    sortMap.put("sortTime", false);
+    Map<String, Object> map = Maps.newHashMap();
+    List<AppBanner> appBanners = appBannerService.query(map, sortMap);
+    if (Collections3.isEmpty(appBanners)) {
+      return;
+    }
+    for (AppBanner appBanner : appBanners) {
+      response.append(convert(appBanner));
+    }
+  }
 
-	private MediaInfo convert(AppBanner appBanner) {
-		MediaInfo dto = new MediaInfo();
-		dto.setComments(appBanner.getComments());
-		dto.setImage(getFullUrl(appBanner.getMediaUrl()));
-		dto.setThumbnail(dto.getImage());
-		dto.setLink(getFullUrl(appBanner.getLink()));
-		dto.setTitle(appBanner.getTitle());
-		return dto;
-	}
+  private MediaInfo convert(AppBanner appBanner) {
+    MediaInfo dto = new MediaInfo();
+    dto.setComments(appBanner.getComments());
+    dto.setImage(getFullUrl(appBanner.getMediaUrl()));
+    dto.setThumbnail(dto.getImage());
+    dto.setLink(getFullUrl(appBanner.getLink()));
+    dto.setTitle(appBanner.getTitle());
+    return dto;
+  }
 
-	private String getFullUrl(String url) {
-		if (ApiUtils.isHttpUrl(url)) {
-			return url;
-		}
-		return oFileProperties.getServerRoot() +'/'+ url;
-	}
+  private String getFullUrl(String url) {
+    if (ApiUtils.isHttpUrl(url)) {
+      return url;
+    }
+    return oFileProperties.getServerRoot() + '/' + url;
+  }
 }

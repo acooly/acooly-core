@@ -12,9 +12,7 @@ import com.acooly.module.mail.entity.EmailTemplate;
 
 import java.util.List;
 
-/**
- * @author shuijing
- */
+/** @author shuijing */
 public interface EmailTemplateService extends EntityService<EmailTemplate> {
-    List<EmailTemplate> find(String property, Object value);
+  List<EmailTemplate> find(String property, Object value);
 }

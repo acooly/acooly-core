@@ -13,11 +13,8 @@ import com.acooly.core.test.domain.App;
 /**
  * app Service接口
  *
- * Date: 2016-12-19 21:09:09
+ * <p>Date: 2016-12-19 21:09:09
  *
  * @author acooly
- *
  */
-public interface AppService extends EntityService<App> {
-
-}
+public interface AppService extends EntityService<App> {}

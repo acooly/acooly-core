@@ -23,83 +23,75 @@ import java.util.List;
 
 /**
  * 访问映射 Service实现
- * <p>
- * Date: 2017-03-21 00:34:47
+ *
+ * <p>Date: 2017-03-21 00:34:47
  *
  * @author acooly
  */
 @Slf4j
 @Service("actionMappingService")
-public class ActionMappingServiceImpl extends EntityServiceImpl<ActionMapping, ActionMappingDao> implements ActionMappingService {
+public class ActionMappingServiceImpl extends EntityServiceImpl<ActionMapping, ActionMappingDao>
+    implements ActionMappingService {
 
-    @Autowired
-    private RedisTemplate redisTemplate;
+  private static final String ACTION_MAPPING_CACHE_PREFIX = "portlet.action.mapping";
+  @Autowired private RedisTemplate redisTemplate;
 
-    private static final String ACTION_MAPPING_CACHE_PREFIX = "portlet.action.mapping";
+  @Override
+  public ActionMapping getActionMapping(String url) {
+    ValueOperations<String, ActionMapping> va = redisTemplate.opsForValue();
+    String cacheKey = getCacheKey(url);
+    ActionMapping actionMapping = va.get(cacheKey);
+    if (actionMapping != null) {
+      return actionMapping;
+    } else {
+      List<ActionMapping> actionMappingList = getEntityDao().findByLikeUrl(url);
 
-    @Override
-    public ActionMapping getActionMapping(String url) {
-        ValueOperations<String, ActionMapping> va = redisTemplate.opsForValue();
-        String cacheKey = getCacheKey(url);
-        ActionMapping actionMapping = va.get(cacheKey);
-        if (actionMapping != null) {
-            return actionMapping;
-        } else {
-            List<ActionMapping> actionMappingList = getEntityDao().findByLikeUrl(url);
-
-            if (Collections3.isEmpty(actionMappingList)) {
-                return null;
-            }
-            actionMapping = Collections3.getFirst(actionMappingList);
-            if (actionMapping == null) {
-                return null;
-            }
-            va.set(cacheKey, actionMapping);
-            return actionMapping;
-        }
+      if (Collections3.isEmpty(actionMappingList)) {
+        return null;
+      }
+      actionMapping = Collections3.getFirst(actionMappingList);
+      if (actionMapping == null) {
+        return null;
+      }
+      va.set(cacheKey, actionMapping);
+      return actionMapping;
     }
+  }
 
+  @Override
+  public void save(ActionMapping o) throws BusinessException {
+    super.save(o);
+    updateCache(o);
+  }
 
-    @Override
-    public void save(ActionMapping o) throws BusinessException {
-        super.save(o);
-        updateCache(o);
-
+  @Override
+  public void removeById(Serializable id) throws BusinessException {
+    ActionMapping actionMapping = get(id);
+    if (actionMapping != null) {
+      deleteCache(actionMapping);
     }
+    super.removeById(id);
+  }
 
-
-    @Override
-    public void removeById(Serializable id) throws BusinessException {
-        ActionMapping actionMapping = get(id);
-        if (actionMapping != null) {
-            deleteCache(actionMapping);
-        }
-        super.removeById(id);
+  private void deleteCache(ActionMapping actionMapping) {
+    try {
+      redisTemplate.delete(actionMapping.getUrl());
+    } catch (Exception e) {
+      log.warn("actionMapping删除缓存失败：{}", actionMapping);
     }
+  }
 
-    private void deleteCache(ActionMapping actionMapping) {
-        try {
-            redisTemplate.delete(actionMapping.getUrl());
-        } catch (Exception e) {
-            log.warn("actionMapping删除缓存失败：{}", actionMapping);
-        }
-
+  private void updateCache(ActionMapping actionMapping) {
+    try {
+      ValueOperations<String, ActionMapping> va = redisTemplate.opsForValue();
+      String cacheKey = getCacheKey(actionMapping.getUrl());
+      va.set(cacheKey, actionMapping);
+    } catch (Exception e) {
+      log.warn("actionMapping更新缓存失败：{}", actionMapping);
     }
+  }
 
-    private void updateCache(ActionMapping actionMapping) {
-        try {
-            ValueOperations<String, ActionMapping> va = redisTemplate.opsForValue();
-            String cacheKey = getCacheKey(actionMapping.getUrl());
-            va.set(cacheKey, actionMapping);
-        } catch (Exception e) {
-            log.warn("actionMapping更新缓存失败：{}", actionMapping);
-        }
-
-    }
-
-    private String getCacheKey(String url) {
-        return ACTION_MAPPING_CACHE_PREFIX + "_" + url;
-    }
-
-
+  private String getCacheKey(String url) {
+    return ACTION_MAPPING_CACHE_PREFIX + "_" + url;
+  }
 }

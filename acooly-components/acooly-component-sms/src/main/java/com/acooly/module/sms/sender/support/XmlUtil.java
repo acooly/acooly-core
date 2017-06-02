@@ -10,37 +10,33 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.OutputStream;
 import java.io.StringWriter;
 
-/**
- * @author shuijing
- */
+/** @author shuijing */
 public class XmlUtil {
-    private static TransformerFactory transFactory = TransformerFactory.newInstance();
+  private static TransformerFactory transFactory = TransformerFactory.newInstance();
 
+  public static void output(Node node, String encoding, OutputStream outputStream)
+      throws TransformerException {
+    Transformer transformer = transFactory.newTransformer();
+    transformer.setOutputProperty("encoding", encoding);
 
-    public static void output(Node node, String encoding,
-                              OutputStream outputStream) throws TransformerException {
-        Transformer transformer = transFactory.newTransformer();
-        transformer.setOutputProperty("encoding", encoding);
+    DOMSource source = new DOMSource();
+    source.setNode(node);
 
-        DOMSource source = new DOMSource();
-        source.setNode(node);
+    StreamResult result = new StreamResult();
+    result.setOutputStream(outputStream);
 
-        StreamResult result = new StreamResult();
-        result.setOutputStream(outputStream);
+    transformer.transform(source, result);
+  }
 
-        transformer.transform(source, result);
-    }
+  public static String xmlNodeToString(Node node, String encoding) throws TransformerException {
+    Transformer transformer = transFactory.newTransformer();
+    transformer.setOutputProperty("encoding", encoding);
+    StringWriter strWtr = new StringWriter();
 
-    public static String xmlNodeToString(Node node, String encoding)
-            throws TransformerException {
-        Transformer transformer = transFactory.newTransformer();
-        transformer.setOutputProperty("encoding", encoding);
-        StringWriter strWtr = new StringWriter();
-
-        DOMSource source = new DOMSource();
-        source.setNode(node);
-        StreamResult result = new StreamResult(strWtr);
-        transformer.transform(source, result);
-        return strWtr.toString();
-    }
+    DOMSource source = new DOMSource();
+    source.setNode(node);
+    StreamResult result = new StreamResult(strWtr);
+    transformer.transform(source, result);
+    return strWtr.toString();
+  }
 }

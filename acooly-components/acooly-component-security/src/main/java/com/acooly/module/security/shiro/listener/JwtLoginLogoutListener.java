@@ -9,18 +9,19 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * @author shuijing
- */
+/** @author shuijing */
 @Component
 public class JwtLoginLogoutListener implements LoginLogoutListener {
-    @Override
-    public void beforeLogout(HttpServletRequest request, HttpServletResponse response, Subject subject) {
-        JWTUtils.removeCookie(JWTUtils.TYPE_JWT, JWTUtils.getDomainName());
-    }
+  @Override
+  public void beforeLogout(
+      HttpServletRequest request, HttpServletResponse response, Subject subject) {
+    JWTUtils.removeCookie(JWTUtils.TYPE_JWT, JWTUtils.getDomainName());
+  }
 
-    @Override
-    public void afterLogin(AuthenticationToken token, AuthenticationException e, HttpServletRequest request, HttpServletResponse response) {
-
-    }
+  @Override
+  public void afterLogin(
+      AuthenticationToken token,
+      AuthenticationException e,
+      HttpServletRequest request,
+      HttpServletResponse response) {}
 }

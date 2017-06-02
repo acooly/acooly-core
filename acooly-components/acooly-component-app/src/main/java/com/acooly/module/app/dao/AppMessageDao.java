@@ -6,11 +6,8 @@ import com.acooly.module.jpa.EntityJpaDao;
 /**
  * 群发消息 JPA Dao
  *
- * Date: 2015-11-04 13:30:36
+ * <p>Date: 2015-11-04 13:30:36
  *
  * @author Acooly Code Generator
- *
  */
-public interface AppMessageDao extends EntityJpaDao<AppMessage, Long>, AppMessageDaoCustom {
-
-}
+public interface AppMessageDao extends EntityJpaDao<AppMessage, Long>, AppMessageDaoCustom {}

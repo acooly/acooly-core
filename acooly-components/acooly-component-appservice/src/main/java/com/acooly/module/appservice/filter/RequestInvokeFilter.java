@@ -15,27 +15,27 @@ import org.springframework.core.Ordered;
 
 import java.lang.reflect.InvocationTargetException;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 public class RequestInvokeFilter implements Filter<AppServiceContext> {
-	@Override
-	public void doFilter(AppServiceContext context, FilterChain<AppServiceContext> filterChain) {
-		
-		try {
-			Object result = context.getMethodInvocation().getMethod().invoke(context.getTarget(),
-				context.getMethodInvocation().getArguments());
-			context.setResult(result);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		} catch (InvocationTargetException e) {
-			context.setTargetThrowable(e.getTargetException());
-		}
-		
-	}
-	
-	@Override
-	public int getOrder() {
-		return Ordered.LOWEST_PRECEDENCE;
-	}
+  @Override
+  public void doFilter(AppServiceContext context, FilterChain<AppServiceContext> filterChain) {
+
+    try {
+      Object result =
+          context
+              .getMethodInvocation()
+              .getMethod()
+              .invoke(context.getTarget(), context.getMethodInvocation().getArguments());
+      context.setResult(result);
+    } catch (IllegalAccessException e) {
+      throw new RuntimeException(e);
+    } catch (InvocationTargetException e) {
+      context.setTargetThrowable(e.getTargetException());
+    }
+  }
+
+  @Override
+  public int getOrder() {
+    return Ordered.LOWEST_PRECEDENCE;
+  }
 }

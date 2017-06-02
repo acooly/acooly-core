@@ -17,57 +17,59 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/manage/module/app/appBanner")
-public class AppBannerManagerController extends AppAbstractManageController<AppBanner, AppBannerService> {
+public class AppBannerManagerController
+    extends AppAbstractManageController<AppBanner, AppBannerService> {
 
+  @Autowired private AppProperties appProperties;
 
-    @Autowired
-    private AppProperties appProperties;
+  @Autowired private AppBannerService appBannerService;
 
-    @Autowired
-    private AppBannerService appBannerService;
+  @Override
+  protected AppBanner onSave(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      Model model,
+      AppBanner entity,
+      boolean isCreate)
+      throws Exception {
+    Map<String, UploadResult> uploadResults = doUpload(request);
+    if (uploadResults != null && !uploadResults.isEmpty()) {
+      UploadResult uploadResult = uploadResults.get("bannerFile");
+      if (uploadResult != null) {
+        entity.setMediaUrl(getDatabasePath(uploadResult));
+      }
+    }
+    entity.setUpdateTime(new Date());
+    return entity;
+  }
 
-    @Override
-    protected AppBanner onSave(HttpServletRequest request, HttpServletResponse response, Model model, AppBanner entity,
-                               boolean isCreate) throws Exception {
-        Map<String, UploadResult> uploadResults = doUpload(request);
-        if (uploadResults != null && !uploadResults.isEmpty()) {
-            UploadResult uploadResult = uploadResults.get("bannerFile");
-            if (uploadResult != null) {
-                entity.setMediaUrl(getDatabasePath(uploadResult));
-            }
+  @Override
+  protected void doRemove(
+      HttpServletRequest request, HttpServletResponse response, Model model, Serializable... ids)
+      throws Exception {
+    if (ids == null || ids.length == 0) {
+      return;
+    }
+    AppBanner appBanner = loadEntity(request);
+    removeFile(appBanner.getMediaUrl());
+    super.doRemove(request, response, model, ids);
+  }
+
+  private void removeFile(String path) {
+    File file = new File(getStorageRoot() + path);
+    try {
+      try {
+        if (file.exists()) {
+          file.delete();
         }
-        entity.setUpdateTime(new Date());
-        return entity;
+      } catch (Exception e) {
+      }
+    } catch (Exception e) {
     }
+  }
 
-    @Override
-    protected void doRemove(HttpServletRequest request, HttpServletResponse response, Model model, Serializable... ids)
-            throws Exception {
-        if (ids == null || ids.length == 0) {
-            return;
-        }
-        AppBanner appBanner = loadEntity(request);
-        removeFile(appBanner.getMediaUrl());
-        super.doRemove(request, response, model, ids);
-    }
-
-    private void removeFile(String path) {
-        File file = new File(getStorageRoot() + path);
-        try {
-            try {
-                if (file.exists()) {
-                    file.delete();
-                }
-            } catch (Exception e) {
-            }
-        } catch (Exception e) {
-        }
-    }
-
-    @Override
-    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-        model.put("serverRoot", oFileProperties.getServerRoot());
-    }
-
-
+  @Override
+  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+    model.put("serverRoot", oFileProperties.getServerRoot());
+  }
 }

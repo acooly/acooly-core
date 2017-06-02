@@ -10,11 +10,9 @@
  */
 package com.acooly.module.security.defence.csrf;
 
-/**
- * @author qiubo
- */
+/** @author qiubo */
 public class AccessDeniedException extends RuntimeException {
-	public AccessDeniedException(String msg) {
-		super(msg);
-	}
+  public AccessDeniedException(String msg) {
+    super(msg);
+  }
 }

@@ -14,31 +14,30 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/manage/module/lottery/lotteryUserCount")
 public class LotteryUserCountManagerController
-        extends AbstractJQueryEntityController<LotteryUserCount, LotteryUserCountService> {
+    extends AbstractJQueryEntityController<LotteryUserCount, LotteryUserCountService> {
 
-    @SuppressWarnings("unused")
-    @Autowired
-    private LotteryUserCountService lotteryUserCountService;
+  @SuppressWarnings("unused")
+  @Autowired
+  private LotteryUserCountService lotteryUserCountService;
 
-    @Override
-    protected List<String> getExportTitles() {
-        return Lists.newArrayList("ID", "活动ID", "活动标题", "参与人", "获参次数", "已参与次数", "剩余次数", "创建时间", "最后修改时间");
-    }
+  @Override
+  protected List<String> getExportTitles() {
+    return Lists.newArrayList(
+        "ID", "活动ID", "活动标题", "参与人", "获参次数", "已参与次数", "剩余次数", "创建时间", "最后修改时间");
+  }
 
-
-    @Override
-    protected List<String> doExportEntity(LotteryUserCount entity) {
-        List<String> line = Lists.newArrayList();
-        line.add(String.valueOf(entity.getId()));
-        line.add(String.valueOf(entity.getLotteryId()));
-        line.add(entity.getLotteryTitle());
-        line.add(entity.getUser());
-        line.add(String.valueOf(entity.getTotalTimes()));
-        line.add(String.valueOf(entity.getPlayTimes()));
-        line.add(String.valueOf(entity.getTotalTimes() - entity.getPlayTimes()));
-        line.add(Dates.format(entity.getCreateTime()));
-        line.add(Dates.format(entity.getUpdateTime()));
-        return line;
-    }
-
+  @Override
+  protected List<String> doExportEntity(LotteryUserCount entity) {
+    List<String> line = Lists.newArrayList();
+    line.add(String.valueOf(entity.getId()));
+    line.add(String.valueOf(entity.getLotteryId()));
+    line.add(entity.getLotteryTitle());
+    line.add(entity.getUser());
+    line.add(String.valueOf(entity.getTotalTimes()));
+    line.add(String.valueOf(entity.getPlayTimes()));
+    line.add(String.valueOf(entity.getTotalTimes() - entity.getPlayTimes()));
+    line.add(Dates.format(entity.getCreateTime()));
+    line.add(Dates.format(entity.getUpdateTime()));
+    return line;
+  }
 }

@@ -14,11 +14,9 @@ import junitparams.custom.CustomParameters;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @Retention(RetentionPolicy.RUNTIME)
 @CustomParameters(provider = CsvProvider.class)
 public @interface CsvParameter {
-	String value();
+  String value();
 }

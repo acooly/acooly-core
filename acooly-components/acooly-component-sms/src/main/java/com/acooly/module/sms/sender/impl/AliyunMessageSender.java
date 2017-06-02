@@ -13,14 +13,15 @@ import com.acooly.module.sms.sender.support.AliyunSmsSendVo;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.InputStreamEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.CharacterData;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
-import org.apache.commons.codec.binary.Base64;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
@@ -34,142 +35,158 @@ import java.util.*;
  *
  * @author shuijing
  * @link https://help.aliyun.com/document_detail/27497.html?spm=5176.doc27501.6.733.LnsIrn
- * <p>
- * 阿里云短信通道
- * 阿里云通道只支持模板和签名为短信内容
- * 发送接口send(String mobileNo, String content) content内容需为json格式 如：
- * AliyunSmsSendVo vo=new AliyunSmsSendVo();
- * params.put("customer", "Testcustomer");
- * asa.setFreeSignName("观世宇");
- * asa.setSmsParamsMap(params);
- * asa.setTemplateCode("SMS_67185863");
- * content = asa.toJson();
- * @See com.acooly.core.test.web.TestController#testAliyunSms()
+ *     <p>阿里云短信通道 阿里云通道只支持模板和签名为短信内容 发送接口send(String mobileNo, String content) content内容需为json格式 如：
+ *     AliyunSmsSendVo vo=new AliyunSmsSendVo(); params.put("customer", "Testcustomer");
+ *     asa.setFreeSignName("观世宇"); asa.setSmsParamsMap(params); asa.setTemplateCode("SMS_67185863");
+ *     content = asa.toJson(); @See com.acooly.core.test.web.TestController#testAliyunSms()
  */
 @Service("aliyunMessageSender")
 public class AliyunMessageSender extends AbstractShortMessageSender {
 
+  @Autowired private SmsProperties properties;
 
-    @Autowired
-    private SmsProperties properties;
-
-    @Override
-    public String send(String mobileNo, String content) {
-        ArrayList<String> list = Lists.newArrayListWithCapacity(1);
-        list.add(mobileNo);
-        return send(list, content);
+  private static String getCharacterDataFromElement(Element e) {
+    Node child = e.getFirstChild();
+    if (child instanceof CharacterData) {
+      CharacterData cd = (CharacterData) child;
+      return cd.getData();
     }
+    return "?";
+  }
 
-    @Override
-    public String send(List<String> mobileNos, String content) {
+  public static String getGMT(Date dateCST) {
+    DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH);
+    df.setTimeZone(TimeZone.getTimeZone("GMT"));
+    return (df.format(dateCST));
+  }
 
-        String mobileNo = Joiner.on(",").join(mobileNos);
-        String gmt = getGMT(new Date());
+  @Override
+  public String send(String mobileNo, String content) {
+    ArrayList<String> list = Lists.newArrayListWithCapacity(1);
+    list.add(mobileNo);
+    return send(list, content);
+  }
 
-        SmsProperties.Aliyun aliyun = properties.getAliyun();
-        String topicName = aliyun.getTopicName();
-        String cityName = topicName.substring(topicName.indexOf("-") + 1);
+  @Override
+  public String send(List<String> mobileNos, String content) {
 
-        String encode = aliyunSign(gmt, topicName, aliyun.getAccessKeySecret());
+    String mobileNo = Joiner.on(",").join(mobileNos);
+    String gmt = getGMT(new Date());
 
-        //content为AliyunSmsSendVo转换的json字符串
-        AliyunSmsSendVo aliVo = AliyunSmsSendVo.getGson().fromJson(content, AliyunSmsSendVo.class);
+    SmsProperties.Aliyun aliyun = properties.getAliyun();
+    String topicName = aliyun.getTopicName();
+    String cityName = topicName.substring(topicName.indexOf("-") + 1);
 
-        AliyunSmsAttributes alisa = new AliyunSmsAttributes();
-        alisa.setTemplateCode(aliVo.getTemplateCode());
-        alisa.setSmsParams(aliVo.getSmsParams());
-        alisa.setFreeSignName(aliVo.getFreeSignName());
-        alisa.setReceiver(mobileNo);
-        String paramString = alisa.toJson();
+    String encode = aliyunSign(gmt, topicName, aliyun.getAccessKeySecret());
 
-        Https instance = Https.getInstance();
-        instance.connectTimeout(timeout / 2);
-        instance.readTimeout(timeout / 2);
-        try {
-            InputStream xmlSerialize = AliyunMessageSendSerializer.getInstance().serialize(paramString, "UTF-8");
+    //content为AliyunSmsSendVo转换的json字符串
+    AliyunSmsSendVo aliVo = AliyunSmsSendVo.getGson().fromJson(content, AliyunSmsSendVo.class);
 
-            //"http://1095791883952390.mns.cn-hangzhou.aliyuncs.com/topics/sms.topic-cn-hangzhou/messages"
-            HttpPost httppost = new HttpPost("http://" + aliyun.getAccountId() + ".mns." + cityName + ".aliyuncs.com/topics/" + topicName + "/messages");
+    AliyunSmsAttributes alisa = new AliyunSmsAttributes();
+    alisa.setTemplateCode(aliVo.getTemplateCode());
+    alisa.setSmsParams(aliVo.getSmsParams());
+    alisa.setFreeSignName(aliVo.getFreeSignName());
+    alisa.setReceiver(mobileNo);
+    String paramString = alisa.toJson();
 
-            InputStreamEntity inputStreamEntity = new InputStreamEntity(xmlSerialize);
-            httppost.setEntity(inputStreamEntity);
+    Https instance = Https.getInstance();
+    instance.connectTimeout(timeout / 2);
+    instance.readTimeout(timeout / 2);
+    try {
+      InputStream xmlSerialize =
+          AliyunMessageSendSerializer.getInstance().serialize(paramString, "UTF-8");
 
-            Map<String, String> headers = Maps.newHashMap();
-            headers.put("Authorization", "MNS " + aliyun.getAccessKeyId() + ":" + encode);
-            headers.put("Date", gmt);
-            headers.put("Content-Type", "text/xml;charset=utf-8");
-            headers.put("x-mns-version", "2015-06-06");
+      //"http://1095791883952390.mns.cn-hangzhou.aliyuncs.com/topics/sms.topic-cn-hangzhou/messages"
+      HttpPost httppost =
+          new HttpPost(
+              "http://"
+                  + aliyun.getAccountId()
+                  + ".mns."
+                  + cityName
+                  + ".aliyuncs.com/topics/"
+                  + topicName
+                  + "/messages");
 
-            HttpResult result = instance.execute(null, httppost, headers, false, "utf-8");
-            return handleResult(result, paramString);
+      InputStreamEntity inputStreamEntity = new InputStreamEntity(xmlSerialize);
+      httppost.setEntity(inputStreamEntity);
 
-        } catch (Exception e) {
-            logger.warn("发送短信失败 {号码:" + mobileNo + ",内容:" + content + "}, 原因:" + e.getMessage());
-            if (e instanceof BusinessException) {
-                String code = ((BusinessException) e).getCode();
-                throw new ShortMessageSendException(code, ((BusinessException) e).message(), e.getMessage());
-            }
-            if (e instanceof IOException || e instanceof ParserConfigurationException || e instanceof SAXException) {
-                throw new ShortMessageSendException("-1", "解析返回数据出错", e.getMessage());
-            }
-            throw new ShortMessageSendException("-1", "请求失败", e.getMessage());
-        }
+      Map<String, String> headers = Maps.newHashMap();
+      headers.put("Authorization", "MNS " + aliyun.getAccessKeyId() + ":" + encode);
+      headers.put("Date", gmt);
+      headers.put("Content-Type", "text/xml;charset=utf-8");
+      headers.put("x-mns-version", "2015-06-06");
+
+      HttpResult result = instance.execute(null, httppost, headers, false, "utf-8");
+      return handleResult(result, paramString);
+
+    } catch (Exception e) {
+      logger.warn("发送短信失败 {号码:" + mobileNo + ",内容:" + content + "}, 原因:" + e.getMessage());
+      if (e instanceof BusinessException) {
+        String code = ((BusinessException) e).getCode();
+        throw new ShortMessageSendException(
+            code, ((BusinessException) e).message(), e.getMessage());
+      }
+      if (e instanceof IOException
+          || e instanceof ParserConfigurationException
+          || e instanceof SAXException) {
+        throw new ShortMessageSendException("-1", "解析返回数据出错", e.getMessage());
+      }
+      throw new ShortMessageSendException("-1", "请求失败", e.getMessage());
     }
+  }
 
-    private String aliyunSign(String gmtDate, String topicName, String accessKeySecret) {
-        StringBuilder sign = new StringBuilder();
-        sign.append("POST").append("\n")
-            .append("").append("\n")
-            .append("text/xml;charset=utf-8").append("\n")
-            .append(gmtDate).append("\n")
-            .append("x-mns-version:2015-06-06").append("\n")
-            .append("/topics/").append(topicName).append("/messages");
-        String signStr = sign.toString();
-        return new String(Base64.encodeBase64(Cryptos.hmacSha1(signStr.getBytes(), accessKeySecret.getBytes())));
+  private String aliyunSign(String gmtDate, String topicName, String accessKeySecret) {
+    StringBuilder sign = new StringBuilder();
+    sign.append("POST")
+        .append("\n")
+        .append("")
+        .append("\n")
+        .append("text/xml;charset=utf-8")
+        .append("\n")
+        .append(gmtDate)
+        .append("\n")
+        .append("x-mns-version:2015-06-06")
+        .append("\n")
+        .append("/topics/")
+        .append(topicName)
+        .append("/messages");
+    String signStr = sign.toString();
+    return new String(
+        Base64.encodeBase64(Cryptos.hmacSha1(signStr.getBytes(), accessKeySecret.getBytes())));
+  }
+
+  protected String handleResult(HttpResult result, String paramString)
+      throws IOException, ParserConfigurationException, SAXException {
+
+    String body = result.getBody();
+    if (StringUtils.isEmpty(body)) {
+      throw new BusinessException("返回数据为空");
     }
+    Document document = AliyunMessageResponseParser.getInstance().parse(body);
+    NodeList messageId = document.getElementsByTagName(AliyunMessageResponseParser.MessageId);
 
-    private static String getCharacterDataFromElement(Element e) {
-        Node child = e.getFirstChild();
-        if (child instanceof CharacterData) {
-            CharacterData cd = (CharacterData) child;
-            return cd.getData();
-        }
-        return "?";
+    if (messageId.getLength() == 0 && result.getStatus() != 201) {
+      //error
+      NodeList message = document.getElementsByTagName(AliyunMessageResponseParser.Message);
+      Element line = (Element) message.item(0);
+      throw new BusinessException("发送失败：" + getCharacterDataFromElement(line));
+    } else {
+      //success
+      Element msgid = (Element) messageId.item(0);
+      NodeList messageBodyMD5 =
+          document.getElementsByTagName(AliyunMessageResponseParser.MessageBodyMD5);
+      Element msgMD5 = (Element) messageBodyMD5.item(0);
+      logger.info(
+          "{} 发送成功，MessageId:{},MessageBodyMD5:{}",
+          paramString,
+          getCharacterDataFromElement(msgid),
+          getCharacterDataFromElement(msgMD5));
+      return "success";
     }
+  }
 
-    protected String handleResult(HttpResult result, String paramString) throws IOException, ParserConfigurationException, SAXException {
-
-        String body = result.getBody();
-        if (StringUtils.isEmpty(body)) {
-            throw new BusinessException("返回数据为空");
-        }
-        Document document = AliyunMessageResponseParser.getInstance().parse(body);
-        NodeList messageId = document.getElementsByTagName(AliyunMessageResponseParser.MessageId);
-
-        if (messageId.getLength() == 0 && result.getStatus() != 201) {
-            //error
-            NodeList message = document.getElementsByTagName(AliyunMessageResponseParser.Message);
-            Element line = (Element) message.item(0);
-            throw new BusinessException("发送失败：" + getCharacterDataFromElement(line));
-        } else {
-            //success
-            Element msgid = (Element) messageId.item(0);
-            NodeList messageBodyMD5 = document.getElementsByTagName(AliyunMessageResponseParser.MessageBodyMD5);
-            Element msgMD5 = (Element) messageBodyMD5.item(0);
-            logger.info("{} 发送成功，MessageId:{},MessageBodyMD5:{}", paramString, getCharacterDataFromElement(msgid), getCharacterDataFromElement(msgMD5));
-            return "success";
-        }
-    }
-
-    public static String getGMT(Date dateCST) {
-        DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH);
-        df.setTimeZone(TimeZone.getTimeZone("GMT"));
-        return (df.format(dateCST));
-    }
-
-    @Override
-    public String getProvider() {
-        return "阿里云";
-    }
-
+  @Override
+  public String getProvider() {
+    return "阿里云";
+  }
 }

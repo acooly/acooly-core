@@ -2,53 +2,52 @@ package com.acooly.module.sms.sender;
 
 /**
  * 短信发送异常
- * 
- * @author zhangpu
  *
+ * @author zhangpu
  */
 public class ShortMessageSendException extends RuntimeException {
 
-	/** UID */
-	private static final long serialVersionUID = -1986339830876922364L;
-	private String resultCode;
-	private String resultMessage;
+  /** UID */
+  private static final long serialVersionUID = -1986339830876922364L;
 
-	public ShortMessageSendException() {
-		super();
-	}
+  private String resultCode;
+  private String resultMessage;
 
-	public ShortMessageSendException(String resultCode, String resultMessage) {
-		super();
-		this.resultCode = resultCode;
-		this.resultMessage = resultMessage;
-	}
+  public ShortMessageSendException() {
+    super();
+  }
 
-	public ShortMessageSendException(String resultCode, String resultMessage, String message) {
-		super(message, null);
-		this.resultCode = resultCode;
-		this.resultMessage = resultMessage;
-	}
+  public ShortMessageSendException(String resultCode, String resultMessage) {
+    super();
+    this.resultCode = resultCode;
+    this.resultMessage = resultMessage;
+  }
 
-	public String getResultCode() {
-		return resultCode;
-	}
+  public ShortMessageSendException(String resultCode, String resultMessage, String message) {
+    super(message, null);
+    this.resultCode = resultCode;
+    this.resultMessage = resultMessage;
+  }
 
-	public void setResultCode(String resultCode) {
-		this.resultCode = resultCode;
-	}
+  public String getResultCode() {
+    return resultCode;
+  }
 
-	public String getResultMessage() {
-		return resultMessage;
-	}
+  public void setResultCode(String resultCode) {
+    this.resultCode = resultCode;
+  }
 
-	public void setResultMessage(String resultMessage) {
-		this.resultMessage = resultMessage;
-	}
+  public String getResultMessage() {
+    return resultMessage;
+  }
 
-	@Override
-	public String getMessage() {
-		return (resultMessage != null ? resultMessage : "")
-				+ (super.getMessage() != null ? ":" + super.getMessage() : "");
-	}
+  public void setResultMessage(String resultMessage) {
+    this.resultMessage = resultMessage;
+  }
 
+  @Override
+  public String getMessage() {
+    return (resultMessage != null ? resultMessage : "")
+        + (super.getMessage() != null ? ":" + super.getMessage() : "");
+  }
 }

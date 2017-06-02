@@ -12,14 +12,13 @@ import com.acooly.module.certification.enums.CertResult;
  *
  * @author zhike@yiji.com
  */
-
 public interface CertificationService {
 
-    /**
-     * 单条实名认证
-     *
-     * @param realName
-     * @param idCardNo
-     */
-    CertResult certification(String realName, String idCardNo);
+  /**
+   * 单条实名认证
+   *
+   * @param realName
+   * @param idCardNo
+   */
+  CertResult certification(String realName, String idCardNo);
 }

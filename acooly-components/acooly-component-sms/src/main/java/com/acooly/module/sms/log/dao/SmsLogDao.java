@@ -9,17 +9,15 @@ import java.util.Date;
 /**
  * 短信发送记录 JPA Dao
  *
- * Date: 2013-08-05 22:28:35
+ * <p>Date: 2013-08-05 22:28:35
  *
  * @author Acooly Code Generator
- *
  */
 public interface SmsLogDao extends EntityJpaDao<SmsLog, Long> {
 
-	@Query("select count(e) from SmsLog e where e.clientIp=?1 and e.createTime > ?2")
-	Long countByIp(String ip, Date startTime);
+  @Query("select count(e) from SmsLog e where e.clientIp=?1 and e.createTime > ?2")
+  Long countByIp(String ip, Date startTime);
 
-	@Query("select count(e) from SmsLog e where e.mobileNo=?1 and e.createTime > ?2")
-	Long countByMobileNo(String mobileNo, Date startTime);
-
+  @Query("select count(e) from SmsLog e where e.mobileNo=?1 and e.createTime > ?2")
+  Long countByMobileNo(String mobileNo, Date startTime);
 }

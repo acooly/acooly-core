@@ -7,17 +7,15 @@ import com.acooly.module.app.enums.EntityStatus;
 /**
  * app_customer Service
  *
- * Date: 2015-05-12 13:39:30
+ * <p>Date: 2015-05-12 13:39:30
  *
  * @author Acooly Code Generator
- *
  */
 public interface AppCustomerService extends EntityService<AppCustomer> {
 
-	AppCustomer loadAppCustomer(String usreName, EntityStatus status);
+  AppCustomer loadAppCustomer(String usreName, EntityStatus status);
 
-	AppCustomer createAppCustomer(AppCustomer appCustomer);
+  AppCustomer createAppCustomer(AppCustomer appCustomer);
 
-	AppCustomer updateSecretKey(AppCustomer appCustomer);
-
+  AppCustomer updateSecretKey(AppCustomer appCustomer);
 }

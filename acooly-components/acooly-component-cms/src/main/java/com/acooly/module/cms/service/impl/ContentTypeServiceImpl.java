@@ -13,41 +13,40 @@ import java.util.List;
 import java.util.Map;
 
 @Service("contentTypeService")
-public class ContentTypeServiceImpl extends EntityServiceImpl<ContentType, ContentTypeDao> implements
-		ContentTypeService {
+public class ContentTypeServiceImpl extends EntityServiceImpl<ContentType, ContentTypeDao>
+    implements ContentTypeService {
 
-	@Override
-	public void save(ContentType o) throws BusinessException {
+  @Override
+  public void save(ContentType o) throws BusinessException {
 
-		if (o.getParent() != null && o.getParent().getId() != null) {
-			o.setPath(StringUtils.trimToEmpty(o.getParent().getPath()) + o.getParent().getId() + "|");
-		}
-		super.save(o);
-	}
+    if (o.getParent() != null && o.getParent().getId() != null) {
+      o.setPath(StringUtils.trimToEmpty(o.getParent().getPath()) + o.getParent().getId() + "|");
+    }
+    super.save(o);
+  }
 
-	@Override
-	public List<ContentType> getLevel(String parentId) {
+  @Override
+  public List<ContentType> getLevel(String parentId) {
 
-		Map<String, Object> map = new HashMap<String, Object>();
-		if (StringUtils.isNotBlank(parentId)) {
-			map.put("EQ_parent.id", parentId);
-		} else {
-			map.put("NULL_parent.id", "1");
-		}
-		return query(map, null);
-	}
+    Map<String, Object> map = new HashMap<String, Object>();
+    if (StringUtils.isNotBlank(parentId)) {
+      map.put("EQ_parent.id", parentId);
+    } else {
+      map.put("NULL_parent.id", "1");
+    }
+    return query(map, null);
+  }
 
-	@Override
-	public ContentType getContentType(String code) {
+  @Override
+  public ContentType getContentType(String code) {
 
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("EQ_code", code);
-		List<ContentType> list = query(map, null);
-		if (list != null && list.size() > 0) {
-			return list.iterator().next();
-		} else {
-			return null;
-		}
-	}
-
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("EQ_code", code);
+    List<ContentType> list = query(map, null);
+    if (list != null && list.size() > 0) {
+      return list.iterator().next();
+    } else {
+      return null;
+    }
+  }
 }

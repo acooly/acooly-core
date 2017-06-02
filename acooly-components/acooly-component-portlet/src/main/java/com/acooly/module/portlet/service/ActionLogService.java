@@ -16,16 +16,21 @@ import javax.validation.constraints.NotNull;
 
 /**
  * portlet_action_log Service接口
- * <p>
- * Date: 2017-03-20 23:36:29
+ *
+ * <p>Date: 2017-03-20 23:36:29
  *
  * @author acooly
  */
 public interface ActionLogService extends EntityService<ActionLog> {
 
-    ActionLog logger(String action, String actionName, String userName, ActionChannelEnum actionChannel,
-                     String version, String comments, HttpServletRequest request);
+  ActionLog logger(
+      String action,
+      String actionName,
+      String userName,
+      ActionChannelEnum actionChannel,
+      String version,
+      String comments,
+      HttpServletRequest request);
 
-    ActionLog logger(@NotNull HttpServletRequest request, String userName);
-
+  ActionLog logger(@NotNull HttpServletRequest request, String userName);
 }

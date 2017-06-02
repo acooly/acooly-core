@@ -13,30 +13,28 @@ import com.acooly.module.point.domain.PointAccount;
 /**
  * 积分账户 Service接口
  *
- * Date: 2017-02-03 22:45:12
- * 
- * @author cuifuqiang
+ * <p>Date: 2017-02-03 22:45:12
  *
+ * @author cuifuqiang
  */
 public interface PointAccountService extends EntityService<PointAccount> {
 
-	PointAccount findByUserName(String userName);
+  PointAccount findByUserName(String userName);
 
-	PointAccount pointProduce(String userName, long point);
+  PointAccount pointProduce(String userName, long point);
 
-	PointAccount pointExpense(String userName, long point, boolean isFreeze);
+  PointAccount pointExpense(String userName, long point, boolean isFreeze);
 
-	PointAccount pointFreeze(String userName, long point);
+  PointAccount pointFreeze(String userName, long point);
 
-	PointAccount pointUnfreeze(String userName, long point);
+  PointAccount pointUnfreeze(String userName, long point);
 
-	/**
-	 * 同一个等级的排名
-	 * 
-	 * @param userName
-	 * @param gradeId
-	 * @return
-	 */
-	public int pointRank(String userName, Long gradeId);
-
+  /**
+   * 同一个等级的排名
+   *
+   * @param userName
+   * @param gradeId
+   * @return
+   */
+  public int pointRank(String userName, Long gradeId);
 }

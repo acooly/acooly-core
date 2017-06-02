@@ -26,44 +26,44 @@ import java.util.List;
 
 import static com.acooly.core.common.boot.listener.ExApplicationRunListener.COMPONENTS_PACKAGE;
 
-/**
- * @author qiubo
- */
+/** @author qiubo */
 @Order(value = Ordered.LOWEST_PRECEDENCE)
 @Slf4j
 public class ComponentExtensionContextInitializer implements ApplicationContextInitializer {
-	@Override
-	public void initialize(ConfigurableApplicationContext applicationContext) {
-	    new DevModeDetector().apply(applicationContext.getEnvironment());
-		RelaxedPropertyResolver resolver = new RelaxedPropertyResolver(applicationContext.getEnvironment(),
-			"spring.autoconfigure.");
-		String[] exclude = resolver.getProperty("exclude", String[].class);
-		if (exclude == null) {
-			exclude = new String[0];
-		}
-		List<String> excludes = Lists.newArrayList(exclude);
-		SpringFactoriesLoader.loadFactoryNames(EnableAutoConfiguration.class, applicationContext.getClassLoader())
-			.forEach(autoConfiguration -> {
-			    if(autoConfiguration.startsWith("com.acooly.core")){
-			        return;
+  @Override
+  public void initialize(ConfigurableApplicationContext applicationContext) {
+    new DevModeDetector().apply(applicationContext.getEnvironment());
+    RelaxedPropertyResolver resolver =
+        new RelaxedPropertyResolver(applicationContext.getEnvironment(), "spring.autoconfigure.");
+    String[] exclude = resolver.getProperty("exclude", String[].class);
+    if (exclude == null) {
+      exclude = new String[0];
+    }
+    List<String> excludes = Lists.newArrayList(exclude);
+    SpringFactoriesLoader.loadFactoryNames(
+            EnableAutoConfiguration.class, applicationContext.getClassLoader())
+        .forEach(
+            autoConfiguration -> {
+              if (autoConfiguration.startsWith("com.acooly.core")) {
+                return;
+              }
+              if (autoConfiguration.startsWith("com.acooly")) {
+                if (!autoConfiguration.startsWith(COMPONENTS_PACKAGE)) {
+                  log.error("组件：{}没有遵循规范，必须放在{}子包", autoConfiguration, COMPONENTS_PACKAGE);
+                  Apps.shutdown();
                 }
-				if (autoConfiguration.startsWith("com.acooly")) {
-					if (!autoConfiguration.startsWith(COMPONENTS_PACKAGE)) {
-						log.error("组件：{}没有遵循规范，必须放在{}子包", autoConfiguration, COMPONENTS_PACKAGE);
-						Apps.shutdown();
-					}
-					
-				}
-				
-			});
-		SpringFactoriesLoader.loadFactories(ComponentInitializer.class, applicationContext.getClassLoader())
-			.forEach(componentInitializer -> {
-				componentInitializer.initialize(applicationContext);
-				excludes.addAll(componentInitializer.excludeAutoconfigClassNames());
-			});
-		
-		if (!excludes.isEmpty()) {
-			System.setProperty("spring.autoconfigure.exclude", Joiner.on(',').join(excludes));
-		}
-	}
+              }
+            });
+    SpringFactoriesLoader.loadFactories(
+            ComponentInitializer.class, applicationContext.getClassLoader())
+        .forEach(
+            componentInitializer -> {
+              componentInitializer.initialize(applicationContext);
+              excludes.addAll(componentInitializer.excludeAutoconfigClassNames());
+            });
+
+    if (!excludes.isEmpty()) {
+      System.setProperty("spring.autoconfigure.exclude", Joiner.on(',').join(excludes));
+    }
+  }
 }

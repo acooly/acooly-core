@@ -5,14 +5,12 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
-/**
- * @author shuijing
- */
+/** @author shuijing */
 public interface ScheduleEngine extends ApplicationListener<ContextRefreshedEvent>, DisposableBean {
 
-    Long addJobToEngine(SchedulerRule rule);
+  Long addJobToEngine(SchedulerRule rule);
 
-    void update(SchedulerRule rule);
+  void update(SchedulerRule rule);
 
-    void deleteJob(SchedulerRule ruleDO);
+  void deleteJob(SchedulerRule ruleDO);
 }

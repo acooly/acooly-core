@@ -4,7 +4,7 @@
  * create by acooly
  * date:2017-03-13
  */
- package com.acooly.module.point.dao;
+package com.acooly.module.point.dao;
 
 import com.acooly.module.mybatis.EntityMybatisDao;
 import com.acooly.module.point.domain.PointStatistics;
@@ -12,9 +12,8 @@ import com.acooly.module.point.domain.PointStatistics;
 /**
  * 积分统计 Mybatis Dao
  *
- * Date: 2017-03-13 11:51:10
+ * <p>Date: 2017-03-13 11:51:10
+ *
  * @author acooly
  */
-public interface PointStatisticsDao extends EntityMybatisDao<PointStatistics> {
-
-}
+public interface PointStatisticsDao extends EntityMybatisDao<PointStatistics> {}

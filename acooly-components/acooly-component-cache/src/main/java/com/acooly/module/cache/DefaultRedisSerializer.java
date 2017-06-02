@@ -13,18 +13,16 @@ import com.acooly.core.utils.kryos.Kryos;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
-/**
- * @author qiubo
- */
+/** @author qiubo */
 public class DefaultRedisSerializer implements RedisSerializer {
 
-    @Override
-    public byte[] serialize(Object o) throws SerializationException {
-        return Kryos.serialize(o);
-    }
+  @Override
+  public byte[] serialize(Object o) throws SerializationException {
+    return Kryos.serialize(o);
+  }
 
-    @Override
-    public Object deserialize(byte[] bytes) throws SerializationException {
-        return Kryos.deserialize(bytes);
-    }
+  @Override
+  public Object deserialize(byte[] bytes) throws SerializationException {
+    return Kryos.deserialize(bytes);
+  }
 }

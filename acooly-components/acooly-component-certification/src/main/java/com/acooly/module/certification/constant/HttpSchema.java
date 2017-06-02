@@ -18,13 +18,10 @@
  */
 package com.acooly.module.certification.constant;
 
-/**
- * HTTP Schema常量
- */
+/** HTTP Schema常量 */
 public class HttpSchema {
-    //HTTP
-    public static final String HTTP = "http://";
-    //HTTPS
-    public static final String HTTPS = "https://";
-
+  //HTTP
+  public static final String HTTP = "http://";
+  //HTTPS
+  public static final String HTTPS = "https://";
 }

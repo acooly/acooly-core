@@ -12,12 +12,10 @@ package com.acooly.module.dubbo;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextClosedEvent;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 public class DubboShutdownApplicationListener implements ApplicationListener<ContextClosedEvent> {
-    @Override
-    public void onApplicationEvent(ContextClosedEvent event) {
-        new DubboShutdownHook().run();
-    }
+  @Override
+  public void onApplicationEvent(ContextClosedEvent event) {
+    new DubboShutdownHook().run();
+  }
 }

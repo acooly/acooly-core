@@ -15,33 +15,30 @@ import org.junit.AfterClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 public class EventBusTest extends TestBase {
-	@Autowired
-	private EventBus eventBus;
-	
-	//立即发布事件
-	@Test
-	public void testPublish() throws Exception {
-		CreateCustomerEvent event = new CreateCustomerEvent();
-		event.setId(1l);
-		event.setUserName("dfd");
-		eventBus.publish(event);
-	}
-	
-	//仅当当前事务提交成功后才发布消息,非事务环境直接发布消息
-	@Test
-	public void testPublishAfterTransactionCommitted() throws Exception {
-		CreateCustomerEvent event = new CreateCustomerEvent();
-		event.setId(2l);
-		event.setUserName("dfd");
-		eventBus.publishAfterTransactionCommitted(event);
-	}
-	
-	@AfterClass
-	public static void testW() throws Exception {
-		System.out.println("a");
-	}
+  @Autowired private EventBus eventBus;
+
+  @AfterClass
+  public static void testW() throws Exception {
+    System.out.println("a");
+  }
+
+  //立即发布事件
+  @Test
+  public void testPublish() throws Exception {
+    CreateCustomerEvent event = new CreateCustomerEvent();
+    event.setId(1l);
+    event.setUserName("dfd");
+    eventBus.publish(event);
+  }
+
+  //仅当当前事务提交成功后才发布消息,非事务环境直接发布消息
+  @Test
+  public void testPublishAfterTransactionCommitted() throws Exception {
+    CreateCustomerEvent event = new CreateCustomerEvent();
+    event.setId(2l);
+    event.setUserName("dfd");
+    eventBus.publishAfterTransactionCommitted(event);
+  }
 }

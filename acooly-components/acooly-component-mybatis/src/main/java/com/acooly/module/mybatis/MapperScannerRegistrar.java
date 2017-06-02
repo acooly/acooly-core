@@ -24,57 +24,58 @@ import java.util.Map;
 
 import static com.acooly.core.common.boot.listener.ExApplicationRunListener.COMPONENTS_PACKAGE;
 
-/**
- * @author qiubo@yiji.com
- */
-public class MapperScannerRegistrar implements BeanFactoryAware, ImportBeanDefinitionRegistrar, ResourceLoaderAware {
-	
-	private BeanFactory beanFactory;
-	
-	private ResourceLoader resourceLoader;
-	
-	@Override
-	public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-		MybatisProperties mybatisProperties = Apps.buildProperties(MybatisProperties.class);
-		if (!mybatisProperties.isSupportMultiDataSource()) {
-			ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
-			try {
-				if (this.resourceLoader != null) {
-					scanner.setResourceLoader(this.resourceLoader);
-				}
-				scanner.setMarkerInterface(EntityMybatisDao.class);
-				scanner.registerFilters();
-				scanner.doScan(Apps.getBasePackage(), COMPONENTS_PACKAGE + ".**.dao");
-			} catch (IllegalStateException ex) {
-			}
-		} else {
-			for (Map.Entry<String, MybatisProperties.Multi> entry : mybatisProperties.getMulti().entrySet()) {
-				ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
-				try {
-					if (this.resourceLoader != null) {
-						scanner.setResourceLoader(this.resourceLoader);
-					}
-					scanner.setMarkerInterface(EntityMybatisDao.class);
-					if (entry.getValue().isPrimary()) {
-						scanner.setSqlSessionFactoryBeanName("sqlSessionFactory");
-					} else {
-						scanner.setSqlSessionFactoryBeanName(entry.getKey() + "SqlSessionFactory");
-					}
-					scanner.registerFilters();
-					scanner.doScan(entry.getValue().getScanPackage());
-				} catch (IllegalStateException ex) {
-				}
-			}
-		}
-	}
-	
-	@Override
-	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-		this.beanFactory = beanFactory;
-	}
-	
-	@Override
-	public void setResourceLoader(ResourceLoader resourceLoader) {
-		this.resourceLoader = resourceLoader;
-	}
+/** @author qiubo@yiji.com */
+public class MapperScannerRegistrar
+    implements BeanFactoryAware, ImportBeanDefinitionRegistrar, ResourceLoaderAware {
+
+  private BeanFactory beanFactory;
+
+  private ResourceLoader resourceLoader;
+
+  @Override
+  public void registerBeanDefinitions(
+      AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+    MybatisProperties mybatisProperties = Apps.buildProperties(MybatisProperties.class);
+    if (!mybatisProperties.isSupportMultiDataSource()) {
+      ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
+      try {
+        if (this.resourceLoader != null) {
+          scanner.setResourceLoader(this.resourceLoader);
+        }
+        scanner.setMarkerInterface(EntityMybatisDao.class);
+        scanner.registerFilters();
+        scanner.doScan(Apps.getBasePackage(), COMPONENTS_PACKAGE + ".**.dao");
+      } catch (IllegalStateException ex) {
+      }
+    } else {
+      for (Map.Entry<String, MybatisProperties.Multi> entry :
+          mybatisProperties.getMulti().entrySet()) {
+        ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
+        try {
+          if (this.resourceLoader != null) {
+            scanner.setResourceLoader(this.resourceLoader);
+          }
+          scanner.setMarkerInterface(EntityMybatisDao.class);
+          if (entry.getValue().isPrimary()) {
+            scanner.setSqlSessionFactoryBeanName("sqlSessionFactory");
+          } else {
+            scanner.setSqlSessionFactoryBeanName(entry.getKey() + "SqlSessionFactory");
+          }
+          scanner.registerFilters();
+          scanner.doScan(entry.getValue().getScanPackage());
+        } catch (IllegalStateException ex) {
+        }
+      }
+    }
+  }
+
+  @Override
+  public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+    this.beanFactory = beanFactory;
+  }
+
+  @Override
+  public void setResourceLoader(ResourceLoader resourceLoader) {
+    this.resourceLoader = resourceLoader;
+  }
 }

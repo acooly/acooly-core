@@ -18,46 +18,48 @@ import org.apache.ibatis.plugin.*;
 import java.util.Date;
 import java.util.Properties;
 
-/**
- * @author qiubo@yiji.com
- */
-@Intercepts({ @Signature(type = Executor.class, method = "update", args = { MappedStatement.class, Object.class }) })
+/** @author qiubo@yiji.com */
+@Intercepts({
+  @Signature(
+    type = Executor.class,
+    method = "update",
+    args = {MappedStatement.class, Object.class}
+  )
+})
 public class DateInterceptor implements Interceptor {
-	@Override
-	public Object intercept(Invocation invocation) throws Throwable {
-		Object[] args = invocation.getArgs();
-		if (args != null) {
-            //删除时不改变值
-            if(args.length==2){
-                if(args[0] instanceof MappedStatement){
-                    MappedStatement statement= (MappedStatement) args[0];
-                    if(statement.getSqlCommandType()== SqlCommandType.DELETE){
-                        return invocation.proceed();
-                    }
-                }
-            }
-            //更新改变值
-            for (Object arg : args) {
-                if(arg instanceof AbstractEntity){
-					AbstractEntity abstractEntity=(AbstractEntity)arg;
-					if(abstractEntity.isNew()){
-						abstractEntity.setCreateTime(new Date());
-					}else {
-						abstractEntity.setUpdateTime(new Date());
-					}
-                }
-            }
+  @Override
+  public Object intercept(Invocation invocation) throws Throwable {
+    Object[] args = invocation.getArgs();
+    if (args != null) {
+      //删除时不改变值
+      if (args.length == 2) {
+        if (args[0] instanceof MappedStatement) {
+          MappedStatement statement = (MappedStatement) args[0];
+          if (statement.getSqlCommandType() == SqlCommandType.DELETE) {
+            return invocation.proceed();
+          }
         }
-        return invocation.proceed();
-	}
-	
-	@Override
-	public Object plugin(Object target) {
-		return Plugin.wrap(target, this);
-	}
-	
-	@Override
-	public void setProperties(Properties properties) {
-		
-	}
+      }
+      //更新改变值
+      for (Object arg : args) {
+        if (arg instanceof AbstractEntity) {
+          AbstractEntity abstractEntity = (AbstractEntity) arg;
+          if (abstractEntity.isNew()) {
+            abstractEntity.setCreateTime(new Date());
+          } else {
+            abstractEntity.setUpdateTime(new Date());
+          }
+        }
+      }
+    }
+    return invocation.proceed();
+  }
+
+  @Override
+  public Object plugin(Object target) {
+    return Plugin.wrap(target, this);
+  }
+
+  @Override
+  public void setProperties(Properties properties) {}
 }

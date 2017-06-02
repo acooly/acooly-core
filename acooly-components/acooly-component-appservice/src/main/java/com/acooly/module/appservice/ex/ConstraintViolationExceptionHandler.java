@@ -9,27 +9,25 @@
  */
 package com.acooly.module.appservice.ex;
 
-
-
 import com.acooly.core.common.exception.OrderCheckException;
-import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.core.common.facade.ResultBase;
+import com.acooly.core.utils.enums.ResultStatus;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
-/**
- * @author qiubo@yiji.com
- */
-public class ConstraintViolationExceptionHandler implements ExceptionHandler<ConstraintViolationException> {
-	@Override
-	public void handle(ExceptionContext<?> context, ConstraintViolationException e) {
-		OrderCheckException exception = new OrderCheckException();
-		for (ConstraintViolation<?> constraintViolation : e.getConstraintViolations()) {
-			exception.addError(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
-		}
-		ResultBase res = context.getResponse();
-		res.setDetail(e.getMessage());
-		res.setStatus(ResultStatus.failure);
-	}
+/** @author qiubo@yiji.com */
+public class ConstraintViolationExceptionHandler
+    implements ExceptionHandler<ConstraintViolationException> {
+  @Override
+  public void handle(ExceptionContext<?> context, ConstraintViolationException e) {
+    OrderCheckException exception = new OrderCheckException();
+    for (ConstraintViolation<?> constraintViolation : e.getConstraintViolations()) {
+      exception.addError(
+          constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
+    }
+    ResultBase res = context.getResponse();
+    res.setDetail(e.getMessage());
+    res.setStatus(ResultStatus.failure);
+  }
 }

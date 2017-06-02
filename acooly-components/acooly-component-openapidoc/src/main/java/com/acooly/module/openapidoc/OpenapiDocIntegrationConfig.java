@@ -17,13 +17,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @Configuration
 @ConditionalOnProperty(value = "acooly.openapidoc.enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.yiji.framework.openapidoc")
-@EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class, basePackages = "com.yiji.framework.openapidoc")
+@EnableJpaRepositories(
+  repositoryBaseClass = AbstractEntityJpaDao.class,
+  basePackages = "com.yiji.framework.openapidoc"
+)
 @AutoConfigureAfter(SecurityAutoConfig.class)
-public class OpenapiDocIntegrationConfig {
-}
+public class OpenapiDocIntegrationConfig {}

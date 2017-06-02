@@ -22,48 +22,46 @@ import org.junit.Test;
 
 import java.util.UUID;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @Slf4j
 public class AnonymousAppBannerListApiServiceTest extends AbstractApiServieTests {
-	{
-		gatewayUrl = "http://localhost:8081/gateway.html";
-		partnerId = "anonymous";
-		key = "anonymouanonymou";
-		notifyUrl = null;
-		version = null;
-		signType = null;
-	}
-	
-	@Test
-	public void testBannerList() throws Exception {
-		service = "bannerList";
-		BannerListRequest request = new BannerListRequest();
-		request.setAppClient(true);
-		request.setDeviceId("11111111");
-		request.setRequestNo(UUID.randomUUID().toString());
-		
-		BannerListResponse bannerListResponse = request(request, BannerListResponse.class);
-		log.info("response:{}", bannerListResponse);
-	}
-	
-	@Test
-	public void testLogin() throws Exception {
-		service = "login";
-		LoginRequest request = new LoginRequest();
-		request.setAppClient(true);
-		request.setDeviceId("11111111");
-		request.setRequestNo(UUID.randomUUID().toString());
-		request.setUsername("bohr");
-		String password = "bohr";
-		request.setPassword(Encodes.encodeBase64(Cryptos.aesEncrypt(password, Encodes.encodeHex(key.getBytes()))));
-		request.setDeviceType(DeviceType.IPHONE6);
-		request.setDeviceModel("xxxxx");
-		request.setChannel("Web");
-		request.setCustomerIp("218.239.78.70");
-		LoginResponse response = request(request, LoginResponse.class);
-		log.info("response:{}", response);
-		
-	}
+  {
+    gatewayUrl = "http://localhost:8081/gateway.html";
+    partnerId = "anonymous";
+    key = "anonymouanonymou";
+    notifyUrl = null;
+    version = null;
+    signType = null;
+  }
+
+  @Test
+  public void testBannerList() throws Exception {
+    service = "bannerList";
+    BannerListRequest request = new BannerListRequest();
+    request.setAppClient(true);
+    request.setDeviceId("11111111");
+    request.setRequestNo(UUID.randomUUID().toString());
+
+    BannerListResponse bannerListResponse = request(request, BannerListResponse.class);
+    log.info("response:{}", bannerListResponse);
+  }
+
+  @Test
+  public void testLogin() throws Exception {
+    service = "login";
+    LoginRequest request = new LoginRequest();
+    request.setAppClient(true);
+    request.setDeviceId("11111111");
+    request.setRequestNo(UUID.randomUUID().toString());
+    request.setUsername("bohr");
+    String password = "bohr";
+    request.setPassword(
+        Encodes.encodeBase64(Cryptos.aesEncrypt(password, Encodes.encodeHex(key.getBytes()))));
+    request.setDeviceType(DeviceType.IPHONE6);
+    request.setDeviceModel("xxxxx");
+    request.setChannel("Web");
+    request.setCustomerIp("218.239.78.70");
+    LoginResponse response = request(request, LoginResponse.class);
+    log.info("response:{}", response);
+  }
 }

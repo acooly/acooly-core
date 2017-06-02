@@ -22,34 +22,31 @@ import java.util.List;
 
 import static com.acooly.module.mail.MailProperties.PREFIX;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @Configuration
-@EnableConfigurationProperties({ MailProperties.class })
+@EnableConfigurationProperties({MailProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.module.mail")
 public class MailAutoConfig {
-	@Autowired
-	private MailProperties mailProperties;
+  @Autowired private MailProperties mailProperties;
 
-    @Bean
-    public StandardDatabaseScriptIniter mailScriptIniter() {
-        return new StandardDatabaseScriptIniter() {
-            @Override
-            public String getEvaluateTable() {
-                return "email_template";
-            }
+  @Bean
+  public StandardDatabaseScriptIniter mailScriptIniter() {
+    return new StandardDatabaseScriptIniter() {
+      @Override
+      public String getEvaluateTable() {
+        return "email_template";
+      }
 
-            @Override
-            public String getComponentName() {
-                return "mail";
-            }
+      @Override
+      public String getComponentName() {
+        return "mail";
+      }
 
-            @Override
-            public List<String> getInitSqlFile() {
-                return Lists.newArrayList("mail", "mail_urls");
-            }
-        };
-    }
+      @Override
+      public List<String> getInitSqlFile() {
+        return Lists.newArrayList("mail", "mail_urls");
+      }
+    };
+  }
 }

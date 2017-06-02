@@ -14,15 +14,16 @@ import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.log.LogbackConfigurator;
 import com.acooly.core.common.boot.log.initializer.AbstractLogInitializer;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 public class WebLogInitializer extends AbstractLogInitializer {
-    @Override
-    public void init(LogbackConfigurator configurator) {
-        if(!Apps.isDevMode()){
-            configurator.logger("org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping", Level.WARN);
-            configurator.logger("org.springframework.web.servlet.handler.SimpleUrlHandlerMapping", Level.WARN);
-        }
+  @Override
+  public void init(LogbackConfigurator configurator) {
+    if (!Apps.isDevMode()) {
+      configurator.logger(
+          "org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping",
+          Level.WARN);
+      configurator.logger(
+          "org.springframework.web.servlet.handler.SimpleUrlHandlerMapping", Level.WARN);
     }
+  }
 }

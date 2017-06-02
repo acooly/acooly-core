@@ -13,13 +13,15 @@ import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * 过滤器链
+ *
  * @author qiubo@yiji.com
  */
 @ThreadSafe
 public interface FilterChain<C extends Context> {
-	/**
-	 * 执行过滤器链
-	 * @param context 上下文对象
-	 */
-	void doFilter(C context);
+  /**
+   * 执行过滤器链
+   *
+   * @param context 上下文对象
+   */
+  void doFilter(C context);
 }

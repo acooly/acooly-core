@@ -1,7 +1,6 @@
 
 package com.acooly.module.cms.service;
 
-
 import com.acooly.core.common.service.EntityService;
 import com.acooly.module.cms.domain.Attachment;
 
@@ -10,6 +9,4 @@ import com.acooly.module.cms.domain.Attachment;
  *
  * @author Acooly Code Generator
  */
-public interface AttachmentService extends EntityService<Attachment> {
-
-}
+public interface AttachmentService extends EntityService<Attachment> {}

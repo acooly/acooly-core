@@ -25,37 +25,32 @@ import java.util.List;
 
 import static com.acooly.module.lottery.LotteryProperties.PREFIX;
 
-/**
- * @author kuli@yiji.com
- */
+/** @author kuli@yiji.com */
 @Configuration
 @EnableConfigurationProperties({LotteryProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.module.lottery")
 @AutoConfigureAfter(SecurityAutoConfig.class)
 public class LotteryAutoConfig extends WebMvcConfigurerAdapter {
-    @Autowired
-    private LotteryProperties lotteryProperties;
+  @Autowired private LotteryProperties lotteryProperties;
 
-    @Bean
-    public StandardDatabaseScriptIniter lotteryScriptIniter() {
-        return new StandardDatabaseScriptIniter() {
-            @Override
-            public String getEvaluateTable() {
-                return "lottery";
-            }
+  @Bean
+  public StandardDatabaseScriptIniter lotteryScriptIniter() {
+    return new StandardDatabaseScriptIniter() {
+      @Override
+      public String getEvaluateTable() {
+        return "lottery";
+      }
 
-            @Override
-            public String getComponentName() {
-                return "lottery";
-            }
+      @Override
+      public String getComponentName() {
+        return "lottery";
+      }
 
-            @Override
-            public List<String> getInitSqlFile() {
-               return Lists.newArrayList("lottery",
-                    "lottery_urls");
-            }
-        };
-    }
-
+      @Override
+      public List<String> getInitSqlFile() {
+        return Lists.newArrayList("lottery", "lottery_urls");
+      }
+    };
+  }
 }

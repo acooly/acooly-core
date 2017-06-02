@@ -14,12 +14,13 @@ import com.acooly.module.certification.enums.CertResult;
  */
 public interface RealNameAuthentication {
 
-    /**
-     * 实名认证
-     * @param realName
-     * @param idCardNo
-     */
-    CertResult certification(String realName, String idCardNo);
+  /**
+   * 实名认证
+   *
+   * @param realName
+   * @param idCardNo
+   */
+  CertResult certification(String realName, String idCardNo);
 
-    String getProvider();
+  String getProvider();
 }

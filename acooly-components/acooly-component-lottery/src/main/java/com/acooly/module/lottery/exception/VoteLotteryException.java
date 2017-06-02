@@ -1,7 +1,4 @@
-/**
- * create by zhangpu
- * date:2015年11月30日
- */
+/** create by zhangpu date:2015年11月30日 */
 package com.acooly.module.lottery.exception;
 
 /**
@@ -10,12 +7,10 @@ package com.acooly.module.lottery.exception;
  */
 public class VoteLotteryException extends LotteryException {
 
-	/** serialVersionUID */
-	private static final long serialVersionUID = 3350243421569983052L;
+  /** serialVersionUID */
+  private static final long serialVersionUID = 3350243421569983052L;
 
-	public VoteLotteryException() {
-		super(LotteryErrorCode.VoteFail);
-	}
-
-
+  public VoteLotteryException() {
+    super(LotteryErrorCode.VoteFail);
+  }
 }

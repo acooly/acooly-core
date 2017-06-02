@@ -22,41 +22,40 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import java.net.UnknownHostException;
 
-/**
- * @author qiubo
- */
+/** @author qiubo */
 @Configuration
-@EnableConfigurationProperties({ CacheProperties.class })
+@EnableConfigurationProperties({CacheProperties.class})
 @EnableCaching
 public class CacheAutoConfig {
-	
-	@Bean
-	public RedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory) throws UnknownHostException {
-		RedisTemplate<Object, Object> template = new RedisTemplate<>();
-		template.setConnectionFactory(redisConnectionFactory);
-		template.setKeySerializer(new DefaultKeySerializer());
-		template.setDefaultSerializer(springSessionDefaultRedisSerializer());
-		return template;
-	}
 
-    @Bean
-    @ConditionalOnProperty(value = "acooly.cache.checkVersion",matchIfMissing = true)
-    public RedisInfoChecker checkRedisVersion(RedisTemplate redisTemplate) {
-        RedisInfoChecker checker = new RedisInfoChecker(redisTemplate);
-        checker.checkRedisVersion();
-        return checker;
-    }
+  @Bean
+  public RedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory)
+      throws UnknownHostException {
+    RedisTemplate<Object, Object> template = new RedisTemplate<>();
+    template.setConnectionFactory(redisConnectionFactory);
+    template.setKeySerializer(new DefaultKeySerializer());
+    template.setDefaultSerializer(springSessionDefaultRedisSerializer());
+    return template;
+  }
 
-	@Bean
-	public CachingConfigurer cachingConfigurer(RedisTemplate redisTemplate, CacheProperties cacheProperties) {
-		return new DefaultCachingConfigurer(redisTemplate, cacheProperties.getExpireTime());
-	}
-	
-	//session使用kryo序列化器 ref:org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration.setDefaultRedisSerializer()
-	//	@Bean("springSessionDefaultRedisSerializer")
-	//由于实体对象中有懒加载集合，不能用kryo。。。
-	public DefaultRedisSerializer springSessionDefaultRedisSerializer() {
-		return new DefaultRedisSerializer();
-	}
+  @Bean
+  @ConditionalOnProperty(value = "acooly.cache.checkVersion", matchIfMissing = true)
+  public RedisInfoChecker checkRedisVersion(RedisTemplate redisTemplate) {
+    RedisInfoChecker checker = new RedisInfoChecker(redisTemplate);
+    checker.checkRedisVersion();
+    return checker;
+  }
 
+  @Bean
+  public CachingConfigurer cachingConfigurer(
+      RedisTemplate redisTemplate, CacheProperties cacheProperties) {
+    return new DefaultCachingConfigurer(redisTemplate, cacheProperties.getExpireTime());
+  }
+
+  //session使用kryo序列化器 ref:org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration.setDefaultRedisSerializer()
+  //	@Bean("springSessionDefaultRedisSerializer")
+  //由于实体对象中有懒加载集合，不能用kryo。。。
+  public DefaultRedisSerializer springSessionDefaultRedisSerializer() {
+    return new DefaultRedisSerializer();
+  }
 }

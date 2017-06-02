@@ -7,21 +7,19 @@
  */
 package com.acooly.module.point.service;
 
-import java.util.Date;
-
 import com.acooly.core.common.service.EntityService;
 import com.acooly.module.point.domain.PointClearConfig;
+
+import java.util.Date;
 
 /**
  * 积分清零设置 Service接口
  *
- * Date: 2017-04-19 16:24:31
- * 
- * @author acooly
+ * <p>Date: 2017-04-19 16:24:31
  *
+ * @author acooly
  */
 public interface PointClearConfigService extends EntityService<PointClearConfig> {
 
-	public long getClearPoint(String userName, Date tradeTime);
-
+  public long getClearPoint(String userName, Date tradeTime);
 }

@@ -1,7 +1,7 @@
 /*
  * acooly.cn Inc.
  * Copyright (c) 2016 All Rights Reserved.
- * create by zhangpu 
+ * create by zhangpu
  * date:2016年3月19日
  *
  */
@@ -9,14 +9,11 @@ package com.acooly.core.common.facade;
 
 import java.io.Serializable;
 
-/**
- * @author zhangpu
- */
+/** @author zhangpu */
 public interface Orderable extends Serializable {
-	String getGid();
+  String getGid();
 
-	String getPartnerId();
+  String getPartnerId();
 
-	void check();
-
+  void check();
 }

@@ -25,63 +25,61 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @RestController
 @RequestMapping(value = "/test")
 public class TestController {
-    @Autowired
-    private SmsService smsService;
-    @Autowired
-    private MailService mailService;
-    @Value("${prop}")
-    private String valueFromProp;
+  @Autowired private SmsService smsService;
+  @Autowired private MailService mailService;
 
-    @Autowired
-    private CertificationService certificationService;
+  @Value("${prop}")
+  private String valueFromProp;
 
-    @RequestMapping("sms")
-    public void testSms() {
-        smsService.send("15021507995", "xxx");
-    }
+  @Autowired private CertificationService certificationService;
 
-    @RequestMapping("aliyunSms")
-    public void testAliyunSms() {
-        AliyunSmsSendVo asa = new AliyunSmsSendVo();
+  @RequestMapping("sms")
+  public void testSms() {
+    smsService.send("15021507995", "xxx");
+  }
 
-        Map<String, String> params = Maps.newHashMap();
-        params.put("customer", "Testcustomer");
-        asa.setFreeSignName("观世宇");
-        asa.setSmsParamsMap(params);
-        asa.setTemplateCode("SMS_67185863");
+  @RequestMapping("aliyunSms")
+  public void testAliyunSms() {
+    AliyunSmsSendVo asa = new AliyunSmsSendVo();
 
-        smsService.send("18612299409", asa.toJson());
-    }
+    Map<String, String> params = Maps.newHashMap();
+    params.put("customer", "Testcustomer");
+    asa.setFreeSignName("观世宇");
+    asa.setSmsParamsMap(params);
+    asa.setTemplateCode("SMS_67185863");
 
-    @GetMapping("testPermission")
-    public Boolean testPermission() {
-        return SecurityUtils.getSubject().isPermitted("xxxx");
-    }
+    smsService.send("18612299409", asa.toJson());
+  }
 
-    @GetMapping("mail")
-    public void testMail() {
-        MailDto dto = new MailDto();
-        dto.to("qiuboboy@qq.com").subject("测试").param("name", "x").param("message", "how are you!")
-            .templateName("register1");
-        mailService.send(dto);
-    }
+  @GetMapping("testPermission")
+  public Boolean testPermission() {
+    return SecurityUtils.getSubject().isPermitted("xxxx");
+  }
 
-    @GetMapping("testPojo")
-    public City testPojo() {
-        City city = new City();
+  @GetMapping("mail")
+  public void testMail() {
+    MailDto dto = new MailDto();
+    dto.to("qiuboboy@qq.com")
+        .subject("测试")
+        .param("name", "x")
+        .param("message", "how are you!")
+        .templateName("register1");
+    mailService.send(dto);
+  }
 
-        return city;
-    }
+  @GetMapping("testPojo")
+  public City testPojo() {
+    City city = new City();
 
-    @RequestMapping("cert")
-    public void testCert() {
-        certificationService.certification("韦崇凯", "500221198810192313");
-    }
+    return city;
+  }
 
+  @RequestMapping("cert")
+  public void testCert() {
+    certificationService.certification("韦崇凯", "500221198810192313");
+  }
 }

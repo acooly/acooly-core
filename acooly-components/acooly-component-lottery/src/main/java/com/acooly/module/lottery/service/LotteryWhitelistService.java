@@ -6,15 +6,13 @@ import com.acooly.module.lottery.domain.LotteryWhitelist;
 /**
  * lottery_whitelist Service
  *
- * Date: 2016-01-02 23:20:21
+ * <p>Date: 2016-01-02 23:20:21
  *
  * @author Acooly Code Generator
- *
  */
 public interface LotteryWhitelistService extends EntityService<LotteryWhitelist> {
 
-	LotteryWhitelist getValid(Long lotteryId, String user);
+  LotteryWhitelist getValid(Long lotteryId, String user);
 
-	void saveInNewTrans(LotteryWhitelist whitelist);
-
+  void saveInNewTrans(LotteryWhitelist whitelist);
 }

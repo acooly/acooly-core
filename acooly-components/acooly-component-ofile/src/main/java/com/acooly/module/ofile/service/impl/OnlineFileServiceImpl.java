@@ -7,6 +7,5 @@ import com.acooly.module.ofile.service.OnlineFileService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OnlineFileServiceImpl extends EntityServiceImpl<OnlineFile, OnlineFileDao> implements OnlineFileService {
-
-}
+public class OnlineFileServiceImpl extends EntityServiceImpl<OnlineFile, OnlineFileDao>
+    implements OnlineFileService {}

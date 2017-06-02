@@ -1,23 +1,20 @@
 /*
  * acooly.cn Inc.
  * Copyright (c) 2016 All Rights Reserved.
- * create by zhangpu 
+ * create by zhangpu
  * date:2016年3月19日
  *
  */
 package com.acooly.core.common.facade;
 
-import java.io.Serializable;
-
 import com.acooly.core.utils.enums.Messageable;
 
-/**
- * @author zhangpu
- */
+import java.io.Serializable;
+
+/** @author zhangpu */
 public interface Resultable extends Serializable {
 
-	Messageable getStatus();
+  Messageable getStatus();
 
-	String getDetail();
-
+  String getDetail();
 }

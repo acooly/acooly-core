@@ -18,15 +18,16 @@ import com.acooly.core.common.boot.log.LogbackConfigurator;
 
 /**
  * 添加info文件日志
+ *
  * @author qiubo
  */
 public class FileInfoLogInitializer extends AbstractLogInitializer {
-	@Override
-	public void init(LogbackConfigurator configurator) {
-		String fileName = Apps.getAppName() + "-info-30de.log";
-		configurator.log("设置info级别的文件日志，日志文件为:%s", fileName);
-		Appender<ILoggingEvent> appender = configurator.asyncFileAppender("FILE-INFO", configurator.getPattern(),
-			fileName);
-		configurator.root(Level.INFO, appender);
-	}
+  @Override
+  public void init(LogbackConfigurator configurator) {
+    String fileName = Apps.getAppName() + "-info-30de.log";
+    configurator.log("设置info级别的文件日志，日志文件为:%s", fileName);
+    Appender<ILoggingEvent> appender =
+        configurator.asyncFileAppender("FILE-INFO", configurator.getPattern(), fileName);
+    configurator.root(Level.INFO, appender);
+  }
 }

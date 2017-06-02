@@ -17,35 +17,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * APP最新版本信息 API
- * 
- * @note <p>
- *       通过设备类型(deviceType:android/iphone)获取最新版本信息
- *       </p>
- * @author zhangpu
  *
+ * @note
+ *     <p>通过设备类型(deviceType:android/iphone)获取最新版本信息
+ * @author zhangpu
  */
-@OpenApiService(name = "appLatestVersion", desc = "最新版本", responseType = ResponseType.SYN, owner = ApiOwners.COMMON)
-public class AppLatestVersionApiService extends BaseApiService<AppLatestVersionRequest, AppLatestVersionResponse> {
+@OpenApiService(
+  name = "appLatestVersion",
+  desc = "最新版本",
+  responseType = ResponseType.SYN,
+  owner = ApiOwners.COMMON
+)
+public class AppLatestVersionApiService
+    extends BaseApiService<AppLatestVersionRequest, AppLatestVersionResponse> {
 
-	@Autowired
-	private AppVersionService appVersionService;
+  @Autowired private AppVersionService appVersionService;
 
-	@Override
-	protected void doService(AppLatestVersionRequest request, AppLatestVersionResponse response) {
-		try {
-			AppVersion version = appVersionService.getLatest(request.getAppCode(), request.getDeviceType());
-			if (version == null) {
-				throw new ApiServiceException(AppApiErrorCode.VERSION_NOFOUND);
-			}
-			BeanMapper.copy(version, response);
-			if (Strings.equalsIgnoreCase(AppVersion.DEVICE_TYPE_IPHONE, version.getDeviceType())) {
-				response.setUrl(version.getAppleUrl());
-			}
-		} catch (ApiServiceException ae) {
-			throw ae;
-		} catch (Exception e) {
-			throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, e.getMessage());
-		}
-	}
-
+  @Override
+  protected void doService(AppLatestVersionRequest request, AppLatestVersionResponse response) {
+    try {
+      AppVersion version =
+          appVersionService.getLatest(request.getAppCode(), request.getDeviceType());
+      if (version == null) {
+        throw new ApiServiceException(AppApiErrorCode.VERSION_NOFOUND);
+      }
+      BeanMapper.copy(version, response);
+      if (Strings.equalsIgnoreCase(AppVersion.DEVICE_TYPE_IPHONE, version.getDeviceType())) {
+        response.setUrl(version.getAppleUrl());
+      }
+    } catch (ApiServiceException ae) {
+      throw ae;
+    } catch (Exception e) {
+      throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, e.getMessage());
+    }
+  }
 }

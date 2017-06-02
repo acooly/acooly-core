@@ -8,8 +8,5 @@ import com.acooly.module.cms.service.AttachmentService;
 import org.springframework.stereotype.Service;
 
 @Service("attachmentService")
-public class AttachmentServiceImpl
-	extends EntityServiceImpl<Attachment, AttachmentDao>
-	implements AttachmentService {
-
-}
+public class AttachmentServiceImpl extends EntityServiceImpl<Attachment, AttachmentDao>
+    implements AttachmentService {}

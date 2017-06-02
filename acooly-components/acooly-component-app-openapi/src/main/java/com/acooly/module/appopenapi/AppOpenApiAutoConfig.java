@@ -21,20 +21,17 @@ import org.springframework.context.annotation.Configuration;
 
 import static com.acooly.module.appopenapi.AppOpenapiProperties.PREFIX;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @Configuration
-@EnableConfigurationProperties({ AppOpenapiProperties.class })
+@EnableConfigurationProperties({AppOpenapiProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.module.appopenapi")
 @Slf4j
 public class AppOpenApiAutoConfig {
-	
-	@ConditionalOnMissingBean(AppApiLoginService.class)
-	@Bean
-	public AppApiLoginService appApiLoginService() {
-		return new AnonymousAppApiLoginService();
-	}
-	
+
+  @ConditionalOnMissingBean(AppApiLoginService.class)
+  @Bean
+  public AppApiLoginService appApiLoginService() {
+    return new AnonymousAppApiLoginService();
+  }
 }

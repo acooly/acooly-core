@@ -11,12 +11,10 @@ package com.acooly.module.mail.service;
 
 import com.acooly.module.mail.MailDto;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 public interface MailService {
-	
-	void send(MailDto dto);
-	
-	void sendAsync(MailDto dto);
+
+  void send(MailDto dto);
+
+  void sendAsync(MailDto dto);
 }

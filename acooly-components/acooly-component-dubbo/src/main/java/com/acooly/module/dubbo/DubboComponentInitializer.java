@@ -13,13 +13,11 @@ package com.acooly.module.dubbo;
 import com.acooly.core.common.boot.component.ComponentInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 public class DubboComponentInitializer implements ComponentInitializer {
-	@Override
-	public void initialize(ConfigurableApplicationContext applicationContext) {
-		//tuning dubbo logger ,avoid log4j initialize
-		System.setProperty("dubbo.application.logger", "slf4j");
-	}
+  @Override
+  public void initialize(ConfigurableApplicationContext applicationContext) {
+    //tuning dubbo logger ,avoid log4j initialize
+    System.setProperty("dubbo.application.logger", "slf4j");
+  }
 }

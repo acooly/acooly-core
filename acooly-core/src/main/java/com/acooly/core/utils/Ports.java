@@ -13,18 +13,17 @@ import javax.net.ServerSocketFactory;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 public class Ports {
-	public static boolean isPortUsing(int port) {
-		try {
-			ServerSocket serverSocket = ServerSocketFactory.getDefault().createServerSocket(port, 1,
-				InetAddress.getByName("localhost"));
-			serverSocket.close();
-			return false;
-		} catch (Exception ex) {
-			return true;
-		}
-	}
+  public static boolean isPortUsing(int port) {
+    try {
+      ServerSocket serverSocket =
+          ServerSocketFactory.getDefault()
+              .createServerSocket(port, 1, InetAddress.getByName("localhost"));
+      serverSocket.close();
+      return false;
+    } catch (Exception ex) {
+      return true;
+    }
+  }
 }

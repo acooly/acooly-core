@@ -5,34 +5,33 @@ import java.util.List;
 
 /**
  * float 的类型转换器。
- * 
+ *
  * @author Agreal·Lee (e-mail:lixiang@yiji.com)
- * 
  */
 public class FloatPrimitiveTypeConverter extends AbstractTypeConverter<Float> {
 
-	public Class<Float> getTargetType() {
-		return Float.TYPE;
-	}
+  public static float floatcharValue(Object value) throws NumberFormatException {
+    return (float) DoublePrimitiveTypeConverter.doubleValue(value);
+  }
 
-	public List<Class<?>> getSupportedSourceTypes() {
-		List<Class<?>> classes = super.getSupportedSourceTypes();
-		classes.add(Object[].class);
-		classes.add(Collection.class);
-		classes.add(CharSequence.class);
-		classes.add(CharSequence[].class);
-		return classes;
-	}
+  public Class<Float> getTargetType() {
+    return Float.TYPE;
+  }
 
-	public Float convert(Object value, Class<? extends Float> toType) {
-		try {
-			return floatcharValue(value);
-		} catch (NumberFormatException e) {
-			throw new TypeConversionException(e);
-		}
-	}
+  public List<Class<?>> getSupportedSourceTypes() {
+    List<Class<?>> classes = super.getSupportedSourceTypes();
+    classes.add(Object[].class);
+    classes.add(Collection.class);
+    classes.add(CharSequence.class);
+    classes.add(CharSequence[].class);
+    return classes;
+  }
 
-	public static float floatcharValue(Object value) throws NumberFormatException {
-		return (float) DoublePrimitiveTypeConverter.doubleValue(value);
-	}
+  public Float convert(Object value, Class<? extends Float> toType) {
+    try {
+      return floatcharValue(value);
+    } catch (NumberFormatException e) {
+      throw new TypeConversionException(e);
+    }
+  }
 }

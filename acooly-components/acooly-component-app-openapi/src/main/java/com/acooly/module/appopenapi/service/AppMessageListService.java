@@ -1,7 +1,4 @@
-/**
- * create by zhangpu
- * date:2015年9月11日
- */
+/** create by zhangpu date:2015年9月11日 */
 package com.acooly.module.appopenapi.service;
 
 import com.acooly.core.common.dao.support.PageInfo;
@@ -19,42 +16,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 推送消息列表
- * 
+ *
  * @author zhangpu
  * @date 2015年9月11日
  */
-@OpenApiService(name = "appMessageList", desc = "推送消息列表", responseType = ResponseType.SYN, owner = ApiOwners.COMMON)
-public class AppMessageListService extends BaseApiService<AppMessageListRequest, AppMessageListResponse> {
+@OpenApiService(
+  name = "appMessageList",
+  desc = "推送消息列表",
+  responseType = ResponseType.SYN,
+  owner = ApiOwners.COMMON
+)
+public class AppMessageListService
+    extends BaseApiService<AppMessageListRequest, AppMessageListResponse> {
 
-	@Autowired
-	private AppMessageService appMessageService;
+  @Autowired private AppMessageService appMessageService;
 
-	@Override
-	protected void doService(AppMessageListRequest request, AppMessageListResponse response) {
-		PageInfo<AppMessage> pageInfo = appMessageService.query(buildPageInfo(request), request.getPartnerId());
-		response.setTotalPages(pageInfo.getTotalPage());
-		response.setTotalRows(pageInfo.getTotalCount());
-		if (Collections3.isNotEmpty(pageInfo.getPageResults())) {
-			for (AppMessage appMessage : pageInfo.getPageResults()) {
-				response.append(convert(appMessage));
-			}
-		}
-	}
+  @Override
+  protected void doService(AppMessageListRequest request, AppMessageListResponse response) {
+    PageInfo<AppMessage> pageInfo =
+        appMessageService.query(buildPageInfo(request), request.getPartnerId());
+    response.setTotalPages(pageInfo.getTotalPage());
+    response.setTotalRows(pageInfo.getTotalCount());
+    if (Collections3.isNotEmpty(pageInfo.getPageResults())) {
+      for (AppMessage appMessage : pageInfo.getPageResults()) {
+        response.append(convert(appMessage));
+      }
+    }
+  }
 
-	protected AppMessageDto convert(AppMessage appMessage) {
-		AppMessageDto dto = new AppMessageDto();
-		dto.setContent(appMessage.getContent());
-		dto.setContext(appMessage.getContext());
-		dto.setId(appMessage.getId());
-		dto.setSender(appMessage.getSender());
-		dto.setSendTime(appMessage.getSendTime());
-		dto.setTitle(appMessage.getTitle());
-		dto.setType(appMessage.getType());
-		return dto;
-	}
+  protected AppMessageDto convert(AppMessage appMessage) {
+    AppMessageDto dto = new AppMessageDto();
+    dto.setContent(appMessage.getContent());
+    dto.setContext(appMessage.getContext());
+    dto.setId(appMessage.getId());
+    dto.setSender(appMessage.getSender());
+    dto.setSendTime(appMessage.getSendTime());
+    dto.setTitle(appMessage.getTitle());
+    dto.setType(appMessage.getType());
+    return dto;
+  }
 
-	protected PageInfo<AppMessage> buildPageInfo(AppMessageListRequest request) {
-		return new PageInfo<AppMessage>(request.getLimit(), request.getStart());
-	}
-
+  protected PageInfo<AppMessage> buildPageInfo(AppMessageListRequest request) {
+    return new PageInfo<AppMessage>(request.getLimit(), request.getStart());
+  }
 }

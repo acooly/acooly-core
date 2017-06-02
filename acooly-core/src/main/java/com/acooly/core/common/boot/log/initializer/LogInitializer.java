@@ -15,9 +15,10 @@ import org.springframework.core.annotation.Order;
 
 /**
  * log初始化扩展
+ *
  * @author qiubo
  */
 @Order(0)
 public interface LogInitializer {
-	void init(LogbackConfigurator configurator);
+  void init(LogbackConfigurator configurator);
 }

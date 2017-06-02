@@ -15,50 +15,47 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
-
 @Controller
 @RequestMapping(value = "/manage/module/portlet/feedback")
-public class FeedbackManagerController extends AbstractJQueryEntityController<Feedback, FeedbackService> {
+public class FeedbackManagerController
+    extends AbstractJQueryEntityController<Feedback, FeedbackService> {
 
-    private static Map<String, String> allTypes = FeedbackTypeEnum.mapping();
+  private static Map<String, String> allTypes = FeedbackTypeEnum.mapping();
+  @Autowired private FeedbackService feedbackService;
 
-    {
-        allowMapping = "*";
+  {
+    allowMapping = "*";
+  }
+
+  @Override
+  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+    model.put("allTypes", allTypes);
+    model.put("allStatuss", FeedbackStatusEnum.mapping());
+  }
+
+  @Override
+  protected Map<String, Boolean> getSortMap(HttpServletRequest request) {
+    Map<String, Boolean> sortMap = super.getSortMap(request);
+    sortMap.put("status", false);
+    sortMap.put("id", false);
+    return sortMap;
+  }
+
+  @RequestMapping(value = "handle")
+  @ResponseBody
+  public JsonEntityResult<Feedback> handle(
+      HttpServletRequest request, HttpServletResponse response) {
+    JsonEntityResult<Feedback> result = new JsonEntityResult<Feedback>();
+    try {
+      String requId = request.getParameter(getEntityIdName());
+      String requStatus = request.getParameter("status");
+      String requComments = request.getParameter("comments");
+      feedbackService.handle(
+          Long.valueOf(requId), FeedbackStatusEnum.find(requStatus), requComments);
+      result.setMessage("处理成功");
+    } catch (Exception e) {
+      handleException(result, "处理", e);
     }
-
-
-    @Autowired
-    private FeedbackService feedbackService;
-
-    @Override
-    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-        model.put("allTypes", allTypes);
-        model.put("allStatuss", FeedbackStatusEnum.mapping());
-    }
-
-    @Override
-    protected Map<String, Boolean> getSortMap(HttpServletRequest request) {
-        Map<String, Boolean> sortMap = super.getSortMap(request);
-        sortMap.put("status", false);
-        sortMap.put("id", false);
-        return sortMap;
-    }
-
-    @RequestMapping(value = "handle")
-    @ResponseBody
-    public JsonEntityResult<Feedback> handle(HttpServletRequest request, HttpServletResponse response) {
-        JsonEntityResult<Feedback> result = new JsonEntityResult<Feedback>();
-        try {
-            String requId = request.getParameter(getEntityIdName());
-            String requStatus = request.getParameter("status");
-            String requComments = request.getParameter("comments");
-            feedbackService.handle(Long.valueOf(requId), FeedbackStatusEnum.find(requStatus), requComments);
-            result.setMessage("处理成功");
-        } catch (Exception e) {
-            handleException(result, "处理", e);
-        }
-        return result;
-    }
-
-
+    return result;
+  }
 }

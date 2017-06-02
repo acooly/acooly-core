@@ -13,23 +13,24 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service("lotteryWhitelistService")
-public class LotteryWhitelistServiceImpl extends EntityServiceImpl<LotteryWhitelist, LotteryWhitelistDao> implements
-        LotteryWhitelistService {
+public class LotteryWhitelistServiceImpl
+    extends EntityServiceImpl<LotteryWhitelist, LotteryWhitelistDao>
+    implements LotteryWhitelistService {
 
-    @Override
-    public LotteryWhitelist getValid(Long lotteryId, String user) {
-        List<LotteryWhitelist> lists = getEntityDao().findByLotteryIdAndUserAndStatus(lotteryId, user,
-                LotteryWhitelistStatus.apply);
-        if (Collections3.isEmpty(lists)) {
-            return null;
-        }
-        return Collections3.getFirst(lists);
+  @Override
+  public LotteryWhitelist getValid(Long lotteryId, String user) {
+    List<LotteryWhitelist> lists =
+        getEntityDao()
+            .findByLotteryIdAndUserAndStatus(lotteryId, user, LotteryWhitelistStatus.apply);
+    if (Collections3.isEmpty(lists)) {
+      return null;
     }
+    return Collections3.getFirst(lists);
+  }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @Override
-    public void saveInNewTrans(LotteryWhitelist whitelist) {
-        save(whitelist);
-    }
-
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  @Override
+  public void saveInNewTrans(LotteryWhitelist whitelist) {
+    save(whitelist);
+  }
 }

@@ -7,21 +7,17 @@
  */
 package com.acooly.module.point.service;
 
-import java.util.Date;
-
 import com.acooly.core.common.service.EntityService;
 import com.acooly.module.point.domain.PointStatistics;
 
 /**
  * 积分统计 Service接口
  *
- * Date: 2017-03-13 11:51:10
- * 
- * @author acooly
+ * <p>Date: 2017-03-13 11:51:10
  *
+ * @author acooly
  */
 public interface PointStatisticsService extends EntityService<PointStatistics> {
 
-	public void pointStatistics(String startTime, String endTime);
-
+  public void pointStatistics(String startTime, String endTime);
 }

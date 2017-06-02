@@ -20,49 +20,41 @@ import javax.validation.constraints.NotNull;
 
 import static com.acooly.module.certification.CertificationProperties.PREFIX;
 
-/**
- * @author zhike@yiji.com
- */
+/** @author zhike@yiji.com */
 @ConfigurationProperties(prefix = PREFIX)
 @Data
 @Slf4j
 @Validated
 public class CertificationProperties {
-    public static final String PREFIX = "acooly.certification";
+  public static final String PREFIX = "acooly.certification";
 
-    /**
-     * 实名权限code
-     */
-    @NotBlank
-    private String appCode;
+  /** 实名权限code */
+  @NotBlank private String appCode;
 
-    @NotNull
-    private Provider provider;
-    private String url;
-    private int timeout = 20000;
+  @NotNull private Provider provider;
+  private String url;
+  private int timeout = 20000;
 
-    public enum Provider implements Messageable {
-        /**
-         * 阿里实名认证
-         */
-        ALI("aliRealNameAuthentication", "阿里实名认证");
+  public enum Provider implements Messageable {
+    /** 阿里实名认证 */
+    ALI("aliRealNameAuthentication", "阿里实名认证");
 
-        private final String code;
-        private final String message;
+    private final String code;
+    private final String message;
 
-        Provider(String code, String message) {
-            this.code = code;
-            this.message = message;
-        }
-
-        @Override
-        public String code() {
-            return this.code;
-        }
-
-        @Override
-        public String message() {
-            return this.message;
-        }
+    Provider(String code, String message) {
+      this.code = code;
+      this.message = message;
     }
+
+    @Override
+    public String code() {
+      return this.code;
+    }
+
+    @Override
+    public String message() {
+      return this.message;
+    }
+  }
 }

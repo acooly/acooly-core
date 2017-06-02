@@ -13,14 +13,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @Controller
 @RequestMapping(value = "/test/jsp")
 public class JSPController {
-    @RequestMapping("/upload")
-    public String testFtl(ModelMap modelMap) {
-        return "upload";
-    }
+  @RequestMapping("/upload")
+  public String testFtl(ModelMap modelMap) {
+    return "upload";
+  }
 }

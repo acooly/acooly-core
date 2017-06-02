@@ -7,13 +7,11 @@ import com.acooly.module.app.domain.AppMessage;
 /**
  * 群发消息 Service
  *
- * Date: 2015-11-04 13:30:36
+ * <p>Date: 2015-11-04 13:30:36
  *
  * @author Acooly Code Generator
- *
  */
 public interface AppMessageService extends EntityService<AppMessage> {
 
-	PageInfo<AppMessage> query(PageInfo<AppMessage> pageInfo, String userName);
-
+  PageInfo<AppMessage> query(PageInfo<AppMessage> pageInfo, String userName);
 }

@@ -4,8 +4,7 @@ import com.acooly.core.common.dao.support.PageInfo;
 
 public interface DatabaseDialect {
 
-	String pageSql(@SuppressWarnings("rawtypes") PageInfo pageInfo, String originalSql);
+  String pageSql(@SuppressWarnings("rawtypes") PageInfo pageInfo, String originalSql);
 
-	DatabaseType getDatabaseType();
-
+  DatabaseType getDatabaseType();
 }

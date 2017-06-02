@@ -18,21 +18,18 @@ import org.springframework.boot.jackson.JsonComponent;
 
 import java.io.IOException;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @JsonComponent
 public class MoneyJsonSerializer extends JsonSerializer<Money> {
 
-    @Override
-    public void serialize(Money value, JsonGenerator jgen, SerializerProvider provider)	throws IOException,
-        JsonProcessingException {
-        jgen.writeNumber(value.getCent());
-    }
+  @Override
+  public void serialize(Money value, JsonGenerator jgen, SerializerProvider provider)
+      throws IOException, JsonProcessingException {
+    jgen.writeNumber(value.getCent());
+  }
 
-    @Override
-    public Class<Money> handledType() {
-        return Money.class;
-    }
+  @Override
+  public Class<Money> handledType() {
+    return Money.class;
+  }
 }
-

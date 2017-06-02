@@ -25,38 +25,41 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Slf4j
 @Controller
 @RequestMapping(value = "/role/facade")
-@ConditionalOnProperty(value  = SecurityProperties.PREFIX + ".shiro.auth.enable",matchIfMissing = true)
+@ConditionalOnProperty(
+  value = SecurityProperties.PREFIX + ".shiro.auth.enable",
+  matchIfMissing = true
+)
 public class RoleFacadeController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private WebSecurityManager shiroSecurityManager;
+  @Autowired private UserService userService;
+  @Autowired private WebSecurityManager shiroSecurityManager;
 
-    @RequestMapping("isPermitted")
-    @ResponseBody
-    public Boolean isPermitted(String uri, String username) {
-        try {
-            return permitted(uri, username);
-        } catch (Exception e) {
-            log.error("检查权限异常", e);
-            return false;
-        }
+  @RequestMapping("isPermitted")
+  @ResponseBody
+  public Boolean isPermitted(String uri, String username) {
+    try {
+      return permitted(uri, username);
+    } catch (Exception e) {
+      log.error("检查权限异常", e);
+      return false;
     }
+  }
 
-    private boolean permitted(String uri, String username) throws Exception {
-        boolean result = false;
-        if (!StringUtils.isEmpty(username)) {
-            User user = userService.getAndCheckUser(username);
-            if (user != null) {
-                ThreadContext.bind(shiroSecurityManager);
-                SimplePrincipalCollection simplePrincipal = new SimplePrincipalCollection(user, ShiroCacheManager.KEY_AUTHC);
-                Subject subject = new Subject.Builder().principals(simplePrincipal).authenticated(true).buildSubject();
-                ThreadContext.bind(subject);
-                String permission = "do"+ PathMatchPermission.PART_DIVIDER_TOKEN + uri;
-                result = subject.isPermitted(permission);
-            }
-        }
-        return result;
+  private boolean permitted(String uri, String username) throws Exception {
+    boolean result = false;
+    if (!StringUtils.isEmpty(username)) {
+      User user = userService.getAndCheckUser(username);
+      if (user != null) {
+        ThreadContext.bind(shiroSecurityManager);
+        SimplePrincipalCollection simplePrincipal =
+            new SimplePrincipalCollection(user, ShiroCacheManager.KEY_AUTHC);
+        Subject subject =
+            new Subject.Builder().principals(simplePrincipal).authenticated(true).buildSubject();
+        ThreadContext.bind(subject);
+        String permission = "do" + PathMatchPermission.PART_DIVIDER_TOKEN + uri;
+        result = subject.isPermitted(permission);
+      }
     }
+    return result;
+  }
 }

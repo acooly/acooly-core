@@ -10,19 +10,16 @@
  */
 package com.acooly.module.appservice.ex;
 
-import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.core.common.facade.ResultBase;
+import com.acooly.core.utils.enums.ResultStatus;
 
-
-/**
- * @author qzhanbo@yiji.com
- */
+/** @author qzhanbo@yiji.com */
 public class ThrowableExceptionHandler implements ExceptionHandler<Throwable> {
-	
-	@Override
-	public void handle(ExceptionContext<?> context, Throwable throwable) {
-		ResultBase res = context.getResponse();
-		res.setDetail(throwable.getMessage());
-		res.setStatus(ResultStatus.failure);
-	}
+
+  @Override
+  public void handle(ExceptionContext<?> context, Throwable throwable) {
+    ResultBase res = context.getResponse();
+    res.setDetail(throwable.getMessage());
+    res.setStatus(ResultStatus.failure);
+  }
 }

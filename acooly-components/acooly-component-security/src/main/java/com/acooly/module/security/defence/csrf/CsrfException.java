@@ -23,8 +23,8 @@ package com.acooly.module.security.defence.csrf;
  */
 @SuppressWarnings("serial")
 public class CsrfException extends AccessDeniedException {
-	
-	public CsrfException(String message) {
-		super(message);
-	}
+
+  public CsrfException(String message) {
+    super(message);
+  }
 }

@@ -13,22 +13,20 @@ import com.acooly.module.filterchain.Context;
 import lombok.Data;
 import org.aopalliance.intercept.MethodInvocation;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @Data
 public class AppServiceContext extends Context {
-	private MethodInvocation methodInvocation;
-	private Object target;
-	private Object result;
-	private Throwable targetThrowable;
-	
-	public String getLoggerMethodName() {
-		String simpleName = this.target.getClass().getSimpleName();
-		int idx = simpleName.indexOf("$$");
-		if (idx != -1) {
-			simpleName = simpleName.substring(0, idx);
-		}
-		return simpleName + "#" + this.methodInvocation.getMethod().getName();
-	}
+  private MethodInvocation methodInvocation;
+  private Object target;
+  private Object result;
+  private Throwable targetThrowable;
+
+  public String getLoggerMethodName() {
+    String simpleName = this.target.getClass().getSimpleName();
+    int idx = simpleName.indexOf("$$");
+    if (idx != -1) {
+      simpleName = simpleName.substring(0, idx);
+    }
+    return simpleName + "#" + this.methodInvocation.getMethod().getName();
+  }
 }

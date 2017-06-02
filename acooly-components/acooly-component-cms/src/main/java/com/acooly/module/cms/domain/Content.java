@@ -10,8 +10,8 @@ import java.util.Set;
 
 /**
  * 内容主表 Entity
- * <p>
- * Date: 2013-07-12 15:06:46
+ *
+ * <p>Date: 2013-07-12 15:06:46
  *
  * @author Acooly Code Generator
  */
@@ -19,244 +19,209 @@ import java.util.Set;
 @Table(name = "CMS_CONTENT")
 public class Content implements Entityable {
 
-    public static final int STATUS_ENABLED = 1;// 1:正常
-    public static final int STATUS_DISABLED = 2;// 2:禁用
+  public static final int STATUS_ENABLED = 1; // 1:正常
+  public static final int STATUS_DISABLED = 2; // 2:禁用
 
-    /**
-     * uid
-     */
-    private static final long serialVersionUID = 7860091097881184418L;
+  /** uid */
+  private static final long serialVersionUID = 7860091097881184418L;
 
-    @Id
-    @GeneratedValue(generator = "incrementGenerator", strategy = GenerationType.AUTO)
-    @GenericGenerator(name = "incrementGenerator", strategy = "increment")
-    private Long id;
+  @Id
+  @GeneratedValue(generator = "incrementGenerator", strategy = GenerationType.AUTO)
+  @GenericGenerator(name = "incrementGenerator", strategy = "increment")
+  private Long id;
 
-    /**
-     * 编码 唯一
-     */
-    private String keycode;
-    /**
-     * 标题
-     */
-    private String title;
-    /**
-     * 封面
-     */
-    private String cover;
-    /**
-     * 发布时间
-     */
-    private Date pubDate = new Date();
-    /**
-     * 关键字 (SEO或本身简单搜索使用)
-     */
-    private String keywords;
-    /**
-     * 主题介绍
-     */
-    private String subject;
-    /**
-     * 作者
-     */
-    private String author;
-    /**
-     * 点击数
-     */
-    private Long hits = 1L;
-    /**
-     * 状态 (1:正常,2:禁用)
-     */
-    private int status = STATUS_ENABLED;
-    /**
-     * 备注
-     */
-    private String comments;
+  /** 编码 唯一 */
+  private String keycode;
+  /** 标题 */
+  private String title;
+  /** 封面 */
+  private String cover;
+  /** 发布时间 */
+  private Date pubDate = new Date();
+  /** 关键字 (SEO或本身简单搜索使用) */
+  private String keywords;
+  /** 主题介绍 */
+  private String subject;
+  /** 作者 */
+  private String author;
+  /** 点击数 */
+  private Long hits = 1L;
+  /** 状态 (1:正常,2:禁用) */
+  private int status = STATUS_ENABLED;
+  /** 备注 */
+  private String comments;
 
-    /**
-     * 外链连接
-     */
-    private String link;
+  /** 外链连接 */
+  private String link;
 
-    private Date createTime;
+  private Date createTime;
 
-    private Date updateTime;
+  private Date updateTime;
 
-    /**
-     * 所属分类
-     */
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH})
-    @JoinColumn(name = "type")
-    private ContentType contentType;
+  /** 所属分类 */
+  @ManyToOne(
+    fetch = FetchType.LAZY,
+    cascade = {CascadeType.REFRESH}
+  )
+  @JoinColumn(name = "type")
+  private ContentType contentType;
 
-    /**
-     * 内容主体
-     */
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @PrimaryKeyJoinColumn
-    @JoinColumn(name = "id")
-    private ContentBody contentBody;
+  /** 内容主体 */
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+  @PrimaryKeyJoinColumn
+  @JoinColumn(name = "id")
+  private ContentBody contentBody;
 
-    /**
-     * 附件列表
-     */
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "content")
-    private Set<Attachment> attachments = new HashSet<Attachment>();
+  /** 附件列表 */
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "content")
+  private Set<Attachment> attachments = new HashSet<Attachment>();
 
+  private String body_;
 
-    public ContentType getContentType() {
-        return contentType;
-    }
+  public ContentType getContentType() {
+    return contentType;
+  }
 
-    public void setContentType(ContentType contentType) {
-        this.contentType = contentType;
-    }
+  public void setContentType(ContentType contentType) {
+    this.contentType = contentType;
+  }
 
+  public ContentBody getContentBody() {
+    return contentBody;
+  }
 
-    public ContentBody getContentBody() {
-        return contentBody;
-    }
+  public void setContentBody(ContentBody contentBody) {
+    this.contentBody = contentBody;
+  }
 
-    public void setContentBody(ContentBody contentBody) {
-        this.contentBody = contentBody;
-    }
+  public Set<Attachment> getAttachments() {
+    return attachments;
+  }
 
+  public void setAttachments(Set<Attachment> attachments) {
+    this.attachments = attachments;
+  }
 
-    public Set<Attachment> getAttachments() {
-        return attachments;
-    }
+  public String getTitle() {
+    return this.title;
+  }
 
-    public void setAttachments(Set<Attachment> attachments) {
-        this.attachments = attachments;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
+  public String getCover() {
+    return this.cover;
+  }
 
-    public String getTitle() {
-        return this.title;
-    }
+  public void setCover(String cover) {
+    this.cover = cover;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public Date getPubDate() {
+    return this.pubDate;
+  }
 
-    public String getCover() {
-        return this.cover;
-    }
+  public void setPubDate(Date pubDate) {
+    this.pubDate = pubDate;
+  }
 
-    public void setCover(String cover) {
-        this.cover = cover;
-    }
+  public String getKeywords() {
+    return this.keywords;
+  }
 
-    public Date getPubDate() {
-        return this.pubDate;
-    }
+  public void setKeywords(String keywords) {
+    this.keywords = keywords;
+  }
 
-    public void setPubDate(Date pubDate) {
-        this.pubDate = pubDate;
-    }
+  public String getSubject() {
+    return this.subject;
+  }
 
-    public String getKeywords() {
-        return this.keywords;
-    }
+  public void setSubject(String subject) {
+    this.subject = subject;
+  }
 
-    public void setKeywords(String keywords) {
-        this.keywords = keywords;
-    }
+  public String getAuthor() {
+    return this.author;
+  }
 
-    public String getSubject() {
-        return this.subject;
-    }
+  public void setAuthor(String author) {
+    this.author = author;
+  }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
+  public Long getHits() {
+    return this.hits;
+  }
 
-    public String getAuthor() {
-        return this.author;
-    }
+  public void setHits(Long hits) {
+    this.hits = hits;
+  }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
+  public int getStatus() {
+    return this.status;
+  }
 
-    public Long getHits() {
-        return this.hits;
-    }
+  public void setStatus(int status) {
+    this.status = status;
+  }
 
-    public void setHits(Long hits) {
-        this.hits = hits;
-    }
+  public String getComments() {
+    return this.comments;
+  }
 
-    public int getStatus() {
-        return this.status;
-    }
+  public void setComments(String comments) {
+    this.comments = comments;
+  }
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
+  @Transient
+  public String getBody_() {
+    return body_;
+  }
 
-    public String getComments() {
-        return this.comments;
-    }
+  public void setBody_(String body) {
+    body_ = body;
+  }
 
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
+  public String getKeycode() {
+    return keycode;
+  }
 
-    private String body_;
+  public void setKeycode(String keycode) {
+    this.keycode = keycode;
+  }
 
-    @Transient
-    public String getBody_() {
-        return body_;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setBody_(String body) {
-        body_ = body;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getKeycode() {
-        return keycode;
-    }
+  @Override
+  public Date getCreateTime() {
+    return createTime;
+  }
 
-    public void setKeycode(String keycode) {
-        this.keycode = keycode;
-    }
+  public void setCreateTime(Date createTime) {
+    this.createTime = createTime;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  @Override
+  public Date getUpdateTime() {
+    return updateTime;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setUpdateTime(Date updateTime) {
+    this.updateTime = updateTime;
+  }
 
-    @Override
-    public Date getCreateTime() {
-        return createTime;
-    }
+  public String getLink() {
+    return link;
+  }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    @Override
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
-    }
+  public void setLink(String link) {
+    this.link = link;
+  }
 }
-
-
-
-

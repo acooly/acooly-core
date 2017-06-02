@@ -16,72 +16,68 @@ import com.alibaba.dubbo.common.extension.Activate;
 import com.alibaba.dubbo.rpc.*;
 import com.google.common.base.Strings;
 
-/**
- * @author qiubo@yiji.com
- */
-@Activate(group = { Constants.PROVIDER, Constants.CONSUMER })
+/** @author qiubo@yiji.com */
+@Activate(group = {Constants.PROVIDER, Constants.CONSUMER})
 public class RequestContextFilter implements Filter {
-	@Override
-	public Result invoke(Invoker<?> invoker, Invocation inv) throws RpcException {
-		if (RpcContext.getContext().isProviderSide()) {
-			try {
-				Object[] args = inv.getArguments();
-				if (args != null) {
-					for (Object arg : args) {
-						if (arg instanceof OrderBase) {
-							RequestContext requestContext = RequestContext.getContext();
-							requestContext.gid = ((Orderable) arg).getGid();
-							requestContext.partnerId = ((Orderable) arg).getPartnerId();
-							break;
-						}
-					}
-				}
-				return invoker.invoke(inv);
-			} finally {
-				RequestContext.removeContext();
-			}
-		} else {
-			Object[] args = inv.getArguments();
-			if (args != null) {
-				for (Object arg : args) {
-					if (arg instanceof OrderBase) {
-						RequestContext requestContext = RequestContext.getContext();
-						if (Strings.isNullOrEmpty(((OrderBase) arg).getGid())) {
-							((OrderBase) arg).setGid(requestContext.gid);
-						}
-						if (Strings.isNullOrEmpty(((OrderBase) arg).getPartnerId())) {
-							((OrderBase) arg).setPartnerId(requestContext.partnerId);
-						}
-						break;
-					}
-				}
-			}
-			return invoker.invoke(inv);
-		}
-		
-	}
-	
-	 static class RequestContext {
-		private static final ThreadLocal<RequestContext> LOCAL = ThreadLocal.withInitial(() -> new RequestContext());
-		
-		public static RequestContext getContext() {
-			return LOCAL.get();
-		}
-		
-		public static void removeContext() {
-			LOCAL.remove();
-		}
-		
-		private String partnerId;
-		
-		private String gid;
+  @Override
+  public Result invoke(Invoker<?> invoker, Invocation inv) throws RpcException {
+    if (RpcContext.getContext().isProviderSide()) {
+      try {
+        Object[] args = inv.getArguments();
+        if (args != null) {
+          for (Object arg : args) {
+            if (arg instanceof OrderBase) {
+              RequestContext requestContext = RequestContext.getContext();
+              requestContext.gid = ((Orderable) arg).getGid();
+              requestContext.partnerId = ((Orderable) arg).getPartnerId();
+              break;
+            }
+          }
+        }
+        return invoker.invoke(inv);
+      } finally {
+        RequestContext.removeContext();
+      }
+    } else {
+      Object[] args = inv.getArguments();
+      if (args != null) {
+        for (Object arg : args) {
+          if (arg instanceof OrderBase) {
+            RequestContext requestContext = RequestContext.getContext();
+            if (Strings.isNullOrEmpty(((OrderBase) arg).getGid())) {
+              ((OrderBase) arg).setGid(requestContext.gid);
+            }
+            if (Strings.isNullOrEmpty(((OrderBase) arg).getPartnerId())) {
+              ((OrderBase) arg).setPartnerId(requestContext.partnerId);
+            }
+            break;
+          }
+        }
+      }
+      return invoker.invoke(inv);
+    }
+  }
 
-         public String getPartnerId() {
-             return partnerId;
-         }
+  static class RequestContext {
+    private static final ThreadLocal<RequestContext> LOCAL =
+        ThreadLocal.withInitial(() -> new RequestContext());
+    private String partnerId;
+    private String gid;
 
-         public String getGid() {
-             return gid;
-         }
-     }
+    public static RequestContext getContext() {
+      return LOCAL.get();
+    }
+
+    public static void removeContext() {
+      LOCAL.remove();
+    }
+
+    public String getPartnerId() {
+      return partnerId;
+    }
+
+    public String getGid() {
+      return gid;
+    }
+  }
 }

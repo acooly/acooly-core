@@ -18,27 +18,26 @@ import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
-/**
- * @author qiubo@yiji.com
- */
-public class EnvironmentApplicationListener	implements ApplicationListener<ApplicationEnvironmentPreparedEvent>,
-											PriorityOrdered {
-	@Override
-	public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
-        new EnvironmentHolder().setEnvironment(event.getEnvironment());
-        setProfileIfEnableActiveProfiles(event.getEnvironment());
-	}
-	
-	@Override
-	public int getOrder() {
-		return Ordered.HIGHEST_PRECEDENCE;
-	}
-    private void setProfileIfEnableActiveProfiles(ConfigurableEnvironment environment) {
-        if (Strings.isNullOrEmpty(System.getProperty(Apps.SPRING_PROFILE_ACTIVE))) {
-            String profile = environment.getProperty(Apps.SPRING_PROFILE_ACTIVE);
-            if (!Strings.isNullOrEmpty(profile)) {
-                System.setProperty(Apps.SPRING_PROFILE_ACTIVE, profile);
-            }
-        }
+/** @author qiubo@yiji.com */
+public class EnvironmentApplicationListener
+    implements ApplicationListener<ApplicationEnvironmentPreparedEvent>, PriorityOrdered {
+  @Override
+  public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
+    new EnvironmentHolder().setEnvironment(event.getEnvironment());
+    setProfileIfEnableActiveProfiles(event.getEnvironment());
+  }
+
+  @Override
+  public int getOrder() {
+    return Ordered.HIGHEST_PRECEDENCE;
+  }
+
+  private void setProfileIfEnableActiveProfiles(ConfigurableEnvironment environment) {
+    if (Strings.isNullOrEmpty(System.getProperty(Apps.SPRING_PROFILE_ACTIVE))) {
+      String profile = environment.getProperty(Apps.SPRING_PROFILE_ACTIVE);
+      if (!Strings.isNullOrEmpty(profile)) {
+        System.setProperty(Apps.SPRING_PROFILE_ACTIVE, profile);
+      }
     }
+  }
 }

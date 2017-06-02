@@ -23,32 +23,30 @@ import java.util.List;
 
 import static com.acooly.module.sms.SmsProperties.PREFIX;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @Configuration
-@EnableConfigurationProperties({ SmsProperties.class })
+@EnableConfigurationProperties({SmsProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.module.sms")
 @AutoConfigureAfter(SecurityAutoConfig.class)
 public class SmsAutoConfig {
-	@Bean
-	public StandardDatabaseScriptIniter smsScriptIniter() {
-		return new StandardDatabaseScriptIniter() {
-			@Override
-			public String getEvaluateTable() {
-				return "sms_log";
-			}
-			
-			@Override
-			public String getComponentName() {
-				return "sms";
-			}
-			
-			@Override
-			public List<String> getInitSqlFile() {
-				return Lists.newArrayList("sms", "sms_urls");
-			}
-		};
-	}
+  @Bean
+  public StandardDatabaseScriptIniter smsScriptIniter() {
+    return new StandardDatabaseScriptIniter() {
+      @Override
+      public String getEvaluateTable() {
+        return "sms_log";
+      }
+
+      @Override
+      public String getComponentName() {
+        return "sms";
+      }
+
+      @Override
+      public List<String> getInitSqlFile() {
+        return Lists.newArrayList("sms", "sms_urls");
+      }
+    };
+  }
 }

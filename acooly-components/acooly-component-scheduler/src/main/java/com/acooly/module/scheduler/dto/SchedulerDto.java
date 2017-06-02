@@ -6,49 +6,47 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @author shuijing
- */
+/** @author shuijing */
 @Getter
 @Setter
 public class SchedulerDto implements Serializable {
 
-    private String cronString;
+  private String cronString;
 
-    private String properties;
+  private String properties;
 
-    private String actionType;
+  private String actionType;
 
-    private String memo;
+  private String memo;
 
-    private String creater;
+  private String creater;
 
-    private String modifyer;
+  private String modifyer;
 
-    private Date validityStart;
+  private Date validityStart;
 
-    private Date validityEnd;
+  private Date validityEnd;
 
-    private Date lastExecuteTime;
+  private Date lastExecuteTime;
 
-    private Integer executeNum;
+  private Integer executeNum;
 
-    private String status;
+  private String status;
 
-    private String className;
+  private String className;
 
-    private String methodName;
+  private String methodName;
 
-    private String exceptionAtLastExecute;
+  private String exceptionAtLastExecute;
 
-    private Integer retryTimeOnException;
+  private Integer retryTimeOnException;
 
-    private Boolean isDel;
+  private Boolean isDel;
 
-    //展示用的地址
-    private String url;
+  //展示用的地址
+  private String url;
 
-    private String validityStartStr;
+  private String validityStartStr;
 
-    private String validityEndStr;
+  private String validityEndStr;
 }

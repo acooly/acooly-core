@@ -14,12 +14,10 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import static com.yiji.framework.openapi.core.OpenApiConstants.APP_CLIENT_ENABLE;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 public class AppOpenapiComponentInitializer implements ComponentInitializer {
-    @Override
-    public void initialize(ConfigurableApplicationContext applicationContext) {
-        System.setProperty(APP_CLIENT_ENABLE,Boolean.TRUE.toString());
-    }
+  @Override
+  public void initialize(ConfigurableApplicationContext applicationContext) {
+    System.setProperty(APP_CLIENT_ENABLE, Boolean.TRUE.toString());
+  }
 }

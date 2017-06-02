@@ -25,51 +25,46 @@ import javax.validation.constraints.NotNull;
 @Data
 public class LotteryEvent {
 
-    @NotNull
-    private Long lotteryId;
-    @NotEmpty
-    private String lotteryCode;
-    @NotNull
-    private LotteryAwardInfo lotteryAwardInfo;
-    /**
-     * 但抽奖活动的中奖奖项配置为不记录中奖时，该对象为空
-     */
-    private LotteryWinner lotteryWinner;
+  @NotNull private Long lotteryId;
+  @NotEmpty private String lotteryCode;
+  @NotNull private LotteryAwardInfo lotteryAwardInfo;
+  /** 但抽奖活动的中奖奖项配置为不记录中奖时，该对象为空 */
+  private LotteryWinner lotteryWinner;
 
-    public Long getLotteryId() {
-        return lotteryId;
-    }
+  public Long getLotteryId() {
+    return lotteryId;
+  }
 
-    public void setLotteryId(Long lotteryId) {
-        this.lotteryId = lotteryId;
-    }
+  public void setLotteryId(Long lotteryId) {
+    this.lotteryId = lotteryId;
+  }
 
-    public String getLotteryCode() {
-        return lotteryCode;
-    }
+  public String getLotteryCode() {
+    return lotteryCode;
+  }
 
-    public void setLotteryCode(String lotteryCode) {
-        this.lotteryCode = lotteryCode;
-    }
+  public void setLotteryCode(String lotteryCode) {
+    this.lotteryCode = lotteryCode;
+  }
 
-    public LotteryAwardInfo getLotteryAwardInfo() {
-        return lotteryAwardInfo;
-    }
+  public LotteryAwardInfo getLotteryAwardInfo() {
+    return lotteryAwardInfo;
+  }
 
-    public void setLotteryAwardInfo(LotteryAwardInfo lotteryAwardInfo) {
-        this.lotteryAwardInfo = lotteryAwardInfo;
-    }
+  public void setLotteryAwardInfo(LotteryAwardInfo lotteryAwardInfo) {
+    this.lotteryAwardInfo = lotteryAwardInfo;
+  }
 
-    public LotteryWinner getLotteryWinner() {
-        return lotteryWinner;
-    }
+  public LotteryWinner getLotteryWinner() {
+    return lotteryWinner;
+  }
 
-    public void setLotteryWinner(LotteryWinner lotteryWinner) {
-        this.lotteryWinner = lotteryWinner;
-    }
+  public void setLotteryWinner(LotteryWinner lotteryWinner) {
+    this.lotteryWinner = lotteryWinner;
+  }
 
-    @Override
-    public String toString() {
-        return ToString.toString(this);
-    }
+  @Override
+  public String toString() {
+    return ToString.toString(this);
+  }
 }

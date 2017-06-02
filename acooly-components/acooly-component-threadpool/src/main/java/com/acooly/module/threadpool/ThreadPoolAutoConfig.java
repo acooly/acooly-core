@@ -16,23 +16,21 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @Configuration
-@EnableConfigurationProperties({ ThreadPoolProperties.class })
+@EnableConfigurationProperties({ThreadPoolProperties.class})
 public class ThreadPoolAutoConfig {
-	@Bean
-	public ThreadPoolTaskExecutor commonTaskExecutor(ThreadPoolProperties properties) {
-		ThreadPoolTaskExecutor bean = new ThreadPoolTaskExecutor();
-		bean.setCorePoolSize(properties.getThreadMin());
-		bean.setMaxPoolSize(properties.getThreadMax());
-		bean.setQueueCapacity(properties.getThreadQueue());
-		bean.setKeepAliveSeconds(300);
-		bean.setWaitForTasksToCompleteOnShutdown(true);
-		bean.setAllowCoreThreadTimeOut(true);
-		bean.setThreadNamePrefix("common-thread-pool-");
-		bean.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-		return bean;
-	}
+  @Bean
+  public ThreadPoolTaskExecutor commonTaskExecutor(ThreadPoolProperties properties) {
+    ThreadPoolTaskExecutor bean = new ThreadPoolTaskExecutor();
+    bean.setCorePoolSize(properties.getThreadMin());
+    bean.setMaxPoolSize(properties.getThreadMax());
+    bean.setQueueCapacity(properties.getThreadQueue());
+    bean.setKeepAliveSeconds(300);
+    bean.setWaitForTasksToCompleteOnShutdown(true);
+    bean.setAllowCoreThreadTimeOut(true);
+    bean.setThreadNamePrefix("common-thread-pool-");
+    bean.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+    return bean;
+  }
 }

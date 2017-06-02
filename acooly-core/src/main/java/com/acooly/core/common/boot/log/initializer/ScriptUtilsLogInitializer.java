@@ -12,12 +12,10 @@ package com.acooly.core.common.boot.log.initializer;
 import ch.qos.logback.classic.Level;
 import com.acooly.core.common.boot.log.LogbackConfigurator;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 public class ScriptUtilsLogInitializer extends AbstractLogInitializer {
-    @Override
-    public void init(LogbackConfigurator configurator) {
-        configurator.logger("org.springframework.jdbc.datasource.init.ScriptUtils", Level.WARN);
-    }
+  @Override
+  public void init(LogbackConfigurator configurator) {
+    configurator.logger("org.springframework.jdbc.datasource.init.ScriptUtils", Level.WARN);
+  }
 }

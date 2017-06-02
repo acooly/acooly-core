@@ -6,11 +6,8 @@ import com.acooly.module.jpa.EntityJpaDao;
 /**
  * app_crash JPA Dao
  *
- * Date: 2015-09-11 23:05:38
+ * <p>Date: 2015-09-11 23:05:38
  *
  * @author Acooly Code Generator
- *
  */
-public interface AppCrashDao extends EntityJpaDao<AppCrash, Long> {
-
-}
+public interface AppCrashDao extends EntityJpaDao<AppCrash, Long> {}

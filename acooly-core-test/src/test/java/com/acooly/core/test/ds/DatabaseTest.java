@@ -17,21 +17,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.sql.DataSource;
 
-/**
- * @author shuijing
- */
+/** @author shuijing */
 public class DatabaseTest extends TestBase {
 
-    @Autowired
-    protected DataSource dataSource;
-	@Test
-	public void testDataSource() throws Exception {
-        String url = dataSource.getConnection().getMetaData().getURL();
-        Assert.notNull(url);
-    }
+  @Autowired protected DataSource dataSource;
 
-	@AfterClass
-	public static void testW() throws Exception {
-		System.out.println("a");
-	}
+  @AfterClass
+  public static void testW() throws Exception {
+    System.out.println("a");
+  }
+
+  @Test
+  public void testDataSource() throws Exception {
+    String url = dataSource.getConnection().getMetaData().getURL();
+    Assert.notNull(url);
+  }
 }

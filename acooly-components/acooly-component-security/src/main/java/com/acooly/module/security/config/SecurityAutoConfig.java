@@ -61,308 +61,326 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author qiubo
- */
+/** @author qiubo */
 @Configuration
 @ConditionalOnWebApplication
-@EnableConfigurationProperties({ SecurityProperties.class, FrameworkProperties.class })
+@EnableConfigurationProperties({SecurityProperties.class, FrameworkProperties.class})
 @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".enable", matchIfMissing = true)
-@ComponentScan(basePackages = { "com.acooly.module.security" })
+@ComponentScan(basePackages = {"com.acooly.module.security"})
 public class SecurityAutoConfig {
-	
-	@Configuration
-	@ConditionalOnWebApplication
-	@ConditionalOnProperty(value = SecurityProperties.PREFIX + ".shiro.enable", matchIfMissing = true)
-	@AutoConfigureAfter({ JPAAutoConfig.class, DataSourceTransactionManagerAutoConfiguration.class })
-	public static class ShiroAutoConfigration {
-		@Bean
-		public CacheManager shiroCacheManager(RedisTemplate redisTemplate) {
-			ShiroCacheManager shiroCacheManager = new ShiroCacheManager();
-			shiroCacheManager.setRedisTemplate(redisTemplate);
-			return shiroCacheManager;
-		}
-		
-		@Bean
-		public WebSecurityManager shiroSecurityManager(CacheManager shiroCacheManager, Realm shiroRealm) {
-			
-			DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-			securityManager.setCacheManager(shiroCacheManager);
-			securityManager.setRealm(shiroRealm);
-			return securityManager;
-		}
-		
-		@Bean
-		public Realm shiroRealm(PathMatchPermissionResolver pathMatchPermissionResolver) {
-			ShiroDbRealm shiroDbRealm = new ShiroDbRealm();
-			shiroDbRealm.setPermissionResolver(pathMatchPermissionResolver);
-			shiroDbRealm.setAuthenticationCachingEnabled(false);
-			shiroDbRealm.setAuthorizationCachingEnabled(false);
-			shiroDbRealm.setAuthorizationCacheName(ShiroCacheManager.KEY_AUTHZ);
-			shiroDbRealm.setAuthenticationCacheName(ShiroCacheManager.KEY_AUTHC);
-			return shiroDbRealm;
-		}
-		
-		@Bean
-		public PathMatchPermissionResolver pathMatchPermissionResolver() {
-			return new PathMatchPermissionResolver();
-		}
-		
-		@Bean
-        @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".shiro.auth.enable", matchIfMissing = true)
-        public ShiroFilterFactoryBean shiroFilterFactoryBean(	@Qualifier("shiroSecurityManager") WebSecurityManager shiroSecurityManager,
-																SecurityProperties securityProperties) {
-			ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
-			shiroFilter.setSecurityManager(shiroSecurityManager);
-			shiroFilter.setLoginUrl(securityProperties.getShiro().getLoginUrl());
-			//		shiroFilter.setUnauthorizedUrl(shiroProperties.getUnauthorizedUrl());
-			shiroFilter.setSuccessUrl(securityProperties.getShiro().getSuccessUrl());
-			shiroFilter.setFilters(buildFiltersMap(securityProperties));
-			shiroFilter.setFilterChainDefinitions(getFilterChainDefinitions(securityProperties));
-			
-			return shiroFilter;
-		}
-		
-		@Bean
-		@DependsOn({ "logout", "urlAuthr", "authc" })
-        @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".shiro.auth.enable", matchIfMissing = true)
-        public Filter shiroFilter(ShiroFilterFactoryBean shiroFilterFactoryBean, Realm shiroRealm) throws Exception {
-			((DefaultWebSecurityManager) shiroFilterFactoryBean.getSecurityManager()).setRealm(shiroRealm);
-			return (Filter) shiroFilterFactoryBean.getObject();
-		}
-		
-		@Bean
-        @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".shiro.auth.enable", matchIfMissing = true)
-        public FilterRegistrationBean shiroFilterRegistrationBean(	@Qualifier("shiroFilter") Filter shiroFilter,
-																	SecurityProperties securityProperties) {
-			FilterRegistrationBean registration = new FilterRegistrationBean();
-			registration.setFilter(shiroFilter);
-			registration.setOrder(Ordered.LOWEST_PRECEDENCE - 10);
-			registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp", "*.json").toArray(new String[0]));
-			registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
-			registration.setName("shiroFilter");
-			return registration;
-		}
-		
-		@Bean
-		@ConditionalOnMissingBean(LifecycleBeanPostProcessor.class)
-		public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
-			return new LifecycleBeanPostProcessor();
-		}
-		
-		@Bean
-		public AuthorizationAttributeSourceAdvisor shiroAuthorizationAttributeSourceAdvisor(WebSecurityManager shiroSecurityManager) {
-			AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
-			advisor.setSecurityManager(shiroSecurityManager);
-			return advisor;
-		}
-		
-		@Bean
-		public AuthorizationAttributeSourceAdvisor shiroAuthorizationAttributeSourceAdvisor(WebSecurityManager shiroSecurityManager,
-																							Realm shiroRealm) {
-			AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
-			advisor.setSecurityManager(shiroSecurityManager);
-			return advisor;
-		}
-		
-		/**
-		 * 注册spring bean，为了shiro能够找到filter
-		 * @param shireLoginLogoutSubject
-		 * @return
-		 */
-		@Bean
-		public NotifyLogoutFilter logout(	ShireLoginLogoutSubject shireLoginLogoutSubject,
-											SecurityProperties securityProperties) {
-			NotifyLogoutFilter notifyLogoutFilter = new NotifyLogoutFilter();
-			notifyLogoutFilter.setRedirectUrl(securityProperties.getShiro().getLoginUrl());
-			notifyLogoutFilter.setShireLoginLogoutSubject(shireLoginLogoutSubject);
-			return notifyLogoutFilter;
-		}
-		
-		/**
-		 * 禁用logout filter，防止spring设置为web容器filter。因为shiroFilter会代理logout
-		 * filter的执行。
-		 * @param filter
-		 * @return
-		 */
-		@Bean
-		public FilterRegistrationBean disableLogoutForSpringMVC(NotifyLogoutFilter filter) {
-			FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-			filterRegistrationBean.setFilter(filter);
-			filterRegistrationBean.setEnabled(false);
-			filterRegistrationBean.setName("disableLogoutForSpringMVC");
-			return filterRegistrationBean;
-		}
-		
-		@Bean
-		public UrlResourceAuthorizationFilter urlAuthr() {
-			UrlResourceAuthorizationFilter filter = new UrlResourceAuthorizationFilter();
-			return filter;
-		}
-		
-		@Bean
-		public FilterRegistrationBean disableUrlAuthrForSpringMVC(UrlResourceAuthorizationFilter filter) {
-			FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-			filterRegistrationBean.setFilter(filter);
-			filterRegistrationBean.setEnabled(false);
-			filterRegistrationBean.setName("disableUrlAuthrForSpringMVC");
-			return filterRegistrationBean;
-		}
-		
-		@Bean
-		public CaptchaFormAuthenticationFilter authc(	ShireLoginLogoutSubject shireLoginLogoutSubject,
-														SecurityProperties securityProperties) {
-			CaptchaFormAuthenticationFilter filter = new CaptchaFormAuthenticationFilter();
-			filter.setShireLoginLogoutSubject(shireLoginLogoutSubject);
-			filter.setFailureUrl(securityProperties.getShiro().getFailedUrl());
-			filter.setSuccessUrl(securityProperties.getShiro().getSuccessUrl());
-			return filter;
-		}
-		
-		@Bean
-		public FilterRegistrationBean disableAuthcForSpringMVC(CaptchaFormAuthenticationFilter filter) {
-			FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-			filterRegistrationBean.setFilter(filter);
-			filterRegistrationBean.setEnabled(false);
-			filterRegistrationBean.setName("disableAuthcForSpringMVC");
-			return filterRegistrationBean;
-		}
-		
-		@Bean
-		public ShireLoginLogoutSubject shireLoginLogoutSubject() {
-			ShireLoginLogoutSubject logoutSubject = new ShireLoginLogoutSubject();
-			return logoutSubject;
-		}
-		
-		private String getFilterChainDefinitions(SecurityProperties securityProperties) {
-			List<Map<String, String>> urls = securityProperties.getShiro().getUrls();
-			if (CollectionUtils.isEmpty(urls)) {
-				return "";
-			}
-			StringBuilder sb = new StringBuilder();
-			for (Map<String, String> url : urls) {
-				if (MapUtils.isNotEmpty(url)) {
-					for (Map.Entry<String, String> entry : url.entrySet()) {
-						sb.append(entry.getKey()).append("=").append(entry.getValue()).append("\n");
-					}
-				}
-			}
-			return sb.toString();
-		}
-		
-		private Map<String, Filter> buildFiltersMap(SecurityProperties securityProperties) {
-			Map<String, String> filters = securityProperties.getShiro().getFilters();
-			if (MapUtils.isEmpty(filters)) {
-				return Maps.newLinkedHashMap();
-			}
-			
-			ReflectionBuilder builder = new ReflectionBuilder();
-			Map<String, ?> built = builder.buildObjects(filters);
-			return extractFilters(built);
-		}
-		
-		private Map<String, Filter> extractFilters(Map<String, ?> objects) {
-			if (CollectionUtils.isEmpty(objects)) {
-				return Maps.newLinkedHashMap();
-			}
-			Map<String, Filter> filterMap = Maps.newLinkedHashMap();
-			for (Map.Entry<String, ?> entry : objects.entrySet()) {
-				String key = entry.getKey();
-				Object value = entry.getValue();
-				if (value instanceof Filter) {
-					filterMap.put(key, (Filter) value);
-				}
-			}
-			return filterMap;
-		}
-	}
-	
-	@Configuration
-	@ConditionalOnWebApplication
-	@ConditionalOnProperty(value = SecurityProperties.PREFIX + ".captcha.enable", matchIfMissing = true)
-	public static class CaptchaAutoConfigration {
-        @Bean
-        public ServletRegistrationBean mycaptcha(SecurityProperties securityProperties) {
-            ServletRegistrationBean bean = new ServletRegistrationBean();
-            bean.setUrlMappings(Lists.newArrayList(securityProperties.getCaptcha().getUrl()));
-            CaptchaServlet captchaServlet = new CaptchaServlet();
-            bean.setServlet(captchaServlet);
-            bean.setLoadOnStartup(1);
-            return bean;
-        }
-	}
-	
-	@Configuration
-	@ConditionalOnWebApplication
-	@ConditionalOnProperty(value = SecurityProperties.PREFIX + ".csrf.enable", matchIfMissing = true)
-	public static class CSRFAutoConfigration {
-		@Bean
-		public Filter csrfFilter(SecurityProperties securityProperties) {
-			CookieCsrfTokenRepository tokenRepository = new CookieCsrfTokenRepository();
-			CsrfFilter csrfFilter = new CsrfFilter(tokenRepository);
-			List<String> excludes = Lists.newArrayList();
-			for (List<String> list : securityProperties.getCsrf().getExclusions().values()) {
-				excludes.addAll(list);
-			}
-			csrfFilter.setRequireCsrfProtectionMatcher(new RequireCsrfProtectionMatcher(excludes));
-			CsrfAccessDeniedHandlerImpl csrfAccessDeniedHandler = new CsrfAccessDeniedHandlerImpl();
-			csrfAccessDeniedHandler.setErrorPage(securityProperties.getCsrf().getErrorPage());
-			csrfFilter.setAccessDeniedHandler(csrfAccessDeniedHandler);
-			FilterRegistrationBean registration = new FilterRegistrationBean();
-			registration.setFilter(csrfFilter);
-			registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp").toArray(new String[0]));
-			registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
-			registration.setName("csrfDefenseFilter");
-			return csrfFilter;
-		}
 
-	}
-	
-	@Configuration
-	@ConditionalOnWebApplication
-	@ConditionalOnProperty(value = SecurityProperties.PREFIX + ".xss.enable", matchIfMissing = true)
-	public static class XssAutoConfigration {
-		@Bean
-		public FilterRegistrationBean xssFilter(SecurityProperties securityProperties) {
-			XssDefenseFilter filter = new XssDefenseFilter();
-			filter.setSecurityProperties(securityProperties);
-			FilterRegistrationBean registration = new FilterRegistrationBean();
-			registration.setFilter(filter);
-			registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp").toArray(new String[0]));
-			registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
-			registration.setName("xssDefenseFilter");
-			return registration;
-		}
-		
-	}
-    @Configuration
-    @ConditionalOnWebApplication
-	public static class HealthCheckConfigration{
-        @Bean
-        public ServletRegistrationBean jcaptchaServlet() {
-            ServletRegistrationBean bean = new ServletRegistrationBean();
-            bean.setUrlMappings(Lists.newArrayList("/healthCheck"));
-            HealthCheckServlet healthCheckServlet = new HealthCheckServlet();
-            bean.setServlet(healthCheckServlet);
-            return bean;
-        }
+  @Bean
+  public AbstractDatabaseScriptIniter securityScriptIniter() {
+    return new SecurityDatabaseScriptIniter();
+  }
+
+  @Configuration
+  @ConditionalOnWebApplication
+  @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".shiro.enable", matchIfMissing = true)
+  @AutoConfigureAfter({JPAAutoConfig.class, DataSourceTransactionManagerAutoConfiguration.class})
+  public static class ShiroAutoConfigration {
+    @Bean
+    public CacheManager shiroCacheManager(RedisTemplate redisTemplate) {
+      ShiroCacheManager shiroCacheManager = new ShiroCacheManager();
+      shiroCacheManager.setRedisTemplate(redisTemplate);
+      return shiroCacheManager;
     }
 
     @Bean
-    public AbstractDatabaseScriptIniter securityScriptIniter() {
-        return new SecurityDatabaseScriptIniter();
-    }
-    @Order(Ordered.HIGHEST_PRECEDENCE)
-    private static class SecurityDatabaseScriptIniter extends AbstractDatabaseScriptIniter{
-        @Override
-        public String getEvaluateSql(DatabaseType databaseType) {
-            return "SELECT count(*) FROM SYS_ROLE";
-        }
+    public WebSecurityManager shiroSecurityManager(
+        CacheManager shiroCacheManager, Realm shiroRealm) {
 
-        @Override
-        public List<String> getInitSqlFile(DatabaseType databaseType) {
-            return Lists.newArrayList("META-INF/database/security/"+databaseType.name()+"/security.sql");
-        }
+      DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+      securityManager.setCacheManager(shiroCacheManager);
+      securityManager.setRealm(shiroRealm);
+      return securityManager;
     }
 
+    @Bean
+    public Realm shiroRealm(PathMatchPermissionResolver pathMatchPermissionResolver) {
+      ShiroDbRealm shiroDbRealm = new ShiroDbRealm();
+      shiroDbRealm.setPermissionResolver(pathMatchPermissionResolver);
+      shiroDbRealm.setAuthenticationCachingEnabled(false);
+      shiroDbRealm.setAuthorizationCachingEnabled(false);
+      shiroDbRealm.setAuthorizationCacheName(ShiroCacheManager.KEY_AUTHZ);
+      shiroDbRealm.setAuthenticationCacheName(ShiroCacheManager.KEY_AUTHC);
+      return shiroDbRealm;
+    }
+
+    @Bean
+    public PathMatchPermissionResolver pathMatchPermissionResolver() {
+      return new PathMatchPermissionResolver();
+    }
+
+    @Bean
+    @ConditionalOnProperty(
+      value = SecurityProperties.PREFIX + ".shiro.auth.enable",
+      matchIfMissing = true
+    )
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(
+        @Qualifier("shiroSecurityManager") WebSecurityManager shiroSecurityManager,
+        SecurityProperties securityProperties) {
+      ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
+      shiroFilter.setSecurityManager(shiroSecurityManager);
+      shiroFilter.setLoginUrl(securityProperties.getShiro().getLoginUrl());
+      //		shiroFilter.setUnauthorizedUrl(shiroProperties.getUnauthorizedUrl());
+      shiroFilter.setSuccessUrl(securityProperties.getShiro().getSuccessUrl());
+      shiroFilter.setFilters(buildFiltersMap(securityProperties));
+      shiroFilter.setFilterChainDefinitions(getFilterChainDefinitions(securityProperties));
+
+      return shiroFilter;
+    }
+
+    @Bean
+    @DependsOn({"logout", "urlAuthr", "authc"})
+    @ConditionalOnProperty(
+      value = SecurityProperties.PREFIX + ".shiro.auth.enable",
+      matchIfMissing = true
+    )
+    public Filter shiroFilter(ShiroFilterFactoryBean shiroFilterFactoryBean, Realm shiroRealm)
+        throws Exception {
+      ((DefaultWebSecurityManager) shiroFilterFactoryBean.getSecurityManager())
+          .setRealm(shiroRealm);
+      return (Filter) shiroFilterFactoryBean.getObject();
+    }
+
+    @Bean
+    @ConditionalOnProperty(
+      value = SecurityProperties.PREFIX + ".shiro.auth.enable",
+      matchIfMissing = true
+    )
+    public FilterRegistrationBean shiroFilterRegistrationBean(
+        @Qualifier("shiroFilter") Filter shiroFilter, SecurityProperties securityProperties) {
+      FilterRegistrationBean registration = new FilterRegistrationBean();
+      registration.setFilter(shiroFilter);
+      registration.setOrder(Ordered.LOWEST_PRECEDENCE - 10);
+      registration.addUrlPatterns(
+          Lists.newArrayList("*.html", "*.jsp", "*.json").toArray(new String[0]));
+      registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
+      registration.setName("shiroFilter");
+      return registration;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(LifecycleBeanPostProcessor.class)
+    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
+      return new LifecycleBeanPostProcessor();
+    }
+
+    @Bean
+    public AuthorizationAttributeSourceAdvisor shiroAuthorizationAttributeSourceAdvisor(
+        WebSecurityManager shiroSecurityManager) {
+      AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
+      advisor.setSecurityManager(shiroSecurityManager);
+      return advisor;
+    }
+
+    @Bean
+    public AuthorizationAttributeSourceAdvisor shiroAuthorizationAttributeSourceAdvisor(
+        WebSecurityManager shiroSecurityManager, Realm shiroRealm) {
+      AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
+      advisor.setSecurityManager(shiroSecurityManager);
+      return advisor;
+    }
+
+    /**
+     * 注册spring bean，为了shiro能够找到filter
+     *
+     * @param shireLoginLogoutSubject
+     * @return
+     */
+    @Bean
+    public NotifyLogoutFilter logout(
+        ShireLoginLogoutSubject shireLoginLogoutSubject, SecurityProperties securityProperties) {
+      NotifyLogoutFilter notifyLogoutFilter = new NotifyLogoutFilter();
+      notifyLogoutFilter.setRedirectUrl(securityProperties.getShiro().getLoginUrl());
+      notifyLogoutFilter.setShireLoginLogoutSubject(shireLoginLogoutSubject);
+      return notifyLogoutFilter;
+    }
+
+    /**
+     * 禁用logout filter，防止spring设置为web容器filter。因为shiroFilter会代理logout filter的执行。
+     *
+     * @param filter
+     * @return
+     */
+    @Bean
+    public FilterRegistrationBean disableLogoutForSpringMVC(NotifyLogoutFilter filter) {
+      FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+      filterRegistrationBean.setFilter(filter);
+      filterRegistrationBean.setEnabled(false);
+      filterRegistrationBean.setName("disableLogoutForSpringMVC");
+      return filterRegistrationBean;
+    }
+
+    @Bean
+    public UrlResourceAuthorizationFilter urlAuthr() {
+      UrlResourceAuthorizationFilter filter = new UrlResourceAuthorizationFilter();
+      return filter;
+    }
+
+    @Bean
+    public FilterRegistrationBean disableUrlAuthrForSpringMVC(
+        UrlResourceAuthorizationFilter filter) {
+      FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+      filterRegistrationBean.setFilter(filter);
+      filterRegistrationBean.setEnabled(false);
+      filterRegistrationBean.setName("disableUrlAuthrForSpringMVC");
+      return filterRegistrationBean;
+    }
+
+    @Bean
+    public CaptchaFormAuthenticationFilter authc(
+        ShireLoginLogoutSubject shireLoginLogoutSubject, SecurityProperties securityProperties) {
+      CaptchaFormAuthenticationFilter filter = new CaptchaFormAuthenticationFilter();
+      filter.setShireLoginLogoutSubject(shireLoginLogoutSubject);
+      filter.setFailureUrl(securityProperties.getShiro().getFailedUrl());
+      filter.setSuccessUrl(securityProperties.getShiro().getSuccessUrl());
+      return filter;
+    }
+
+    @Bean
+    public FilterRegistrationBean disableAuthcForSpringMVC(CaptchaFormAuthenticationFilter filter) {
+      FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+      filterRegistrationBean.setFilter(filter);
+      filterRegistrationBean.setEnabled(false);
+      filterRegistrationBean.setName("disableAuthcForSpringMVC");
+      return filterRegistrationBean;
+    }
+
+    @Bean
+    public ShireLoginLogoutSubject shireLoginLogoutSubject() {
+      ShireLoginLogoutSubject logoutSubject = new ShireLoginLogoutSubject();
+      return logoutSubject;
+    }
+
+    private String getFilterChainDefinitions(SecurityProperties securityProperties) {
+      List<Map<String, String>> urls = securityProperties.getShiro().getUrls();
+      if (CollectionUtils.isEmpty(urls)) {
+        return "";
+      }
+      StringBuilder sb = new StringBuilder();
+      for (Map<String, String> url : urls) {
+        if (MapUtils.isNotEmpty(url)) {
+          for (Map.Entry<String, String> entry : url.entrySet()) {
+            sb.append(entry.getKey()).append("=").append(entry.getValue()).append("\n");
+          }
+        }
+      }
+      return sb.toString();
+    }
+
+    private Map<String, Filter> buildFiltersMap(SecurityProperties securityProperties) {
+      Map<String, String> filters = securityProperties.getShiro().getFilters();
+      if (MapUtils.isEmpty(filters)) {
+        return Maps.newLinkedHashMap();
+      }
+
+      ReflectionBuilder builder = new ReflectionBuilder();
+      Map<String, ?> built = builder.buildObjects(filters);
+      return extractFilters(built);
+    }
+
+    private Map<String, Filter> extractFilters(Map<String, ?> objects) {
+      if (CollectionUtils.isEmpty(objects)) {
+        return Maps.newLinkedHashMap();
+      }
+      Map<String, Filter> filterMap = Maps.newLinkedHashMap();
+      for (Map.Entry<String, ?> entry : objects.entrySet()) {
+        String key = entry.getKey();
+        Object value = entry.getValue();
+        if (value instanceof Filter) {
+          filterMap.put(key, (Filter) value);
+        }
+      }
+      return filterMap;
+    }
+  }
+
+  @Configuration
+  @ConditionalOnWebApplication
+  @ConditionalOnProperty(
+    value = SecurityProperties.PREFIX + ".captcha.enable",
+    matchIfMissing = true
+  )
+  public static class CaptchaAutoConfigration {
+    @Bean
+    public ServletRegistrationBean mycaptcha(SecurityProperties securityProperties) {
+      ServletRegistrationBean bean = new ServletRegistrationBean();
+      bean.setUrlMappings(Lists.newArrayList(securityProperties.getCaptcha().getUrl()));
+      CaptchaServlet captchaServlet = new CaptchaServlet();
+      bean.setServlet(captchaServlet);
+      bean.setLoadOnStartup(1);
+      return bean;
+    }
+  }
+
+  @Configuration
+  @ConditionalOnWebApplication
+  @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".csrf.enable", matchIfMissing = true)
+  public static class CSRFAutoConfigration {
+    @Bean
+    public Filter csrfFilter(SecurityProperties securityProperties) {
+      CookieCsrfTokenRepository tokenRepository = new CookieCsrfTokenRepository();
+      CsrfFilter csrfFilter = new CsrfFilter(tokenRepository);
+      List<String> excludes = Lists.newArrayList();
+      for (List<String> list : securityProperties.getCsrf().getExclusions().values()) {
+        excludes.addAll(list);
+      }
+      csrfFilter.setRequireCsrfProtectionMatcher(new RequireCsrfProtectionMatcher(excludes));
+      CsrfAccessDeniedHandlerImpl csrfAccessDeniedHandler = new CsrfAccessDeniedHandlerImpl();
+      csrfAccessDeniedHandler.setErrorPage(securityProperties.getCsrf().getErrorPage());
+      csrfFilter.setAccessDeniedHandler(csrfAccessDeniedHandler);
+      FilterRegistrationBean registration = new FilterRegistrationBean();
+      registration.setFilter(csrfFilter);
+      registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp").toArray(new String[0]));
+      registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
+      registration.setName("csrfDefenseFilter");
+      return csrfFilter;
+    }
+  }
+
+  @Configuration
+  @ConditionalOnWebApplication
+  @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".xss.enable", matchIfMissing = true)
+  public static class XssAutoConfigration {
+    @Bean
+    public FilterRegistrationBean xssFilter(SecurityProperties securityProperties) {
+      XssDefenseFilter filter = new XssDefenseFilter();
+      filter.setSecurityProperties(securityProperties);
+      FilterRegistrationBean registration = new FilterRegistrationBean();
+      registration.setFilter(filter);
+      registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp").toArray(new String[0]));
+      registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
+      registration.setName("xssDefenseFilter");
+      return registration;
+    }
+  }
+
+  @Configuration
+  @ConditionalOnWebApplication
+  public static class HealthCheckConfigration {
+    @Bean
+    public ServletRegistrationBean jcaptchaServlet() {
+      ServletRegistrationBean bean = new ServletRegistrationBean();
+      bean.setUrlMappings(Lists.newArrayList("/healthCheck"));
+      HealthCheckServlet healthCheckServlet = new HealthCheckServlet();
+      bean.setServlet(healthCheckServlet);
+      return bean;
+    }
+  }
+
+  @Order(Ordered.HIGHEST_PRECEDENCE)
+  private static class SecurityDatabaseScriptIniter extends AbstractDatabaseScriptIniter {
+    @Override
+    public String getEvaluateSql(DatabaseType databaseType) {
+      return "SELECT count(*) FROM SYS_ROLE";
+    }
+
+    @Override
+    public List<String> getInitSqlFile(DatabaseType databaseType) {
+      return Lists.newArrayList(
+          "META-INF/database/security/" + databaseType.name() + "/security.sql");
+    }
+  }
 }

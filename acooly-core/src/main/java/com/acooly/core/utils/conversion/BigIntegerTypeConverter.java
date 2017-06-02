@@ -7,49 +7,53 @@ import java.util.List;
 
 /**
  * {@link BigInteger}的类型转换器。
- * 
+ *
  * @author Agreal·Lee (e-mail:lixiang@yiji.com)
- * 
  */
 public class BigIntegerTypeConverter extends AbstractTypeConverter<BigInteger> {
 
-	public Class<BigInteger> getTargetType() {
-		return BigInteger.class;
-	}
+  public static BigInteger bigIntValue(Object value) throws NumberFormatException {
+    if (value == null) {
+      return null;
+    }
+    Class<?> c = value.getClass();
+    if (c == BigInteger.class) {
+      return (BigInteger) value;
+    }
+    if (c == BigDecimal.class) {
+      return ((BigDecimal) value).toBigInteger();
+    }
+    if (c.getSuperclass() == Number.class) {
+      return BigInteger.valueOf(((Number) value).longValue());
+    }
+    if (c == Boolean.class) {
+      return BigInteger.valueOf(((Boolean) value).booleanValue() ? 1 : 0);
+    }
+    if (c == Character.class) {
+      return BigInteger.valueOf(((Character) value).charValue());
+    }
+    return new BigInteger(StringTypeConverter.stringValue(value, true));
+  }
 
-	public List<Class<?>> getSupportedSourceTypes() {
-		return Arrays.asList(Number.class, Boolean.class, Character.class, CharSequence.class, CharSequence[].class,
-				BigDecimal.class);
-	}
+  public Class<BigInteger> getTargetType() {
+    return BigInteger.class;
+  }
 
-	public BigInteger convert(Object value, Class<? extends BigInteger> toType) {
-		try {
-			return bigIntValue(value);
-		} catch (Exception e) {
-			throw new TypeConversionException(e);
-		}
-	}
+  public List<Class<?>> getSupportedSourceTypes() {
+    return Arrays.asList(
+        Number.class,
+        Boolean.class,
+        Character.class,
+        CharSequence.class,
+        CharSequence[].class,
+        BigDecimal.class);
+  }
 
-	public static BigInteger bigIntValue(Object value) throws NumberFormatException {
-		if (value == null) {
-			return null;
-		}
-		Class<?> c = value.getClass();
-		if (c == BigInteger.class) {
-			return (BigInteger) value;
-		}
-		if (c == BigDecimal.class) {
-			return ((BigDecimal) value).toBigInteger();
-		}
-		if (c.getSuperclass() == Number.class) {
-			return BigInteger.valueOf(((Number) value).longValue());
-		}
-		if (c == Boolean.class) {
-			return BigInteger.valueOf(((Boolean) value).booleanValue() ? 1 : 0);
-		}
-		if (c == Character.class) {
-			return BigInteger.valueOf(((Character) value).charValue());
-		}
-		return new BigInteger(StringTypeConverter.stringValue(value, true));
-	}
+  public BigInteger convert(Object value, Class<? extends BigInteger> toType) {
+    try {
+      return bigIntValue(value);
+    } catch (Exception e) {
+      throw new TypeConversionException(e);
+    }
+  }
 }

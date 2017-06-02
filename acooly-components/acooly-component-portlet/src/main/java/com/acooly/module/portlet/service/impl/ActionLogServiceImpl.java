@@ -25,71 +25,79 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * portlet_action_log Service实现
- * <p>
- * Date: 2017-03-20 23:36:29
+ *
+ * <p>Date: 2017-03-20 23:36:29
  *
  * @author acooly
  */
 @Service("actionLogService")
-public class ActionLogServiceImpl extends EntityServiceImpl<ActionLog, ActionLogDao> implements ActionLogService {
+public class ActionLogServiceImpl extends EntityServiceImpl<ActionLog, ActionLogDao>
+    implements ActionLogService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ActionLogServiceImpl.class);
+  private static final Logger logger = LoggerFactory.getLogger(ActionLogServiceImpl.class);
 
-    @Resource
-    private ActionMappingService actionMappingService;
+  @Resource private ActionMappingService actionMappingService;
 
-    @Override
-    public ActionLog logger(String action, String actionName, String userName, ActionChannelEnum actionChannel, String version, String comments, HttpServletRequest request) {
-        try {
-            ActionLog actionLog = new ActionLog();
-            actionLog.setActionKey(action);
-            actionLog.setActionName(actionName);
-            if (actionChannel == null && request == null) {
-                throw new IllegalArgumentException("actionChannel和request不能同时为空");
-            }
-            if (actionChannel == null && request != null) {
-                actionLog.setChannel(parseChannelForReqeust(request));
-            } else {
-                actionLog.setChannel(actionChannel);
-            }
-            actionLog.setComments(comments);
-            actionLog.setUserName(userName);
-            actionLog.setChannelVersion(version);
-            actionLog.setUserIp(IPUtil.getIpAddr(request));
-            if (request != null) {
-                actionLog.setChannelInfo(Strings.substring(Servlets.getHeaderValue(request, "User-Agent"), 0, 255));
-            }
-            save(actionLog);
-            return actionLog;
-        } catch (Exception e) {
-            logger.warn("保持action日志失败:{}", e.getMessage());
-        }
-        return null;
+  @Override
+  public ActionLog logger(
+      String action,
+      String actionName,
+      String userName,
+      ActionChannelEnum actionChannel,
+      String version,
+      String comments,
+      HttpServletRequest request) {
+    try {
+      ActionLog actionLog = new ActionLog();
+      actionLog.setActionKey(action);
+      actionLog.setActionName(actionName);
+      if (actionChannel == null && request == null) {
+        throw new IllegalArgumentException("actionChannel和request不能同时为空");
+      }
+      if (actionChannel == null && request != null) {
+        actionLog.setChannel(parseChannelForReqeust(request));
+      } else {
+        actionLog.setChannel(actionChannel);
+      }
+      actionLog.setComments(comments);
+      actionLog.setUserName(userName);
+      actionLog.setChannelVersion(version);
+      actionLog.setUserIp(IPUtil.getIpAddr(request));
+      if (request != null) {
+        actionLog.setChannelInfo(
+            Strings.substring(Servlets.getHeaderValue(request, "User-Agent"), 0, 255));
+      }
+      save(actionLog);
+      return actionLog;
+    } catch (Exception e) {
+      logger.warn("保持action日志失败:{}", e.getMessage());
     }
+    return null;
+  }
 
-
-    @Override
-    public ActionLog logger(HttpServletRequest request, String userName) {
-        String actionKey = Servlets.getRequestPath(request);
-        String actionName = null;
-        ActionMapping actionMapping = actionMappingService.getActionMapping(actionKey);
-        if (actionMapping != null) {
-            actionName = actionMapping.getTitle();
-        }
-        return logger(actionKey, actionName, userName, parseChannelForReqeust(request), null, null, request);
+  @Override
+  public ActionLog logger(HttpServletRequest request, String userName) {
+    String actionKey = Servlets.getRequestPath(request);
+    String actionName = null;
+    ActionMapping actionMapping = actionMappingService.getActionMapping(actionKey);
+    if (actionMapping != null) {
+      actionName = actionMapping.getTitle();
     }
+    return logger(
+        actionKey, actionName, userName, parseChannelForReqeust(request), null, null, request);
+  }
 
-    protected ActionChannelEnum parseChannelForReqeust(HttpServletRequest request) {
-        String userAgent = Servlets.getHeaderValue(request, "User-Agent");
-        if (Strings.contains(userAgent, "MicroMessenger")) {
-            return ActionChannelEnum.wechat;
-        }
-        String[] iosMobiles = {"iPod", "iPad", "iPhone", "Android", "SymbianOS", "Windows Phone"};
-        for (String s : iosMobiles) {
-            if (Strings.containsIgnoreCase(userAgent, s)) {
-                return ActionChannelEnum.wap;
-            }
-        }
-        return ActionChannelEnum.web;
+  protected ActionChannelEnum parseChannelForReqeust(HttpServletRequest request) {
+    String userAgent = Servlets.getHeaderValue(request, "User-Agent");
+    if (Strings.contains(userAgent, "MicroMessenger")) {
+      return ActionChannelEnum.wechat;
     }
+    String[] iosMobiles = {"iPod", "iPad", "iPhone", "Android", "SymbianOS", "Windows Phone"};
+    for (String s : iosMobiles) {
+      if (Strings.containsIgnoreCase(userAgent, s)) {
+        return ActionChannelEnum.wap;
+      }
+    }
+    return ActionChannelEnum.web;
+  }
 }

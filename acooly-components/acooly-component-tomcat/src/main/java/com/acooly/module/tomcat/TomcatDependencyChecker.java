@@ -15,15 +15,12 @@ import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.utils.Ports;
 import org.springframework.core.env.Environment;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 public class TomcatDependencyChecker implements DependencyChecker {
-	@Override
-	public void check(Environment environment) {
-		if (Ports.isPortUsing(Apps.getHttpPort())) {
-			throw new AppConfigException("tomcat http port:" + Apps.getHttpPort() + " is using.");
-		}
-	}
-	
+  @Override
+  public void check(Environment environment) {
+    if (Ports.isPortUsing(Apps.getHttpPort())) {
+      throw new AppConfigException("tomcat http port:" + Apps.getHttpPort() + " is using.");
+    }
+  }
 }

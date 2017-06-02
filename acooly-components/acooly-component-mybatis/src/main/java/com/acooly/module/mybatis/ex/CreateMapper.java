@@ -14,20 +14,18 @@ import org.apache.ibatis.mapping.MappedStatement;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.provider.base.BaseInsertProvider;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 public interface CreateMapper<T> {
-	@InsertProvider(type = CreateProvider.class, method = "dynamicSQL")
-	void create(T o);
-	
-    class CreateProvider extends BaseInsertProvider {
-		public CreateProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
-			super(mapperClass, mapperHelper);
-		}
-		
-		public String create(MappedStatement ms) {
-			return super.insert(ms);
-		}
-	}
+  @InsertProvider(type = CreateProvider.class, method = "dynamicSQL")
+  void create(T o);
+
+  class CreateProvider extends BaseInsertProvider {
+    public CreateProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
+      super(mapperClass, mapperHelper);
+    }
+
+    public String create(MappedStatement ms) {
+      return super.insert(ms);
+    }
+  }
 }

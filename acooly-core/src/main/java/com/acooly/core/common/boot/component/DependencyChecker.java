@@ -17,10 +17,10 @@ import org.springframework.core.env.Environment;
  * @author qiubo@yiji.com
  */
 public interface DependencyChecker {
-	/**
-	 * 检查依赖情况,如果条件不满足,请抛出异常
-	 *
-	 * 注意,在开发阶段某些依赖不是必须的,请根据不同的使用场景来检查依赖
-	 */
-	void check(Environment environment);
+  /**
+   * 检查依赖情况,如果条件不满足,请抛出异常
+   *
+   * <p>注意,在开发阶段某些依赖不是必须的,请根据不同的使用场景来检查依赖
+   */
+  void check(Environment environment);
 }

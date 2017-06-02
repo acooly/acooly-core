@@ -24,87 +24,86 @@ import java.util.concurrent.TimeoutException;
 
 import static com.acooly.module.scheduler.engine.ScheduleEngineImpl.getLogPrefix;
 
-
-/**
- * @author shuijing
- */
+/** @author shuijing */
 @Component
 public class QuartzJob implements Job {
 
-    private static final Logger logger = LoggerFactory.getLogger(QuartzJob.class);
+  /** 任务对象key */
+  public static final String SCHEDULER_RULE_DO_KEY = "schedulerRuleDO";
+  private static final Logger logger = LoggerFactory.getLogger(QuartzJob.class);
+  @Autowired private SchedulerRuleDao schedulerRuleRepository;
+  @Autowired private ObjectMapper objectMapper;
 
-    /**
-     * 任务对象key
-     */
-    public static final String SCHEDULER_RULE_DO_KEY = "schedulerRuleDO";
+  @Override
+  public void execute(JobExecutionContext context) {
 
-    @Autowired
-    private SchedulerRuleDao schedulerRuleRepository;
-    @Autowired
-    private ObjectMapper objectMapper;
+    String msgAtLastExecute = "";
+    SchedulerRule schedulerRule = null;
+    try {
+      JobDataMap dataMap = context.getJobDetail().getJobDataMap();
 
-    @Override
-    public void execute(JobExecutionContext context) {
+      schedulerRule =
+          objectMapper.readValue((String) dataMap.get(SCHEDULER_RULE_DO_KEY), SchedulerRule.class);
 
-        String msgAtLastExecute = "";
-        SchedulerRule schedulerRule = null;
-        try {
-            JobDataMap dataMap = context.getJobDetail().getJobDataMap();
+      if (schedulerRule == null) {
+        logger.error("任务执行失败,没有找到任务实体,context：{}", context.toString());
+        return;
+      }
+      //yiji-boot 支持gid oid 不再重写就用gid了
+      MDC.put("gid", getLogPrefix(schedulerRule.getId()));
 
-            schedulerRule = objectMapper.readValue((String) dataMap.get(SCHEDULER_RULE_DO_KEY), SchedulerRule.class);
+      TaskExecutor taskExecutor =
+          TaskExecutorProvider.get(TaskTypeEnum.getEnumByCode(schedulerRule.getActionType()));
 
-            if (schedulerRule == null) {
-                logger.error("任务执行失败,没有找到任务实体,context：{}", context.toString());
-                return;
-            }
-            //yiji-boot 支持gid oid 不再重写就用gid了
-            MDC.put("gid", getLogPrefix(schedulerRule.getId()));
+      logger.info(
+          "开始执行,taskId={},,memo={},creater={}",
+          schedulerRule.getId(),
+          schedulerRule.getMemo(),
+          schedulerRule.getCreater());
 
-            TaskExecutor taskExecutor = TaskExecutorProvider.get(TaskTypeEnum.getEnumByCode(schedulerRule
-                .getActionType()));
+      Boolean executeResult = taskExecutor.execute(schedulerRule);
 
-            logger.info("开始执行,taskId={},,memo={},creater={}", schedulerRule.getId(),
-                schedulerRule.getMemo(), schedulerRule.getCreater());
+      logger.info("执行结束,执行结果:{}", executeResult);
+      msgAtLastExecute = "执行成功";
+    } catch (Exception e) {
+      Throwable ex = Throwables.getRootCause(e);
+      msgAtLastExecute = ex.getMessage();
 
-            Boolean executeResult = taskExecutor.execute(schedulerRule);
+      if (isReadTimeOutException(schedulerRule, ex)) {
+        return;
+      }
 
-            logger.info("执行结束,执行结果:{}", executeResult);
-            msgAtLastExecute = "执行成功";
-        } catch (Exception e) {
-            Throwable ex = Throwables.getRootCause(e);
-            msgAtLastExecute = ex.getMessage();
+      if ((ex instanceof HTTPException)
+          || (ex instanceof ConnectException)
+          || (ex instanceof SocketException)
+          || (ex instanceof SocketTimeoutException)) {
+        logger.error(
+            "请求:{} ,异常信息:{}",
+            schedulerRule.getId(),
+            schedulerRule.getProperties(),
+            ex.getMessage());
+      } else {
+        logger.error("执行异常", e);
+      }
 
-            if (isReadTimeOutException(schedulerRule, ex)) {
-                return;
-            }
-
-            if ((ex instanceof HTTPException) || (ex instanceof ConnectException) || (ex instanceof SocketException)
-                || (ex instanceof SocketTimeoutException)) {
-                logger.error("请求:{} ,异常信息:{}", schedulerRule.getId(), schedulerRule.getProperties(),
-                    ex.getMessage());
-            } else {
-                logger.error("执行异常", e);
-            }
-
-        } finally {
-            schedulerRuleRepository.updateExceptionAtLastExecute(msgAtLastExecute, schedulerRule.getId());
-            MDC.clear();
-        }
+    } finally {
+      schedulerRuleRepository.updateExceptionAtLastExecute(msgAtLastExecute, schedulerRule.getId());
+      MDC.clear();
     }
+  }
 
-    private boolean isReadTimeOutException(SchedulerRule schedulerRule, Throwable ex) {
-        //忽略读超时异常
-        if ((ex instanceof SocketTimeoutException && ex.getMessage() != null && ex.getMessage().contains(
-            "Read timed out"))) {
-            logger.warn("请求:{} 读超时,异常信息:{}", schedulerRule.getProperties(),
-                ex.getMessage());
-            return true;
-        }
-        if (ex instanceof TimeoutException) {
-            logger.warn("请求. 读超时,异常信息:{}", ex.getMessage());
-            return true;
-        }
-        return false;
+  private boolean isReadTimeOutException(SchedulerRule schedulerRule, Throwable ex) {
+    //忽略读超时异常
+    if ((ex instanceof SocketTimeoutException
+        && ex.getMessage() != null
+        && ex.getMessage().contains("Read timed out"))) {
+      logger.warn("请求:{} 读超时,异常信息:{}", schedulerRule.getProperties(), ex.getMessage());
+      return true;
     }
-
+    if (ex instanceof TimeoutException) {
+      logger.warn("请求. 读超时,异常信息:{}", ex.getMessage());
+      return true;
+    }
+    return false;
+  }
 }

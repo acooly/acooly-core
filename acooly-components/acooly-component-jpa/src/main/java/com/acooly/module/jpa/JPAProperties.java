@@ -20,26 +20,22 @@ import java.util.Map;
 import static com.acooly.core.common.boot.listener.ExApplicationRunListener.COMPONENTS_PACKAGE;
 import static com.acooly.module.jpa.JPAProperties.PREFIX;
 
-
-/**
- * @author qiubo
- */
+/** @author qiubo */
 @ConfigurationProperties(prefix = PREFIX)
 @Getter
 @Setter
 public class JPAProperties {
-	public static final String PREFIX = "acooly.jpa";
-	public static final String ENABLE_KEY = PREFIX + ".enable";
-	private boolean enable = true;
-	private boolean openEntityManagerInViewFilterEnable=true;
-	private Map<String,String> entityPackagesToScan= Maps.newHashMap();
+  public static final String PREFIX = "acooly.jpa";
+  public static final String ENABLE_KEY = PREFIX + ".enable";
+  private boolean enable = true;
+  private boolean openEntityManagerInViewFilterEnable = true;
+  private Map<String, String> entityPackagesToScan = Maps.newHashMap();
 
-    public JPAProperties() {
-        entityPackagesToScan.put("app0", Apps.getBasePackage()+".**.domain");
-        entityPackagesToScan.put("app1", Apps.getBasePackage()+".**.entity");
+  public JPAProperties() {
+    entityPackagesToScan.put("app0", Apps.getBasePackage() + ".**.domain");
+    entityPackagesToScan.put("app1", Apps.getBasePackage() + ".**.entity");
 
-        entityPackagesToScan.put("components0", COMPONENTS_PACKAGE+".**.domain");
-        entityPackagesToScan.put("components1", COMPONENTS_PACKAGE+".**.entity");
-
-    }
+    entityPackagesToScan.put("components0", COMPONENTS_PACKAGE + ".**.domain");
+    entityPackagesToScan.put("components1", COMPONENTS_PACKAGE + ".**.entity");
+  }
 }

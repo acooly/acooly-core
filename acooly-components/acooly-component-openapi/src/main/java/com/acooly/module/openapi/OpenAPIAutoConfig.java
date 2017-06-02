@@ -25,73 +25,74 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.List;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import static com.acooly.module.openapi.OpenAPIProperties.PREFIX;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @Configuration
-@EnableConfigurationProperties({ OpenAPIProperties.class })
+@EnableConfigurationProperties({OpenAPIProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.yiji.framework.openapi.core")
 @ComponentScan(basePackages = "com.yiji.framework.openapi.service")
 @ComponentScan(basePackages = "com.yiji.framework.openapi.manage.web")
-@EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class,
-    basePackages = "com.yiji.framework.openapi.service.persistent")
+@EnableJpaRepositories(
+  repositoryBaseClass = AbstractEntityJpaDao.class,
+  basePackages = "com.yiji.framework.openapi.service.persistent"
+)
 @EntityScan(basePackages = "com.yiji.framework.openapi.domain")
 @AutoConfigureAfter(SecurityAutoConfig.class)
 public class OpenAPIAutoConfig {
-	@Autowired
-	private OpenAPIProperties properties;
-	
-	@Bean
-	public ServletRegistrationBean openAPIServlet(OpenAPIProperties properties) {
-		ServletRegistrationBean bean = new ServletRegistrationBean();
-		bean.setUrlMappings(Lists.newArrayList("/gateway.html", "/gateway"));
-		OpenAPIDispatchServlet openAPIDispatchServlet = new OpenAPIDispatchServlet();
-		bean.setServlet(openAPIDispatchServlet);
-		return bean;
-	}
+  @Autowired private OpenAPIProperties properties;
 
-	@Bean
-	public AbstractDatabaseScriptIniter openapiCoreScriptIniter() {
-		return new AbstractDatabaseScriptIniter() {
-			@Override
-			public String getEvaluateSql(DatabaseType databaseType) {
-				return "SELECT count(*) FROM api_order_info";
-			}
-			
-			@Override
-			public List<String> getInitSqlFile(DatabaseType databaseType) {
-				if (databaseType == DatabaseType.mysql) {
-					return Lists.newArrayList("META-INF/database/mysql/openapi-core.sql");
-				} else {
-					return Lists.newArrayList("META-INF/database/oracle/openapi-core.sql");
-				}
-			}
-		};
-	}
-    @Bean
-    public AbstractDatabaseScriptIniter openapiManageScriptIniter() {
-        return new AbstractDatabaseScriptIniter() {
-            @Override
-            public String getEvaluateSql(DatabaseType databaseType) {
-                return "SELECT count(*) FROM api_partner";
-            }
+  @Bean
+  public ServletRegistrationBean openAPIServlet(OpenAPIProperties properties) {
+    ServletRegistrationBean bean = new ServletRegistrationBean();
+    bean.setUrlMappings(Lists.newArrayList("/gateway.html", "/gateway"));
+    OpenAPIDispatchServlet openAPIDispatchServlet = new OpenAPIDispatchServlet();
+    bean.setServlet(openAPIDispatchServlet);
+    return bean;
+  }
 
-            @Override
-            public List<String> getInitSqlFile(DatabaseType databaseType) {
-                if (databaseType == DatabaseType.mysql) {
-                    return Lists.newArrayList("META-INF/database/mysql/openapi-manage.sql","META-INF/database/openapi/mysql/initTest.sql","META-INF/database/mysql/openapi-manage-urls.sql");
-                } else {
-                    throw new UnsupportedOperationException("还不支持oracle");
-                }
-            }
-        };
-    }
+  @Bean
+  public AbstractDatabaseScriptIniter openapiCoreScriptIniter() {
+    return new AbstractDatabaseScriptIniter() {
+      @Override
+      public String getEvaluateSql(DatabaseType databaseType) {
+        return "SELECT count(*) FROM api_order_info";
+      }
+
+      @Override
+      public List<String> getInitSqlFile(DatabaseType databaseType) {
+        if (databaseType == DatabaseType.mysql) {
+          return Lists.newArrayList("META-INF/database/mysql/openapi-core.sql");
+        } else {
+          return Lists.newArrayList("META-INF/database/oracle/openapi-core.sql");
+        }
+      }
+    };
+  }
+
+  @Bean
+  public AbstractDatabaseScriptIniter openapiManageScriptIniter() {
+    return new AbstractDatabaseScriptIniter() {
+      @Override
+      public String getEvaluateSql(DatabaseType databaseType) {
+        return "SELECT count(*) FROM api_partner";
+      }
+
+      @Override
+      public List<String> getInitSqlFile(DatabaseType databaseType) {
+        if (databaseType == DatabaseType.mysql) {
+          return Lists.newArrayList(
+              "META-INF/database/mysql/openapi-manage.sql",
+              "META-INF/database/openapi/mysql/initTest.sql",
+              "META-INF/database/mysql/openapi-manage-urls.sql");
+        } else {
+          throw new UnsupportedOperationException("还不支持oracle");
+        }
+      }
+    };
+  }
 }

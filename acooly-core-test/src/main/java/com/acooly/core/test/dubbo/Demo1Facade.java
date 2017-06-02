@@ -15,11 +15,9 @@ import com.acooly.core.common.facade.PageResult;
 import com.acooly.core.common.facade.SingleOrder;
 import com.acooly.core.common.facade.SingleResult;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 public interface Demo1Facade {
-	SingleResult<String> echo(SingleOrder<String> msg);
-	
-	PageResult<String> echo1(PageOrder<String> msg);
+  SingleResult<String> echo(SingleOrder<String> msg);
+
+  PageResult<String> echo1(PageOrder<String> msg);
 }

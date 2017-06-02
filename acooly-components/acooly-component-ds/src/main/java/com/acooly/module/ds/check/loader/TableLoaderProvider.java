@@ -9,22 +9,20 @@ import java.sql.SQLException;
 
 import static com.acooly.core.common.dao.dialect.DatabaseDialectManager.getJdbcUrlFromDataSource;
 
-/**
- * @author shuijing
- */
+/** @author shuijing */
 public class TableLoaderProvider {
-    private static Logger logger = LoggerFactory.getLogger(TableLoaderProvider.class);
+  private static Logger logger = LoggerFactory.getLogger(TableLoaderProvider.class);
 
-    public static TableLoader getTableLoader(DataSource dataSource) throws SQLException {
-        TableLoader tableLoader;
-        String jdbcUrl = getJdbcUrlFromDataSource(dataSource.getConnection());
-        if (StringUtils.contains(jdbcUrl, ":mysql:")) {
-            tableLoader = new MysqlTableLoader(dataSource);
-        } else if (StringUtils.contains(jdbcUrl, ":oracle:")) {
-            tableLoader = new OracleTableLoader(dataSource);
-        } else {
-            throw new IllegalArgumentException("Unknown Database of " + jdbcUrl);
-        }
-        return tableLoader;
+  public static TableLoader getTableLoader(DataSource dataSource) throws SQLException {
+    TableLoader tableLoader;
+    String jdbcUrl = getJdbcUrlFromDataSource(dataSource.getConnection());
+    if (StringUtils.contains(jdbcUrl, ":mysql:")) {
+      tableLoader = new MysqlTableLoader(dataSource);
+    } else if (StringUtils.contains(jdbcUrl, ":oracle:")) {
+      tableLoader = new OracleTableLoader(dataSource);
+    } else {
+      throw new IllegalArgumentException("Unknown Database of " + jdbcUrl);
     }
+    return tableLoader;
+  }
 }

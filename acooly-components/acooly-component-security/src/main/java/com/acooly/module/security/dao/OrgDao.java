@@ -1,9 +1,9 @@
 /*
-* acooly.cn Inc.
-* Copyright (c) 2017 All Rights Reserved.
-* create by shuijing
-* date:2017-05-26
-*/
+ * acooly.cn Inc.
+ * Copyright (c) 2017 All Rights Reserved.
+ * create by shuijing
+ * date:2017-05-26
+ */
 package com.acooly.module.security.dao;
 
 import com.acooly.module.jpa.EntityJpaDao;
@@ -13,15 +13,14 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-
 /**
  * 组织机构 JPA Dao
- * <p>
- * Date: 2017-05-26 16:48:57
+ *
+ * <p>Date: 2017-05-26 16:48:57
  *
  * @author shuijing
  */
 public interface OrgDao extends EntityJpaDao<Org, Long> {
-    @Query(value = "select * from sys_org where parent_id= :parentId", nativeQuery = true)
-    List<Org> findByParentId(@Param("parentId") long parentId);
+  @Query(value = "select * from sys_org where parent_id= :parentId", nativeQuery = true)
+  List<Org> findByParentId(@Param("parentId") long parentId);
 }

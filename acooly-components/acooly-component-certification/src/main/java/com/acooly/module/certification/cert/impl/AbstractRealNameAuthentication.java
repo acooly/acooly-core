@@ -17,21 +17,21 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author zhike@yiji.com
  */
-public abstract class AbstractRealNameAuthentication implements RealNameAuthentication, InitializingBean {
+public abstract class AbstractRealNameAuthentication
+    implements RealNameAuthentication, InitializingBean {
 
-    protected Logger logger = LoggerFactory.getLogger(this.getClass());
+  protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    protected String appCode;
-    protected String service;
-    protected int timeout;
+  protected String appCode;
+  protected String service;
+  protected int timeout;
 
-    @Autowired
-    private CertificationProperties certificationProperties;
+  @Autowired private CertificationProperties certificationProperties;
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        appCode = certificationProperties.getAppCode();
-        service = certificationProperties.getUrl();
-        timeout = certificationProperties.getTimeout();
-    }
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    appCode = certificationProperties.getAppCode();
+    service = certificationProperties.getUrl();
+    timeout = certificationProperties.getTimeout();
+  }
 }

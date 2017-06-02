@@ -18,33 +18,31 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @OpenApiMessage(service = "payOrder", type = ApiMessageType.Request)
 public class PayOrderRequest extends ApiRequest {
 
-    @NotNull
-    @OpenApiField(desc = "金额")
-    private Money amount;
-    @NotEmpty
-    @OpenApiField(desc = "买家用户ID")
-    private String payerUserId;
+  @NotNull
+  @OpenApiField(desc = "金额")
+  private Money amount;
 
-    public Money getAmount() {
-        return amount;
-    }
+  @NotEmpty
+  @OpenApiField(desc = "买家用户ID")
+  private String payerUserId;
 
-    public void setAmount(Money amount) {
-        this.amount = amount;
-    }
+  public Money getAmount() {
+    return amount;
+  }
 
-    public String getPayerUserId() {
-        return payerUserId;
-    }
+  public void setAmount(Money amount) {
+    this.amount = amount;
+  }
 
-    public void setPayerUserId(String payerUserId) {
-        this.payerUserId = payerUserId;
-    }
+  public String getPayerUserId() {
+    return payerUserId;
+  }
 
+  public void setPayerUserId(String payerUserId) {
+    this.payerUserId = payerUserId;
+  }
 }

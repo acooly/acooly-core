@@ -23,32 +23,30 @@ import java.util.List;
 
 import static com.acooly.module.certification.CertificationProperties.PREFIX;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 @Configuration
-@EnableConfigurationProperties({ CertificationProperties.class })
+@EnableConfigurationProperties({CertificationProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.module.certification")
 @AutoConfigureAfter(SecurityAutoConfig.class)
 public class CertificationAutoConfig {
-	@Bean
-	public StandardDatabaseScriptIniter smsScriptIniter() {
-		return new StandardDatabaseScriptIniter() {
-			@Override
-			public String getEvaluateTable() {
-				return "certification_info";
-			}
-			
-			@Override
-			public String getComponentName() {
-				return "certification";
-			}
-			
-			@Override
-			public List<String> getInitSqlFile() {
-				return Lists.newArrayList("certification", "certification_urls");
-			}
-		};
-	}
+  @Bean
+  public StandardDatabaseScriptIniter smsScriptIniter() {
+    return new StandardDatabaseScriptIniter() {
+      @Override
+      public String getEvaluateTable() {
+        return "certification_info";
+      }
+
+      @Override
+      public String getComponentName() {
+        return "certification";
+      }
+
+      @Override
+      public List<String> getInitSqlFile() {
+        return Lists.newArrayList("certification", "certification_urls");
+      }
+    };
+  }
 }

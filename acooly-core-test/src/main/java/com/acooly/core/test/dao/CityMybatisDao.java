@@ -17,23 +17,20 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 public interface CityMybatisDao extends EntityMybatisDao<City> {
-    @Select("select * from City")
-    List<City> selectAll();
+  @Select("select * from City")
+  List<City> selectAll();
 
-    /**
-     * 分页查询
-     * @param pageInfo
-     * @return
-     */
-    @Select("select * from City")
-    List<City> selectAllByPage(PageInfo<City> pageInfo);
+  /**
+   * 分页查询
+   *
+   * @param pageInfo
+   * @return
+   */
+  @Select("select * from City")
+  List<City> selectAllByPage(PageInfo<City> pageInfo);
 
-
-    @Select("select * from City  where id=#{id} for update")
-    City selectById(@Param("id")Long  id);
-
+  @Select("select * from City  where id=#{id} for update")
+  City selectById(@Param("id") Long id);
 }

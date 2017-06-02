@@ -15,38 +15,24 @@ import lombok.Data;
 @Data
 public class CertResult {
 
-    /**
-     * 结果编码
-     */
-    private String resultCode;
+  /** 结果编码 */
+  private String resultCode;
 
-    /**
-     * 结果信息
-     */
-    private String resultMessage;
+  /** 结果信息 */
+  private String resultMessage;
 
-    /**
-     * 性别
-     */
-    private String sex;
+  /** 性别 */
+  private String sex;
 
-    /**
-     * 姓名
-     */
-    private String realName;
+  /** 姓名 */
+  private String realName;
 
-    /**
-     * 身份证号码
-     */
-    private String idCardNo;
+  /** 身份证号码 */
+  private String idCardNo;
 
-    /**
-     * 出生日期
-     */
-    private String birthday;
+  /** 出生日期 */
+  private String birthday;
 
-    /**
-     * 户籍所在地
-     */
-    private String address;
+  /** 户籍所在地 */
+  private String address;
 }

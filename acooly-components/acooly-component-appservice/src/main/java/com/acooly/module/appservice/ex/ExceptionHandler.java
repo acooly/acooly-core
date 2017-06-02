@@ -10,9 +10,7 @@
  */
 package com.acooly.module.appservice.ex;
 
-/**
- * @author qzhanbo@yiji.com
- */
+/** @author qzhanbo@yiji.com */
 public interface ExceptionHandler<EX extends Throwable> {
-	void handle(ExceptionContext<?> context, EX ex);
+  void handle(ExceptionContext<?> context, EX ex);
 }

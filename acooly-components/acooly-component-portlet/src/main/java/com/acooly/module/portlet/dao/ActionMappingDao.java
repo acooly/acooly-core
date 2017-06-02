@@ -15,14 +15,13 @@ import java.util.List;
 
 /**
  * 访问映射 Mybatis Dao
- * <p>
- * Date: 2017-03-21 00:34:47
+ *
+ * <p>Date: 2017-03-21 00:34:47
  *
  * @author acooly
  */
 public interface ActionMappingDao extends EntityMybatisDao<ActionMapping> {
 
-    @Select("select * from portlet_action_mapping where url like \"%\"#{url}")
-    List<ActionMapping> findByLikeUrl(@Param("url") String url);
-
+  @Select("select * from portlet_action_mapping where url like \"%\"#{url}")
+  List<ActionMapping> findByLikeUrl(@Param("url") String url);
 }

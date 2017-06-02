@@ -14,21 +14,17 @@ import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.utils.Ports;
 import org.springframework.core.env.Environment;
 
-
-/**
- * @author qiubo@yiji.com
- */
+/** @author qiubo@yiji.com */
 public class DubboDependencyChecker implements DependencyChecker {
-	@Override
-	public void check(Environment environment) {
-		if (environment.getProperty("acooly.dubbo.enable", Boolean.class, Boolean.TRUE)) {
-			if (environment.getProperty("acooly.dubbo.provider.enable", Boolean.class, Boolean.TRUE)) {
-				Integer port = environment.getRequiredProperty("acooly.dubbo.provider.port", Integer.class);
-				if (Ports.isPortUsing(port.intValue())) {
-					throw new AppConfigException("dubbo port:" + port + " is using.");
-				}
-			}
-		}
-	}
-	
+  @Override
+  public void check(Environment environment) {
+    if (environment.getProperty("acooly.dubbo.enable", Boolean.class, Boolean.TRUE)) {
+      if (environment.getProperty("acooly.dubbo.provider.enable", Boolean.class, Boolean.TRUE)) {
+        Integer port = environment.getRequiredProperty("acooly.dubbo.provider.port", Integer.class);
+        if (Ports.isPortUsing(port.intValue())) {
+          throw new AppConfigException("dubbo port:" + port + " is using.");
+        }
+      }
+    }
+  }
 }

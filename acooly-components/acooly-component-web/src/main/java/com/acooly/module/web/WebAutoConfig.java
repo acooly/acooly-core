@@ -22,7 +22,10 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
@@ -51,166 +54,172 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author qiubo
- */
+/** @author qiubo */
 @Configuration
 @EnableWebMvc
 @ConditionalOnWebApplication
-@ConditionalOnClass({ Servlet.class, DispatcherServlet.class, WebMvcConfigurerAdapter.class })
-@EnableConfigurationProperties({ WebMvcProperties.class, ResourceProperties.class, WebProperties.class })
+@ConditionalOnClass({Servlet.class, DispatcherServlet.class, WebMvcConfigurerAdapter.class})
+@EnableConfigurationProperties({
+  WebMvcProperties.class,
+  ResourceProperties.class,
+  WebProperties.class
+})
 @AutoConfigureAfter(WebMvcAutoConfiguration.class)
 @Slf4j
 @ComponentScan
-public class WebAutoConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware, InitializingBean {
-	
-	public static final String SIMPLE_URL_MAPPING_VIEW_CONTROLLER = "simpleUrlMappingViewController";
-	
-	@Autowired
-	private WebProperties webProperties;
-	
-	private ApplicationContext applicationContext;
-	
-	@Override
-	public void addViewControllers(ViewControllerRegistry registry) {
-		//设置 welcome-file
-		if (!Strings.isNullOrEmpty(webProperties.getWelcomeFile())) {
-			String welcomeFile = webProperties.getWelcomeFile();
-			if (!welcomeFile.startsWith("/")) {
-				welcomeFile = "forward:/" + welcomeFile;
-			} else {
-				welcomeFile = "forward:" + welcomeFile;
-			}
-			registry.addViewController("/").setViewName(welcomeFile);
-			registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
-		}
-	}
-	
-	@Override
-	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-		//和原逻辑保持一直，原因未知。
-		configurer.mediaType("html", MediaType.APPLICATION_JSON);
-	}
-	
-	/**
-	 * 配置模板直接映射bean
-	 */
-	@Bean
-	public SimpleUrlHandlerMapping directUrlHandlerMapping(WebProperties webProperties) {
-		SimpleUrlHandlerMapping directUrlHandlerMapping = new SimpleUrlHandlerMapping();
-		directUrlHandlerMapping.setOrder(Integer.MAX_VALUE - 2);
-		Map<String, Object> urlMap = new HashMap<>();
-		for (String url : webProperties.buildMappingUrlList()) {
-			urlMap.put(url, SIMPLE_URL_MAPPING_VIEW_CONTROLLER);
-		}
-		directUrlHandlerMapping.setUrlMap(urlMap);
-		return directUrlHandlerMapping;
-	}
-	
-	/**
-	 * 配置模板直接映射controller
-	 */
-	@Bean(name = SIMPLE_URL_MAPPING_VIEW_CONTROLLER)
-	public SimpleUrlMappingViewController simpleUrlMappingViewController(WebProperties webProperties) {
-		SimpleUrlMappingViewController simpleUrlMappingViewController = new SimpleUrlMappingViewController();
-		Map<String, String> viewNameMap = webProperties.buildViewNameMap();
-		if (!viewNameMap.isEmpty()) {
-			log.info("配置url直接映射模板:{}", viewNameMap);
-		}
-		simpleUrlMappingViewController.setViewNameMap(viewNameMap);
-		return simpleUrlMappingViewController;
-	}
-	
-	@Bean
-	@ConditionalOnBean(HiddenHttpMethodFilter.class)
-	public FilterRegistrationBean disableHiddenHttpMethodFilter(HiddenHttpMethodFilter filter,
-																WebProperties webProperties) {
-		FilterRegistrationBean registration = new FilterRegistrationBean(filter);
-		registration.setEnabled(webProperties.isHiddenHttpMethodFilterEnable());
-		return registration;
-	}
-	
-	@Bean
-	@ConditionalOnBean(HttpPutFormContentFilter.class)
-	public FilterRegistrationBean disableHttpPutFormContentFilter(	HttpPutFormContentFilter filter,
-																	WebProperties webProperties) {
-		FilterRegistrationBean registration = new FilterRegistrationBean(filter);
-		registration.setEnabled(webProperties.isHttpPutFormContentFilterEnable());
-		return registration;
-	}
-	
-	//	@Override
-	//	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-	//		configurer.ignoreAcceptHeader(true).defaultContentType(MediaType.TEXT_HTML).favorPathExtension(true)
-	//			.favorParameter(false).useJaf(false).mediaType("html", MediaType.APPLICATION_JSON)
-	//			.mediaType("xml", MediaType.APPLICATION_XML).mediaType("json", MediaType.APPLICATION_JSON);
-	//	}
-	
-	@Override
-	public void configureViewResolvers(ViewResolverRegistry registry) {
-		super.configureViewResolvers(registry);
-		Map<String, Object> attributes = Maps.newHashMap();
-		attributes.put("requestContextAttribute", "rc");
-		attributes.put("xml_escape", new XmlEscape());
-		registry.freeMarker().attributes(attributes);
-	}
-	
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
-	}
-	
-	@Configuration
-	public static class AcoolyFreeMarkerConfiguration extends FreeMarkerAutoConfiguration.FreeMarkerWebConfiguration {
-		@Bean
-		@ConditionalOnMissingBean(FreeMarkerConfig.class)
-		public FreeMarkerConfigurer freeMarkerConfigurer() {
-			FreeMarkerConfigurer configurer = new FreeMarkerConfigurer() {
-				@Override
-				protected void postProcessTemplateLoaders(List<TemplateLoader> templateLoaders) {
-					templateLoaders.add(new ClassTemplateLoader(FreeMarkerConfigurer.class, "/templates"));
-                    templateLoaders.add(new ClassTemplateLoader(FreeMarkerConfigurer.class, "/templates/common"));
-                }
-			};
-            Map<String, Object> variables=Maps.newHashMap();
-            variables.put("includePage",new IncludePage());
-            configurer.setFreemarkerVariables(variables);
-			applyProperties(configurer);
-			return configurer;
-		}
-		
-		/**
-		 * 禁用org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter#viewResolver(org.springframework.beans.factory.BeanFactory)
-		 * 禁用默认的org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration.FreeMarkerWebConfiguration#freeMarkerViewResolver()
-		 * @return
-		 */
-		@Bean(name = { "freeMarkerViewResolver", "viewResolver" })
-		public FreeMarkerViewResolver viewResolver() {
-			FreeMarkerViewResolver resolver = new FreeMarkerViewResolver();
-			this.properties.applyToViewResolver(resolver);
-			resolver.setOrder(Ordered.HIGHEST_PRECEDENCE);
-			return resolver;
-		}
-	}
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		Map<String, WebMvcAutoConfiguration> beansOfType = applicationContext
-			.getBeansOfType(WebMvcAutoConfiguration.class);
-		if (beansOfType.isEmpty()) {
-			log.error("spring mvc 没有正确加载WebMvcAutoConfiguration,原因可能有:");
-			log.error("1. JavaConfig中配置了@EnableWebMvc");
-			log.error("2. 引入了spring-mvc xml配置文件");
-		}
-		if (EnvironmentHolder.get().getProperty(WebProperties.Jsp.ENABLE_KEY, Boolean.class, Boolean.TRUE)) {
-			try {
-				InternalResourceViewResolver internalResourceViewResolver = applicationContext
-					.getBean(InternalResourceViewResolver.class);
-				internalResourceViewResolver.setPrefix(webProperties.getJsp().getPrefix());
-				internalResourceViewResolver.setSuffix(webProperties.getJsp().getSuffix());
-			} catch (BeansException e) {
-				// do nothing
-			}
-		}
-		
-	}
+public class WebAutoConfig extends WebMvcConfigurerAdapter
+    implements ApplicationContextAware, InitializingBean {
+
+  public static final String SIMPLE_URL_MAPPING_VIEW_CONTROLLER = "simpleUrlMappingViewController";
+
+  @Autowired private WebProperties webProperties;
+
+  private ApplicationContext applicationContext;
+
+  @Override
+  public void addViewControllers(ViewControllerRegistry registry) {
+    //设置 welcome-file
+    if (!Strings.isNullOrEmpty(webProperties.getWelcomeFile())) {
+      String welcomeFile = webProperties.getWelcomeFile();
+      if (!welcomeFile.startsWith("/")) {
+        welcomeFile = "forward:/" + welcomeFile;
+      } else {
+        welcomeFile = "forward:" + welcomeFile;
+      }
+      registry.addViewController("/").setViewName(welcomeFile);
+      registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+    }
+  }
+
+  @Override
+  public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+    //和原逻辑保持一直，原因未知。
+    configurer.mediaType("html", MediaType.APPLICATION_JSON);
+  }
+
+  /** 配置模板直接映射bean */
+  @Bean
+  public SimpleUrlHandlerMapping directUrlHandlerMapping(WebProperties webProperties) {
+    SimpleUrlHandlerMapping directUrlHandlerMapping = new SimpleUrlHandlerMapping();
+    directUrlHandlerMapping.setOrder(Integer.MAX_VALUE - 2);
+    Map<String, Object> urlMap = new HashMap<>();
+    for (String url : webProperties.buildMappingUrlList()) {
+      urlMap.put(url, SIMPLE_URL_MAPPING_VIEW_CONTROLLER);
+    }
+    directUrlHandlerMapping.setUrlMap(urlMap);
+    return directUrlHandlerMapping;
+  }
+
+  /** 配置模板直接映射controller */
+  @Bean(name = SIMPLE_URL_MAPPING_VIEW_CONTROLLER)
+  public SimpleUrlMappingViewController simpleUrlMappingViewController(
+      WebProperties webProperties) {
+    SimpleUrlMappingViewController simpleUrlMappingViewController =
+        new SimpleUrlMappingViewController();
+    Map<String, String> viewNameMap = webProperties.buildViewNameMap();
+    if (!viewNameMap.isEmpty()) {
+      log.info("配置url直接映射模板:{}", viewNameMap);
+    }
+    simpleUrlMappingViewController.setViewNameMap(viewNameMap);
+    return simpleUrlMappingViewController;
+  }
+
+  @Bean
+  @ConditionalOnBean(HiddenHttpMethodFilter.class)
+  public FilterRegistrationBean disableHiddenHttpMethodFilter(
+      HiddenHttpMethodFilter filter, WebProperties webProperties) {
+    FilterRegistrationBean registration = new FilterRegistrationBean(filter);
+    registration.setEnabled(webProperties.isHiddenHttpMethodFilterEnable());
+    return registration;
+  }
+
+  @Bean
+  @ConditionalOnBean(HttpPutFormContentFilter.class)
+  public FilterRegistrationBean disableHttpPutFormContentFilter(
+      HttpPutFormContentFilter filter, WebProperties webProperties) {
+    FilterRegistrationBean registration = new FilterRegistrationBean(filter);
+    registration.setEnabled(webProperties.isHttpPutFormContentFilterEnable());
+    return registration;
+  }
+
+  //	@Override
+  //	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+  //		configurer.ignoreAcceptHeader(true).defaultContentType(MediaType.TEXT_HTML).favorPathExtension(true)
+  //			.favorParameter(false).useJaf(false).mediaType("html", MediaType.APPLICATION_JSON)
+  //			.mediaType("xml", MediaType.APPLICATION_XML).mediaType("json", MediaType.APPLICATION_JSON);
+  //	}
+
+  @Override
+  public void configureViewResolvers(ViewResolverRegistry registry) {
+    super.configureViewResolvers(registry);
+    Map<String, Object> attributes = Maps.newHashMap();
+    attributes.put("requestContextAttribute", "rc");
+    attributes.put("xml_escape", new XmlEscape());
+    registry.freeMarker().attributes(attributes);
+  }
+
+  @Override
+  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    this.applicationContext = applicationContext;
+  }
+
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    Map<String, WebMvcAutoConfiguration> beansOfType =
+        applicationContext.getBeansOfType(WebMvcAutoConfiguration.class);
+    if (beansOfType.isEmpty()) {
+      log.error("spring mvc 没有正确加载WebMvcAutoConfiguration,原因可能有:");
+      log.error("1. JavaConfig中配置了@EnableWebMvc");
+      log.error("2. 引入了spring-mvc xml配置文件");
+    }
+    if (EnvironmentHolder.get()
+        .getProperty(WebProperties.Jsp.ENABLE_KEY, Boolean.class, Boolean.TRUE)) {
+      try {
+        InternalResourceViewResolver internalResourceViewResolver =
+            applicationContext.getBean(InternalResourceViewResolver.class);
+        internalResourceViewResolver.setPrefix(webProperties.getJsp().getPrefix());
+        internalResourceViewResolver.setSuffix(webProperties.getJsp().getSuffix());
+      } catch (BeansException e) {
+        // do nothing
+      }
+    }
+  }
+
+  @Configuration
+  public static class AcoolyFreeMarkerConfiguration
+      extends FreeMarkerAutoConfiguration.FreeMarkerWebConfiguration {
+    @Bean
+    @ConditionalOnMissingBean(FreeMarkerConfig.class)
+    public FreeMarkerConfigurer freeMarkerConfigurer() {
+      FreeMarkerConfigurer configurer =
+          new FreeMarkerConfigurer() {
+            @Override
+            protected void postProcessTemplateLoaders(List<TemplateLoader> templateLoaders) {
+              templateLoaders.add(
+                  new ClassTemplateLoader(FreeMarkerConfigurer.class, "/templates"));
+              templateLoaders.add(
+                  new ClassTemplateLoader(FreeMarkerConfigurer.class, "/templates/common"));
+            }
+          };
+      Map<String, Object> variables = Maps.newHashMap();
+      variables.put("includePage", new IncludePage());
+      configurer.setFreemarkerVariables(variables);
+      applyProperties(configurer);
+      return configurer;
+    }
+
+    /**
+     * 禁用org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter#viewResolver(org.springframework.beans.factory.BeanFactory)
+     * 禁用默认的org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration.FreeMarkerWebConfiguration#freeMarkerViewResolver()
+     *
+     * @return
+     */
+    @Bean(name = {"freeMarkerViewResolver", "viewResolver"})
+    public FreeMarkerViewResolver viewResolver() {
+      FreeMarkerViewResolver resolver = new FreeMarkerViewResolver();
+      this.properties.applyToViewResolver(resolver);
+      resolver.setOrder(Ordered.HIGHEST_PRECEDENCE);
+      return resolver;
+    }
+  }
 }

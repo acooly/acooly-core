@@ -63,6 +63,11 @@ public class SmsProperties {
      */
     private Aliyun aliyun;
 
+    /**
+     * 仅当使用容联.云通讯短信平台时配置
+     */
+    private Cloopen cloopen;
+
     private int timeout = 20000;
     /**
      * IP最大频率(分钟)
@@ -150,6 +155,19 @@ public class SmsProperties {
         private String topicName;
     }
 
+    /**
+     * 容联.云通讯
+     */
+    @Data
+    public static class Cloopen {
+        /**
+         * 主账号id
+         */
+        private String accountId;
+        private String accountToken;
+        private String appId;
+    }
+
     public enum Provider implements Messageable {
         /**
          * 亿美
@@ -171,6 +189,10 @@ public class SmsProperties {
          * 阿里云
          */
         Aliyun("aliyunMessageSender", "阿里云"),
+        /**
+         * 容联.云通讯
+         */
+        Cloopen("cloopenMessageSender", "容联.云通讯"),
         /**
          * 测试
          */
@@ -223,6 +245,11 @@ public class SmsProperties {
             Assert.hasText(this.aliyun.getAccessKeySecret());
             Assert.hasText(this.aliyun.getAccountId());
             Assert.hasText(this.aliyun.getTopicName());
+        }
+        if (this.provider == Provider.Cloopen) {
+            Assert.notNull(this.cloopen);
+            Assert.hasText(this.cloopen.getAppId());
+            Assert.hasText(this.cloopen.getAccountId());
         }
     }
 

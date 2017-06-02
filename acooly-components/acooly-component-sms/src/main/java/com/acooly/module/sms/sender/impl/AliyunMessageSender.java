@@ -6,8 +6,9 @@ import com.acooly.core.utils.net.Https;
 import com.acooly.core.utils.security.Cryptos;
 import com.acooly.module.sms.SmsProperties;
 import com.acooly.module.sms.sender.ShortMessageSendException;
-import com.acooly.module.sms.sender.support.AliyunMessageResponseParser;
-import com.acooly.module.sms.sender.support.AliyunMessageSendSerializer;
+import com.acooly.module.sms.sender.support.parser.AliyunMessageResponseParser;
+import com.acooly.module.sms.sender.support.parser.BaseMessageResponseParser;
+import com.acooly.module.sms.sender.support.serializer.AliyunMessageSendSerializer;
 import com.acooly.module.sms.sender.support.AliyunSmsAttributes;
 import com.acooly.module.sms.sender.support.AliyunSmsSendVo;
 import com.google.common.base.Joiner;
@@ -29,22 +30,16 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+
 /**
  * 阿里云短信接口
  *
  * @author shuijing
  * @link https://help.aliyun.com/document_detail/27497.html?spm=5176.doc27501.6.733.LnsIrn
  * <p>
- * 阿里云短信通道
  * 阿里云通道只支持模板和签名为短信内容
- * 发送接口send(String mobileNo, String content) content内容需为json格式 如：
- * AliyunSmsSendVo vo=new AliyunSmsSendVo();
- * params.put("customer", "Testcustomer");
- * asa.setFreeSignName("观世宇");
- * asa.setSmsParamsMap(params);
- * asa.setTemplateCode("SMS_67185863");
- * content = asa.toJson();
- * @See com.acooly.core.test.web.TestController#testAliyunSms()
+ * 发送接口send(String mobileNo, String content) content内容需为json格式 见测试用例：
+ * @See Scom.acooly.core.test.web.TestController#testAliyunSms()
  */
 @Service("aliyunMessageSender")
 public class AliyunMessageSender extends AbstractShortMessageSender {
@@ -128,15 +123,6 @@ public class AliyunMessageSender extends AbstractShortMessageSender {
         return new String(Base64.encodeBase64(Cryptos.hmacSha1(signStr.getBytes(), accessKeySecret.getBytes())));
     }
 
-    private static String getCharacterDataFromElement(Element e) {
-        Node child = e.getFirstChild();
-        if (child instanceof CharacterData) {
-            CharacterData cd = (CharacterData) child;
-            return cd.getData();
-        }
-        return "?";
-    }
-
     protected String handleResult(HttpResult result, String paramString) throws IOException, ParserConfigurationException, SAXException {
 
         String body = result.getBody();
@@ -150,13 +136,13 @@ public class AliyunMessageSender extends AbstractShortMessageSender {
             //error
             NodeList message = document.getElementsByTagName(AliyunMessageResponseParser.Message);
             Element line = (Element) message.item(0);
-            throw new BusinessException("发送失败：" + getCharacterDataFromElement(line));
+            throw new BusinessException("发送失败：" + BaseMessageResponseParser.getCharacterDataFromElement(line));
         } else {
             //success
             Element msgid = (Element) messageId.item(0);
             NodeList messageBodyMD5 = document.getElementsByTagName(AliyunMessageResponseParser.MessageBodyMD5);
             Element msgMD5 = (Element) messageBodyMD5.item(0);
-            logger.info("{} 发送成功，MessageId:{},MessageBodyMD5:{}", paramString, getCharacterDataFromElement(msgid), getCharacterDataFromElement(msgMD5));
+            logger.info("{} 发送成功，MessageId:{},MessageBodyMD5:{}", paramString, BaseMessageResponseParser.getCharacterDataFromElement(msgid), BaseMessageResponseParser.getCharacterDataFromElement(msgMD5));
             return "success";
         }
     }

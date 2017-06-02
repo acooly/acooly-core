@@ -1,9 +1,6 @@
 package com.acooly.module.sms.sender.support;
 
 import com.google.common.collect.Maps;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,22 +9,7 @@ import java.util.Map;
 /**
  * @author shuijing
  */
-public class AliyunSmsSendVo {
-
-    private static Gson gson = null;
-
-    public static synchronized Gson getGson() {
-        if (gson == null) {
-            GsonBuilder b = new GsonBuilder();
-            b.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE);
-            BooleanSerializer serializer = new BooleanSerializer();
-            b.registerTypeAdapter(Boolean.class, serializer);
-            b.registerTypeAdapter(boolean.class, serializer);
-            gson = b.create();
-        }
-        return gson;
-    }
-
+public class AliyunSmsSendVo extends BaseSmsSendVo {
 
     /**
      * 短信签名

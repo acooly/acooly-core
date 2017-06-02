@@ -1,5 +1,6 @@
-package com.acooly.module.sms.sender.support;
+package com.acooly.module.sms.sender.support.serializer;
 
+import com.acooly.module.sms.sender.support.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

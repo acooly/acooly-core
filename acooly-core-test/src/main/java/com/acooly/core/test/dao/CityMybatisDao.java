@@ -30,4 +30,6 @@ public interface CityMybatisDao extends EntityMybatisDao<City> {
      */
     @Select("select * from City")
     List<City> selectAllByPage(PageInfo<City> pageInfo);
+
+
 }

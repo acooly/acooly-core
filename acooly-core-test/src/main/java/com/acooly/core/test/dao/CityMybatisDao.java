@@ -12,6 +12,7 @@ package com.acooly.core.test.dao;
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.test.domain.City;
 import com.acooly.module.mybatis.EntityMybatisDao;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -30,4 +31,9 @@ public interface CityMybatisDao extends EntityMybatisDao<City> {
      */
     @Select("select * from City")
     List<City> selectAllByPage(PageInfo<City> pageInfo);
+
+
+    @Select("select * from City  where id=#{id} for update")
+    City selectById(@Param("id")Long  id);
+
 }

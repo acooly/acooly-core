@@ -148,7 +148,7 @@ public class AliyunMessageSender extends AbstractShortMessageSender {
     }
 
     public static String getGMT(Date dateCST) {
-        DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.ENGLISH);
+        DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH);
         df.setTimeZone(TimeZone.getTimeZone("GMT"));
         return (df.format(dateCST));
     }

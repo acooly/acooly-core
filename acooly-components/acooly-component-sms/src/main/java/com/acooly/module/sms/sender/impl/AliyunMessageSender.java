@@ -6,10 +6,11 @@ import com.acooly.core.utils.net.Https;
 import com.acooly.core.utils.security.Cryptos;
 import com.acooly.module.sms.SmsProperties;
 import com.acooly.module.sms.sender.ShortMessageSendException;
-import com.acooly.module.sms.sender.support.AliyunMessageResponseParser;
-import com.acooly.module.sms.sender.support.AliyunMessageSendSerializer;
 import com.acooly.module.sms.sender.support.AliyunSmsAttributes;
 import com.acooly.module.sms.sender.support.AliyunSmsSendVo;
+import com.acooly.module.sms.sender.support.parser.AliyunMessageResponseParser;
+import com.acooly.module.sms.sender.support.parser.BaseMessageResponseParser;
+import com.acooly.module.sms.sender.support.serializer.AliyunMessageSendSerializer;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -19,8 +20,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.InputStreamEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.CharacterData;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -35,24 +37,13 @@ import java.util.*;
  *
  * @author shuijing
  * @link https://help.aliyun.com/document_detail/27497.html?spm=5176.doc27501.6.733.LnsIrn
- *     <p>阿里云短信通道 阿里云通道只支持模板和签名为短信内容 发送接口send(String mobileNo, String content) content内容需为json格式 如：
- *     AliyunSmsSendVo vo=new AliyunSmsSendVo(); params.put("customer", "Testcustomer");
- *     asa.setFreeSignName("观世宇"); asa.setSmsParamsMap(params); asa.setTemplateCode("SMS_67185863");
- *     content = asa.toJson(); @See com.acooly.core.test.web.TestController#testAliyunSms()
+ *     <p>阿里云通道只支持模板和签名为短信内容 发送接口send(String mobileNo, String content) content内容需为json格式 见测试用例： @See
+ *     Scom.acooly.core.test.web.TestController#testAliyunSms()
  */
 @Service("aliyunMessageSender")
 public class AliyunMessageSender extends AbstractShortMessageSender {
 
   @Autowired private SmsProperties properties;
-
-  private static String getCharacterDataFromElement(Element e) {
-    Node child = e.getFirstChild();
-    if (child instanceof CharacterData) {
-      CharacterData cd = (CharacterData) child;
-      return cd.getData();
-    }
-    return "?";
-  }
 
   public static String getGMT(Date dateCST) {
     DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH);
@@ -169,7 +160,8 @@ public class AliyunMessageSender extends AbstractShortMessageSender {
       //error
       NodeList message = document.getElementsByTagName(AliyunMessageResponseParser.Message);
       Element line = (Element) message.item(0);
-      throw new BusinessException("发送失败：" + getCharacterDataFromElement(line));
+      throw new BusinessException(
+          "发送失败：" + BaseMessageResponseParser.getCharacterDataFromElement(line));
     } else {
       //success
       Element msgid = (Element) messageId.item(0);
@@ -179,8 +171,8 @@ public class AliyunMessageSender extends AbstractShortMessageSender {
       logger.info(
           "{} 发送成功，MessageId:{},MessageBodyMD5:{}",
           paramString,
-          getCharacterDataFromElement(msgid),
-          getCharacterDataFromElement(msgMD5));
+          BaseMessageResponseParser.getCharacterDataFromElement(msgid),
+          BaseMessageResponseParser.getCharacterDataFromElement(msgMD5));
       return "success";
     }
   }

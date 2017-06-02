@@ -1,4 +1,4 @@
-package com.acooly.module.sms.sender.support;
+package com.acooly.module.sms.sender.support.parser;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -11,7 +11,7 @@ public class BaseXMLSerializer<T> {
 
   private static ThreadLocal<DocumentBuilder> sps = new ThreadLocal<DocumentBuilder>();
 
-  protected DocumentBuilder getDocmentBuilder() throws ParserConfigurationException {
+  protected static DocumentBuilder getDocmentBuilder() throws ParserConfigurationException {
     DocumentBuilder db = sps.get();
     if (db == null) {
       db = factory.newDocumentBuilder();

@@ -34,3 +34,13 @@
     asa.setTemplateCode("SMS_67185863");
     content = asa.toJson();`
     测试用例见 `com.acooly.core.test.web.TestController#testAliyunSms()`
+    
+2. 容联.云通讯通道,只支持模板短信内容,
+   发送接口send(String mobileNo, String content) content内容需为json格式 如：
+   `  CloopenSmsSendVo clo = new CloopenSmsSendVo();
+      clo.setTemplateId("1");
+      List<String> data = new ArrayList<>();
+      data.add("aaattt");
+      clo.setDatas(data);
+      smsService.send("18612299409", clo.toJson());`
+    测试用例见 `com.acooly.core.test.web.TestController#testCloopenSms()`    

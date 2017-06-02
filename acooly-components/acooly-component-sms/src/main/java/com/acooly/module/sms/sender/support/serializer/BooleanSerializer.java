@@ -1,4 +1,4 @@
-package com.acooly.module.sms.sender.support;
+package com.acooly.module.sms.sender.support.serializer;
 
 import com.google.gson.*;
 

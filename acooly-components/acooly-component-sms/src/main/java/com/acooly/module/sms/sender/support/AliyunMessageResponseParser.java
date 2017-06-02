@@ -1,5 +1,6 @@
 package com.acooly.module.sms.sender.support;
 
+import com.acooly.module.sms.sender.support.parser.BaseXMLSerializer;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;

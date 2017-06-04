@@ -15,7 +15,6 @@ import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.exception.AppConfigException;
 import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.pool.vendor.MySqlValidConnectionChecker;
 import com.alibaba.druid.pool.vendor.OracleValidConnectionChecker;
 import com.google.common.collect.Maps;
 import lombok.Data;
@@ -81,6 +80,8 @@ public class DruidProperties implements BeanClassLoaderAware {
   private boolean showSql = true;
 
   private boolean testOnBorrow = false;
+
+  private String validationQuery = null;
 
   private ClassLoader beanClassLoader;
 
@@ -161,8 +162,9 @@ public class DruidProperties implements BeanClassLoaderAware {
     dataSource.setValidationQueryTimeout(5);
 
     if (this.mysql()) {
-      System.setProperty("druid.mysql.usePingMethod", "true");
-      dataSource.setValidConnectionChecker(new MySqlValidConnectionChecker());
+      validationQuery="select 'x'";
+      dataSource.setValidationQuery(validationQuery);
+      dataSource.setValidationQueryTimeout(2);
     } else {
       System.setProperty("druid.oracle.pingTimeout", "5");
       dataSource.setValidConnectionChecker(new OracleValidConnectionChecker());

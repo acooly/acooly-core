@@ -81,8 +81,6 @@ public class DruidProperties implements BeanClassLoaderAware {
 
   private boolean testOnBorrow = false;
 
-  private String validationQuery = null;
-
   private ClassLoader beanClassLoader;
 
   private Checker checker = new Checker();
@@ -162,7 +160,7 @@ public class DruidProperties implements BeanClassLoaderAware {
     dataSource.setValidationQueryTimeout(5);
 
     if (this.mysql()) {
-      validationQuery="select 'x'";
+      String validationQuery = "select 'x'";
       dataSource.setValidationQuery(validationQuery);
       dataSource.setValidationQueryTimeout(2);
     } else {

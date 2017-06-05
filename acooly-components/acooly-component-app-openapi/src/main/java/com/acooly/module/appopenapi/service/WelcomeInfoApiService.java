@@ -10,6 +10,7 @@ import com.acooly.module.appopenapi.enums.DeviceType;
 import com.acooly.module.appopenapi.message.WelcomeInfoRequest;
 import com.acooly.module.appopenapi.message.WelcomeInfoResponse;
 import com.acooly.module.ofile.OFileProperties;
+import com.yiji.framework.openapi.common.enums.ApiBusiType;
 import com.yiji.framework.openapi.core.meta.OpenApiService;
 import com.yiji.framework.openapi.core.service.base.BaseApiService;
 import com.yiji.framework.openapi.core.service.enums.ResponseType;
@@ -31,7 +32,8 @@ import java.util.List;
   name = "welcomeInfo",
   desc = "欢迎信息",
   responseType = ResponseType.SYN,
-  owner = ApiOwners.COMMON
+  owner = ApiOwners.COMMON,
+  busiType = ApiBusiType.Query
 )
 public class WelcomeInfoApiService extends BaseApiService<WelcomeInfoRequest, WelcomeInfoResponse> {
   @Autowired private OFileProperties oFileProperties;

@@ -9,6 +9,7 @@ import com.acooly.module.appopenapi.message.BannerListRequest;
 import com.acooly.module.appopenapi.message.BannerListResponse;
 import com.acooly.module.ofile.OFileProperties;
 import com.google.common.collect.Maps;
+import com.yiji.framework.openapi.common.enums.ApiBusiType;
 import com.yiji.framework.openapi.core.meta.OpenApiService;
 import com.yiji.framework.openapi.core.service.base.BaseApiService;
 import com.yiji.framework.openapi.core.service.enums.ResponseType;
@@ -27,7 +28,8 @@ import java.util.Map;
   name = "bannerList",
   desc = "横幅广告",
   responseType = ResponseType.SYN,
-  owner = ApiOwners.COMMON
+  owner = ApiOwners.COMMON,
+  busiType = ApiBusiType.Query
 )
 public class BannerListApiService extends BaseApiService<BannerListRequest, BannerListResponse> {
 

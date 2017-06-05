@@ -14,6 +14,6 @@ public class OpenAPIPerfLogInitializer extends AbstractLogInitializer {
     configurator.log("设置api性能日志，日志文件为:%s", fileName);
     Appender<ILoggingEvent> appender =
         configurator.fileAppender("api-perf", "%msg%n", fileName, 5);
-    configurator.logger("org.perf4j.TimingLogger", Level.INFO, false, appender);
+    configurator.logger("com.yiji.framework.openapi_PERFORMANCE_LOGGER", Level.INFO, false, appender);
   }
 }

@@ -23,6 +23,12 @@ CREATE TABLE `scheduler_rule` (
   `last_execute_time`         DATETIME            DEFAULT NULL,
   `memo`                      VARCHAR(255)        DEFAULT NULL,
   `method_name`               VARCHAR(255)        DEFAULT NULL,
+  `d_param`                   VARCHAR(255)        DEFAULT NULL
+  COMMENT 'dubbo调用执行参数',
+  `d_version`                 VARCHAR(256)        DEFAULT NULL
+  COMMENT 'dubbo version',
+  `d_group`                   VARCHAR(256)        DEFAULT NULL
+  COMMENT 'dubbo group',
   `modifyer`                  VARCHAR(255)        DEFAULT NULL,
   `properties`                VARCHAR(255)        DEFAULT NULL,
   `retry_time_on_exception`   INT(11)             DEFAULT NULL,

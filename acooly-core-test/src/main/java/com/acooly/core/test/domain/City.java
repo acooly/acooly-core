@@ -2,25 +2,14 @@
 package com.acooly.core.test.domain;
 
 import com.acooly.core.common.domain.AbstractEntity;
+import lombok.Data;
 
+@Data
 public class City extends AbstractEntity {
   private String name;
 
   private String state;
 
-  public String getName() {
-    return name;
-  }
+  private transient String test;
 
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getState() {
-    return state;
-  }
-
-  public void setState(String state) {
-    this.state = state;
-  }
 }

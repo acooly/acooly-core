@@ -22,7 +22,9 @@ public class OpenAPIPerfLogInitializer extends AbstractLogInitializer {
       configurator.log("设置info级别的api-query日志，日志文件为:%s", apiQuery);
       Appender<ILoggingEvent> apiQueryAppender =
           configurator.asyncFileAppender("api-query", configurator.getPattern(), apiQuery);
-      configurator.logger("API-QUERY", Level.INFO, false, apiQueryAppender);
+      //开发者模式时，追加到主日志
+      boolean additive=Apps.isDevMode();
+      configurator.logger("API-QUERY", Level.INFO, additive, apiQueryAppender);
     }
   }
 }

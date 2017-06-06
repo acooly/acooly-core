@@ -11,6 +11,7 @@ import com.acooly.module.certification.cert.RealNameAuthenticationException;
 import com.acooly.module.certification.enums.CertResult;
 import com.acooly.module.certification.platform.entity.CertificationRecord;
 import com.acooly.module.certification.platform.service.CertificationRecordService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ import javax.annotation.Resource;
  *
  * @author zhike@yiji.com
  */
+@Slf4j
 @Service("certificationService")
 public class CertificationServiceImpl implements CertificationService {
 
@@ -30,6 +32,7 @@ public class CertificationServiceImpl implements CertificationService {
 
   @Override
   public CertResult certification(String realName, String idCardNo) {
+    long st = System.currentTimeMillis();
     CertResult result = new CertResult();
     try {
       CertificationRecord certificationRecord =
@@ -51,6 +54,8 @@ public class CertificationServiceImpl implements CertificationService {
       result.setResultCode(e.getResultCode());
       result.setResultMessage(e.getResultMessage());
     }
+    long et = System.currentTimeMillis();
+    log.info("实名认证完成，花费时间: {} ms", (et - st));
     return result;
   }
 

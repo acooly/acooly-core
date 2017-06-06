@@ -1,9 +1,10 @@
 package com.acooly.module.scheduler.executor;
 
-import com.acooly.module.dubbo.DubboRemoteProxyFacotry;
+import com.acooly.core.common.dubbo.DubboFactory;
 import com.acooly.module.scheduler.api.ScheduleCallBackService;
 import com.acooly.module.scheduler.domain.SchedulerRule;
 import com.alibaba.dubbo.rpc.RpcContext;
+import io.jsonwebtoken.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
@@ -17,15 +18,17 @@ import java.util.Map;
 @TaskExecutor.Type(type = TaskTypeEnum.DUBBO_TASK)
 public class DubboTaskExecutor implements TaskExecutor {
 
-  @Autowired private DubboRemoteProxyFacotry dubboRemoteProxyFacotry;
+  @Autowired(required = false)
+  private DubboFactory dubboFactory;
 
   @Override
   public Boolean execute(SchedulerRule schedulerRule) {
+    Assert.notNull(dubboFactory, "dubbo定时任务必须要依赖dubbo组件");
     Map<String, String> map = splitDubboParam(schedulerRule.getDParam());
     RpcContext.getContext().setAttachments(map);
 
     ScheduleCallBackService scheduleCallBackService =
-        dubboRemoteProxyFacotry.getProxy(
+        dubboFactory.getProxy(
             ScheduleCallBackService.class,
             schedulerRule.getDGroup(),
             schedulerRule.getDVersion(),

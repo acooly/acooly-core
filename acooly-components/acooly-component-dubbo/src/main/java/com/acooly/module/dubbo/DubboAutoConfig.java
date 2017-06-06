@@ -12,6 +12,7 @@ package com.acooly.module.dubbo;
 
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.EnvironmentHolder;
+import com.acooly.core.common.dubbo.DubboFactory;
 import com.acooly.core.common.exception.AppConfigException;
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.config.*;
@@ -214,6 +215,11 @@ public class DubboAutoConfig implements InitializingBean {
   @Bean
   public DubboRemoteProxyFacotry dubboRemoteProxyFacotry() {
     return new DubboRemoteProxyFacotry();
+  }
+
+  @Bean
+  public DubboFactory dubboFactory(DubboRemoteProxyFacotry dubboRemoteProxyFacotry) {
+    return new DubboFactoryImpl(dubboRemoteProxyFacotry);
   }
 
   @Bean

@@ -19,4 +19,9 @@ import static com.acooly.module.openapi.OpenAPIProperties.PREFIX;
 @Data
 public class OpenAPIProperties {
   public static final String PREFIX = "acooly.openpai";
+
+    /**
+     * 查询日志分离到不同的日志文件
+     */
+  private Boolean queryLogSeparationEnable;
 }

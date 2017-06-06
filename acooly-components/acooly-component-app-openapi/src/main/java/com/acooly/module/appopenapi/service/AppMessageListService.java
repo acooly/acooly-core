@@ -9,6 +9,7 @@ import com.acooly.module.appopenapi.dto.AppMessageDto;
 import com.acooly.module.appopenapi.enums.ApiOwners;
 import com.acooly.module.appopenapi.message.AppMessageListRequest;
 import com.acooly.module.appopenapi.message.AppMessageListResponse;
+import com.yiji.framework.openapi.common.enums.ApiBusiType;
 import com.yiji.framework.openapi.core.meta.OpenApiService;
 import com.yiji.framework.openapi.core.service.base.BaseApiService;
 import com.yiji.framework.openapi.core.service.enums.ResponseType;
@@ -24,7 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
   name = "appMessageList",
   desc = "推送消息列表",
   responseType = ResponseType.SYN,
-  owner = ApiOwners.COMMON
+  owner = ApiOwners.COMMON,
+  busiType = ApiBusiType.Query
 )
 public class AppMessageListService
     extends BaseApiService<AppMessageListRequest, AppMessageListResponse> {

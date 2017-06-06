@@ -8,6 +8,7 @@ import com.acooly.module.appopenapi.AppApiErrorCode;
 import com.acooly.module.appopenapi.enums.ApiOwners;
 import com.acooly.module.appopenapi.message.AppLatestVersionRequest;
 import com.acooly.module.appopenapi.message.AppLatestVersionResponse;
+import com.yiji.framework.openapi.common.enums.ApiBusiType;
 import com.yiji.framework.openapi.common.enums.ApiServiceResultCode;
 import com.yiji.framework.openapi.common.exception.ApiServiceException;
 import com.yiji.framework.openapi.core.meta.OpenApiService;
@@ -26,7 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
   name = "appLatestVersion",
   desc = "最新版本",
   responseType = ResponseType.SYN,
-  owner = ApiOwners.COMMON
+  owner = ApiOwners.COMMON,
+  busiType = ApiBusiType.Query
 )
 public class AppLatestVersionApiService
     extends BaseApiService<AppLatestVersionRequest, AppLatestVersionResponse> {

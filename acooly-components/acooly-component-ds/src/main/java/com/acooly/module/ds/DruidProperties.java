@@ -15,7 +15,6 @@ import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.exception.AppConfigException;
 import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.pool.vendor.MySqlValidConnectionChecker;
 import com.alibaba.druid.pool.vendor.OracleValidConnectionChecker;
 import com.google.common.collect.Maps;
 import lombok.Data;
@@ -153,7 +152,7 @@ public class DruidProperties implements BeanClassLoaderAware {
     //检测需要关闭的空闲连接间隔，单位是毫秒
     dataSource.setTimeBetweenEvictionRunsMillis(300000);
     //连接在池中最小生存的时间
-    dataSource.setMinEvictableIdleTimeMillis(600000);
+    dataSource.setMinEvictableIdleTimeMillis(3600000);
     dataSource.setTestWhileIdle(true);
     //从连接池中获取连接时不测试
     dataSource.setTestOnBorrow(testOnBorrow);
@@ -161,8 +160,9 @@ public class DruidProperties implements BeanClassLoaderAware {
     dataSource.setValidationQueryTimeout(5);
 
     if (this.mysql()) {
-      System.setProperty("druid.mysql.usePingMethod", "true");
-      dataSource.setValidConnectionChecker(new MySqlValidConnectionChecker());
+      String validationQuery = "select 'x'";
+      dataSource.setValidationQuery(validationQuery);
+      dataSource.setValidationQueryTimeout(2);
     } else {
       System.setProperty("druid.oracle.pingTimeout", "5");
       dataSource.setValidConnectionChecker(new OracleValidConnectionChecker());

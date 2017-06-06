@@ -3,3 +3,7 @@ com.acooly.module.openapi.OpenAPIAutoConfig
 
 com.acooly.core.common.boot.component.ComponentInitializer=\
 com.acooly.module.openapi.OpenAPIComponentInitializer
+
+
+com.acooly.core.common.boot.log.initializer.LogInitializer=\
+com.acooly.module.openapi.OpenAPIPerfLogInitializer

@@ -10,7 +10,7 @@ import java.util.Map;
 /** @author shuijing */
 public enum TaskTypeEnum {
   HTTP_TASK("HTTP", "HTTP任务"),
-  //DUBBO_TASK("DUBBO", "DUBBO任务"),
+  DUBBO_TASK("DUBBO", "DUBBO任务"),
   LOCAL_TASK("LOCAL", "本地任务");
 
   @Setter @Getter private String code;

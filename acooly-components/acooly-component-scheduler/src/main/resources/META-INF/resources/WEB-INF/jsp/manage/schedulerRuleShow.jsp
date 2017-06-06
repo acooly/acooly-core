@@ -11,6 +11,10 @@
             <td>${schedulerRule.memo}</td>
         </tr>
         <tr>
+            <th>状态:</th>
+            <td>${schedulerRule.status}</td>
+        </tr>
+        <tr>
             <th>cron表达式:</th>
             <td>${schedulerRule.cronString}</td>
         </tr>
@@ -31,8 +35,16 @@
             <td>${schedulerRule.methodName}</td>
         </tr>
         <tr>
-            <th>状态:</th>
-            <td>${schedulerRule.status}</td>
+            <th>dubbo组名:</th>
+            <td>${schedulerRule.DGroup}</td>
+        </tr>
+        <tr>
+            <th>dubbo版本:</th>
+            <td>${schedulerRule.DVersion}</td>
+        </tr>
+        <tr>
+            <th>dubbo参数:</th>
+            <td>${schedulerRule.DParam}</td>
         </tr>
         <tr>
             <th width="25%">创建时间:</th>

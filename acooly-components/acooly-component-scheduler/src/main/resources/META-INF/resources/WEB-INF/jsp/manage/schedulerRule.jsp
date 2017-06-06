@@ -39,12 +39,15 @@ $(function() {
         	<th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
 			<th field="id" sum="true">id</th>
             <th field="memo">任务名</th>
+            <th field="status" data-options="formatter:function(value){ return formatRefrence('manage_schedulerRule_datagrid','allStatuss',value);} ">状态</th>
             <th field="cronString">cron_string</th>
             <th field="actionType" data-options="formatter:function(value){ return formatRefrence('manage_schedulerRule_datagrid','allTaskTypes',value);} ">任务类型</th>
             <th field="properties">HTTP地址</th>
             <th field="className">类名</th>
             <th field="methodName">方法名</th>
-            <th field="status" data-options="formatter:function(value){ return formatRefrence('manage_schedulerRule_datagrid','allStatuss',value);} ">状态</th>
+            <th field="dgroup">dubbo组名</th>
+            <th field="dversion">dubbo版本</th>
+            <th field="dparam">dubbo参数</th>
             <th field="lastExecuteTime" formatter="dateTimeFormatter">上次执行时间</th>
             <th field="exceptionAtLastExecute">上次执行结果</th>
             <th field="creater">任务创建人</th>
@@ -57,7 +60,7 @@ $(function() {
     <div id="manage_schedulerRule_action" style="display: none;">
         <a class="line-action icon-resume" onclick="$.acooly.framework.confirmSubmit('/manage/schedulerRule/runjob.html','{0}','manage_schedulerRule_datagrid');" href="#" title="立即执行"></a>
         <a  onclick="$.acooly.framework.edit({url:'/manage/schedulerRule/edit.html',id:'{0}',entity:'schedulerRule',width:620,height:520});" href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
-        <a  onclick="$.acooly.framework.show('/manage/schedulerRule/show.html?id={0}',500,600);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>
+        <a  onclick="$.acooly.framework.show('/manage/schedulerRule/show.html?id={0}',580,600);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>
         <a  onclick="$.acooly.framework.remove('/manage/schedulerRule/deleteJson.html','{0}','manage_schedulerRule_datagrid');" href="#" title="删除"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>
     </div>
 

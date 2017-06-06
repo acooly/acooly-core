@@ -7,6 +7,7 @@ import com.acooly.module.scheduler.executor.TaskExecutorProvider;
 import com.acooly.module.scheduler.executor.TaskTypeEnum;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
+import org.apache.commons.lang3.StringUtils;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -68,7 +69,9 @@ public class QuartzJob implements Job {
     } catch (Exception e) {
       Throwable ex = Throwables.getRootCause(e);
       msgAtLastExecute = ex.getMessage();
-
+      if (msgAtLastExecute != null && msgAtLastExecute.length() > 240) {
+        msgAtLastExecute = msgAtLastExecute.substring(0, 240) + "...";
+      }
       if (isReadTimeOutException(schedulerRule, ex)) {
         return;
       }

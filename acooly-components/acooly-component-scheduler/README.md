@@ -16,6 +16,7 @@
 ### 2.2 配置
 
 * `acooly.scheduler.threadCount=10` 定时任务执行线程数大小
-* dubbo任务引用了`acooly-component-dubbo`组件，必须开启`acooly.dubbo.enable=true`
+* dubbo任务引用了`acooly-component-dubbo`组件，开启定时任务的同时必须开启`acooly.dubbo.enable=true`
 * 当scheduler执行dubbo调度，此组件作为服务消费者，dubbo服务提供者和服务消费者必须配置同一个`acooly.dubbo.zkUrl`
+* dubbo服务提供者需要实现的接口`com.acooly.module.scheduler.api.ScheduleCallBackService`在`acooly-component-scheduler`此组件里面，引用此组件后，不需要定时任务相关功能，需要设置`acooly.scheduler.enable=false`关闭定时任务
 * 配置定时任务请在boss页面，切勿在数据库直接修改`QRTZ_`开头的表数据

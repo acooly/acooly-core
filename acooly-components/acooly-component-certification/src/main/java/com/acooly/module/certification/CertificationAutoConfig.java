@@ -35,7 +35,7 @@ public class CertificationAutoConfig {
     return new StandardDatabaseScriptIniter() {
       @Override
       public String getEvaluateTable() {
-        return "certification_info";
+        return "cert_certification_record";
       }
 
       @Override

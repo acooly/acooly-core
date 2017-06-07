@@ -97,6 +97,7 @@ public class SecurityAutoConfig {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public Realm shiroRealm(PathMatchPermissionResolver pathMatchPermissionResolver) {
       ShiroDbRealm shiroDbRealm = new ShiroDbRealm();
       shiroDbRealm.setPermissionResolver(pathMatchPermissionResolver);

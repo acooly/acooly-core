@@ -14,12 +14,15 @@ public class SSOComponentInitializer implements ComponentInitializer {
     String property = EnvironmentHolder.get().getProperty("acooly.sso.enable");
     if (property == null) {
       System.setProperty("acooly.security.shiro.auth.enable", "false");
+      System.setProperty("acooly.sso.freemarker.include", "true");
     } else {
       Boolean enable = Boolean.valueOf(property);
       if (enable) {
         System.setProperty("acooly.security.shiro.auth.enable", "false");
+        System.setProperty("acooly.sso.freemarker.include", "true");
       } else {
         System.setProperty("acooly.security.shiro.auth.enable", "true");
+        System.setProperty("acooly.sso.freemarker.include", "false");
       }
     }
   }

@@ -15,7 +15,9 @@
 
 1. 业务页面引入公共静态文件(只需要主页面添加，如：point.jsp需要添加，子页面pointEidt.jsp,pointImport.jsp,pointShow.jsp不用添加)
 
-   * freemarker 的需要在第一行引入`<#include "*/include.ftl">`
+   * freemarker 的需要在第一行引入`<#if ssoEnable>
+                                  <#include "*/include.ftl">
+                               </#if>`
    * jsp 的需要引入 `<c:if test="${initParam['ssoEnable']=='true'}">
                     <%@ include file="/WEB-INF/jsp/manage/common/ssoInclude.jsp" %>
                    </c:if>`

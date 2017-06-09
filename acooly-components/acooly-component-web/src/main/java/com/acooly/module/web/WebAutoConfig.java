@@ -203,6 +203,8 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
           };
       Map<String, Object> variables = Maps.newHashMap();
       variables.put("includePage", new IncludePage());
+      String ssoEnable = System.getProperty("acooly.sso.freemarker.include");
+      variables.put("ssoEnable", ssoEnable);
       configurer.setFreemarkerVariables(variables);
       applyProperties(configurer);
       return configurer;

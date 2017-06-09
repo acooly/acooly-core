@@ -1,3 +1,6 @@
+<#if ssoEnable>
+    <#include "*/include.ftl">
+</#if>
 <script type="text/javascript">
 $(function() {
 	$.acooly.framework.registerKeydown('manage_certificationRecord_searchform','manage_certificationRecord_datagrid');

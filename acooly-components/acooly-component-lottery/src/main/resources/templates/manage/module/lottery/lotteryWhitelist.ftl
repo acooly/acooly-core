@@ -1,3 +1,6 @@
+<#if ssoEnable>
+    <#include "*/include.ftl">
+</#if>
 <script type="text/javascript">
 $(function() {
 	$.acooly.framework.registerKeydown('manage_lotteryWhitelist_searchform','manage_lotteryWhitelist_datagrid');

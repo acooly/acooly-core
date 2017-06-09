@@ -18,6 +18,7 @@ import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.TemplateLoader;
 import freemarker.template.utility.XmlEscape;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -204,7 +205,9 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
       Map<String, Object> variables = Maps.newHashMap();
       variables.put("includePage", new IncludePage());
       String ssoEnable = System.getProperty("acooly.sso.freemarker.include");
-      variables.put("ssoEnable", ssoEnable);
+      if (!StringUtils.isEmpty(ssoEnable)){
+          variables.put("ssoEnable", Boolean.valueOf(ssoEnable));
+      }
       configurer.setFreemarkerVariables(variables);
       applyProperties(configurer);
       return configurer;

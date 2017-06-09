@@ -1,3 +1,6 @@
+<#if ssoEnable>
+    <#include "*/include.ftl">
+</#if>
 <script type="text/javascript">
     $(function () {
         $.acooly.framework.registerKeydown('manage_smsLog_searchform', 'manage_smsLog_datagrid');

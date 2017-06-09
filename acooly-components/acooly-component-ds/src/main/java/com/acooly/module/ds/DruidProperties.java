@@ -81,6 +81,8 @@ public class DruidProperties implements BeanClassLoaderAware {
 
   private boolean testOnBorrow = false;
 
+  private boolean useTomcatDataSource=false;
+
   private ClassLoader beanClassLoader;
 
   private Checker checker = new Checker();

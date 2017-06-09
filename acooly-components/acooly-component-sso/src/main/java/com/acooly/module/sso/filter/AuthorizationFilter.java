@@ -89,13 +89,16 @@ public class AuthorizationFilter implements Filter {
               .trustAllCerts()
               .trustAllHosts()
               .body();
-    } catch (HttpRequest.HttpRequestException e) {
+    } catch (Exception e) {
       logger.error("权限校验出错 uri is {}", requestURI, e);
       return false;
     }
     if (!StringUtils.isEmpty(body) && (body.contains("true") || body.contains("false"))) {
+      Boolean permitted = Boolean.valueOf(body);
+      logger.info("sso 用户:{}权限校验结果:{} url:{} ", username, permitted, requestURI);
       return Boolean.valueOf(body);
     }
+    logger.info("sso 用户:{}权限校验结果:{} url:{} ", username, false, requestURI);
     return false;
   }
 

@@ -23,5 +23,6 @@ public class CmsComponentInitializer implements ComponentInitializer {
   public void initialize(ConfigurableApplicationContext applicationContext) {
     setPropertyIfMissing("acooly.ds.Checker.excludedColumnTables.cms", "cms_content_body");
     setPropertyIfMissing("acooly.security.xss.exclusions.cms[0]", "/manage/module/cms/**");
+    setPropertyIfMissing("acooly.security.csrf.exclusions.cms", "/manage/module/cms/**");
   }
 }

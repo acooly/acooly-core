@@ -62,7 +62,7 @@ public class DubboProperties implements InitializingBean {
     public static final int DEFAULT_TIMEOUT = 60000;
     public static final boolean DEFAULT_REGISTER = true;
     /** provider 序列化，使用数据压缩协议 */
-    private final String serialization = "hessian3";
+    private String serialization = "hessian3";
     /** 是否启用服务提供者 */
     private boolean enable = true;
     /** 必填：服务提供者端口 */

@@ -130,8 +130,8 @@
 				// $.acooly.layout.loadTree($.acooly.layout.selectedMenu.id,$.acooly.layout.selectedMenu.text);
 			},
 			addTab : function(opts) {
-                var jq = top.jQuery;
-                var t = jq('#layout_center_tabs');
+                //var jq = top.jQuery;
+                var t = $('#layout_center_tabs');
 				if (t.tabs('exists', opts.title)) {
 					t.tabs('select', opts.title);
 				} else {

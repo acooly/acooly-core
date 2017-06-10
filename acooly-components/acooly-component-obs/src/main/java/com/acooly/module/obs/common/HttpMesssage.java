@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package com.acooly.module.obs.common;
 
 import java.io.IOException;
@@ -24,47 +23,45 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Common class for both HTTP request and HTTP response.
- */
+/** Common class for both HTTP request and HTTP response. */
 public abstract class HttpMesssage {
 
-    private Map<String, String> headers = new HashMap<String, String>();
-    private InputStream content;
-    private long contentLength;
+  private Map<String, String> headers = new HashMap<String, String>();
+  private InputStream content;
+  private long contentLength;
 
-    public Map<String, String> getHeaders() {
-        return headers;
-    }
-    
-    public void setHeaders(Map<String, String> headers) {
-        this.headers = headers;
-    }
-    
-    public void addHeader(String key, String value) {
-        this.headers.put(key, value);
-    }
+  public Map<String, String> getHeaders() {
+    return headers;
+  }
 
-    public InputStream getContent() {
-        return content;
-    }
+  public void setHeaders(Map<String, String> headers) {
+    this.headers = headers;
+  }
 
-    public void setContent(InputStream content) {
-        this.content = content;
-    }
+  public void addHeader(String key, String value) {
+    this.headers.put(key, value);
+  }
 
-    public long getContentLength() {
-        return contentLength;
-    }
+  public InputStream getContent() {
+    return content;
+  }
 
-    public void setContentLength(long contentLength) {
-        this.contentLength = contentLength;
-    }
+  public void setContent(InputStream content) {
+    this.content = content;
+  }
 
-    public void close() throws IOException {
-        if (content != null) {
-            content.close();
-            content = null;
-        }
+  public long getContentLength() {
+    return contentLength;
+  }
+
+  public void setContentLength(long contentLength) {
+    this.contentLength = contentLength;
+  }
+
+  public void close() throws IOException {
+    if (content != null) {
+      content.close();
+      content = null;
     }
+  }
 }

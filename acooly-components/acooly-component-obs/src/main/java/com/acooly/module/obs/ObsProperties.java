@@ -1,4 +1,3 @@
-
 package com.acooly.module.obs;
 
 import com.acooly.core.utils.enums.Messageable;

@@ -1,4 +1,3 @@
-
 package com.acooly.module.obs.model;
 
 import com.acooly.module.obs.common.util.DateUtil;

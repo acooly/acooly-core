@@ -1,5 +1,3 @@
-
-
 package com.acooly.module.obs.common.util;
 
 /*

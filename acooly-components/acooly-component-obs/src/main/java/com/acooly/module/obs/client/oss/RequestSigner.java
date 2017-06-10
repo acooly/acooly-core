@@ -1,5 +1,3 @@
-
-
 package com.acooly.module.obs.client.oss;
 
 import com.acooly.module.obs.exceptions.ClientException;

@@ -1,4 +1,3 @@
-
 package com.acooly.module.obs;
 
 import com.acooly.module.security.config.SecurityAutoConfig;
@@ -16,6 +15,4 @@ import static com.acooly.module.obs.ObsProperties.PREFIX;
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.module.obs")
 @AutoConfigureAfter(SecurityAutoConfig.class)
-public class ObsAutoConfig {
-
-}
+public class ObsAutoConfig {}

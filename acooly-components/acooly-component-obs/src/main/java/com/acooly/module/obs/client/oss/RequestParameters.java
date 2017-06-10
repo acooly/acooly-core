@@ -1,5 +1,3 @@
-
-
 package com.acooly.module.obs.client.oss;
 
 public final class RequestParameters {

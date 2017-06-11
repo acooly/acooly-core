@@ -11,6 +11,7 @@
 package com.acooly.module.ds;
 
 import com.acooly.core.common.boot.ApplicationContextHolder;
+import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.dao.support.DataSourceReadyEvent;
 import com.acooly.core.common.exception.AppConfigException;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +44,11 @@ public class JDBCAutoConfig {
     DataSource dataSource;
     try {
       if (druidProperties == null) {
-        dataSource = DruidProperties.buildFromEnv(DruidProperties.PREFIX);
+        druidProperties = new DruidProperties();
+        EnvironmentHolder.buildProperties(druidProperties, DruidProperties.PREFIX);
+      }
+      if (druidProperties.isUseTomcatDataSource()) {
+          dataSource=new TomcatDataSourceProperties().build(druidProperties);
       } else {
         dataSource = druidProperties.build();
       }

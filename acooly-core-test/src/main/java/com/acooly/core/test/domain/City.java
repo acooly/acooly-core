@@ -10,6 +10,4 @@ public class City extends AbstractEntity {
 
   private String state;
 
-  private transient String test;
-
 }

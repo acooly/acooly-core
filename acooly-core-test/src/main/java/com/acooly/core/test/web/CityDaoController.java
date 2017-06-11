@@ -29,6 +29,7 @@ import com.acooly.core.test.dao.CityMybatisDao;
 import com.acooly.core.test.domain.City;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +45,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/city")
+@Slf4j
 public class CityDaoController {
 
   @Autowired private CityMybatisDao cityDao;
@@ -81,7 +83,9 @@ public class CityDaoController {
   @RequestMapping(value = "/get", method = RequestMethod.GET)
   public City get(Long id) {
     cityDao.flush();
-    return cityDao.get(id);
+      City city = cityDao.get(id);
+      log.info("{}",city);
+      return city;
   }
 
   @RequestMapping(value = "/getAll", method = RequestMethod.GET)

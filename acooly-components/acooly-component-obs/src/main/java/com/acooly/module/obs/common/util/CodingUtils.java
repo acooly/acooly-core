@@ -1,6 +1,5 @@
 package com.acooly.module.obs.common.util;
 
-import java.util.List;
 
 /** Utils for common coding. */
 public class CodingUtils {

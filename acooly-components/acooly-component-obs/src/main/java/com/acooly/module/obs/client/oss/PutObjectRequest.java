@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.io.File;
 import java.io.InputStream;
 
+/** @author shuijing */
 @Getter
 @Setter
 public class PutObjectRequest extends GenericRequest {

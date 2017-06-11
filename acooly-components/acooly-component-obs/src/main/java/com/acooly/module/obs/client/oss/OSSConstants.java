@@ -1,10 +1,16 @@
 
 package com.acooly.module.obs.client.oss;
 
-/** Miscellaneous constants used for oss client service. */
+/**
+ * Miscellaneous constants used for oss client service.
+ *
+ * @author shuijing
+ */
 public final class OSSConstants {
 
   public static final String DEFAULT_OSS_ENDPOINT = "http://oss.aliyuncs.com";
+
+  public static final String DEFAULT_OSS_VISITE_URL = "oss.aliyuncs.com";
 
   public static final String DEFAULT_CHARSET_NAME = "utf-8";
   public static final String DEFAULT_XML_ENCODING = "utf-8";

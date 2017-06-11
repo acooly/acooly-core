@@ -1,4 +1,4 @@
-package com.acooly.module.obs.client.oss;
+package com.acooly.module.obs.client.oss.util;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -6,7 +6,11 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
-/** Utility class used to determine the mimetype of files based on file extensions. */
+/**
+ * Utility class used to determine the mimetype of files based on file extensions.
+ *
+ * @author shuijing
+ */
 @Slf4j
 public class Mimetypes {
 

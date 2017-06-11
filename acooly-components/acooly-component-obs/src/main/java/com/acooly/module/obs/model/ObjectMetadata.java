@@ -1,7 +1,7 @@
 package com.acooly.module.obs.model;
 
 import com.acooly.module.obs.common.util.DateUtil;
-import com.acooly.module.obs.common.util.HttpHeaders;
+import com.acooly.module.obs.common.HttpHeaders;
 
 import java.text.ParseException;
 import java.util.Collections;

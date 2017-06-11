@@ -1,4 +1,3 @@
-
 package com.acooly.module.obs.model;
 
 import java.io.Closeable;

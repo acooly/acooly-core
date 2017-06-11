@@ -1,4 +1,3 @@
-
 package com.acooly.module.obs.common;
 
 /** 表示HTTP的请求方法。 */

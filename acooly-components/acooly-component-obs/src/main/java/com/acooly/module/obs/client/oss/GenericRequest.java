@@ -7,6 +7,8 @@ import lombok.Setter;
 /**
  * A generic request that contains some basic request options, such as
  * bucket name, object key, costom headers, progress listener and so on.
+ *
+ * @author shuijing
  */
 @Getter
 @Setter

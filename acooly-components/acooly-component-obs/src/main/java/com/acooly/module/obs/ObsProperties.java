@@ -43,7 +43,7 @@ public class ObsProperties {
   public enum Provider implements Messageable {
 
     /** 阿里云 */
-    Aliyun("aliyunMessageSender", "阿里云");
+    Aliyun("aliyunObsClient", "阿里云");
 
     private final String code;
     private final String message;
@@ -70,7 +70,11 @@ public class ObsProperties {
     private String accessKeyId;
     /** 接入key秘钥 */
     private String accessKeySecret;
-    /** 主题名称，如：sms.topic-cn-hangzhou */
+    /**
+     * 华东一：http://oss-cn-hangzhou.aliyuncs.com
+     *
+     * <p>https://intl.aliyun.com/help/zh/doc-detail/31837.htm
+     */
     private String endpoint;
   }
 }

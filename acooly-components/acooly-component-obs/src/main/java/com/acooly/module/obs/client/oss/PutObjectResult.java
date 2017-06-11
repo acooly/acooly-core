@@ -11,4 +11,6 @@ public class PutObjectResult extends GenericResult {
 
   // Object的ETag值。
   private String eTag;
+
+  private String buketName;
 }

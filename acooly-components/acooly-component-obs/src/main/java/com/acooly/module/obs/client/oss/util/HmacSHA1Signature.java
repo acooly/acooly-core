@@ -1,4 +1,7 @@
-package com.acooly.module.obs.client.oss;
+package com.acooly.module.obs.client.oss.util;
+
+import com.acooly.module.obs.client.oss.ServiceSignature;
+import com.acooly.module.obs.client.oss.util.BinaryUtil;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -6,7 +9,11 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
-/** Used for computing Hmac-SHA1 signature. */
+/**
+ * Used for computing Hmac-SHA1 signature.
+ *
+ * @author shuijing
+ */
 public class HmacSHA1Signature extends ServiceSignature {
 
   /* The default encoding. */

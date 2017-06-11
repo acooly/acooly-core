@@ -1,8 +1,11 @@
 package com.acooly.module.obs.client.oss;
 
 import com.acooly.module.obs.ObsProperties;
+import com.acooly.module.obs.client.oss.util.OSSUtils;
+import com.acooly.module.obs.client.oss.util.SignUtils;
 import com.acooly.module.obs.exceptions.ClientException;
 
+/** @author shuijing */
 public class OSSRequestSigner implements RequestSigner {
 
   private String httpMethod;

@@ -1,7 +1,6 @@
-
 package com.acooly.module.obs.client.oss;
 
-import com.acooly.module.obs.common.util.HttpHeaders;
+import com.acooly.module.obs.common.HttpHeaders;
 
 public interface OSSHeaders extends HttpHeaders {
 

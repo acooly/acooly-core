@@ -15,6 +15,7 @@ public class ResponseMessage extends HttpMesssage {
 
   private String uri;
   private int statusCode;
+  private String buketName;
 
   //private ServiceClient.Request request;
   private CloseableHttpResponse httpResponse;

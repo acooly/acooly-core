@@ -5,6 +5,8 @@ import lombok.Setter;
 
 /**
  * A generic result that contains some basic response options, such as requestId.
+ *
+ * @author shuijing
  */
 @Getter
 @Setter
@@ -13,5 +15,5 @@ public abstract class GenericResult {
     private String requestId;
     private Long clientCRC;
     private Long serverCRC;
-    ResponseMessage response;
+    ResponseMessage response=new ResponseMessage();
 }

@@ -1,6 +1,8 @@
-package com.acooly.module.obs.client.oss;
+package com.acooly.module.obs.client.oss.util;
 
-import com.acooly.module.obs.common.util.HttpHeaders;
+import com.acooly.module.obs.client.oss.OSSHeaders;
+import com.acooly.module.obs.client.oss.RequestMessage;
+import com.acooly.module.obs.common.HttpHeaders;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.TreeMap;
 import static com.acooly.module.obs.client.oss.RequestParameters.*;
 import static com.acooly.module.obs.common.util.CodingUtils.assertTrue;
 
+/** @author shuijing */
 public class SignUtils {
 
   private static final String NEW_LINE = "\n";

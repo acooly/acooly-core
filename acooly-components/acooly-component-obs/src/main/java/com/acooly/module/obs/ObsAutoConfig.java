@@ -1,8 +1,5 @@
-
 package com.acooly.module.obs;
 
-import com.acooly.module.security.config.SecurityAutoConfig;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,7 +12,4 @@ import static com.acooly.module.obs.ObsProperties.PREFIX;
 @EnableConfigurationProperties({ObsProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.module.obs")
-@AutoConfigureAfter(SecurityAutoConfig.class)
-public class ObsAutoConfig {
-
-}
+public class ObsAutoConfig {}

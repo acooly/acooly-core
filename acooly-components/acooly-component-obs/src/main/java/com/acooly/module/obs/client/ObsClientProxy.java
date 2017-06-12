@@ -5,6 +5,7 @@ import com.acooly.module.obs.exceptions.ClientException;
 import com.acooly.module.obs.exceptions.ObsException;
 import com.acooly.module.obs.model.ObjectMetadata;
 import com.acooly.module.obs.model.ObsObject;
+import com.acooly.module.obs.model.ObjectResult;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -14,9 +15,9 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.List;
 import java.util.Map;
 
+/** @author shuijing */
 @Service("obsClient")
 public class ObsClientProxy implements ObsClient, ApplicationContextAware {
 
@@ -27,6 +28,7 @@ public class ObsClientProxy implements ObsClient, ApplicationContextAware {
   private ApplicationContext applicationContext;
 
   private ObsClient obsClient;
+
   @Autowired private ObsProperties obsProperties;
 
   public String getProvider() {
@@ -51,37 +53,38 @@ public class ObsClientProxy implements ObsClient, ApplicationContextAware {
   }
 
   @Override
-  public String putObject(String bucketName, String key, InputStream input)
+  public ObjectResult putObject(String bucketName, String key, File file)
+      throws ObsException, ClientException {
+    return getObsClient().putObject(bucketName, key, file);
+  }
+
+  @Override
+  public ObjectResult putObject(String bucketName, String key, InputStream input)
+      throws ObsException, ClientException {
+    return getObsClient().putObject(bucketName, key, input);
+  }
+
+  @Override
+  public ObjectResult putObject(String bucketName, String key, File file, ObjectMetadata metadata)
       throws ObsException, ClientException {
     return null;
   }
 
   @Override
-  public String putObject(String bucketName, String key, InputStream input, ObjectMetadata metadata)
+  public ObjectResult putObject(
+      String bucketName, String key, InputStream input, ObjectMetadata metadata)
       throws ObsException, ClientException {
     return null;
   }
 
   @Override
-  public String putObject(String bucketName, String key, File file, ObjectMetadata metadata)
+  public ObjectResult putObject(URL signedUrl, String filePath, Map<String, String> requestHeaders)
       throws ObsException, ClientException {
     return null;
   }
 
   @Override
-  public String putObject(String bucketName, String key, File file)
-      throws ObsException, ClientException {
-    return null;
-  }
-
-  @Override
-  public String putObject(URL signedUrl, String filePath, Map<String, String> requestHeaders)
-      throws ObsException, ClientException {
-    return null;
-  }
-
-  @Override
-  public String putObject(
+  public ObjectResult putObject(
       URL signedUrl,
       InputStream requestContent,
       long contentLength,

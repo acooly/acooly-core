@@ -1,6 +1,4 @@
-
-
-package com.acooly.module.obs.common.util;
+package com.acooly.module.obs.common;
 
 /*
  * A collection of common HTTP headers.

@@ -12,20 +12,10 @@
     <artifactId>acooly-component-obs</artifactId>
     <dependencies>
         <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-security</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-threadpool</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>javax.xml</groupId>
             <artifactId>jaxp-api</artifactId>
             <version>1.4</version>
@@ -33,7 +23,7 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>

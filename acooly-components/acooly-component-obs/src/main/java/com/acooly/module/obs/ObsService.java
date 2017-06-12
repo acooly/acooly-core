@@ -4,6 +4,7 @@ import com.acooly.module.obs.exceptions.ClientException;
 import com.acooly.module.obs.exceptions.ObsException;
 import com.acooly.module.obs.model.ObjectMetadata;
 import com.acooly.module.obs.model.ObsObject;
+import com.acooly.module.obs.model.ObjectResult;
 
 import java.io.File;
 import java.io.InputStream;
@@ -17,28 +18,30 @@ import java.util.Map;
  */
 public interface ObsService {
 
-  String putObject(String bucketName, String key, File file) throws ObsException, ClientException;
-
-  String putObject(String bucketName, String key, InputStream input)
+  ObjectResult putObject(String bucketName, String key, File file)
       throws ObsException, ClientException;
 
-  String putObject(String bucketName, String key, File file, ObjectMetadata metadata)
+  ObjectResult putObject(String bucketName, String key, InputStream input)
       throws ObsException, ClientException;
 
-  String putObject(String bucketName, String key, InputStream input, ObjectMetadata metadata)
+  ObjectResult putObject(String bucketName, String key, File file, ObjectMetadata metadata)
       throws ObsException, ClientException;
 
-  String putObject(URL signedUrl, String filePath, Map<String, String> requestHeaders)
+  ObjectResult putObject(
+      String bucketName, String key, InputStream input, ObjectMetadata metadata)
       throws ObsException, ClientException;
 
-  String putObject(
+  ObjectResult putObject(URL signedUrl, String filePath, Map<String, String> requestHeaders)
+      throws ObsException, ClientException;
+
+  ObjectResult putObject(
       URL signedUrl,
       InputStream requestContent,
       long contentLength,
       Map<String, String> requestHeaders)
       throws ObsException, ClientException;
 
-  ObsObject getObject(String bucketName, String key) throws ObsException, ClientException;
+  ObsObject  getObject(String bucketName, String key) throws ObsException, ClientException;
 
   void deleteObject(String bucketName, String key) throws ObsException, ClientException;
 }

@@ -1,5 +1,3 @@
-
-
 package com.acooly.module.obs.client.oss;
 
 import com.acooly.module.obs.common.HttpMesssage;
@@ -35,16 +33,15 @@ public class RequestMessage extends HttpMesssage {
   private boolean useChunkEncoding = false;
 
   /* The original request provided by user */
-  //private final WebServiceRequest originalRequest;
+  private final WebServiceRequest originalRequest;
 
-  //    public RequestMessage() {
-  //        this(null);
-  //    }
+  public RequestMessage() {
+    this(null);
+  }
 
-  //    public RequestMessage(WebServiceRequest originalRequest) {
-  //        this.originalRequest = (originalRequest == null) ?
-  //                WebServiceRequest.NOOP : originalRequest;
-  //    }
+  public RequestMessage(WebServiceRequest originalRequest) {
+    this.originalRequest = (originalRequest == null) ? WebServiceRequest.NOOP : originalRequest;
+  }
 
   public HttpMethod getMethod() {
     return method;

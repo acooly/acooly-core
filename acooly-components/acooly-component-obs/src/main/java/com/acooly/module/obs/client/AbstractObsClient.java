@@ -1,8 +1,6 @@
 package com.acooly.module.obs.client;
 
 import com.acooly.module.obs.ObsProperties;
-import com.acooly.module.obs.client.oss.PutObjectResult;
-import com.acooly.module.obs.model.ObjectResult;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 

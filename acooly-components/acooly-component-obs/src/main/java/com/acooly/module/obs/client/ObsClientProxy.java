@@ -67,14 +67,14 @@ public class ObsClientProxy implements ObsClient, ApplicationContextAware {
   @Override
   public ObjectResult putObject(String bucketName, String key, File file, ObjectMetadata metadata)
       throws ObsException, ClientException {
-    return null;
+    return getObsClient().putObject(bucketName, key, file, metadata);
   }
 
   @Override
   public ObjectResult putObject(
       String bucketName, String key, InputStream input, ObjectMetadata metadata)
       throws ObsException, ClientException {
-    return null;
+    return getObsClient().putObject(bucketName, key, input, metadata);
   }
 
   @Override

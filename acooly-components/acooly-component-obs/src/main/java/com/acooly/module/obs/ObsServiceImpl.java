@@ -36,14 +36,14 @@ public class ObsServiceImpl implements InitializingBean, ObsService {
   @Override
   public ObjectResult putObject(String bucketName, String key, File file, ObjectMetadata metadata)
       throws ObsException, ClientException {
-    return null;
+    return obsClient.putObject(bucketName, key, file, metadata);
   }
 
   @Override
   public ObjectResult putObject(
       String bucketName, String key, InputStream input, ObjectMetadata metadata)
       throws ObsException, ClientException {
-    return null;
+    return obsClient.putObject(bucketName, key, input, metadata);
   }
 
   @Override

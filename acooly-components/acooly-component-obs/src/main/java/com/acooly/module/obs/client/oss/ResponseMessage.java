@@ -11,11 +11,13 @@ import java.io.IOException;
 @Setter
 public class ResponseMessage extends HttpMesssage {
 
-  private static final int HTTP_SUCCESS_STATUS_CODE = 200;
+  public static final int HTTP_SUCCESS_STATUS_CODE = 200;
 
   private String uri;
   private int statusCode;
   private String buketName;
+  //返回的result
+  private String result;
 
   //private ServiceClient.Request request;
   private CloseableHttpResponse httpResponse;

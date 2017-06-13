@@ -27,7 +27,7 @@ public class Mimetypes {
     if (mimetypes != null) return mimetypes;
 
     mimetypes = new Mimetypes();
-    InputStream is = mimetypes.getClass().getResourceAsStream("/mime.types");
+    InputStream is = mimetypes.getClass().getResourceAsStream("/util/mime.types");
     if (is != null) {
       log.debug("Loading mime types from file in the classpath: mime.types");
 

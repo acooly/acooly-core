@@ -3,6 +3,8 @@ package com.acooly.module.obs.client.oss;
 import com.acooly.core.utils.net.HttpResult;
 import com.acooly.core.utils.net.Https;
 import com.acooly.module.obs.ObsProperties;
+import com.acooly.module.obs.client.oss.parser.AliyunOSSResponseParser;
+import com.acooly.module.obs.client.oss.parser.BaseMessageResponseParser;
 import com.acooly.module.obs.client.oss.util.HttpUtil;
 import com.acooly.module.obs.client.oss.util.Mimetypes;
 import com.acooly.module.obs.common.HttpMesssage;
@@ -15,12 +17,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.InputStreamEntity;
 import org.springframework.util.Assert;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.acooly.module.obs.client.oss.ResponseMessage.HTTP_SUCCESS_STATUS_CODE;
 import static com.acooly.module.obs.client.oss.util.IOUtils.checkFile;
 import static com.acooly.module.obs.client.oss.util.IOUtils.newRepeatableInputStream;
 import static com.acooly.module.obs.client.oss.util.OSSUtils.*;
@@ -165,6 +173,7 @@ public class OSSObjectOperation {
     responseMessage.setHeaders(result.getHeaders());
     responseMessage.setUri(wrapperRequest.getUri());
     responseMessage.setBuketName(bucketName);
+    responseMessage.setResult(result.getBody());
     //解析结果
     try {
       return responseParser.parse(responseMessage);
@@ -336,11 +345,26 @@ public class OSSObjectOperation {
         result.getResponse().setUri(response.getUri());
         result.getResponse().setStatusCode(response.getStatusCode());
         result.setBuketName(response.getBuketName());
+        //出错情况
+        if (response.getStatusCode() != HTTP_SUCCESS_STATUS_CODE) {
+          Document document = AliyunOSSResponseParser.getInstance().parse(response.getResult());
+          NodeList messageNode = document.getElementsByTagName(AliyunOSSResponseParser.MESSAGE);
+          Element line = (Element) messageNode.item(0);
+          String message = BaseMessageResponseParser.getCharacterDataFromElement(line);
+          result.getResponse().setErrorResponseAsString(message);
+        }
         //setCRC(result, response);
         return result;
+      } catch (Exception e) {
+        if (e instanceof IOException
+            || e instanceof ParserConfigurationException
+            || e instanceof SAXException) {
+          throw new ResponseParseException("解析返回xml失败");
+        }
       } finally {
         safeCloseResponse(response);
       }
+      return result;
     }
   }
 

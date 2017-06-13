@@ -1,10 +1,14 @@
 package com.acooly.module.ds;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.sql.DataSource;
 
 /** @author qiubo@yiji.com */
+@Slf4j
 public class TomcatDataSourceProperties {
   public DataSource build(DruidProperties druidProperties) {
+    log.info("使用tomcat数据源");
     org.apache.tomcat.jdbc.pool.DataSource dataSource =
         new org.apache.tomcat.jdbc.pool.DataSource();
     dataSource.setUrl(druidProperties.getUrl());

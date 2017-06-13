@@ -359,10 +359,6 @@ public class OSSObjectOperation {
 
   private static void populateGetObjectRequestHeaders(
       GetObjectRequest getObjectRequest, Map<String, String> headers) {
-    //        if (getObjectRequest.getRange() != null) {
-    //            addGetObjectRangeHeader(getObjectRequest.getRange(), headers);
-    //        }
-
     if (getObjectRequest.getModifiedSinceConstraint() != null) {
       headers.put(
           OSSHeaders.GET_OBJECT_IF_MODIFIED_SINCE,
@@ -374,15 +370,6 @@ public class OSSObjectOperation {
           OSSHeaders.GET_OBJECT_IF_UNMODIFIED_SINCE,
           DateUtil.formatRfc822Date(getObjectRequest.getUnmodifiedSinceConstraint()));
     }
-    //        if (getObjectRequest.getMatchingETagConstraints().size() > 0) {
-    //            headers.put(OSSHeaders.GET_OBJECT_IF_MATCH,
-    //                joinETags(getObjectRequest.getMatchingETagConstraints()));
-    //        }
-
-    //        if (getObjectRequest.getNonmatchingETagConstraints().size() > 0) {
-    //            headers.put(OSSHeaders.GET_OBJECT_IF_NONE_MATCH,
-    //                joinETags(getObjectRequest.getNonmatchingETagConstraints()));
-    //        }
   }
 
   private RequestSigner createSigner(HttpMethod method, String bucketName, String key) {

@@ -1,4 +1,4 @@
-package com.acooly.module.obs.model;
+package com.acooly.module.obs.common.model;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class ObsObject implements Closeable {
   // Object的元数据。
   private ObjectMetadata metadata = new ObjectMetadata();
 
-  // Object所包含的内容。
+  // Object所包含的内容，需要调用者主动关闭！
   private InputStream objectContent;
 
   /**

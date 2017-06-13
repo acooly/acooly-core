@@ -1,4 +1,4 @@
-package com.acooly.module.obs.client.oss;
+package com.acooly.module.obs.client.oss.model;
 
 
 import lombok.Getter;

@@ -3,15 +3,21 @@ package com.acooly.module.obs.client.oss;
 import com.acooly.core.utils.net.HttpResult;
 import com.acooly.core.utils.net.Https;
 import com.acooly.module.obs.ObsProperties;
+import com.acooly.module.obs.client.oss.model.GenericRequest;
+import com.acooly.module.obs.client.oss.model.GetObjectRequest;
+import com.acooly.module.obs.client.oss.model.PutObjectRequest;
+import com.acooly.module.obs.client.oss.model.PutObjectResult;
 import com.acooly.module.obs.client.oss.parser.AliyunOSSResponseParser;
 import com.acooly.module.obs.client.oss.parser.BaseMessageResponseParser;
-import com.acooly.module.obs.client.oss.util.HttpUtil;
-import com.acooly.module.obs.client.oss.util.Mimetypes;
+import com.acooly.module.obs.common.util.HttpUtil;
+import com.acooly.module.obs.common.util.Mimetypes;
 import com.acooly.module.obs.common.HttpMesssage;
 import com.acooly.module.obs.common.HttpMethod;
+import com.acooly.module.obs.common.util.DateUtil;
 import com.acooly.module.obs.exceptions.ClientException;
 import com.acooly.module.obs.exceptions.ObsException;
-import com.acooly.module.obs.model.ObjectMetadata;
+import com.acooly.module.obs.common.model.ObjectMetadata;
+import com.acooly.module.obs.common.model.ObsObject;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.*;
@@ -29,9 +35,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.acooly.module.obs.client.oss.ResponseMessage.HTTP_SUCCESS_STATUS_CODE;
-import static com.acooly.module.obs.client.oss.util.IOUtils.checkFile;
-import static com.acooly.module.obs.client.oss.util.IOUtils.newRepeatableInputStream;
-import static com.acooly.module.obs.client.oss.util.OSSUtils.*;
+import static com.acooly.module.obs.common.util.IOUtils.checkFile;
+import static com.acooly.module.obs.common.util.IOUtils.newRepeatableInputStream;
+import static com.acooly.module.obs.common.util.OSSUtils.*;
 import static com.acooly.module.obs.common.util.CodingUtils.assertTrue;
 
 /** @author shuijing */
@@ -53,19 +59,18 @@ public class OSSObjectOperation {
     return this.endpoint;
   }
 
-  public static final PutObjectReponseParser putObjectReponseParser = new PutObjectReponseParser();
+  protected static final PutObjectReponseParser putObjectReponseParser =
+      new PutObjectReponseParser();
+
+  protected static EmptyResponseParser emptyResponseParser = new EmptyResponseParser();
 
   public PutObjectResult putObject(PutObjectRequest putObjectRequest)
       throws ObsException, ClientException {
 
-    // assertParameterNotNull(putObjectRequest, "putObjectRequest");
+    Assert.notNull(putObjectRequest, "putObjectRequest");
 
     PutObjectResult result =
         writeObjectInternal(WriteMode.OVERWRITE, putObjectRequest, putObjectReponseParser);
-
-    //        if (isCrcCheckEnabled()) {
-    //            OSSUtils.checkChecksum(result.getClientCRC(), result.getServerCRC(), result.getRequestId());
-    //        }
 
     return result;
   }
@@ -138,18 +143,104 @@ public class OSSObjectOperation {
                 determineInputStreamLength(repeatableInputStream, metadata.getContentLength()))
             .setOriginalRequest(originalRequest)
             .build();
-
     //暂时不支持append file
     //    Map<String, String> params = new LinkedHashMap<>();
     //    populateWriteObjectParams(mode, originalRequest, params);
-
     //retryStrategy
     //      RetryStrategy retryStrategy = context.getRetryStrategy() != null ?
     //          context.getRetryStrategy() : this.getDefaultRetryStrategy();
 
-    //签名头
-    //Authorization = "OSS " + AccessKeyId + ":" + Signature
-    RequestSigner signer = createSigner(WriteMode.getMappingMethod(mode), bucketName, key);
+    return sendImpl(httpRequest, responseParser, bucketName, key, mode, true);
+  }
+
+  /** Delete an object. */
+  public void deleteObject(GenericRequest genericRequest) throws ObsException, ClientException {
+
+    Assert.notNull(genericRequest, "genericRequest");
+
+    String bucketName = genericRequest.getBucketName();
+    String key = genericRequest.getKey();
+
+    Assert.notNull(bucketName, "bucketName");
+    ensureBucketNameValid(bucketName);
+    Assert.notNull(key, "key");
+    ensureObjectKeyValid(key);
+
+    RequestMessage request =
+        new OSSRequestMessageBuilder()
+            .setEndpoint(createAndgetEndpoint())
+            .setMethod(HttpMethod.DELETE)
+            .setBucket(bucketName)
+            .setKey(key)
+            .setOriginalRequest(genericRequest)
+            .build();
+
+    sendImpl(request, emptyResponseParser, bucketName, key, null, true);
+  }
+
+  public ObsObject getObject(GetObjectRequest getObjectRequest)
+      throws ObsException, ClientException {
+    Assert.notNull(getObjectRequest, "getObjectRequest");
+
+    String bucketName = null;
+    String key = null;
+    RequestMessage request = null;
+    if (!getObjectRequest.isUseUrlSignature()) {
+      bucketName = getObjectRequest.getBucketName();
+      key = getObjectRequest.getKey();
+      Assert.notNull(bucketName, "bucketName不能为空");
+      Assert.notNull(key, "key不能为空");
+
+      ensureBucketNameValid(bucketName);
+      ensureObjectKeyValid(key);
+
+      Map<String, String> headers = new HashMap<String, String>();
+      populateGetObjectRequestHeaders(getObjectRequest, headers);
+
+      //        Map<String, String> params = new HashMap<String, String>();
+      //        populateResponseHeaderParameters(params, getObjectRequest.getResponseHeaders());
+      //        String process = getObjectRequest.getProcess();
+      //        if (process != null) {
+      //            params.put(RequestParameters.SUBRESOURCE_PROCESS, process);
+      //        }
+
+      request =
+          new OSSRequestMessageBuilder()
+              .setEndpoint(createAndgetEndpoint())
+              .setMethod(HttpMethod.GET)
+              .setBucket(bucketName)
+              .setKey(key)
+              .setHeaders(headers)
+              //.setParameters(params)
+              .setOriginalRequest(getObjectRequest)
+              .build();
+    } else {
+      request = new RequestMessage(getObjectRequest);
+      request.setMethod(HttpMethod.GET);
+      request.setAbsoluteUrl(getObjectRequest.getAbsoluteUri());
+      request.setUseUrlSignature(true);
+      request.setHeaders(getObjectRequest.getHeaders());
+    }
+    GetObjectResponseParser parser = new GetObjectResponseParser(bucketName, key);
+
+    ObsObject obsObject = sendImpl(request, parser, bucketName, key, null, false);
+    return obsObject;
+  }
+
+  /** 内部封装的http请求实现 */
+  private <T> T sendImpl(
+      RequestMessage httpRequest,
+      ResponseParser<T> responseParser,
+      String bucketName,
+      String key,
+      WriteMode mode,
+      boolean closeStream)
+      throws ObsException, ClientException {
+
+    //加上认证header
+    //Authorization: OSS qn6qrrqxo2oawuk53otfjbyc:qZzjF3DUtd+yK16BdhGtFcCVknM=
+    HttpMethod method = (mode == null) ? httpRequest.getMethod() : WriteMode.getMappingMethod(mode);
+    RequestSigner signer = createSigner(method, bucketName, key);
     signer.sign(httpRequest);
 
     WrapperRequest wrapperRequest = buildRequest(httpRequest);
@@ -158,13 +249,21 @@ public class OSSObjectOperation {
     Https instance = Https.getInstance();
     instance.connectTimeout(obsProperties.getTimeout() / 2);
     instance.readTimeout(obsProperties.getTimeout() / 2);
-    HttpResult result =
-        instance.execute(
-            null,
-            httpRequestBase,
-            wrapperRequest.getHeaders(),
-            false,
-            OSSConstants.DEFAULT_CHARSET_NAME);
+    HttpResult result;
+    //不关闭inputStream
+    if (!closeStream) {
+      result =
+          instance.execute(
+              httpRequestBase, wrapperRequest.getHeaders(), OSSConstants.DEFAULT_CHARSET_NAME);
+    } else {
+      result =
+          instance.execute(
+              null,
+              httpRequestBase,
+              wrapperRequest.getHeaders(),
+              false,
+              OSSConstants.DEFAULT_CHARSET_NAME);
+    }
 
     HttpUtil.convertHeaderCharsetFromIso88591(result.getHeaders());
 
@@ -174,6 +273,9 @@ public class OSSObjectOperation {
     responseMessage.setUri(wrapperRequest.getUri());
     responseMessage.setBuketName(bucketName);
     responseMessage.setResult(result.getBody());
+    if (!closeStream) {
+      responseMessage.setContent(((Https.HttpResultEx) result).getContent());
+    }
     //解析结果
     try {
       return responseParser.parse(responseMessage);
@@ -253,6 +355,34 @@ public class OSSObjectOperation {
     }
 
     return request;
+  }
+
+  private static void populateGetObjectRequestHeaders(
+      GetObjectRequest getObjectRequest, Map<String, String> headers) {
+    //        if (getObjectRequest.getRange() != null) {
+    //            addGetObjectRangeHeader(getObjectRequest.getRange(), headers);
+    //        }
+
+    if (getObjectRequest.getModifiedSinceConstraint() != null) {
+      headers.put(
+          OSSHeaders.GET_OBJECT_IF_MODIFIED_SINCE,
+          DateUtil.formatRfc822Date(getObjectRequest.getModifiedSinceConstraint()));
+    }
+
+    if (getObjectRequest.getUnmodifiedSinceConstraint() != null) {
+      headers.put(
+          OSSHeaders.GET_OBJECT_IF_UNMODIFIED_SINCE,
+          DateUtil.formatRfc822Date(getObjectRequest.getUnmodifiedSinceConstraint()));
+    }
+    //        if (getObjectRequest.getMatchingETagConstraints().size() > 0) {
+    //            headers.put(OSSHeaders.GET_OBJECT_IF_MATCH,
+    //                joinETags(getObjectRequest.getMatchingETagConstraints()));
+    //        }
+
+    //        if (getObjectRequest.getNonmatchingETagConstraints().size() > 0) {
+    //            headers.put(OSSHeaders.GET_OBJECT_IF_NONE_MATCH,
+    //                joinETags(getObjectRequest.getNonmatchingETagConstraints()));
+    //        }
   }
 
   private RequestSigner createSigner(HttpMethod method, String bucketName, String key) {
@@ -346,7 +476,7 @@ public class OSSObjectOperation {
         result.getResponse().setStatusCode(response.getStatusCode());
         result.setBuketName(response.getBuketName());
         //出错情况
-        if (response.getStatusCode() != HTTP_SUCCESS_STATUS_CODE) {
+        if (response.getStatusCode() != HTTP_SUCCESS_STATUS_CODE && response.getResult() != null) {
           Document document = AliyunOSSResponseParser.getInstance().parse(response.getResult());
           NodeList messageNode = document.getElementsByTagName(AliyunOSSResponseParser.MESSAGE);
           Element line = (Element) messageNode.item(0);
@@ -365,6 +495,48 @@ public class OSSObjectOperation {
         safeCloseResponse(response);
       }
       return result;
+    }
+  }
+
+  public static final class GetObjectResponseParser implements ResponseParser<ObsObject> {
+    private String bucketName;
+    private String key;
+
+    public GetObjectResponseParser(final String bucketName, final String key) {
+      this.bucketName = bucketName;
+      this.key = key;
+    }
+
+    @Override
+    public ObsObject parse(ResponseMessage response) throws ResponseParseException {
+      ObsObject ossObject = new ObsObject();
+      ossObject.setBucketName(this.bucketName);
+      ossObject.setKey(this.key);
+      ossObject.setObjectContent(response.getContent());
+      //            ossObject.setRequestId(response.getRequestId());
+      //            ossObject.setResponse(response);
+      try {
+        ossObject.setObjectMetadata(parseObjectMetadata(response.getHeaders()));
+        //setServerCRC(ossObject, response);
+        return ossObject;
+      } catch (ResponseParseException e) {
+        // Close response only when parsing exception thrown.
+        safeCloseResponse(response);
+        // Rethrow
+        throw e;
+      }
+    }
+  }
+
+  public static final class EmptyResponseParser implements ResponseParser<ResponseMessage> {
+
+    @Override
+    public ResponseMessage parse(ResponseMessage response) throws ResponseParseException {
+      // Close response and return it directly without parsing.
+      response.setStatusCode(response.getStatusCode());
+
+      safeCloseResponse(response);
+      return response;
     }
   }
 

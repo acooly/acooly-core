@@ -1,6 +1,7 @@
 package com.acooly.module.obs.client.oss;
 
-import com.acooly.module.obs.client.oss.util.OSSUtils;
+import com.acooly.module.obs.client.oss.model.WebServiceRequest;
+import com.acooly.module.obs.common.util.OSSUtils;
 import com.acooly.module.obs.common.HttpMethod;
 import com.acooly.module.obs.common.util.DateUtil;
 
@@ -8,7 +9,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.*;
 
-import static com.acooly.module.obs.client.oss.util.OSSUtils.determineFinalEndpoint;
+import static com.acooly.module.obs.common.util.OSSUtils.determineFinalEndpoint;
 
 /**
  * HTTP request message builder.

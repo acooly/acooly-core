@@ -1,5 +1,6 @@
 package com.acooly.module.obs.client.oss;
 
+import com.acooly.module.obs.client.oss.model.WebServiceRequest;
 import com.acooly.module.obs.common.HttpMesssage;
 import com.acooly.module.obs.common.HttpMethod;
 

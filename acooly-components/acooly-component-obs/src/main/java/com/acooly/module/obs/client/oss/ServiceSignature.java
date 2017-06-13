@@ -1,6 +1,6 @@
 package com.acooly.module.obs.client.oss;
 
-import com.acooly.module.obs.client.oss.util.HmacSHA1Signature;
+import com.acooly.module.obs.common.util.HmacSHA1Signature;
 
 /** 表示用于计算访问签名的接口。 */
 public abstract class ServiceSignature {

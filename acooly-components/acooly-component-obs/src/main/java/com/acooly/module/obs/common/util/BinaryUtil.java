@@ -1,4 +1,4 @@
-package com.acooly.module.obs.client.oss.util;
+package com.acooly.module.obs.common.util;
 
 import org.apache.commons.codec.binary.Base64;
 

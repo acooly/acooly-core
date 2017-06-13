@@ -1,7 +1,6 @@
-package com.acooly.module.obs.client.oss.util;
+package com.acooly.module.obs.common.util;
 
 import com.acooly.module.obs.client.oss.ServiceSignature;
-import com.acooly.module.obs.client.oss.util.BinaryUtil;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;

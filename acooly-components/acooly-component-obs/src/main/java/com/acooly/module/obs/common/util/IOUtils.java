@@ -1,5 +1,5 @@
 
-package com.acooly.module.obs.client.oss.util;
+package com.acooly.module.obs.common.util;
 
 import com.acooly.module.obs.client.oss.OSSConstants;
 import com.acooly.module.obs.client.oss.RepeatableFileInputStream;

@@ -1,13 +1,16 @@
-package com.acooly.module.obs.client.oss.util;
+package com.acooly.module.obs.common.util;
 
 import com.acooly.module.obs.client.oss.OSSHeaders;
-import com.acooly.module.obs.model.ObjectMetadata;
+import com.acooly.module.obs.client.oss.ResponseParseException;
+import com.acooly.module.obs.common.model.ObjectMetadata;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.util.Iterator;
 import java.util.Map;
 
 import static com.acooly.module.obs.client.oss.OSSConstants.*;
@@ -92,8 +95,8 @@ public class OSSUtils {
         if (entry.getKey() != null && entry.getValue() != null) {
           String key = entry.getKey();
           //去掉"Content-Length"
-          if (CONTENT_LENGTH.equals(key)){
-              continue;
+          if (CONTENT_LENGTH.equals(key)) {
+            continue;
           }
 
           String value = entry.getValue().toString();
@@ -194,5 +197,41 @@ public class OSSUtils {
     }
 
     return hintLength;
+  }
+
+  /** Unmarshall object metadata from response headers. */
+  public static ObjectMetadata parseObjectMetadata(Map<String, String> headers)
+      throws ResponseParseException {
+
+    try {
+      ObjectMetadata objectMetadata = new ObjectMetadata();
+
+      for (Iterator<String> it = headers.keySet().iterator(); it.hasNext(); ) {
+        String key = it.next();
+
+        if (key.indexOf(OSSHeaders.OSS_USER_METADATA_PREFIX) >= 0) {
+          key = key.substring(OSSHeaders.OSS_USER_METADATA_PREFIX.length());
+          objectMetadata.addUserMetadata(
+              key, headers.get(OSSHeaders.OSS_USER_METADATA_PREFIX + key));
+        } else if (key.equals(OSSHeaders.LAST_MODIFIED) || key.equals(OSSHeaders.DATE)) {
+          try {
+            objectMetadata.setHeader(key, DateUtil.parseRfc822Date(headers.get(key)));
+          } catch (ParseException pe) {
+            throw new ResponseParseException(pe.getMessage(), pe);
+          }
+        } else if (key.equals(OSSHeaders.CONTENT_LENGTH)) {
+          Long value = Long.valueOf(headers.get(key));
+          objectMetadata.setHeader(key, value);
+        } else if (key.equals(OSSHeaders.ETAG)) {
+          objectMetadata.setHeader(key, trimQuotes(headers.get(key)));
+        } else {
+          objectMetadata.setHeader(key, headers.get(key));
+        }
+      }
+
+      return objectMetadata;
+    } catch (Exception e) {
+      throw new ResponseParseException(e.getMessage(), e);
+    }
   }
 }

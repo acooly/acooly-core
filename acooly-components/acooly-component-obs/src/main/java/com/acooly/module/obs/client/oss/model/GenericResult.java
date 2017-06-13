@@ -1,5 +1,6 @@
-package com.acooly.module.obs.client.oss;
+package com.acooly.module.obs.client.oss.model;
 
+import com.acooly.module.obs.client.oss.ResponseMessage;
 import lombok.Getter;
 import lombok.Setter;
 

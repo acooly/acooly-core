@@ -2,14 +2,16 @@ package com.acooly.module.obs.client;
 
 import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.module.obs.ObsProperties;
-import com.acooly.module.obs.client.oss.OSSObjectOperation;
-import com.acooly.module.obs.client.oss.PutObjectRequest;
-import com.acooly.module.obs.client.oss.PutObjectResult;
+import com.acooly.module.obs.client.oss.*;
+import com.acooly.module.obs.client.oss.model.GenericRequest;
+import com.acooly.module.obs.client.oss.model.GetObjectRequest;
+import com.acooly.module.obs.client.oss.model.PutObjectRequest;
+import com.acooly.module.obs.client.oss.model.PutObjectResult;
 import com.acooly.module.obs.exceptions.ClientException;
 import com.acooly.module.obs.exceptions.ObsException;
-import com.acooly.module.obs.model.ObjectMetadata;
-import com.acooly.module.obs.model.ObjectResult;
-import com.acooly.module.obs.model.ObsObject;
+import com.acooly.module.obs.common.model.ObjectMetadata;
+import com.acooly.module.obs.common.model.ObjectResult;
+import com.acooly.module.obs.common.model.ObsObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -90,32 +92,30 @@ public class AliyunObsClient extends AbstractObsClient {
   }
 
   @Override
-  public ObjectResult putObject(URL signedUrl, String filePath, Map<String, String> requestHeaders)
+  public ObjectResult putObject(URL signedUrl, File file, Map<String, String> requestHeaders)
       throws ObsException, ClientException {
     return null;
   }
 
   @Override
   public ObjectResult putObject(
-      URL signedUrl,
-      InputStream requestContent,
-      long contentLength,
-      Map<String, String> requestHeaders)
+      URL signedUrl, InputStream inputStream, Map<String, String> requestHeaders)
       throws ObsException, ClientException {
     return null;
   }
 
   @Override
   public ObsObject getObject(String bucketName, String key) throws ObsException, ClientException {
-    return null;
+    return objectOperation.getObject(new GetObjectRequest(bucketName, key));
   }
 
   @Override
-  public void deleteObject(String bucketName, String key) throws ObsException, ClientException {}
+  public void deleteObject(String bucketName, String key) throws ObsException, ClientException {
+     objectOperation.deleteObject(new GenericRequest(bucketName, key));
+  }
 
   @Override
   public void afterPropertiesSet() throws Exception {
-
     this.objectOperation = new OSSObjectOperation(properties);
   }
 }

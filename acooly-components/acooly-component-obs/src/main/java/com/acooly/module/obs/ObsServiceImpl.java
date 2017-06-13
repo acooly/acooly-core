@@ -3,9 +3,9 @@ package com.acooly.module.obs;
 import com.acooly.module.obs.client.ObsClient;
 import com.acooly.module.obs.exceptions.ClientException;
 import com.acooly.module.obs.exceptions.ObsException;
-import com.acooly.module.obs.model.ObjectMetadata;
-import com.acooly.module.obs.model.ObsObject;
-import com.acooly.module.obs.model.ObjectResult;
+import com.acooly.module.obs.common.model.ObjectMetadata;
+import com.acooly.module.obs.common.model.ObsObject;
+import com.acooly.module.obs.common.model.ObjectResult;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,29 +46,26 @@ public class ObsServiceImpl implements InitializingBean, ObsService {
     return obsClient.putObject(bucketName, key, input, metadata);
   }
 
-  @Override
-  public ObjectResult putObject(URL signedUrl, String filePath, Map<String, String> requestHeaders)
-      throws ObsException, ClientException {
-    return null;
-  }
+    @Override
+    public ObjectResult putObject(URL signedUrl, File file, Map<String, String> requestHeaders) throws ObsException, ClientException {
+        return null;
+    }
 
-  @Override
-  public ObjectResult putObject(
-      URL signedUrl,
-      InputStream requestContent,
-      long contentLength,
-      Map<String, String> requestHeaders)
-      throws ObsException, ClientException {
-    return null;
-  }
+    @Override
+    public ObjectResult putObject(URL signedUrl, InputStream inputStream, Map<String, String> requestHeaders) throws ObsException, ClientException {
+        return null;
+    }
 
-  @Override
+
+    @Override
   public ObsObject getObject(String bucketName, String key) throws ObsException, ClientException {
-    return null;
+    return obsClient.getObject(bucketName, key);
   }
 
   @Override
-  public void deleteObject(String bucketName, String key) throws ObsException, ClientException {}
+  public void deleteObject(String bucketName, String key) throws ObsException, ClientException {
+     obsClient.deleteObject(bucketName, key);
+  }
 
   @Override
   public void afterPropertiesSet() throws Exception {}

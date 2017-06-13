@@ -1,4 +1,4 @@
-package com.acooly.module.obs.client.oss.util;
+package com.acooly.module.obs.common.util;
 
 import lombok.extern.slf4j.Slf4j;
 

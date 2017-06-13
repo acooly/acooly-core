@@ -31,7 +31,6 @@ public class ObsProperties {
 
   @PostConstruct
   public void init() {
-
     if (this.provider == Provider.Aliyun) {
       Assert.notNull(this.aliyun);
       Assert.hasText(this.aliyun.getAccessKeyId());

@@ -1,19 +1,18 @@
 package com.acooly.core.test.web;
 
 import com.acooly.module.obs.ObsService;
-import com.acooly.module.obs.client.oss.util.BinaryUtil;
-import com.acooly.module.obs.common.util.DateUtil;
-import com.acooly.module.obs.model.ObjectMetadata;
-import com.acooly.module.obs.model.ObjectResult;
+import com.acooly.module.obs.common.util.BinaryUtil;
+import com.acooly.module.obs.common.model.ObjectMetadata;
+import com.acooly.module.obs.common.model.ObjectResult;
+import com.acooly.module.obs.common.model.ObsObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.poi.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Date;
 
 /** @author shuijing */
@@ -54,8 +53,8 @@ public class ObsTestController {
     meta.setContentLength(content.length());
     meta.setExpirationTime(DateUtils.addDays(new Date(), 30));
     // 设置上传MD5校验
-    //String md5 = BinaryUtil.toBase64String(BinaryUtil.calculateMd5(content.getBytes()));
-    //meta.setContentMD5(md5);
+    String md5 = BinaryUtil.toBase64String(BinaryUtil.calculateMd5(content.getBytes()));
+    meta.setContentMD5(md5);
     // 设置上传内容类型
     meta.setContentType("text/plain");
     ObjectResult result =
@@ -76,6 +75,26 @@ public class ObsTestController {
 
     ObjectResult result = obsService.putObject(bucketName, key, file, meta);
     log.info("put result:" + result.toString());
+  }
+
+  @RequestMapping("aliyun/getObject")
+  public void getObject() throws IOException {
+    String bucketName = "yijifu-acooly";
+    String key = "test/logoAbc.png";
+    ObsObject object = obsService.getObject(bucketName, key);
+    InputStream inputStream = object.getObjectContent();
+    FileOutputStream out = new FileOutputStream(new File("D:\\tmp\\logoAbc.png"));
+    IOUtils.copy(inputStream, out);
+    out.flush();
+    out.close();
+    inputStream.close();
+  }
+
+  @RequestMapping("aliyun/deleteObject")
+  public void deleteObject() throws IOException {
+    String bucketName = "yijifu-acooly";
+    String key = "test/logoAbc.png";
+    obsService.deleteObject(bucketName, key);
   }
 
   public static InputStream genFixedLengthInputStream(long fixedLength) {

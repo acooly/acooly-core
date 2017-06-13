@@ -1,6 +1,6 @@
-package com.acooly.module.obs.client.oss;
+package com.acooly.module.obs.client.oss.model;
 
-import com.acooly.module.obs.model.ObjectMetadata;
+import com.acooly.module.obs.common.model.ObjectMetadata;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,4 +1,4 @@
-package com.acooly.module.obs.model;
+package com.acooly.module.obs.common.model;
 
 import com.acooly.core.common.facade.ResultBase;
 import lombok.Data;

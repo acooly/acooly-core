@@ -6,6 +6,7 @@ import com.acooly.core.utils.ShutdownHooks;
 import com.acooly.core.utils.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import lombok.Data;
 import org.apache.http.Header;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -36,6 +37,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
@@ -303,12 +305,12 @@ public class Https {
         }
       }
       loggerRequest(request);
-      HttpResponse e1 = this.httpclient.execute(request);
-      loggerResponse(e1);
+      HttpResponse response = this.httpclient.execute(request);
+      loggerResponse(response);
 
-      int statusCode1 = e1.getStatusLine().getStatusCode();
+      int statusCode1 = response.getStatusLine().getStatusCode();
       if (enableRedirect && this.isRedirect(statusCode1)) {
-        Header locationHeader = e1.getFirstHeader("Location");
+        Header locationHeader = response.getFirstHeader("Location");
         if (locationHeader != null) {
           String location = locationHeader.getValue();
           if (location != null) {
@@ -319,10 +321,11 @@ public class Https {
           }
         }
       }
-
-      result.setBody(EntityUtils.toString(e1.getEntity(), charset));
-      result.setHeaders(readHeaders(e1));
-      result.setStatus(e1.getStatusLine().getStatusCode());
+      if (response.getEntity() != null) {
+        result.setBody(EntityUtils.toString(response.getEntity(), charset));
+      }
+      result.setHeaders(readHeaders(response));
+      result.setStatus(response.getStatusLine().getStatusCode());
       logger.debug("http result: result: {}", result);
       return result;
     } catch (IOException ioe) {
@@ -337,6 +340,51 @@ public class Https {
         request.releaseConnection();
       }
     }
+  }
+
+  public HttpResultEx execute(HttpRequestBase request, Map<String, ?> headerMap, String charset) {
+    HttpResultEx result = new HttpResultEx();
+    charset = getCharset(charset);
+    HttpResponse response = null;
+    try {
+      if (headerMap != null && !headerMap.isEmpty()) {
+        for (Entry<String, ?> entry : headerMap.entrySet()) {
+          if (entry.getValue() == null) {
+            request.setHeader(entry.getKey(), "");
+          } else {
+            request.setHeader(entry.getKey(), entry.getValue().toString());
+          }
+        }
+      }
+      loggerRequest(request);
+      response = this.httpclient.execute(request);
+      response.getEntity().getContent();
+      loggerResponse(response);
+      //result.setBody(EntityUtils.toString(response.getEntity(), charset));
+
+      result.setHeaders(readHeaders(response));
+      result.setStatus(response.getStatusLine().getStatusCode());
+      result.setContent(response.getEntity().getContent());
+      logger.debug("http result: result: {}", result);
+      return result;
+    } catch (IOException ioe) {
+      throw Exceptions.unchecked(ioe);
+    } catch (Exception ex) {
+      if (request != null) {
+        request.abort();
+      }
+      throw ex;
+    }
+    //    finally {
+    //        if (request != null) {
+    //            request.releaseConnection();
+    //        }
+    //    }
+  }
+
+  @Data
+  public class HttpResultEx extends HttpResult {
+    private InputStream content;
   }
 
   private Map<String, String> readHeaders(HttpResponse httpResponse) {

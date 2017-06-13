@@ -11,10 +11,8 @@ public abstract class AbstractObsClient implements ObsClient, InitializingBean {
 
   @Autowired private ObsProperties obsProperties;
 
-
   @Override
   public void afterPropertiesSet() throws Exception {
-
     timeout = obsProperties.getTimeout();
   }
 }

@@ -1,4 +1,4 @@
-package com.acooly.module.obs.model;
+package com.acooly.module.obs.common.model;
 
 import com.acooly.module.obs.common.util.DateUtil;
 import com.acooly.module.obs.common.HttpHeaders;
@@ -17,8 +17,6 @@ public class ObjectMetadata {
 
   // 非用户自定义的元数据。
   private Map<String, Object> metadata = new HashMap<String, Object>();
-
-  public static final String AES_256_SERVER_SIDE_ENCRYPTION = "AES256";
 
   /**
    * 获取用户自定义的元数据。
@@ -220,42 +218,6 @@ public class ObjectMetadata {
   }
 
   /**
-   * 获取一个值表示Object的服务器加密的熵编码
-   *
-   * @return 服务器端加密的熵编码，null表示没有进行加密
-   */
-  //    public String getServerSideEncryption() {
-  //        return (String)metadata.get(HttpHeaders.OSS_SERVER_SIDE_ENCRYPTION);
-  //    }
-
-  /**
-   * 设置Object服务器端熵编码的类型
-   *
-   * @param 服务器端加密的熵编码类型
-   */
-  //    public void setServerSideEncryption(String serverSideEncryption) {
-  //        metadata.put(HttpHeaders.OSS_SERVER_SIDE_ENCRYPTION, serverSideEncryption);
-  //    }
-
-  /**
-   * 获取Object存储类型，目前支持Normal、Appendable两类。
-   *
-   * @return Object存储类型。
-   */
-  //    public String getObjectType() {
-  //        return (String)metadata.get(HttpHeaders.OSS_OBJECT_TYPE);
-  //    }
-
-  /**
-   * 设置Object访问权限，目前支持default, private, public-read, public-read-write四种访问权限。
-   *
-   * @param cannedAcl Object访问权限。
-   */
-  //    public void setObjectAcl(CannedAccessControlList cannedAcl) {
-  //        metadata.put(HttpHeaders.OSS_OBJECT_ACL, cannedAcl != null ? cannedAcl.toString() : "");
-  //    }
-
-  /**
    * 返回内部保存的请求头的元数据（内部使用）。
    *
    * @return 内部保存的请求头的元数据（内部使用）。
@@ -264,51 +226,4 @@ public class ObjectMetadata {
     return Collections.unmodifiableMap(metadata);
   }
 
-  /**
-   * 获取RequestId。
-   *
-   * @return RequestId。
-   */
-  //    public String getRequestId() {
-  //        return (String)metadata.get(HttpHeaders.OSS_HEADER_REQUEST_ID);
-  //    }
-
-  /**
-   * 获取文件的存储类型
-   *
-   * @return
-   */
-  //    public StorageClass getObjectStorageClass() {
-  //        String storageClassString = (String)metadata.get(HttpHeaders.OSS_STORAGE_CLASS);
-  //        if (storageClassString != null) {
-  //            return StorageClass.parse(storageClassString);
-  //        }
-  //        return StorageClass.Standard;
-  //    }
-
-  /**
-   * 获取Archive类型文件Restore状态
-   *
-   * @return 文件Restore状态
-   */
-  //    public String getObjectRawRestore() {
-  //        return (String)metadata.get(HttpHeaders.OSS_RESTORE);
-  //    }
-
-  /**
-   * 获取Archive文件Restore是否完成
-   *
-   * @return Restore是否完成
-   */
-  //    public boolean isRestoreCompleted() {
-  //        String restoreString = getObjectRawRestore();
-  //        if (restoreString == null) {
-  //            throw new NullPointerException();
-  //        }
-  //
-  //        if (restoreString.equals(HttpHeaders.OSS_ONGOING_RESTORE)) {
-  //            return false;
-  //        }
-  //        return true;
-  //    }
 }

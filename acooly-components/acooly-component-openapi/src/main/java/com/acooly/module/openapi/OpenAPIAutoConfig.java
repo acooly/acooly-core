@@ -49,7 +49,7 @@ public class OpenAPIAutoConfig {
   @Bean
   public ServletRegistrationBean openAPIServlet(OpenAPIProperties properties) {
     ServletRegistrationBean bean = new ServletRegistrationBean();
-    bean.setUrlMappings(Lists.newArrayList("/gateway.html", "/gateway"));
+    bean.setUrlMappings(Lists.newArrayList("/gateway.html", "/gateway", "/gateway.do"));
     OpenAPIDispatchServlet openAPIDispatchServlet = new OpenAPIDispatchServlet();
     bean.setServlet(openAPIDispatchServlet);
     return bean;

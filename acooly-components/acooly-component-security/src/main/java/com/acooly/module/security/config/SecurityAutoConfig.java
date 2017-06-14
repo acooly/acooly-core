@@ -321,7 +321,7 @@ public class SecurityAutoConfig {
   @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".csrf.enable", matchIfMissing = true)
   public static class CSRFAutoConfigration {
     @Bean
-    public Filter csrfFilter(SecurityProperties securityProperties) {
+    public FilterRegistrationBean csrfFilter(SecurityProperties securityProperties) {
       CookieCsrfTokenRepository tokenRepository = new CookieCsrfTokenRepository();
       CsrfFilter csrfFilter = new CsrfFilter(tokenRepository);
       List<String> excludes = Lists.newArrayList();
@@ -337,7 +337,7 @@ public class SecurityAutoConfig {
       registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp").toArray(new String[0]));
       registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
       registration.setName("csrfDefenseFilter");
-      return csrfFilter;
+      return registration;
     }
   }
 

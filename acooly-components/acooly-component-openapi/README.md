@@ -1,3 +1,5 @@
+openapi访问路径请使用`http://ip:port/gateway.do`
+
 ## 测试帐号
 
     partnerId=test

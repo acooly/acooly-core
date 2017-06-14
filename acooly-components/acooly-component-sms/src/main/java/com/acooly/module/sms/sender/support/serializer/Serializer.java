@@ -4,5 +4,5 @@ import java.io.InputStream;
 
 /** @author shuijing */
 public interface Serializer<T> {
-  InputStream serialize(T obj, String encoding) throws Exception;
+  String serialize(T obj, String encoding) throws Exception;
 }

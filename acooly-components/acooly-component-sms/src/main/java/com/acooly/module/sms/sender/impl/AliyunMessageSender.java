@@ -26,6 +26,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -84,9 +85,8 @@ public class AliyunMessageSender extends AbstractShortMessageSender {
     instance.connectTimeout(timeout / 2);
     instance.readTimeout(timeout / 2);
     try {
-      InputStream xmlSerialize =
-          AliyunMessageSendSerializer.getInstance().serialize(paramString, "UTF-8");
-
+      String xml = AliyunMessageSendSerializer.getInstance().serialize(paramString, "UTF-8");
+      InputStream xmlSerialize = new ByteArrayInputStream(xml.getBytes("UTF-8"));
       //"http://1095791883952390.mns.cn-hangzhou.aliyuncs.com/topics/sms.topic-cn-hangzhou/messages"
       HttpPost httppost =
           new HttpPost(

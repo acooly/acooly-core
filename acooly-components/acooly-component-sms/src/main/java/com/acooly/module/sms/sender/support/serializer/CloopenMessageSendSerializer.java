@@ -28,7 +28,7 @@ public class CloopenMessageSendSerializer extends XMLSerializer<Map<String, Obje
   }
 
   @Override
-  public InputStream serialize(Map<String, Object> params, String encoding) throws Exception {
+  public String serialize(Map<String, Object> params, String encoding) throws Exception {
     Document doc = getDocmentBuilder().newDocument();
 
     Element root = doc.createElement(TEMPLATE_SMS);
@@ -61,8 +61,8 @@ public class CloopenMessageSendSerializer extends XMLSerializer<Map<String, Obje
     }
 
     String xml = XmlUtil.xmlNodeToString(doc, encoding);
+    return xml;
     //log.info("send xml is: {}",xml);
-    return new ByteArrayInputStream(xml.getBytes(encoding));
   }
 
   private static class SingletonHolder {

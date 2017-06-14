@@ -12,11 +12,13 @@ import com.acooly.module.sms.sender.support.serializer.CloopenMessageSendSeriali
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.DateUtils;
+import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.entity.InputStreamEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -44,10 +47,13 @@ import static com.acooly.module.sms.sender.support.serializer.CloopenMessageSend
  *     <p>只支持模板和签名为短信内容 发送接口send(String mobileNo, String content) content内容需为json格式 见测试用例： @See
  *     com.acooly.core.test.web.TestController#testCloopenSms()
  */
+@Slf4j
 @Service("cloopenMessageSender")
 public class CloopenMessageSender extends AbstractShortMessageSender {
 
   private final String SEND_URL_CLO = "https://app.cloopen.com:8883/";
+
+  private final String ENCODING = "UTF-8";
 
   @Autowired private SmsProperties properties;
 
@@ -84,9 +90,8 @@ public class CloopenMessageSender extends AbstractShortMessageSender {
     instance.connectTimeout(timeout / 2);
     instance.readTimeout(timeout / 2);
     try {
-      InputStream xmlSerialize =
-          CloopenMessageSendSerializer.getInstance().serialize(params, "UTF-8");
-
+      String xml = CloopenMessageSendSerializer.getInstance().serialize(params, ENCODING);
+      InputStream xmlSerialize = new ByteArrayInputStream(xml.getBytes(ENCODING));
       //2013-12-26/Accounts/{accountSid}/SMS/TemplateSMS?sig={SigParameter}
       HttpPost httppost =
           new HttpPost(
@@ -94,6 +99,9 @@ public class CloopenMessageSender extends AbstractShortMessageSender {
 
       InputStreamEntity inputStreamEntity = new InputStreamEntity(xmlSerialize);
       httppost.setEntity(inputStreamEntity);
+      BasicHttpEntity basicHttpEntity = new BasicHttpEntity();
+      basicHttpEntity.setContent(xmlSerialize);
+      basicHttpEntity.setContentLength(xml.getBytes(ENCODING).length);
 
       Map<String, String> headers = Maps.newHashMap();
       headers.put("Authorization", base64Sign);
@@ -102,7 +110,6 @@ public class CloopenMessageSender extends AbstractShortMessageSender {
 
       HttpResult result = instance.execute(null, httppost, headers, false, "utf-8");
       return handleResult(result, CloopenSmsSendVo.getGson().toJson(params));
-
     } catch (Exception e) {
       logger.warn("发送短信失败 {号码:" + mobileNo + ",内容:" + content + "}, 原因:" + e.getMessage());
       if (e instanceof BusinessException) {
@@ -120,7 +127,8 @@ public class CloopenMessageSender extends AbstractShortMessageSender {
   }
 
   private String cloopenSignMd5(String accountId, String appId, String crrDate) {
-    return DigestUtils.md5Hex((accountId + appId + crrDate).getBytes());
+    String md5Hex = DigestUtils.md5Hex((accountId + appId + crrDate));
+    return md5Hex.toUpperCase();
   }
 
   private String cloopenSignBase64(String accountId, String crrDate) {
@@ -146,8 +154,13 @@ public class CloopenMessageSender extends AbstractShortMessageSender {
       String statusCode = getCharacterDataFromElement(esn);
       if (!StringUtils.isEmpty(statusCode)) {
         if (CloopenMessageResponseParser.SUCCESS_CODE.equals(statusCode)) {
+          log.info("SMS cloopen send success {}", paramString);
           return "success";
         } else {
+          log.info(
+              "SMS cloopen send fail {},reason is {}",
+              paramString,
+              CloopenMessageResponseParser.codeMapping.get(statusCode));
           throw new BusinessException(
               CloopenMessageResponseParser.codeMapping.get(statusCode), statusCode);
         }

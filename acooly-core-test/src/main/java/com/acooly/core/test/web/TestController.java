@@ -15,6 +15,7 @@ import com.acooly.module.mail.MailDto;
 import com.acooly.module.mail.service.MailService;
 import com.acooly.module.sms.SmsService;
 import com.acooly.module.sms.sender.support.AliyunSmsSendVo;
+import com.acooly.module.sms.sender.support.CloopenSmsSendVo;
 import com.google.common.collect.Maps;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.List;
 
 /** @author qiubo@yiji.com */
 @RestController
@@ -54,6 +57,20 @@ public class TestController {
 
     smsService.send("18612299409", asa.toJson());
   }
+
+
+    @RequestMapping("cloopenSms")
+    public void testCloopen() {
+        CloopenSmsSendVo col = new CloopenSmsSendVo();
+
+        col.setTemplateId("181976");
+        List<String> data =new ArrayList<>();
+        data.add("17060915020001800000");
+        data.add("145317");
+        col.setDatas(data);
+
+        smsService.send("18612299409", col.toJson());
+    }
 
   @GetMapping("testPermission")
   public Boolean testPermission() {

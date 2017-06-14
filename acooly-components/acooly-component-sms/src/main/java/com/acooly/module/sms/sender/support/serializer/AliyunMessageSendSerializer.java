@@ -26,7 +26,7 @@ public class AliyunMessageSendSerializer extends XMLSerializer<String> {
   }
 
   @Override
-  public InputStream serialize(String paraMapStr, String encoding) throws Exception {
+  public String serialize(String paraMapStr, String encoding) throws Exception {
     Document doc = getDocmentBuilder().newDocument();
 
     Element root = doc.createElementNS(DEFAULT_XML_NAMESPACE, MESSAGE_TAG);
@@ -47,7 +47,7 @@ public class AliyunMessageSendSerializer extends XMLSerializer<String> {
 
     String xml = XmlUtil.xmlNodeToString(doc, encoding);
 
-    return new ByteArrayInputStream(xml.getBytes(encoding));
+    return xml;
   }
 
   private static class SingletonHolder {

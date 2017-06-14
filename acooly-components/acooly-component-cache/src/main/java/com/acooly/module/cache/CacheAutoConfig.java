@@ -39,7 +39,7 @@ public class CacheAutoConfig {
   }
 
   @Bean
-  @ConditionalOnProperty(value = "acooly.cache.checkVersion", matchIfMissing = true)
+  @ConditionalOnProperty(value = "acooly.cache.checkVersion")
   public RedisInfoChecker checkRedisVersion(RedisTemplate redisTemplate) {
     RedisInfoChecker checker = new RedisInfoChecker(redisTemplate);
     checker.checkRedisVersion();

@@ -1,6 +1,6 @@
 ###  1. openapi访问路径
 
-openapi访问路径请使用`http://ip:port/gateway.do`
+openapi访问路径请使用`http://ip:port/gateway.do`（此路径不会过一些无用的filter）
 
 ###  2. 测试帐号
 

@@ -102,6 +102,7 @@ public class SecurityProperties {
       addUrlFilter("/manage/*.jsp", "user");
       addUrlFilter("/manage/layout/*", "user");
       addUrlFilter("/manage/system/*", "user");
+      addUrlFilter("/manage/druid/**", "user");
       addUrlFilter("/manage/**", "urlAuthr");
       addUrlFilter("/**", "anon");
     }
@@ -135,6 +136,7 @@ public class SecurityProperties {
     @Getter @Setter private boolean enable = true;
     /** 路径支持ant表达式 */
     @Getter @Setter private Map<String, List<String>> exclusions = Maps.newHashMap();
+
     private List<String> ex = Lists.newArrayList();
 
     public boolean matches(HttpServletRequest request) {

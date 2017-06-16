@@ -69,6 +69,7 @@ public class AuthorizationFilter implements Filter {
   public void destroy() {}
 
   private boolean isPermitted(HttpServletRequest request) throws MalformedURLException {
+    long st = System.currentTimeMillis();
     if (rootPath == null) {
       String ssoServerUrl = ssoProperties.getSsoServerUrl();
       URL url = new URL(ssoServerUrl);
@@ -93,12 +94,14 @@ public class AuthorizationFilter implements Filter {
       logger.error("权限校验出错 uri is {}", requestURI, e);
       return false;
     }
+    long et = System.currentTimeMillis();
     if (!StringUtils.isEmpty(body) && (body.contains("true") || body.contains("false"))) {
       Boolean permitted = Boolean.valueOf(body);
-      logger.info("sso 用户:{}权限校验结果:{} url:{} ", username, permitted, requestURI);
+      logger.info(
+          "sso 用户:{}权限校验结果:{},耗时:{} ms, url:{} ", username, permitted, (et - st), requestURI);
       return Boolean.valueOf(body);
     }
-    logger.info("sso 用户:{}权限校验结果:{} url:{} ", username, false, requestURI);
+    logger.info("sso 用户:{}权限校验结果:{},耗时:{} ms, url:{} ", username, false, (et - st), requestURI);
     return false;
   }
 

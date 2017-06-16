@@ -26,6 +26,7 @@ import com.acooly.module.security.shiro.filter.UrlResourceAuthorizationFilter;
 import com.acooly.module.security.shiro.listener.ShireLoginLogoutSubject;
 import com.acooly.module.security.shiro.realm.PathMatchPermissionResolver;
 import com.acooly.module.security.shiro.realm.ShiroDbRealm;
+import com.alibaba.druid.support.http.StatViewServlet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.collections.MapUtils;
@@ -314,6 +315,16 @@ public class SecurityAutoConfig {
       bean.setLoadOnStartup(1);
       return bean;
     }
+  }
+
+  @Bean
+  public ServletRegistrationBean statViewServlet() {
+    ServletRegistrationBean bean = new ServletRegistrationBean();
+
+    StatViewServlet statViewServlet = new StatViewServlet();
+    bean.setUrlMappings(Lists.newArrayList("/manage/druid/*"));
+    bean.setServlet(statViewServlet);
+    return bean;
   }
 
   @Configuration

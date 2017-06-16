@@ -81,7 +81,7 @@ public class DruidProperties implements BeanClassLoaderAware {
 
   private boolean testOnBorrow = false;
 
-  private boolean useTomcatDataSource=false;
+  private boolean useTomcatDataSource = false;
 
   private ClassLoader beanClassLoader;
 
@@ -172,27 +172,26 @@ public class DruidProperties implements BeanClassLoaderAware {
     //fixme 开启ps cache
     //dataSource.setPoolPreparedStatements(!druidProperties.mysql());
     Properties properties = new Properties();
-    if (this.isShowSql()) {
-      properties.put("yiji.ds.logForHumanRead", Boolean.TRUE.toString());
-    }
+    properties.put("druid.stat.logSlowSql", Boolean.TRUE.toString());
     if (!Env.isOnline()) {
       if (Apps.isDevMode()) {
-        properties.put("yiji.ds.slowSqlMillis", Integer.toString(0));
+        properties.put("druid.stat.slowSqlMillis", Integer.toString(0));
       } else {
         //线下测试时，执行时间超过100ms就打印sql，用户可以设置为0，每条sql语句都打印
         properties.put(
-            "yiji.ds.slowSqlMillis",
+            "druid.stat.slowSqlMillis",
             Integer.toString(Math.min(this.getSlowSqlThreshold(), DEFAULT_SLOW_SQL_THRESHOLD)));
       }
     } else {
       //线上运行时，阈值选最大值。有可能线下测试设置为0，方便调试
       properties.put(
-          "yiji.ds.slowSqlMillis",
+          "druid.stat.slowSqlMillis",
           Integer.toString(Math.max(this.getSlowSqlThreshold(), DEFAULT_SLOW_SQL_THRESHOLD)));
     }
-    properties.put("yiji.ds.maxResult", Integer.toString(this.getMaxResultThreshold()));
     dataSource.setConnectProperties(properties);
+
     try {
+      dataSource.setFilters("stat");
       dataSource.init();
     } catch (SQLException e) {
       throw new AppConfigException("druid连接池初始化失败", e);

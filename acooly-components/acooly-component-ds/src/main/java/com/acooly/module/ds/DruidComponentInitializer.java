@@ -10,7 +10,6 @@
  */
 package com.acooly.module.ds;
 
-import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.component.ComponentInitializer;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -24,7 +23,6 @@ public class DruidComponentInitializer implements ComponentInitializer {
   public void initialize(ConfigurableApplicationContext applicationContext) {
     //tuning druid logger ,avoid log4j initialize
     System.setProperty("druid.logType", "slf4j");
-    System.setProperty("yiji.appName", Apps.getAppName());
     //关闭org.springframework.boot.autoconfigure.jdbc.DataSourceInitializer加载数据源,在加载多个数据源时会出错
     if (Strings.isNullOrEmpty(System.getProperty("spring.datasource.initialize"))) {
       System.setProperty("spring.datasource.initialize", Boolean.FALSE.toString());

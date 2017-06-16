@@ -203,6 +203,10 @@ INSERT INTO `sys_resource` VALUES ('2016093009', '1', '机构管理', 'URL', '0'
 insert into SYS_RESOURCE (ID, PARENTID, NAME, TYPE, VALUE, SHOW_STATE, SHOW_MODE, ORDER_TIME, ICON, DESCN)
 values (7, 1, '桌面管理', 'URL', '/manage/system/portallet/index.html', 0, 1, '2014-01-08 02:39:40', 'icons-resource-wangzhan1', null);
 
+insert into SYS_RESOURCE (ID, PARENTID, NAME, TYPE, VALUE, SHOW_STATE, SHOW_MODE, ORDER_TIME, ICON, DESCN)
+values (8, 1, '连接池监控', 'URL', '/manage/druid/index.html', 0, 2, '2014-01-08 02:39:40', 'icons-resource-eye', null);
+
+
 insert into SYS_ROLE (ID, NAME, DESCN) values (1, 'ROLE_SYSTEM', '系统管理角色');
 
 insert into SYS_ROLE_RESC (ROLE_ID, RESC_ID)
@@ -221,7 +225,8 @@ insert into SYS_ROLE_RESC (ROLE_ID, RESC_ID)
 values (1, 2016093009);
 insert into SYS_ROLE_RESC (ROLE_ID, RESC_ID)
 values (1, 7);
-
+insert into SYS_ROLE_RESC (ROLE_ID, RESC_ID)
+values (1, 8);
 insert into SYS_USER (ID, USERNAME, REAL_NAME, PASSWORD, SALT, USER_TYPE, EMAIL, MOBILE_NO, CREATE_TIME, LAST_MODIFY_TIME, EXPIRATION_TIME, UNLOCK_TIME, LOGIN_STATUS,LOGIN_FAIL_TIMES,LOGIN_TIME,STATUS, DESCN)
 values (1, 'admin', '张浦', 'ab7cc1898fe24ef738595e56759b17893f2dbcc6', 'f10a5bda42097431', 1, 'zp820705@163.com', '13896177630', '2014-01-07', '2014-01-07', null, null, 1,0,null,1, null);
 

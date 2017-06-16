@@ -33,12 +33,12 @@ public class DruidLogInitializer extends AbstractLogInitializer {
       configurator.log("设置数据库访问性能日志，日志文件为:%s", fileName);
       //创建异步file appender
       Appender<ILoggingEvent> appender =
-          configurator.asyncFileAppender("DRUID-SQL", "%msg%n", fileName, 2);
+          configurator.asyncFileAppender("DRUID-SQL", "%d{yyyy-MM-dd HH:mm:ss.SSS} %msg%n", fileName, 2);
       //异步日志不收集栈信息
       if (appender instanceof LogbackAsyncAppender) {
         ((LogbackAsyncAppender) appender).setIncludeCallerData(false);
       }
-      configurator.logger("com.yiji.common.ds.sql", Level.INFO, false, appender);
+      configurator.logger("com.alibaba.druid.filter.stat.StatFilter", Level.INFO, false, appender);
     }
   }
 }

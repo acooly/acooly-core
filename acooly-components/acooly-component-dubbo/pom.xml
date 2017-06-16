@@ -37,7 +37,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>dubbo</artifactId>
-            <version>yiji-2.5.18</version>
+            <version>yiji-2.5.21</version>
             <exclusions>
                 <exclusion>
                     <artifactId>spring</artifactId>

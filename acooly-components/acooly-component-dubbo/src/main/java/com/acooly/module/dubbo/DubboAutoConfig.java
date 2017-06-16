@@ -177,6 +177,10 @@ public class DubboAutoConfig implements InitializingBean {
     if (dubboProperties.isProviderLog()) {
       config.setFilter("providerLogFilter");
     }
+    String providerIp = Apps.getEnvironment().getProperty("dubbo.provider.ip");
+    if (!Strings.isNullOrEmpty(providerIp)) {
+      config.setHost(providerIp);
+    }
     return config;
   }
 

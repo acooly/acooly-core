@@ -38,3 +38,7 @@
 #### 4.1 获取请求上下文信息
 
 参考`com.acooly.module.dubbo.DubboRequestContext`
+
+### 4.2 如何设置provider暴露ip
+
+设置启动变量`-Ddubbo.provider.ip=xxx`或设置配置文件。

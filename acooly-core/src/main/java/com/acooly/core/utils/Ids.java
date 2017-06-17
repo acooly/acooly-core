@@ -4,13 +4,8 @@ import com.acooly.core.utils.system.IPUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.jvm.hotspot.oops.BranchData;
 
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -147,7 +142,7 @@ public class Ids {
                     timeCount = 1;
                     break;
                 }
-                if(sequence.compareAndSet(timeCount, timeCount + 1)){
+                if (sequence.compareAndSet(timeCount, timeCount + 1)) {
                     break;
                 }
             }

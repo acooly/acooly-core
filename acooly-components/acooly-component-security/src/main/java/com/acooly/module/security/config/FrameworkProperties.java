@@ -55,6 +55,8 @@ public class FrameworkProperties implements Serializable {
   private Map<Integer, String> userStatus = Maps.newLinkedHashMap();
   /** 用户类型 */
   private Map<Integer, String> userTypes = Maps.newLinkedHashMap();
+  /** 登录短信验证码重新发送时间间隔 s*/
+  public int smsSendInterval = 30;
 
   public FrameworkProperties() {
     userStatus.put(User.STATUS_ENABLE, "正常");

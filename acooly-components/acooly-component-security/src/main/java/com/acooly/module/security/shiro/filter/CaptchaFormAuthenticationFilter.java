@@ -1,5 +1,6 @@
 package com.acooly.module.security.shiro.filter;
 
+import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.Strings;
@@ -40,11 +41,16 @@ import java.util.Map;
 @Slf4j
 public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 
+  public static final String SMS_VERIFY_CODE_KEY = "SMS_VERIFY_CODE_KEY";
+  /** 短信验证码发送开始时间 */
+  public static final String SMS_VERIFY_CODE_KEY_ST = "SMS_VERIFY_CODE_KEY_ST";
+
   public static final String CAPTCHA_FIRST_VERFIY = "CaptchaFirstVerfiy";
   private static final Logger logger =
       LoggerFactory.getLogger(CaptchaFormAuthenticationFilter.class);
   /** 界面请求的Input-form表单名称 */
   public String captchaInputName = "captcha";
+
   @Autowired protected UserService userService;
   /** 登录失败Redirect URL */
   private String failureUrl = "/manage/onLoginFailure.html";
@@ -69,9 +75,18 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
     try {
 
       User user = checkUserStatus(token, httpServletRequest);
-      if (user.getLoginFailTimes() > 0) {
-        checkCaptcha(httpServletRequest);
+
+      //开启短信验证码
+      if (isLoginSmsEnable()) {
+        if (!checkSmsCaptcha()) {
+          throw new InvaildCaptchaException("验证码错误.");
+        }
+      } else {
+        if (user.getLoginFailTimes() > 0) {
+          checkCaptcha(httpServletRequest);
+        }
       }
+
       Subject subject = getSubject(httpServletRequest, response);
       subject.login(token);
       shireLoginLogoutSubject.afterLogin(
@@ -159,6 +174,19 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
     }
   }
 
+  /** 验证短信验证码 */
+  protected boolean checkSmsCaptcha() {
+    String captchaInputName = ServletUtil.getRequestParameter(this.captchaInputName);
+    String code = (String) ServletUtil.getSessionAttribute(SMS_VERIFY_CODE_KEY);
+    if (StringUtils.isEmpty(code)) {
+      return false;
+    }
+    if (code.equals(captchaInputName)) {
+      return true;
+    }
+    return false;
+  }
+
   @Override
   protected boolean onLoginSuccess(
       AuthenticationToken token, Subject subject, ServletRequest request, ServletResponse response)
@@ -227,5 +255,15 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 
   public void setShireLoginLogoutSubject(ShireLoginLogoutSubject shireLoginLogoutSubject) {
     this.shireLoginLogoutSubject = shireLoginLogoutSubject;
+  }
+
+  public static boolean isLoginSmsEnable() {
+    boolean enable = false;
+    String loginSmsEnable = System.getProperty("acooly.security.loginSmsEnable");
+    if (loginSmsEnable == null) {
+      loginSmsEnable = EnvironmentHolder.get().getProperty("acooly.security.loginSmsEnable");
+    }
+    enable = Boolean.valueOf(loginSmsEnable);
+    return enable;
   }
 }

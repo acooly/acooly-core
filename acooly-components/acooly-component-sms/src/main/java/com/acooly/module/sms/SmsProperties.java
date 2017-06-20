@@ -145,7 +145,6 @@ public class SmsProperties {
     private String sn;
     /** 密码,请通过亿美销售人员获取 */
     private String password;
-
     /** 短信签名 */
     private String sign;
   }
@@ -162,10 +161,7 @@ public class SmsProperties {
   }
 
   /**
-   * 阿里云短信通道 阿里云通道只支持模板和签名为短信内容 发送接口send(String mobileNo, String content) content内容需为json格式 如：
-   * AliyunSmsSendVo vo=new AliyunSmsSendVo(); params.put("customer", "Testcustomer");
-   * asa.setFreeSignName("观世宇"); asa.setSmsParamsMap(params); asa.setTemplateCode("SMS_67185863");
-   * content = asa.toJson(); @See com.acooly.core.test.web.TestController#testAliyunSms()
+   * 阿里云短信通道 阿里云通道只支持模板和签名为短信内容 @See com.acooly.core.test.web.TestController#testAliyunSms()
    */
   @Data
   public static class Aliyun {
@@ -184,8 +180,10 @@ public class SmsProperties {
   public static class Cloopen {
     /** 主账号id */
     private String accountId;
-
     private String accountToken;
     private String appId;
+
+    /** 登录验证码模板id，仅当开启登录短信的时候配置 */
+    private String loginVerifCodeTemplateId;
   }
 }

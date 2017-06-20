@@ -29,6 +29,7 @@ import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -58,9 +59,10 @@ public abstract class StandardDatabaseScriptIniter
         Assert.isTrue(evaluateTable.contains(componentName));
       }
       String evaluateSql = String.format(EVALUATE_SQL_PATTERN, evaluateTable);
+      Connection connection = null;
       try {
-        ScriptUtils.executeSqlScript(
-            dataSource.getConnection(), new ByteArrayResource(evaluateSql.getBytes()));
+        connection = dataSource.getConnection();
+        ScriptUtils.executeSqlScript(connection, new ByteArrayResource(evaluateSql.getBytes()));
       } catch (DataAccessException e) {
         Throwable throwable = Throwables.getRootCause(e);
         String msg = throwable.getMessage();
@@ -78,7 +80,14 @@ public abstract class StandardDatabaseScriptIniter
             logger.error("组件相关表不存在，请初始化[{}]", files);
             Apps.shutdown();
           }
-          abFiles.forEach(sqlPath -> exeSqlFile(componentName, dataSource, sqlPath));
+          if (connection != null) {
+            Connection conn = connection;
+            abFiles.forEach(sqlPath -> exeSqlFile(componentName, conn, sqlPath));
+          }
+        }
+      } finally {
+        if (connection != null) {
+          connection.close();
         }
       }
     } catch (SQLException e) {
@@ -95,13 +104,13 @@ public abstract class StandardDatabaseScriptIniter
   /** 数据库初始化脚本文件名 */
   public abstract List<String> getInitSqlFile();
 
-  private void exeSqlFile(String componentName, DataSource dataSource, String sqlpath) {
+  private void exeSqlFile(String componentName, Connection connection, String sqlpath) {
     logger.info("发现组件或模块[{}]基础数据还没有初始化，开始初始化:{}", componentName, sqlpath);
     try {
       Resource scriptResource = ApplicationContextHolder.get().getResource("classpath:" + sqlpath);
       EncodedResource encodedResource = new EncodedResource(scriptResource, Charsets.UTF_8);
-      ScriptUtils.executeSqlScript(dataSource.getConnection(), encodedResource);
-    } catch (SQLException e) {
+      ScriptUtils.executeSqlScript(connection, encodedResource);
+    } catch (Exception e) {
       throw new AppConfigException("初始化" + componentName + "失败", e);
     }
   }

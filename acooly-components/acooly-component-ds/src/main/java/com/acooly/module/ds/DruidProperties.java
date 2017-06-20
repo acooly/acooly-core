@@ -163,7 +163,7 @@ public class DruidProperties implements BeanClassLoaderAware {
 
     dataSource.setRemoveAbandoned(true);
     dataSource.setRemoveAbandonedTimeout(3600);
-
+    dataSource.setLogAbandoned(true);
     if (this.mysql()) {
       String validationQuery = "select 'x'";
       dataSource.setValidationQuery(validationQuery);

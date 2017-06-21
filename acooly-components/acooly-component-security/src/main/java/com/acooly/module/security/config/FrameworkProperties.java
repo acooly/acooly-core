@@ -17,6 +17,7 @@ import java.util.Map;
 @Setter
 @ToString
 public class FrameworkProperties implements Serializable {
+  private static final long serialVersionUID = 1L;
   public static final int SHOW_STATE_YES = 0;
   public static final int SHOW_STATE_NO = 1;
   public static final int SHOW_MODE_AJAXLOAD = 1;
@@ -55,7 +56,7 @@ public class FrameworkProperties implements Serializable {
   private Map<Integer, String> userStatus = Maps.newLinkedHashMap();
   /** 用户类型 */
   private Map<Integer, String> userTypes = Maps.newLinkedHashMap();
-  /** 登录短信验证码重新发送时间间隔 s*/
+  /** 登录短信验证码重新发送时间间隔 s */
   public int smsSendInterval = 30;
 
   public FrameworkProperties() {

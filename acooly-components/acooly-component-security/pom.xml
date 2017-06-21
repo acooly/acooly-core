@@ -64,5 +64,10 @@
             <artifactId>jjwt</artifactId>
             <version>0.6.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-ds</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

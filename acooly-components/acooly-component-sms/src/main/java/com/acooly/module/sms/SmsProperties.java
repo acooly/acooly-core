@@ -184,6 +184,6 @@ public class SmsProperties {
     private String appId;
 
     /** 登录验证码模板id，仅当开启登录短信的时候配置 */
-    private String loginVerifCodeTemplateId;
+    private String loginVerifCodeTemplateId = "183256";
   }
 }

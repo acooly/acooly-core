@@ -96,21 +96,29 @@ public class PageExecutorInterceptor implements Interceptor {
       Object parameterObject)
       throws Throwable {
     String countSql = getCountSql(originalSql);
-    Connection connection =
-        mappedStatement.getConfiguration().getEnvironment().getDataSource().getConnection();
-    PreparedStatement countStmt = connection.prepareStatement(countSql);
-    BoundSql countBS = copyFromBoundSql(mappedStatement, boundSql, countSql);
-    DefaultParameterHandler parameterHandler =
-        new DefaultParameterHandler(mappedStatement, parameterObject, countBS);
-    parameterHandler.setParameters(countStmt);
-    ResultSet rs = countStmt.executeQuery();
+    Connection connection = null;
     long totpage = 0;
-    if (rs.next()) {
-      totpage = rs.getLong(1);
+    try {
+      connection =
+          mappedStatement.getConfiguration().getEnvironment().getDataSource().getConnection();
+      PreparedStatement countStmt = connection.prepareStatement(countSql);
+      BoundSql countBS = copyFromBoundSql(mappedStatement, boundSql, countSql);
+      DefaultParameterHandler parameterHandler =
+          new DefaultParameterHandler(mappedStatement, parameterObject, countBS);
+      parameterHandler.setParameters(countStmt);
+      ResultSet rs = countStmt.executeQuery();
+      totpage = 0;
+      if (rs.next()) {
+        totpage = rs.getLong(1);
+      }
+      rs.close();
+      countStmt.close();
+    } finally {
+      if (connection != null) {
+        connection.close();
+      }
     }
-    rs.close();
-    countStmt.close();
-    connection.close();
+
     return totpage;
   }
 

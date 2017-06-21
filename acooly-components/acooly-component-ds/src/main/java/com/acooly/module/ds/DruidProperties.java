@@ -83,6 +83,9 @@ public class DruidProperties implements BeanClassLoaderAware {
 
   private boolean useTomcatDataSource = false;
 
+  /** 自动创建表 */
+  private boolean autoCreateTable = true;
+
   private ClassLoader beanClassLoader;
 
   private Checker checker = new Checker();

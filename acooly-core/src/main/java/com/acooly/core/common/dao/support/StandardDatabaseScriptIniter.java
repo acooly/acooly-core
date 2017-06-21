@@ -47,6 +47,11 @@ public abstract class StandardDatabaseScriptIniter
 
   @Override
   public void onApplicationEvent(DataSourceReadyEvent event) {
+    if (Env.isOnline()
+        || !Apps.getEnvironment()
+            .getProperty("acooly.ds.autoCreateTable", Boolean.class, Boolean.TRUE)) {
+      return;
+    }
     DataSource dataSource = (DataSource) event.getSource();
     try {
       DatabaseType databaseType =
@@ -75,10 +80,6 @@ public abstract class StandardDatabaseScriptIniter
                 String.format(
                     INIT_SQL_PATTERN, componentName, databaseType.name().toLowerCase(), file);
             abFiles.add(initSql);
-          }
-          if (Env.isOnline()) {
-            logger.error("组件相关表不存在，请初始化[{}]", files);
-            Apps.shutdown();
           }
           if (connection != null) {
             Connection conn = connection;

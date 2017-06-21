@@ -21,6 +21,7 @@
         <module>acooly-configuration-processor</module>
         <module>acooly-archetype</module>
         <module>acooly-core-docs</module>
+        <module>acooly-common</module>
     </modules>
     <dependencies>
         <dependency>

@@ -97,8 +97,8 @@ public class UserSmsController {
     return result;
   }
 
-  public boolean isMobileNO(String mobiles) {
-    Pattern p = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0-9]))\\d{8}$");
+  public static boolean isMobileNO(String mobiles) {
+    Pattern p = Pattern.compile("^[1][3,4,5,7,8][0-9]{9}$");
     Matcher m = p.matcher(mobiles);
     return m.matches();
   }

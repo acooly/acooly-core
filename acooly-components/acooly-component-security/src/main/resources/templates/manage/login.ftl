@@ -237,7 +237,6 @@
         var SEND_INTERVAL = $('#smsSendInterval').val();
         var timeLeft = SEND_INTERVAL;
         btn.bind('click', function () {
-            debugger;
             if (!$('#form-username').val()) {
                 $('#message').html('用户名不能为空!');
                 return;

@@ -17,7 +17,7 @@ import java.util.Map;
 @Setter
 @ToString
 public class FrameworkProperties implements Serializable {
-  private static final long serialVersionUID = -687823029475930101L;
+  private static final long serialVersionUID = 1L;
   public static final int SHOW_STATE_YES = 0;
   public static final int SHOW_STATE_NO = 1;
   public static final int SHOW_MODE_AJAXLOAD = 1;

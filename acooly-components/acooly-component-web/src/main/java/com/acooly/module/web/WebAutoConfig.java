@@ -209,14 +209,6 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
         variables.put("ssoEnable", Boolean.valueOf(ssoEnable));
       }
 
-      String loginSmsEnable = System.getProperty("acooly.security.loginSmsEnable");
-      if (loginSmsEnable == null) {
-        loginSmsEnable = EnvironmentHolder.get().getProperty("acooly.security.loginSmsEnable");
-      }
-      if (!StringUtils.isEmpty(loginSmsEnable)) {
-        variables.put("loginSmsEnable", Boolean.valueOf(loginSmsEnable));
-      }
-
       configurer.setFreemarkerVariables(variables);
       applyProperties(configurer);
       return configurer;

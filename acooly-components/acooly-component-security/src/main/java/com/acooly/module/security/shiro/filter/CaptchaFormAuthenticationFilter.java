@@ -8,6 +8,7 @@ import com.acooly.core.utils.net.ServletUtil;
 import com.acooly.core.utils.security.JWTUtils;
 import com.acooly.module.security.captche.Captchas;
 import com.acooly.module.security.config.FrameworkPropertiesHolder;
+import com.acooly.module.security.config.SecurityProperties;
 import com.acooly.module.security.domain.User;
 import com.acooly.module.security.service.UserService;
 import com.acooly.module.security.shiro.exception.InvaildCaptchaException;
@@ -258,12 +259,8 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
   }
 
   public static boolean isLoginSmsEnable() {
-    boolean enable = false;
-    String loginSmsEnable = System.getProperty("acooly.security.loginSmsEnable");
-    if (loginSmsEnable == null) {
-      loginSmsEnable = EnvironmentHolder.get().getProperty("acooly.security.loginSmsEnable");
-    }
-    enable = Boolean.valueOf(loginSmsEnable);
-    return enable;
+    return EnvironmentHolder.get()
+        .getProperty(
+            "acooly.security.loginSmsEnable", Boolean.class, SecurityProperties.DEFAULT_LOGIN_SMS);
   }
 }

@@ -69,6 +69,13 @@ public class CityDaoController {
     return cityDao.selectAllByPage(pageInfo);
   }
 
+  @RequestMapping(value = "/selectAllByPage1", method = RequestMethod.GET)
+  public PageInfo<City> selectAllByPage1() {
+    PageInfo<City> pageInfo = new PageInfo<>();
+    pageInfo.setCountOfCurrentPage(2);
+    return cityDao.selectAllByPage1(pageInfo);
+  }
+
   @RequestMapping(value = "/selectAll", method = RequestMethod.GET)
   public List<City> selectAll() {
     return cityDao.selectAll();
@@ -83,9 +90,9 @@ public class CityDaoController {
   @RequestMapping(value = "/get", method = RequestMethod.GET)
   public City get(Long id) {
     cityDao.flush();
-      City city = cityDao.get(id);
-      log.info("{}",city);
-      return city;
+    City city = cityDao.get(id);
+    log.info("{}", city);
+    return city;
   }
 
   @RequestMapping(value = "/getAll", method = RequestMethod.GET)

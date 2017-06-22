@@ -12,6 +12,7 @@ package com.acooly.core.test.dao;
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.test.domain.City;
 import com.acooly.module.mybatis.EntityMybatisDao;
+import com.acooly.module.mybatis.metadata.CountSql;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -33,4 +34,7 @@ public interface CityMybatisDao extends EntityMybatisDao<City> {
 
   @Select("select * from City  where id=#{id} for update")
   City selectById(@Param("id") Long id);
+
+  @CountSql("select count(*) from City")
+  PageInfo<City> selectAllByPage1(PageInfo pageInfo);
 }

@@ -2,7 +2,10 @@ package com.acooly.module.mybatis.interceptor;
 
 import com.acooly.core.common.dao.dialect.DatabaseDialectManager;
 import com.acooly.core.common.dao.support.PageInfo;
+import com.acooly.module.mybatis.metadata.CountSql;
 import com.acooly.module.mybatis.page.MyBatisPage;
+import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -14,6 +17,7 @@ import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,6 +34,8 @@ import java.util.Properties;
   )
 })
 public class PageExecutorInterceptor implements Interceptor {
+
+  private static Map<String, String> countSqlMap = Maps.newConcurrentMap();
 
   @SuppressWarnings({"rawtypes", "unchecked"})
   @Override
@@ -95,28 +101,72 @@ public class PageExecutorInterceptor implements Interceptor {
       BoundSql boundSql,
       Object parameterObject)
       throws Throwable {
-    String countSql = getCountSql(originalSql);
-    Connection connection =
-        mappedStatement.getConfiguration().getEnvironment().getDataSource().getConnection();
-    PreparedStatement countStmt = connection.prepareStatement(countSql);
-    BoundSql countBS = copyFromBoundSql(mappedStatement, boundSql, countSql);
-    DefaultParameterHandler parameterHandler =
-        new DefaultParameterHandler(mappedStatement, parameterObject, countBS);
-    parameterHandler.setParameters(countStmt);
-    ResultSet rs = countStmt.executeQuery();
+    String countSql = getCountSql(mappedStatement, originalSql);
+    Connection connection = null;
     long totpage = 0;
-    if (rs.next()) {
-      totpage = rs.getLong(1);
+    try {
+      connection =
+          mappedStatement.getConfiguration().getEnvironment().getDataSource().getConnection();
+      PreparedStatement countStmt = connection.prepareStatement(countSql);
+      BoundSql countBS = copyFromBoundSql(mappedStatement, boundSql, countSql);
+      DefaultParameterHandler parameterHandler =
+          new DefaultParameterHandler(mappedStatement, parameterObject, countBS);
+      parameterHandler.setParameters(countStmt);
+      ResultSet rs = countStmt.executeQuery();
+      totpage = 0;
+      if (rs.next()) {
+        totpage = rs.getLong(1);
+      }
+      rs.close();
+      countStmt.close();
+    } finally {
+      if (connection != null) {
+        connection.close();
+      }
     }
-    rs.close();
-    countStmt.close();
-    connection.close();
+
     return totpage;
   }
 
   /** 根据原Sql语句获取对应的查询总记录数的Sql语句 */
-  private String getCountSql(String sql) {
-    return "SELECT COUNT(*) FROM (" + sql + ") forPageCount";
+  private String getCountSql(MappedStatement mappedStatement, String sql) {
+    String countSqlByAnnotation = getCountSqlByAnnotation(mappedStatement);
+
+    return !Strings.isNullOrEmpty(countSqlByAnnotation)
+        ? countSqlByAnnotation
+        : "SELECT COUNT(*) FROM (" + sql + ") forPageCount";
+  }
+
+  private String getCountSqlByAnnotation(MappedStatement mappedStatement) {
+    String id = mappedStatement.getId();
+    String cached = countSqlMap.get(id);
+    if (cached == null) {
+      String countSql = "";
+      try {
+        if (!Strings.isNullOrEmpty(id)) {
+          int idx = id.lastIndexOf('.');
+          String className = id.substring(0, idx);
+          String methodName = id.substring(idx + 1);
+          Method[] methods = new Method[0];
+
+          methods = Class.forName(className).getMethods();
+          for (Method method : methods) {
+            if (method.getName().equals(methodName)) {
+              CountSql annotation = method.getAnnotation(CountSql.class);
+              if (annotation != null) {
+                countSql = annotation.value();
+                break;
+              }
+            }
+          }
+        }
+      } catch (Exception e) {
+        //ignore
+      }
+      countSqlMap.put(id, countSql);
+      cached = countSql;
+    }
+    return cached;
   }
 
   /** 复制MappedStatement对象 */

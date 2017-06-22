@@ -31,6 +31,8 @@ public class SecurityProperties {
 
   public static final String PREFIX = "acooly.security";
   public static final boolean DEFAULT_SHIRO_FILTER_ANON = false;
+  public static final boolean DEFAULT_LOGIN_SMS = false;
+
   /** 是否启用shiro */
   private boolean enable = true;
 
@@ -41,6 +43,9 @@ public class SecurityProperties {
 
   /** 开启后shiro filter链都会设为不拦截，可在系统不需要任何授权、认证时开启 */
   private boolean shiroFilterAnon = DEFAULT_SHIRO_FILTER_ANON;
+
+  /** 开启短信验证 */
+  private boolean loginSmsEnable = DEFAULT_LOGIN_SMS;
 
   @PostConstruct
   public void initXss() {

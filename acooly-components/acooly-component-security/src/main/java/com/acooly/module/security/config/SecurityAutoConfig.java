@@ -39,6 +39,7 @@ import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSource
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.mgt.WebSecurityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -47,6 +48,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -57,8 +59,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
+import javax.servlet.ServletContext;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +74,9 @@ import java.util.Map;
 @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = {"com.acooly.module.security"})
 public class SecurityAutoConfig {
+
+  @Autowired SecurityProperties securityProperties;
+  @Autowired private ServletContext servletContext;
 
   @Bean
   public AbstractDatabaseScriptIniter securityScriptIniter() {
@@ -412,6 +419,13 @@ public class SecurityAutoConfig {
     public List<String> getInitSqlFile(DatabaseType databaseType) {
       return Lists.newArrayList(
           "META-INF/database/security/" + databaseType.name() + "/security.sql");
+    }
+  }
+
+  @PostConstruct
+  public void ssoContextInitializer() {
+    if (securityProperties.isLoginSmsEnable()) {
+      servletContext.setAttribute("loginSmsEnable", true);
     }
   }
 }

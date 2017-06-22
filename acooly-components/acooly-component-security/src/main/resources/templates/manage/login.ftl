@@ -64,7 +64,7 @@
                                    id="form-password">
                         </div>
 
-                    <#if loginSmsEnable>
+                    <#if Application.loginSmsEnable?exists>
                         <div class="form-group input-group" style="white-space:nowrap;">
                                    <span class="input-group-addon" id="captcha-addon"><i
                                        class="fa fa-check fa-fw"></i></span>
@@ -143,7 +143,7 @@
                 return;
             }
 
-        <#if loginSmsEnable>
+        <#if Application.loginSmsEnable?exists>
             if (!checkCodee()) {
                 return;
             }
@@ -175,7 +175,7 @@
                             window.location.href = "/manage/index.html";
                         }
                     } else {
-                    <#if loginSmsEnable>
+                    <#if Application.loginSmsEnable?exists>
                     <#else>
                         refreshCaptcha();
                     </#if>

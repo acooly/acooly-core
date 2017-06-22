@@ -13,6 +13,7 @@ package com.acooly.module.ds;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
+import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.log.LogbackAsyncAppender;
 import com.acooly.core.common.boot.log.LogbackConfigurator;
 import com.acooly.core.common.boot.log.initializer.AbstractLogInitializer;
@@ -38,7 +39,11 @@ public class DruidLogInitializer extends AbstractLogInitializer {
       if (appender instanceof LogbackAsyncAppender) {
         ((LogbackAsyncAppender) appender).setIncludeCallerData(false);
       }
-      configurator.logger("com.alibaba.druid.filter.stat.StatFilter", Level.INFO, false, appender);
+      if(Apps.isDevMode()){
+          configurator.logger("com.alibaba.druid.filter.stat.StatFilter", Level.INFO, true, appender);
+      }else{
+          configurator.logger("com.alibaba.druid.filter.stat.StatFilter", Level.INFO, false, appender);
+      }
     }
   }
 }

@@ -4,7 +4,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.acooly.core.test.dao.CityMybatisDao">
     <select id="selectAllByPage1" resultType="City">
-        select * from City
+        select * from City order by name desc
     </select>
 
 </mapper>

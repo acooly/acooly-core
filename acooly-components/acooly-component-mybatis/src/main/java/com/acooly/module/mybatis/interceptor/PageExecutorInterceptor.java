@@ -4,6 +4,7 @@ import com.acooly.core.common.dao.dialect.DatabaseDialectManager;
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.module.mybatis.metadata.CountSql;
 import com.acooly.module.mybatis.page.MyBatisPage;
+import com.github.pagehelper.parser.CountSqlParser;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import org.apache.ibatis.executor.Executor;
@@ -11,7 +12,6 @@ import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.MappedStatement.Builder;
 import org.apache.ibatis.mapping.ParameterMapping;
-import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
 import org.apache.ibatis.session.ResultHandler;
@@ -36,6 +36,8 @@ import java.util.Properties;
 public class PageExecutorInterceptor implements Interceptor {
 
   private static Map<String, String> countSqlMap = Maps.newConcurrentMap();
+
+  CountSqlParser countSqlParser = new CountSqlParser();
 
   @SuppressWarnings({"rawtypes", "unchecked"})
   @Override
@@ -131,10 +133,9 @@ public class PageExecutorInterceptor implements Interceptor {
   /** 根据原Sql语句获取对应的查询总记录数的Sql语句 */
   private String getCountSql(MappedStatement mappedStatement, String sql) {
     String countSqlByAnnotation = getCountSqlByAnnotation(mappedStatement);
-
     return !Strings.isNullOrEmpty(countSqlByAnnotation)
         ? countSqlByAnnotation
-        : "SELECT COUNT(*) FROM (" + sql + ") forPageCount";
+        : countSqlParser.getSmartCountSql(sql);
   }
 
   private String getCountSqlByAnnotation(MappedStatement mappedStatement) {
@@ -147,8 +148,7 @@ public class PageExecutorInterceptor implements Interceptor {
           int idx = id.lastIndexOf('.');
           String className = id.substring(0, idx);
           String methodName = id.substring(idx + 1);
-          Method[] methods = new Method[0];
-
+          Method[] methods;
           methods = Class.forName(className).getMethods();
           for (Method method : methods) {
             if (method.getName().equals(methodName)) {
@@ -175,12 +175,7 @@ public class PageExecutorInterceptor implements Interceptor {
         new Builder(
             ms.getConfiguration(),
             ms.getId(),
-            new SqlSource() {
-              @Override
-              public BoundSql getBoundSql(Object parameterObject) {
-                return newBoundSql;
-              }
-            },
+            parameterObject -> newBoundSql,
             ms.getSqlCommandType());
     builder.resource(ms.getResource());
     builder.fetchSize(ms.getFetchSize());

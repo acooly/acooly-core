@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.net.HttpHeaders;
 import com.google.common.net.MediaType;
+import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -336,5 +337,15 @@ public class Servlets {
     } catch (Exception e) {
     }
     return host;
+  }
+
+  /**
+   * 获取UserAgent，
+   *
+   * 使用请增加mave依赖neu.bitwalker:UserAgentUtils
+   *
+   */
+  public static UserAgent getUserAgent(HttpServletRequest request) {
+    return UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
   }
 }

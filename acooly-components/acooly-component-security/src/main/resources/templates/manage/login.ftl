@@ -28,11 +28,7 @@
                 </div>
             </div>
             <div class="row">
-            <#if loginSmsEnable>
-            <div class="col-sm-5 col-sm-offset-4 form-box" style="margin-left: 29%">
-            <#else>
             <div class="col-sm-4 col-sm-offset-4 form-box">
-            </#if>
                 <div class="form-top">
                     <div class="form-top-left">
                         <h3>登录您的账号</h3>
@@ -72,15 +68,15 @@
                         <div class="form-group input-group" style="white-space:nowrap;">
                                    <span class="input-group-addon" id="captcha-addon"><i
                                        class="fa fa-check fa-fw"></i></span>
-                            <input id="phoneNumber" name="phoneNumber" value="" size="100"
+                           <#-- <input id="phoneNumber" name="phoneNumber" value="" size="100"
                                    class="form-captcha form-control"
-                                   type="text" placeholder="手机号码"/>
+                                   type="text" placeholder="手机号码"/>-->
 
-                            <input id="validCode" name="validCode" type="text" value="" size="10"
-                                   class="form-captcha form-control"
+                            <input id="validCode" name="validCode" type="text" value="" size="30"
+                                   class="form-smscaptcha form-control"
                                    placeholder="验证码"/>
                             <input
-                                id="getValidCodeaa" class="btn btn-info" width="5" type="button"
+                                id="getValidCodeaa" class="btn btn-info" width="20" type="button"
                                 style="font-size: small" value="获取验证码"
                             />
                             <input style="display: none;" id="smsSendInterval"
@@ -232,7 +228,7 @@
          * @author shuijing
          */
         var btn = $("#getValidCodeaa");
-        var inputPhone = $('#phoneNumber');
+        //var inputPhone = $('#phoneNumber');
         var validCode = $('#validCode');
         var SEND_INTERVAL = $('#smsSendInterval').val();
         var timeLeft = SEND_INTERVAL;
@@ -241,15 +237,15 @@
                 $('#message').html('用户名不能为空!');
                 return;
             }
-            if (!checkPhone()) {
-                return;
-            }
+//            if (!checkPhone()) {
+//                return;
+//            }
             btn.attr('disabled', 'disabled');
             validCode.val('');
 
             var jsonData = {
                 username: $('#form-username').val(),
-                phoneNumber: inputPhone.val(),
+                //phoneNumber: inputPhone.val(),
                 _csrf: $('#_csrf').val()
             };
 
@@ -294,28 +290,28 @@
          * @param input 手机号输入域
          * @returns {boolean}
          */
-        function checkPhone(input) {
-            input = input || this.inputPhone;
-            var value = input.val();
-            if (!value) {
-                $('#message').html('手机号码不能为空!');
-                return false;
-            }
-            var reg = /(^0{0,1}[13|15|18|14|17]{2}[0-9]{9}$)/;
-            if (!reg.test(value)) {
-                $('#message').html('手机号码格式错误!');
-                return false;
-            } else {
-                //$('#message').html('手机号码格式正确');
-                $('#message').html('');
-                return true;
-            }
-        }
+//        function checkPhone(input) {
+//            input = input || this.inputPhone;
+//            var value = input.val();
+//            if (!value) {
+//                $('#message').html('手机号码不能为空!');
+//                return false;
+//            }
+//            var reg = /(^0{0,1}[13|15|18|14|17]{2}[0-9]{9}$)/;
+//            if (!reg.test(value)) {
+//                $('#message').html('手机号码格式错误!');
+//                return false;
+//            } else {
+//                //$('#message').html('手机号码格式正确');
+//                $('#message').html('');
+//                return true;
+//            }
+//        }
 
         function checkCodee() {
-            if (!this.checkPhone()) {
-                return false;
-            }
+//            if (!this.checkPhone()) {
+//                return false;
+//            }
             if (!this.validCode.val()) {
                 $('#message').html('验证码不能为空!');
                 return false;

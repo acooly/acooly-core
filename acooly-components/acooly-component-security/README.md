@@ -21,3 +21,4 @@
 * 可配置页面重新发送按钮间隔,单位秒，默认为30秒
      `acooly.framework.smsSendInterval=60
       `
+* 开启短信验证码功能后，在新增user的时候，填写手机号码

@@ -9,6 +9,7 @@
  */
 package com.acooly.module.security.config;
 
+import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
 import com.acooly.module.jpa.JPAAutoConfig;
@@ -261,15 +262,33 @@ public class SecurityAutoConfig {
       if (CollectionUtils.isEmpty(urls)) {
         return "";
       }
+      Boolean shiroFilterAnon = isShiroFilterAnon();
       StringBuilder sb = new StringBuilder();
-      for (Map<String, String> url : urls) {
+      for (int i = 0; i < urls.size(); i++) {
+        Map<String, String> url = urls.get(i);
         if (MapUtils.isNotEmpty(url)) {
           for (Map.Entry<String, String> entry : url.entrySet()) {
-            sb.append(entry.getKey()).append("=").append(entry.getValue()).append("\n");
+            if (shiroFilterAnon) {
+              if (i == urls.size() - 1) {
+                sb.append("/**").append("=").append("anon").append("\n");
+              } else {
+                sb.append("/manage/**").append("=").append("anon").append("\n");
+              }
+            } else {
+              sb.append(entry.getKey()).append("=").append(entry.getValue()).append("\n");
+            }
           }
         }
       }
       return sb.toString();
+    }
+
+    public static boolean isShiroFilterAnon() {
+      String loginSmsEnable = System.getProperty("acooly.security.shiroFilterAnon");
+      if (loginSmsEnable == null) {
+        loginSmsEnable = EnvironmentHolder.get().getProperty("acooly.security.shiroFilterAnon");
+      }
+      return loginSmsEnable == null ? false : Boolean.valueOf(loginSmsEnable);
     }
 
     private Map<String, Filter> buildFiltersMap(SecurityProperties securityProperties) {

@@ -1,6 +1,8 @@
 package com.acooly.module.appopenapi.message;
 
 import com.yiji.framework.openapi.common.annotation.OpenApiField;
+import com.yiji.framework.openapi.common.annotation.OpenApiMessage;
+import com.yiji.framework.openapi.common.enums.ApiMessageType;
 import com.yiji.framework.openapi.common.message.ApiRequest;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -10,6 +12,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @note 格式：HTTP-POST格式,如：name=xxx&amp;age=12
  * @author zhangpu
  */
+@OpenApiMessage(service = "appLatestVersion", type = ApiMessageType.Request)
 public class AppLatestVersionRequest extends ApiRequest {
 
   @OpenApiField(desc = "APP编码", constraint = "APP唯一标志,默认为:woldd")

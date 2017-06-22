@@ -1,6 +1,8 @@
 package com.acooly.module.appopenapi.message;
 
 import com.yiji.framework.openapi.common.annotation.OpenApiField;
+import com.yiji.framework.openapi.common.annotation.OpenApiMessage;
+import com.yiji.framework.openapi.common.enums.ApiMessageType;
 import com.yiji.framework.openapi.common.message.ApiResponse;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -12,6 +14,7 @@ import java.util.Date;
  *
  * @author zhangpu
  */
+@OpenApiMessage(service = "appLatestVersion", type = ApiMessageType.Response)
 public class AppLatestVersionResponse extends ApiResponse {
   @OpenApiField(desc = "应用编码")
   private String appCode;

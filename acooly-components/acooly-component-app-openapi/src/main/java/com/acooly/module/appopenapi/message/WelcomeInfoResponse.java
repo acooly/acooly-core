@@ -2,6 +2,8 @@ package com.acooly.module.appopenapi.message;
 
 import com.google.common.collect.Lists;
 import com.yiji.framework.openapi.common.annotation.OpenApiField;
+import com.yiji.framework.openapi.common.annotation.OpenApiMessage;
+import com.yiji.framework.openapi.common.enums.ApiMessageType;
 import com.yiji.framework.openapi.common.message.ApiResponse;
 
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.List;
  * @note 包括欢迎页面logo上的广告图和一组轮播欢迎导航图片
  * @author zhangpu
  */
+@OpenApiMessage(service = "welcomeInfo", type = ApiMessageType.Response)
 public class WelcomeInfoResponse extends ApiResponse {
 
   @OpenApiField(desc = "启动界面", constraint = "全URL，可直接访问. 返回空着不显示")

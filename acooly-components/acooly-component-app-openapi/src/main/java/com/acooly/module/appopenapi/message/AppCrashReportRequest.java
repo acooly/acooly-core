@@ -2,6 +2,8 @@
 package com.acooly.module.appopenapi.message;
 
 import com.yiji.framework.openapi.common.annotation.OpenApiField;
+import com.yiji.framework.openapi.common.annotation.OpenApiMessage;
+import com.yiji.framework.openapi.common.enums.ApiMessageType;
 import com.yiji.framework.openapi.common.message.ApiRequest;
 
 import javax.validation.constraints.Size;
@@ -12,6 +14,7 @@ import javax.validation.constraints.Size;
  * @author zhangpu
  * @date 2015年9月11日
  */
+@OpenApiMessage(service = "appCrashReport", type = ApiMessageType.Request)
 public class AppCrashReportRequest extends ApiRequest {
 
   @Size(min = 0, max = 32)

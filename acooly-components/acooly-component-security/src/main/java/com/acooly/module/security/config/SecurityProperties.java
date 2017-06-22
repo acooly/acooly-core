@@ -38,6 +38,9 @@ public class SecurityProperties {
   private Xss xss = new Xss();
   private Captcha captcha = new Captcha();
 
+  /** 开启后shiro filter链都会设为不拦截，可在系统不需要任何授权、认证时开启 */
+  private boolean shiroFilterAnon = false;
+
   @PostConstruct
   public void initXss() {
     this.xss.init();

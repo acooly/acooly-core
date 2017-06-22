@@ -22,3 +22,12 @@
      `acooly.framework.smsSendInterval=60
       `
 * 开启短信验证码功能后，在新增user的时候，填写手机号码
+
+
+### 2. 怎么设置不需要需登录(授权、认证)访问所有boss页面
+
+只需要添加配置：
+`acooly.security.shiroFilterAnon=true
+`
+
+开启后shiro filter链都会设为不拦截，可在系统不需要任何授权、认证时开启（慎用）

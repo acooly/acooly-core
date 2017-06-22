@@ -30,6 +30,7 @@ import java.util.Map;
 public class SecurityProperties {
 
   public static final String PREFIX = "acooly.security";
+  public static final boolean DEFAULT_SHIRO_FILTER_ANON = false;
   /** 是否启用shiro */
   private boolean enable = true;
 
@@ -39,7 +40,7 @@ public class SecurityProperties {
   private Captcha captcha = new Captcha();
 
   /** 开启后shiro filter链都会设为不拦截，可在系统不需要任何授权、认证时开启 */
-  private boolean shiroFilterAnon = false;
+  private boolean shiroFilterAnon = DEFAULT_SHIRO_FILTER_ANON;
 
   @PostConstruct
   public void initXss() {

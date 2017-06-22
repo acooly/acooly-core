@@ -284,11 +284,11 @@ public class SecurityAutoConfig {
     }
 
     public static boolean isShiroFilterAnon() {
-      String loginSmsEnable = System.getProperty("acooly.security.shiroFilterAnon");
-      if (loginSmsEnable == null) {
-        loginSmsEnable = EnvironmentHolder.get().getProperty("acooly.security.shiroFilterAnon");
-      }
-      return loginSmsEnable == null ? false : Boolean.valueOf(loginSmsEnable);
+      return EnvironmentHolder.get()
+          .getProperty(
+              "acooly.security.shiroFilterAnon",
+              Boolean.class,
+              SecurityProperties.DEFAULT_SHIRO_FILTER_ANON);
     }
 
     private Map<String, Filter> buildFiltersMap(SecurityProperties securityProperties) {

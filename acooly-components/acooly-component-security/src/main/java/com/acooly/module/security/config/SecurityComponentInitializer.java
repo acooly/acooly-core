@@ -21,6 +21,5 @@ public class SecurityComponentInitializer implements ComponentInitializer {
     setPropertyIfMissing("acooly.security.csrf.exclusions.sso[0]", "/role/facade/*");
     setPropertyIfMissing("acooly.security.csrf.exclusions.sso[1]", "/security/config/index.html");
     setPropertyIfMissing("acooly.security.loginSmsEnable", false);
-    setPropertyIfMissing("acooly.security.shiroFilterAnon", false);
   }
 }

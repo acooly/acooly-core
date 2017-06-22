@@ -9,16 +9,21 @@
  */
 package com.acooly.core.test.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.ServletContext;
+
 /** @author qiubo@yiji.com */
 @Controller
 public class FreemarkerController {
+  @Autowired private ServletContext servletContext;
 
   @RequestMapping("/testFtl")
   public String testFtl(ModelMap modelMap) {
+    servletContext.setAttribute("xxx", "aaa");
     modelMap.put("name", "na");
     modelMap.put("message", "hi");
     return "test";

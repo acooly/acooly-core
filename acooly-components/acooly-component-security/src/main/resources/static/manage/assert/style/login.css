@@ -88,6 +88,10 @@ body {
 	width:35%; display:inline-block;
 }
 
+.form-bottom form .form-smscaptcha {
+    width:65%; display:inline-block;
+}
+
 .login-footer {
     margin-top: 30px;
 	text-align: center;

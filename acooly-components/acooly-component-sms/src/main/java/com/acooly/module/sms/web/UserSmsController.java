@@ -41,7 +41,7 @@ public class UserSmsController {
   @Autowired private UserService userService;
   @Autowired private SmsService smsService;
 
-  /**登录短信验证码发送有效时间，以短信方式发送给用户 */
+  /** 登录短信验证码发送有效时间，以短信方式发送给用户 */
   private String smsSendEffectiveTime = "5";
 
   @RequestMapping(value = "generateSmsCaptcha.json")
@@ -49,24 +49,18 @@ public class UserSmsController {
   public JsonResult generateSmsCaptcha(
       HttpServletRequest request, HttpServletResponse response, Model model) {
     String username = request.getParameter("username");
-    String phoneNumber = request.getParameter("phoneNumber");
-
     JsonResult result = new JsonResult();
     try {
-      if (StringUtils.isEmpty(phoneNumber)) {
-        result.setMessage("手机号为空!");
-        result.setSuccess(false);
-        return result;
-      }
-      if (!isMobileNO(phoneNumber)) {
-        result.setMessage("手机号格式错误!");
-        result.setSuccess(false);
-        return result;
-      }
-      //检查用户是否存在，防止随意调用发送短信
+
       User user = userService.findUserByUsername(username);
       if (user == null) {
         result.setMessage("用户不存在!");
+        result.setSuccess(false);
+        return result;
+      }
+      String mobileNo = user.getMobileNo();
+      if (StringUtils.isEmpty(mobileNo)) {
+        result.setMessage("手机号码未填，请联系管理员!");
         result.setSuccess(false);
         return result;
       }
@@ -82,7 +76,7 @@ public class UserSmsController {
       }
       String code = RandomStringUtils.randomNumeric(4);
 
-      sendProxy(phoneNumber, code, user);
+      sendProxy(mobileNo, code, user);
 
       log.info("用户:{},登录验证码已发送:{}", user.getUsername(), code);
       ServletUtil.setSessionAttribute(SMS_VERIFY_CODE_KEY, code);

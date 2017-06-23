@@ -10,6 +10,7 @@
  */
 package com.acooly.module.tomcat;
 
+import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.component.ComponentInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -22,5 +23,9 @@ public class TomcatComponentInitializer implements ComponentInitializer {
     //enable https redirct to relative location
     System.setProperty("server.tomcat.protocol_header", "x-forwarded-proto");
     System.setProperty("server.tomcat.port-header", "x-forwarded-port");
+    if (applicationContext.getEnvironment().getProperty("acooly.tomcat.port") != null) {
+      System.setProperty(
+          Apps.HTTP_PORT, applicationContext.getEnvironment().getProperty("acooly.tomcat.port"));
+    }
   }
 }

@@ -4,6 +4,8 @@ package com.acooly.module.appopenapi.message;
 import com.acooly.module.appopenapi.dto.MediaInfo;
 import com.google.common.collect.Lists;
 import com.yiji.framework.openapi.common.annotation.OpenApiField;
+import com.yiji.framework.openapi.common.annotation.OpenApiMessage;
+import com.yiji.framework.openapi.common.enums.ApiMessageType;
 import com.yiji.framework.openapi.common.message.ApiResponse;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.List;
  *
  * @author zhangpu
  */
+@OpenApiMessage(service = "bannerList", type = ApiMessageType.Response)
 public class BannerListResponse extends ApiResponse {
 
   @OpenApiField(desc = "媒体列表")

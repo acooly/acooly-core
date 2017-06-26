@@ -1,6 +1,8 @@
 package com.acooly.module.appopenapi.message;
 
 import com.yiji.framework.openapi.common.annotation.OpenApiField;
+import com.yiji.framework.openapi.common.annotation.OpenApiMessage;
+import com.yiji.framework.openapi.common.enums.ApiMessageType;
 import com.yiji.framework.openapi.common.message.ApiResponse;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -11,6 +13,7 @@ import javax.validation.constraints.Size;
  *
  * @author zhangpu
  */
+@OpenApiMessage(service = "login", type = ApiMessageType.Response)
 public class LoginResponse extends ApiResponse {
 
   @NotEmpty

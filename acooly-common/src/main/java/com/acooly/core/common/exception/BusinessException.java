@@ -25,10 +25,10 @@ public class BusinessException extends RuntimeException implements Messageable {
 
     /**
      * @param message 错误消息
-     * @param disableStackTrace 是否收集线程栈信息，对于业务明确的异常，请关闭
+     * @param writableStackTrace 是否收集线程栈信息，对于业务明确的异常，请关闭,设置为false为关闭
      */
-  public BusinessException(String message, boolean disableStackTrace) {
-    super(message, null, false, disableStackTrace);
+  public BusinessException(String message, boolean writableStackTrace) {
+    super(message, null, false, writableStackTrace);
   }
 
   public BusinessException(String message, Throwable cause) {

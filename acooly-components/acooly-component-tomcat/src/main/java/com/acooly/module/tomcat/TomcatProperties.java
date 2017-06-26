@@ -29,4 +29,9 @@ public class TomcatProperties {
 
   /** 可选: 设置uri编码 */
   private String uriEncoding = "UTF-8";
+
+    /**
+     * 可选: 通过外部配置自定义tomcat端口
+     */
+  private Integer port=null;
 }

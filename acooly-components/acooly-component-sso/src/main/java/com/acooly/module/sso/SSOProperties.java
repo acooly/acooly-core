@@ -21,4 +21,7 @@ public class SSOProperties {
    * https://github.com/spring-projects/spring-framework/blob/master/spring-core/src/test/java/org/springframework/util/AntPathMatcherTests.java)
    */
   private String ssoExcludeUrl;
+
+  /** 客户端资源权限缓存时间，在主boss验证资源用户的资源权限后缓存的时间,单位分钟,默认10分钟 */
+  private int AuthorizationCacheTime = 10;
 }

@@ -6,6 +6,8 @@ import com.acooly.module.sso.SSOProperties;
 import com.acooly.module.sso.support.DefaultRequestMatcher;
 import com.acooly.module.sso.support.RequestMatcher;
 import com.github.kevinsawicki.http.HttpRequest;
+import com.google.common.collect.Maps;
+import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +20,16 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 /** @author shuijing */
 public class AuthorizationFilter implements Filter {
-  public static int TIME_OUT = 5 * 1000;
+  public static int TIME_OUT = 15 * 1000;
   private Logger logger = LoggerFactory.getLogger(AuthorizationFilter.class);
+
   private ApplicationContext applicationContext;
+
+  private Map<String, CacheVo> cache = Maps.newConcurrentMap();
 
   private ServletContext servletContext;
 
@@ -57,7 +63,7 @@ public class AuthorizationFilter implements Filter {
       chain.doFilter(request, response);
       return;
     }
-    if (isPermitted(httpServletRequest)) {
+    if (isPermittedFromCache(httpServletRequest)) {
       chain.doFilter(request, response);
     } else {
       response.setContentType("text/html;charset=UTF-8");
@@ -116,5 +122,37 @@ public class AuthorizationFilter implements Filter {
       }
     }
     return false;
+  }
+
+  public boolean isPermittedFromCache(HttpServletRequest request) throws MalformedURLException {
+    String url = request.getRequestURI();
+    if (cache.containsKey(url)) {
+      CacheVo cacheVo = cache.get(url);
+      long startTime = cacheVo.getStartTime();
+      long currentTime = System.currentTimeMillis();
+      if ((currentTime - startTime) > ssoProperties.getAuthorizationCacheTime() * 60 * 1000) {
+        //缓存失效，重新检验
+        return reputCache(request);
+      } else {
+        return cacheVo.isPermitted;
+      }
+    } else {
+      return reputCache(request);
+    }
+  }
+
+  private boolean reputCache(HttpServletRequest request) throws MalformedURLException {
+    boolean permitted = isPermitted(request);
+    CacheVo cacheVo = new CacheVo();
+    cacheVo.setIsPermitted(permitted);
+    cacheVo.setStartTime(System.currentTimeMillis());
+    cache.put(request.getRequestURI(), cacheVo);
+    return permitted;
+  }
+
+  @Data
+  private static class CacheVo {
+    private Boolean isPermitted;
+    private long startTime;
   }
 }

@@ -125,9 +125,9 @@ public class AuthorizationFilter implements Filter {
   }
 
   public boolean isPermittedFromCache(HttpServletRequest request) throws MalformedURLException {
-    String url = request.getRequestURI();
-    if (cache.containsKey(url)) {
-      CacheVo cacheVo = cache.get(url);
+    String cacheKey = getCacheKey(request);
+    if (cache.containsKey(cacheKey)) {
+      CacheVo cacheVo = cache.get(cacheKey);
       long startTime = cacheVo.getStartTime();
       long currentTime = System.currentTimeMillis();
       if ((currentTime - startTime) > ssoProperties.getAuthorizationCacheTime() * 60 * 1000) {
@@ -141,12 +141,18 @@ public class AuthorizationFilter implements Filter {
     }
   }
 
+  private String getCacheKey(HttpServletRequest request) {
+    String url = request.getRequestURI();
+    String username = (String) request.getAttribute(JWTUtils.KEY_SUB_NAME);
+    return username + "," + url;
+  }
+
   private boolean reputCache(HttpServletRequest request) throws MalformedURLException {
     boolean permitted = isPermitted(request);
     CacheVo cacheVo = new CacheVo();
     cacheVo.setIsPermitted(permitted);
     cacheVo.setStartTime(System.currentTimeMillis());
-    cache.put(request.getRequestURI(), cacheVo);
+    cache.put(getCacheKey(request), cacheVo);
     return permitted;
   }
 

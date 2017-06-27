@@ -114,7 +114,7 @@ public class JPushSendService {
   protected String getAuthorization() {
     String p =
         appProperties.getJpush().getAppKey() + ":" + appProperties.getJpush().getMasterSecret();
-    return "Basic " + Base64.encodeBase64URLSafeString(p.getBytes());
+    return "Basic " + Base64.encodeBase64String(p.getBytes());
   }
 
   static class JPushReturn {

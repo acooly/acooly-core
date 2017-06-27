@@ -17,7 +17,7 @@ $(function() {
         <tr>
           <td align="left">
           	<div>
-					用户名: <input type="text" class="text" size="15" name="search_LIKE_userName"/>
+					用户名: <input type="text" class="text" size="15" name="search_EQ_userName"/>
 <%-- 					状态: <select style="width:80px;height:27px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allStatuss}"><option value="${e.key}" ${param.search_EQ_status == e.key?'selected':''}>${e.value}</option></c:forEach></select> --%>
 					用户等级: <select style="width:80px;height:27px;" name="search_EQ_gradeId" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allPointGrades}"><option value="${e.key}" ${param.search_EQ_gradeId == e.key?'selected':''}>${e.value}</option></c:forEach></select>
 					创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />

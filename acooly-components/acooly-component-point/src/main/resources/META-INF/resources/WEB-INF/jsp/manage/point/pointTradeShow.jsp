@@ -39,9 +39,21 @@
 		<td>${pointTrade.endAvailable}</td>
 	</tr>
 	<tr>
+		<th>业务Id:</th>
+		<td>${pointTrade.busiId}</td>
+	</tr>
+	<tr>
+		<th>业务类型:</th>
+		<td>${pointTrade.busiType}</td>
+	</tr>
+	<tr>
+		<th>业务类型描述:</th>
+		<td>${pointTrade.busiTypeText}</td>
+	</tr>
+	<tr>
 		<th>相关业务数据:</th>
-		<td>${pointTrade.businessData}</td>
-	</tr>					
+		<td>${pointTrade.busiData}</td>
+	</tr>
 	<tr>
 		<th>创建时间:</th>
 		<td><fmt:formatDate value="${pointTrade.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>

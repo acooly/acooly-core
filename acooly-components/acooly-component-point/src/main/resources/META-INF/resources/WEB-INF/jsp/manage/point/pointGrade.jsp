@@ -16,7 +16,7 @@ $(function() {
           <td align="left">
           	<div>
 					等级: <input type="text" class="text" size="15" name="search_EQ_num"/>
-					标题: <input type="text" class="text" size="15" name="search_LIKE_title"/>
+					标题: <input type="text" class="text" size="15" name="search_EQ_title"/>
 					创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
 					至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_pointGrade_searchform','manage_pointGrade_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>

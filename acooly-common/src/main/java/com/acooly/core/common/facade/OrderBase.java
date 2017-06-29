@@ -29,7 +29,7 @@ public class OrderBase implements Orderable {
   private String partnerId;
 
   @NotNull
-  @Length(min = 20, max = 64)
+  @Length(min = 1, max = 64)
   private String gid;
 
   public void check() {

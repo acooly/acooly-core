@@ -14,6 +14,7 @@ import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.exception.AppConfigException;
+import com.acooly.module.ds.check.DBPatch;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.vendor.OracleValidConnectionChecker;
 import com.google.common.collect.Maps;
@@ -85,6 +86,9 @@ public class DruidProperties implements BeanClassLoaderAware {
 
   /** 自动创建表 */
   private boolean autoCreateTable = true;
+
+  /** 检查表是否缺少某些字段，如果缺少，启动报错。 */
+  private Map<String, DBPatch> dbPatchs;
 
   private ClassLoader beanClassLoader;
 

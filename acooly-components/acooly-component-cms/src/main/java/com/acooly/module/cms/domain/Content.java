@@ -76,6 +76,7 @@ public class Content implements Entityable {
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "content")
   private Set<Attachment> attachments = new HashSet<Attachment>();
 
+  @Transient
   private String body_;
 
   public ContentType getContentType() {

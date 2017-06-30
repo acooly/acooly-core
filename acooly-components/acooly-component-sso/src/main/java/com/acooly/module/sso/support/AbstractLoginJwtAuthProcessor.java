@@ -77,8 +77,8 @@ public abstract class AbstractLoginJwtAuthProcessor<T> implements LoginAuthProce
         shiroSession = new HttpServletSession(httpSession, request.getRemoteHost());
       }
       Subject subject =
-          new Subject.Builder()
-              .sessionId(request.getSession().getId())
+          new Subject.Builder(getSecurityManager())
+              .sessionId(shiroSession.getId())
               .session(shiroSession)
               .principals(simplePrincipal)
               .authenticated(true)

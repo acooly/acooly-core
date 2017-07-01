@@ -47,6 +47,10 @@ public class Apps {
     logPath = "/var/log/webapps/" + getAppName() + "/";
     return logPath;
   }
+    public static void setLogPath(String tmp){
+        logPath=tmp;
+    }
+
 
   /** 获取应用数据目录，组件如果要存放临时数据，请放在此目录 */
   public static String getAppDataPath() {

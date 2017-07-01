@@ -199,7 +199,7 @@ public class DubboAutoConfig implements InitializingBean {
 
   @Bean
   @DependsOn({"registryConfig"})
-  @ConditionalOnProperty(name = "acooly.devMode", havingValue = "false", matchIfMissing = true)
+  @ConditionalOnProperty(name = {"acooly.devMode","acooly.dubbo.monitor.disable"}, havingValue = "false", matchIfMissing = true)
   public static MonitorConfig monitorConfig() {
     MonitorConfig config = new MonitorConfig();
     config.setProtocol("registry");

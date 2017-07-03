@@ -49,7 +49,7 @@ $(function() {
             <th field="dversion">dubbo版本</th>
             <th field="dparam">dubbo参数</th>
             <th field="lastExecuteTime" formatter="dateTimeFormatter">上次执行时间</th>
-            <th field="exceptionAtLastExecute">上次执行结果</th>
+            <th field="exceptionAtLastExecute" formatter="contentFormatter">上次执行结果</th>
             <th field="creater">任务创建人</th>
           	<th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_schedulerRule_action',value,row)}">动作</th>
         </tr>

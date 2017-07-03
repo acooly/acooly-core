@@ -84,7 +84,7 @@ public class JWTUtils {
 
   private static ObjectMapper objectMapper;
   /** jwt 过期时间，单位分钟 */
-  public static final long JWT_EXP_TIME = 7 * 24 * 60L;
+  public static final Long JWT_EXP_TIME = 7 * 24 * 60L;
 
   static {
     headerMap = new HashMap<>();
@@ -111,6 +111,21 @@ public class JWTUtils {
             .signWith(SignatureAlgorithm.HS256, SIGN_KEY.getBytes())
             .compact();
     return compactJws;
+  }
+
+  public static String refreshJwt(Jwt<Header, Claims> jws) {
+    Date expTime = new Date((System.currentTimeMillis() + JWT_EXP_TIME * 60 * 1000));
+    jws.getBody().put(CLAIMS_KEY_EXP, expTime);
+    String newJws =
+        Jwts.builder()
+            .setHeader(headerMap)
+            .setClaims(jws.getBody())
+            .signWith(SignatureAlgorithm.HS256, SIGN_KEY.getBytes())
+            .compact();
+    //更新jwt
+    JWTUtils.removeCookie(JWTUtils.TYPE_JWT, JWTUtils.getDomainName());
+    JWTUtils.addJwtCookie(ServletUtil.getResponse(), newJws, JWTUtils.getDomainName());
+    return newJws;
   }
 
   /**

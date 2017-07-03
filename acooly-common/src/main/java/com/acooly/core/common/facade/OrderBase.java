@@ -25,11 +25,11 @@ public class OrderBase implements Orderable {
   private static final long serialVersionUID = 6062457604679752587L;
 
   @NotNull
-  @Length(min = 1, max = 20)
+  @Length(min = 1, max = 64)
   private String partnerId;
 
   @NotNull
-  @Length(min = 20, max = 64)
+  @Length(min = 1, max = 64)
   private String gid;
 
   public void check() {

@@ -28,10 +28,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 import java.util.HashMap;
 
-import static com.acooly.core.utils.security.JWTUtils.*;
+import static com.acooly.core.utils.security.JWTUtils.SIGN_KEY;
 import static com.acooly.module.security.shiro.realm.ShiroDbRealm.SESSION_USER;
 
 /**
@@ -89,18 +88,7 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
           }
           boolean timeout = JWTUtils.validateTimeout(jws);
           if (timeout) {
-            Date expTime = new Date((System.currentTimeMillis() + JWT_EXP_TIME * 60 * 1000));
-            jws.getBody().put(CLAIMS_KEY_EXP, expTime);
-            String newJws =
-                Jwts.builder()
-                    .setHeader(headerMap)
-                    .setClaims(jws.getBody())
-                    .signWith(SignatureAlgorithm.HS256, SIGN_KEY.getBytes())
-                    .compact();
-            //更新jwt
-            JWTUtils.removeCookie(JWTUtils.TYPE_JWT, JWTUtils.getDomainName());
-            JWTUtils.addJwtCookie(ServletUtil.getResponse(), newJws, JWTUtils.getDomainName());
-
+            String newJws = JWTUtils.refreshJwt(jws);
             return "redirect:" + fomartRederectUrl(targetUrl, newJws);
           } else {
             return "redirect:" + fomartRederectUrl(targetUrl, jwt);

@@ -47,7 +47,7 @@ public class PageInfo<T> implements Serializable {
 
   /** 是否有下页 */
   public boolean hasNext() {
-    return currentPage != totalPage;
+    return currentPage < totalPage;
   }
 
   public boolean isNext() {

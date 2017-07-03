@@ -1,6 +1,7 @@
 package com.acooly.module.security.shiro.listener;
 
 import com.acooly.core.utils.security.JWTUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
@@ -16,6 +17,7 @@ public class JwtLoginLogoutListener implements LoginLogoutListener {
   public void beforeLogout(
       HttpServletRequest request, HttpServletResponse response, Subject subject) {
     JWTUtils.removeCookie(JWTUtils.TYPE_JWT, JWTUtils.getDomainName());
+    SecurityUtils.getSubject().logout();
   }
 
   @Override

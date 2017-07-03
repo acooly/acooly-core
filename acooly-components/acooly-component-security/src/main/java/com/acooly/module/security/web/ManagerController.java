@@ -72,7 +72,7 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
    * @return
    */
   @RequestMapping(value = "login")
-  public String login(HttpServletRequest request, Model model) throws Exception {
+  public String login(HttpServletRequest request, Model model) {
     Subject subject = SecurityUtils.getSubject();
     if (subject.isAuthenticated()) {
       /** 如果已经登录的情况，其他系统集成sso则重定向目标地址，否则直接跳主页 */
@@ -81,7 +81,12 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
       if (StringUtils.isNotBlank(targetUrl)) {
         String jwt = JWTUtils.getJwtFromCookie(request.getCookies());
         if (!StringUtils.isEmpty(jwt)) {
-          Jwt<Header, Claims> jws = JWTUtils.parseJws(jwt, SIGN_KEY);
+          Jwt<Header, Claims> jws = null;
+          try {
+            jws = JWTUtils.parseJws(jwt, SIGN_KEY);
+          } catch (Exception e) {
+            logger.error("解析jwt错误", e);
+          }
           boolean timeout = JWTUtils.validateTimeout(jws);
           if (timeout) {
             Date expTime = new Date((System.currentTimeMillis() + JWT_EXP_TIME * 60 * 1000));
@@ -126,14 +131,7 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
     JsonResult jsonResult = new JsonResult();
     User user = (User) SecurityUtils.getSubject().getSession().getAttribute(SESSION_USER);
     if (user != null) {
-      String username = user.getUsername();
-      String subjectStr = "";
-      try {
-        subjectStr = JsonMapper.nonEmptyMapper().getMapper().writeValueAsString(user);
-      } catch (JsonProcessingException e) {
-        logger.error("创建jwt时user转String失败", e.getMessage());
-      }
-      String jwt = JWTUtils.createJwt(username, subjectStr);
+      String jwt = genarateJwt(user);
       JWTUtils.addJwtCookie(ServletUtil.getResponse(), jwt, JWTUtils.getDomainName());
 
       HashMap<Object, Object> resmap = Maps.newHashMap();

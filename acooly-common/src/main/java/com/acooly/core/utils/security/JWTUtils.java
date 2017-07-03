@@ -80,9 +80,11 @@ public class JWTUtils {
   /** JWT 接收方 (暂无用) */
   private static String aud = "boss";
   /** header */
-  private static Map headerMap;
+  public static Map headerMap;
 
   private static ObjectMapper objectMapper;
+  /** jwt 过期时间，单位分钟 */
+  public static final long JWT_EXP_TIME = 7 * 24 * 60L;
 
   static {
     headerMap = new HashMap<>();
@@ -94,7 +96,7 @@ public class JWTUtils {
   public static String createJwt(String sub, String subjectStr) {
     Date iat = new Date();
     // 实效时间为 120分钟
-    Date expTime = new Date(iat.getTime() + 120 * 60 * 60 * 1000);
+    Date expTime = new Date(iat.getTime() + JWT_EXP_TIME * 60 * 1000);
     Map claims = new HashMap<>();
     claims.put(CLAIMS_KEY_ISS, iss);
     claims.put(CLAIMS_KEY_SUB, sub);

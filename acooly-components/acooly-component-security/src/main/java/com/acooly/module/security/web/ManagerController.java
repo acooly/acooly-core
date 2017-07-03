@@ -13,6 +13,7 @@ import com.acooly.module.security.domain.User;
 import com.acooly.module.security.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.Maps;
+import io.jsonwebtoken.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -27,8 +28,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.HashMap;
 
+import static com.acooly.core.utils.security.JWTUtils.*;
 import static com.acooly.module.security.shiro.realm.ShiroDbRealm.SESSION_USER;
 
 /**
@@ -69,7 +72,7 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
    * @return
    */
   @RequestMapping(value = "login")
-  public String login(HttpServletRequest request, Model model) {
+  public String login(HttpServletRequest request, Model model) throws Exception {
     Subject subject = SecurityUtils.getSubject();
     if (subject.isAuthenticated()) {
       /** 如果已经登录的情况，其他系统集成sso则重定向目标地址，否则直接跳主页 */
@@ -77,7 +80,34 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
       //targetUrl = (String) ServletUtil.getSessionAttribute(JWTUtils.KEY_TARGETURL);
       if (StringUtils.isNotBlank(targetUrl)) {
         String jwt = JWTUtils.getJwtFromCookie(request.getCookies());
-        return "redirect:" + fomartRederectUrl(targetUrl, jwt);
+        if (!StringUtils.isEmpty(jwt)) {
+          Jwt<Header, Claims> jws = JWTUtils.parseJws(jwt, SIGN_KEY);
+          boolean timeout = JWTUtils.validateTimeout(jws);
+          if (timeout) {
+            Date expTime = new Date((System.currentTimeMillis() + JWT_EXP_TIME * 60 * 1000));
+            jws.getBody().put(CLAIMS_KEY_EXP, expTime);
+            String newJws =
+                Jwts.builder()
+                    .setHeader(headerMap)
+                    .setClaims(jws.getBody())
+                    .signWith(SignatureAlgorithm.HS256, SIGN_KEY.getBytes())
+                    .compact();
+            //更新jwt
+            JWTUtils.removeCookie(JWTUtils.TYPE_JWT, JWTUtils.getDomainName());
+            JWTUtils.addJwtCookie(ServletUtil.getResponse(), newJws, JWTUtils.getDomainName());
+
+            return "redirect:" + fomartRederectUrl(targetUrl, newJws);
+          } else {
+            return "redirect:" + fomartRederectUrl(targetUrl, jwt);
+          }
+        } else {
+          User user = (User) subject.getPrincipal();
+          if (user != null) {
+            String newJwt = genarateJwt(user);
+            JWTUtils.addJwtCookie(ServletUtil.getResponse(), newJwt, JWTUtils.getDomainName());
+            return "redirect:" + fomartRederectUrl(targetUrl, newJwt);
+          }
+        }
       }
       return "redirect:/manage/index.html";
     } else {
@@ -104,10 +134,9 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
         logger.error("创建jwt时user转String失败", e.getMessage());
       }
       String jwt = JWTUtils.createJwt(username, subjectStr);
-      HashMap<Object, Object> resmap = Maps.newHashMap();
-
       JWTUtils.addJwtCookie(ServletUtil.getResponse(), jwt, JWTUtils.getDomainName());
 
+      HashMap<Object, Object> resmap = Maps.newHashMap();
       String targetUrl = (String) ServletUtil.getSessionAttribute(JWTUtils.KEY_TARGETURL);
       if (StringUtils.isNotBlank(targetUrl)) {
         resmap.put("isRedirect", true);
@@ -120,6 +149,17 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
     }
     jsonResult.setSuccess(true);
     return jsonResult;
+  }
+
+  private String genarateJwt(User user) {
+    String username = user.getUsername();
+    String subjectStr = "";
+    try {
+      subjectStr = JsonMapper.nonEmptyMapper().getMapper().writeValueAsString(user);
+    } catch (JsonProcessingException e) {
+      logger.error("创建jwt时user转String失败", e.getMessage());
+    }
+    return JWTUtils.createJwt(username, subjectStr);
   }
 
   private String fomartRederectUrl(String targetUrl, String jwt) {

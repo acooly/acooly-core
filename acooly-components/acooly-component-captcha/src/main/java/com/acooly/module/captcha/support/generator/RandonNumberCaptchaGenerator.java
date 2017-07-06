@@ -6,7 +6,7 @@ import static com.acooly.module.captcha.CaptchaProperties.DEFAULT_LENGTH;
 
 /** @author shuijing */
 @Service("randonNumberCaptchaGenerator")
-public class RandonNumberCaptchaGenerator<UA> extends RandomWordCaptchaGenerator<UA> {
+public class RandonNumberCaptchaGenerator extends RandomWordCaptchaGenerator{
 
   public RandonNumberCaptchaGenerator() {
     this(DEFAULT_LENGTH);

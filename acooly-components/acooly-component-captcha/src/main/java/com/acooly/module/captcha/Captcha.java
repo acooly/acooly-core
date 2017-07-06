@@ -3,11 +3,11 @@ package com.acooly.module.captcha;
 import java.io.Serializable;
 
 /** @author shuijing */
-public interface Captcha<A> extends Serializable {
+public interface Captcha<V> extends Serializable {
 
   String getId();
 
-  Answer<A> getAnswer();
+  V getValue();
 
   long getExpiredTimeMillis();
 }

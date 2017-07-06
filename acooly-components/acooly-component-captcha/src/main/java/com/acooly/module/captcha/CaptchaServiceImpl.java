@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /** @author shuijing */
-@Service
+@Service("captchaService")
 public class CaptchaServiceImpl implements CaptchaService {
 
   //private CaptchaProperties captchaProperties;

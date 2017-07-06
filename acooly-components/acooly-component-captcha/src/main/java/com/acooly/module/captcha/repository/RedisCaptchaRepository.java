@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 /** @author shuijing */
 public class RedisCaptchaRepository implements CaptchaRepository<String, Captcha> {
 
-  private RedisTemplate redisTemplate;
+  private RedisTemplate<String, Captcha> redisTemplate;
 
   public RedisCaptchaRepository(RedisTemplate redisTemplate) {
     this.redisTemplate = redisTemplate;

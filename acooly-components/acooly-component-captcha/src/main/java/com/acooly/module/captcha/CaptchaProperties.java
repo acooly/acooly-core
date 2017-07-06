@@ -21,11 +21,13 @@ public class CaptchaProperties {
   public boolean enable;
 
   /** 过期时间,单位秒,默认300S(5分钟) */
-  private Long expireSeconds = 5 * 60L;
+  private Long expireSeconds = 300L;
 
   private int captchaLength = DEFAULT_LENGTH;
 
   private GeneratorType generatorType = GeneratorType.RandonNumber;
+
+  private AnswerHandlerType handlerType = AnswerHandlerType.DefualtAnswerHandler;
 
   public enum GeneratorType implements Messageable {
     RandomWord("randomWordCaptchaGenerator", "随机字符"),
@@ -52,7 +54,7 @@ public class CaptchaProperties {
   }
 
   public enum AnswerHandlerType implements Messageable {
-    DefualtAnswerHandler("validatableAnswerHandler", "默认字符验证器");
+    DefualtAnswerHandler("validatableAnswerHandler", "字符验证器");
 
     private final String code;
     private final String message;

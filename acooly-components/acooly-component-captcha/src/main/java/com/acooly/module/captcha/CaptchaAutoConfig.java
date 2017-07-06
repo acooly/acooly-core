@@ -36,29 +36,26 @@ public class CaptchaAutoConfig {
   }
 
   @Bean
-  public CaptchaGenerator randomWordCaptchaGenerator(
-      Validator stringValidator, CaptchaRepository redisCaptchaRepository) {
+  public CaptchaGenerator randomWordCaptchaGenerator(CaptchaRepository redisCaptchaRepository) {
     RandomWordCaptchaGenerator generator = new RandomWordCaptchaGenerator();
     generator.setCaptchaRepository(redisCaptchaRepository);
-    generator.setValidator(stringValidator);
     generator.setLength(properties.getCaptchaLength());
+    generator.setDefaultSeconds(properties.getExpireSeconds());
     return generator;
   }
 
   @Bean
-  public CaptchaGenerator randonNumberCaptchaGenerator(
-      Validator stringValidator, CaptchaRepository redisCaptchaRepository) {
+  public CaptchaGenerator randonNumberCaptchaGenerator(CaptchaRepository redisCaptchaRepository) {
     RandonNumberCaptchaGenerator generator = new RandonNumberCaptchaGenerator();
     generator.setCaptchaRepository(redisCaptchaRepository);
-    generator.setValidator(stringValidator);
     generator.setLength(properties.getCaptchaLength());
+    generator.setDefaultSeconds(properties.getExpireSeconds());
     return generator;
   }
 
   @Bean
-  public AnswerHandler validatableAnswerHandler(CaptchaRepository redisCaptchaRepository) {
-    return new ValidatableAnswerHandler(redisCaptchaRepository);
+  public AnswerHandler validatableAnswerHandler(
+      CaptchaRepository redisCaptchaRepository, Validator stringValidator) {
+    return new ValidatableAnswerHandler(redisCaptchaRepository, stringValidator);
   }
-
-
 }

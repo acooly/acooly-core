@@ -1,22 +1,21 @@
 package com.acooly.module.captcha.support;
 
-import com.acooly.module.captcha.Answer;
 import com.acooly.module.captcha.Captcha;
 import lombok.Data;
 
 /** @author shuijing */
 @Data
-public class DefaultCaptcha<A> implements Captcha<A> {
+public class DefaultCaptcha<V> implements Captcha<V> {
 
-  private Answer<A> answer;
+  private V value;
 
   private String id;
 
   private long expiredTimeMillis;
 
-  public DefaultCaptcha(String id, Answer<A> answer, long expiredTimeMillis) {
+  public DefaultCaptcha(String id, V value, long expiredTimeMillis) {
     this.id = id;
-    this.answer = answer;
+    this.value = value;
     this.expiredTimeMillis = expiredTimeMillis;
   }
 
@@ -26,8 +25,8 @@ public class DefaultCaptcha<A> implements Captcha<A> {
   }
 
   @Override
-  public Answer<A> getAnswer() {
-    return this.answer;
+  public V getValue() {
+    return this.value;
   }
 
   @Override

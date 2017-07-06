@@ -1,6 +1,6 @@
 package com.acooly.module.captcha;
 
 /** @author shuijing */
-public interface Validator<A, UA> {
-  boolean validate(A answer, UA userAnswer);
+public interface Validator<V, UA> {
+  boolean validate(V value, UA userAnswer);
 }

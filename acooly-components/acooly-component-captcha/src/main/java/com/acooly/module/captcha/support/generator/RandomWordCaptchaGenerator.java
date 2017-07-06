@@ -12,7 +12,7 @@ import static com.acooly.module.captcha.CaptchaProperties.DEFAULT_LENGTH;
 /** @author shuijing */
 @Setter
 @Service("randomWordCaptchaGenerator")
-public class RandomWordCaptchaGenerator<UA> extends AbstractCaptchaGenerator<String, UA> {
+public class RandomWordCaptchaGenerator extends AbstractCaptchaGenerator<String> {
 
   private int length;
 

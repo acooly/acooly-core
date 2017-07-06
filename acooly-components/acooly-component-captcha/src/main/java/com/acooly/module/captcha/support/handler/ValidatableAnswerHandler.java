@@ -4,24 +4,25 @@ import com.acooly.module.captcha.*;
 import com.acooly.module.captcha.dto.AnswerDto;
 import com.acooly.module.captcha.exception.CaptchaValidateException;
 import com.acooly.module.captcha.repository.CaptchaRepository;
-import com.acooly.module.captcha.repository.RedisCaptchaRepository;
-import com.acooly.module.captcha.support.ValidatableAnswer;
 import lombok.extern.slf4j.Slf4j;
 
 /** @author shuijing */
 @Slf4j
-public class ValidatableAnswerHandler<A, UA> implements AnswerHandler<UA> {
+public class ValidatableAnswerHandler<V, UA> implements AnswerHandler<UA> {
 
   private CaptchaRepository repository;
 
-  public ValidatableAnswerHandler(CaptchaRepository repository) {
+  private Validator<V, UA> validator;
+
+  public ValidatableAnswerHandler(CaptchaRepository repository, Validator<V, UA> validator) {
     this.repository = repository;
+    this.validator = validator;
   }
 
   @Override
   public boolean isValid(AnswerDto<UA> answerDto) throws CaptchaValidateException {
 
-    Captcha captcha = repository.get(answerDto.getCaptchaId());
+    Captcha<V> captcha = repository.get(answerDto.getCaptchaId());
     if (captcha == null) {
       throw new CaptchaValidateException("CAPCHA_IS_NULL", "验证码为空");
     }
@@ -29,9 +30,7 @@ public class ValidatableAnswerHandler<A, UA> implements AnswerHandler<UA> {
       throw new CaptchaValidateException("CAPCHA_TIMEOUT", "验证码过期");
     }
 
-    Answer answer = captcha.getAnswer();
-    ValidatableAnswer<A, UA> validatableAnswer = (ValidatableAnswer) answer;
-    boolean validated = validatableAnswer.validateTo(answerDto.getUserAnswer());
+    boolean validated = validator.validate(captcha.getValue(), answerDto.getUserAnswer());
 
     if (!validated) {
       throw new CaptchaValidateException("CAPCHA_VERIFY_FAIL", "验证码不正确");

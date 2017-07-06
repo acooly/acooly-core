@@ -9,7 +9,7 @@
  */
 package com.acooly.core.test.ds;
 
-import com.acooly.core.test.TestBase;
+import com.acooly.core.test.TestNoWebBase;
 import org.apache.shiro.util.Assert;
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.sql.DataSource;
 
 /** @author shuijing */
-public class DatabaseTest extends TestBase {
+public class DatabaseTest extends TestNoWebBase {
 
   @Autowired protected DataSource dataSource;
 

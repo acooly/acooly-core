@@ -14,6 +14,7 @@ import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.exception.AppConfigException;
+import com.acooly.module.ds.check.DBPatch;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.vendor.OracleValidConnectionChecker;
 import com.google.common.collect.Maps;
@@ -85,6 +86,9 @@ public class DruidProperties implements BeanClassLoaderAware {
 
   /** 自动创建表 */
   private boolean autoCreateTable = true;
+
+  /** 检查表是否缺少某些字段，如果缺少，启动报错。 */
+  private Map<String, DBPatch> dbPatchs;
 
   private ClassLoader beanClassLoader;
 
@@ -180,7 +184,7 @@ public class DruidProperties implements BeanClassLoaderAware {
     Properties properties = new Properties();
     properties.put("druid.stat.logSlowSql", Boolean.TRUE.toString());
     if (!Env.isOnline()) {
-      if (Apps.isDevMode()) {
+      if (Apps.isDevMode()&&this.showSql) {
         properties.put("druid.stat.slowSqlMillis", Integer.toString(0));
       } else {
         //线下测试时，执行时间超过100ms就打印sql，用户可以设置为0，每条sql语句都打印

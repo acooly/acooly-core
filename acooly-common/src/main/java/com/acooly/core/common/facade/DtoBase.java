@@ -21,7 +21,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class DtoBase implements Serializable {
-
+  private static final long serialVersionUID = 1L;
   /** 商户订单号 */
   private String merchOrderNo;
   /** 业务订单号 * */

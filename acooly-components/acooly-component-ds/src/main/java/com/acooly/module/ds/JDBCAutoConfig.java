@@ -14,6 +14,7 @@ import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.dao.support.DataSourceReadyEvent;
 import com.acooly.core.common.exception.AppConfigException;
+import com.acooly.module.ds.check.DBPatchChecker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -48,10 +49,13 @@ public class JDBCAutoConfig {
         EnvironmentHolder.buildProperties(druidProperties, DruidProperties.PREFIX);
       }
       if (druidProperties.isUseTomcatDataSource()) {
-          dataSource=new TomcatDataSourceProperties().build(druidProperties);
+        dataSource = new TomcatDataSourceProperties().build(druidProperties);
       } else {
         dataSource = druidProperties.build();
       }
+
+      new DBPatchChecker(druidProperties).check(dataSource);
+
       ApplicationContextHolder.get().publishEvent(new DataSourceReadyEvent(dataSource));
       return dataSource;
     } catch (Exception e) {

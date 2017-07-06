@@ -3,7 +3,6 @@ package com.acooly.module.captcha.support.generator;
 import com.acooly.module.captcha.Captcha;
 import com.acooly.module.captcha.exception.CaptchaGenerateException;
 import lombok.Setter;
-import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -11,7 +10,6 @@ import static com.acooly.module.captcha.CaptchaProperties.DEFAULT_LENGTH;
 
 /** @author shuijing */
 @Setter
-@Service("randomWordCaptchaGenerator")
 public class RandomWordCaptchaGenerator extends AbstractCaptchaGenerator<String> {
 
   private int length;

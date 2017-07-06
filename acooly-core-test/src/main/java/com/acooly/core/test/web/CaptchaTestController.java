@@ -26,18 +26,18 @@ public class CaptchaTestController {
   }
 
   @RequestMapping("/val")
-  public void validateCaptcha() {
-    Captcha captcha = captchaService.getCaptcha(500L);
+  public void validateCaptchaNull() {
+    Captcha captcha = captchaService.getCaptcha(600L);
     log.info(
         "id:{},answer:{},getExpiredTime:{}",
         captcha.getId(),
         captcha.getValue(),
         captcha.getExpiredTimeMillis());
-    captchaService.validateCaptcha(captcha.getId(), captcha.getValue() + "aaa");
+    captchaService.validateCaptcha(captcha.getId() + "aaa", captcha.getValue() + "aaa");
   }
 
   @RequestMapping("/vali")
-  public void validateCaptchaNull() {
+  public void validateCaptcha() {
     Captcha captcha = captchaService.getCaptcha("18612288888", "openapi", null);
     log.info(
         "id:{},answer:{},getExpiredTime:{}",
@@ -45,5 +45,16 @@ public class CaptchaTestController {
         captcha.getValue(),
         captcha.getExpiredTimeMillis());
     captchaService.validateCaptcha(captcha.getId(), (String) captcha.getValue());
+  }
+
+  @RequestMapping("/valid")
+  public void validateCaptchaHander() {
+    Captcha captcha = captchaService.getCaptcha("18612288888", "openapi", null);
+    log.info(
+        "id:{},answer:{},getExpiredTime:{}",
+        captcha.getId(),
+        captcha.getValue(),
+        captcha.getExpiredTimeMillis());
+    captchaService.validateCaptcha(captcha.getId(), ((String) captcha.getValue()).toLowerCase());
   }
 }

@@ -25,14 +25,16 @@ public class CaptchaProperties {
 
   private int captchaLength = DEFAULT_LENGTH;
 
-  private GeneratorType generatorType = GeneratorType.RandonNumber;
+  private GeneratorType generatorType = GeneratorType.RANDOM_NUMBER;
 
-  private AnswerHandlerType handlerType = AnswerHandlerType.DefualtAnswerHandler;
+  private AnswerHandlerType handlerType = AnswerHandlerType.DEFUALT_ANSWER_HANDLER;
 
   public enum GeneratorType implements Messageable {
-    RandomWord("randomWordCaptchaGenerator", "随机字符"),
+    RANDOM_WORD("randomWordCaptchaGenerator", "随机字符"),
 
-    RandonNumber("randonNumberCaptchaGenerator", "随机数字");
+    RANDOM_NUMBER("randonNumberCaptchaGenerator", "随机数字"),
+
+    DEFAULT_UNIQUE_GENERATOR("defaultUniqueGenerator", "唯一字符串(生成token建议使用)");
 
     private final String code;
     private final String message;
@@ -54,7 +56,9 @@ public class CaptchaProperties {
   }
 
   public enum AnswerHandlerType implements Messageable {
-    DefualtAnswerHandler("validatableAnswerHandler", "字符验证器");
+    DEFUALT_ANSWER_HANDLER("validatableAnswerHandler", "字符验证器"),
+
+    CASE_SENSITIVE_HANDLER("caseSensitiveHandler", "字符大小写敏感验证器");
 
     private final String code;
     private final String message;

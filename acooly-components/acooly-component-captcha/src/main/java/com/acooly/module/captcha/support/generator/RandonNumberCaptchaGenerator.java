@@ -1,11 +1,9 @@
 package com.acooly.module.captcha.support.generator;
 
-import org.springframework.stereotype.Service;
 
 import static com.acooly.module.captcha.CaptchaProperties.DEFAULT_LENGTH;
 
 /** @author shuijing */
-@Service("randonNumberCaptchaGenerator")
 public class RandonNumberCaptchaGenerator extends RandomWordCaptchaGenerator{
 
   public RandonNumberCaptchaGenerator() {

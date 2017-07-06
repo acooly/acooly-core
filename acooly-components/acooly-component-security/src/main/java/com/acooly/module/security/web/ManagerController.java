@@ -13,6 +13,7 @@ import com.acooly.module.security.domain.User;
 import com.acooly.module.security.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.Maps;
+import io.jsonwebtoken.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -29,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 
+import static com.acooly.core.utils.security.JWTUtils.SIGN_KEY;
 import static com.acooly.module.security.shiro.realm.ShiroDbRealm.SESSION_USER;
 
 /**
@@ -77,7 +79,28 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
       //targetUrl = (String) ServletUtil.getSessionAttribute(JWTUtils.KEY_TARGETURL);
       if (StringUtils.isNotBlank(targetUrl)) {
         String jwt = JWTUtils.getJwtFromCookie(request.getCookies());
-        return "redirect:" + fomartRederectUrl(targetUrl, jwt);
+        if (!StringUtils.isEmpty(jwt)) {
+          Jwt<Header, Claims> jws = null;
+          try {
+            jws = JWTUtils.parseJws(jwt, SIGN_KEY);
+          } catch (Exception e) {
+            logger.error("解析jwt错误", e);
+          }
+          boolean timeout = JWTUtils.validateTimeout(jws);
+          if (timeout) {
+            String newJws = JWTUtils.refreshJwt(jws);
+            return "redirect:" + fomartRederectUrl(targetUrl, newJws);
+          } else {
+            return "redirect:" + fomartRederectUrl(targetUrl, jwt);
+          }
+        } else {
+          User user = (User) subject.getPrincipal();
+          if (user != null) {
+            String newJwt = genarateJwt(user);
+            JWTUtils.addJwtCookie(ServletUtil.getResponse(), newJwt, JWTUtils.getDomainName());
+            return "redirect:" + fomartRederectUrl(targetUrl, newJwt);
+          }
+        }
       }
       return "redirect:/manage/index.html";
     } else {
@@ -96,18 +119,10 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
     JsonResult jsonResult = new JsonResult();
     User user = (User) SecurityUtils.getSubject().getSession().getAttribute(SESSION_USER);
     if (user != null) {
-      String username = user.getUsername();
-      String subjectStr = "";
-      try {
-        subjectStr = JsonMapper.nonEmptyMapper().getMapper().writeValueAsString(user);
-      } catch (JsonProcessingException e) {
-        logger.error("创建jwt时user转String失败", e.getMessage());
-      }
-      String jwt = JWTUtils.createJwt(username, subjectStr);
-      HashMap<Object, Object> resmap = Maps.newHashMap();
-
+      String jwt = genarateJwt(user);
       JWTUtils.addJwtCookie(ServletUtil.getResponse(), jwt, JWTUtils.getDomainName());
 
+      HashMap<Object, Object> resmap = Maps.newHashMap();
       String targetUrl = (String) ServletUtil.getSessionAttribute(JWTUtils.KEY_TARGETURL);
       if (StringUtils.isNotBlank(targetUrl)) {
         resmap.put("isRedirect", true);
@@ -120,6 +135,17 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
     }
     jsonResult.setSuccess(true);
     return jsonResult;
+  }
+
+  private String genarateJwt(User user) {
+    String username = user.getUsername();
+    String subjectStr = "";
+    try {
+      subjectStr = JsonMapper.nonEmptyMapper().getMapper().writeValueAsString(user);
+    } catch (JsonProcessingException e) {
+      logger.error("创建jwt时user转String失败", e.getMessage());
+    }
+    return JWTUtils.createJwt(username, subjectStr);
   }
 
   private String fomartRederectUrl(String targetUrl, String jwt) {

@@ -80,9 +80,11 @@ public class JWTUtils {
   /** JWT 接收方 (暂无用) */
   private static String aud = "boss";
   /** header */
-  private static Map headerMap;
+  public static Map headerMap;
 
   private static ObjectMapper objectMapper;
+  /** jwt 过期时间，单位分钟 */
+  public static final Long JWT_EXP_TIME = 7 * 24 * 60L;
 
   static {
     headerMap = new HashMap<>();
@@ -94,7 +96,7 @@ public class JWTUtils {
   public static String createJwt(String sub, String subjectStr) {
     Date iat = new Date();
     // 实效时间为 120分钟
-    Date expTime = new Date(iat.getTime() + 120 * 60 * 60 * 1000);
+    Date expTime = new Date(iat.getTime() + JWT_EXP_TIME * 60 * 1000);
     Map claims = new HashMap<>();
     claims.put(CLAIMS_KEY_ISS, iss);
     claims.put(CLAIMS_KEY_SUB, sub);
@@ -109,6 +111,21 @@ public class JWTUtils {
             .signWith(SignatureAlgorithm.HS256, SIGN_KEY.getBytes())
             .compact();
     return compactJws;
+  }
+
+  public static String refreshJwt(Jwt<Header, Claims> jws) {
+    Date expTime = new Date((System.currentTimeMillis() + JWT_EXP_TIME * 60 * 1000));
+    jws.getBody().put(CLAIMS_KEY_EXP, expTime);
+    String newJws =
+        Jwts.builder()
+            .setHeader(headerMap)
+            .setClaims(jws.getBody())
+            .signWith(SignatureAlgorithm.HS256, SIGN_KEY.getBytes())
+            .compact();
+    //更新jwt
+    JWTUtils.removeCookie(JWTUtils.TYPE_JWT, JWTUtils.getDomainName());
+    JWTUtils.addJwtCookie(ServletUtil.getResponse(), newJws, JWTUtils.getDomainName());
+    return newJws;
   }
 
   /**

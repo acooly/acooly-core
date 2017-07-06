@@ -19,7 +19,7 @@ import javax.servlet.ServletContext;
 /** @author qiubo@yiji.com */
 @Controller
 public class FreemarkerController {
-  @Autowired private ServletContext servletContext;
+  @Autowired(required = false) private ServletContext servletContext;
 
   @RequestMapping("/testFtl")
   public String testFtl(ModelMap modelMap) {

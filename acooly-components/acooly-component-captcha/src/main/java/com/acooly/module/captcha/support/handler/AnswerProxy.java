@@ -21,7 +21,7 @@ public class AnswerProxy<UA>
 
   private ApplicationContext applicationContext;
 
-  private AnswerHandler<UA> handler;
+  private AnswerHandler handler;
 
   @Autowired private CaptchaProperties properties;
 
@@ -34,7 +34,7 @@ public class AnswerProxy<UA>
   public void onApplicationEvent(ContextRefreshedEvent event) {
     if (handler == null) {
       handler =
-          (AnswerHandler<UA>) this.applicationContext.getBean(properties.getHandlerType().code());
+          (AnswerHandler) this.applicationContext.getBean(properties.getHandlerType().code());
     }
   }
 

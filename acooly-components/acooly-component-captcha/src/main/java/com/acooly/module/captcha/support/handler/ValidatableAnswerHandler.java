@@ -14,7 +14,7 @@ public class ValidatableAnswerHandler<V, UA> implements AnswerHandler<UA> {
 
   private Validator<V, UA> validator;
 
-  public ValidatableAnswerHandler(CaptchaRepository repository, Validator<V, UA> validator) {
+  public ValidatableAnswerHandler(CaptchaRepository repository, Validator validator) {
     this.repository = repository;
     this.validator = validator;
   }

@@ -28,7 +28,7 @@ public class CaptchaAutoConfig {
   @Autowired private CaptchaProperties properties;
 
   @Bean
-  public CaptchaRepository redisCaptchaRepository(RedisTemplate redisTemplate) {
+  public CaptchaRepository<String, Captcha> redisCaptchaRepository(RedisTemplate redisTemplate) {
     return new RedisCaptchaRepository(redisTemplate);
   }
 
@@ -43,7 +43,7 @@ public class CaptchaAutoConfig {
   }
 
   @Bean
-  public CaptchaGenerator randomWordCaptchaGenerator(CaptchaRepository redisCaptchaRepository) {
+  public CaptchaGenerator randomWordCaptchaGenerator(CaptchaRepository<String, Captcha> redisCaptchaRepository) {
     RandomWordCaptchaGenerator generator = new RandomWordCaptchaGenerator();
     generator.setCaptchaRepository(redisCaptchaRepository);
     generator.setLength(properties.getCaptchaLength());
@@ -52,7 +52,7 @@ public class CaptchaAutoConfig {
   }
 
   @Bean
-  public CaptchaGenerator randonNumberCaptchaGenerator(CaptchaRepository redisCaptchaRepository) {
+  public CaptchaGenerator randonNumberCaptchaGenerator(CaptchaRepository<String, Captcha> redisCaptchaRepository) {
     RandonNumberCaptchaGenerator generator = new RandonNumberCaptchaGenerator();
     generator.setCaptchaRepository(redisCaptchaRepository);
     generator.setLength(properties.getCaptchaLength());
@@ -61,7 +61,7 @@ public class CaptchaAutoConfig {
   }
 
   @Bean
-  public DefaultUniqueGenerator defaultUniqueGenerator(CaptchaRepository redisCaptchaRepository) {
+  public DefaultUniqueGenerator defaultUniqueGenerator(CaptchaRepository<String, Captcha> redisCaptchaRepository) {
     DefaultUniqueGenerator generator = new DefaultUniqueGenerator(properties.getCaptchaLength());
     generator.setCaptchaRepository(redisCaptchaRepository);
     generator.setDefaultSeconds(properties.getExpireSeconds());

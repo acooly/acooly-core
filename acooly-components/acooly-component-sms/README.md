@@ -38,6 +38,10 @@ acooly.sms.emay.sign=\u9526\u5DDE\u94F6\u884C
 acooly.sms.url=http://sdk.entinfo.cn:8061
 acooly.sms.username=xxx
 acooly.sms.password=xxx
+acooly.sms.batchUser=xxx
+acooly.sms.batchPswd=xxx
+acooly.sms.prefix=xxx(前缀)
+acooly.sms.posfix=xxx(后缀)
 ```
 3. 重庆客亲通
 ```

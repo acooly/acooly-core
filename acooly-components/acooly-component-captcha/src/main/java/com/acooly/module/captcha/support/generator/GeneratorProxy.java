@@ -14,14 +14,14 @@ import org.springframework.stereotype.Service;
 
 /** @author shuijing */
 @Service("captchaGenerator")
-public class GeneratorProxy<A>
-    implements CaptchaGenerator<A>,
+public class GeneratorProxy<V>
+    implements CaptchaGenerator<V>,
         ApplicationContextAware,
         ApplicationListener<ContextRefreshedEvent> {
 
   private ApplicationContext applicationContext;
 
-  private CaptchaGenerator<A> generator;
+  private CaptchaGenerator generator;
 
   @Autowired private CaptchaProperties properties;
 
@@ -34,13 +34,13 @@ public class GeneratorProxy<A>
   public void onApplicationEvent(ContextRefreshedEvent event) {
     if (generator == null) {
       generator =
-          (CaptchaGenerator<A>)
+          (CaptchaGenerator)
               this.applicationContext.getBean(properties.getGeneratorType().code());
     }
   }
 
   @Override
-  public Captcha<A> createCaptcha(String key, Long seconds) throws CaptchaGenerateException {
+  public Captcha<V> createCaptcha(String key, Long seconds) throws CaptchaGenerateException {
     return generator.createCaptcha(key, seconds);
   }
 }

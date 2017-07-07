@@ -24,10 +24,10 @@ public class ValidatableAnswerHandler<V, UA> implements AnswerHandler<UA> {
 
     Captcha<V> captcha = repository.get(answerDto.getCaptchaId());
     if (captcha == null) {
-      throw new CaptchaValidateException("CAPCHA_IS_NULL", "验证码为空");
+      throw new CaptchaValidateException("CAPCHA_IS_NULL", "验证码不存在");
     }
     if (System.currentTimeMillis() > captcha.getExpiredTimeMillis()) {
-      throw new CaptchaValidateException("CAPCHA_TIMEOUT", "验证码过期");
+      throw new CaptchaValidateException("CAPCHA_TIMEOUT", "验证码已过期");
     }
 
     boolean validated = validator.validate(captcha.getValue(), answerDto.getUserAnswer());

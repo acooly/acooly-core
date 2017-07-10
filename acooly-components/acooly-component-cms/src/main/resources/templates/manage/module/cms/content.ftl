@@ -40,10 +40,10 @@
             <table class="tableForm" width="100%">
                 <tr>
                     <td align="left">
-                        标题:<input type="text" class="text" name="search_LIKE_title" value="${param.search_LIKE_title}"/>
-                        关键字:<input type="text" class="text" name="search_LIKE_keywords" value="${param.search_LIKE_keywords}"/>
+                        标题:<input type="text" class="text" name="search_LIKE_title"  />
+                        关键字:<input type="text" class="text" name="search_LIKE_keywords"  "/>
                         <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true"
-                           onclick="$.acooly.framework.search('manage_content${Request["code"]}_searchform', 'manage_content${RequestParameters.code}_datagrid');">查询</a>
+                           onclick="$.acooly.framework.search('manage_content${RequestParameters.code}_searchform', 'manage_content${RequestParameters.code}_datagrid');">查询</a>
                     </td>
                 </tr>
             </table>

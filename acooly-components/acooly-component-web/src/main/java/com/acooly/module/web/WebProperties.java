@@ -42,7 +42,7 @@ public class WebProperties {
   private boolean HttpPutFormContentFilterEnable = false;
 
   /** 配置自定义欢迎页面,比如设置登录页面为欢迎页:login.html */
-  private String welcomeFile = "index.html";
+  private String welcomeFile = "manage/index.html";
 
   /** http 缓存时间,-1=不设置,0=第二次请求需要和服务器协商,大于0=经过多少秒后才过期 */
   private int cacheMaxAge = -1;

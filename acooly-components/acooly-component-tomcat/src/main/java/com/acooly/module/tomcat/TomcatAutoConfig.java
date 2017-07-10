@@ -14,8 +14,6 @@ import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.exception.AppConfigException;
 import com.google.common.collect.Maps;
-import org.apache.catalina.Lifecycle;
-import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.valves.AccessLogValve;
 import org.apache.coyote.AbstractProtocol;
@@ -105,17 +103,6 @@ public class TomcatAutoConfig {
           valve.setRequestAttributesEnabled(true);
           valve.setDirectory(Apps.getLogPath());
           factory.addContextValves(valve);
-        }
-
-        if (!Apps.isDevMode()) {
-          factory.addContextLifecycleListeners(
-              event -> {
-                if (event.getType().equals(Lifecycle.CONFIGURE_START_EVENT)) {
-                  ((StandardContext) event.getLifecycle())
-                      .getResources()
-                      .setCacheTtl(100l * 24 * 60 * 60 * 1000);
-                }
-              });
         }
       }
     };

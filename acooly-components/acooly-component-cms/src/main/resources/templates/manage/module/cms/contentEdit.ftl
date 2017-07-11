@@ -7,25 +7,31 @@
         <input type="hidden" name="code" value="${RequestParameters.code}"/>
         <table class="tableForm" width="100%">
             <tr>
-                <th width="10%">标题：</th>
+                <th width="20%">标题：</th>
                 <td>
-                    <input type="text" style="width: 300px;" class="text" name="title" size="128" class="easyui-validatebox"
-                           data-options="required:true" class="text" validType="byteLength[1,128]"/>
+                    <input type="text" style="width: 300px;" class="text" name="title" size="128" class="easyui-validatebox" data-options="required:true" class="text" validType="byteLength[1,128]"/>
                     <#if RequestParameters.cmsType != 'banner'>
-                    <span>关键字：<input type="text" class="text" name="keywords" size="20"
-                                     class="easyui-validatebox" validType="byteLength[1,128]"/></span>
-                    <span>编码:<select name="keycode" editable="false" style="width: 80px;" panelHeight="auto" class="easyui-combobox"><option value="">选择编码</option>
+                    <span style="margin-left: 10px;">编码: <select name="keycode" editable="false" style="width: 80px;" panelHeight="auto" class="easyui-combobox"><option value="">选择编码</option>
                                      <#list allCodes as v><option value="${v}">${v}</option></#list>
                                </select></span>
                     </#if>
                 </td>
             </tr>
+            <#if RequestParameters.cmsType != 'banner'>
             <tr>
-                <th>简介：</th>
-                <td><textarea name="subject" cols="80" rows="2" style="width:700px;"></textarea></td>
+                <th>页面标题(SEO)：</th>
+                <td><input type="text" style="width: 300px;" class="text" name="webTitle" size="128" class="easyui-validatebox"  class="text" validType="byteLength[1,128]"/>
+                    <span style="margin-left: 10px;">关键字（SEO）：<input type="text" class="text" name="keywords" size="20"
+                                          class="easyui-validatebox" validType="byteLength[1,128]"/></span>
+                </td>
             </tr>
             <tr>
-                <th>图片：</th>
+                <th>简介(SEO)：</th>
+                <td><textarea name="subject" cols="80" rows="2" style="width:700px;"></textarea></td>
+            </tr>
+            </#if>
+            <tr>
+                <th>图片(封面)：</th>
                 <td>
                     <input type="file" name="cover_f" id="cover_f" class="easyui-validatebox" validType="validImg['jpg,gif,png','只能上传jpg,gif,png格式的图片']"/>
                     <#if content.cover?? && content.cover != '' && action!='create'>

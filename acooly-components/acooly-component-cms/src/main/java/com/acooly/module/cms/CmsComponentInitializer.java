@@ -14,15 +14,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 
-/** @author acooly */
+/**
+ * @author acooly
+ */
 public class CmsComponentInitializer implements ComponentInitializer {
 
-  private static final Logger logger = LoggerFactory.getLogger(CmsComponentInitializer.class);
+    private static final Logger logger = LoggerFactory.getLogger(CmsComponentInitializer.class);
 
-  @Override
-  public void initialize(ConfigurableApplicationContext applicationContext) {
-    setPropertyIfMissing("acooly.ds.Checker.excludedColumnTables.cms", "cms_content_body");
-    setPropertyIfMissing("acooly.security.xss.exclusions.cms[0]", "/manage/module/cms/**");
-    setPropertyIfMissing("acooly.security.csrf.exclusions.cms", "/manage/module/cms/**");
-  }
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        setPropertyIfMissing("acooly.ds.Checker.excludedColumnTables.cms", "cms_content_body");
+        setPropertyIfMissing("acooly.security.xss.exclusions.cms[0]", "/manage/module/cms/**");
+        setPropertyIfMissing("acooly.security.csrf.exclusions.cms", "/manage/module/cms/**");
+
+        /** 升级cms，增加网页专用标题 */
+        setPropertyIfMissing("acooly.ds.dbPatchs.cms_content.columnName", "web_title");
+        setPropertyIfMissing("acooly.ds.dbPatchs.cms_content.patchSql", "ALTER TABLE `cms_content` ADD COLUMN `web_title` VARCHAR(128) NULL COMMENT '网页标题';");
+    }
 }

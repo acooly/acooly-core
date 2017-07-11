@@ -1,16 +1,21 @@
 package com.acooly.module.ds.check;
 
+import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.module.ds.DruidProperties;
 import com.acooly.module.ds.check.dic.Column;
 import com.acooly.module.ds.check.loader.TableLoader;
 import com.acooly.module.ds.check.loader.TableLoaderProvider;
+import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.util.CollectionUtils;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -62,19 +67,47 @@ public class DBPatchChecker {
                         }
                       });
               if (!missingColums.isEmpty()) {
-                log.error(
-                    "表:{}缺少以下字段：{}，请按照提示执行sql语句:\n{}",
-                    entry.getKey(),
-                    missingColums,
-                    entry.getValue().getPatchSql());
-                  System.exit(0);
+                  log.warn(
+                      "表:{}缺少以下字段：{}，自动执行下列sql语句:\n{}",
+                      entry.getKey(),
+                      missingColums,
+                      entry.getValue().getPatchSql());
+                  try {
+                      executeSql(dataSource, entry.getValue().getPatchSql());
+                  } catch (Exception e) {
+                      log.error(
+                          "自动执行sql失败，表:{}缺少以下字段：{}，请按照提示执行sql语句:\n{}",
+                          entry.getKey(),
+                          missingColums,
+                          entry.getValue().getPatchSql());
+                      System.exit(0);
+                  }
+
               }
             }
 
           } catch (SQLException e) {
-            log.error("执行表字段检查失败",e);
+            log.error("执行表字段检查失败", e);
           }
         });
+  }
+
+  private void executeSql(DataSource dataSource, String sql) {
+    Connection connection = null;
+    try {
+      connection = dataSource.getConnection();
+      ScriptUtils.executeSqlScript(connection, new ByteArrayResource(sql.getBytes(Charsets.UTF_8)));
+    } catch (SQLException e) {
+      throw new AppConfigException(e);
+    } finally {
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException e) {
+          log.warn("", e);
+        }
+      }
+    }
   }
 
   private String getMysqlschema(DataSource dataSource) throws SQLException {

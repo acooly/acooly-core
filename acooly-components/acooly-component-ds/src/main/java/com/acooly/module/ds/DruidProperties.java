@@ -10,7 +10,6 @@
  */
 package com.acooly.module.ds;
 
-import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.exception.AppConfigException;
@@ -184,14 +183,7 @@ public class DruidProperties implements BeanClassLoaderAware {
     Properties properties = new Properties();
     properties.put("druid.stat.logSlowSql", Boolean.TRUE.toString());
     if (!Env.isOnline()) {
-      if (Apps.isDevMode()&&this.showSql) {
-        properties.put("druid.stat.slowSqlMillis", Integer.toString(0));
-      } else {
-        //线下测试时，执行时间超过100ms就打印sql，用户可以设置为0，每条sql语句都打印
-        properties.put(
-            "druid.stat.slowSqlMillis",
-            Integer.toString(Math.min(this.getSlowSqlThreshold(), DEFAULT_SLOW_SQL_THRESHOLD)));
-      }
+        properties.put("druid.stat.slowSqlMillis", slowSqlThreshold);
     } else {
       //线上运行时，阈值选最大值。有可能线下测试设置为0，方便调试
       properties.put(

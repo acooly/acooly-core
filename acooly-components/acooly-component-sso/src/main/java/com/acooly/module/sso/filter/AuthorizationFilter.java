@@ -134,7 +134,12 @@ public class AuthorizationFilter implements Filter {
         //缓存失效，重新检验
         return reputCache(request);
       } else {
-        return cacheVo.isPermitted;
+        //防止网络原因验证失败，成功的直接返回，失败的重新http验证
+        if (cacheVo.isPermitted) {
+          return true;
+        } else {
+          return reputCache(request);
+        }
       }
     } else {
       return reputCache(request);

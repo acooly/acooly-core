@@ -60,7 +60,7 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
       if (request.isAppClient()) {
         if (appCustomer == null) {
           appCustomer = new AppCustomer();
-          appCustomer.setUserName(request.getUsername());
+          appCustomer.setUserName(dto.getAccessKey());
           appCustomer.setAccessKey(dto.getAccessKey());
           appCustomer.setDeviceId(request.getDeviceId());
           appCustomer.setDeviceType(request.getDeviceType());

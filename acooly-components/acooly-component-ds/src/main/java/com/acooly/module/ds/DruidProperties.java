@@ -183,7 +183,7 @@ public class DruidProperties implements BeanClassLoaderAware {
     Properties properties = new Properties();
     properties.put("druid.stat.logSlowSql", Boolean.TRUE.toString());
     if (!Env.isOnline()) {
-        properties.put("druid.stat.slowSqlMillis", slowSqlThreshold);
+        properties.put("druid.stat.slowSqlMillis", Integer.toString(slowSqlThreshold));
     } else {
       //线上运行时，阈值选最大值。有可能线下测试设置为0，方便调试
       properties.put(

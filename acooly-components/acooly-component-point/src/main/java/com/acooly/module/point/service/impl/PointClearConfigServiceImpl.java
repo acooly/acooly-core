@@ -7,7 +7,6 @@
 package com.acooly.module.point.service.impl;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,21 +35,18 @@ public class PointClearConfigServiceImpl extends EntityServiceImpl<PointClearCon
 
 	@Override
 	public long getClearPoint(String userName, Date tradeTime) {
-		PointClearConfig pointClearConfig = null;
 		String tradeTimeStr = Dates.format(tradeTime, Dates.CHINESE_DATETIME_FORMAT_LINE);
-		List<PointClearConfig> lists = getEntityDao().getClearConfigByTradeTime(tradeTimeStr);
-		if (!lists.isEmpty()) {
-			pointClearConfig = lists.get(0);
-			String startClearTime = Dates.format(pointClearConfig.getStartClearTime(),
-					Dates.CHINESE_DATETIME_FORMAT_LINE);
-			String endClearTime = Dates.format(pointClearConfig.getEndClearTime(), Dates.CHINESE_DATETIME_FORMAT_LINE);
-			String clearTime = Dates.format(pointClearConfig.getClearTime(), Dates.CHINESE_DATETIME_FORMAT_LINE);
-
-			long producePoint = pointTradeService.getProducePoint(userName, startClearTime, endClearTime);
-			long expensePoint = pointTradeService.getExpensePoint(userName, startClearTime, clearTime);
-			long clearPoint = producePoint - expensePoint;
-			return (clearPoint) > 0 ? clearPoint : 0l;
+		PointClearConfig pointClearConfig = getEntityDao().getOneClearConfigByTradeTime(tradeTimeStr);
+		if (pointClearConfig == null) {
+			return 0l;
 		}
-		return 0l;
+		String startClearTime = Dates.format(pointClearConfig.getStartClearTime(), Dates.CHINESE_DATETIME_FORMAT_LINE);
+		String endClearTime = Dates.format(pointClearConfig.getEndClearTime(), Dates.CHINESE_DATETIME_FORMAT_LINE);
+		String clearTime = Dates.format(pointClearConfig.getClearTime(), Dates.CHINESE_DATETIME_FORMAT_LINE);
+
+		long producePoint = pointTradeService.getProducePoint(userName, startClearTime, endClearTime);
+		long expensePoint = pointTradeService.getExpensePoint(userName, startClearTime, clearTime);
+		long clearPoint = producePoint - expensePoint;
+		return (clearPoint) > 0 ? clearPoint : 0l;
 	}
 }

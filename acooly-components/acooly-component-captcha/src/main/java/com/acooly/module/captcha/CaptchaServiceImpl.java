@@ -43,7 +43,7 @@ public class CaptchaServiceImpl implements CaptchaService {
     answerHandler.isValid(new AnswerDto<>(captchaId, userAnswer));
   }
 
-  private String mergeKey(String key, String businessCode) {
+  public static String mergeKey(String key, String businessCode) {
 
     if (key == null && businessCode == null) {
       //gen key

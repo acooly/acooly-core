@@ -55,6 +55,9 @@ public class SmsServiceImpl implements SmsService, InitializingBean {
     SmsStatus smsStatus = SmsStatus.SEND_FAIL;
     String resultMessage = null;
     try {
+      if (isInBlacklist(mobileNo)) {
+        return;
+      }
       sendCheck(mobileNo, context);
       result = shortMessageSender.send(mobileNo, content);
       smsStatus = SmsStatus.SEND_SUCCESS;
@@ -74,6 +77,9 @@ public class SmsServiceImpl implements SmsService, InitializingBean {
 
   @Override
   public void sendAsync(final String mobileNo, final String content, final SmsContext smsContext) {
+    if (isInBlacklist(mobileNo)) {
+      return;
+    }
     sendCheck(mobileNo, smsContext);
     if (smsContext != null) {
       smsContext.setNeedCheck(false);
@@ -122,6 +128,9 @@ public class SmsServiceImpl implements SmsService, InitializingBean {
       final String template,
       final Map<String, Object> data,
       final SmsContext smsContext) {
+    if (isInBlacklist(mobileNo)) {
+      return;
+    }
     sendCheck(mobileNo, smsContext);
     if (smsContext != null) {
       smsContext.setNeedCheck(false);
@@ -204,10 +213,16 @@ public class SmsServiceImpl implements SmsService, InitializingBean {
     return smsBlacklistService.inBlacklist(mobileNo);
   }
 
-  protected void sendCheck(String mobileNo, SmsContext context) {
+  private boolean isInBlacklist(String mobileNo) {
     if (isBlacklist(mobileNo)) {
-      throw new ShortMessageSendException("-1003", "黑名单用户，不予发送");
+      logger.info("{}:黑名单用户，不予发送", mobileNo);
+      return true;
     }
+    return false;
+  }
+
+  protected void sendCheck(String mobileNo, SmsContext context) {
+
     if (context == null || !context.isNeedCheck()) {
       return;
     }

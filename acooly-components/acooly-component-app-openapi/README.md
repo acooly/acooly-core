@@ -9,6 +9,9 @@
 
 1. 需要配置匿名账户相关信息，用于app匿名访问登录或其他服务
 2. 应用需要实现`com.acooly.module.appopenapi.support.AppApiLoginService`,提供app登录认证需求
+3. 配置异步通知超时时间
+   `acooly.appopenapi.notifysender.connectionTimeout=7000
+       acooly.appopenapi.notifysender.socketTimeout=8000`
 
 ## 3. 使用
 

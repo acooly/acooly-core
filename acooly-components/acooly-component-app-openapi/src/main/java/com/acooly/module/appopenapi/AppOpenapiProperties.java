@@ -37,7 +37,7 @@ public class AppOpenapiProperties {
 
   private Anonymous anonymous = new Anonymous();
 
-  private NotifySender notifySender = new NotifySender();
+  private NotifySender notifysender = new NotifySender();
 
   @PostConstruct
   public void init() {

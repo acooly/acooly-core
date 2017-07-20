@@ -39,8 +39,8 @@ public class AppOpenApiAutoConfig {
   @Bean
   public DefaultApiNotifySender defaultApiNotifySender(AppOpenapiProperties appOpenapiProperties) {
     DefaultApiNotifySender sender = new DefaultApiNotifySender();
-    sender.setConnectionTimeout(appOpenapiProperties.getNotifySender().getConnectionTimeout());
-    sender.setSocketTimeout(appOpenapiProperties.getNotifySender().getSocketTimeout());
+    sender.setConnectionTimeout(appOpenapiProperties.getNotifysender().getConnectionTimeout());
+    sender.setSocketTimeout(appOpenapiProperties.getNotifysender().getSocketTimeout());
     return sender;
   }
 }

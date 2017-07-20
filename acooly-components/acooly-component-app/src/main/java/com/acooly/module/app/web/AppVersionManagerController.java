@@ -90,7 +90,7 @@ public class AppVersionManagerController
         String hostAndPath = null;
         if (Strings.containsIgnoreCase(oFileProperties.getServerRoot(), "http")) {
             // 媒体服务器配置了host
-            hostAndPath = oFileProperties.getStorageRoot();
+            hostAndPath = oFileProperties.getServerRoot();
         } else {
             hostAndPath = getHost(request) + oFileProperties.getServerRoot();
         }

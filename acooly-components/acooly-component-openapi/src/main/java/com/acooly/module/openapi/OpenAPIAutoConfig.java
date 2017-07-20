@@ -37,6 +37,7 @@ import static com.acooly.module.openapi.OpenAPIProperties.PREFIX;
 @ComponentScan(basePackages = "com.yiji.framework.openapi.core")
 @ComponentScan(basePackages = "com.yiji.framework.openapi.service")
 @ComponentScan(basePackages = "com.yiji.framework.openapi.manage.web")
+@ComponentScan(basePackages = "com.yiji.framework.openapi.nms")
 @EnableJpaRepositories(
   repositoryBaseClass = AbstractEntityJpaDao.class,
   basePackages = "com.yiji.framework.openapi.service.persistent"

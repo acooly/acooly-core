@@ -37,6 +37,8 @@ public class AppOpenapiProperties {
 
   private Anonymous anonymous = new Anonymous();
 
+  private NotifySender notifySender = new NotifySender();
+
   @PostConstruct
   public void init() {
     this.getAnonymous().getServices().add("login");
@@ -58,5 +60,13 @@ public class AppOpenapiProperties {
     private String secretKey = "anonymouanonymou";
     /** 匿名services */
     @NotNull private List<String> services = Lists.newArrayList();
+  }
+
+  @Data
+  public static class NotifySender {
+    /** 通知链接超时时间，默认10S */
+    private String connectionTimeout = "10000";
+    /** 通知socket超时时间，默认10S */
+    private String socketTimeout = "10000";
   }
 }

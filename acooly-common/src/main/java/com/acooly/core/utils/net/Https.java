@@ -64,6 +64,7 @@ public class Https {
   private static final boolean INCLUDE_BLANK = false;
   private static Logger logger = LoggerFactory.getLogger(Https.class);
   private static Https instance = new Https();
+  private static Https customInstance;
   private final HttpClient httpclient;
 
   private Https() {
@@ -92,8 +93,31 @@ public class Https {
     this.httpclient = new DefaultHttpClient(cm, params);
   }
 
+  private Https(int maxTotal, int maxPerRoute, String connectionTimeout, String socketTimeout) {
+    SchemeRegistry schemeRegistry = new SchemeRegistry();
+    Scheme httpsScheme = this.createHttpsScheme(HTTPS_PORT);
+    schemeRegistry.register(httpsScheme);
+    schemeRegistry.register(new Scheme("http", HTTP_PORT, PlainSocketFactory.getSocketFactory()));
+    PoolingClientConnectionManager cm = new PoolingClientConnectionManager(schemeRegistry);
+    cm.setMaxTotal(maxTotal);
+    cm.setDefaultMaxPerRoute(maxPerRoute);
+    BasicHttpParams params = new BasicHttpParams();
+    params.setParameter("http.protocol.cookie-policy", "ignoreCookies");
+    params.setParameter("http.connection.timeout", Integer.valueOf(connectionTimeout));
+    params.setParameter("http.socket.timeout", Integer.valueOf(socketTimeout));
+    this.httpclient = new DefaultHttpClient(cm, params);
+  }
+
   public static Https getInstance() {
     return instance;
+  }
+
+  public static Https getCustomInstance(String connectionTimeout, String socketTimeout) {
+    if (customInstance == null) {
+      customInstance = new Https(200, 50, connectionTimeout, socketTimeout);
+      ShutdownHooks.addShutdownHook(() -> Https.customInstance.shutdown(), "HttpUtilShutdownHook");
+    }
+    return customInstance;
   }
 
   private Scheme createHttpsScheme(int port) {

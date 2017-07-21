@@ -42,12 +42,12 @@ $(function() {
             <th field="status" data-options="formatter:function(value){ return formatRefrence('manage_schedulerRule_datagrid','allStatuss',value);} ">状态</th>
             <th field="cronString">cron_string</th>
             <th field="actionType" data-options="formatter:function(value){ return formatRefrence('manage_schedulerRule_datagrid','allTaskTypes',value);} ">任务类型</th>
-            <th field="properties">HTTP地址</th>
-            <th field="className">类名</th>
-            <th field="methodName">方法名</th>
-            <th field="dgroup">dubbo组名</th>
-            <th field="dversion">dubbo版本</th>
-            <th field="dparam">dubbo参数</th>
+            <th field="properties" formatter="contentFormatter">HTTP地址</th>
+            <th field="className" formatter="contentFormatter">类名</th>
+            <th field="methodName" formatter="contentFormatter">方法名</th>
+            <th field="dgroup" formatter="contentFormatter">dubbo组名</th>
+            <th field="dversion" formatter="contentFormatter">dubbo版本</th>
+            <th field="dparam" formatter="contentFormatter">dubbo参数</th>
             <th field="lastExecuteTime" formatter="dateTimeFormatter">上次执行时间</th>
             <th field="exceptionAtLastExecute" formatter="contentFormatter">上次执行结果</th>
             <th field="creater">任务创建人</th>

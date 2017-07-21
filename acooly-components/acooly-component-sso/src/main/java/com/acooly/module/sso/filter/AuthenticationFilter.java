@@ -5,6 +5,7 @@ import com.acooly.module.sso.dic.AuthResult;
 import com.acooly.module.sso.exceptions.SSOException;
 import com.acooly.module.sso.support.*;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /** @author shuijing */
+@Slf4j
 public class AuthenticationFilter implements Filter {
 
   private static final LoginAuthProcessor defaultLoginAuthentication = new DefaultLoginAuth();

@@ -64,30 +64,26 @@ public abstract class AbstractLoginJwtAuthProcessor<T> implements LoginAuthProce
     if (securityManager == null) {
       ThreadContext.bind(getSecurityManager());
     }
-    Subject conSubject = ThreadContext.getSubject();
-    if (conSubject == null) {
-      String userStr = (String) jwt.getBody().get(JWTUtils.CLAIMS_KEY_SUBJECT);
-      User user = JsonMapper.nonEmptyMapper().getMapper().readValue(userStr, User.class);
-      SimplePrincipalCollection simplePrincipal =
-          new SimplePrincipalCollection(user, ShiroCacheManager.KEY_AUTHC);
+    String userStr = (String) jwt.getBody().get(JWTUtils.CLAIMS_KEY_SUBJECT);
+    User user = JsonMapper.nonEmptyMapper().getMapper().readValue(userStr, User.class);
+    SimplePrincipalCollection simplePrincipal =
+        new SimplePrincipalCollection(user, ShiroCacheManager.KEY_AUTHC);
+    // set user to request
+    request.setAttribute(JWTUtils.CLAIMS_KEY_SUB, user);
 
-      //fix bug -> Session already invalidated  -> get user from request
-      request.setAttribute(JWTUtils.CLAIMS_KEY_SUB,user);
-
-      HttpSession httpSession = request.getSession(true);
-      HttpServletSession shiroSession = null;
-      if (httpSession != null) {
-        shiroSession = new HttpServletSession(httpSession, request.getRemoteHost());
-      }
-      Subject subject =
-          new Subject.Builder(getSecurityManager())
-              .sessionId(shiroSession.getId())
-              .session(shiroSession)
-              .principals(simplePrincipal)
-              .authenticated(true)
-              .buildSubject();
-      ThreadContext.bind(subject);
+    HttpSession httpSession = request.getSession(true);
+    HttpServletSession shiroSession = null;
+    if (httpSession != null) {
+      shiroSession = new HttpServletSession(httpSession, request.getRemoteHost());
     }
+    Subject subject =
+        new Subject.Builder(getSecurityManager())
+            .sessionId(shiroSession.getId())
+            .session(shiroSession)
+            .principals(simplePrincipal)
+            .authenticated(true)
+            .buildSubject();
+    ThreadContext.bind(subject);
   }
 
   /** 将解析后的信息存入 request 属性中 */

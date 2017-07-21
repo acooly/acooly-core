@@ -30,3 +30,6 @@
 1. 域名支持二级域名，如登录服务器地址`acooly.sso.ssoServerUrl=http://boss.acooly.com/manage/login.html` 那么只有 .acooly.com 子域名才支持 sso 登录
 2. 只有子系统才需要添加此组件，主boss不用添加 比如：主boss为`boss.acooly.com` 子系统是`acooly.com`的子域名:`openapi.acooly.com,cms.acooly.com,scheduler.acooly.com,mail.acooly.com` 
 3. 本地测试可本机添加hosts
+4. 启用sso组件后，获取User两种方式 
+  1、`User user=ShiroUtils.getCurrentUser();` 
+  2、`User user = (User) request.getAttribute(JWTUtils.CLAIMS_KEY_SUB)`

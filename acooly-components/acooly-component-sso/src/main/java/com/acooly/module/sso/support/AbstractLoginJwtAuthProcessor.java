@@ -71,6 +71,9 @@ public abstract class AbstractLoginJwtAuthProcessor<T> implements LoginAuthProce
       SimplePrincipalCollection simplePrincipal =
           new SimplePrincipalCollection(user, ShiroCacheManager.KEY_AUTHC);
 
+      //fix bug -> Session already invalidated  -> get user from request
+      request.setAttribute(JWTUtils.CLAIMS_KEY_SUB,user);
+
       HttpSession httpSession = request.getSession(true);
       HttpServletSession shiroSession = null;
       if (httpSession != null) {

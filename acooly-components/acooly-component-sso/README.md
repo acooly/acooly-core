@@ -11,7 +11,7 @@
    * `acooly.sso.ssoServerUrl=http://boss.acooly.com:8070/manage/login.html` 登录服务端地址，url为全路径，ssoServer为主boss系统，统一管理认证权限，可只添加security组件单独启动
    * `acooly.sso.ssoExcludeUrl=/manage/logout.html,/manage/error/**` 不需要登录认证的地址，ant路径匹配规则， 用,分割[Ant-style path patterns](https://github.com/spring-projects/spring-framework/blob/master/spring-core/src/test/java/org/springframework/util/AntPathMatcherTests.java)
 
-## 4. 子系统集成单点登录步骤
+## 3. 子系统集成单点登录步骤
 
 1. 业务页面引入公共静态文件(只需要主页面添加，如：point.jsp需要添加，子页面pointEidt.jsp,pointImport.jsp,pointShow.jsp不用添加)
 

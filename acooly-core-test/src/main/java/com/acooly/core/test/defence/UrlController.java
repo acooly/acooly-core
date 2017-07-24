@@ -71,6 +71,22 @@ public class UrlController {
     return dtos;
   }
 
+  @RequestMapping(value = "/param5", method = RequestMethod.GET)
+  public List<MyDto> param5() {
+    List<MyDto> dtos = Lists.newArrayList();
+    MyDto myDto = new MyDto();
+    myDto.setId(1l);
+    myDto.setName("bohr");
+    myDto.setAge(30);
+    MyDto myDto1 = new MyDto();
+    myDto1.setId(2l);
+    myDto1.setName("na");
+    myDto1.setAge(28);
+    dtos.add(myDto);
+    dtos.add(myDto1);
+    return dtos;
+  }
+
   public static void main(String[] args) throws Exception {
     DefenceProperties defenceProperties = new DefenceProperties();
     UrlSecurityServiceImpl urlSecurityService = new UrlSecurityServiceImpl();

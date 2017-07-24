@@ -15,7 +15,6 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 public class SecurityJacksonValue {
 	
 	private Object object;
-	private String[] fields;
 	static UrlSecurityService urlSecurityService;
 	static ConversionService conversionService;
 	private static ObjectMapper objectMapper;
@@ -29,7 +28,6 @@ public class SecurityJacksonValue {
 				if (objectMapper == null) {
 					ObjectMapper objectMapper = builder.createXmlMapper(false).build();
 					SecurityBeanPropertyFilter securityBeanPropertyFilter = new SecurityBeanPropertyFilter();
-					SecurityContext.getContext().setFields(fields);
 					securityBeanPropertyFilter.setConversionService(conversionService);
 					securityBeanPropertyFilter.setUrlSecurityService(urlSecurityService);
 					objectMapper.addMixIn(Object.class, PropertyFilterMixIn.class);
@@ -46,4 +44,8 @@ public class SecurityJacksonValue {
 			throw new RuntimeException(e);
 		}
 	}
+
+    public void setFields(String[] fields) {
+        SecurityContext.getContext().setFields(fields);
+    }
 }

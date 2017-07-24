@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.acooly.module.security.defence.csrf;
+package com.acooly.module.defence.csrf;
 
 /**
- * Thrown when no expected {@link CsrfToken} is found but is required.
+ * Thrown when an invalid or missing {@link CsrfToken} is found in the HttpServletRequest
  *
  * @author Rob Winch
  * @since 3.2
  */
 @SuppressWarnings("serial")
-public class MissingCsrfTokenException extends CsrfException {
+public class CsrfException extends AccessDeniedException {
 
-  public MissingCsrfTokenException(String actualToken) {
-    super("Expected CSRF token not found.");
+  public CsrfException(String message) {
+    super(message);
   }
 }

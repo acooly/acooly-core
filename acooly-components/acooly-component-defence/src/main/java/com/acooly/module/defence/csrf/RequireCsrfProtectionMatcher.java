@@ -7,7 +7,7 @@
  * 修订记录:
  * qiubo@yiji.com 2016-12-23 21:18 创建
  */
-package com.acooly.module.security.defence.csrf;
+package com.acooly.module.defence.csrf;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;

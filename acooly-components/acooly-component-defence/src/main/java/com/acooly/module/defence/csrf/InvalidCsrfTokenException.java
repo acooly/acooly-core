@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.acooly.module.security.defence.csrf;
+package com.acooly.module.defence.csrf;
 
 import javax.servlet.http.HttpServletRequest;
 

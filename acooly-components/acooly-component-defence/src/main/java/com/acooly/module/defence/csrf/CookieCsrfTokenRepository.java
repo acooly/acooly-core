@@ -7,7 +7,7 @@
  * 修订记录:
  * qiubo@yiji.com 2016-03-22 11:00 创建
  */
-package com.acooly.module.security.defence.csrf;
+package com.acooly.module.defence.csrf;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

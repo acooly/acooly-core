@@ -1,6 +1,8 @@
-package com.acooly.module.security.defence;
+package com.acooly.module.defence.xss;
 
-import com.acooly.module.security.config.SecurityProperties;
+import com.acooly.module.defence.DefenceProperties;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -13,15 +15,7 @@ import java.io.IOException;
  */
 public class XssDefenseFilter implements Filter {
 
-  private SecurityProperties securityProperties;
-
-  public SecurityProperties getSecurityProperties() {
-    return securityProperties;
-  }
-
-  public void setSecurityProperties(SecurityProperties securityProperties) {
-    this.securityProperties = securityProperties;
-  }
+  @Getter @Setter private DefenceProperties defenceProperties;
 
   public void init(FilterConfig filterConfig) throws ServletException {}
 
@@ -29,7 +23,7 @@ public class XssDefenseFilter implements Filter {
 
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
-    if (securityProperties.getXss().matches((HttpServletRequest) request)) {
+    if (defenceProperties.getXss().matches((HttpServletRequest) request)) {
       chain.doFilter(new XssHttpServletRequestWrapper((HttpServletRequest) request), response);
     } else {
       chain.doFilter(request, response);

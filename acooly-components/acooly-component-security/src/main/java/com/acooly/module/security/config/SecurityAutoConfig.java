@@ -14,11 +14,6 @@ import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
 import com.acooly.module.jpa.JPAAutoConfig;
 import com.acooly.module.security.captche.CaptchaServlet;
-import com.acooly.module.security.defence.XssDefenseFilter;
-import com.acooly.module.security.defence.csrf.CookieCsrfTokenRepository;
-import com.acooly.module.security.defence.csrf.CsrfAccessDeniedHandlerImpl;
-import com.acooly.module.security.defence.csrf.CsrfFilter;
-import com.acooly.module.security.defence.csrf.RequireCsrfProtectionMatcher;
 import com.acooly.module.security.health.HealthCheckServlet;
 import com.acooly.module.security.shiro.cache.ShiroCacheManager;
 import com.acooly.module.security.shiro.filter.CaptchaFormAuthenticationFilter;
@@ -48,7 +43,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -353,47 +347,6 @@ public class SecurityAutoConfig {
     return bean;
   }
 
-  @Configuration
-  @ConditionalOnWebApplication
-  @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".csrf.enable", matchIfMissing = true)
-  public static class CSRFAutoConfigration {
-    @Bean
-    public FilterRegistrationBean csrfFilter(SecurityProperties securityProperties) {
-      CookieCsrfTokenRepository tokenRepository = new CookieCsrfTokenRepository();
-      CsrfFilter csrfFilter = new CsrfFilter(tokenRepository);
-      List<String> excludes = Lists.newArrayList();
-      for (List<String> list : securityProperties.getCsrf().getExclusions().values()) {
-        excludes.addAll(list);
-      }
-      csrfFilter.setRequireCsrfProtectionMatcher(new RequireCsrfProtectionMatcher(excludes));
-      CsrfAccessDeniedHandlerImpl csrfAccessDeniedHandler = new CsrfAccessDeniedHandlerImpl();
-      csrfAccessDeniedHandler.setErrorPage(securityProperties.getCsrf().getErrorPage());
-      csrfFilter.setAccessDeniedHandler(csrfAccessDeniedHandler);
-      FilterRegistrationBean registration = new FilterRegistrationBean();
-      registration.setFilter(csrfFilter);
-      registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp").toArray(new String[0]));
-      registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
-      registration.setName("csrfDefenseFilter");
-      return registration;
-    }
-  }
-
-  @Configuration
-  @ConditionalOnWebApplication
-  @ConditionalOnProperty(value = SecurityProperties.PREFIX + ".xss.enable", matchIfMissing = true)
-  public static class XssAutoConfigration {
-    @Bean
-    public FilterRegistrationBean xssFilter(SecurityProperties securityProperties) {
-      XssDefenseFilter filter = new XssDefenseFilter();
-      filter.setSecurityProperties(securityProperties);
-      FilterRegistrationBean registration = new FilterRegistrationBean();
-      registration.setFilter(filter);
-      registration.addUrlPatterns(Lists.newArrayList("*.html", "*.jsp").toArray(new String[0]));
-      registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
-      registration.setName("xssDefenseFilter");
-      return registration;
-    }
-  }
 
   @Configuration
   @ConditionalOnWebApplication

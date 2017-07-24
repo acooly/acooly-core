@@ -1,4 +1,4 @@
-package com.acooly.module.security.defence;
+package com.acooly.module.defence.xss;
 
 import com.acooly.core.utils.Strings;
 

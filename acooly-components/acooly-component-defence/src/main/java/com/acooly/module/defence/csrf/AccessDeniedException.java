@@ -8,7 +8,7 @@
  * qzhanbo@yiji.com 2015-06-25 11:25 创建
  *
  */
-package com.acooly.module.security.defence.csrf;
+package com.acooly.module.defence.csrf;
 
 /** @author qiubo */
 public class AccessDeniedException extends RuntimeException {

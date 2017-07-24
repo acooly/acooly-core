@@ -56,7 +56,7 @@
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-web</artifactId>
+            <artifactId>acooly-component-defence</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

@@ -8,7 +8,7 @@
  * qzhanbo@yiji.com 2015-06-25 11:26 创建
  *
  */
-package com.acooly.module.security.defence.csrf;
+package com.acooly.module.defence.csrf;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

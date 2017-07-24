@@ -4,15 +4,20 @@ import com.acooly.module.defence.csrf.CookieCsrfTokenRepository;
 import com.acooly.module.defence.csrf.CsrfAccessDeniedHandlerImpl;
 import com.acooly.module.defence.csrf.CsrfFilter;
 import com.acooly.module.defence.csrf.RequireCsrfProtectionMatcher;
+import com.acooly.module.defence.url.param.SecurityParamHandlerMethodArgumentResolver;
+import com.acooly.module.defence.url.result.SecurityHandlerMethodReturnValueHandler;
 import com.acooly.module.defence.xss.XssDefenseFilter;
 import com.google.common.collect.Lists;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.servlet.DispatcherType;
 import java.util.EnumSet;
@@ -65,4 +70,37 @@ public class DefenceAutoConfig {
             return registration;
         }
     }
+
+    @Configuration
+    @ConditionalOnWebApplication
+    @ConditionalOnProperty(value = DefenceProperties.PREFIX + ".url.enable", matchIfMissing = true)
+    @ComponentScan("com.acooly.module.defence.url")
+    public static class UrlAutoConfigration {
+        @Bean
+        public WebMvcConfigurerAdapter urlWebMvcConfigurerAdapter() {
+            return new WebMvcConfigurerAdapter() {
+                @Override
+                public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+                    argumentResolvers.add(securityParamHandlerMethodArgumentResolver());
+                }
+
+                @Override
+                public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
+                    returnValueHandlers.add(securityHandlerMethodReturnValueHandler());
+                }
+
+            };
+        }
+
+        @Bean
+        public SecurityParamHandlerMethodArgumentResolver securityParamHandlerMethodArgumentResolver() {
+            return new SecurityParamHandlerMethodArgumentResolver();
+        }
+
+        @Bean
+        public SecurityHandlerMethodReturnValueHandler securityHandlerMethodReturnValueHandler() {
+            return new SecurityHandlerMethodReturnValueHandler();
+        }
+    }
+
 }

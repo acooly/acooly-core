@@ -1,5 +1,6 @@
 package com.acooly.module.defence.url.result;
 
+import com.acooly.core.common.dao.support.EnhanceDefaultConversionService;
 import com.acooly.module.defence.url.UrlSecurityService;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -8,12 +9,11 @@ import com.fasterxml.jackson.databind.ser.PropertyWriter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import lombok.Data;
 import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.core.convert.ConversionService;
 /** @author qiubo@yiji.com */
 @Data
 public class SecurityBeanPropertyFilter extends SimpleBeanPropertyFilter {
 	private UrlSecurityService urlSecurityService;
-	private ConversionService conversionService;
+    private EnhanceDefaultConversionService conversionService= EnhanceDefaultConversionService.INSTANCE;
 	
 	@Override
 	public void serializeAsField(Object pojo, JsonGenerator jgen, SerializerProvider provider,

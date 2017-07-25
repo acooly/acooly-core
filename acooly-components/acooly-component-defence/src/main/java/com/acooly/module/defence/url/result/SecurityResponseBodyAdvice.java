@@ -5,7 +5,6 @@ import com.acooly.module.defence.url.UrlSecurityService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.server.ServerHttpRequest;
@@ -17,8 +16,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 public class SecurityResponseBodyAdvice implements ResponseBodyAdvice, InitializingBean {
 	@Autowired
 	private UrlSecurityService urlSecurityService;
-	@Autowired
-	private ConversionService conversionService;
 	@Autowired
 	private Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder;
 	
@@ -43,6 +40,5 @@ public class SecurityResponseBodyAdvice implements ResponseBodyAdvice, Initializ
 	public void afterPropertiesSet() throws Exception {
 		SecurityJacksonValue.builder = jackson2ObjectMapperBuilder;
         SecurityJacksonValue.urlSecurityService=urlSecurityService;
-        SecurityJacksonValue.conversionService=conversionService;
 	}
 }

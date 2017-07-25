@@ -1,12 +1,12 @@
 package com.acooly.module.defence.url.param;
 
+import com.acooly.core.common.dao.support.EnhanceDefaultConversionService;
 import com.acooly.module.defence.url.SecurityParam;
 import com.acooly.module.defence.url.UrlSecurityService;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -19,8 +19,7 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_RE
 public class SecurityParamHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 	@Autowired
 	private UrlSecurityService urlSecurityService;
-	@Autowired
-	private ConversionService conversionService;
+	private EnhanceDefaultConversionService conversionService= EnhanceDefaultConversionService.INSTANCE;
 	private SecurityServletModelAttributeMethodProcessor modelAttributeMethodProcessor = new SecurityServletModelAttributeMethodProcessor(
 		false);
 	

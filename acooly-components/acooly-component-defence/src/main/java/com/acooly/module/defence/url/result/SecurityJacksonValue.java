@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import lombok.Data;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 /** @author qiubo@yiji.com */
 @Data
@@ -16,7 +15,6 @@ public class SecurityJacksonValue {
 	
 	private Object object;
 	static UrlSecurityService urlSecurityService;
-	static ConversionService conversionService;
 	private static ObjectMapper objectMapper;
 	static Jackson2ObjectMapperBuilder builder;
 	
@@ -28,7 +26,6 @@ public class SecurityJacksonValue {
 				if (objectMapper == null) {
 					ObjectMapper objectMapper = builder.createXmlMapper(false).build();
 					SecurityBeanPropertyFilter securityBeanPropertyFilter = new SecurityBeanPropertyFilter();
-					securityBeanPropertyFilter.setConversionService(conversionService);
 					securityBeanPropertyFilter.setUrlSecurityService(urlSecurityService);
 					objectMapper.addMixIn(Object.class, PropertyFilterMixIn.class);
 					FilterProvider filters = new SimpleFilterProvider().addFilter("SecurityValue", securityBeanPropertyFilter)

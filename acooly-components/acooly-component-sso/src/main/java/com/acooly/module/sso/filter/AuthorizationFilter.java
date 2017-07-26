@@ -97,7 +97,7 @@ public class AuthorizationFilter implements Filter {
               .trustAllHosts()
               .body();
     } catch (Exception e) {
-      logger.error("权限校验出错 uri is {}", requestURI, e);
+      logger.error("权限校验出错 uri is {},请求路径为：{}", requestURI, permittedPath, e);
       return false;
     }
     long et = System.currentTimeMillis();

@@ -25,6 +25,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.util.ClassUtils;
 
 import java.beans.PropertyEditorManager;
 import java.io.*;
@@ -54,6 +55,12 @@ public class CsvProvider implements ParametersProvider<CsvParameter> {
     } else {
       needConvert = true;
       parameterType = parameterTypes[0];
+      if(ClassUtils.isPrimitiveOrWrapper(parameterType)){
+          needConvert=false;
+      }
+      if(String.class.isAssignableFrom(parameterType)){
+          needConvert=false;
+      }
     }
   }
 
@@ -78,7 +85,7 @@ public class CsvProvider implements ParametersProvider<CsvParameter> {
 
         lineNo++;
         if (lineNo == 1) {
-          log.info("header:{}", line);
+//          log.info("header:{}", line);
           header = Utils.splitAtCommaOrPipe(line);
         } else {
           if (line.contains("~")) {

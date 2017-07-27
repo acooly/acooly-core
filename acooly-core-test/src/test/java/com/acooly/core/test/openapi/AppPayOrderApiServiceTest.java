@@ -10,8 +10,8 @@
 package com.acooly.core.test.openapi;
 
 import com.acooly.core.utils.Money;
-import com.yiji.framework.openapi.core.security.sign.SignTypeEnum;
-import com.yiji.framework.openapi.core.test.AbstractApiServieTests;
+import com.acooly.openapi.framework.core.security.sign.SignTypeEnum;
+import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import org.junit.Test;
 
 import java.util.UUID;

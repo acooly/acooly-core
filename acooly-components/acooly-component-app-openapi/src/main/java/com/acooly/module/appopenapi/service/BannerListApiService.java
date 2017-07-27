@@ -8,12 +8,12 @@ import com.acooly.module.appopenapi.enums.ApiOwners;
 import com.acooly.module.appopenapi.message.BannerListRequest;
 import com.acooly.module.appopenapi.message.BannerListResponse;
 import com.acooly.module.ofile.OFileProperties;
+import com.acooly.openapi.framework.common.enums.ApiBusiType;
+import com.acooly.openapi.framework.core.meta.OpenApiService;
+import com.acooly.openapi.framework.core.service.base.BaseApiService;
+import com.acooly.openapi.framework.core.service.enums.ResponseType;
+import com.acooly.openapi.framework.core.util.ApiUtils;
 import com.google.common.collect.Maps;
-import com.yiji.framework.openapi.common.enums.ApiBusiType;
-import com.yiji.framework.openapi.core.meta.OpenApiService;
-import com.yiji.framework.openapi.core.service.base.BaseApiService;
-import com.yiji.framework.openapi.core.service.enums.ResponseType;
-import com.yiji.framework.openapi.core.util.ApiUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

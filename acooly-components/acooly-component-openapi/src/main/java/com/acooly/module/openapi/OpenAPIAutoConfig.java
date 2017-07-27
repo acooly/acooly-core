@@ -13,8 +13,8 @@ import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
 import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
 import com.acooly.module.security.config.SecurityAutoConfig;
+import com.acooly.openapi.framework.core.servlet.OpenAPIDispatchServlet;
 import com.google.common.collect.Lists;
-import com.yiji.framework.openapi.core.servlet.OpenAPIDispatchServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -34,15 +34,12 @@ import static com.acooly.module.openapi.OpenAPIProperties.PREFIX;
 @Configuration
 @EnableConfigurationProperties({OpenAPIProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
-@ComponentScan(basePackages = "com.yiji.framework.openapi.core")
-@ComponentScan(basePackages = "com.yiji.framework.openapi.service")
-@ComponentScan(basePackages = "com.yiji.framework.openapi.manage.web")
-@ComponentScan(basePackages = "com.yiji.framework.openapi.nms")
+@ComponentScan(basePackages = "com.acooly.openapi.framework")
 @EnableJpaRepositories(
   repositoryBaseClass = AbstractEntityJpaDao.class,
-  basePackages = "com.yiji.framework.openapi.service.persistent"
+  basePackages = "com.acooly.openapi.framework"
 )
-@EntityScan(basePackages = "com.yiji.framework.openapi.domain")
+@EntityScan(basePackages = "com.acooly.openapi.framework.domain")
 @AutoConfigureAfter(SecurityAutoConfig.class)
 public class OpenAPIAutoConfig {
   @Autowired private OpenAPIProperties properties;
@@ -88,7 +85,7 @@ public class OpenAPIAutoConfig {
         if (databaseType == DatabaseType.mysql) {
           return Lists.newArrayList(
               "META-INF/database/mysql/openapi-manage.sql",
-              "META-INF/database/openapi/mysql/initTest.sql",
+              "META-INF/database/mysql/openapi-initTest.sql",
               "META-INF/database/mysql/openapi-manage-urls.sql");
         } else {
           throw new UnsupportedOperationException("还不支持oracle");

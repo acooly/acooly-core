@@ -8,8 +8,8 @@
  * kuli@yiji.com 2017-03-02 11:23 创建
  */
 
-import com.yiji.framework.openapi.common.enums.SecretType;
-import com.yiji.framework.openapi.domain.ApiPartner;
+import com.acooly.openapi.framework.common.enums.SecretType;
+import com.acooly.openapi.framework.domain.ApiPartner;
 import org.apache.commons.beanutils.BeanUtils;
 
 /** @author acooly */

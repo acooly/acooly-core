@@ -2,10 +2,10 @@
 package com.acooly.module.appopenapi.message;
 
 import com.acooly.module.appopenapi.enums.DeviceType;
-import com.yiji.framework.openapi.common.annotation.OpenApiField;
-import com.yiji.framework.openapi.common.annotation.OpenApiMessage;
-import com.yiji.framework.openapi.common.enums.ApiMessageType;
-import com.yiji.framework.openapi.common.message.ApiRequest;
+import com.acooly.openapi.framework.common.annotation.OpenApiField;
+import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
+import com.acooly.openapi.framework.common.enums.ApiMessageType;
+import com.acooly.openapi.framework.common.message.ApiRequest;
 
 /**
  * 欢迎信息

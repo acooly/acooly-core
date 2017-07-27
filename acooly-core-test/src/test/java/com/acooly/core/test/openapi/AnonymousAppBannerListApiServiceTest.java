@@ -16,7 +16,7 @@ import com.acooly.module.appopenapi.message.BannerListRequest;
 import com.acooly.module.appopenapi.message.BannerListResponse;
 import com.acooly.module.appopenapi.message.LoginRequest;
 import com.acooly.module.appopenapi.message.LoginResponse;
-import com.yiji.framework.openapi.core.test.AbstractApiServieTests;
+import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 

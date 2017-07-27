@@ -1,10 +1,11 @@
 package com.acooly.core.test.openapi;
 
-import com.yiji.framework.openapi.common.enums.ApiServiceResultCode;
-import com.yiji.framework.openapi.common.exception.ApiServiceException;
-import com.yiji.framework.openapi.common.message.ApiRequest;
-import com.yiji.framework.openapi.common.message.ApiResponse;
-import com.yiji.framework.openapi.core.exception.ApiServiceExceptionHander;
+
+import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
+import com.acooly.openapi.framework.common.exception.ApiServiceException;
+import com.acooly.openapi.framework.common.message.ApiRequest;
+import com.acooly.openapi.framework.common.message.ApiResponse;
+import com.acooly.openapi.framework.core.exception.ApiServiceExceptionHander;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;

@@ -18,7 +18,7 @@ public class OpenAPIComponentInitializer implements ComponentInitializer {
   @Override
   public void initialize(ConfigurableApplicationContext applicationContext) {
     System.setProperty(
-        "acooly.jpa.entityPackagesToScan.openapi", "com.yiji.framework.openapi.domain");
+        "acooly.jpa.entityPackagesToScan.openapi", "com.acooly.openapi.framework.domain");
     if (Apps.buildProperties(OpenAPIProperties.class).getQueryLogSeparationEnable()) {
       System.setProperty("openapi.queryLogSeparationEnable", "true");
     }

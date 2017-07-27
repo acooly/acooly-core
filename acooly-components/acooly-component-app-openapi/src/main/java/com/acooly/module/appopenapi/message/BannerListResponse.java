@@ -2,11 +2,11 @@
 package com.acooly.module.appopenapi.message;
 
 import com.acooly.module.appopenapi.dto.MediaInfo;
+import com.acooly.openapi.framework.common.annotation.OpenApiField;
+import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
+import com.acooly.openapi.framework.common.enums.ApiMessageType;
+import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.google.common.collect.Lists;
-import com.yiji.framework.openapi.common.annotation.OpenApiField;
-import com.yiji.framework.openapi.common.annotation.OpenApiMessage;
-import com.yiji.framework.openapi.common.enums.ApiMessageType;
-import com.yiji.framework.openapi.common.message.ApiResponse;
 
 import java.util.List;
 

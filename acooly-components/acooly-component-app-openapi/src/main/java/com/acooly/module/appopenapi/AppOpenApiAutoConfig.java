@@ -11,7 +11,7 @@ package com.acooly.module.appopenapi;
 
 import com.acooly.module.appopenapi.support.AppApiLoginService;
 import com.acooly.module.appopenapi.support.login.AnonymousAppApiLoginService;
-import com.yiji.framework.openapi.core.notify.impl.DefaultApiNotifySender;
+import com.acooly.openapi.framework.core.notify.impl.DefaultApiNotifySender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

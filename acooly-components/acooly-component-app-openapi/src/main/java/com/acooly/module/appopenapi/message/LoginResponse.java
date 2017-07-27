@@ -1,9 +1,9 @@
 package com.acooly.module.appopenapi.message;
 
-import com.yiji.framework.openapi.common.annotation.OpenApiField;
-import com.yiji.framework.openapi.common.annotation.OpenApiMessage;
-import com.yiji.framework.openapi.common.enums.ApiMessageType;
-import com.yiji.framework.openapi.common.message.ApiResponse;
+import com.acooly.openapi.framework.common.annotation.OpenApiField;
+import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
+import com.acooly.openapi.framework.common.enums.ApiMessageType;
+import com.acooly.openapi.framework.common.message.ApiResponse;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;

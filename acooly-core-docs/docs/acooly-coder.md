@@ -11,7 +11,7 @@ acooly coder是为acooly框架配套的专用代码生成工具，设计目的�
 acooly coder的发布包采用maven方式发布，目前只提供cli工具。
 仓库地址：http://${host}/nexus/content/repositories/releases/
 
-工具包maven坐标（请根据需要更新对应的版本,当前版本：4.0.0-SNAPSHOT）：
+工具包maven坐标（请根据需要更新对应的版本,当前版本：4.1.0-SNAPSHOT）：
 
 v1.x坐标：
 
@@ -30,7 +30,7 @@ v4.x坐标：
 		<dependency>
 	  		<groupId>com.acooly</groupId>
 	  		<artifactId>acooly-coder</artifactId>
-	  		<version>4.0.0-SNAPSHOT</version>
+	  		<version>4.1.0-SNAPSHOT</version>
 		</dependency>
 
 >>使用说明：v4版本已经集成到项目中。

@@ -1,7 +1,7 @@
 /** create by zhangpu date:2015年5月10日 */
 package com.acooly.module.appopenapi.dto;
 
-import com.yiji.framework.openapi.common.annotation.OpenApiField;
+import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**

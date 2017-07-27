@@ -9,12 +9,12 @@
  */
 package com.acooly.core.test.openapi;
 
-import com.yiji.framework.openapi.common.enums.ApiBusiType;
-import com.yiji.framework.openapi.common.enums.ApiServiceResultCode;
-import com.yiji.framework.openapi.core.meta.OpenApiDependence;
-import com.yiji.framework.openapi.core.meta.OpenApiService;
-import com.yiji.framework.openapi.core.service.base.BaseApiService;
-import com.yiji.framework.openapi.core.service.enums.ResponseType;
+import com.acooly.openapi.framework.common.enums.ApiBusiType;
+import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
+import com.acooly.openapi.framework.core.meta.OpenApiDependence;
+import com.acooly.openapi.framework.core.meta.OpenApiService;
+import com.acooly.openapi.framework.core.service.base.BaseApiService;
+import com.acooly.openapi.framework.core.service.enums.ResponseType;
 import lombok.extern.slf4j.Slf4j;
 
 /** @author qiubo@yiji.com */

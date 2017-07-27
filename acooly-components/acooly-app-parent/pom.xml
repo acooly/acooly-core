@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.acooly</groupId>
         <artifactId>acooly-parent</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
+        <version>4.1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>acooly-app-parent</artifactId>
@@ -18,168 +18,168 @@
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-cache</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-ds</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-dubbo</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-jpa</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-mybatis</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-security</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-test</artifactId>
                 <scope>test</scope>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-tomcat</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-web</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-filterchain</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-appservice</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-ofile</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-cms</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-openapi</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-app</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-portlet</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-sms</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-mail</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-app-openapi</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-event</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-lottery</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-point</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-openapidoc</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-threadpool</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-scheduler</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-sso</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId> acooly-component-certification</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId> acooly-component-seq</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId> acooly-component-obs</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-common</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-captcha</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-pdf</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-defence</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

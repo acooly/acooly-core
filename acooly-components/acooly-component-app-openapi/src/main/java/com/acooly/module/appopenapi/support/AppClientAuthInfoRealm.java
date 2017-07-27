@@ -4,15 +4,16 @@ import com.acooly.module.app.domain.AppCustomer;
 import com.acooly.module.app.enums.EntityStatus;
 import com.acooly.module.app.service.AppCustomerService;
 import com.acooly.module.appopenapi.AppOpenapiProperties;
+import com.acooly.openapi.framework.core.auth.realm.impl.CacheableAuthInfoRealm;
+import com.acooly.openapi.framework.core.exception.impl.ApiServiceAuthenticationException;
 import com.google.common.collect.Lists;
-import com.yiji.framework.openapi.core.auth.realm.impl.CacheableAuthInfoRealm;
-import com.yiji.framework.openapi.core.exception.impl.ApiServiceAuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.yiji.framework.openapi.core.auth.realm.AuthInfoRealm.APP_CLIENT_REALM;
+import static com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm.APP_CLIENT_REALM;
+
 
 /**
  * APP-API认证和授权realm实现

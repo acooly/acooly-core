@@ -2,7 +2,7 @@
 package com.acooly.module.appopenapi.dto;
 
 import com.acooly.module.app.enums.AppMessageType;
-import com.yiji.framework.openapi.common.annotation.OpenApiField;
+import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;

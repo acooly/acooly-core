@@ -2,8 +2,8 @@
 package com.acooly.module.appopenapi.message;
 
 import com.acooly.module.appopenapi.enums.QueryType;
-import com.yiji.framework.openapi.common.annotation.OpenApiField;
-import com.yiji.framework.openapi.common.message.AppRequest;
+import com.acooly.openapi.framework.common.annotation.OpenApiField;
+import com.acooly.openapi.framework.common.message.AppRequest;
 
 /**
  * 内容信息详情 请求

@@ -2,9 +2,11 @@ package com.acooly.core.test.openapi;
 
 import com.acooly.core.utils.net.HttpResult;
 import com.acooly.core.utils.net.Https;
+import com.acooly.openapi.framework.common.ApiConstants;
+import com.acooly.openapi.framework.common.utils.Servlets;
+import com.acooly.openapi.framework.facade.api.OpenApiRemoteService;
+import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
 import com.google.common.collect.Maps;
-import com.yiji.framework.openapi.common.ApiConstants;
-import com.yiji.framework.openapi.common.utils.Servlets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,8 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.yiji.framework.openapi.facade.api.OpenApiRemoteService;
-import org.yiji.framework.openapi.facade.order.ApiNotifyOrder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -9,9 +9,10 @@
  */
 package com.acooly.core.test.openapi;
 
-import com.yiji.framework.openapi.common.annotation.OpenApiMessage;
-import com.yiji.framework.openapi.common.enums.ApiMessageType;
-import com.yiji.framework.openapi.common.message.ApiResponse;
+
+import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
+import com.acooly.openapi.framework.common.enums.ApiMessageType;
+import com.acooly.openapi.framework.common.message.ApiResponse;
 
 /** @author qiubo@yiji.com */
 @OpenApiMessage(service = "payOrder", type = ApiMessageType.Response)

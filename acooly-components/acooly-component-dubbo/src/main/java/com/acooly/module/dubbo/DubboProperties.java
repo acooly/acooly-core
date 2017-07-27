@@ -10,6 +10,9 @@
  */
 package com.acooly.module.dubbo;
 
+import com.acooly.core.common.boot.Apps;
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.dubbo.config.annotation.Service;
 import lombok.Data;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -48,6 +51,12 @@ public class DubboProperties implements InitializingBean {
   private boolean providerLog = true;
 
   private Provider provider = new Provider();
+
+  /**
+   * dubbo 可自定义增加注解扫描路径，用,分割，此路径下会扫描{@link Reference}，{@link Service}这两个注解，默认会扫描{@link
+   * Apps#getBasePackage()}路径
+   */
+  private String cumstomConfigPackage;
 
   @Override
   public void afterPropertiesSet() throws Exception {

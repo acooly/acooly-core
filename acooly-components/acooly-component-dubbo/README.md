@@ -39,6 +39,11 @@
 
 参考`com.acooly.module.dubbo.DubboRequestContext`
 
-### 4.2 如何设置provider暴露ip
+#### 4.2 如何设置provider暴露ip
 
 设置启动变量`-Ddubbo.provider.ip=xxx`或设置配置文件。
+
+#### 4.3 如何增加自定义扫描服务(@Service @Reference)的路径
+
+添加配置`acooly.dubbo.cumstomConfigPackage=com.acooly.module.security.service`
+可自定义增加注解扫描路径，多个路径用用,分割，此路径下会扫描{@link Reference}，{@link Service}这两个注解，默认会扫描{@link Apps#getBasePackage()}路径

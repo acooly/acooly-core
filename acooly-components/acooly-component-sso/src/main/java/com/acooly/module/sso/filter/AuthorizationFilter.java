@@ -1,7 +1,9 @@
 
 package com.acooly.module.sso.filter;
 
+import com.acooly.core.common.dubbo.DubboFactory;
 import com.acooly.core.utils.security.JWTUtils;
+import com.acooly.module.security.service.SSOAuthzService;
 import com.acooly.module.sso.SSOProperties;
 import com.acooly.module.sso.support.DefaultRequestMatcher;
 import com.acooly.module.sso.support.RequestMatcher;
@@ -11,7 +13,9 @@ import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.util.Assert;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.*;
@@ -24,6 +28,10 @@ import java.util.Map;
 
 /** @author shuijing */
 public class AuthorizationFilter implements Filter {
+
+  @Autowired(required = false)
+  private DubboFactory dubboFactory;
+
   public static int TIME_OUT = 15 * 1000;
   private Logger logger = LoggerFactory.getLogger(AuthorizationFilter.class);
 
@@ -111,6 +119,23 @@ public class AuthorizationFilter implements Filter {
     return false;
   }
 
+  private boolean isPermittedByDubbo(HttpServletRequest request) {
+    String requestURI = request.getRequestURI();
+    String username = (String) request.getAttribute(JWTUtils.KEY_SUB_NAME);
+    Assert.notNull(dubboFactory, "dubboFactory为空，请增加dubbo依赖，并配置dubbo参数");
+    try {
+      SSOAuthzService authzService =
+          dubboFactory.getProxy(
+              SSOAuthzService.class, "com.acooly.module.security.service", "1.0", TIME_OUT);
+      boolean permitted = authzService.permitted(requestURI, username);
+      logger.info("sso 用户:{}权限校验结果:{}, url:{} ", username, permitted, requestURI);
+      return permitted;
+    } catch (Exception e) {
+      logger.error("权限校验出错 uri is {}", requestURI, e);
+      return false;
+    }
+  }
+
   private boolean checkReferer(HttpServletRequest httpServletRequest) throws MalformedURLException {
     String referrer = httpServletRequest.getHeader("referer");
     if (!StringUtils.isEmpty(referrer)) {
@@ -153,7 +178,12 @@ public class AuthorizationFilter implements Filter {
   }
 
   private boolean reputCache(HttpServletRequest request) throws MalformedURLException {
-    boolean permitted = isPermitted(request);
+    boolean permitted;
+    if (ssoProperties.isEnableDubboAuthz()) {
+      permitted = isPermittedByDubbo(request);
+    } else {
+      permitted = isPermitted(request);
+    }
     CacheVo cacheVo = new CacheVo();
     cacheVo.setIsPermitted(permitted);
     cacheVo.setStartTime(System.currentTimeMillis());

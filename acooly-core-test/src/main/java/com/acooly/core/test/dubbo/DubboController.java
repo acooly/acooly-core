@@ -9,8 +9,10 @@
  */
 package com.acooly.core.test.dubbo;
 
+import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.common.facade.SingleOrder;
 import com.acooly.core.common.facade.SingleResult;
+import com.acooly.module.security.service.SSOAuthzService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,11 +25,22 @@ public class DubboController {
   @Reference(version = "1.0")
   private DemoFacade demoFacade;
 
+  @Reference(version = "1.0", group = "com.acooly.module.security.service")
+  private SSOAuthzService roleAuthzFacade;
+
   @RequestMapping(value = "/dubbo", method = RequestMethod.GET)
   public SingleResult<String> get(String msg) {
     SingleOrder<String> request = new SingleOrder<>();
     request.gid().partnerId("test");
     request.setDto(msg);
     return demoFacade.echo(request);
+  }
+
+  @RequestMapping(value = "/role", method = RequestMethod.GET)
+  public void roleGet(String msg) throws Exception {
+    SSOAuthzService authzService = ApplicationContextHolder.get().getBean(SSOAuthzService.class);
+    Boolean p =
+        roleAuthzFacade.permitted("/manage/paycore/account/accountOrder/listJson.html", "admin");
+    System.out.println(p);
   }
 }

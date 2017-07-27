@@ -9,14 +9,33 @@
  */
 package com.acooly.module.security.config;
 
+import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.boot.component.ComponentInitializer;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ConfigurableApplicationContext;
 
 /** @author qiubo@yiji.com */
 public class SecurityComponentInitializer implements ComponentInitializer {
+  public static final String ACOOLY_DUBBO_CUMSTOM_CONFIG_PACKAGE =
+      "acooly.dubbo.cumstomConfigPackage";
+
   @Override
   public void initialize(ConfigurableApplicationContext applicationContext) {
     setPropertyIfMissing(
         "acooly.ds.Checker.excludedColumnTables.security", "SYS_ROLE_RESC, SYS_USER_ROLE");
+    SecurityProperties securityProperties = new SecurityProperties();
+    EnvironmentHolder.buildProperties(securityProperties);
+    if (securityProperties.isEnableSSOAuthzService()) {
+      String dubboConfigPackage =
+          EnvironmentHolder.get().getProperty(ACOOLY_DUBBO_CUMSTOM_CONFIG_PACKAGE);
+      if (StringUtils.isEmpty(dubboConfigPackage)) {
+        System.setProperty(
+            ACOOLY_DUBBO_CUMSTOM_CONFIG_PACKAGE, "com.acooly.module.security.service");
+      } else {
+        System.setProperty(
+            ACOOLY_DUBBO_CUMSTOM_CONFIG_PACKAGE,
+            dubboConfigPackage + "," + "com.acooly.module.security.service");
+      }
+    }
   }
 }

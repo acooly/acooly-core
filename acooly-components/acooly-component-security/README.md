@@ -24,10 +24,17 @@
 * 开启短信验证码功能后，在新增user的时候，填写手机号码
 
 
-### 2. 怎么设置不需要需登录(授权、认证)访问所有boss页面
+### 3. 怎么设置不需要需登录(授权、认证)访问所有boss页面
 
 只需要添加配置：
 `acooly.security.shiroFilterAnon=true
 `
 
 开启后shiro filter链都会设为不拦截，可在系统不需要任何授权、认证时开启（慎用）
+
+### 4. 设置单点登录启用dubbo权限校验服务
+
+在使用单点登录的时候，主boss作为权限的主配置提供者，默认提供http接口校验权限`{@link com.acooly.module.security.web.RoleFacadeController.isPermitted}`
+当使用dubbo作为权限校验时候，主boss应用必须开启服务提供者：
+`acooly.security.enableSSOAuthzService=true
+`

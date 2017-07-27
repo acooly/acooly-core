@@ -43,9 +43,11 @@ public class SecurityProperties {
   /** 开启短信验证 */
   private boolean loginSmsEnable = DEFAULT_LOGIN_SMS;
 
+  /** 开启单点登录权限校验dubbo服务(主boss才开启，为防止非主boss应用提供此服务，同一个zk环境中仅仅允许一个应用为服务提供者) */
+  private boolean enableSSOAuthzService = false;
+
   @PostConstruct
-  public void initXss() {
-  }
+  public void initXss() {}
 
   @Getter
   @Setter
@@ -117,8 +119,6 @@ public class SecurityProperties {
       urls.add(url);
     }
   }
-
-
 
   @Data
   public static class Captcha {

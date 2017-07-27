@@ -24,4 +24,7 @@ public class SSOProperties {
 
   /** 客户端资源权限缓存时间，在主boss验证资源用户的资源权限后缓存的时间,单位分钟,默认10分钟 */
   private int AuthorizationCacheTime = 10;
+
+  /** 启用dubbo方式去主boss校验资源权限，默认false采用http请求主boss校验资源权限 */
+  private boolean enableDubboAuthz = false;
 }

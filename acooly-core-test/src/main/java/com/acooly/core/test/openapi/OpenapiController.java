@@ -5,6 +5,8 @@ import com.acooly.core.utils.net.Https;
 import com.google.common.collect.Maps;
 import com.yiji.framework.openapi.common.ApiConstants;
 import com.yiji.framework.openapi.common.utils.Servlets;
+import com.yiji.framework.openapi.core.notify.api.OpenApiRemoteServiceImpl;
+import com.yiji.framework.openapi.nms.handle.impl.HttpNotifyMessageSendHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -53,7 +55,8 @@ public class OpenapiController implements ApplicationContextAware {
     Object result = null;
     try {
       w.write("call :" + type);
-      OpenApiRemoteService openApiRemoteService =
+        HttpNotifyMessageSendHandler bean = applicationContext.getBean(HttpNotifyMessageSendHandler.class);
+        OpenApiRemoteService openApiRemoteService =
           applicationContext.getBean(OpenApiRemoteService.class);
       if (StringUtils.equals(type, "async")) {
         ApiNotifyOrder order = new ApiNotifyOrder();

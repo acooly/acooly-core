@@ -15,12 +15,14 @@ import org.apache.shiro.web.mgt.WebSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
+import static com.acooly.module.security.config.SecurityComponentInitializer.DUBBO_SSO_CONFIG_PACKAGE;
+
 /** @author shuijing */
-@Service(version = "1.0",group = "com.acooly.module.security.service")
+@Service(version = "1.0", group = DUBBO_SSO_CONFIG_PACKAGE)
 @org.springframework.stereotype.Service
 @ConditionalOnProperty(
-    value = SecurityProperties.PREFIX + ".shiro.auth.enable",
-    matchIfMissing = true
+  value = SecurityProperties.PREFIX + ".shiro.auth.enable",
+  matchIfMissing = true
 )
 public class SSOAuthzServiceImpl implements SSOAuthzService {
 

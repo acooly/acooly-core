@@ -16,8 +16,9 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 /** @author qiubo@yiji.com */
 public class SecurityComponentInitializer implements ComponentInitializer {
-  public static final String ACOOLY_DUBBO_CUMSTOM_CONFIG_PACKAGE =
-      "acooly.dubbo.cumstomConfigPackage";
+  public static final String DUBBO_CUMSTOM_CONFIG_PACKAGE = "acooly.dubbo.cumstomConfigPackage";
+
+  public static final String DUBBO_SSO_CONFIG_PACKAGE = "com.acooly.module.security.service";
 
   @Override
   public void initialize(ConfigurableApplicationContext applicationContext) {
@@ -26,15 +27,12 @@ public class SecurityComponentInitializer implements ComponentInitializer {
     SecurityProperties securityProperties = new SecurityProperties();
     EnvironmentHolder.buildProperties(securityProperties);
     if (securityProperties.isEnableSSOAuthzService()) {
-      String dubboConfigPackage =
-          EnvironmentHolder.get().getProperty(ACOOLY_DUBBO_CUMSTOM_CONFIG_PACKAGE);
+      String dubboConfigPackage = EnvironmentHolder.get().getProperty(DUBBO_CUMSTOM_CONFIG_PACKAGE);
       if (StringUtils.isEmpty(dubboConfigPackage)) {
-        System.setProperty(
-            ACOOLY_DUBBO_CUMSTOM_CONFIG_PACKAGE, "com.acooly.module.security.service");
+        System.setProperty(DUBBO_CUMSTOM_CONFIG_PACKAGE, DUBBO_SSO_CONFIG_PACKAGE);
       } else {
         System.setProperty(
-            ACOOLY_DUBBO_CUMSTOM_CONFIG_PACKAGE,
-            dubboConfigPackage + "," + "com.acooly.module.security.service");
+            DUBBO_CUMSTOM_CONFIG_PACKAGE, dubboConfigPackage + "," + DUBBO_SSO_CONFIG_PACKAGE);
       }
     }
   }

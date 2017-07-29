@@ -17,6 +17,8 @@ public class OpendocIntegrationComponentInitializer implements ComponentInitiali
   @Override
   public void initialize(ConfigurableApplicationContext applicationContext) {
     setPropertyIfMissing(
-        "acooly.jpa.entityPackagesToScan.openapidoc1", "com.yiji.framework.openapidoc.**.domain");
+        "acooly.jpa.entityPackagesToScan.openapidoc1", "com.acooly.openapi.apidoc.**.domain");
+      setPropertyIfMissing(
+          "acooly.jpa.entityPackagesToScan.openapidoc2", "com.acooly.openapi.apidoc.**.entity");
   }
 }

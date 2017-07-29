@@ -12,9 +12,9 @@
     <artifactId>acooly-component-openapidoc</artifactId>
     <dependencies>
         <dependency>
-            <groupId>com.yiji.openapi.doc</groupId>
-            <artifactId>openapidoc-component</artifactId>
-            <version>4.0.0-SNAPSHOT</version>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-apidoc-component</artifactId>
+            <version>4.1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

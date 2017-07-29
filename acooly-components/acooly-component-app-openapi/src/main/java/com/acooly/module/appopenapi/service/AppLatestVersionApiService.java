@@ -8,12 +8,12 @@ import com.acooly.module.appopenapi.AppApiErrorCode;
 import com.acooly.module.appopenapi.enums.ApiOwners;
 import com.acooly.module.appopenapi.message.AppLatestVersionRequest;
 import com.acooly.module.appopenapi.message.AppLatestVersionResponse;
+import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
+import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
-import com.acooly.openapi.framework.core.meta.OpenApiService;
 import com.acooly.openapi.framework.core.service.base.BaseApiService;
-import com.acooly.openapi.framework.core.service.enums.ResponseType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

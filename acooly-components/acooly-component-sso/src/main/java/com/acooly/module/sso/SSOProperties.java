@@ -1,8 +1,10 @@
 package com.acooly.module.sso;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.util.Assert;
+
+import javax.annotation.PostConstruct;
 
 /** @author shuijing */
 @Data
@@ -14,7 +16,7 @@ public class SSOProperties {
   private boolean enable = true;
 
   /** 主boss登录地址 */
-  @NotEmpty private String ssoServerUrl;
+  private String ssoServerUrl;
 
   /**
    * 不需要拦截处理的静态资源(ant匹配规则 @link
@@ -27,4 +29,11 @@ public class SSOProperties {
 
   /** 启用dubbo方式去主boss校验资源权限，默认false采用http请求主boss校验资源权限 */
   private boolean enableDubboAuthz = false;
+
+  @PostConstruct
+  public void init(){
+    if(!enableDubboAuthz){
+        Assert.notNull(ssoServerUrl);
+    }
+  }
 }

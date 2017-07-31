@@ -10,6 +10,7 @@
 package com.acooly.module.ofile;
 
 import com.acooly.core.common.boot.Apps;
+import com.acooly.core.common.exception.AppConfigException;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SystemUtils;
@@ -65,6 +66,12 @@ public class OFileProperties implements InitializingBean {
       containDomain = true;
     }
     if (containDomain) {
+      int idx=  path.indexOf('/');
+        if(idx<0){
+            if(enableLocalMapping){
+                throw new AppConfigException("当启用本地tomcat映射时，必须指定访问域名路径，比如：http://res.example.com/media");
+            }
+        }
       path = path.substring(path.indexOf('/'));
     } else {
       path = serverRoot;

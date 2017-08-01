@@ -34,9 +34,9 @@ $(function() {
         <tr>
         	<th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
 			<th field="id" sum="true">ID</th>
-			<th field="mobile">mobile</th>
+			<th field="mobile">手机号</th>
 			<th field="status" data-options="formatter:function(value){ return formatRefrence('manage_smsBlackList_datagrid','allStatuss',value);} ">状态</th>
-			<th field="description" formatter="contentFormatter">description</th>
+			<th field="description" formatter="contentFormatter">描述</th>
 		    <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
 		    <th field="updateTime" formatter="dateTimeFormatter">修改时间</th>
           	<th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_smsBlackList_action',value,row)}">动作</th>

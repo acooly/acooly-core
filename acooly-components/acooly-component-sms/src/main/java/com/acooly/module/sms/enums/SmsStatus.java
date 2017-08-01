@@ -1,4 +1,4 @@
-package com.acooly.module.sms.log.enums;
+package com.acooly.module.sms.enums;
 
 import java.util.HashMap;
 import java.util.Map;

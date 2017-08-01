@@ -1,7 +1,7 @@
-package com.acooly.module.sms.log.dao;
+package com.acooly.module.sms.dao;
 
 import com.acooly.module.jpa.EntityJpaDao;
-import com.acooly.module.sms.log.domain.SmsLog;
+import com.acooly.module.sms.domain.SmsLog;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Date;

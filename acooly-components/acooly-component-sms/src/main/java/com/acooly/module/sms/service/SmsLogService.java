@@ -1,7 +1,7 @@
-package com.acooly.module.sms.log.service;
+package com.acooly.module.sms.service;
 
 import com.acooly.core.common.service.EntityService;
-import com.acooly.module.sms.log.domain.SmsLog;
+import com.acooly.module.sms.domain.SmsLog;
 
 /**
  * 短信发送记录 Service

@@ -18,3 +18,13 @@ ALTER TABLE `sms_log`
 ADD COLUMN `CLIENT_IP`  varchar(16) NULL COMMENT '客户IP' AFTER `STATUS`,
 ADD COLUMN `COMMENTS`  varchar(256) NULL COMMENT '备注' AFTER `CLIENT_IP`;
 
+CREATE TABLE `sms_black_list` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `mobile` varchar(20) NOT NULL,
+  `status` varchar(255) NOT NULL COMMENT '状态{enable:正常,disable:作废}',
+  `description` varchar(512) DEFAULT NULL,
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sms_black_list_mobile_idx` (`mobile`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='短信黑名单';

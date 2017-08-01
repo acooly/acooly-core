@@ -1,10 +1,10 @@
-package com.acooly.module.sms.log.service.impl;
+package com.acooly.module.sms.service.impl;
 
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.utils.Dates;
-import com.acooly.module.sms.log.dao.SmsLogDao;
-import com.acooly.module.sms.log.domain.SmsLog;
-import com.acooly.module.sms.log.service.SmsLogService;
+import com.acooly.module.sms.dao.SmsLogDao;
+import com.acooly.module.sms.domain.SmsLog;
+import com.acooly.module.sms.service.SmsLogService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;

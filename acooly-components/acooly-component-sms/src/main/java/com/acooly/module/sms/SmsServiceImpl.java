@@ -1,9 +1,9 @@
 package com.acooly.module.sms;
 
-import com.acooly.module.sms.blacklist.SmsBlacklistService;
-import com.acooly.module.sms.log.domain.SmsLog;
-import com.acooly.module.sms.log.enums.SmsStatus;
-import com.acooly.module.sms.log.service.SmsLogService;
+import com.acooly.module.sms.service.SmsBlacklistService;
+import com.acooly.module.sms.domain.SmsLog;
+import com.acooly.module.sms.enums.SmsStatus;
+import com.acooly.module.sms.service.SmsLogService;
 import com.acooly.module.sms.sender.ShortMessageSendException;
 import com.acooly.module.sms.sender.ShortMessageSender;
 import com.acooly.module.sms.template.SmsTemplate;

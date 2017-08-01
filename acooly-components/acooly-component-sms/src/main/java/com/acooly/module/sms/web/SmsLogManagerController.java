@@ -1,9 +1,9 @@
-package com.acooly.module.sms.log.web;
+package com.acooly.module.sms.web;
 
 import com.acooly.core.common.web.AbstractJQueryEntityController;
-import com.acooly.module.sms.log.domain.SmsLog;
-import com.acooly.module.sms.log.enums.SmsStatus;
-import com.acooly.module.sms.log.service.SmsLogService;
+import com.acooly.module.sms.domain.SmsLog;
+import com.acooly.module.sms.enums.SmsStatus;
+import com.acooly.module.sms.service.SmsLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

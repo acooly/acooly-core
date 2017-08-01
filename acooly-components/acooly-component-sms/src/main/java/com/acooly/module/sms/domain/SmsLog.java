@@ -1,7 +1,7 @@
-package com.acooly.module.sms.log.domain;
+package com.acooly.module.sms.domain;
 
 import com.acooly.core.common.domain.AbstractEntity;
-import com.acooly.module.sms.log.enums.SmsStatus;
+import com.acooly.module.sms.enums.SmsStatus;
 import lombok.Getter;
 import lombok.Setter;
 

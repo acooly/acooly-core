@@ -102,3 +102,7 @@ acooly.sms.cloopen.appId=8aaf07085b8e61*****b8f6274f40111
       clo.setDatas(data);
       smsService.send("18612299409", clo.toJson());`
     测试用例见 `com.acooly.core.test.web.TestController#testCloopenSms()`    
+    
+3. 短信黑名单遵循以下规则
+  如数据库表`sms_black_list`有黑名单记录，则发送以数据库记录为准。如数据库表无记录，则以配置文件`acooly.sms.blacklist`配置为准
+    

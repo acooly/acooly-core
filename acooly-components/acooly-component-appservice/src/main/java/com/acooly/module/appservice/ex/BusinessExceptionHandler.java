@@ -18,8 +18,8 @@ public class BusinessExceptionHandler implements ExceptionHandler<BusinessExcept
 
   public void handle(ExceptionContext<?> context, BusinessException e) {
     ResultBase res = context.getResponse();
-    res.setDetail(e.getMessage());
+    res.setDetail(e.message());
     res.setStatus(ResultStatus.failure);
-    res.setCode(e.getCode());
+    res.setCode(e.code());
   }
 }

@@ -15,6 +15,7 @@ import com.google.common.collect.Sets;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Set;
 
@@ -68,7 +69,11 @@ public class AppServiceMethodInterceptor implements MethodInterceptor {
       appServiceFilterChain.doFilter(appServiceContext);
       return appServiceContext.getResult();
     } else {
-      return methodInvocation.getMethod().invoke(target, methodInvocation.getArguments());
+        try {
+            return methodInvocation.getMethod().invoke(target, methodInvocation.getArguments());
+        } catch (InvocationTargetException e) {
+           throw e.getTargetException();
+        }
     }
   }
 }

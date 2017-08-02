@@ -45,32 +45,14 @@ public class ProviderLogFilter implements Filter {
       RpcContext context = RpcContext.getContext();
       context.set(providerLogEnableKey, Boolean.TRUE);
       String serviceName = invoker.getInterface().getSimpleName();
-      String version = invoker.getUrl().getParameter(Constants.VERSION_KEY);
       String group = invoker.getUrl().getParameter(Constants.GROUP_KEY);
       StringBuilder sn = new StringBuilder(200);
       if (null != group && group.length() > 0) {
         sn.append(group).append("/");
       }
       sn.append(serviceName);
-      if (null != version && version.length() > 0) {
-        sn.append(":").append(version);
-      }
       sn.append("#");
       sn.append(inv.getMethodName());
-      sn.append("(");
-      Class<?>[] types = inv.getParameterTypes();
-      if (types != null && types.length > 0) {
-        boolean first = true;
-        for (Class<?> type : types) {
-          if (first) {
-            first = false;
-          } else {
-            sn.append(",");
-          }
-          sn.append(type.getSimpleName());
-        }
-      }
-      sn.append(") ");
       Object[] args = inv.getArguments();
       if (args != null && args.length > 0) {
         sn.append(ToString.toString(args));

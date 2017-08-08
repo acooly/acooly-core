@@ -7,6 +7,7 @@
  */
 package com.acooly.core.common.facade;
 
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.core.utils.enums.ResultStatus;
@@ -66,5 +67,14 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
   @Override
   public String message() {
     return detail;
+  }
+
+    /**
+     * 当statu != ResultStatus.success抛出业务异常
+     */
+  public void throwExceptionIfNotSuccess(){
+      if(!success()){
+          throw new BusinessException(this.getCode(), this.getDetail());
+      }
   }
 }

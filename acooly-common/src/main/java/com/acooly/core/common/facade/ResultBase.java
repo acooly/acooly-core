@@ -54,7 +54,11 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
     return status == ResultStatus.success;
   }
 
-  @Override
+  public boolean processing() {
+      return status == ResultStatus.processing;
+  }
+
+    @Override
   public String toString() {
     return ToString.toString(this);
   }

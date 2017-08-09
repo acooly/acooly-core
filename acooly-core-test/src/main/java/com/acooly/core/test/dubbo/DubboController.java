@@ -12,6 +12,7 @@ package com.acooly.core.test.dubbo;
 import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.common.facade.SingleOrder;
 import com.acooly.core.common.facade.SingleResult;
+import com.acooly.core.test.dubbo.mock.XXFacade;
 import com.acooly.module.security.service.SSOAuthzService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,8 @@ public class DubboController {
 
   @Reference(version = "1.0", group = "com.acooly.module.security.service")
   private SSOAuthzService roleAuthzFacade;
+  @Reference(version = "1.0")
+  private XXFacade xxFacade;
 
   @RequestMapping(value = "/dubbo", method = RequestMethod.GET)
   public SingleResult<String> get(String msg) {
@@ -35,6 +38,14 @@ public class DubboController {
     request.setDto(msg);
     return demoFacade.echo(request);
   }
+
+    @RequestMapping(value = "/dubboMock", method = RequestMethod.GET)
+    public SingleResult<String> dubboMock(String msg) {
+        SingleOrder<String> request = new SingleOrder<>();
+        request.gid().partnerId("test");
+        request.setDto(msg);
+        return xxFacade.echo(request);
+    }
 
   @RequestMapping(value = "/role", method = RequestMethod.GET)
   public void roleGet(String msg) throws Exception {

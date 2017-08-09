@@ -47,3 +47,26 @@
 
 添加配置`acooly.dubbo.cumstomConfigPackage=com.acooly.module.security.service`
 可自定义增加注解扫描路径，多个路径用用,分割，此路径下会扫描{@link Reference}，{@link Service}这两个注解，默认会扫描{@link Apps#getBasePackage()}路径
+
+#### 4.4 如何mock dubbo服务
+
+1. 配置需要被mock的dubbo服务接口
+
+    acooly.dubbo.consumer.mockInterfaces[0]=com.acooly.core.test.dubbo.mock.XXFacade
+
+上面的配置mock掉所有如下字段
+
+      @Reference(version = "1.0")
+      private XXFacade xxFacade;
+
+2. 增加mock实现
+
+    @Service
+    public class XXFacadeMock implements XXFacade {
+        @Override
+        public SingleResult<String> echo(SingleOrder<String> msg) {
+            return SingleResult.from("mocked");
+        }
+    }
+
+实现mock接口，并注册到spring容器中。为了避免混淆，mock服务实现类必须已`Mock`为后缀。

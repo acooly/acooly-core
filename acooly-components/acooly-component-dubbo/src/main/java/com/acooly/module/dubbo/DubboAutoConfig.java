@@ -14,6 +14,7 @@ import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.dubbo.DubboFactory;
 import com.acooly.core.common.exception.AppConfigException;
+import com.acooly.module.dubbo.mock.DubboMockBeanPostProcessor;
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.config.*;
 import com.alibaba.dubbo.config.spring.AnnotationBean;
@@ -222,6 +223,14 @@ public class DubboAutoConfig implements InitializingBean {
     config.setPackage(basePackage);
     return config;
   }
+    @Bean
+    public static DubboMockBeanPostProcessor dubboMockBeanPostProcessor() {
+        DubboMockBeanPostProcessor config = new DubboMockBeanPostProcessor();
+        initDubboProperties();
+        config.setAnnotationPackage(Apps.getBasePackage());
+        config.setMockInterfaces(dubboProperties.getConsumer().getMockInterfaces());
+        return config;
+    }
 
   @Override
   public void afterPropertiesSet() throws Exception {}

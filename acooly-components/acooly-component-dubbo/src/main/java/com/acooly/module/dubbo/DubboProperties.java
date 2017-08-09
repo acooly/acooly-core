@@ -18,6 +18,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.Assert;
 
+import java.util.List;
+
 /** @author qiubo@yiji.com */
 @ConfigurationProperties(DubboProperties.PREFIX)
 @Data
@@ -51,6 +53,8 @@ public class DubboProperties implements InitializingBean {
   private boolean providerLog = true;
 
   private Provider provider = new Provider();
+
+  private Consumer consumer = new Consumer();
 
   /**
    * dubbo 可自定义增加注解扫描路径，用,分割，此路径下会扫描{@link Reference}，{@link Service}这两个注解，默认会扫描{@link
@@ -86,5 +90,9 @@ public class DubboProperties implements InitializingBean {
     private Integer timeout = DEFAULT_TIMEOUT;
     /** 服务是否注册到zk */
     private boolean register = DEFAULT_REGISTER;
+  }
+  @Data
+  public static class Consumer{
+    private List<String> mockInterfaces;
   }
 }

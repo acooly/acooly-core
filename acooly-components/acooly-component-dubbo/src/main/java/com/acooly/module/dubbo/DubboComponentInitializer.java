@@ -19,5 +19,13 @@ public class DubboComponentInitializer implements ComponentInitializer {
   public void initialize(ConfigurableApplicationContext applicationContext) {
     //tuning dubbo logger ,avoid log4j initialize
     System.setProperty("dubbo.application.logger", "slf4j");
+      Boolean dubboEnable=true;
+      if(!applicationContext.getEnvironment().getProperty("acooly.dubbo.enable",Boolean.class,Boolean.TRUE)){
+          dubboEnable=false;
+      }
+      if(!applicationContext.getEnvironment().getProperty("acooly.dubbo.provider.enable",Boolean.class,Boolean.TRUE)){
+          dubboEnable=false;
+      }
+      System.setProperty("dubbo.provider.enable", dubboEnable.toString());
   }
 }

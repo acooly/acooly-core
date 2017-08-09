@@ -3,6 +3,7 @@ package com.acooly.module.dubbo.mock;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.exception.AppConfigException;
 import com.alibaba.dubbo.config.annotation.Reference;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -14,6 +15,7 @@ import java.util.Map;
 /**
  * @author qiubo@yiji.com
  */
+@Slf4j
 public class DubboMockBeanPostProcessor implements BeanPostProcessor {
     private String annotationPackage;
     private List<String> mockInterfaces;
@@ -56,6 +58,7 @@ public class DubboMockBeanPostProcessor implements BeanPostProcessor {
                         throw new AppConfigException("dubbo消费者:"+field.getType()+" mock实现类不存在,类名必须以Mock为后缀");
                     }
                     field.set(bean, mockService);
+                    log.info("[MOCK]dubbo Reference {}.{} has bean mocked with {}",bean.getClass().getName(),field.getName(),mockService);
                 }
             }
         });

@@ -50,7 +50,7 @@
 
 #### 4.4 如何mock dubbo服务
 
-1. 配置需要被mock的dubbo服务接口
+##### 4.4.1. 配置需要被mock的dubbo服务接口
 
     acooly.dubbo.consumer.mockInterfaces[0]=com.acooly.core.test.dubbo.mock.XXFacade
 
@@ -59,7 +59,7 @@
       @Reference(version = "1.0")
       private XXFacade xxFacade;
 
-2. 增加mock实现
+##### 4.4.2. 增加mock实现
 
     @Service
     public class XXFacadeMock implements XXFacade {

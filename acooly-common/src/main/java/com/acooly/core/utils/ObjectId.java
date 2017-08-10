@@ -359,7 +359,7 @@ public final class ObjectId implements Comparable<ObjectId>, Serializable {
 
   // Creates the process identifier.  This does not have to be unique per class loader because
   // NEXT_COUNTER will provide the uniqueness.
-  private static short createProcessIdentifier() {
+  public static short createProcessIdentifier() {
     short processId;
     try {
       String processName = java.lang.management.ManagementFactory.getRuntimeMXBean().getName();

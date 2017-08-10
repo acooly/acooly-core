@@ -76,6 +76,10 @@ $(function() {
               <option value="">所有</option>
               <#list allUserTypes as k,v><option value="${k}">${v}</option></#list>
           	  </select>
+           角色:<select id="search_EQ_role" name="search_EQ_role" panelHeight="auto" editable="false" class="easyui-combobox" style="height:27px;">
+              <option value="">所有</option>
+          <#list allRoles as e><option value="${e.id}">${e.descn}</option></#list>
+          </select>
           组织机构:<input type="text" id="orgId" name="search_EQ_orgId"
                           class="easyui-combobox"/>
           <a href="javascript:void(0);" style="width:70px;" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_user_searchform','manage_user_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i> 查询</a>
@@ -86,7 +90,7 @@ $(function() {
   </div>
   <!-- 列表和工具栏 -->
   <div data-options="region:'center',border:false">
-    <table id="manage_user_datagrid" class="easyui-datagrid" url="${rc.getContextPath()}/manage/system/user/listJson.html" toolbar="#manage_user_toolbar" fit="true" border="false" fitColumns="false"
+    <table id="manage_user_datagrid" class="easyui-datagrid" url="${rc.getContextPath()}/manage/system/user/listUser.html" toolbar="#manage_user_toolbar" fit="true" border="false" fitColumns="false"
       pagination="true" idField="id" pageSize="20" pageList="[ 10, 20, 30, 40, 50 ]" sortName="id" sortOrder="desc" checkOnSelect="true" selectOnCheck="true" singleSelect="true">
       <thead>
         <tr>
@@ -99,7 +103,7 @@ $(function() {
           <th field="createTime">创建时间</th>
           <th field="lastModifyTime">修改时间</th>
           <th field="unlockTime">解锁时间</th>
-          <th field="roles" data-options="formatter:function(value){ return value?value[0]['name']:'';}">角色</th>
+          <th field="roleDescn">角色</th>
           <th field="status" data-options="formatter:function(value){ return formatRefrence('manage_user_datagrid','allStatus',value);} ">状态</th>
           <th field="userType" data-options="formatter:function(value){ return formatRefrence('manage_user_datagrid','allUserTypes',value);} ">用户类型</th>
           <th field="orgName">所属机构</th>

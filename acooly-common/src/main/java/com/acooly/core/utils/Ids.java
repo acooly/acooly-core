@@ -51,17 +51,19 @@ public class Ids {
      * 统一不重复内部订单号
      *
      * @param systemCode 4字节系统编码
-     * @return 24字节不重复编码
+     * @return 28字节不重复编码
      */
     public static String oid(String systemCode) {
         StringBuilder sb = new StringBuilder();
         sb.append(padding(systemCode, 4));
-        sb.append(Did.getInstance().getId(20));
+        sb.append(oid());
         return sb.toString();
     }
-
+    /**
+     * 长度24位全球唯一标识
+     */
     public static String oid() {
-        return oid("O001");
+        return gid();
     }
 
     /**

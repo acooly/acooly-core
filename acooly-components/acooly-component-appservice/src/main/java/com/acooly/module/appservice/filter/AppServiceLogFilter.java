@@ -41,31 +41,27 @@ public class AppServiceLogFilter implements Filter<AppServiceContext> {
   @Override
   public void doFilter(AppServiceContext context, FilterChain<AppServiceContext> filterChain) {
     boolean dubboLogEnable = dubboLogged();
-    if(dubboLogEnable){
-        try {
-            markCurrentMethodNotPrintLogMethod.invoke(providerLogFilter);
-        } catch (Exception e) {
-            e.printStackTrace();
-            //do nothing
-        }
-    }
-    if (!dubboLogEnable) {
-      long begin = System.currentTimeMillis();
-      String logPrefix = context.getLogPrefix();
-      Object[] args = context.getMethodInvocation().getArguments();
-      if (Strings.isNullOrEmpty(logPrefix)) {
-        logPrefix = context.getLoggerMethodName();
+    if (dubboLogEnable) {
+      try {
+        markCurrentMethodNotPrintLogMethod.invoke(providerLogFilter);
+      } catch (Exception e) {
+        e.printStackTrace();
+        //do nothing
       }
-      logger.info("[{}]请求入参:{}", logPrefix, args == null ? "无" : args);
-      filterChain.doFilter(context);
-      logger.info(
-          "[{}]请求响应:{},耗时:{}ms",
-          logPrefix,
-          context.getResult() == null ? "无" : context.getResult(),
-          System.currentTimeMillis() - begin);
-    } else {
-      filterChain.doFilter(context);
     }
+    long begin = System.currentTimeMillis();
+    String logPrefix = context.getLogPrefix();
+    Object[] args = context.getMethodInvocation().getArguments();
+    if (Strings.isNullOrEmpty(logPrefix)) {
+      logPrefix = context.getLoggerMethodName();
+    }
+    logger.info("[{}]请求入参:{}", logPrefix, args == null ? "无" : args);
+    filterChain.doFilter(context);
+    logger.info(
+        "[{}]请求响应:{},耗时:{}ms",
+        logPrefix,
+        context.getResult() == null ? "无" : context.getResult(),
+        System.currentTimeMillis() - begin);
   }
 
   private boolean dubboLogged() {

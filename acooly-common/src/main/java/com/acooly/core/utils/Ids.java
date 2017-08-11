@@ -59,7 +59,7 @@ public class Ids {
 
   /** 长度24位全球唯一标识 */
   public static String gid() {
-    return new ObjectId().toHexString();
+    return "g"+new ObjectId().toHexString();
   }
 
   /**
@@ -76,7 +76,10 @@ public class Ids {
   }
 
   public static String oid() {
-    return oid("O001");
+      StringBuilder sb = new StringBuilder();
+      sb.append("o");
+      sb.append(Did.getInstance().getId(20));
+      return sb.toString();
   }
 
   /**

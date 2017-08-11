@@ -5,6 +5,9 @@
  */
 package com.acooly.core.utils;
 
+import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.utils.enums.Messageable;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -14,6 +17,29 @@ import java.io.StringWriter;
  * @author calvin
  */
 public class Exceptions {
+
+    public static void rethrow(Messageable messageable,Throwable cause){
+        throw new BusinessException(messageable,cause);
+    }
+    public static void rethrow(Messageable messageable){
+        throw new BusinessException(messageable);
+    }
+    public static void rethrow(String code,String message){
+        throw new BusinessException(message,code);
+    }
+    public static void rethrow(String code,String message,Throwable throwable){
+        throw new BusinessException(message,throwable,code);
+    }
+
+    public static void rethrow(Throwable throwable) {
+        if (throwable instanceof RuntimeException) {
+            throw (RuntimeException) throwable;
+        } else if (throwable instanceof Error) {
+            throw (Error) throwable;
+        } else {
+            throw new BusinessException(throwable.getMessage());
+        }
+    }
 
   /** 将CheckedException转换为UncheckedException. */
   public static RuntimeException unchecked(Exception e) {

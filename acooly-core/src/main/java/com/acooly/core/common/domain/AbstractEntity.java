@@ -7,10 +7,7 @@ import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,8 +31,17 @@ public abstract class AbstractEntity implements Entityable {
   private Long id;
 
   /** 创建时间 */
+  @Column(
+    name = "create_time",
+    columnDefinition = " timestamp  DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'"
+  )
   private Date createTime = new Date();
 
+  @Column(
+    name = "update_time",
+    columnDefinition =
+        "timestamp  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'"
+  )
   /** 修改时间 */
   private Date updateTime = new Date();
 

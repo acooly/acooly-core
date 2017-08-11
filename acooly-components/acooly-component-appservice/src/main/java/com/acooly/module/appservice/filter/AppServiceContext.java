@@ -9,6 +9,7 @@
  */
 package com.acooly.module.appservice.filter;
 
+import com.acooly.module.appservice.AppService;
 import com.acooly.module.filterchain.Context;
 import lombok.Data;
 import org.aopalliance.intercept.MethodInvocation;
@@ -28,5 +29,13 @@ public class AppServiceContext extends Context {
       simpleName = simpleName.substring(0, idx);
     }
     return simpleName + "#" + this.methodInvocation.getMethod().getName();
+  }
+
+  public String getLogPrefix() {
+    AppService annotation = this.methodInvocation.getMethod().getAnnotation(AppService.class);
+    if (annotation != null) {
+      return annotation.logPrefix();
+    }
+    return null;
   }
 }

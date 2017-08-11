@@ -55,7 +55,12 @@ public class AppManagerController extends AbstractJQueryEntityController<App, Ap
    */
   @Override
   protected App doImportEntity(List<String> fields) {
-    return super.doImportEntity(fields);
+    App app = new App();
+    app.setDisplayName(fields.get(1));
+    app.setName(fields.get(2));
+    app.setParentAppId(Long.parseLong(fields.get(3)));
+    app.setType(fields.get(4));
+    return app;
   }
 
   @Override

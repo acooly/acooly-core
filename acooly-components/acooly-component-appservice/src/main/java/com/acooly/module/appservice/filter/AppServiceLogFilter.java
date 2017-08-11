@@ -11,6 +11,7 @@ package com.acooly.module.appservice.filter;
 
 import com.acooly.module.filterchain.Filter;
 import com.acooly.module.filterchain.FilterChain;
+import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -24,11 +25,14 @@ public class AppServiceLogFilter implements Filter<AppServiceContext> {
   private boolean dubboNotSupport = false;
   private Class providerLogFilter;
   private Method method;
+  private Method markCurrentMethodNotPrintLogMethod;
 
   public AppServiceLogFilter() {
     try {
       providerLogFilter = Class.forName("com.acooly.module.dubbo.ProviderLogFilter");
       method = providerLogFilter.getMethod("isDubboProviderLogEnable");
+      markCurrentMethodNotPrintLogMethod =
+          providerLogFilter.getMethod("markCurrentMethodNotPrintLog");
     } catch (ClassNotFoundException | NoSuchMethodException e) {
       dubboNotSupport = true;
     }
@@ -37,15 +41,26 @@ public class AppServiceLogFilter implements Filter<AppServiceContext> {
   @Override
   public void doFilter(AppServiceContext context, FilterChain<AppServiceContext> filterChain) {
     boolean dubboLogEnable = dubboLogged();
+    if(dubboLogEnable){
+        try {
+            markCurrentMethodNotPrintLogMethod.invoke(providerLogFilter);
+        } catch (Exception e) {
+            e.printStackTrace();
+            //do nothing
+        }
+    }
     if (!dubboLogEnable) {
       long begin = System.currentTimeMillis();
+      String logPrefix = context.getLogPrefix();
       Object[] args = context.getMethodInvocation().getArguments();
-      String logMethod = context.getLoggerMethodName();
-      logger.info("[{}]请求入参:{}", logMethod, args == null ? "无" : args);
+      if (Strings.isNullOrEmpty(logPrefix)) {
+        logPrefix = context.getLoggerMethodName();
+      }
+      logger.info("[{}]请求入参:{}", logPrefix, args == null ? "无" : args);
       filterChain.doFilter(context);
       logger.info(
           "[{}]请求响应:{},耗时:{}ms",
-          logMethod,
+          logPrefix,
           context.getResult() == null ? "无" : context.getResult(),
           System.currentTimeMillis() - begin);
     } else {

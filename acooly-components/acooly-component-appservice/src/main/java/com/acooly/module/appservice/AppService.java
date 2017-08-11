@@ -34,6 +34,8 @@ import java.lang.annotation.*;
 public @interface AppService {
   boolean enable() default true;
 
+  String logPrefix() default "";
+
   /** 请求对象校验组 jsr303 */
   @Documented
   @Inherited

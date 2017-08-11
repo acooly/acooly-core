@@ -22,15 +22,27 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
   private Messageable status = ResultStatus.success;
 
   /** 参考 {@link ResultCode} */
-  private String code;
+  private String code = ResultCode.SUCCESS.getCode();
 
-  private String detail;
+  private String detail=ResultCode.SUCCESS.getMessage();
 
   public Messageable getStatus() {
     return status;
   }
 
   public void setStatus(Messageable status) {
+      if(status==ResultStatus.success){
+        code= ResultCode.SUCCESS.getCode();
+        detail= ResultCode.SUCCESS.getCode();
+      }
+      if(status==ResultStatus.processing){
+          code= ResultCode.PROCESSING.getCode();
+          detail= ResultCode.PROCESSING.getCode();
+      }
+      if(status==ResultStatus.failure){
+          code= null;
+          detail= null;
+      }
     this.status = status;
   }
 

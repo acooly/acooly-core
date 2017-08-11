@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotNull;
 
 /**
- * 内部通讯请求参数 基类
+ * 查询请求基类
  *
  * @author zhangpu
  */

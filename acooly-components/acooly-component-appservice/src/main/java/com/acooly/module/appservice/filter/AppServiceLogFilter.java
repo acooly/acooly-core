@@ -45,7 +45,6 @@ public class AppServiceLogFilter implements Filter<AppServiceContext> {
       try {
         markCurrentMethodNotPrintLogMethod.invoke(providerLogFilter);
       } catch (Exception e) {
-        e.printStackTrace();
         //do nothing
       }
     }

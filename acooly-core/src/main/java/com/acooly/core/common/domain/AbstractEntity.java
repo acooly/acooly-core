@@ -35,7 +35,7 @@ public abstract class AbstractEntity implements Entityable {
     name = "create_time",
     insertable = false,
     updatable = false,
-    columnDefinition = " timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'"
+    columnDefinition = " timestamp  DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'"
   )
   private Date createTime = new Date();
 
@@ -44,7 +44,7 @@ public abstract class AbstractEntity implements Entityable {
     insertable = false,
     updatable = false,
     columnDefinition =
-        "timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'"
+        "timestamp  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'"
   )
   /** 修改时间 */
   private Date updateTime = new Date();

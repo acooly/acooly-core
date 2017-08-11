@@ -54,6 +54,15 @@ public class BusinessException extends RuntimeException implements Messageable {
     this.code = code;
   }
 
+  public BusinessException(Messageable messageable){
+      super(messageable.message());
+      this.code=messageable.code();
+  }
+    public BusinessException(Messageable messageable,Throwable cause){
+        super(messageable.message(),cause);
+        this.code=messageable.code();
+    }
+
   public String getCode() {
     return code;
   }

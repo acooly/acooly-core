@@ -121,6 +121,7 @@ public class Ids {
     private static Did did = new Did();
     private AtomicLong sequence = new AtomicLong(1);
     private String nodeFlag;
+    private static String pidStr = null;
     private Object nodeFlagLock = new Object();
 
     private Did() {
@@ -164,7 +165,10 @@ public class Ids {
 
     /** 获取两位pid */
     private String getPid() {
-      return String.valueOf(short2(PROCESS_IDENTIFIER));
+      if (pidStr == null) {
+        pidStr = String.valueOf(short2(PROCESS_IDENTIFIER));
+      }
+      return pidStr;
     }
 
     public String getSequ() {

@@ -20,8 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class AbstractRealNameAuthentication
     implements RealNameAuthentication, InitializingBean {
 
-  protected Logger logger = LoggerFactory.getLogger(this.getClass());
-
   protected String appCode;
   protected String service;
   protected int timeout;

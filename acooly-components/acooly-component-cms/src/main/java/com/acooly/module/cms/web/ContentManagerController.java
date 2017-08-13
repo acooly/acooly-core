@@ -5,6 +5,7 @@ import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Servlets;
+import com.acooly.core.utils.Strings;
 import com.acooly.module.cms.domain.*;
 import com.acooly.module.cms.service.AttachmentService;
 import com.acooly.module.cms.service.CmsCodeService;
@@ -12,7 +13,13 @@ import com.acooly.module.cms.service.ContentService;
 import com.acooly.module.cms.service.ContentTypeService;
 import com.acooly.module.ofile.OFileProperties;
 import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +35,7 @@ import java.util.Map.Entry;
 
 @Controller
 @RequestMapping(value = "/manage/module/cms/content")
+@Slf4j
 public class ContentManagerController
         extends AbstractJQueryEntityController<Content, ContentService> {
 
@@ -45,9 +53,9 @@ public class ContentManagerController
     @Autowired
     private AttachmentService attachmentService;
     @Autowired
-    private OFileProperties oFileProperties;
-    @Autowired
     private CmsCodeService cmsCodeService;
+    @Autowired
+    private OFileProperties oFileProperties;
 
 
     @RequestMapping(value = "removeAttachment")
@@ -84,7 +92,6 @@ public class ContentManagerController
         Set<Attachment> items = new HashSet<Attachment>();
         String[] strlist = request.getParameterValues("attachment");
         if (strlist != null && strlist.length != 0) {
-
             for (int index = 0; index < strlist.length; index++) {
                 String str = strlist[index];
                 if (StringUtils.isNotBlank(str)) {
@@ -102,22 +109,13 @@ public class ContentManagerController
             }
         }
         entity.setAttachments(items);
-        String storageRoot = getFileStorageRoot();
+        getUploadConfig().setThumbnailEnable(true);
         Map<String, UploadResult> uploadResults = doUpload(request);
         if (uploadResults != null && uploadResults.size() > 0) {
             UploadResult uploadResult = uploadResults.get("cover_f");
             if (uploadResult != null) {
                 if (uploadResult.getSize() > 0) {
-                    File f = uploadResult.getFile();
-                    String filePath = f.getPath();
-                    // String cover_f_format = WebUtils.getCleanParam(request,
-                    // "cover_f_format");
-                    // if(StringUtils.isNotBlank(cover_f_format)&&"product".equals(cover_f_format)){
-                    // Images.resize(filePath, filePath, 100, 170,true);
-                    // }
-                    filePath = filePath.substring(storageRoot.length());
-                    filePath = filePath.replaceAll("\\\\", "/");
-                    entity.setCover(filePath);
+                    entity.setCover(uploadResult.getRelativeFile());
                 }
             }
         }
@@ -149,14 +147,12 @@ public class ContentManagerController
     /**
      * @return
      */
-    private Object getFileServerRoot() {
-
+    private String getFileServerRoot() {
         return oFileProperties.getServerRoot();
     }
 
     @Override
     protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-
         model.put("allStatuss", allStatuss);
         model.put("mediaRoot", getFileServerRoot());
 
@@ -171,19 +167,64 @@ public class ContentManagerController
         model.put("allCodes", codes);
     }
 
-    protected void doRemove(
-            HttpServletRequest request, HttpServletResponse response, Model model, Serializable... ids)
-            throws Exception {
+    /**
+     * 删除内容
+     * <p>
+     * 包括删除文件
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @param ids
+     * @throws Exception
+     */
+    protected void onRemove(HttpServletRequest request, HttpServletResponse response, Model model, Serializable... ids) throws Exception {
 
         if (ids == null || ids.length == 0) {
             throw new RuntimeException("请求参数中没有指定需要删除的实体Id");
         }
-        try {
-            getEntityService().updateStatusBatch(Content.STATUS_DISABLED, ids);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("操作失败");
+        // 循环删除文件
+        Content content = null;
+        for (Serializable id : ids) {
+            content = getEntityService().get(id);
+            if (content == null) {
+                continue;
+            }
+            deleteRelativeFile(content.getCover(), request);
+            deleteFileWithBody(content.getContentBody().getBody(), request);
         }
+    }
+
+
+    private void deleteFileWithBody(String body, HttpServletRequest request) {
+
+        try {
+            Document doc = Jsoup.parse(body);
+            Elements elements = doc.select("img[src^=" + getFileServerRoot() + "]");
+            String filePath = null;
+            for (Element e : elements) {
+                filePath = e.attr("src");
+                if (Strings.isBlank(filePath)) {
+                    continue;
+                }
+                filePath = Strings.substringAfter(filePath, getFileServerRoot());
+                deleteRelativeFile(filePath, request);
+            }
+        } catch (Exception e) {
+            log.warn("删除body中的上传文件失败");
+        }
+
+
+    }
+
+    private void deleteRelativeFile(String relativePath, HttpServletRequest request) {
+        if (Strings.isBlank(relativePath)) {
+            return;
+        }
+        File f = new File(getFileStorageRoot(), relativePath);
+        File thumb = getThumbnailFile(f, request);
+        FileUtils.deleteQuietly(f);
+        FileUtils.deleteQuietly(thumb);
     }
 
     protected Content doSave(
@@ -206,9 +247,7 @@ public class ContentManagerController
     @ResponseBody
     public String importJsonReview(
             HttpServletRequest request, HttpServletResponse response, Model model) {
-
         String filePath = "";
-
         try {
             String storageRoot = getFileStorageRoot();
             Map<String, UploadResult> uploadResults = doUpload(request);
@@ -266,7 +305,6 @@ public class ContentManagerController
     }
 
     protected UploadConfig getUploadConfig() {
-
         super.uploadConfig.setUseMemery(false);
         super.uploadConfig.setNeedTimePartPath(false);
         super.uploadConfig.setStorageRoot(getFileStorageRoot());
@@ -290,5 +328,4 @@ public class ContentManagerController
         sortMap.put("pubDate", false);
         return sortMap;
     }
-
 }

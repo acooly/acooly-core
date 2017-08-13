@@ -12,19 +12,25 @@ package com.acooly.module.dubbo;
 import com.acooly.core.utils.ToString;
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.rpc.*;
+import com.google.common.base.Strings;
+import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 /** @author qiubo@yiji.com */
 public class ProviderLogFilter implements Filter {
 
-  private static final Logger logger = LoggerFactory.getLogger(ProviderLogFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProviderLogFilter.class);
 
   private static final AtomicLong requestId = new AtomicLong();
+    public static final String NOT_NEED_LOG_METHOD_KEY = "notNeedLogMethodKey";
 
-  private static String providerLogEnableKey = "dubboProviderLogEnableKey";
+    private static String providerLogEnableKey = "dubboProviderLogEnableKey";
+
+  private static Set<String> notNeedLogMethod = Sets.newConcurrentHashSet();
 
   public static Boolean isDubboProviderLogEnable() {
     RpcContext context = RpcContext.getContext();
@@ -37,35 +43,46 @@ public class ProviderLogFilter implements Filter {
     return Boolean.FALSE;
   }
 
-  public Result invoke(Invoker<?> invoker, Invocation inv) throws RpcException {
-    long id = requestId.getAndIncrement();
-    long now = System.currentTimeMillis();
-    try {
-
+  public static void markCurrentMethodNotPrintLog() {
       RpcContext context = RpcContext.getContext();
-      context.set(providerLogEnableKey, Boolean.TRUE);
-      String serviceName = invoker.getInterface().getSimpleName();
-      String group = invoker.getUrl().getParameter(Constants.GROUP_KEY);
-      StringBuilder sn = new StringBuilder(200);
-      if (null != group && group.length() > 0) {
-        sn.append(group).append("/");
-      }
-      sn.append(serviceName);
-      sn.append("#");
-      sn.append(inv.getMethodName());
-      Object[] args = inv.getArguments();
-      if (args != null && args.length > 0) {
-        sn.append(ToString.toString(args));
-      }
-      sn.append(" ip:").append(context.getRemoteHost());
-      String msg = sn.toString();
-      logger.info("[DUBBO-{}]请求:{}", id, msg);
-    } catch (Exception t) {
-      logger.warn("Exception in ProviderLogFilter of service( {} -> {})", invoker, inv, t);
-    }
+      notNeedLogMethod.add(context.get(NOT_NEED_LOG_METHOD_KEY).toString());
+  }
 
-    Result result = invoker.invoke(inv);
-    logger.info("[DUBBO-{}]响应:{} 耗时:{}ms", id, result, System.currentTimeMillis() - now);
-    return result;
+  public Result invoke(Invoker<?> invoker, Invocation inv) throws RpcException {
+    String serviceName = invoker.getInterface().getSimpleName();
+    String group = invoker.getUrl().getParameter(Constants.GROUP_KEY);
+    String methodName = inv.getMethodName();
+    String methodString;
+    if (Strings.isNullOrEmpty(group)) {
+      methodString = String.format("%s#%s", serviceName, methodName);
+    } else {
+      methodString = String.format("%s/%s#%s", serviceName, group, methodName);
+    }
+    if (notNeedLogMethod.contains(methodString)) {
+      return invoker.invoke(inv);
+    } else {
+      RpcContext context = RpcContext.getContext();
+      context.set(NOT_NEED_LOG_METHOD_KEY, methodString);
+      long id = requestId.getAndIncrement();
+      long now = System.currentTimeMillis();
+      try {
+        context.set(providerLogEnableKey, Boolean.TRUE);
+        StringBuilder sn = new StringBuilder(200);
+        sn.append(methodString);
+        Object[] args = inv.getArguments();
+        if (args != null && args.length > 0) {
+          sn.append(ToString.toString(args));
+        }
+        sn.append(" ip:").append(context.getRemoteHost());
+        String msg = sn.toString();
+        logger.info("[DUBBO-{}]请求:{}", id, msg);
+      } catch (Exception t) {
+        logger.warn("Exception in ProviderLogFilter of service( {} -> {})", invoker, inv, t);
+      }
+
+      Result result = invoker.invoke(inv);
+      logger.info("[DUBBO-{}]响应:{} 耗时:{}ms", id, result, System.currentTimeMillis() - now);
+      return result;
+    }
   }
 }

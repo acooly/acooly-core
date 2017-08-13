@@ -30,11 +30,10 @@ import java.util.Map;
 @Service("aliRealNameAuthentication")
 public class AliRealNameAuthentication extends AbstractRealNameAuthentication {
 
-  public static Map<String, String> messages =
+  private static Map<String, String> messages =
       new LinkedHashMap<String, String>() {
         /** UId */
         private static final long serialVersionUID = -847699194658395108L;
-
         {
           put("0", "匹配");
           put("5", "不匹配");

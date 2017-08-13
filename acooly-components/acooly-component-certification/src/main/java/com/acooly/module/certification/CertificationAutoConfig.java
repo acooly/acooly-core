@@ -1,12 +1,3 @@
-/*
- * www.yiji.com Inc.
- * Copyright (c) 2017 All Rights Reserved
- */
-
-/*
- * 修订记录:
- * qiubo@yiji.com 2017-02-24 21:58 创建
- */
 package com.acooly.module.certification;
 
 import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
@@ -23,7 +14,7 @@ import java.util.List;
 
 import static com.acooly.module.certification.CertificationProperties.PREFIX;
 
-/** @author qiubo@yiji.com */
+/** @author shuijing */
 @Configuration
 @EnableConfigurationProperties({CertificationProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
@@ -31,7 +22,7 @@ import static com.acooly.module.certification.CertificationProperties.PREFIX;
 @AutoConfigureAfter(SecurityAutoConfig.class)
 public class CertificationAutoConfig {
   @Bean
-  public StandardDatabaseScriptIniter smsScriptIniter() {
+  public StandardDatabaseScriptIniter certificationScriptIniter() {
     return new StandardDatabaseScriptIniter() {
       @Override
       public String getEvaluateTable() {

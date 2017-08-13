@@ -38,7 +38,13 @@ public class DubboController {
     request.setDto(msg);
     return demoFacade.echo(request);
   }
-
+    @RequestMapping(value = "/dubbo1", method = RequestMethod.GET)
+    public SingleResult<String> get1(String msg) {
+        SingleOrder<String> request = new SingleOrder<>();
+        request.gid().partnerId("test");
+        request.setDto("a");
+        return demoFacade.echo1(request);
+    }
     @RequestMapping(value = "/dubboMock", method = RequestMethod.GET)
     public SingleResult<String> dubboMock(String msg) {
         SingleOrder<String> request = new SingleOrder<>();

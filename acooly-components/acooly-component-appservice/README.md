@@ -154,3 +154,18 @@ dubbo和spring其他annotation任然可以使用。@AppService内部会确保增
 2. 统一的性能、监控数据
 3. 容错
 4. 服务认证和授权
+
+
+### 3.5 @AppService 增加logPrefix
+
+
+当dubbo服务实现方法标注@AppService时，并且dubbo providerLog开启，优先打印@AppService日志。
+
+	2017-08-11 11:45:53.766 INFO  [http-nio-8081-exec-9] ConsumerLogFilter:52-- [DUBBO-6]请求:DemoFacade#echo1[SingleOrder{dto=a,gid=598d28717a1e14044742e314,partnerId=test}] ip:192.168.13.34:12345
+	2017-08-11 11:45:53.777 INFO  [DubboServerHandler-192.168.13.34:12345-thread-6] AppServiceLogFilter:59-598d28717a1e14044742e314- [测试]请求入参:[SingleOrder{dto=a,gid=598d28717a1e14044742e314,partnerId=test}]
+	2017-08-11 11:45:53.780 INFO  [DubboServerHandler-192.168.13.34:12345-thread-6] AppServiceLogFilter:61-598d28717a1e14044742e314- [测试]请求响应:SingleResult{code=null,detail=null,dto=a,status=success:成功},耗时:3ms
+	2017-08-11 11:45:53.786 INFO  [http-nio-8081-exec-9] ConsumerLogFilter:59-- [DUBBO-6]响应:RpcResult [result=SingleResult{code=null,detail=null,dto=a,status=success:成功}, exception=null] 耗时:20ms
+
+如上，第一行和第四行日志为consumerLog。第二行和第三行为@AppService输出日志。
+
+当`logPrefix`没有设置时，日志输出方法名。

@@ -1,22 +1,41 @@
 ## 1. 组件介绍
 
-此组建提供实名认证能力
+此组件提供实名认证、银行卡二三四要素认证能力
 
 ## 2. 使用说明
 
-### 2.1 实名认证服务类
+### 2.1 服务类
 
-    com.acooly.module.certification
+`com.acooly.module.certification.CertificationService`
+    
 
-### 2.2 如何配置实名模板
+### 2.2 配置
 
-####实名组建使用配置
+* `acooly.certification.appCode=a08c5badb879******bc8d67e709b` 
+  必选，使用阿里云提供者必填appCode
+  
+* `acooly.certification.bankCertProvider=ali`
+  可选，银行卡二三四要素认证提供者，目前默认为ali(阿里云提供商)  
 
-1、渠道配置目前只支持ali渠道
-acooly.certification.provider
+* `acooly.certification.provider=ali`
+  可选，实名认证提供者，目前默认为ali(阿里云提供商)
+    
+* `acooly.certification.url=http://idcard.market.alicloudapi.com`
+  可选，实名认证服务地址，可修改 
 
-2、ali渠道需要的appCode
-acooly.certification.appCode
 
-3、渠道请求地址
-acooly.certification.url
+
+### 2.3 接口使用
+```
+             @Autowired private CertificationService certificationService;
+            
+             public void four(String realName, String cardNo, String certId, String phoneNum) {
+                BankCardResult result =
+                    certificationService.bankCardCertFour(realName, cardNo, certId, phoneNum);
+                log.info("银行卡四要素验证结果:{}", result.toString());
+              }
+
+```
+
+            
+              

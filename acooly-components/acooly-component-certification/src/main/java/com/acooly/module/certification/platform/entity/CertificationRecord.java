@@ -7,6 +7,7 @@
 package com.acooly.module.certification.platform.entity;
 
 import com.acooly.core.common.domain.AbstractEntity;
+import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
@@ -19,6 +20,7 @@ import javax.validation.constraints.Size;
  *
  * @author acooly Date: 2017-04-21 16:50:19
  */
+@Data
 @Entity
 @Table(name = "cert_certification_record")
 public class CertificationRecord extends AbstractEntity {
@@ -50,52 +52,4 @@ public class CertificationRecord extends AbstractEntity {
 
   /** 状态 */
   @NotNull private Integer status = 0;
-
-  public String getRealName() {
-    return this.realName;
-  }
-
-  public void setRealName(String realName) {
-    this.realName = realName;
-  }
-
-  public String getIdCarNo() {
-    return this.idCarNo;
-  }
-
-  public void setIdCarNo(String idCarNo) {
-    this.idCarNo = idCarNo;
-  }
-
-  public String getSex() {
-    return this.sex;
-  }
-
-  public void setSex(String sex) {
-    this.sex = sex;
-  }
-
-  public String getAddress() {
-    return this.address;
-  }
-
-  public void setAddress(String address) {
-    this.address = address;
-  }
-
-  public String getBirthday() {
-    return this.birthday;
-  }
-
-  public void setBirthday(String birthday) {
-    this.birthday = birthday;
-  }
-
-  public Integer getStatus() {
-    return this.status;
-  }
-
-  public void setStatus(Integer status) {
-    this.status = status;
-  }
 }

@@ -123,7 +123,10 @@
     对于应用开发者，框架支持自动执行初始化脚本，脚本路径如下：
 
         src/main/resources/META-INF/database/${dbType}/dml.sql
+        src/main/resources/META-INF/database/${dbType}/dml_*.sql
         src/main/resources/META-INF/database/${dbType}/ddl.sql
+        src/main/resources/META-INF/database/${dbType}/ddl_*.sql
+
 
 
     框架发现数据库文件存在，会依次执行这两个文件。(此逻辑在jpa初始化完成后才执行，所以我们可以依赖jpa`@Entity`创建表，然后初始化数据)。

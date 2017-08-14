@@ -169,7 +169,7 @@ public class Ids {
     /** 获取两位pid */
     private String getPid() {
       if (pidStr == null) {
-        pidStr = String.valueOf(short2(PROCESS_IDENTIFIER));
+        pidStr = String.valueOf(Math.abs(short2(PROCESS_IDENTIFIER)));
       }
       return pidStr;
     }

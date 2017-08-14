@@ -19,7 +19,7 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
   /** serialVersionUID */
   private static final long serialVersionUID = -8702480923545642017L;
 
-  private Messageable status = ResultStatus.success;
+  private ResultStatus status = ResultStatus.success;
 
   /** 参考 {@link ResultCode} */
   private String code = ResultCode.SUCCESS.getCode();
@@ -30,7 +30,7 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
     return status;
   }
 
-  public void setStatus(Messageable status) {
+  public void setStatus(ResultStatus status) {
       if(status==ResultStatus.success){
         code= ResultCode.SUCCESS.getCode();
         detail= ResultCode.SUCCESS.getCode();

@@ -19,7 +19,7 @@ public class ThrowableExceptionHandler implements ExceptionHandler<Throwable> {
   @Override
   public void handle(ExceptionContext<?> context, Throwable throwable) {
     ResultBase res = context.getResponse();
-    res.setDetail(throwable.getMessage());
-    res.setStatus(ResultStatus.failure);
+      res.setStatus(ResultStatus.failure);
+      res.setDetail(throwable.getMessage());
   }
 }

@@ -31,18 +31,6 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
   }
 
   public void setStatus(ResultStatus status) {
-      if(status==ResultStatus.success){
-        code= ResultCode.SUCCESS.getCode();
-        detail= ResultCode.SUCCESS.getCode();
-      }
-      if(status==ResultStatus.processing){
-          code= ResultCode.PROCESSING.getCode();
-          detail= ResultCode.PROCESSING.getCode();
-      }
-      if(status==ResultStatus.failure){
-          code= null;
-          detail= null;
-      }
     this.status = status;
   }
 

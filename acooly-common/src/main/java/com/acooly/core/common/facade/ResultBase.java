@@ -34,6 +34,12 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
     this.status = status;
   }
 
+  public void markProcessing(){
+      this.status=ResultStatus.processing;
+      this.code=ResultStatus.processing.code();
+      this.detail=ResultStatus.processing.message();
+  }
+
   public String getDetail() {
     return detail;
   }

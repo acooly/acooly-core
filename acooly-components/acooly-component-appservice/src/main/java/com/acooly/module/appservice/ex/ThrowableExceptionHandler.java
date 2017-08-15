@@ -20,6 +20,7 @@ public class ThrowableExceptionHandler implements ExceptionHandler<Throwable> {
   public void handle(ExceptionContext<?> context, Throwable throwable) {
     ResultBase res = context.getResponse();
       res.setStatus(ResultStatus.failure);
-      res.setDetail(throwable.getMessage());
+      res.setCode(ResultStatus.failure.code());
+      res.setDetail("内部异常");
   }
 }

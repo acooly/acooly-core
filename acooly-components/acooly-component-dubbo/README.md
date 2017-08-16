@@ -39,6 +39,12 @@
 
 参考`com.acooly.module.dubbo.DubboRequestContext`
 
+上下文信息也可以自动传递。在dubbo服务A内调用其他dubbo服务B时。
+
+请求dubbo服务A的`partnerId`和`gid`会自动传递到调用dubbo服务B。
+
+如果dubbo服务A的请求对象为`BizOrderBase`及其子类,`merchOrderNo`和`bizOrderNo`也会自动传递。
+
 #### 4.2 如何设置provider暴露ip
 
 设置启动变量`-Ddubbo.provider.ip=xxx`或设置配置文件。

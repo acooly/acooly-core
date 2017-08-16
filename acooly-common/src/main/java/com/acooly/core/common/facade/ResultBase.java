@@ -24,7 +24,7 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
   /** 参考 {@link ResultCode} */
   private String code = ResultCode.SUCCESS.getCode();
 
-  private String detail=ResultCode.SUCCESS.getMessage();
+  private String detail = ResultCode.SUCCESS.getMessage();
 
   public Messageable getStatus() {
     return status;
@@ -34,10 +34,10 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
     this.status = status;
   }
 
-  public void markProcessing(){
-      this.status=ResultStatus.processing;
-      this.code=ResultStatus.processing.code();
-      this.detail=ResultStatus.processing.message();
+  public void markProcessing() {
+    this.status = ResultStatus.processing;
+    this.code = ResultStatus.processing.code();
+    this.detail = ResultStatus.processing.message();
   }
 
   public String getDetail() {
@@ -61,10 +61,10 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
   }
 
   public boolean processing() {
-      return status == ResultStatus.processing;
+    return status == ResultStatus.processing;
   }
 
-    @Override
+  @Override
   public String toString() {
     return ToString.toString(this);
   }
@@ -79,12 +79,10 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
     return detail;
   }
 
-    /**
-     * 当statu != ResultStatus.success抛出业务异常
-     */
-  public void throwExceptionIfNotSuccess(){
-      if(!success()){
-          throw new BusinessException(this.getCode(), this.getDetail());
-      }
+  /** 当statu != ResultStatus.success抛出业务异常 */
+  public void throwExceptionIfNotSuccess() {
+    if (!success()) {
+      throw new BusinessException(this.getDetail(), this.getCode());
+    }
   }
 }

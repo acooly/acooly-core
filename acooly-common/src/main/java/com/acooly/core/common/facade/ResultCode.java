@@ -19,12 +19,12 @@ import java.util.Map;
 
 /** @author qiubo@yiji.com */
 public enum ResultCode implements Messageable {
-  SUCCESS("EXECUTE_SUCCESS", "成功"),
-  PROCESSING("EXECUTE_PROCESSING", "处理中"),
+  SUCCESS("SUCCESS", "成功"),
+  PROCESSING("PROCESSING", "处理中"),
   INTERNAL_ERROR("INTERNAL_ERROR", "内部错误"),
   PARAMETER_ERROR("PARAMETER_ERROR", "参数错误"),
   FAILURE("FAILURE", "执行失败"),
-  UN_AUTHENTICATED_ERROR("UNAUTHENTICATED", "认证(签名)错误"),
+  UNAUTHENTICATED_ERROR("UNAUTHENTICATED_ERROR", "认证(签名)错误"),
   PARAM_FORMAT_ERROR("PARAM_FORMAT_ERROR", "参数格式错误"),
   REQUEST_NO_NOT_UNIQUE("REQUEST_NO_NOT_UNIQUE", "请求号重复"),
   FIELD_NOT_UNIQUE("FIELD_NOT_UNIQUE", "对象字段重复"),

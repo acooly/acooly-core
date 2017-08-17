@@ -120,6 +120,10 @@ acooly.portlet.actionlog.filterEnable=true
 acooly.portlet.actionlog.sessionUserKey=sessionCustomer
 # 访问日志收集filter收集日志的url配置（AntPath模式）
 acooly.portlet.actionlog.filterUrlPatterns=/portal/**
+# 是否开启批量写入
+acooly.portlet.actionlog.cacheable=true
+# 批量写入的批次大小
+acooly.portlet.actionlog.cacheSize=1000
 ```
 
 #### 配置映射

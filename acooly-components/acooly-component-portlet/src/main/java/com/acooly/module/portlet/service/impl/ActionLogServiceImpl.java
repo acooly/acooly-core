@@ -18,6 +18,7 @@ import com.acooly.module.portlet.enums.ActionChannelEnum;
 import com.acooly.module.portlet.service.ActionLogService;
 import com.acooly.module.portlet.service.ActionMappingService;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ import java.util.List;
  * @author acooly
  */
 @Service("actionLogService")
+@Slf4j
 public class ActionLogServiceImpl extends EntityServiceImpl<ActionLog, ActionLogDao>
         implements ActionLogService {
 
@@ -95,12 +97,14 @@ public class ActionLogServiceImpl extends EntityServiceImpl<ActionLog, ActionLog
                 if (actionLogs.size() >= cacheSize) {
                     saves(actionLogs);
                     redisTemplate.delete(ACTION_LOG_CACHE_NAME);
+                    log.info("批量写入actionLog日志并清空缓存。数量:{}", actionLogs.size());
                 } else {
                     va.set(ACTION_LOG_CACHE_NAME, actionLogs);
                 }
 
             } else {
                 save(actionLog);
+                log.debug("缓存写入actionLog日志: {}", actionLog);
             }
             return actionLog;
         } catch (Exception e) {

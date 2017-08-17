@@ -71,7 +71,6 @@ public class ExHibernateJpaVendorAdapter extends HibernateJpaVendorAdapter {
           }
           Arrays.stream(scriptResources)
               .filter(Resource::exists)
-              .sorted()
               .forEach(
                   resource -> {
                     log.info(

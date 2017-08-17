@@ -16,6 +16,7 @@ import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.springframework.jdbc.datasource.init.ScriptUtils.*;
@@ -71,7 +72,7 @@ public class ExHibernateJpaVendorAdapter extends HibernateJpaVendorAdapter {
           }
           Arrays.stream(scriptResources)
               .filter(Resource::exists)
-              .sorted()
+              .sorted(Comparator.comparing(Resource::getFilename))
               .forEach(
                   resource -> {
                     log.info(

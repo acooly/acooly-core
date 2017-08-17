@@ -19,20 +19,19 @@ import java.util.Map;
 /** @author qiubo@yiji.com */
 @Getter
 @Setter
-public class ListOrder<T> extends SingleOrder<T> {
+public class ListOrder extends OrderBase {
 
   /** 参数map */
   private Map<String, Object> map;
 
   private Map<String, Boolean> sortMap;
 
-  public static <T> ListOrder<T> from(T dto) {
-    ListOrder<T> order = new ListOrder<T>();
-    order.setDto(dto);
+  public static  ListOrder from() {
+    ListOrder order = new ListOrder();
     return order;
   }
 
-  public ListOrder<T> map(String key, Object value) {
+  public ListOrder map(String key, Object value) {
     if (this.map == null) {
       this.map = Maps.newHashMap();
     }
@@ -40,7 +39,7 @@ public class ListOrder<T> extends SingleOrder<T> {
     return this;
   }
 
-  public ListOrder<T> sortMap(String key, Boolean value) {
+  public ListOrder sortMap(String key, Boolean value) {
     if (this.sortMap == null) {
       this.sortMap = Maps.newHashMap();
     }
@@ -48,16 +47,16 @@ public class ListOrder<T> extends SingleOrder<T> {
     return this;
   }
 
-  public ListOrder<T> gid() {
+  public ListOrder gid() {
     return this.gid(Ids.gid());
   }
 
-  public ListOrder<T> gid(String gid) {
+  public ListOrder gid(String gid) {
     this.setGid(gid);
     return this;
   }
 
-  public ListOrder<T> partnerId(String partnerId) {
+  public ListOrder partnerId(String partnerId) {
     this.setPartnerId(partnerId);
     return this;
   }

@@ -12,8 +12,8 @@ public class DuplicateKeyExceptionHandler implements ExceptionHandler<DuplicateK
 
     public void handle(ExceptionContext<?> context, DuplicateKeyException e) {
         ResultBase res = context.getResponse();
+        res.setStatus(ResultStatus.failure);
         res.setDetail(ResultCode.REQUEST_NO_NOT_UNIQUE.getMessage());
         res.setCode(ResultCode.REQUEST_NO_NOT_UNIQUE.getCode());
-        res.setStatus(ResultStatus.failure);
     }
 }

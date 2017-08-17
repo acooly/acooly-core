@@ -13,6 +13,9 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.io.IOException;
+import java.sql.Connection;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.jdbc.datasource.init.ScriptUtils.*;
@@ -37,29 +40,52 @@ public class ExHibernateJpaVendorAdapter extends HibernateJpaVendorAdapter {
           } else {
             throw new UnsupportedOperationException("不支持此数据库");
           }
-          String ddl = "classpath:META-INF/database/" + dbType + "/" + "ddl.sql";
-          String dml = "classpath:META-INF/database/" + dbType + "/" + "dml.sql";
-          List<String> sqls = Lists.newArrayList(ddl, dml);
-          sqls.forEach(
-              s -> {
-                Resource scriptResource = ApplicationContextHolder.get().getResource(s);
-                if (scriptResource.exists()) {
-                  log.info("执行自定义数据库脚本文件:{}", s);
-                  EncodedResource encodedResource =
-                      new EncodedResource(scriptResource, Charsets.UTF_8);
-                  ScriptUtils.executeSqlScript(
-                      connection,
-                      encodedResource,
-                      true,
-                      true,
-                      DEFAULT_COMMENT_PREFIX,
-                      DEFAULT_STATEMENT_SEPARATOR,
-                      DEFAULT_BLOCK_COMMENT_START_DELIMITER,
-                      DEFAULT_BLOCK_COMMENT_END_DELIMITER);
-                }
-              });
+
+          exeScripts(
+              connection,
+              dbType,
+              Lists.newArrayList(
+                  "classpath:META-INF/database/" + dbType + "/" + "ddl.sql",
+                  dbType,
+                  "classpath:META-INF/database/" + dbType + "/" + "ddl_*.sql"));
+
+          exeScripts(
+              connection,
+              dbType,
+              Lists.newArrayList(
+                  "classpath:META-INF/database/" + dbType + "/" + "dml.sql",
+                  "classpath:META-INF/database/" + dbType + "/" + "dml_*.sql"));
         });
     entityManager.getTransaction().commit();
     session.close();
+  }
+
+  private void exeScripts(Connection connection, String dbType, List<String> scripts) {
+    scripts.forEach(
+        s -> {
+          Resource[] scriptResources;
+          try {
+            scriptResources = ApplicationContextHolder.get().getResources(s);
+          } catch (IOException e) {
+            return;
+          }
+          Arrays.stream(scriptResources)
+              .filter(Resource::exists)
+              .forEach(
+                  resource -> {
+                    log.info(
+                        "执行自定义数据库脚本文件:META-INF/database/{}/{}", dbType, resource.getFilename());
+                    EncodedResource encodedResource = new EncodedResource(resource, Charsets.UTF_8);
+                    ScriptUtils.executeSqlScript(
+                        connection,
+                        encodedResource,
+                        true,
+                        true,
+                        DEFAULT_COMMENT_PREFIX,
+                        DEFAULT_STATEMENT_SEPARATOR,
+                        DEFAULT_BLOCK_COMMENT_START_DELIMITER,
+                        DEFAULT_BLOCK_COMMENT_END_DELIMITER);
+                  });
+        });
   }
 }

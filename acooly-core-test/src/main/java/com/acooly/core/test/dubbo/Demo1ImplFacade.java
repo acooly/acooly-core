@@ -30,8 +30,8 @@ public class Demo1ImplFacade implements Demo1Facade {
   }
 
   @Override
-  public PageResult<String> echo1(PageOrder<String> msg) {
-    log.info("{}", msg.getDto());
+  public PageResult<String> echo1(PageOrder msg) {
+    log.info("{}", msg);
     PageInfo<String> pageInfo = new PageInfo<>();
     pageInfo.setPageResults(Lists.newArrayList("a", "b", "c"));
     return PageResult.from(pageInfo);

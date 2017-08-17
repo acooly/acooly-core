@@ -19,31 +19,25 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
   /** serialVersionUID */
   private static final long serialVersionUID = -8702480923545642017L;
 
-  private Messageable status = ResultStatus.success;
+  private ResultStatus status = ResultStatus.success;
 
   /** 参考 {@link ResultCode} */
   private String code = ResultCode.SUCCESS.getCode();
 
-  private String detail=ResultCode.SUCCESS.getMessage();
+  private String detail = ResultCode.SUCCESS.getMessage();
 
   public Messageable getStatus() {
     return status;
   }
 
-  public void setStatus(Messageable status) {
-      if(status==ResultStatus.success){
-        code= ResultCode.SUCCESS.getCode();
-        detail= ResultCode.SUCCESS.getCode();
-      }
-      if(status==ResultStatus.processing){
-          code= ResultCode.PROCESSING.getCode();
-          detail= ResultCode.PROCESSING.getCode();
-      }
-      if(status==ResultStatus.failure){
-          code= null;
-          detail= null;
-      }
+  public void setStatus(ResultStatus status) {
     this.status = status;
+  }
+
+  public void markProcessing() {
+    this.status = ResultStatus.processing;
+    this.code = ResultStatus.processing.code();
+    this.detail = ResultStatus.processing.message();
   }
 
   public String getDetail() {
@@ -67,10 +61,10 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
   }
 
   public boolean processing() {
-      return status == ResultStatus.processing;
+    return status == ResultStatus.processing;
   }
 
-    @Override
+  @Override
   public String toString() {
     return ToString.toString(this);
   }
@@ -85,12 +79,10 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
     return detail;
   }
 
-    /**
-     * 当statu != ResultStatus.success抛出业务异常
-     */
-  public void throwExceptionIfNotSuccess(){
-      if(!success()){
-          throw new BusinessException(this.getCode(), this.getDetail());
-      }
+  /** 当statu != ResultStatus.success抛出业务异常 */
+  public void throwExceptionIfNotSuccess() {
+    if (!success()) {
+      throw new BusinessException(this.getDetail(), this.getCode());
+    }
   }
 }

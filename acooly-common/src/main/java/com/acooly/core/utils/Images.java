@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class Images {
 
@@ -80,6 +81,42 @@ public class Images {
                     wideth_biao,
                     height_biao,
                     null);
+            g.dispose();
+            ImageIO.write(image, getImageFormat(targetImg), _file);
+        } catch (Exception e) {
+            logger.warn("添加图片水印失败", e);
+            throw new RuntimeException("添加图片水印失败");
+        }
+    }
+
+    /**
+     *
+     * @param inputStream 水印图片
+     * @param targetImg
+     * @param x
+     * @param y
+     */
+    public static final void pressImage(InputStream inputStream, String targetImg, int x, int y) {
+        try {
+            File _file = new File(targetImg);
+            Image src = ImageIO.read(_file);
+            int wideth = src.getWidth(null);
+            int height = src.getHeight(null);
+            BufferedImage image = new BufferedImage(wideth, height, BufferedImage.TYPE_INT_RGB);
+            Graphics g = image.createGraphics();
+            g.drawImage(src, 0, 0, wideth, height, null);
+
+            // 水印文件
+            Image src_biao = ImageIO.read(inputStream);
+            int wideth_biao = src_biao.getWidth(null);
+            int height_biao = src_biao.getHeight(null);
+            g.drawImage(
+                src_biao,
+                wideth - wideth_biao - x,
+                height - height_biao - y,
+                wideth_biao,
+                height_biao,
+                null);
             g.dispose();
             ImageIO.write(image, getImageFormat(targetImg), _file);
         } catch (Exception e) {

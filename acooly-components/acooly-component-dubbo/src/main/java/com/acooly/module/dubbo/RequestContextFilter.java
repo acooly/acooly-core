@@ -9,6 +9,7 @@
  */
 package com.acooly.module.dubbo;
 
+import com.acooly.core.common.facade.BizOrderBase;
 import com.acooly.core.common.facade.OrderBase;
 import com.acooly.core.common.facade.Orderable;
 import com.alibaba.dubbo.common.Constants;
@@ -27,9 +28,13 @@ public class RequestContextFilter implements Filter {
         if (args != null) {
           for (Object arg : args) {
             if (arg instanceof OrderBase) {
-              RequestContext requestContext = RequestContext.getContext();
-              requestContext.gid = ((Orderable) arg).getGid();
-              requestContext.partnerId = ((Orderable) arg).getPartnerId();
+              RequestContext ctx = RequestContext.getContext();
+              ctx.gid = ((Orderable) arg).getGid();
+              ctx.partnerId = ((Orderable) arg).getPartnerId();
+              if (arg instanceof BizOrderBase) {
+                ctx.bizOrderNo = ((BizOrderBase) arg).getBizOrderNo();
+                ctx.merchOrderNo = ((BizOrderBase) arg).getMerchOrderNo();
+              }
               break;
             }
           }
@@ -43,12 +48,22 @@ public class RequestContextFilter implements Filter {
       if (args != null) {
         for (Object arg : args) {
           if (arg instanceof OrderBase) {
-            RequestContext requestContext = RequestContext.getContext();
+            RequestContext ctx = RequestContext.getContext();
             if (Strings.isNullOrEmpty(((OrderBase) arg).getGid())) {
-              ((OrderBase) arg).setGid(requestContext.gid);
+              ((OrderBase) arg).setGid(ctx.gid);
             }
             if (Strings.isNullOrEmpty(((OrderBase) arg).getPartnerId())) {
-              ((OrderBase) arg).setPartnerId(requestContext.partnerId);
+              ((OrderBase) arg).setPartnerId(ctx.partnerId);
+            }
+            if (arg instanceof BizOrderBase) {
+              String bizOrderNo = ((BizOrderBase) arg).getBizOrderNo();
+              if (Strings.isNullOrEmpty(bizOrderNo)) {
+                ((BizOrderBase) arg).setBizOrderNo(ctx.bizOrderNo);
+              }
+              String merchOrderNo = ((BizOrderBase) arg).getMerchOrderNo();
+              if (Strings.isNullOrEmpty(merchOrderNo)) {
+                ((BizOrderBase) arg).setMerchOrderNo(ctx.merchOrderNo);
+              }
             }
             break;
           }
@@ -63,6 +78,8 @@ public class RequestContextFilter implements Filter {
         ThreadLocal.withInitial(() -> new RequestContext());
     private String partnerId;
     private String gid;
+    private String merchOrderNo;
+    private String bizOrderNo;
 
     public static RequestContext getContext() {
       return LOCAL.get();
@@ -78,6 +95,14 @@ public class RequestContextFilter implements Filter {
 
     public String getGid() {
       return gid;
+    }
+
+    public String getMerchOrderNo() {
+      return merchOrderNo;
+    }
+
+    public String getBizOrderNo() {
+      return bizOrderNo;
     }
   }
 }

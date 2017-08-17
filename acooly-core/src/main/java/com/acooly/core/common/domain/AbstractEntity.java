@@ -82,6 +82,16 @@ public abstract class AbstractEntity implements Entityable {
     }
   }
 
+  public void from(Object dto) {
+    BeanCopier.copy(
+        dto, this, BeanCopier.CopyStrategy.IGNORE_NULL, BeanCopier.NoMatchingRule.IGNORE);
+  }
+
+  public void fromContainNUll(Object dto) {
+    BeanCopier.copy(
+        dto, this, BeanCopier.CopyStrategy.CONTAIN_NULL, BeanCopier.NoMatchingRule.EXCEPTION);
+  }
+
   @Override
   public String toString() {
     return ToString.toString(this);

@@ -11,4 +11,12 @@ public class DubboRequestContext {
   public static String getGid() {
     return RequestContextFilter.RequestContext.getContext().getGid();
   }
+  /** 获取请求上下文中的merchOrderNo */
+  public static String getMerchOrderNo() {
+    return RequestContextFilter.RequestContext.getContext().getMerchOrderNo();
+  }
+  /** 获取请求上下文中的bizOrderNo */
+  public static String getBizOrderNo() {
+    return RequestContextFilter.RequestContext.getContext().getBizOrderNo();
+  }
 }

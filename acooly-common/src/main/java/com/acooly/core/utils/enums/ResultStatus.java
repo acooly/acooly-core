@@ -20,7 +20,7 @@ public enum ResultStatus implements Messageable {
   success("success", "成功"),
 
   /** 失败 */
-  failure("fail", "失败"),
+  failure("failure", "失败"),
 
   /** 处理中 */
   processing("processing", "处理中");

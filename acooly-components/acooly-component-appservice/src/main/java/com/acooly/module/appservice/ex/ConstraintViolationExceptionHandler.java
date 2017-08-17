@@ -27,7 +27,8 @@ public class ConstraintViolationExceptionHandler
           constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
     }
     ResultBase res = context.getResponse();
-    res.setDetail(e.getMessage());
     res.setStatus(ResultStatus.failure);
+    res.setDetail(e.getMessage());
+      res.setCode(ResultStatus.failure.getCode());
   }
 }

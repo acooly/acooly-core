@@ -36,7 +36,7 @@ public class DemoFacadeImpl implements DemoFacade {
     demo1Facade.echo(SingleOrder.from(msg.getDto()));
     PageResult<String> result =
         demo1Facade.echo1(
-            PageOrder.from(msg.getDto())
+            PageOrder.from()
                 .pageInfo()
                 .map("EQ_name", "bohr")
                 .sortMap("name", Boolean.TRUE));

@@ -21,7 +21,7 @@ import java.util.Map;
 /** @author qiubo@yiji.com */
 @Getter
 @Setter
-public class PageOrder<T> extends SingleOrder<T> {
+public class PageOrder extends OrderBase {
 
   @NotNull private PageInfo pageInfo;
   /** 参数map */
@@ -29,23 +29,22 @@ public class PageOrder<T> extends SingleOrder<T> {
 
   private Map<String, Boolean> sortMap;
 
-  public static <T> PageOrder<T> from(T dto) {
-    PageOrder<T> order = new PageOrder<T>();
-    order.setDto(dto);
+  public static  PageOrder from() {
+    PageOrder order = new PageOrder();
     return order;
   }
 
-  public PageOrder<T> pageInfo(PageInfo pageInfo) {
+  public PageOrder pageInfo(PageInfo pageInfo) {
     this.pageInfo = pageInfo;
     return this;
   }
 
-  public PageOrder<T> pageInfo() {
+  public PageOrder pageInfo() {
     this.pageInfo = new PageInfo<>();
     return this;
   }
 
-  public PageOrder<T> map(String key, Object value) {
+  public PageOrder map(String key, Object value) {
     if (this.map == null) {
       this.map = Maps.newHashMap();
     }
@@ -53,7 +52,7 @@ public class PageOrder<T> extends SingleOrder<T> {
     return this;
   }
 
-  public PageOrder<T> sortMap(String key, Boolean value) {
+  public PageOrder sortMap(String key, Boolean value) {
     if (this.sortMap == null) {
       this.sortMap = Maps.newHashMap();
     }
@@ -61,16 +60,16 @@ public class PageOrder<T> extends SingleOrder<T> {
     return this;
   }
 
-  public PageOrder<T> gid() {
+  public PageOrder gid() {
     return this.gid(Ids.gid());
   }
 
-  public PageOrder<T> gid(String gid) {
+  public PageOrder gid(String gid) {
     this.setGid(gid);
     return this;
   }
 
-  public PageOrder<T> partnerId(String partnerId) {
+  public PageOrder partnerId(String partnerId) {
     this.setPartnerId(partnerId);
     return this;
   }

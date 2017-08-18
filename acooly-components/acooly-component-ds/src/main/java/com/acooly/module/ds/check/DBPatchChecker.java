@@ -111,11 +111,13 @@ public class DBPatchChecker {
   }
 
   private String getMysqlschema(DataSource dataSource) throws SQLException {
-    String scheme =
-        StringUtils.substringAfterLast(dataSource.getConnection().getMetaData().getURL(), "/");
-    if (StringUtils.contains(scheme, "?")) {
-      scheme = StringUtils.substringBefore(scheme, "?");
-    }
-    return scheme;
+      try(Connection connection = dataSource.getConnection()){
+          String scheme =
+              StringUtils.substringAfterLast(connection.getMetaData().getURL(), "/");
+          if (StringUtils.contains(scheme, "?")) {
+              scheme = StringUtils.substringBefore(scheme, "?");
+          }
+          return scheme;
+      }
   }
 }

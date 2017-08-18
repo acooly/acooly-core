@@ -51,12 +51,6 @@ public class ActionLog extends AbstractEntity {
   /** 访问IP */
   private String userIp;
 
-  /** 创建时间 */
-  private Date createTime;
-
-  /** 更新时间 */
-  private Date updateTime;
-
   /** 备注 */
   private String comments;
 
@@ -122,22 +116,6 @@ public class ActionLog extends AbstractEntity {
 
   public void setUserIp(String userIp) {
     this.userIp = userIp;
-  }
-
-  public Date getCreateTime() {
-    return this.createTime;
-  }
-
-  public void setCreateTime(Date createTime) {
-    this.createTime = createTime;
-  }
-
-  public Date getUpdateTime() {
-    return this.updateTime;
-  }
-
-  public void setUpdateTime(Date updateTime) {
-    this.updateTime = updateTime;
   }
 
   public String getComments() {

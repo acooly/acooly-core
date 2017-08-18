@@ -42,7 +42,7 @@ VALUES
 
 CREATE TABLE `portlet_action_log` (
   `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `action_key` varchar(32) NOT NULL COMMENT '操作',
+  `action_key` varchar(128) NOT NULL COMMENT '操作',
   `action_name` varchar(32) DEFAULT NULL COMMENT '操作名称',
   `action_url` varchar(128) DEFAULT NULL COMMENT 'URL连接',
   `user_name` varchar(32) DEFAULT NULL COMMENT '用户名',

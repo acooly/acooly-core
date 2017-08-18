@@ -2,10 +2,13 @@ package com.acooly.module.event;
 
 import com.acooly.core.common.boot.Apps;
 import lombok.extern.slf4j.Slf4j;
+import net.engio.mbassy.bus.MessagePublication;
 import net.engio.mbassy.bus.config.BusConfiguration;
 import net.engio.mbassy.bus.config.Feature;
 import net.engio.mbassy.bus.config.IBusConfiguration;
 import net.engio.mbassy.bus.error.IPublicationErrorHandler;
+import net.engio.mbassy.listener.MetadataReader;
+import net.engio.mbassy.subscription.SubscriptionManagerProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -28,10 +31,15 @@ public class EventAutoConfig {
     Feature.AsynchronousHandlerInvocation asynchronousHandlerInvocation =
         new Feature.AsynchronousHandlerInvocation();
     asynchronousHandlerInvocation.setExecutor(poolTaskExecutor.getThreadPoolExecutor());
-    EventBus bus =
+      Feature.SyncPubSub syncPubSub = new Feature.SyncPubSub()
+          .setMetadataReader(new MetadataReader())
+          .setPublicationFactory(new MessagePublication.Factory())
+          .setSubscriptionFactory(new ExSubscriptionFactory())
+          .setSubscriptionManagerProvider(new SubscriptionManagerProvider());
+      EventBus bus =
         new EventBus(
             new BusConfiguration()
-                .addFeature(Feature.SyncPubSub.Default())
+                .addFeature(syncPubSub)
                 .addFeature(asynchronousHandlerInvocation)
                 .addFeature(Feature.AsynchronousMessageDispatch.Default())
                 .addPublicationErrorHandler(new IPublicationErrorHandler.ConsoleLogger())

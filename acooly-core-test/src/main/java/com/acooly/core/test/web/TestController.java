@@ -17,6 +17,7 @@ import com.acooly.module.sms.SmsService;
 import com.acooly.module.sms.sender.support.AliyunSmsSendVo;
 import com.acooly.module.sms.sender.support.CloopenSmsSendVo;
 import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,16 +25,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 /** @author qiubo@yiji.com */
 @RestController
 @RequestMapping(value = "/test")
+@Slf4j
 public class TestController {
   @Autowired private SmsService smsService;
   @Autowired private MailService mailService;
+  @Autowired private DataSource dataSource;
 
   @Value("${prop}")
   private String valueFromProp;
@@ -58,19 +65,18 @@ public class TestController {
     smsService.send("18612299409", asa.toJson());
   }
 
+  @RequestMapping("cloopenSms")
+  public void testCloopen() {
+    CloopenSmsSendVo col = new CloopenSmsSendVo();
 
-    @RequestMapping("cloopenSms")
-    public void testCloopen() {
-        CloopenSmsSendVo col = new CloopenSmsSendVo();
+    col.setTemplateId("181976");
+    List<String> data = new ArrayList<>();
+    data.add("17060915020001800000");
+    data.add("145317");
+    col.setDatas(data);
 
-        col.setTemplateId("181976");
-        List<String> data =new ArrayList<>();
-        data.add("17060915020001800000");
-        data.add("145317");
-        col.setDatas(data);
-
-        smsService.send("18612299409", col.toJson());
-    }
+    smsService.send("18612299409", col.toJson());
+  }
 
   @GetMapping("testPermission")
   public Boolean testPermission() {
@@ -93,6 +99,24 @@ public class TestController {
     City city = new City();
 
     return city;
+  }
+
+  @GetMapping("testDataSource")
+  public void testDataSource() throws Exception {
+    Connection connection = dataSource.getConnection();
+    String sql = "select now()";
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    ResultSet resultSet = preparedStatement.executeQuery();
+    if (resultSet.next()) {
+      log.info("now={}", resultSet.getString(1));
+    }
+    connection.close();
+
+    preparedStatement = connection.prepareStatement(sql);
+    resultSet = preparedStatement.executeQuery();
+    if (resultSet.next()) {
+      log.info("now={}", resultSet.getString(1));
+    }
   }
 
   @RequestMapping("cert")

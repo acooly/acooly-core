@@ -16,9 +16,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 /** @author acooly */
-public interface Entityable extends Serializable, Persistable<Long> {
+public interface Entityable extends Serializable, Persistable<Serializable> {
 
-  Long getId();
+  Serializable getId();
 
   Date getCreateTime();
 

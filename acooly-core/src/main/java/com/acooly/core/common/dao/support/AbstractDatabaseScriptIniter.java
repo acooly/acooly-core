@@ -29,6 +29,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -47,15 +48,17 @@ public abstract class AbstractDatabaseScriptIniter
     }
     DataSource dataSource = (DataSource) event.getSource();
     try {
-      DatabaseType databaseType =
-          DatabaseDialectManager.getDatabaseType(dataSource.getConnection());
+      DatabaseType databaseType;
+      databaseType = DatabaseDialectManager.getDatabaseType(dataSource.getConnection());
       try {
         String evSql = getEvaluateSql(databaseType);
         if (Strings.isNullOrEmpty(evSql)) {
           return;
         }
-        ScriptUtils.executeSqlScript(
-            dataSource.getConnection(), new ByteArrayResource(evSql.getBytes(Charsets.UTF_8)));
+        try (Connection connection = dataSource.getConnection()) {
+          ScriptUtils.executeSqlScript(
+              connection, new ByteArrayResource(evSql.getBytes(Charsets.UTF_8)));
+        }
       } catch (DataAccessException e) {
         Throwable throwable = Throwables.getRootCause(e);
         String msg = throwable.getMessage();
@@ -85,7 +88,9 @@ public abstract class AbstractDatabaseScriptIniter
     try {
       Resource scriptResource = ApplicationContextHolder.get().getResource("classpath:" + sqlpath);
       EncodedResource encodedResource = new EncodedResource(scriptResource, Charsets.UTF_8);
-      ScriptUtils.executeSqlScript(dataSource.getConnection(), encodedResource);
+      try (Connection connection = dataSource.getConnection()) {
+        ScriptUtils.executeSqlScript(connection, encodedResource);
+      }
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }

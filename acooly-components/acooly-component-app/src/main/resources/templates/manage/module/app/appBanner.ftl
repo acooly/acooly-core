@@ -46,6 +46,8 @@ $(function() {
     <div id="manage_appBanner_action" style="display: none;">
       <a class="line-action icon-edit" onclick="$.acooly.framework.edit({url:'/manage/module/app/appBanner/edit.html',id:'{0}',entity:'appBanner',width:500,height:400});" href="#" title="编辑"></a>
       <a class="line-action icon-show" onclick="$.acooly.framework.show('/manage/module/app/appBanner/show.html?id={0}',700,415);" href="#" title="查看"></a>
+      <a class="line-action icon-movetop" onclick="$.acooly.framework.move('/manage/module/app/appBanner/moveTop.html',{0},'manage_appBanner_datagrid');" href="#"></a>
+      <a class="line-action icon-moveup" onclick="$.acooly.framework.move('/manage/module/app/appBanner/moveUp.html',{0},'manage_appBanner_datagrid');" href="#"></a>
       <a class="line-action icon-delete" onclick="$.acooly.framework.remove('/manage/module/app/appBanner/deleteJson.html','{0}','manage_appBanner_datagrid');" href="#" title="删除"></a>
     </div>
     

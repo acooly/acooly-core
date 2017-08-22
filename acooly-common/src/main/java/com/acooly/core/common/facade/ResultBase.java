@@ -96,7 +96,7 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
     }
     return this;
   }
-    public ResultBase ifProcessing(Consumer consumer) {
+    public ResultBase ifProcessing(Consumer<ResultBase> consumer) {
         if(processing()){
             consumer.accept(this);
         }

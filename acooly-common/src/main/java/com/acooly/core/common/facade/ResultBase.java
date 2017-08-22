@@ -13,6 +13,8 @@ import com.acooly.core.utils.enums.Messageable;
 import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.core.utils.mapper.BeanCopier;
 
+import java.util.function.Consumer;
+
 /** @author zhangpu */
 public class ResultBase extends LinkedHashMapParameterize<String, Object>
     implements Resultable, Messageable {
@@ -94,7 +96,12 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
     }
     return this;
   }
-
+    public ResultBase ifProcessing(Consumer consumer) {
+        if(processing()){
+            consumer.accept(this);
+        }
+        return this;
+    }
   /**
    * 把当前结果对象属性复制到target对象
    *

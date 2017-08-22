@@ -101,7 +101,7 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
    * @param target 目标对象
    * @param ignorePropeties 忽略参数名
    */
-  public ResultBase to(Object target, String... ignorePropeties) {
+  public ResultBase copy(Object target, String... ignorePropeties) {
     BeanCopier.copy(
         this,
         target,

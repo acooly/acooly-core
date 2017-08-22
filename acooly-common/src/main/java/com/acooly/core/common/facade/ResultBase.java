@@ -81,29 +81,33 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
   }
 
   /** 当status != ResultStatus.success抛出业务异常 */
-  public void throwExceptionIfNotSuccess() {
+  public ResultBase throwExceptionIfNotSuccess() {
     if (!success()) {
       throw new BusinessException(this.getDetail(), this.getCode());
     }
+    return this;
   }
   /** 当status == ResultStatus.failure抛出业务异常 */
-  public void throwExceptionIfFailure() {
+  public ResultBase throwExceptionIfFailure() {
     if (status == ResultStatus.failure) {
       throw new BusinessException(this.getDetail(), this.getCode());
     }
+    return this;
   }
 
-    /**
-     * 把当前结果对象属性复制到target对象
-     * @param target 目标对象
-     * @param ignorePropeties 忽略参数名
-     */
-  public void to(Object target, String... ignorePropeties) {
+  /**
+   * 把当前结果对象属性复制到target对象
+   *
+   * @param target 目标对象
+   * @param ignorePropeties 忽略参数名
+   */
+  public ResultBase to(Object target, String... ignorePropeties) {
     BeanCopier.copy(
         this,
         target,
         BeanCopier.CopyStrategy.IGNORE_NULL,
         BeanCopier.NoMatchingRule.IGNORE,
         ignorePropeties);
+    return this;
   }
 }

@@ -79,9 +79,15 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
     return detail;
   }
 
-  /** 当statu != ResultStatus.success抛出业务异常 */
+  /** 当status != ResultStatus.success抛出业务异常 */
   public void throwExceptionIfNotSuccess() {
     if (!success()) {
+      throw new BusinessException(this.getDetail(), this.getCode());
+    }
+  }
+  /** 当status == ResultStatus.failure抛出业务异常 */
+  public void throwExceptionIfFailure() {
+    if (status == ResultStatus.failure) {
       throw new BusinessException(this.getDetail(), this.getCode());
     }
   }

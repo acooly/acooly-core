@@ -11,6 +11,7 @@ import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.core.utils.enums.ResultStatus;
+import com.acooly.core.utils.mapper.BeanCopier;
 
 /** @author zhangpu */
 public class ResultBase extends LinkedHashMapParameterize<String, Object>
@@ -90,5 +91,19 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
     if (status == ResultStatus.failure) {
       throw new BusinessException(this.getDetail(), this.getCode());
     }
+  }
+
+    /**
+     * 把当前结果对象属性复制到target对象
+     * @param target 目标对象
+     * @param ignorePropeties 忽略参数名
+     */
+  public void to(Object target, String... ignorePropeties) {
+    BeanCopier.copy(
+        this,
+        target,
+        BeanCopier.CopyStrategy.IGNORE_NULL,
+        BeanCopier.NoMatchingRule.IGNORE,
+        ignorePropeties);
   }
 }

@@ -96,12 +96,13 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
     }
     return this;
   }
-    public ResultBase ifProcessing(Consumer<ResultBase> consumer) {
-        if(processing()){
-            consumer.accept(this);
-        }
-        return this;
+
+  public ResultBase ifProcessing(Consumer<ResultBase> consumer) {
+    if (processing()) {
+      consumer.accept(this);
     }
+    return this;
+  }
   /**
    * 把当前结果对象属性复制到target对象
    *

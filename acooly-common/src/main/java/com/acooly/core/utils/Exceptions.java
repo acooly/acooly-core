@@ -44,7 +44,7 @@ public class Exceptions {
     }
   }
 
-  public static void rethrowBusinessException(Throwable throwable) {
+  public static BusinessException rethrowBusinessException(Throwable throwable) {
     if (throwable instanceof BusinessException) {
       throw (BusinessException) throwable;
     } else if (throwable instanceof Error) {

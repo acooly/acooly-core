@@ -1,6 +1,5 @@
 package com.acooly.module.certification.cert.impl;
 
-import com.acooly.core.utils.enums.Messageable;
 import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.module.certification.CertificationProperties;
 import com.acooly.module.certification.cert.BankCardCertService;
@@ -124,42 +123,6 @@ public class AliBankCardCertServiceImpl implements BankCardCertService {
     }
     return result;
   }
-
-  /*public static void main(String[] args) {
-
-    String s =
-        "{\n"
-            + "\t\"showapi_res_code\": 0,\n"
-            + "\t\"showapi_res_error\": \"\",\n"
-            + "\t\"showapi_res_body\": {\n"
-            + "\t\t\"code\": \"0\",\n"
-            + "\t\t\"msg\": \"资料匹配,账号正常\",\n"
-            + "\t\t\"ret_code\": \"0\",\n"
-            + "\t\t\"error\": \"\",\n"
-            + "                \"belong\":{\n"
-            + "                      \"area\": \"福建省 - 漳州市\",//地区\n"
-            + "\t\t      \"tel\": \"95568\",//银行客服\n"
-            + "\t\t      \"brand\": \"民生借记卡(银联卡)\",//银行卡产品名称\n"
-            + "\t\t      \"bankName\": \"中国民生银行（03050000）\",//银行名称\n"
-            + "\t\t       \"cardType\": \"借记卡\",//银行卡种\n"
-            + "\t\t       \"url\": \"www.cmbc.com.cn\",//银行官网\n"
-            + "\t\t       \"cardNum\": \"622622070288xxxx\"\n"
-            + "               }\n"
-            + "\t}\n"
-            + "}";
-    JSONObject jsonObject = JSON.parseObject(s);
-    JSONObject resBody = jsonObject.getJSONObject("showapi_res_body");
-
-    String retCode = resBody.getString("ret_code");
-    String msg = resBody.getString("msg");
-
-    JSONObject belong = resBody.getJSONObject("belong");
-    String bankName = belong.getString("bankName");
-    String resCode = jsonObject.getString("showapi_res_code");
-    //String showapi_res_code = jsonObject.getString("showapi_res_code");
-    JSONObject resError = jsonObject.getJSONObject("showapi_res_error");
-    System.out.printf("aa");
-  }*/
 
   private static final Map<String, String> RET_CODE =
       new LinkedHashMap<String, String>() {

@@ -3,7 +3,7 @@ package com.acooly.module.appservice.ex;
 import com.acooly.core.common.facade.ResultBase;
 import com.acooly.core.common.facade.ResultCode;
 import com.acooly.core.utils.enums.ResultStatus;
-import org.apache.xmlbeans.impl.piccolo.util.DuplicateKeyException;
+import org.springframework.dao.DuplicateKeyException;
 
 /**
  * @author qiubo@yiji.com

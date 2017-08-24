@@ -55,3 +55,104 @@ openapi访问路径请使用`http://ip:port/gateway.do`（此路径不会过一�
             apiResponse.setResultMessage(ApiServiceResultCode.INTERNAL_ERROR.message());
         }
     }
+
+
+
+## openapi层一些通用处理模式
+
+### 1. `ApiRequest` -> `OrderBase`
+
+openapi收到外部请求后，需要转换为内部请求对象调用业务系统。
+
+#### 1.1. ApiRequest#toOrder
+
+把`ApiRequest` 转换为 `OrderBase`，并设置`gid`。
+
+如果是`BizOrderBase`，会新创建bizOrderNo。
+
+#### 1.2. PageApiRequest#toOrder
+
+如果内部请求对象为`PageOrder`，会设置`PageInfo`.
+
+
+有了以上的方法，代码可以简化为：
+
+	QueryTradePageOrder order = request.toOrder(QueryTradePageOrder.class);
+	OfflinePayOrder order = request.toOrder(OfflinePayOrder.class);
+
+
+### 2. `ResultBase` -> `ApiResponse`
+
+#### 2.1 异常处理
+
+对于同步服务，下层服务返回非成功时，直接抛出异常，由api框架处理响应码。
+
+	result.throwIfNotSuccess();
+
+对于异步服务，下层服务返回失败时，直接抛出异常，由api框架处理响应码。
+
+	result.throwIfFailure()
+
+#### 2.1 查询
+
+分页查询时，需要把`PageResult`转换为`PageApiResponse`。
+
+	PageApiResponse#setPageResult(com.acooly.core.common.facade.PageResult<U>)
+	PageApiResponse#setPageResult(com.acooly.core.common.facade.PageResult<U>, BiConsumer<U,T>)
+
+代码可以简化为：
+
+	 //构建dubbo 请求对象
+	 QueryTradePageResult result =
+        queryTradeFacade.queryTradePage(request.toOrder(QueryTradePageOrder.class));
+    //判断响应状态
+    result.throwIfNotSuccess();
+    //设置响应
+    response.setPageResult(result);
+
+或者：
+
+	 //构建dubbo 请求对象
+	 QueryFundPageOrder order = request.toOrder(QueryFundPageOrder.class);
+	 //请求dubbo服务
+	 QueryFundPageResult result = queryFundFacade.queryFundPage(order);
+	 //判断响应状态
+    result.throwIfNotSuccess();
+    //设置响应，转换特殊参数，把银行图片转换为绝对路径。
+    response.setPageResult(
+        result, (fundDto, fundInfo) -> fundInfo.setBankImage(getAccessUrl(fundDto.getBankImage())));
+
+#### 2.2 命令
+
+####  2.2.1. 同步命令
+
+同步命令请求响应流程如下：
+
+1. 构建dubbo请求对象
+2. 发起dubbo调用
+3. 处理响应异常
+4. dubbo响应对象转换为api响应对象。
+
+代码如下：
+
+		 tradeFacade
+	        .balancePay(request.toOrder(BalancePayOrder.class))
+	        .throwIfNotSuccess() //当请求不成功时，抛出异常，由api框架处理
+	        .copyTo(response); //dubbo响应拷贝为api响应
+
+####  2.2.1. 异步命令
+
+同步命令请求响应流程如下：
+
+1. 构建dubbo请求对象
+2. 发起dubbo调用
+3. 处理响应异常
+4. dubbo响应对象转换为api响应对象。(当业务状态为处理中时，响应api为处理成功，状态码为处理中)
+
+代码如下：
+
+	  tradeFacade
+        .deductPay(request.toOrder(DeductPayOrder.class))
+        .throwIfFailure() //仅当处理状态为失败时，才抛出异常
+        .ifProcessing(result -> response.setResult(ApiServiceResultCode.PROCESSING))//处理响应状态码，当响应状态为处理中时，api响应处理中。
+        .copyTo(response);//dubbo响应拷贝为api响应

@@ -24,4 +24,9 @@ public class OpenAPIProperties {
      * 查询日志分离到不同的日志文件
      */
   private Boolean queryLogSeparationEnable=false;
+
+    /**
+     * 是否启用openapi性能日志
+     */
+  private Boolean enablePerfLog=true;
 }

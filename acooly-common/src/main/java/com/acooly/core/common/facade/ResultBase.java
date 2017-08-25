@@ -11,6 +11,9 @@ import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.core.utils.enums.ResultStatus;
+import com.acooly.core.utils.mapper.BeanCopier;
+
+import java.util.function.Consumer;
 
 /** @author zhangpu */
 public class ResultBase extends LinkedHashMapParameterize<String, Object>
@@ -79,10 +82,55 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
     return detail;
   }
 
-  /** 当statu != ResultStatus.success抛出业务异常 */
-  public void throwExceptionIfNotSuccess() {
+  /** 当status != ResultStatus.success抛出业务异常 */
+  public ResultBase throwExceptionIfNotSuccess() {
     if (!success()) {
       throw new BusinessException(this.getDetail(), this.getCode());
     }
+    return this;
+  }
+    /** 当status != ResultStatus.success抛出业务异常 */
+    public ResultBase throwIfNotSuccess() {
+        if (!success()) {
+            throw new BusinessException(this.getDetail(), this.getCode());
+        }
+        return this;
+    }
+  /** 当status == ResultStatus.failure抛出业务异常 */
+  public ResultBase throwExceptionIfFailure() {
+    if (status == ResultStatus.failure) {
+      throw new BusinessException(this.getDetail(), this.getCode());
+    }
+    return this;
+  }
+
+    /** 当status == ResultStatus.failure抛出业务异常 */
+    public ResultBase throwIfFailure() {
+        if (status == ResultStatus.failure) {
+            throw new BusinessException(this.getDetail(), this.getCode());
+        }
+        return this;
+    }
+
+  public ResultBase ifProcessing(Consumer<ResultBase> consumer) {
+    if (processing()) {
+      consumer.accept(this);
+    }
+    return this;
+  }
+  /**
+   * 把当前结果对象属性复制到target对象
+   *
+   * @param target 目标对象
+   * @param ignorePropeties 忽略参数名
+   */
+  public ResultBase copyTo(Object target, String... ignorePropeties) {
+    BeanCopier.copy(
+        this,
+        target,
+        BeanCopier.CopyStrategy.IGNORE_NULL,
+        BeanCopier.NoMatchingRule.IGNORE,
+        ignorePropeties);
+    return this;
   }
 }

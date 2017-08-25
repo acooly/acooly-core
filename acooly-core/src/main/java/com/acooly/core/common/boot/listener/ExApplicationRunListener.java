@@ -35,6 +35,7 @@ import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.SpringVersion;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
@@ -145,15 +146,16 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
   }
 
   private BootApp findYijiBootApplication(SpringApplication application) {
-    return (BootApp)
+
+    Class sourceClass =
         application
             .getSources()
             .stream()
             .map(o1 -> (Class) o1)
-            .filter(o1 -> o1.isAnnotationPresent(BootApp.class))
+            .filter(o1 -> AnnotationUtils.findAnnotation(o1, BootApp.class) != null)
             .findFirst()
-            .orElseThrow(() -> new AppConfigException("启动类必须标注" + BootApp.class.getSimpleName()))
-            .getAnnotation(BootApp.class);
+            .orElseThrow(() -> new AppConfigException("启动类必须标注" + BootApp.class.getSimpleName()));
+    return AnnotationUtils.findAnnotation(sourceClass, BootApp.class);
   }
 
   private void jvmPropstuning() {
@@ -207,9 +209,7 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
       new ShutdownThread().register();
       //log startup info
       LoggerFactory.getLogger(ExApplicationRunListener.class)
-          .info(
-              "启动成功: http://127.0.0.1:{}",
-              context.getEnvironment().getProperty(Apps.HTTP_PORT));
+          .info("启动成功: http://127.0.0.1:{}", context.getEnvironment().getProperty(Apps.HTTP_PORT));
     } else {
       ConsoleLogInitializer.addConsoleAppender();
       LoggerFactory.getLogger(ExApplicationRunListener.class).error("启动失败", exception);

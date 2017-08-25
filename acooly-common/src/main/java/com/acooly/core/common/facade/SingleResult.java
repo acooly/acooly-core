@@ -22,7 +22,12 @@ public class SingleResult<T> extends ResultBase {
     singleResult.setStatus(ResultStatus.success);
     return singleResult;
   }
-
+    public static <T> SingleResult<T> fromProcessing(T dto) {
+        SingleResult<T> singleResult = new SingleResult<>();
+        singleResult.setDto(dto);
+        singleResult.markProcessing();
+        return singleResult;
+    }
   /** 把T类型转换为S类型后构造结果对象 */
   public static <T, S> SingleResult<S> from(T t, Class<S> clazz) {
     SingleResult<S> singleResult = new SingleResult<>();

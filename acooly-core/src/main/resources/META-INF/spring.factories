@@ -19,4 +19,5 @@ com.acooly.core.common.boot.component.ComponentExtensionContextInitializer,\
 com.acooly.core.common.boot.listener.HolderInitApplicationContextInitializer
 
 org.springframework.context.ApplicationListener=\
-com.acooly.core.common.boot.listener.EnvironmentApplicationListener
+com.acooly.core.common.boot.listener.EnvironmentApplicationListener,\
+com.acooly.core.common.boot.listener.ApplicationReadyListener

@@ -6,24 +6,32 @@ import ch.qos.logback.core.Appender;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.log.LogbackConfigurator;
 import com.acooly.core.common.boot.log.initializer.AbstractLogInitializer;
+import com.acooly.openapi.framework.core.OpenApiConstants;
+
+import static com.acooly.core.common.boot.Apps.buildProperties;
 
 /** @author qiubo@yiji.com */
 public class OpenAPIPerfLogInitializer extends AbstractLogInitializer {
   @Override
   public void init(LogbackConfigurator configurator) {
-    String fileName = "api-pref.log";
-    configurator.log("设置api性能日志，日志文件为:%s", fileName);
-    Appender<ILoggingEvent> appender = configurator.fileAppender("api-perf", "%msg%n", fileName, 5);
-    configurator.logger(
-        "com.yiji.framework.openapi_PERFORMANCE_LOGGER", Level.INFO, false, appender);
+    OpenAPIProperties openAPIProperties = buildProperties(OpenAPIProperties.class);
+    if (openAPIProperties.getEnablePerfLog()) {
+      String fileName = "api-pref.log";
+      configurator.log("设置api性能日志，日志文件为:%s", fileName);
+      Appender<ILoggingEvent> appender =
+          configurator.fileAppender("api-perf", "%msg%n", fileName, 5);
+      configurator.logger(OpenApiConstants.PERFORMANCE_LOGGER, Level.INFO, false, appender);
+    }else {
+        configurator.logger(OpenApiConstants.PERFORMANCE_LOGGER,Level.OFF);
+    }
 
-    if (Apps.buildProperties(OpenAPIProperties.class).getQueryLogSeparationEnable()) {
+    if (openAPIProperties.getQueryLogSeparationEnable()) {
       String apiQuery = "api-query-30de.log";
       configurator.log("设置info级别的api-query日志，日志文件为:%s", apiQuery);
       Appender<ILoggingEvent> apiQueryAppender =
           configurator.asyncFileAppender("api-query", configurator.getPattern(), apiQuery);
       //开发者模式时，追加到主日志
-      boolean additive=Apps.isDevMode();
+      boolean additive = Apps.isDevMode();
       configurator.logger("API-QUERY", Level.INFO, additive, apiQueryAppender);
     }
   }

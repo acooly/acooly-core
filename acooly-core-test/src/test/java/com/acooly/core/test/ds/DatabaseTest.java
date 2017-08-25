@@ -13,14 +13,15 @@ import com.acooly.core.test.TestNoWebBase;
 import org.apache.shiro.util.Assert;
 import org.junit.AfterClass;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 /** @author shuijing */
 public class DatabaseTest extends TestNoWebBase {
 
-  @Autowired protected DataSource dataSource;
+  @Resource
+  protected DataSource dataSource;
 
   @AfterClass
   public static void testW() throws Exception {

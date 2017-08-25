@@ -25,8 +25,9 @@ public class Ports {
       return true;
     }
     try {
-      new Socket(theAddress, port);
-      flag = true;
+        Socket socket = new Socket(theAddress, port);
+        socket.close();
+        flag = true;
     } catch (IOException e) {
       //do nothing
     }

@@ -101,3 +101,35 @@
     1,123,dfd
     2,145,bohr
     3,,
+
+### 2.4 dubbo 测试
+
+在开发时，我们希望服务debug模式启动(并使用spring loaded/jrebel)，然后跑单元测试来发现问题，发现问题后及时修改，不重启服务，并且测试也能快速跑完。
+
+请使用`@DubboTest`，以后测试dubbo服务，速度屌炸天。
+
+代码参考`com.acooly.core.test.dubbo.DubboConsumerTest`
+
+    @RunWith(SpringRunner.class)
+    @DubboTest
+    public class DubboConsumerTest {
+      protected static final String PROFILE = "sdev";
+
+      static {
+        Apps.setProfileIfNotExists(PROFILE);
+      }
+
+      @Reference(version = "1.0")
+      private DemoFacade demoFacade;
+
+      @Test
+      public void test() {
+        SingleOrder<String> request = new SingleOrder<>();
+        request.gid().partnerId("test");
+        request.setDto("123");
+        demoFacade.echo(request);
+      }
+    }
+
+
+注意：建议测试类放在`basePackage`下的test包（如果放在Main类相同的包，会扫描所有类，影响启动速度。）。

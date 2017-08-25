@@ -7,7 +7,9 @@ package com.acooly.core.common.boot;
 import com.acooly.core.common.boot.listener.ExApplicationRunListener;
 import com.acooly.core.common.exception.AppConfigException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
+import org.springframework.core.env.MutablePropertySources;
 import org.springframework.util.StringUtils;
 
 /** @author qiubo */
@@ -31,6 +33,8 @@ public class Apps {
 
   private static String dataPath = null;
 
+  private static Boolean isTest = null;
+
   public static String getAppName() {
     String name = System.getProperty(APP_NAME);
     if (name == null) {
@@ -47,10 +51,10 @@ public class Apps {
     logPath = "/var/log/webapps/" + getAppName() + "/";
     return logPath;
   }
-    public static void setLogPath(String tmp){
-        logPath=tmp;
-    }
 
+  public static void setLogPath(String tmp) {
+    logPath = tmp;
+  }
 
   /** 获取应用数据目录，组件如果要存放临时数据，请放在此目录 */
   public static String getAppDataPath() {
@@ -115,5 +119,14 @@ public class Apps {
 
   public static ApplicationContext getApplicationContext() {
     return ApplicationContextHolder.get();
+  }
+
+  public static boolean isRunInTest() {
+    if (isTest == null) {
+      ConfigurableEnvironment environment = (ConfigurableEnvironment) Apps.getEnvironment();
+      MutablePropertySources propertySources = environment.getPropertySources();
+      isTest = propertySources.contains("Inlined Test Properties");
+    }
+    return isTest;
   }
 }

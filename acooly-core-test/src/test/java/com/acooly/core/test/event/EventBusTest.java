@@ -13,11 +13,12 @@ import com.acooly.core.test.TestBase;
 import com.acooly.module.event.EventBus;
 import org.junit.AfterClass;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.Resource;
 
 /** @author qiubo@yiji.com */
 public class EventBusTest extends TestBase {
-  @Autowired private EventBus eventBus;
+  @Resource private EventBus eventBus;
 
   @AfterClass
   public static void testW() throws Exception {

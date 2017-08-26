@@ -144,6 +144,11 @@
             <artifactId>acooly-component-captcha</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-rocketmq</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

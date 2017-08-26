@@ -45,6 +45,7 @@
         <module>acooly-component-obs</module>
         <module>acooly-component-captcha</module>
         <module>acooly-component-defence</module>
+        <module>acooly-component-rocketmq</module>
         <module>acooly-component-store</module>
     </modules>
 

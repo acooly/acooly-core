@@ -3,6 +3,8 @@ package com.acooly.module.dubbo.mock;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.exception.AppConfigException;
 import com.alibaba.dubbo.config.annotation.Reference;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -13,6 +15,8 @@ import java.util.Map;
 
 /** @author qiubo@yiji.com */
 @Slf4j
+@Getter
+@Setter
 public class DubboMockBeanPostProcessor implements BeanPostProcessor {
   private String annotationPackage;
   private List<String> mockInterfaces;
@@ -73,17 +77,5 @@ public class DubboMockBeanPostProcessor implements BeanPostProcessor {
           }
         });
     return bean;
-  }
-
-  public void setAnnotationPackage(String annotationPackages) {
-    this.annotationPackage = annotationPackage;
-  }
-
-  public List<String> getMockInterfaces() {
-    return mockInterfaces;
-  }
-
-  public void setMockInterfaces(List<String> mockInterfaces) {
-    this.mockInterfaces = mockInterfaces;
   }
 }

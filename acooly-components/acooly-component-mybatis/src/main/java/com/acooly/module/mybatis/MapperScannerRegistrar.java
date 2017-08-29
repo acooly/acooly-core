@@ -23,8 +23,6 @@ import org.springframework.core.type.AnnotationMetadata;
 import java.util.List;
 import java.util.Map;
 
-import static com.acooly.core.common.boot.listener.ExApplicationRunListener.COMPONENTS_PACKAGE;
-
 /** @author qiubo@yiji.com */
 public class MapperScannerRegistrar
     implements BeanFactoryAware, ImportBeanDefinitionRegistrar, ResourceLoaderAware {
@@ -46,8 +44,6 @@ public class MapperScannerRegistrar
         scanner.setMarkerInterface(EntityMybatisDao.class);
         scanner.registerFilters();
         List<String> daoScanPackages = mybatisProperties.getDaoScanPackages();
-        daoScanPackages.add(COMPONENTS_PACKAGE + ".**.dao");
-        daoScanPackages.add(Apps.getBasePackage());
         scanner.doScan(daoScanPackages.toArray(new String[daoScanPackages.size()]));
       } catch (IllegalStateException ex) {
       }

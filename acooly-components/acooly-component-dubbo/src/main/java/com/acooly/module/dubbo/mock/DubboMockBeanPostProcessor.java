@@ -58,7 +58,7 @@ public class DubboMockBeanPostProcessor implements BeanPostProcessor {
                         throw new AppConfigException("dubbo消费者:"+field.getType()+" mock实现类不存在,类名必须以Mock为后缀");
                     }
                     field.set(bean, mockService);
-                    log.info("[MOCK]dubbo @Reference {}.{} has bean mocked with {}",bean.getClass().getName(),field.getName(),mockService.getClass().getName());
+                    log.info("[MOCK]dubbo @Reference {}.{} has bean mocked with {}",bean.getClass().getSimpleName(),field.getName(),mockService.getClass().getName());
                 }
             }
         });

@@ -4,7 +4,6 @@ import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.exception.AppConfigException;
 import com.alibaba.dubbo.config.annotation.Reference;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.util.ReflectionUtils;
@@ -42,7 +41,8 @@ public class DubboMockBeanPostProcessor implements BeanPostProcessor {
         if (!isMatchPackage(bean)) {
             return bean;
         }
-        ReflectionUtils.doWithFields(getTargetClass(bean), field -> {
+        //处理代理bean，不能获取targetClass
+        ReflectionUtils.doWithFields(bean.getClass(), field -> {
             Reference reference = field.getAnnotation(Reference.class);
             if (reference != null) {
                 if(mockInterfaces.contains(field.getType().getName())){
@@ -64,18 +64,6 @@ public class DubboMockBeanPostProcessor implements BeanPostProcessor {
         });
         return bean;
     }
-    private Class<?> getTargetClass(Object bean) {
-        Class targetClass = AopUtils.getTargetClass(bean);
-        while (isCglibProxyClass(targetClass)) {
-            targetClass = targetClass.getSuperclass();
-        }
-        return targetClass;
-    }
-    public static boolean isCglibProxyClass(Class clazz) {
-        return (clazz != null && clazz.getName().contains("$$"));
-    }
-
-
     public void setAnnotationPackage(String annotationPackages) {
         this.annotationPackage = annotationPackage;
     }

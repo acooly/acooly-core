@@ -45,7 +45,11 @@ public class MybatisProperties implements InitializingBean {
   private String typeHandlersPackage;
 
   private Map<String, String> typeAliasesPackage = Maps.newHashMap();
+
   private String configLocation;
+
+  /** 扩展dao扫描包 */
+  private String daoScanPackage;
 
   private boolean supportMultiDataSource;
   private Map<String, Multi> multi = Maps.newHashMap();

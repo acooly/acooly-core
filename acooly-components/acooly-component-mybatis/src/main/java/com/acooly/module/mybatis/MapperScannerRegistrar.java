@@ -10,6 +10,7 @@
 package com.acooly.module.mybatis;
 
 import com.acooly.core.common.boot.Apps;
+import com.google.common.base.Strings;
 import org.mybatis.spring.mapper.ClassPathMapperScanner;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -44,7 +45,14 @@ public class MapperScannerRegistrar
         }
         scanner.setMarkerInterface(EntityMybatisDao.class);
         scanner.registerFilters();
-        scanner.doScan(Apps.getBasePackage(), COMPONENTS_PACKAGE + ".**.dao");
+        if (!Strings.isNullOrEmpty(mybatisProperties.getDaoScanPackage())) {
+          scanner.doScan(
+              Apps.getBasePackage(),
+              COMPONENTS_PACKAGE + ".**.dao",
+              mybatisProperties.getDaoScanPackage());
+        } else {
+          scanner.doScan(Apps.getBasePackage(), COMPONENTS_PACKAGE + ".**.dao");
+        }
       } catch (IllegalStateException ex) {
       }
     } else {

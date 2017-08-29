@@ -22,7 +22,7 @@ public class DubboMockBeanPostProcessor implements BeanPostProcessor {
   private List<String> mockInterfaces;
 
   @Override
-  public Object postProcessBeforeInitialization(Object bean, String beanName)
+  public Object postProcessAfterInitialization(Object bean, String beanName)
       throws BeansException {
     return bean;
   }
@@ -40,7 +40,7 @@ public class DubboMockBeanPostProcessor implements BeanPostProcessor {
   }
 
   @Override
-  public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+  public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
     if (mockInterfaces == null) {
       return bean;
     }

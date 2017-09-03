@@ -8,15 +8,20 @@
 package com.acooly.module.store.service;
 
 import com.acooly.core.common.service.EntityService;
+import com.acooly.module.store.entity.Category;
 import com.acooly.module.store.entity.Goods;
+
+import java.util.List;
 
 /**
  * 商品信息 Service接口
- *
+ * <p>
  * Date: 2017-08-21 01:56:35
- * @author zhangpu
  *
+ * @author zhangpu
  */
 public interface GoodsService extends EntityService<Goods> {
+
+    List<Goods> findByStoreCode(String storeCode);
 
 }

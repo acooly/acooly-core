@@ -47,8 +47,11 @@ public class SmsProperties {
   private String posfix;
   /** 仅当使用亿美通道时配置 */
   private Emay emay;
+
   /** 仅当使用创蓝253短信平台时配置 */
   private CL253 cl253;
+  /** 仅当使用创蓝253 2.0接口时配置 */
+  private CL253Plus cl253plus;
 
   /** 仅当使用阿里云短信平台时配置 */
   private Aliyun aliyun;
@@ -91,6 +94,13 @@ public class SmsProperties {
         cl253.sign = "【" + cl253.sign.trim() + "】";
       }
     }
+
+    if (this.provider == Provider.CL253Plus) {
+      Assert.notNull(this.cl253plus);
+      Assert.hasText(this.cl253plus.getAccount());
+      Assert.hasText(this.cl253plus.getPswd());
+    }
+
     if (this.provider == Provider.Aliyun) {
       Assert.notNull(this.aliyun);
       Assert.hasText(this.aliyun.getAccessKeyId());
@@ -114,6 +124,8 @@ public class SmsProperties {
     KLUM("chinaklumShortMessageSender", "重庆客亲通"),
     /** 创蓝253 */
     CL253("cl253ShortMessageSender", "创蓝253"),
+    /** 创蓝253 2.0接口 */
+    CL253Plus("cl253PlusShortMessageSender", "创蓝253 2.0接口"),
     /** 阿里云 */
     Aliyun("aliyunMessageSender", "阿里云"),
     /** 容联.云通讯 */
@@ -160,9 +172,15 @@ public class SmsProperties {
     private String sign;
   }
 
-  /**
-   * 阿里云短信通道 阿里云通道只支持模板和签名为短信内容 @See com.acooly.core.test.web.TestController#testAliyunSms()
-   */
+  @Data
+  public static class CL253Plus {
+    /** 用户账号 */
+    private String account;
+    /** 用户密码 */
+    private String pswd;
+  }
+
+  /** 阿里云短信通道 阿里云通道只支持模板和签名为短信内容 @See com.acooly.core.test.web.TestController#testAliyunSms() */
   @Data
   public static class Aliyun {
     /** 主账号id */
@@ -180,6 +198,7 @@ public class SmsProperties {
   public static class Cloopen {
     /** 主账号id */
     private String accountId;
+
     private String accountToken;
     private String appId;
 

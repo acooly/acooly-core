@@ -23,18 +23,104 @@
 			 */
 			create : function(opts) {
 				if (opts.entity) {
-					$.acooly.framework.doCreate(opts.url, "manage_" + opts.entity + "_editform", "manage_" + opts.entity + "_datagrid", opts.title, opts.top, opts.width, opts.height, opts.addButton, opts.reload, opts.maximizable, opts.onSubmit, opts.onSuccess, opts.onFail, opts.onCloseWindow,opts.ajaxData);
+					$.acooly.framework.doCreate(opts.url, "manage_" + opts.entity + "_editform", "manage_" + opts.entity + "_datagrid", opts.title, opts.top, opts.width, opts.height, opts.addButton, opts.reload, opts.maximizable, opts.onSubmit, opts.onSuccess, (opts.onFail || opts.onFailure), (opts.onCloseWindow || opts.onClose),opts.ajaxData,opts.buttons,opts.hideSaveBtn);
 				} else {
-					$.acooly.framework.doCreate(opts.url, opts.form, opts.datagrid, opts.title, opts.top, opts.width, opts.height, opts.addButton, opts.reload, opts.maximizable, opts.onSubmit, opts.onSuccess, opts.onFail, opts.onCloseWindow,opts.ajaxData);
+					$.acooly.framework.doCreate(opts.url, opts.form, opts.datagrid, opts.title, opts.top, opts.width, opts.height, opts.addButton, opts.reload, opts.maximizable, opts.onSubmit, opts.onSuccess, (opts.onFail || opts.onFailure), (opts.onCloseWindow || opts.onClose), opts.ajaxData,opts.buttons,opts.hideSaveBtn);
 				}
 			},
+
+            /**
+			 * 提交表单处理
+             * @param type
+             * @param onSubmit
+             * @param onSuccess
+             * @param OnFailure
+             */
+			ajaxSubmitHandler: function(type,thisObject,form,datagrid,reload,onSubmit,onSuccess,onFailure){
+                var d = $(thisObject).closest('.window-body');
+                $('#' + form).ajaxSubmit({
+                    beforeSerialize : function(formData, options) {
+                        // 编辑页面beforeSubmit方法
+                        try {
+                            var _beforeSubmit = eval(form + "_beforeSubmit");
+                            if (typeof (_beforeSubmit) == "function") {
+                                _beforeSubmit.call(this, formData);
+                            }
+                        } catch (e) {
+                        }
+                    },
+                    beforeSubmit : function(formData, jqForm, options) {
+                        // 如果有回调函数则处理回调函数的验证
+                        if (onSubmit && !onSubmit.call(this, arguments)) {
+                            return false;
+                        }
+                        // 编辑页面onSubmit方法
+                        try {
+                            var defaultFunc = eval(form + "_onSubmit");
+                            if (defaultFunc && typeof (defaultFunc) == "function" && !defaultFunc.call(this, arguments)) {
+                                return false;
+                            }
+                        } catch (e) {
+                            // ig
+                        }
+                        // 默认easy-ui-validator验证
+                        var result = $('#' + form).form('validate');
+                        $(thisObject).linkbutton(result ? 'disable' : 'enable');
+                        return result;
+                    },
+                    success : function(result, statusText) {
+                        $(thisObject).linkbutton('enable');
+                        if (typeof (result) == 'string') {
+                            result = eval('(' + result + ')');
+                        }
+                        try {
+                            if (result.success) {
+                                // 如果有回调函数则处理回调函数
+                                if (onSuccess) {
+                                    onSuccess.call(d, result);
+                                }
+
+                                if(type=='create'){
+                                    $.acooly.framework.onSaveSuccess(d, datagrid, result, reload);
+								}else{
+                                    $.acooly.framework.onUpdateSuccess(d, datagrid, result, reload);
+								}
+
+                                d.dialog('destroy');
+                            } else {
+                                if (onFailure) {
+                                    onFailure.call(d, result);
+                                }
+                            }
+                            if (result.message) {
+                                $.messager.show({
+                                    title : '提示',
+                                    msg : result.message
+                                });
+                            }
+                        } catch (e) {
+                            $.messager.alert('提示', e);
+                        }
+
+                    },
+                    error : function(XmlHttpRequest, textStatus, errorThrown) {
+                        $(thisObject).linkbutton('enable');
+                        $.messager.alert('提示', errorThrown);
+                    }
+                });
+			},
+
 
 			
 			/**
 			 * 执行添加
 			 */
-			doCreate : function(url, form, datagrid, title, top, width, height, addButton, reload, maximizable, onSubmitCallback, successCallback, failCallback, onCloseWindow,ajaxData) {
+			doCreate : function(url, form, datagrid, title, top, width, height,
+								addButton, reload, maximizable, onSubmit, onSuccess, onFailure, onClose,
+								ajaxData,buttons,hideSaveBtn) {
+
 				$('#' + datagrid).datagrid('uncheckAll').datagrid('unselectAll').datagrid('clearSelections');
+
 				var t = top ? top : null;
 				var w = width ? width : 500;
 				var h = height ? height : 'auto';
@@ -44,6 +130,31 @@
 				addB = '<i class="fa fa-lg fa-fw fa-col fa-plus-circle" ></i>'+addB;
 				var max = maximizable ? maximizable : false;
 				url = $.acooly.framework.buildCanonicalUrl(url,ajaxData);
+
+				// 构建buttons
+				var saveBtn ={
+                    id : 'acooly-framework-add-btn',
+                    text : addB,
+                    handler : function() {
+                        $.acooly.framework.ajaxSubmitHandler("create",$(this),form, datagrid,reload,onSubmit,onSuccess,onFailure);
+                    }
+                };
+
+                var closeBtn = {
+                    text : '<i class="fa fa-times-circle fa-lg fa-fw fa-col" ></i>关闭',
+                    handler : function() {
+                        // var d = $(this).closest('.window-body');
+                        d.dialog('close');
+
+                    }
+                };
+
+				var buttons = buttons || [];
+				if(!hideSaveBtn){
+					buttons.push(saveBtn);
+				}
+                buttons.push(closeBtn);
+
 				var d = null;
 				$.acooly.divdialog = d = $('<div/>').dialog({
 					href : url,
@@ -54,91 +165,10 @@
 					modal : true,
 					/*iconCls : 'icon-save',*/
 					maximizable : max,
-					buttons : [ {
-						id : 'acooly-framework-add-btn',
-						text : addB,
-						/*iconCls : 'icon-add',*/
-						handler : function() {
-							$('#acooly-framework-add-btn').linkbutton('disable');
-							var d = $(this).closest('.window-body');
-							$('#' + form).ajaxSubmit({
-								beforeSerialize : function(formData, options) {
-									// 编辑页面beforeSubmit方法
-									try {
-										var _beforeSubmit = eval(form + "_beforeSubmit");
-										if (typeof (_beforeSubmit) == "function") {
-											_beforeSubmit.call(this, formData);
-										}
-									} catch (e) {
-									}
-								},
-								beforeSubmit : function(formData, jqForm, options) {
-									// 如果有回调函数则处理回调函数的验证
-									if (onSubmitCallback && !onSubmitCallback.call(this, arguments)) {
-										$('#acooly-framework-add-btn').linkbutton('enable');
-										return false;
-									}
-									// 编辑页面onSubmit方法
-									try {
-										var defaultFunc = eval(form + "_onSubmit");
-										if (defaultFunc && typeof (defaultFunc) == "function" && !defaultFunc.call(this, arguments)) {
-											$('#acooly-framework-add-btn').linkbutton('enable');
-											return false;
-										}
-									} catch (e) {
-										// ig
-									}
-									// 默认easy-ui-validator验证
-									var result = $('#' + form).form('validate');
-									$('#acooly-framework-add-btn').linkbutton(result ? 'disable' : 'enable');
-									return result;
-								},
-								success : function(result, statusText) {
-									$('#acooly-framework-add-btn').linkbutton('enable');
-									if (typeof (result) == 'string') {
-										result = eval('(' + result + ')');
-									}
-									try {
-										if (result.success) {
-											// 如果有回调函数则处理回调函数
-											if (successCallback) {
-												successCallback.call(d, result);
-											}
-											$.acooly.framework.onSaveSuccess(d, datagrid, result, reload);
-											d.dialog('destroy');
-										} else {
-											if (failCallback) {
-												failCallback.call(d, result);
-											}
-										}
-										if (result.message) {
-											$.messager.show({
-												title : '提示',
-												msg : result.message
-											});
-										}
-									} catch (e) {
-										$.messager.alert('提示', e);
-									}
-									
-								},
-								error : function(XmlHttpRequest, textStatus, errorThrown) {
-									$.messager.alert('提示', errorThrown);
-								}
-							});
-						}
-					}, {
-						text : '<i class="fa fa-times-circle fa-lg fa-fw fa-col" ></i>关闭',
-						/*iconCls : 'icon-cancel',*/
-						handler : function() {
-							// var d = $(this).closest('.window-body');
-							d.dialog('close');
-
-						}
-					} ],
+					buttons : buttons,
 					onClose : function() {
-						if (onCloseWindow) {
-							onCloseWindow();
+						if (onClose) {
+                            onClose.call(d);
 						}
 						$(this).dialog('destroy');
 					}
@@ -185,17 +215,19 @@
 			 */
 			edit : function(opts) {
 				if (opts.entity) {
-					$.acooly.framework.doEdit(opts.url, opts.id, "manage_" + opts.entity + "_editform", "manage_" + opts.entity + "_datagrid", opts.title, opts.top, opts.width, opts.height, opts.editButton, opts.reload, opts.maximizable, opts.onSubmit, opts.onSuccess, opts.onFail,
-							opts.onCloseWindow,opts.ajaxData);
+					$.acooly.framework.doEdit(opts.url, opts.id, "manage_" + opts.entity + "_editform", "manage_" + opts.entity + "_datagrid", opts.title, opts.top, opts.width, opts.height, opts.editButton, opts.reload, opts.maximizable, opts.onSubmit, opts.onSuccess,
+						(opts.onFail || opts.onFailure), (opts.onCloseWindow || opts.onClose) ,opts.ajaxData,opts.buttons,opts.hideSaveBtn);
 				} else {
-					$.acooly.framework.doEdit(opts.url, opts.id, opts.form, opts.datagrid, opts.title, opts.top, opts.width, opts.height, opts.editButton, opts.reload, opts.maximizable, opts.onSubmit, opts.onSuccess, opts.onFail, opts.onCloseWindow,opts.ajaxData);
+					$.acooly.framework.doEdit(opts.url, opts.id, opts.form, opts.datagrid, opts.title, opts.top, opts.width, opts.height, opts.editButton, opts.reload, opts.maximizable, opts.onSubmit, opts.onSuccess,
+						(opts.onFail || opts.onFailure), (opts.onCloseWindow || opts.onClose),opts.ajaxData,opts.buttons,opts.hideSaveBtn);
 				}
 			},
 
 			/**
 			 * 执行编辑
 			 */
-			doEdit : function(url, id, form, datagrid, title, top, width, height, editButton, reload, maximizable, onSubmitCallback, successCallback, failCallback, onCloseWindow,ajaxData) {
+			doEdit : function(url, id, form, datagrid, title, top, width, height, editButton, reload, maximizable, onSubmit, onSuccess, onFailure, onClose,
+							  ajaxData,buttons,hideSaveBtn) {
 				// changelog 删除编辑时自动unselect所有的行。 by zhangpu on 2013-06-07
 				// $('#'+datagrid).datagrid('uncheckAll').datagrid('unselectAll').datagrid('clearSelections');
 				var t = top ? top : null;
@@ -219,6 +251,29 @@
 				}
 				var href = $.acooly.framework.getCanonicalUrl(url, id);
 				href = $.acooly.framework.buildCanonicalUrl(href,ajaxData);
+
+                // 构建buttons
+                var saveBtn ={
+                    id : 'acooly-framework-edit-btn',
+                    text : editB,
+                    handler : function() {
+                        $.acooly.framework.ajaxSubmitHandler("edit",$(this),form, datagrid,reload,onSubmit,onSuccess,onFailure);
+                    }
+                };
+                var closeBtn = {
+                    text : '<i class="fa fa-times-circle fa-lg fa-fw fa-col" ></i>关闭',
+                    handler : function() {
+                        // var d = $(this).closest('.window-body');
+                        d.dialog('close');
+                    }
+                };
+
+                var buttons = buttons || [];
+                if(!hideSaveBtn){
+                    buttons.push(saveBtn);
+                }
+                buttons.push(closeBtn);
+
 				var d = null;
 				$.acooly.divdialog = d = $('<div/>').dialog({
 					href : href,
@@ -229,91 +284,10 @@
 					modal : true,
 					/*iconCls : 'icon-save',*/
 					maximizable : max,
-					buttons : [ {
-						id : 'acooly-framework-edit-btn',
-						text : editB,
-						/*iconCls : 'icon-add',*/
-						handler : function() {
-							$('#acooly-framework-edit-btn').linkbutton('disable');
-							var d = $(this).closest('.window-body');
-							$('#' + form).ajaxSubmit({
-								beforeSerialize : function(formData, options) {
-									// 编辑页面beforeSubmit方法
-									try {
-										var _beforeSubmit = eval(form + "_beforeSubmit");
-										if (typeof (_beforeSubmit) == "function") {
-											_beforeSubmit.call(this, formData);
-										}
-									} catch (e) {
-									}
-								},
-								beforeSubmit : function(formData, jqForm, options) {
-									// 如果有回调函数则处理回调函数的验证
-									if (onSubmitCallback && !onSubmitCallback.call(this, arguments)) {
-										$('#acooly-framework-edit-btn').linkbutton('enable');
-										return false;
-									}
-									// 编辑页面onSubmit方法
-									try {
-										var defaultFunc = eval(form + "_onSubmit");
-										if (defaultFunc && typeof (defaultFunc) == "function" && !defaultFunc.call(this, arguments)) {
-											$('#acooly-framework-edit-btn').linkbutton('enable');
-											return false;
-										}
-									} catch (e) {
-										// ig
-									}
-									// 默认easy-ui-validator验证
-									var result = $('#' + form).form('validate');
-									$('#acooly-framework-edit-btn').linkbutton(result ? 'disable' : 'enable');
-									return result;
-								},
-								success : function(result, statusText) {
-									$('#acooly-framework-edit-btn').linkbutton('enable');
-									if (typeof (result) == 'string') {
-										result = eval('(' + result + ')');
-									}
-									try {
-										if (result.success) {
-											// 如果有回调函数则处理回调函数
-											if (successCallback) {
-												successCallback(d, result);
-											}
-											$.acooly.framework.onUpdateSuccess(d, datagrid, result, id, reload);
-											d.dialog('destroy');
-										} else {
-											if (failCallback) {
-												failCallback.call(d, result);
-											}
-										}
-										if (result.message) {
-											$.messager.show({
-												title : '提示',
-												msg : result.message
-											});
-										}
-									} catch (e) {
-										$.messager.alert('提示', e);
-									}
-									
-								},
-								error : function(XmlHttpRequest, textStatus, errorThrown) {
-									var e = XmlHttpRequest.responseText;
-									$.messager.alert('提示', e);
-								}
-							});
-						}
-					}, {
-						text : '<i class="fa fa-times-circle fa-lg fa-fw fa-col" ></i>关闭',
-						/*iconCls : 'icon-cancel',*/
-						handler : function() {
-							var d = $(this).closest('.window-body');
-							d.dialog('close');
-						}
-					} ],
+					buttons : buttons,
 					onClose : function() {
-						if (onCloseWindow) {
-							onCloseWindow();
+						if (onClose) {
+                            onClose.call(d);
 						}
 						$(this).dialog('destroy');
 					}
@@ -323,7 +297,7 @@
 			/**
 			 * 修改更新保存成功后
 			 */
-			onUpdateSuccess : function(dialog, datagrid, result, id, reload) {
+			onUpdateSuccess : function(dialog, datagrid, result, reload) {
 				// changelog: by zhangpu on 2013-5-28, do compatibe with
 				// datagrid and treegrid
 				var className = $('#' + datagrid).attr('class');
@@ -344,7 +318,7 @@
 						});
 					} else {
 						$('#' + datagrid).treegrid('updateRow', {
-							index : $('#' + datagrid).treegrid('getRowIndex', id),
+							index : $('#' + datagrid).treegrid('getRowIndex', result.entity.id),
 							row : result.entity
 						});
 					}

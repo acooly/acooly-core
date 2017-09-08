@@ -81,6 +81,13 @@ acooly.sms.cloopen.accountId=8aaf07085a3c*****44aee64302f2
 acooly.sms.cloopen.accountToken=54b8454ee795*****f386582305b7fe
 acooly.sms.cloopen.appId=8aaf07085b8e61*****b8f6274f40111
 ```    
+
+4. 创蓝253 2.0接口
+```
+acooly.sms.provider=cl253plus
+acooly.sms.cl253plus.account=xxx
+acooly.sms.cl253plus.pswd=xxx
+```
 ### 2.4 注意
    
 1. 阿里云短信通道,阿里云通道只支持模板和签名为短信内容,

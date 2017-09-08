@@ -77,9 +77,10 @@ opts参数说明：
 |maximizable	|boolean		|否		  |弹出框是否可以最大化，true或false(默认)
 |onSubmit		|function		|否		  |表单提交前，在原有easyui表单验证前的拦截函数，可以在本函数中进行附加的提交前验证和对表单元素赋值操作。如果返回false，则终止提交。无传入参数，可以通过jquery选择器获取当前scope的元素值。
 |onSuccess	|function		|否		  |提交成功后的回调函数（result.success = true），传入参数为ajax表单提交的返回值（一般为JsonEntityResult的Json数据）。
-|failCallback	|function		|否		  |提交失败后回调函数（result.success = false），传入参数为ajax表单提交的返回值（一般为JsonEntityResult的Json数据）。
-|onCloseWindow|function		|否		 |关闭弹出框回调函数
+|onFaillure	|function		|否		  |提交失败后回调函数（result.success = false），传入参数为ajax表单提交的返回值（一般为JsonEntityResult的Json数据）。
+|onClose|function		|否		 |关闭弹出框回调函数
 |ajaxData     |json        |否     |可以传递添加和编辑视图额外的请求参数。如{"search\_EQ\_id":1}
+|buttons    |   array       |否  |可增加按钮。格式：{id:xx,text:xxx,hander:function(){...}}
 
 >框架最初为提供添加和删除的相关回调函数，采用命名约定的隐含回调函数方式处理。处理方式都是在添加或编辑的视图界面中，声明指定名称的函数实现回调。包括：
 >${formId}\_beforeSubmit：表示表单序列化完成后，提交前的拦截函数。
@@ -91,6 +92,50 @@ opts参数说明：
 ```javascript
 // 指定视图URL，实体名，高度，宽度等
 $.acooly.framework.create({url:'/manage/showcase/customer/create.html',entity:'customer',width:500,height:400})
+
+// 增加特殊按钮
+$.acooly.framework.create({
+    url:'/manage/module/app/app/create.html',
+    entity:'app',
+    width:500,height:400,
+    hideSaveBtn:true,
+    buttons:[{
+            id:"manage_app_btn_ok",
+            text:"<i class=\"fa fa-book fa-lg fa-fw fa-col\"></i>审批通过",
+            handler:function(){
+                // 获取按钮当前ID
+                console.info($(this).attr('id'));
+                $.messager.alert('提示', "这个审批按钮，这里可以通过JS操作表单的值，然后再调用ajaxSubmitHander提交表单，行为与原来的提交表单一致");
+
+                // do something. eg: change action url; change form-field value.
+                // ...
+
+                // 提交表单（create or edit）,前4个参数必选。
+                $.acooly.framework.ajaxSubmitHandler("create",$(this),"manage_app_editform","manage_app_datagrid", true,
+                    function(){
+                      // onSubmit: before submit
+                        console.info("onsubmit");
+                        return true;
+                    },
+                    function () {
+                        // onSuccess
+                        console.info("onSuccess");
+                    },
+                    function(){
+                        // onFailure
+                        console.info("onFailure");
+                    }
+                );
+
+            }
+        },{
+            id:"manage_app_btn_no",
+            text:"<i class=\"fa fa-book fa-lg fa-fw fa-col\"></i>审批驳回",
+            handler:function(){
+                $.acooly.framework.ajaxSubmitHandler("create",$(this),"manage_app_editform","manage_app_datagrid");
+            }
+        }]
+    });
 ```
 
 #### 通用表单查询
@@ -573,6 +618,7 @@ $('#formId').ajaxSubmit({
 ### 主从管理
 
 请参考：acooly-showcase的客户管理模块。
+
 
 # 用户视图开发
 

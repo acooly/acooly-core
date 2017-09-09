@@ -23,7 +23,11 @@ public class CaptchaProperties {
   /** 过期时间,单位秒,默认300S(5分钟) */
   private Long expireSeconds = 300L;
 
+  /** 验证码长度 */
   private int captchaLength = DEFAULT_LENGTH;
+
+  /** 验证码最大验证次数 */
+  private int validTimes = 200;
 
   private GeneratorType generatorType = GeneratorType.RANDOM_NUMBER;
 

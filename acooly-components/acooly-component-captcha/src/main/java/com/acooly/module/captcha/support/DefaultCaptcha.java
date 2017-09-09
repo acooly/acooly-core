@@ -13,10 +13,17 @@ public class DefaultCaptcha<V> implements Captcha<V> {
 
   private long expiredTimeMillis;
 
+  //验证次数
+  private int validTimes;
+
   public DefaultCaptcha(String id, V value, long expiredTimeMillis) {
     this.id = id;
     this.value = value;
     this.expiredTimeMillis = expiredTimeMillis;
+  }
+
+  public void incrValidTimes() {
+    this.validTimes = validTimes + 1;
   }
 
   @Override

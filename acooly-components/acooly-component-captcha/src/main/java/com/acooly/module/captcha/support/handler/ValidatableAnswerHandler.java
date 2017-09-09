@@ -4,7 +4,10 @@ import com.acooly.module.captcha.*;
 import com.acooly.module.captcha.dto.AnswerDto;
 import com.acooly.module.captcha.exception.CaptchaValidateException;
 import com.acooly.module.captcha.repository.CaptchaRepository;
+import com.acooly.module.captcha.support.DefaultCaptcha;
 import lombok.extern.slf4j.Slf4j;
+
+import static com.acooly.module.captcha.support.generator.AbstractCaptchaGenerator.DEFAULT_CACHE_EXPIRED_TIME;
 
 /** @author shuijing */
 @Slf4j
@@ -14,9 +17,13 @@ public class ValidatableAnswerHandler<V, UA> implements AnswerHandler<UA> {
 
   private Validator<V, UA> validator;
 
-  public ValidatableAnswerHandler(CaptchaRepository repository, Validator validator) {
+  private CaptchaProperties properties;
+
+  public ValidatableAnswerHandler(
+      CaptchaRepository repository, Validator validator, CaptchaProperties properties) {
     this.repository = repository;
     this.validator = validator;
+    this.properties = properties;
   }
 
   @Override
@@ -35,9 +42,32 @@ public class ValidatableAnswerHandler<V, UA> implements AnswerHandler<UA> {
     if (!validated) {
       throw new CaptchaValidateException("CAPCHA_VERIFY_FAIL", "验证码不正确");
     }
+
+    if (aboveValidTimes(captcha)) {
+      throw new CaptchaValidateException("CAPCHA_VERIFY_ABOVE_TIMES", "验证码验证次超过限制");
+    }
+
     //      if (validated) {
     //        repository.delete(answerDto.getCaptchaId());
     //      }
+
     return validated;
+  }
+
+  boolean aboveValidTimes(Captcha captcha) {
+
+    DefaultCaptcha defaultCaptcha = (DefaultCaptcha) captcha;
+    //获取新的保存时间
+    long expiredTimeMillis = captcha.getExpiredTimeMillis();
+    long leftExpiredTime = expiredTimeMillis - System.currentTimeMillis();
+    long newSaveTime = leftExpiredTime + DEFAULT_CACHE_EXPIRED_TIME * 1000;
+
+    int validTimes = defaultCaptcha.getValidTimes();
+    if (validTimes > properties.getValidTimes()-1) {
+      return true;
+    }
+    defaultCaptcha.incrValidTimes();
+    repository.set(captcha.getId(), captcha, newSaveTime);
+    return false;
   }
 }

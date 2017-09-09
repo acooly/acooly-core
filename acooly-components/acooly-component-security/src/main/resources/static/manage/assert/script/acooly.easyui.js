@@ -1,121 +1,122 @@
 /**
  * 扩展validatebox的验证规则
  */
-$
-		.extend(
-				$.fn.validatebox.defaults.rules,
-				{
-
-					// changelog: by zhangpu on 2013-5-28, todo: append
-					// byteLength validator for chinese-string
-					/** byte长度验证 */
-					byteLength : {
-						validator : function(value, param) {
-							var str = value;
-							var minlen = param[0];
-							var maxlen = param[1];
-							if (str == null) {
-								return false;
-							}
-							var l = str.length;
-							var blen = 0;
-							for (i = 0; i < l; i++) {
-								if ((str.charCodeAt(i) & 65280) != 0) {
-									blen++;
-								}
-								blen++;
-							}
-							if (blen > maxlen || blen < minlen) {
-								return false;
-							}
-							return true;
-
-						},
-						message : '输入的数据长度超出范围.'
-					},
-					// 两个表单相等
-					equals : {
-						validator : function(value, param) {
-							return value == $(param[0]).val();
-						},
-						message : '两次输入不相同.'
-					},
-					// 验证汉子
-					CHS : {
-						validator : function(value) {
-							return /^[\u0391-\uFFE5]+$/.test(value);
-						},
-						message : '只能输入汉字'
-					},
-					// 移动手机号码验证
-					mobile : {// value值为文本框中的值
-						validator : function(value) {
-							var reg = /^1[2|3|4|5|6|7|8|9]\d{9}$/;
-							return reg.test(value);
-						},
-						message : '输入手机号码格式不准确.'
-					},
-					// 国内邮编验证
-					zipcode : {
-						validator : function(value) {
-							var reg = /^[1-9]\d{5}$/;
-							return reg.test(value);
-						},
-						message : '邮编必须是非0开始的6位数字.'
-					},
-					// 用户账号验证(只能包括 _ 数字 字母)
-					account : {// param的值为[]中值
-						validator : function(value, param) {
-							if (value.length < param[0]
-									|| value.length > param[1]) {
-								$.fn.validatebox.defaults.rules.account.message = '用户名长度必须在'
-										+ param[0] + '至' + param[1] + '范围';
-								return false;
-							} else {
-								if (!/^[\w]+$/.test(value)) {
-									$.fn.validatebox.defaults.rules.account.message = '用户名只能数字、字母、下划线组成.';
-									return false;
-								} else {
-									return true;
-								}
-							}
-						},
-						message : ''
-					},
-					// 公共正则,param[0]为正则表达式,param[1]为错误提示消息
-					commonRegExp : {
-						validator : function(value, param) {
-							var re = new RegExp(param[0]);
-							var result = re.test(value);
-							return re.test(value);
-						},
-						message : '{1}'
-					},
-					// param[0]为bmp,jpg,gif(用逗号隔开),param[1]为错误提示消息
-					validImg : {
-						validator : function(value, param) {
-							var param1 = param[0];// bmp,jpg,gif
-							var param1List = param1.split(',');
-							var extname = value.substring(value
-									.lastIndexOf(".") + 1, value.length);
-							extname = extname.toLowerCase();// 处理了大小写
-							for (var i = 0; i < param1List.length; i++) {
-								if (param1List[i] == extname) {
-									return true;
-								}
-							}
-						},
-						message : '{1}'
-					},
-					simplecsv : {
-						validator : function(value, param) {
-							return /^[\w,\$,\{,\},_,\u4e00-\u9fa5]+(,[\w,\$,\{,\},_,\u4e00-\u9fa5]+)*$/
-									.test(value);
-						},
-						message : '多个用户和组使用逗号分割'
+$.extend($.fn.validatebox.defaults.rules, {
+		// changelog: by zhangpu on 2013-5-28
+		// byteLength validator for chinese-string
+		/** byte长度验证 */
+		byteLength : {
+			validator : function(value, param) {
+				var str = value;
+				var minlen = param[0];
+				var maxlen = param[1];
+				if (str == null) {
+					return false;
+				}
+				var l = str.length;
+				var blen = 0;
+				for (i = 0; i < l; i++) {
+					if ((str.charCodeAt(i) & 65280) != 0) {
+						blen++;
 					}
+					blen++;
+				}
+				if (blen > maxlen || blen < minlen) {
+					return false;
+				}
+				return true;
 
-				});
+			},
+			message : '输入的数据长度超出范围.'
+		},
+		// 两个表单相等
+		equals : {
+			validator : function(value, param) {
+				return value == $(param[0]).val();
+			},
+			message : '两次输入不相同.'
+		},
+		// 验证汉子
+		CHS : {
+			validator : function(value) {
+				return /^[\u0391-\uFFE5]+$/.test(value);
+			},
+			message : '只能输入汉字'
+		},
+		// 移动手机号码验证
+		mobile : {// value值为文本框中的值
+			validator : function(value) {
+				var reg = /^1[2|3|4|5|6|7|8|9]\d{9}$/;
+				return reg.test(value);
+			},
+			message : '输入手机号码格式不准确.'
+		},
+		// 国内邮编验证
+		zipcode : {
+			validator : function(value) {
+				var reg = /^[1-9]\d{5}$/;
+				return reg.test(value);
+			},
+			message : '邮编必须是非0开始的6位数字.'
+		},
+		// 用户账号验证(只能包括 _ 数字 字母)
+		account : {// param的值为[]中值
+			validator : function(value, param) {
+				if (value.length < param[0]
+						|| value.length > param[1]) {
+					$.fn.validatebox.defaults.rules.account.message = '用户名长度必须在'
+							+ param[0] + '至' + param[1] + '范围';
+					return false;
+				} else {
+					if (!/^[\w]+$/.test(value)) {
+						$.fn.validatebox.defaults.rules.account.message = '用户名只能数字、字母、下划线组成.';
+						return false;
+					} else {
+						return true;
+					}
+				}
+			},
+			message : ''
+		},
+		// 公共正则,param[0]为正则表达式,param[1]为错误提示消息
+		commonRegExp : {
+			validator : function(value, param) {
+				var re = new RegExp(param[0]);
+				var result = re.test(value);
+				return re.test(value);
+			},
+			message : '{1}'
+		},
+		// param[0]为bmp,jpg,gif(用逗号隔开),param[1]为错误提示消息
+		validImg : {
+			validator : function(value, param) {
+				var param1 = param[0];// bmp,jpg,gif
+				var param1List = param1.split(',');
+				var extname = value.substring(value
+						.lastIndexOf(".") + 1, value.length);
+				extname = extname.toLowerCase();// 处理了大小写
+				for (var i = 0; i < param1List.length; i++) {
+					if (param1List[i] == extname) {
+						return true;
+					}
+				}
+			},
+			message : '{1}'
+		},
+		simplecsv : {
+			validator : function(value, param) {
+				return /^[\w,\$,\{,\},_,\u4e00-\u9fa5]+(,[\w,\$,\{,\},_,\u4e00-\u9fa5]+)*$/.test(value);
+			},
+			message : '多个用户和组使用逗号分割'
+		},
+		money : {
+            validator : function(value, param) {
+                return /^-?[0-9]*(.[0-9]{1,2})?$/.test(value);
+            },
+            message : '金额必须为整数或最多两位小数'
+		}
+
+});
 
 // ******** 常用 formatter 定义 **************//
 

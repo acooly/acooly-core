@@ -14,6 +14,8 @@
 
 `acooly.captcha.expireSeconds=320` 设置验证码过期时间，单位秒S，默认300S（5分钟）
 
+`acooly.captcha.validTimes=30`  设置验证码最大验证次数 默认200
+
 `acooly.captcha.generatorType=default_unique_generator` 设置验证码生产方式,默认random_number（随机数字），此组件用于token方式建议：default_unique_generator
 
 `acooly.captcha.handlerType=defualt_answer_handler`  设置验证码验证方式，默认字符串不区分大小写

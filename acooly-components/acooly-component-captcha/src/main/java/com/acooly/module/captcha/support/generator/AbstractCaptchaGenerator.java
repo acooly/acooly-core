@@ -12,7 +12,7 @@ import lombok.Setter;
 public abstract class AbstractCaptchaGenerator<V> implements CaptchaGenerator<V> {
 
   //默认在超过设置的过期时间后，验证码再保存2小时
-  public final long DEFAULT_CACHE_EXPIRED_TIME = 2 * 60 * 60;
+  public static final long DEFAULT_CACHE_EXPIRED_TIME = 2 * 60 * 60;
 
   private CaptchaRepository<String, Captcha> captchaRepository;
 

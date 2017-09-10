@@ -13,9 +13,9 @@ var acooly_verify = {
         if (value == null) {
             return false;
         }
-        var l = str.length, blen = 0;
+        var l = value.length, blen = 0;
         for (i = 0; i < l; i++) {
-            if ((str.charCodeAt(i) & 65280) != 0) {
+            if ((value.charCodeAt(i) & 65280) != 0) {
                 blen++;
             }
             blen++;

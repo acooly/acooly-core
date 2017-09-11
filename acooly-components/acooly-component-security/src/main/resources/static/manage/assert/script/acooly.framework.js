@@ -837,7 +837,7 @@
 				$.ajax({
 					url:opts.url + '?'+new Date(),
 					data : data,
-					breforeSend:function(){
+					beforeSend:function(){
 						$('#'+opts.gridId).datagrid('loading');
 					},
 					complete: function(){

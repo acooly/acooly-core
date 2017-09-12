@@ -103,7 +103,7 @@ $.extend($.fn.validatebox.defaults.rules, {
         },
         message: '金额必须为整数或最多两位小数'
     },
-    cert:{
+    cert: {
         validator: function (value, param) {
             return $.acooly.verify.cert(value);
         },
@@ -173,6 +173,17 @@ var linkFormatter = function (value) {
 
 var jsonFormatter = function (value) {
     return $.acooly.format.json(value);
+}
+
+var mappingFormatter = function (value, row, index, data, field) {
+    try {
+        console.info("data", data);
+        var mapping = "all" + field.substring(0, 1).toUpperCase() + field.substring(1, field.length) + "s";
+        console.info(mapping);
+        return data["data"][mapping][value];
+    } catch (e) {
+        return value;
+    }
 }
 
 

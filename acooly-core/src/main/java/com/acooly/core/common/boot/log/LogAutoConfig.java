@@ -12,6 +12,7 @@ package com.acooly.core.common.boot.log;
 import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.google.common.collect.Maps;
+import lombok.Data;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,6 +26,7 @@ import java.util.Map;
 public class LogAutoConfig {
 
   @ConfigurationProperties("acooly.log")
+  @Data
   public static class LogProperties {
 
     public static final String GID_KEY = "gid";
@@ -96,37 +98,7 @@ public class LogAutoConfig {
       return resolver.getProperty("consoleEnable", Boolean.class, Boolean.TRUE);
     }
 
-    public boolean isConsoleEnable() {
-      return consoleEnable;
-    }
 
-    public void setConsoleEnable(boolean consoleEnable) {
-      this.consoleEnable = consoleEnable;
-    }
-
-    public Pattern getPattern() {
-      return pattern;
-    }
-
-    public void setPattern(Pattern pattern) {
-      this.pattern = pattern;
-    }
-
-    public String getMsgReplace() {
-      return msgReplace;
-    }
-
-    public void setMsgReplace(String msgReplace) {
-      this.msgReplace = msgReplace;
-    }
-
-    public Map<String, String> getLevel() {
-      return level;
-    }
-
-    public void setLevel(Map<String, String> level) {
-      this.level = level;
-    }
 
     public enum Pattern {
       COMMON(MDC_LOG_PATTERN_WITH_GID, ANSI_MDC_LOG_PATTERN_WITH_GID),

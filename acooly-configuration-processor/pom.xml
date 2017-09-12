@@ -12,5 +12,10 @@
     <artifactId>acooly-configuration-processor</artifactId>
     <description>用于扩展spring已有spring-boot-configuration-processor</description>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
+    </dependencies>
 </project>

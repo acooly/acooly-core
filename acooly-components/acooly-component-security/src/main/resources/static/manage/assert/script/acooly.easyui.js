@@ -177,9 +177,7 @@ var jsonFormatter = function (value) {
 
 var mappingFormatter = function (value, row, index, data, field) {
     try {
-        console.info("data", data);
         var mapping = "all" + field.substring(0, 1).toUpperCase() + field.substring(1, field.length) + "s";
-        console.info(mapping);
         return data["data"][mapping][value];
     } catch (e) {
         return value;

@@ -56,10 +56,10 @@ public class DubboMockBeanPostProcessor implements BeanPostProcessor {
     ReflectionUtils.doWithFields(
         bean.getClass(),
         field -> {
-          String key = field.toString();
-          if (!proccessed.contains(key)) {
-            Reference reference = field.getAnnotation(Reference.class);
-            if (reference != null) {
+          Reference reference = field.getAnnotation(Reference.class);
+          if (reference != null) {
+            String key = field.toString();
+            if (!proccessed.contains(key)) {
               if (mockInterfaces.contains(field.getType().getName())) {
                 field.setAccessible(true);
                 Object mockService = findMockBean(field);
@@ -73,8 +73,8 @@ public class DubboMockBeanPostProcessor implements BeanPostProcessor {
                 }
               }
             }
+            proccessed.add(key);
           }
-          proccessed.add(key);
         });
     return bean;
   }

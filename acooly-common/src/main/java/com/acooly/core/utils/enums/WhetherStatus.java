@@ -19,9 +19,9 @@ import java.util.Map;
  * @author zhangpu
  */
 public enum WhetherStatus implements Messageable {
-  yes("yes", "正常"),
+  yes("yes", "是"),
 
-  no("no", "禁用");
+  no("no", "否");
 
   private final String code;
   private final String message;

@@ -24,6 +24,7 @@
 <!-- 自己定义的样式和JS扩展 -->
 <script type="text/javascript" src="/manage/assert/script/acooly.framework.js" charset="utf-8"></script>
 <script type="text/javascript" src="/manage/assert/script/acooly.format.js" charset="utf-8"></script>
+<script type="text/javascript" src="/manage/assert/script/acooly.verify.js" charset="utf-8"></script>
 <script type="text/javascript" src="/manage/assert/script/acooly.easyui.js" charset="utf-8"></script>
 <script type="text/javascript" src="/manage/assert/script/acooly.layout.js" charset="utf-8"></script>
 <script type="text/javascript" src="/manage/assert/script/acooly.system.js" charset="utf-8"></script>

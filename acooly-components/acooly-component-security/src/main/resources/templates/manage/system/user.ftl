@@ -113,14 +113,14 @@ $(function() {
     </table>
 
     <div id="manage_user_action" style="display: none;">
-      <a title="编辑"  onclick="$.acooly.framework.edit({url:'/manage/system/user/edit.html',id:'{0}',entity:'user',height:450});" href="#"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
+      <a title="编辑"   onclick="$.acooly.framework.edit({url:'/manage/system/user/edit.html',id:'{0}',entity:'user',height:450});" href="#"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
       <!--<a title="查看"  onclick="$.acooly.framework.show('/manage/system/user/show.html?id={0}',500,350);" href="#"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>-->
       <a title="修改密码"  onclick="manage_user_changePasswd('{0}');" href="#"><i class="fa fa-key fa-lg fa-fw fa-col"></i></a>
       <a title="删除" onclick="$.acooly.framework.remove('/manage/system/user/deleteJson.html','{0}','manage_user_datagrid');" href="#"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>
     </div>
 
     <div id="manage_user_toolbar">
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/system/user/create.html',entity:'user',height:510})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col" ></i>添加</a>
+      <a href="#" class="easyui-linkbutton" data-options="size:'small'" plain="true" onclick="$.acooly.framework.create({url:'/manage/system/user/create.html',entity:'user',height:510})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col" ></i>添加</a>
     </div>
   </div>
 

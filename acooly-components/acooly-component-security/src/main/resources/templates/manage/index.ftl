@@ -69,7 +69,7 @@
 
 <body id="mainLayout" class="easyui-layout" style="margin-left: 2px; margin-right: 2px;">
 	<div data-options="region:'north',border:false,href:'/manage/layout/north.html'" style="height: 66px; overflow: hidden;"></div>
-	<div id="mainWestLayout" title="功能菜单" data-options="tools: [{ iconCls:'icon-refresh',handler:function(){$.acooly.layout.reloadMenu();}}],region:'west',href:'/manage/layout/west.html',onLoad:function(){$.acooly.layout.loadTree();}" style="width: 210px; overflow: hidden;"></div>
+	<div id="mainWestLayout" title="功能菜单" data-options="headerCls:'westHeader',tools: [{ iconCls:'icon-refresh',handler:function(){$.acooly.layout.reloadMenu();}}],region:'west',href:'/manage/layout/west.html',onLoad:function(){$.acooly.layout.loadTree();}" style="width: 210px; overflow: hidden;"></div>
 	<div data-options="region:'center',href:'/manage/layout/center.html'" style="overflow: hidden;"></div>
 </body>
 </html>

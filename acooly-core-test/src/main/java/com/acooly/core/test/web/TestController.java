@@ -9,7 +9,10 @@
  */
 package com.acooly.core.test.web;
 
+import com.acooly.core.test.dao.AppDao;
+import com.acooly.core.test.domain.App;
 import com.acooly.core.test.domain.City;
+import com.acooly.core.utils.Money;
 import com.acooly.module.certification.CertificationService;
 import com.acooly.module.mail.MailDto;
 import com.acooly.module.mail.service.MailService;
@@ -41,11 +44,20 @@ public class TestController {
   @Autowired private SmsService smsService;
   @Autowired private MailService mailService;
   @Autowired private DataSource dataSource;
+  @Autowired private AppDao appDao;
 
   @Value("${prop}")
   private String valueFromProp;
 
   @Autowired private CertificationService certificationService;
+
+  @RequestMapping("app")
+  public App testApp() {
+    App app = new App();
+    app.setPrice(new Money(1));
+    appDao.save(app);
+    return appDao.get(app.getId());
+  }
 
   @RequestMapping("sms")
   public void testSms() {

@@ -13,7 +13,6 @@ import com.acooly.core.common.boot.Apps;
 import com.acooly.core.utils.Money;
 import com.acooly.module.web.WebProperties;
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.springframework.boot.jackson.JsonComponent;
@@ -27,7 +26,7 @@ public class MoneyJsonSerializer extends JsonSerializer<Money> {
 
   @Override
   public void serialize(Money value, JsonGenerator jgen, SerializerProvider provider)
-      throws IOException, JsonProcessingException {
+      throws IOException {
     if (webProperties == null) {
       webProperties = Apps.buildProperties(WebProperties.class);
     }

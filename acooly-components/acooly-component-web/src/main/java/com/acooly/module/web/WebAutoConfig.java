@@ -11,6 +11,7 @@
 package com.acooly.module.web;
 
 import com.acooly.core.common.boot.EnvironmentHolder;
+import com.acooly.module.web.formatter.MoneyFormatter;
 import com.acooly.module.web.freemarker.IncludePage;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
@@ -39,6 +40,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.filter.HttpPutFormContentFilter;
@@ -111,7 +113,14 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
     return directUrlHandlerMapping;
   }
 
-  /** 配置模板直接映射controller */
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+      if(webProperties.isEnableMoneyDisplayYuan()){
+          registry.addFormatter(new MoneyFormatter());
+      }
+    }
+
+    /** 配置模板直接映射controller */
   @Bean(name = SIMPLE_URL_MAPPING_VIEW_CONTROLLER)
   public SimpleUrlMappingViewController simpleUrlMappingViewController(
       WebProperties webProperties) {

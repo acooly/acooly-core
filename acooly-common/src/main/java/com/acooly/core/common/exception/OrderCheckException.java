@@ -9,6 +9,7 @@
  */
 package com.acooly.core.common.exception;
 
+import com.acooly.core.common.facade.ResultCode;
 import com.acooly.core.utils.enums.Messageable;
 
 import java.util.HashMap;
@@ -98,7 +99,7 @@ public class OrderCheckException extends IllegalArgumentException implements Mes
 
   @Override
   public String code() {
-    return "INVALID_ARGUMENTS";
+    return ResultCode.PARAMETER_ERROR.getCode();
   }
 
   @Override

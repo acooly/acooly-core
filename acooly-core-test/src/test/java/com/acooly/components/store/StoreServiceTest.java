@@ -10,13 +10,7 @@
 package com.acooly.components.store;
 
 import com.acooly.core.common.boot.Apps;
-import com.acooly.module.store.dto.StoreNode;
-import com.acooly.module.store.service.StoreService;
 import com.acooly.module.test.AppTestBase;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 /**
  * @author zhangpu 2017-09-01 10:20
@@ -30,17 +24,17 @@ public class StoreServiceTest extends AppTestBase {
         Apps.setProfileIfNotExists(PROFILE);
     }
 
-
-    @Autowired
-    private StoreService storeService;
-
-
-    @Test
-    public void testLoadStore() {
-        String storeCode = "00000001";
-        List<StoreNode> storeNodeList = storeService.loadStore(storeCode);
-        System.out.println(storeNodeList);
-    }
-
+//
+//    @Autowired
+//    private StoreService storeService;
+//
+//
+//    @Test
+//    public void testLoadStore() {
+//        String storeCode = "00000001";
+//        List<StoreNode> storeNodeList = storeService.loadStore(storeCode);
+//        System.out.println(storeNodeList);
+//    }
+//
 
 }

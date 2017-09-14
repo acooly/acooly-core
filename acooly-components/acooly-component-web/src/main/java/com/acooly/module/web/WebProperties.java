@@ -49,6 +49,9 @@ public class WebProperties {
 
   private Jsp jsp = new Jsp();
 
+  /** 是否启用Money用元展示 */
+  private boolean enableMoneyDisplayYuan = false;
+
   public List<String> buildMappingUrlList() {
     List mappingUrlList = new ArrayList<>();
     if (simplePageMap == null) {

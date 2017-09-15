@@ -74,6 +74,8 @@ public class DubboProperties implements InitializingBean {
     public static final int DEFAULT_THREAD = 400;
     public static final int DEFAULT_TIMEOUT = 60000;
     public static final boolean DEFAULT_REGISTER = true;
+    /** provider暴露ip地址，不指定使用自动发现 */
+    private String ip;
     /** provider 序列化，使用数据压缩协议 */
     private String serialization = "hessian3";
     /** 是否启用服务提供者 */
@@ -91,8 +93,9 @@ public class DubboProperties implements InitializingBean {
     /** 服务是否注册到zk */
     private boolean register = DEFAULT_REGISTER;
   }
+
   @Data
-  public static class Consumer{
+  public static class Consumer {
     private List<String> mockInterfaces;
   }
 }

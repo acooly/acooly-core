@@ -30,7 +30,7 @@ public class ThreadPoolAutoConfig {
     bean.setWaitForTasksToCompleteOnShutdown(true);
     bean.setAllowCoreThreadTimeOut(true);
     bean.setThreadNamePrefix("common-thread-pool-");
-    bean.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+    bean.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
     return bean;
   }
 }

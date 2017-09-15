@@ -1,7 +1,6 @@
 body {
 	font-family: "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei";
-	font-size: 12px;
-	color: #404040;
+	font-size: 14px;
 }
 
 
@@ -94,7 +93,7 @@ a.button1 span img{ width:16px; height:16px; border:none; vertical-align:middle;
 .tableForm {
 	border-collapse: collapse;
 	background-color: white;
-	font-size: 12px;
+	width: 100%;
 }
 
 .tableForm th {
@@ -102,7 +101,7 @@ a.button1 span img{ width:16px; height:16px; border:none; vertical-align:middle;
 	border-bottom: 1px dotted #ccc;
 	padding: 5px;
 	font-weight: normal;
-	color: #013871;
+	/*color: #013871;*/
 }
 
 .tableForm td {
@@ -113,16 +112,18 @@ a.button1 span img{ width:16px; height:16px; border:none; vertical-align:middle;
 
 
 .tableForm .text {
-    height: 25px;
+    height: 30px;
+	line-height: 30px;
     padding: 0 5px;
     border: 1px solid #cecece;
     background-color: #fff;
-    line-height: 25px;
+	font-size: 14px;
+
 }
 
 .tableForm .select {
-	height: 26px;
-	width: 80px;
+	height: 33px;
+	min-width: 80px;
 }
 
 .tableForm textarea {
@@ -190,4 +191,7 @@ img {
 }
 .panel-header .panel-title .fa-lg { vertical-align: -10%;}
 
-.westHeader {height: 20px;}
+.easyui-combobox-ext {
+	height: 30px;
+	min-width: 100px;
+}

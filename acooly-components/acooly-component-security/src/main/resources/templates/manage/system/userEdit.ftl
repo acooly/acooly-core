@@ -32,7 +32,7 @@
 			<input name="id" type="hidden" />
 			<table class="tableForm">
 				<tr>
-					<th style="width: 80px;">登录名称</th>
+					<th style="width: 30%;">登录名称</th>
 					<td>
 						<#if action == 'create'>
 						<input name="username" type="text" class="easyui-validatebox text" data-options="required:true" style="width:200px" />
@@ -63,19 +63,19 @@
 				</tr>
 				<tr>
 					<th>类型</th>
-					<td><select name="userType" panelHeight="auto" style="width: 200px;height:27px;" class="easyui-combobox">
+					<td><select name="userType" panelHeight="auto" class="easyui-combobox easyui-combobox-ext" style="height: 30px;">
 						<#list allUserTypes as k,v><option value="${k}">${v}</option></#list>
 					</select></td>
 				</tr>
 				<tr>
 					<th>状态</th>
-					<td><select name="status" panelHeight="auto" style="width: 200px;height:27px;" class="easyui-combobox">
+					<td><select name="status" panelHeight="auto" class="easyui-combobox" style="height: 30px;">
 							<#list allStatus as k,v><option value="${k}">${v}</option></#list>
 					</select></td>
 				</tr>
 				<tr>
 					<th>所属角色</th>
-					<td><select name="role" panelHeight="auto" style="width: 200px;height:27px;" class="easyui-combobox">
+					<td><select name="role" panelHeight="auto" style="width: 200px;height:27px;" class="easyui-combobox" style="height: 30px;">
 							<#list allRoles as e><option <#if user??> <#if user.roles?seq_contains(e)>selected</#if>  </#if> value="${e.id}">${e.name}</option></#list>
 					</select></td>
 				</tr>

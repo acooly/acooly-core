@@ -463,7 +463,7 @@
                     'fileTypeExts': '*.xls;*.xlsx;*.csv',
                     'fileSizeLimit': '200MB',
                     'swf': '/manage/assert/plugin/jquery-uploadify/uploadify.swf',
-                    'uploader': contextPath + options.url + ";jsessionid=" + options.jsessionid,
+                    'uploader': contextPath + options.url + "&k=v;jsessionid=" + options.jsessionid,
                     'cancelImg': '/manage/assert/plugin/jquery-uploadify/uploadify-cancel.png',
                     'successTimeout': 600,
                     'formData': options.formData,

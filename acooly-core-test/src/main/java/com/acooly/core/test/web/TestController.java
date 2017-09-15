@@ -52,9 +52,7 @@ public class TestController {
   @Autowired private CertificationService certificationService;
 
   @RequestMapping("app")
-  public App testApp() {
-    App app = new App();
-    app.setPrice(new Money(1));
+  public App testApp(App app) {
     appDao.save(app);
     return appDao.get(app.getId());
   }

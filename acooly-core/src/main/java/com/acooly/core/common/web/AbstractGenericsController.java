@@ -1,16 +1,21 @@
 package com.acooly.core.common.web;
 
 import com.acooly.core.common.boot.ApplicationContextHolder;
+import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.UnMappingMethodException;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.core.utils.BeanUtils;
 import com.acooly.core.utils.GenericsUtils;
+import com.acooly.core.utils.Money;
 import com.acooly.core.utils.system.IPUtil;
+import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.validation.ValidationUtils;
@@ -32,7 +37,8 @@ import java.util.List;
  * @param <M>
  * @author zhangpu
  */
-public abstract class AbstractGenericsController<T extends Entityable, M extends EntityService<T>> {
+public abstract class AbstractGenericsController<T extends Entityable, M extends EntityService<T>>
+    implements InitializingBean {
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractGenericsController.class);
 
@@ -46,8 +52,11 @@ public abstract class AbstractGenericsController<T extends Entityable, M extends
   @Autowired(required = false)
   private Validator[] validators;
 
+  private DefaultConversionService conversionService = new DefaultConversionService();
+
   protected void bind(HttpServletRequest request, Object command) throws Exception {
     ServletRequestDataBinder binder = createBinder(request, command);
+    binder.setConversionService(conversionService);
     binder.bind(request);
     if (this.validators != null) {
       for (Validator validator : this.validators) {
@@ -126,5 +135,18 @@ public abstract class AbstractGenericsController<T extends Entityable, M extends
       Assert.notNull(entityService, "EntityService未能成功初始化");
     }
     return entityService;
+  }
+
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    Boolean property =
+        Apps.getEnvironment()
+            .getProperty("acooly.web.enableMoneyDisplayYuan", Boolean.class, Boolean.FALSE);
+    if (property) {
+      conversionService.addConverter(
+          String.class,
+          Money.class,
+          source -> Strings.isNullOrEmpty(source) ? null : new Money(source));
+    }
   }
 }

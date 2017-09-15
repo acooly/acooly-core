@@ -9,12 +9,10 @@
  */
 package com.acooly.core.test.utils;
 
-import com.acooly.core.test.TestBase;
 import com.acooly.core.utils.Ids;
-import junitparams.JUnitParamsRunner;
+import com.acooly.core.utils.id.NetAddressIdWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -59,6 +57,11 @@ public class IdsTest {
         System.out.println("test saved count:" + container.size());
     }
 
+  @Test
+  public void name() throws Exception {
 
-
+      NetAddressIdWorker netAddressIdWorker=new NetAddressIdWorker();
+      Long generate = netAddressIdWorker.generate();
+    System.out.println(generate+":"+Long.toString(generate).toString().length());
+  }
 }

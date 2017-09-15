@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,6 +53,7 @@ public class TestController {
   @Autowired private CertificationService certificationService;
 
   @RequestMapping("app")
+  @Transactional
   public App testApp(App app) {
     appDao.save(app);
     return appDao.get(app.getId());

@@ -1,4 +1,3 @@
-
 package com.acooly.module.event;
 
 import lombok.extern.slf4j.Slf4j;
@@ -7,14 +6,19 @@ import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.bus.config.IBusConfiguration;
 import net.engio.mbassy.bus.error.IPublicationErrorHandler;
 import net.engio.mbassy.bus.publication.SyncAsyncPostCommand;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationAdapter;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.support.*;
 
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-public class EventBus<T> extends MBassador<T> {
+public class EventBus<T> extends MBassador<T> implements InitializingBean {
+
+  private TransactionTemplate transactionTemplate;
+  @Autowired private PlatformTransactionManager platformTransactionManager;
 
   public EventBus() {}
 
@@ -34,7 +38,10 @@ public class EventBus<T> extends MBassador<T> {
             @Override
             public void afterCompletion(int status) {
               if (status == TransactionSynchronization.STATUS_COMMITTED) {
-                EventBus.this.publish(message);
+                  transactionTemplate.execute(status1 -> {
+                      EventBus.this.publish(message);
+                      return null;
+                  });
               }
             }
           });
@@ -65,5 +72,14 @@ public class EventBus<T> extends MBassador<T> {
   public SyncAsyncPostCommand<T> post(T message) {
     log.info("发送事件:{}", message);
     return super.post(message);
+  }
+
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
+    defaultTransactionDefinition.setPropagationBehavior(
+        TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+    transactionTemplate =
+        new TransactionTemplate(platformTransactionManager, defaultTransactionDefinition);
   }
 }

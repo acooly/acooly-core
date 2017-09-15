@@ -13,21 +13,23 @@ import com.acooly.module.event.EventHandler;
 import lombok.extern.slf4j.Slf4j;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Invoke;
+import org.springframework.transaction.annotation.Transactional;
 
 /** @author qiubo@yiji.com */
 @EventHandler
 @Slf4j
 public class CustomerEventHandler {
-  //同步事件处理器
+  // 同步事件处理器
   @Handler
   public void handleCreateCustomerEvent(CreateCustomerEvent event) {
     log.info("{}", event);
-    //do what you like
+    // do what you like
   }
-  //异步事件处理器
+  // 异步事件处理器
+  @Transactional
   @Handler(delivery = Invoke.Asynchronously)
   public void handleCreateCustomerEventAsyn(CreateCustomerEvent event) {
     log.info("{}", event);
-    //do what you like
+    // do what you like
   }
 }

@@ -1,11 +1,13 @@
 package com.acooly.module.certification.cert;
 
+import com.acooly.core.common.exception.BusinessException;
+
 /**
  * 短信发送异常
  *
  * @author zhangpu
  */
-public class RealNameAuthenticationException extends RuntimeException {
+public class RealNameAuthenticationException extends BusinessException {
 
   /** UID */
   private static final long serialVersionUID = -1986339830876922364L;
@@ -24,7 +26,7 @@ public class RealNameAuthenticationException extends RuntimeException {
   }
 
   public RealNameAuthenticationException(String resultCode, String resultMessage, String message) {
-    super(message, null);
+    super(message);
     this.resultCode = resultCode;
     this.resultMessage = resultMessage;
   }

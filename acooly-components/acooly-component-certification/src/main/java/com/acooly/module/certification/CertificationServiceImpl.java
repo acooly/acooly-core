@@ -59,12 +59,12 @@ public class CertificationServiceImpl implements CertificationService {
         result.setIdCardNo(idCardNo);
       } else {
         result = realNameAuthentication.certification(realName, idCardNo);
+        saveRecord(result, certificationRecord);
       }
     } catch (RealNameAuthenticationException e) {
       result.setResultCode(e.getResultCode());
       result.setResultMessage(e.getResultMessage());
-    } finally {
-      saveRecord(result, certificationRecord);
+      throw e;
     }
     long et = System.currentTimeMillis();
     log.info("实名认证完成，花费时间: {} ms", (et - st));
@@ -112,14 +112,15 @@ public class CertificationServiceImpl implements CertificationService {
         if (result.getStatus() == ResultStatus.failure) {
           throw new CertficationException(ResultStatus.failure.getCode(), result.getDetail());
         }
+        if (result.getStatus() == ResultStatus.success) {
+          saveBankCardCertRecord(result, record, realName, cardNo, certId, phoneNum);
+        }
       }
     } catch (CertficationException e) {
       result.setCode(e.getResultCode());
       result.setStatus(ResultStatus.failure);
       result.setDetail(e.getResultMessage());
       throw e;
-    } finally {
-      saveBankCardCertRecord(result, record, realName, cardNo, certId, phoneNum);
     }
     log.info("银行卡认证完成，耗时: {} ms", (System.currentTimeMillis() - st));
     return result;

@@ -1,7 +1,9 @@
 package com.acooly.module.certification.cert;
 
+import com.acooly.core.common.exception.BusinessException;
+
 /** @author shuijing */
-public class CertficationException extends RuntimeException {
+public class CertficationException extends BusinessException {
 
   /** UID */
   private static final long serialVersionUID = -1986339230876922364L;
@@ -20,7 +22,7 @@ public class CertficationException extends RuntimeException {
   }
 
   public CertficationException(String resultCode, String resultMessage, String message) {
-    super(message, null);
+    super(message);
     this.resultCode = resultCode;
     this.resultMessage = resultMessage;
   }

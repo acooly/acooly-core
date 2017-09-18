@@ -1,13 +1,11 @@
-视图层开发指南
+Acooly框架-BOSS开发指南
 ===
-
-# 管理视图开发
 
 管理视图的开发在acooly框架下，我们选择的是easyui作为基本的前端解决方案，采用JSP作为视图渲染。
 
 >本章节，先总体描述后台管理的easyui开发的一些约定，注意点，然后在列举最几种常用的视图开发场景的案例。
 
-## 基础知识准备
+# 基础知识准备
 
 如果需要进行acooly框架的后台管理功能开发，需要进行一些基础技术栈的准备。
 
@@ -17,10 +15,10 @@
 * easyui：至少熟悉：布局管理（easyui-layout），表格（easyui-datagrid），弹出框（dialog），按钮（easyui-linkbutton）等
 * jsp/jstl/freemarker: 至少熟悉：servlet内置变量的操作，自定义变量输出，Map和List的跌倒，if控制语句等。
 
-## 开发规范和约定
+# 开发规范和约定
 
 
-### 元素ID全局唯一
+## 元素ID全局唯一
 
 所有后台的界面采用EASYUI搭建，每个模块功能页面默认采用AJAX方式加载，JS运行SCOPE是唯一的，要求整站的所有页面的所有元素的ID唯一，否则可能出现不可预料的问题。
 
@@ -28,20 +26,26 @@
 	
 如：manage\_customer\_datagrid , manage\_customer\_form,manage\_customer\_searchform, manage\_customer\_button\_search
 
-### 基本操作模式
+## 基本操作模式
 
 所有后台功能模块的基本操作模式都是采用：主界面 + 弹出框操作模式，主界面一般为列表(datagrid),也可以是多个datagrid与其他UI组件的整合，如果左右，上下结构，与zTree,Tab等组件的组合等。
 	
 功能包括：独立的多条件查询区域，独立的横向工具条，表格内每行的功能按钮等。
 
 	
-## 封装功能介绍
+# 封装功能介绍
 
 acooly框架的后台基于easyui，在开发规范和约定的基础上，做了较多的基础功能封装。
 
-### 常规操作
+## 常规操作
 
-常规操作的封装主要包括: 操作的CRUD，查询，上传，下载等通用功能，同时提供非界面的确认操作模式封装。操作的封装主要在:/manage/script/acooly.framework.js文件中，你可以在运行时，通过查看页面源代码方式找到源代码，也可以acooly-components-security-${version}.jar中找到源代码文件。
+常规操作的封装主要包括: 操作的CRUD，查询，上传，下载等通用功能，同时提供非界面的确认操作模式封装。操作的封装主要在:
+
+* /manage/assert/script/acooly.framework.js
+* /manage/assert/script/acooly.format.js
+* /manage/assert/script/acooly.verify.js
+
+你可以在运行时，通过查看页面源代码方式找到源代码，也可以acooly-components-security-${version}.jar中找到源代码文件。
 
 ```xml
 <dependency>
@@ -53,7 +57,7 @@ acooly框架的后台基于easyui，在开发规范和约定的基础上，做�
 
 >注意：常规操作完整Demo是以自动代码生成的单模块功能，一个完整模块的功能几乎使用了大部分的常规操作封装。常规操作中的一些API因历史版本原因，虽然不是完善和优美的封装，但是暂时都没有改进或删除冗余，但都可以作为案例参考，使用者可以编写自己的封装函数使用。
 
-#### 添加和修改
+### 添加和修改
 
 提供统一的弹出dialog调用指定URL（create或edit）获取添加和编辑的视图，并在弹出框中显示，同时提供统一的按钮（提交）和(取消)，封装提交的表单请求，完成添加和编辑的保持操作。
 
@@ -138,7 +142,7 @@ $.acooly.framework.create({
     });
 ```
 
-#### 通用表单查询
+### 通用表单查询
 提供统一的的通用表单查询封装，特性如下：
 1. 自动序列化指定元素ID（可以是formId,也可以是任意的DIV的ID）下的所有表单为json格式，作为查询条件。
 2. 查询完成后，获取的新数据，自动reload制定的表格数据（datagrid）
@@ -173,7 +177,7 @@ $(function() {
 ```
 
 
-#### 查看
+### 查看
 提供通用弹出框查询视图界面封装。
 
 **$.acooly.framework.show(url, width, height)
@@ -190,7 +194,7 @@ opts参数说明：
 
 get与show是不同时期的封装，为兼容老版本，所以同时支持，不同在于，get可以指定弹出框的标题，推荐使用get
 
-#### 删除
+### 删除
 提供通用的删除功能封装，支持单个和批量，同时删除前二次确认。
 
 **删除单条**
@@ -210,7 +214,7 @@ $.acooly.framework.remove('/manage/showcase/customer/deleteJson.html','1','manag
 $.acooly.framework.removes('/manage/showcase/customer/deleteJson.html','manage_customer_datagrid')
 ```
 
-#### 导出文件
+### 导出文件
 提供以当前查询表单所选作为条件的动态查询后导出EXCEL和CSV的功能。可以指定导出文件名。
 
 **$.acooly.framework.exports(url, searchForm, fileName);**
@@ -231,7 +235,7 @@ $.acooly.framework.exports('/manage/showcase/customer/exportXls.html','manage_cu
 $.acooly.framework.exports('/manage/showcase/customer/exportCsv.html','manage_customer_searchform','客户信息表')
 ```
 
-#### 文件上传
+### 文件上传
 
 提供通用的文件上传功能，也可以作为文件导入的界面使用。
 
@@ -263,7 +267,7 @@ $.acooly.framework.exports('/manage/showcase/customer/exportCsv.html','manage_cu
 	});	
 ```
 
-#### 通用询问请求操作
+### 通用询问请求操作
 
 前端管理功能开发中，存在很多无界面的询问二次确认的请求操作，场景为：点击按钮(或其他)触发，询问二次确认，确定后，请求服务器端一个指定URL，待服务器端完成操作后，提供操作结果。一般应用于在datagrid中选择了行后的对应操作，如：禁用，启用，移动等。
 
@@ -282,14 +286,49 @@ $.acooly.framework.exports('/manage/showcase/customer/exportCsv.html','manage_cu
 |onFailure	|function		|否			|提交成功后的回调函数（result.success = false），传入参数为ajax表单提交的返回值（一般为JsonResult的Json数据）
 
 
+### 工具方法
+
 #### 获取选中的Grid行
 
 提供了通用的选择Datagrid行的帮助方法，返回为当前选择行的对应数据. 同时支持datagrid和treegrid
 
+```js
 $.acooly.framework.getSelectedRow(datagrid);
+```
 
+#### 获取选择的Tab索引号
 
-### DataGrid
+该方法一般用于判断当前选择了那个Tab，然后可以通过tab的onSelect事件绑定来协同处理选中某个tab后的操作。
+
+```js
+$.acooly.framework.getSelectedTabIndex(tabsId);
+```
+
+#### Grid行选择事件触发
+
+用于触发选中Datagrid的行后的回调操作。选中grid的行，如果未选择则提示错误，否则回调传入的函数逻辑。一般用于必须选择了某行采用进行后续操作逻辑的处理。
+
+```js
+$.acooly.framework.fireSelectRow(gridId, selectedCallBack, errorMessage)
+```
+
+#### 手动加载Grid
+
+一般用于特殊场景，需要手动通过ajax获取数据，然后手动加载显示Grid数据的场景。
+
+```js
+// opts:gridId,url,ajaxData
+$.acooly.framework.loadGrid(opts);
+
+// 重新加载（刷新）
+$.acooly.framework.reloadGrid(gridId)
+```
+
+>注意：为防止重复加载，可以预先设置datagrid为不可显示，同时不要设置datagrid的url对象，在加载完成后，在渲染和显示datagrid。
+
+# 核心组件
+
+## DataGrid
 
 EasyUI的DataGrid组件是BOSS后台最常用的组件，没有之一，就是最常用的。数据查询，数据管理首页等。本节主要针对acooly框架对DataGrid的使用和扩展进行说明，DataGrid本身的大量功能和特性请参考EASYUI官方文档和Demo。
 
@@ -317,7 +356,7 @@ EasyUI的DataGrid组件是BOSS后台最常用的组件，没有之一，就是�
 </table>    
 ```
 
-#### 常用参数
+### 常用参数
 
 acooly框架中，Datagrid的使用方式采用html代码方式，通过标准table标签，添加class="easyui-datagrid"方式标记为datagrid组件，然后通过属性定义来控制行为。
 
@@ -343,7 +382,7 @@ acooly框架中，Datagrid的使用方式采用html代码方式，通过标准ta
 |singleSelect   |boolean|否  |是否只允许选择单行。如果无需批量操作（批量删除等）的场景，设置为false.
 |nowrap         |boolean|否  |操作单元格隐藏和显示时，文本是否自动换行。建议这是为false：表示会自动换行。
 
-#### 数据结构
+### 数据结构
 
 datagrid官方要求的加载数据的结构为：
 
@@ -378,7 +417,7 @@ acooly框架的数据结构为JsonListResult,增加了success,code,message,和�
 
 以上数据扩展后，直接加载给datagrid对象，在datagrid组件内的所有列定义的formatter方法内可以直接使用额外传入的Map数据data来作为格式转换。
 
-#### 列定义及格式化
+### 列定义及格式化
 
 easyui官方文档对列的定义和属性有全面的说明，请随时跟进需求参考并使用，这里说明的是acooly里面最常用的列定义方式及相关属性和格式化方案。
 
@@ -401,15 +440,40 @@ formatter : function(value,row,index){
 } 
 ```
 
+特别注意：目前框架对原生的formatter回调函数进行了扩展，如下：
+
+```js
+formatter : function(value,row,index,data,field){
+    // value : 当前单元格原始值
+    // row : 当前行的json数据，如：{"id":1, "username":"zhangpu",...}
+    // index: 当前行在整个datagrid数据集中的位置索引，第1条为0.
+    // data: 当前datagrid的数据，包括分页和附带的其他数据，如：mapping数据。
+    // field: 当前单元格的列名。
+} 
+```
+
+
 基于以上能力，我们队列的格式化主要有一下几种常见模式：
 
-* Mapping数据转换：以服务器端返回的data数据中的mapping，转换原始值为中文。
+* **Mapping数据转换**：以服务器端返回的data数据中的mapping，转换原始值为中文。
 
 ```html
 <th field="gender" data-options="formatter:function(value){ return formatRefrence('manage_customer_datagrid','allGenders',value);} ">性别</th>
 ```
 
-* 行操作按钮格式化：每行的最后一列可以定义为操作列，提供对本行的快捷操作连接按钮，但是一般在点击该类按钮的时候需要传入本行相关的参数，这里需要通过formatter方式构造整个链接及参数，需要使用到js的template,你可以采用任意的第三方js-template，但是默认情况下，acooly框架提供了简单的实现，可以支付几乎所有场景。
+经过扩展和封装，目前可以写为：
+
+注意：控制层的mapping变量名称必须按约定规则："all"+首字母大写的列名+"s" ,本例为：allGenders
+
+```java
+model.put("allGenders",GenderEnum.mapping());
+```
+
+```html
+<th field="gender" formatter="mappingFormatter">性别</th>
+```
+
+* **行操作按钮格式化**：每行的最后一列可以定义为操作列，提供对本行的快捷操作连接按钮，但是一般在点击该类按钮的时候需要传入本行相关的参数，这里需要通过formatter方式构造整个链接及参数，需要使用到js的template,你可以采用任意的第三方js-template，但是默认情况下，acooly框架提供了简单的实现，可以支付几乎所有场景。
 
     * formatAction方法是老的兼容方法，只实现了对第一个参数（manage_customer_action）指定的元素下的首个{0}替换为当前行的id（row.id）
     * formatString是推荐的标准模板方法，在第1个参数指定的元素下定义{0-n}的partten,采用后续传入的0-n个参数一一对应的替换。
@@ -448,11 +512,11 @@ formatter : function(value,row,index){
 ```
 
 
-### Form表单
+## Form表单
 
 本节将先介绍EasyUI本身的默认表单验证，以及对应扩展实现，然后在详细介绍acooly框架中的应用。
 
-#### EasyUI验证框架
+### EasyUI验证框架
 
 EasyUI中的表单验证主要通过其内置的验证器(validator)实现，除了required属性基本应用于所有表单元素外，其他一般都应用在: easyui-validatebox（文本框） 和 easyui-numberbox(数字框)。
 
@@ -492,12 +556,15 @@ acooly框架根据常见功能，扩展了一些常见的验证，在框架的�
 |bytelength  |长度验证，一个字节计算为1个长度，一个汉字算2个长度，主要应用于ORACLE等数据库。|validType="bytelength[2,4]"
 |equals      |判断两个表单值相等。|validtype="equals['#newPassword']"
 |CHS         |汉字验证，要求输入的必须都是汉字|validType="CHS" 
+|phone       |座机号码验证
 |mobile      |移动手机号码验证                |validType="mobile" 
 |zipcode     |国内邮编验证                   |validType="zipcode" 
 |account     |常用账号格式（只能包括 _ 数字 字母）|validType="account" 
 |commonRegExp|正则验证 |validType="commonRegExp['[\\\\w]{6,16}','密码由任意字母、数字、下划线组成，长度6-16字节']"            
 |validImg    |图片验证，param[0]为bmp,jpg,gif(用逗号隔开),param[1]为错误提示消息 |
 |simplecsv   |简单csv格式验证，包括逗号风格格式|
+|money       |金额验证
+|cert        |身份证号码验证
 
 如需要制定扩展验证，可以采用如下方法或参考以上自定义验证的实现源代码。
 
@@ -533,7 +600,9 @@ $.extend($.fn.validatebox.defaults.rules, {
 	data-options="validType:['CHS','length[2,4]']" missingMessage="请输入您的真实姓名" invalidMessage="姓名只能是2-4个汉字"/>
 ```
 
-#### 表单验证
+>特别注意：组合验证的时候请使用data-options方式配置数组验证（如上面的实例），不建议采用validType属性方式配置，否则可能不会生效。
+
+### 表单验证
 
 acooly框架的表单提交采用jquery.form插件方案的ajaxSubmit方法，在ajaxSubmit方法中可以通过beforeSerialize和beforeSubmit完成前置自定义验证，最后提交前会调用EasyUI验证框架验证。
 
@@ -574,7 +643,7 @@ $('#formId').ajaxSubmit({
 以上模块代码是ajaxSubmit在acooly中的常规实现，你可以根据需求，参考jquery.form插件的需求进行调整。然后一般通过点击按钮时间调用该方法实现ajax form表单提交。
 
 
-#### 数据绑定
+### 数据绑定
 
 表单操作中，涉及提交数据自动绑定为domain/entity对象，响应数据（编辑时）domain/entity自动绑定视图表单的功能，这种方式有利于提高高发效率。目前acooly框架中，上送数据的绑定为entity采用的是springMvc的原生解决方案，这里不详细介绍。
 
@@ -595,38 +664,35 @@ $('#formId').ajaxSubmit({
 ```
 
 
-### 页面框架
+## 页面框架
 页面框架的封装主要是使用esayui和ztree对后台管理的页面框架整体的结构，基础功能的封装，包括整体布局，两级菜单的显示，logo，系统功能等。这里不做详细的介绍，如有兴趣，请参见源代码。
 
-/manage/script/acooly.system.js
-/manage/script/acooly.layout.js
-/manage/script/acooly.portal.js
+* /manage/assert/script/acooly.system.js
+* /manage/assert/script/acooly.layout.js
+* /manage/assert/script/acooly.portal.js
 
 
-## 案例经验
+# 案例经验
 
-### 标准CRUD
+## 标准CRUD
 
 请参考：自动代码生成的代码。所有自动代码生成的单实体的功能包含了网站的CRUD功能。
 
-### 分类管理
+## 分类管理
 
 分类管理在后台管理开发中是比较常见的场景。从数据结构上来看，首先有一个多级或无限极的分类实体，然后由一个具体分类下管理的主体实体。所以在这种场景下，我们需要管理的是2个实体,但是在视图上，我们习惯采用单个整合视图来操作个管理更符合人类习惯。
 
-请参考：openapi-framework项目的openapi-framework-manage模块中的服务管理功能。
+请参考：acooly-showcase中: **商户管理（树型）**功能。
 
-### 主从管理
+## 主从管理
 
-请参考：acooly-showcase的客户管理模块。
+主要应对场景为一个主表对应多个子表的协调管理。例如客户管理，主表为客户主信息表，可能存在多个客户子表，例如：客户基础信息，客户联系信息，客户认证信息，客户扩展信息等。
 
+该案例主要展示在该场景下的主要特性处理方案：
 
-# 用户视图开发
+* 主对象的管理（CRUD，分页查询，导入和导出）
+* 独立加载单和子tab，防止同时加载全部和重复加载。
+* tab内的子模块的管理
 
-## 通用网站开发
+请参考：acooly-showcase中:**客户管理(父子)**功能。
 
-自定义taglibs介绍，mask，title，paging的标签，布局方式，缓存等，ajax
-待补充
-
-## 微网站开发
-
-微网站的开发，目前主要采用jq-weui方案。

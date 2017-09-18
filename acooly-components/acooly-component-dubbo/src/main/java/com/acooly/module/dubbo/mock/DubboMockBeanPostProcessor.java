@@ -3,7 +3,6 @@ package com.acooly.module.dubbo.mock;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.exception.AppConfigException;
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.google.common.collect.Sets;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +14,6 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 /** @author qiubo@yiji.com */
 @Slf4j
@@ -24,7 +22,6 @@ import java.util.Set;
 public class DubboMockBeanPostProcessor implements BeanPostProcessor {
   private String annotationPackage;
   private List<String> mockInterfaces;
-  private Set<String> proccessed = Sets.newConcurrentHashSet();
 
   @Override
   public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
@@ -58,22 +55,18 @@ public class DubboMockBeanPostProcessor implements BeanPostProcessor {
         field -> {
           Reference reference = field.getAnnotation(Reference.class);
           if (reference != null) {
-            String key = field.toString();
-            if (!proccessed.contains(key)) {
-              if (mockInterfaces.contains(field.getType().getName())) {
-                field.setAccessible(true);
-                Object mockService = findMockBean(field);
-                if (!Objects.equals(field.get(bean), mockService)) {
-                  field.set(bean, mockService);
-                  log.info(
-                      "[MOCK]dubbo @Reference {}.{} has bean mocked with {}",
-                      field.getDeclaringClass().getSimpleName(),
-                      field.getName(),
-                      mockService.getClass().getName());
-                }
+            if (mockInterfaces.contains(field.getType().getName())) {
+              field.setAccessible(true);
+              Object mockService = findMockBean(field);
+              if (!Objects.equals(field.get(bean), mockService)) {
+                field.set(bean, mockService);
+                log.info(
+                    "[MOCK]dubbo @Reference {}.{} has bean mocked with {}",
+                    field.getDeclaringClass().getSimpleName(),
+                    field.getName(),
+                    mockService.getClass().getName());
               }
             }
-            proccessed.add(key);
           }
         });
     return bean;

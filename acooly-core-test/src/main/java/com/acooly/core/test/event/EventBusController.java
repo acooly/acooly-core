@@ -4,6 +4,7 @@ import com.acooly.core.test.dao.CityMybatisDao;
 import com.acooly.module.event.EventBus;
 import com.acooly.module.event.EventHandler;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Invoke;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -30,10 +31,9 @@ public class EventBusController {
   @RequestMapping("test")
   @Transactional
   public void test() {
-    SqlSessionHolder holder =
-        (SqlSessionHolder) TransactionSynchronizationManager.getResource(sessionFactory);
+    val holder = (SqlSessionHolder) TransactionSynchronizationManager.getResource(sessionFactory);
     if (holder != null) {
-        log.info("{}",holder.getSqlSession().getConnection());
+      log.info("{}", holder.getSqlSession().getConnection());
     }
     cityDao.get(1l);
     CreateCustomerEvent event = new CreateCustomerEvent();

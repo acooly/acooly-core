@@ -133,7 +133,7 @@ public class DruidProperties implements BeanClassLoaderAware {
   }
 
   /** 通过当前配置创建datasource */
-  DruidDataSource build() {
+  public DruidDataSource build() {
     this.check();
     if (this.beanClassLoader == null) {
       this.beanClassLoader = ClassUtils.getDefaultClassLoader();

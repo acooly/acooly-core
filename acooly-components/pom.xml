@@ -47,6 +47,7 @@
         <module>acooly-component-defence</module>
         <module>acooly-component-rocketmq</module>
         <module>acooly-component-store</module>
+        <module>acooly-component-safety</module>
     </modules>
 
     <dependencies>

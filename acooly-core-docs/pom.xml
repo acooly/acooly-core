@@ -11,24 +11,47 @@
 
     <artifactId>acooly-core-docs</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.ruleoftech</groupId>
+            <artifactId>markdown-page-generator-plugin</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
+
     <build>
-        <resources>
-            <resource>
-                <filtering>false</filtering>
-                <directory>docs</directory>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-                <targetPath>META-INF/docs</targetPath>
-            </resource>
-            <resource>
-                <filtering>false</filtering>
-                <directory>.</directory>
-                <includes>
-                    <include>*.md</include>
-                </includes>
-                <targetPath>META-INF</targetPath>
-            </resource>
-        </resources>
+        <plugins>
+            <plugin>
+                <groupId>com.ruleoftech</groupId>
+                <artifactId>markdown-page-generator-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <!--<resources>-->
+            <!--<resource>-->
+                <!--<filtering>false</filtering>-->
+                <!--<directory>docs</directory>-->
+                <!--<includes>-->
+                    <!--<include>**/*</include>-->
+                <!--</includes>-->
+                <!--<targetPath>META-INF/docs</targetPath>-->
+            <!--</resource>-->
+            <!--<resource>-->
+                <!--<filtering>false</filtering>-->
+                <!--<directory>.</directory>-->
+                <!--<includes>-->
+                    <!--<include>*.md</include>-->
+                <!--</includes>-->
+                <!--<targetPath>META-INF</targetPath>-->
+            <!--</resource>-->
+        <!--</resources>-->
     </build>
 </project>

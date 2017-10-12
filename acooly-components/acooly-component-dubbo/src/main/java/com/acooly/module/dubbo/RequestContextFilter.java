@@ -73,7 +73,7 @@ public class RequestContextFilter implements Filter {
     }
   }
 
-  static class RequestContext {
+ public static class RequestContext {
     private static final ThreadLocal<RequestContext> LOCAL =
         ThreadLocal.withInitial(() -> new RequestContext());
     private String partnerId;

@@ -6,6 +6,8 @@
 package com.acooly.module.certification.cert.impl;
 
 import com.acooly.core.utils.enums.ResultStatus;
+import com.acooly.module.certification.CertificationProperties;
+import com.acooly.module.certification.cert.RealNameAuthentication;
 import com.acooly.module.certification.cert.RealNameAuthenticationException;
 import com.acooly.module.certification.common.Response;
 import com.acooly.module.certification.enums.CertResult;
@@ -15,6 +17,7 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.conn.ConnectTimeoutException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -28,9 +31,12 @@ import java.util.Map;
  */
 @Slf4j
 @Service("aliRealNameAuthentication")
-public class AliRealNameAuthentication extends AbstractRealNameAuthentication {
+public class AliRealNameAuthentication implements RealNameAuthentication {
 
-  private static Map<String, String> messages =
+    @Autowired
+    private CertificationProperties certificationProperties;
+
+    private static Map<String, String> messages =
       new LinkedHashMap<String, String>() {
         /** UId */
         private static final long serialVersionUID = -847699194658395108L;
@@ -45,10 +51,10 @@ public class AliRealNameAuthentication extends AbstractRealNameAuthentication {
   @Override
   public CertResult certification(String realName, String idCardNo) {
     String path = "/lianzhuo/idcard";
-    String host = service;
+    String host = "http://idcard.market.alicloudapi.com";
     Map<String, String> headers = new HashMap<>();
     //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
-    headers.put("Authorization", "APPCODE " + appCode);
+    headers.put("Authorization", "APPCODE " + certificationProperties.getRealname().getAppCode());
     Map<String, String> querys = new HashMap<>();
     querys.put("cardno", idCardNo);
     querys.put("name", realName);
@@ -56,7 +62,7 @@ public class AliRealNameAuthentication extends AbstractRealNameAuthentication {
     result.setRealName(realName);
     result.setIdCardNo(idCardNo);
     try {
-      Response response = HttpUtil.httpGet(host, path, timeout, headers, querys);
+      Response response = HttpUtil.httpGet(host, path, certificationProperties.getRealname().getTimeout(), headers, querys);
       if (StringUtils.isNotBlank(response.getBody())) {
         JSONObject resultObj = JSON.parseObject(response.getBody());
         JSONObject resp = resultObj.getJSONObject("resp");

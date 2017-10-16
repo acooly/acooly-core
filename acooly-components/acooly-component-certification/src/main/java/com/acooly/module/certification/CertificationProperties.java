@@ -12,11 +12,11 @@ package com.acooly.module.certification;
 import com.acooly.core.utils.enums.Messageable;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.NotNull;
+import javax.annotation.PostConstruct;
 
 import static com.acooly.module.certification.CertificationProperties.BankCertProvider.ALI;
 import static com.acooly.module.certification.CertificationProperties.PREFIX;
@@ -32,19 +32,45 @@ import static com.acooly.module.certification.CertificationProperties.PREFIX;
 public class CertificationProperties {
   public static final String PREFIX = "acooly.certification";
 
-  /** 实名权限code */
-  @NotBlank private String appCode;
-
   /** 实名认证 */
-  @NotNull private Provider provider = Provider.ALI;
+  private Provider provider = Provider.ALI;
 
   /** 银行卡认证，默认为阿里云 */
   private BankCertProvider bankCertProvider = ALI;
+  /** 实名认证url 当使用非阿里云时配置 */
+  private String realnameurl;
+  /** 用阿里云实名认证配置 */
+  private RealName realname;
+  /** 用阿里云银行卡要素认证配置 */
+  private BankCert bankcert;
 
-  /** 实名认证服务地址 */
-  private String url = "http://idcard.market.alicloudapi.com";
+  @PostConstruct
+  public void init() {
+    if (this.provider == Provider.ALI) {
+      Assert.notNull(this.realname);
+      Assert.hasText(this.realname.getAppCode());
+    }
+    if (this.bankCertProvider == ALI) {
+      Assert.notNull(this.realname);
+      Assert.hasText(this.realname.getAppCode());
+    }
+  }
 
-  private int timeout = 20000;
+  @Data
+  public static class RealName {
+    /** 实名appCode */
+    private String appCode;
+
+    private int timeout = 20000;
+  }
+
+  @Data
+  public static class BankCert {
+    /** 银行卡要素二三四要素appCode */
+    private String appCode;
+
+    private int timeout = 20000;
+  }
 
   public enum Provider implements Messageable {
     /** 阿里实名认证 */

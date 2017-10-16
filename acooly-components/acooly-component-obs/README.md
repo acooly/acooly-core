@@ -15,8 +15,8 @@
 `acooly.obs.provider=aliyun
  acooly.obs.aliyun.accessKeyId=LTAIKG****xZdYJQ
  acooly.obs.aliyun.accessKeySecret=WVQ1t6yxlL*********um86
- acooly.obs.aliyun.endpoint=http://oss-cn-hangzhou.aliyuncs.com`
-`com.acooly.module.obs.ObsProperties`
+ acooly.obs.aliyun.endpoint=http://oss-cn-hangzhou.aliyuncs.com
+` 
 
 * 2.1.2 接口：`com.acooly.module.obs.ObsService`
 

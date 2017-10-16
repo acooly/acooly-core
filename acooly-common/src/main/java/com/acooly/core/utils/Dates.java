@@ -4,7 +4,11 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 简单 Date 相关静态工具
@@ -518,8 +522,47 @@ public class Dates {
     return new SimpleDateFormat(defaultFormat);
   }
 
-  public static void main(String[] args) throws Exception {
-    String d = "2016-09-26 23:23:23";
-    System.out.println(parse(d));
+  /**
+   * 收集起始时间到结束时间之间所有的时间并以字符串集合方式返回
+   *
+   * @param timeStart Date
+   * @param timeEnd Date
+   * @return 日期集合
+   */
+  public static List<String> collectLocalDates(Date timeStart, Date timeEnd) {
+    return collectLocalDates(
+        format(timeStart, CHINESE_DATE_FORMAT_LINE), format(timeEnd, CHINESE_DATE_FORMAT_LINE));
   }
+
+  /**
+   * 收集起始时间到结束时间之间所有的时间并以字符串集合方式返回
+   *
+   * @param timeStart 格式："2017-07-11"
+   * @param timeEnd 格式："2017-07-11"
+   * @return 日期集合
+   */
+  public static List<String> collectLocalDates(String timeStart, String timeEnd) {
+    return collectLocalDates(LocalDate.parse(timeStart), LocalDate.parse(timeEnd));
+  }
+
+  /**
+   * 收集起始时间到结束时间之间所有的时间并以字符串集合方式返回
+   *
+   * @param start 开始时间(包括当天)
+   * @param end 结束时间(包括当天)
+   * @return 日期集合
+   */
+  public static List<String> collectLocalDates(LocalDate start, LocalDate end) {
+    return Stream.iterate(start, localDate -> localDate.plusDays(1))
+        .limit(ChronoUnit.DAYS.between(start, end) + 1)
+        .map(LocalDate::toString)
+        .collect(Collectors.toList());
+  }
+
+//  public static void main(String[] args) throws Exception {
+//    String timeStart = "2017-07-11";
+//    String timeEnd = "2017-09-20";
+//    Date date = addDate(new Date(), -40);
+//    collectLocalDates(addDay(new Date(), -40), new Date()).forEach(System.out::println);
+//  }
 }

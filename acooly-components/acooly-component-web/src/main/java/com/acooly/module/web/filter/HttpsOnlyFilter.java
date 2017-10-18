@@ -17,7 +17,9 @@ public class HttpsOnlyFilter extends OncePerRequestFilter {
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
     if (!isHttps(request)) {
-      response.sendRedirect(buildHttpsUrl(request));
+      // ref:https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/307
+      response.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
+      response.setHeader("Location", buildHttpsUrl(request));
     } else {
       response.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
       filterChain.doFilter(request, response);
@@ -25,6 +27,7 @@ public class HttpsOnlyFilter extends OncePerRequestFilter {
   }
 
   private boolean isHttps(HttpServletRequest request) {
+    // 奇葩的阿里云slb不在内网ip段
     String protocol = String.valueOf(request.getHeader("X-Forwarded-Proto"));
     if (!Strings.isNullOrEmpty(protocol)) {
       return "https".equalsIgnoreCase(protocol);

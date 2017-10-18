@@ -1,25 +1,35 @@
 package com.acooly.module.web.filter;
 
-import javax.servlet.*;
+import com.google.common.base.Strings;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /** @author qiubo@yiji.com */
-public class HttpsOnlyFilter implements Filter {
+public class HttpsOnlyFilter extends OncePerRequestFilter {
 
   @Override
-  public void init(FilterConfig filterConfig) throws ServletException {}
-
-  @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-      throws IOException, ServletException {
-    if (!request.isSecure()) {
-      ((HttpServletResponse) response).sendRedirect(buildHttpsUrl((HttpServletRequest) request));
+  protected void doFilterInternal(
+      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
+    if (!isHttps(request)) {
+      response.sendRedirect(buildHttpsUrl(request));
     } else {
-      ((HttpServletResponse) response)
-          .setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
-      chain.doFilter(request, response);
+      response.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+      filterChain.doFilter(request, response);
+    }
+  }
+
+  private boolean isHttps(HttpServletRequest request) {
+    String protocol = String.valueOf(request.getHeader("X-Forwarded-Proto"));
+    if (!Strings.isNullOrEmpty(protocol)) {
+      return "https".equalsIgnoreCase(protocol);
+    } else {
+      return request.isSecure();
     }
   }
 

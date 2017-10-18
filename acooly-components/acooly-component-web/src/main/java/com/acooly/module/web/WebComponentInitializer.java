@@ -56,11 +56,5 @@ public class WebComponentInitializer implements ComponentInitializer {
     // 设置 jackson
     setPropertyIfMissing("spring.jackson.date-format", "yyyy-MM-dd HH:mm:ss");
     setPropertyIfMissing("spring.jackson.time-zone", "Asia/Shanghai");
-
-    if (Apps.buildProperties(WebProperties.class).isHttpsOnly()) {
-      System.setProperty("server.tomcat.remoteIpHeader", "X-Forwarded-For");
-      System.setProperty("server.tomcat.protocolHeader", "X-Forwarded-Proto");
-      System.setProperty("server.tomcat.portHeader", "X-Forwarded-Port");
-    }
   }
 }

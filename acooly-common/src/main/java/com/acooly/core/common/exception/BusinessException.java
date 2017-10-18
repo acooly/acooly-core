@@ -31,6 +31,15 @@ public class BusinessException extends RuntimeException implements Messageable {
     super(message, null, false, writableStackTrace);
   }
 
+  /**
+   * @param message 错误消息
+   * @param writableStackTrace 是否收集线程栈信息，对于业务明确的异常，请关闭,设置为false为关闭
+   */
+  public BusinessException(String message, String code, boolean writableStackTrace) {
+    super(message, null, false, writableStackTrace);
+    this.code = code;
+  }
+
   public BusinessException(String message, Throwable cause) {
     super(message, cause);
   }
@@ -59,7 +68,7 @@ public class BusinessException extends RuntimeException implements Messageable {
     this.code = messageable.code();
   }
 
-  public BusinessException(Messageable messageable,String msg) {
+  public BusinessException(Messageable messageable, String msg) {
     super(msg);
     this.code = messageable.code();
   }

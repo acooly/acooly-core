@@ -34,7 +34,7 @@ public class AliBankCardCertServiceImpl implements BankCardCertService {
   public BankCardResult bankCardCert(
       String realName, String cardNo, String certId, String phoneNum) {
 
-    String appCode = certificationProperties.getAppCode();
+    String appCode = certificationProperties.getBankcert().getAppCode();
     String path = "/bank4";
     //二要素
     if (StringUtils.isEmpty(certId) && StringUtils.isEmpty(phoneNum)) {
@@ -57,7 +57,7 @@ public class AliBankCardCertServiceImpl implements BankCardCertService {
     BankCardResult result;
     try {
       Response response =
-          HttpUtil.httpGet(certUrl, path, certificationProperties.getTimeout(), headers, params);
+          HttpUtil.httpGet(certUrl, path, certificationProperties.getBankcert().getTimeout(), headers, params);
 
       result = unmashall(response);
 
@@ -76,7 +76,7 @@ public class AliBankCardCertServiceImpl implements BankCardCertService {
   private BankCardResult unmashall(Response response) throws CertficationException {
 
     if (StringUtils.isEmpty(response.getBody())) {
-      throw new CertficationException(ResultStatus.failure.getCode(), "银行卡二三四要素校验返回空");
+      throw new CertficationException(ResultStatus.failure.getCode(), "银行卡二三四要素校验返回空:"+response.getErrorMessage());
     }
 
     BankCardResult result = new BankCardResult();

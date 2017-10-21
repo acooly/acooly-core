@@ -16,6 +16,8 @@ import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.extension.Activate;
 import com.alibaba.dubbo.rpc.*;
 import com.google.common.base.Strings;
+import lombok.Getter;
+import lombok.Setter;
 
 /** @author qiubo@yiji.com */
 @Activate(group = {Constants.PROVIDER, Constants.CONSUMER})
@@ -72,8 +74,9 @@ public class RequestContextFilter implements Filter {
       return invoker.invoke(inv);
     }
   }
-
-  static class RequestContext {
+@Getter
+@Setter
+ public static class RequestContext {
     private static final ThreadLocal<RequestContext> LOCAL =
         ThreadLocal.withInitial(() -> new RequestContext());
     private String partnerId;
@@ -87,22 +90,6 @@ public class RequestContextFilter implements Filter {
 
     public static void removeContext() {
       LOCAL.remove();
-    }
-
-    public String getPartnerId() {
-      return partnerId;
-    }
-
-    public String getGid() {
-      return gid;
-    }
-
-    public String getMerchOrderNo() {
-      return merchOrderNo;
-    }
-
-    public String getBizOrderNo() {
-      return bizOrderNo;
     }
   }
 }

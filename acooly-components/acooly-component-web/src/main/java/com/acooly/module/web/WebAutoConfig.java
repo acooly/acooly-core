@@ -11,6 +11,7 @@
 package com.acooly.module.web;
 
 import com.acooly.core.common.boot.EnvironmentHolder;
+import com.acooly.module.web.filter.HttpsOnlyFilter;
 import com.acooly.module.web.formatter.MoneyFormatter;
 import com.acooly.module.web.freemarker.IncludePage;
 import com.google.common.base.Strings;
@@ -24,10 +25,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.condition.*;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
@@ -81,7 +79,7 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
 
   @Override
   public void addViewControllers(ViewControllerRegistry registry) {
-    //设置 welcome-file
+    // 设置 welcome-file
     if (!Strings.isNullOrEmpty(webProperties.getWelcomeFile())) {
       String welcomeFile = webProperties.getWelcomeFile();
       if (!welcomeFile.startsWith("/")) {
@@ -96,7 +94,7 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
 
   @Override
   public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-    //和原逻辑保持一直，原因未知。
+    // 和原逻辑保持一直，原因未知。
     configurer.mediaType("html", MediaType.APPLICATION_JSON);
   }
 
@@ -113,14 +111,14 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
     return directUrlHandlerMapping;
   }
 
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-      if(webProperties.isEnableMoneyDisplayYuan()){
-          registry.addFormatter(new MoneyFormatter());
-      }
+  @Override
+  public void addFormatters(FormatterRegistry registry) {
+    if (webProperties.isEnableMoneyDisplayYuan()) {
+      registry.addFormatter(new MoneyFormatter());
     }
+  }
 
-    /** 配置模板直接映射controller */
+  /** 配置模板直接映射controller */
   @Bean(name = SIMPLE_URL_MAPPING_VIEW_CONTROLLER)
   public SimpleUrlMappingViewController simpleUrlMappingViewController(
       WebProperties webProperties) {
@@ -144,6 +142,12 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
   }
 
   @Bean
+  @ConditionalOnProperty("acooly.web.httpsOnly")
+  public HttpsOnlyFilter httpsOnlyFilter() {
+    return new HttpsOnlyFilter();
+  }
+
+  @Bean
   @ConditionalOnBean(HttpPutFormContentFilter.class)
   public FilterRegistrationBean disableHttpPutFormContentFilter(
       HttpPutFormContentFilter filter, WebProperties webProperties) {
@@ -154,7 +158,8 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
 
   //	@Override
   //	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-  //		configurer.ignoreAcceptHeader(true).defaultContentType(MediaType.TEXT_HTML).favorPathExtension(true)
+  //
+  //	configurer.ignoreAcceptHeader(true).defaultContentType(MediaType.TEXT_HTML).favorPathExtension(true)
   //			.favorParameter(false).useJaf(false).mediaType("html", MediaType.APPLICATION_JSON)
   //			.mediaType("xml", MediaType.APPLICATION_XML).mediaType("json", MediaType.APPLICATION_JSON);
   //	}

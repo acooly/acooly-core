@@ -52,6 +52,8 @@ public class WebProperties {
   /** 是否启用Money用元展示 */
   private boolean enableMoneyDisplayYuan = false;
 
+  private boolean httpsOnly=false;
+
   public List<String> buildMappingUrlList() {
     List mappingUrlList = new ArrayList<>();
     if (simplePageMap == null) {

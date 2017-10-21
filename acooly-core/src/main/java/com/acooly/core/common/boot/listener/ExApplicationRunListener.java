@@ -96,7 +96,6 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
   }
 
   private void checkAndSetPackage(SpringApplication application) {
-    Assert.isTrue(application.getSources().size() == 1, "boot应用应该只有一个source");
     application
         .getSources()
         .forEach(

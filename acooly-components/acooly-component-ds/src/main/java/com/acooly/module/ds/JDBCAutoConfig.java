@@ -41,6 +41,7 @@ public class JDBCAutoConfig {
   @Autowired private DruidProperties druidProperties;
 
   @Bean
+  @ConditionalOnMissingBean
   public DataSource dataSource() {
     DataSource dataSource;
     try {

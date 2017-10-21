@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/cert")
 public class CertificationController {
 
-  @Autowired private CertificationService certificationService;
+  @Autowired(required = false) private CertificationService certificationService;
 
   @RequestMapping("/four")
   public void four(String realName, String cardNo, String certId, String phoneNum) {

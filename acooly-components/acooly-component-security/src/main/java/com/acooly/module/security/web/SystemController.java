@@ -1,5 +1,6 @@
 package com.acooly.module.security.web;
 
+import com.acooly.core.common.olog.annotation.Olog;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Strings;
@@ -37,6 +38,7 @@ import java.util.List;
   value = SecurityProperties.PREFIX + ".shiro.auth.enable",
   matchIfMissing = true
 )
+@Olog.Ignore
 public class SystemController extends AbstractJQueryEntityController<User, UserService> {
 
   @Autowired private UserService userService;
@@ -48,6 +50,7 @@ public class SystemController extends AbstractJQueryEntityController<User, UserS
    *
    * @return
    */
+  @Olog.Ignore
   @RequestMapping("authorisedMenus")
   @ResponseBody
   public List<ResourceNode> authorisedMenus(
@@ -59,6 +62,7 @@ public class SystemController extends AbstractJQueryEntityController<User, UserS
 
   @RequestMapping(value = "portallets")
   @ResponseBody
+  @Olog.Ignore
   public List<Portallet> portallets(
       Model model, HttpServletRequest request, HttpServletResponse response) {
     try {

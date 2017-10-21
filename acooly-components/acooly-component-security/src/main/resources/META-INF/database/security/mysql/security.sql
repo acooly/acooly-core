@@ -5,32 +5,6 @@
 
 
 /*==============================================================*/
-/* Table: SYS_OLOG                                              */
-/*==============================================================*/
-CREATE TABLE SYS_OLOG
-(
-   ID                   BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键',
-   MODULE               VARCHAR(256) COMMENT '模块',
-   MODULE_NAME          VARCHAR(256) COMMENT '模块名称',
-   ACTION               VARCHAR(32) COMMENT '操作',
-   ACTION_NAME          VARCHAR(32) COMMENT '操作名称',
-   EXECUTE_MILLISECONDS INT NOT NULL COMMENT '执行时间',
-   OPERATE_TIME         DATETIME COMMENT '操作时间',
-   OPERATE_USER         VARCHAR(64) COMMENT '操作员',
-   OPERATE_USER_ID      BIGINT COMMENT '操作员ID',
-   REQUEST_PARAMETERS   VARCHAR(512) COMMENT '请求参数',
-   OPERATE_RESULT       INT NOT NULL DEFAULT 1 COMMENT '操作结果{1:成功,2:失败}',
-   OPERATE_MESSAGE      VARCHAR(512) COMMENT '消息',
-   CLIENT_INFORMATIONS  VARCHAR(256) COMMENT '客户端信息',
-   DESCN                VARCHAR(256) COMMENT '备注',
-   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-   PRIMARY KEY (ID)
-);
-
-ALTER TABLE SYS_OLOG COMMENT '操作日志';
-
-/*==============================================================*/
 /* Table: SYS_PORTALLET                                         */
 /*==============================================================*/
 CREATE TABLE SYS_PORTALLET

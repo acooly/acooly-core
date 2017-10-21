@@ -1,5 +1,6 @@
 package com.acooly.module.security.web;
 
+import com.acooly.core.common.olog.annotation.Olog;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Servlets;
@@ -46,6 +47,7 @@ import static com.acooly.module.security.shiro.realm.ShiroDbRealm.SESSION_USER;
   value = SecurityProperties.PREFIX + ".shiro.auth.enable",
   matchIfMissing = true
 )
+@Olog.Ignore
 public class ManagerController extends AbstractJQueryEntityController<User, UserService> {
 
   private static final Logger logger = LoggerFactory.getLogger(ManagerController.class);

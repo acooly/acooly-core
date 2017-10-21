@@ -20,7 +20,7 @@ import java.util.Map;
 @Slf4j
 public class MQController {
 
-  @Autowired private MessageProducer messageProducer;
+  @Autowired(required = false) private MessageProducer messageProducer;
 
   @RequestMapping(value = "/send", method = RequestMethod.GET)
   public void send() {

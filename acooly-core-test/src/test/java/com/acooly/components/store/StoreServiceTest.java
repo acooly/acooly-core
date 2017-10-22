@@ -12,6 +12,9 @@ package com.acooly.components.store;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.module.test.AppTestBase;
 
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
+
 /**
  * @author zhangpu 2017-09-01 10:20
  */

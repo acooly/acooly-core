@@ -18,17 +18,17 @@ import com.acooly.module.portlet.enums.ActionChannelEnum;
 import com.acooly.module.portlet.service.ActionLogService;
 import com.acooly.module.portlet.service.ActionMappingService;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Queues;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * portlet_action_log Service实现
@@ -48,13 +48,11 @@ public class ActionLogServiceImpl extends EntityServiceImpl<ActionLog, ActionLog
     private ActionMappingService actionMappingService;
 
     @Autowired
-    private RedisTemplate redisTemplate;
-
-    @Autowired
     private PortletProperties portletProperties;
 
-    private static final String ACTION_LOG_CACHE_NAME = "portlet.action.actionlogs";
     private static final int ACTION_LOG_CACHE_SIZE_DEFAULT = 100;
+
+    private BlockingQueue<ActionLog> queue;
 
 
     @Override
@@ -86,31 +84,43 @@ public class ActionLogServiceImpl extends EntityServiceImpl<ActionLog, ActionLog
                 if (cacheSize <= 0) {
                     cacheSize = ACTION_LOG_CACHE_SIZE_DEFAULT;
                 }
-
-                ValueOperations<String, List<ActionLog>> va = redisTemplate.opsForValue();
-
-                List<ActionLog> actionLogs = va.get(ACTION_LOG_CACHE_NAME);
-                if (actionLogs == null) {
-                    actionLogs = Lists.newArrayList();
+                initQueue(cacheSize * 2);
+                // 忽略失败
+                queue.offer(actionLog);
+                if (queue.size() >= cacheSize) {
+                    List<ActionLog> actionLogs = Lists.newArrayList();
+                    queue.drainTo(actionLogs, cacheSize);
+                    asyncSaves(actionLogs);
                 }
-                actionLogs.add(actionLog);
-                if (actionLogs.size() >= cacheSize) {
-                    saves(actionLogs);
-                    redisTemplate.delete(ACTION_LOG_CACHE_NAME);
-                    log.info("批量写入actionLog日志并清空缓存。数量:{}", actionLogs.size());
-                } else {
-                    va.set(ACTION_LOG_CACHE_NAME, actionLogs);
-                }
-
             } else {
                 save(actionLog);
-                log.debug("缓存写入actionLog日志: {}", actionLog);
+                log.debug("同步缓存写入actionLog日志: {}", actionLog);
             }
             return actionLog;
         } catch (Exception e) {
             logger.warn("保持action日志失败:{}", e.getMessage());
         }
         return null;
+    }
+
+    protected void asyncSaves(final List<ActionLog> actionLogs) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                saves(actionLogs);
+                log.info("异步缓存写入actionLog日志, size: {}", actionLogs.size());
+            }
+        }).start();
+    }
+
+    protected void initQueue(int capacity) {
+        if (this.queue == null) {
+            synchronized (this) {
+                if (this.queue == null) {
+                    this.queue = Queues.newLinkedBlockingQueue(capacity);
+                }
+            }
+        }
     }
 
     protected ActionLog doMarshallActionLog(String action,
@@ -121,7 +131,7 @@ public class ActionLogServiceImpl extends EntityServiceImpl<ActionLog, ActionLog
                                             String comments,
                                             HttpServletRequest request) {
         ActionLog actionLog = new ActionLog();
-        actionLog.setActionKey(Strings.right(action, 128));
+        actionLog.setActionKey(Strings.right(action, 32));
         actionLog.setActionName(actionName);
         if (actionChannel == null && request == null) {
             throw new IllegalArgumentException("actionChannel和request不能同时为空");

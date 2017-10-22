@@ -73,7 +73,7 @@ public class OLogProperties implements InitializingBean {
 
   @Data
   public static class Storage {
-
+    private boolean enable = true;
     private Archive archive = new Archive();
   }
 

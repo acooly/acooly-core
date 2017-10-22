@@ -1,10 +1,10 @@
 package com.acooly.module.olog.collector.intercept;
 
 import com.acooly.core.common.web.support.JsonResult;
-import com.acooly.module.olog.collector.client.OlogClient;
+import com.acooly.module.olog.collector.OlogForwarder;
 import com.acooly.module.olog.collector.logger.OlogCollector;
 import com.acooly.module.olog.collector.logger.OlogTarget;
-import com.acooly.module.olog.facade.order.OlogOrder;
+import com.acooly.module.olog.facade.dto.OlogDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +28,10 @@ public class OlogHandleInterceptor extends HandlerInterceptorAdapter {
   public static final String EXECUTE_START_KEY = "ologExecuteStart";
 
   public static final String RESPONSE_BODY_KEY = "OlogHandleInterceptor.responseBody";
+  public static final String OLOG_DTO_KEY = "OlogHandleInterceptor.ologDto";
 
   @Resource private OlogCollector ologCollector;
-  @Autowired private OlogClient ologClient;
+  @Autowired private OlogForwarder ologClient;
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -65,12 +66,12 @@ public class OlogHandleInterceptor extends HandlerInterceptorAdapter {
               args,
               result,
               getExecuteTimes(request));
-      OlogOrder collected = ologCollector.collect(request, response, target);
+      OlogDTO collected = ologCollector.collect(request, response, target);
       if (collected != null) {
         if (!OlogHandleInterceptor.responseBody(request)) {
           ologClient.logger(collected);
         } else {
-          request.setAttribute("OlogOrder", collected);
+          request.setAttribute(OLOG_DTO_KEY, collected);
         }
       }
     } catch (Exception e) {

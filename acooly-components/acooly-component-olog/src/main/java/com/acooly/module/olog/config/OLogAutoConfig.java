@@ -21,6 +21,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -70,8 +71,15 @@ public class OLogAutoConfig {
   }
 
   @Configuration
+  @ConditionalOnProperty(value = "acooly.olog.storage.enable", matchIfMissing = true)
   @ComponentScan("com.acooly.module.olog.storage")
   public static class StorageConfig {
+    @Configuration
+    @ConditionalOnProperty(value = "dubbo.provider.enable")
+    @ImportResource("classpath:/META-INF/spring/olog-storage-dubbo.xml")
+    public static class StrageDubboConfig {
+
+    }
 
     @Bean
     public StandardDatabaseScriptIniter ologScriptIniter() {

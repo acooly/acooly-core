@@ -6,13 +6,12 @@ import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.mapper.JsonMapper;
-import com.acooly.module.olog.collector.client.OlogClient;
 import com.acooly.module.olog.collector.logger.OlogCollector;
 import com.acooly.module.olog.collector.logger.OlogTarget;
 import com.acooly.module.olog.collector.logger.operator.OlogOperator;
 import com.acooly.module.olog.collector.logger.operator.OperatorUserCollector;
 import com.acooly.module.olog.config.OLogProperties;
-import com.acooly.module.olog.facade.order.OlogOrder;
+import com.acooly.module.olog.facade.dto.OlogDTO;
 import com.google.common.collect.Maps;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.OperatingSystem;
@@ -40,13 +39,13 @@ public class HttpServletOlogCollector implements OlogCollector {
   @Autowired private OperatorUserCollector operatorUserCollector;
 
   @Override
-  public OlogOrder collect(
+  public OlogDTO collect(
       HttpServletRequest request, HttpServletResponse response, OlogTarget target) {
     return collect(request, response, target, null);
   }
 
   @Override
-  public OlogOrder collect(
+  public OlogDTO collect(
       HttpServletRequest request,
       HttpServletResponse response,
       OlogTarget target,
@@ -56,7 +55,7 @@ public class HttpServletOlogCollector implements OlogCollector {
       return null;
     }
     try {
-      OlogOrder olog = new OlogOrder();
+      OlogDTO olog = new OlogDTO();
       handleSystem(olog);
       handleModule(target, request, olog);
       handleAction(target, olog);
@@ -72,7 +71,7 @@ public class HttpServletOlogCollector implements OlogCollector {
     }
   }
 
-  protected void handleSystem(OlogOrder olog) {
+  protected void handleSystem(OlogDTO olog) {
     olog.setSystem(Apps.getAppName());
   }
 
@@ -82,7 +81,7 @@ public class HttpServletOlogCollector implements OlogCollector {
    * @param context
    * @param olog
    */
-  protected void handleContext(Map<String, Object> context, OlogOrder olog) {
+  protected void handleContext(Map<String, Object> context, OlogDTO olog) {
     if (context == null || context.size() == 0) {
       return;
     }
@@ -99,7 +98,7 @@ public class HttpServletOlogCollector implements OlogCollector {
    * @param request
    * @param olog
    */
-  protected void handleModule(OlogTarget target, HttpServletRequest request, OlogOrder olog) {
+  protected void handleModule(OlogTarget target, HttpServletRequest request, OlogDTO olog) {
     // Annotation方式标注模块和模块名称优先级高于配置
     OlogModule ologModule = target.getBean().getClass().getAnnotation(OlogModule.class);
     if (ologModule != null) {
@@ -133,7 +132,7 @@ public class HttpServletOlogCollector implements OlogCollector {
    *
    * @param target
    */
-  protected void handleAction(OlogTarget target, OlogOrder olog) {
+  protected void handleAction(OlogTarget target, OlogDTO olog) {
     // 获取Action和ActionName,Annotation优先于mapping配置
     String action = target.getMethod().getName();
     String actionName = getActionName(action);
@@ -156,7 +155,7 @@ public class HttpServletOlogCollector implements OlogCollector {
    * @param request
    * @param olog
    */
-  protected void handleOperater(HttpServletRequest request, OlogOrder olog) {
+  protected void handleOperater(HttpServletRequest request, OlogDTO olog) {
     OlogOperator ologOperator = operatorUserCollector.getOperatorUser(request);
     if (ologOperator != null) {
       olog.setOperateUserId(ologOperator.getOperatorUserId());
@@ -171,7 +170,7 @@ public class HttpServletOlogCollector implements OlogCollector {
    * @param target
    * @param olog
    */
-  protected void handleParameters(OlogTarget target, HttpServletRequest request, OlogOrder olog) {
+  protected void handleParameters(OlogTarget target, HttpServletRequest request, OlogDTO olog) {
     if (!oLogProperties.getCollector().isSaveParameter()) {
       return;
     }
@@ -186,13 +185,13 @@ public class HttpServletOlogCollector implements OlogCollector {
    * @param request
    * @param olog
    */
-  protected void handleClientInformations(HttpServletRequest request, OlogOrder olog) {
+  protected void handleClientInformations(HttpServletRequest request, OlogDTO olog) {
     if (request != null) {
       olog.setClientInformations(getClientInformations(request));
     }
   }
 
-  protected void handleResult(OlogTarget target, HttpServletRequest request, OlogOrder olog) {
+  protected void handleResult(OlogTarget target, HttpServletRequest request, OlogDTO olog) {
     olog.setExecuteMilliseconds(target.getExecuteMilliseconds());
     Object result = target.getResult();
 

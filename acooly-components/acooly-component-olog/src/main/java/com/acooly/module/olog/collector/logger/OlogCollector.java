@@ -1,5 +1,6 @@
 package com.acooly.module.olog.collector.logger;
 
+import com.acooly.module.olog.facade.dto.OlogDTO;
 import com.acooly.module.olog.facade.order.OlogOrder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +14,8 @@ import java.util.Map;
  */
 public interface OlogCollector {
 
-    OlogOrder collect(HttpServletRequest request, HttpServletResponse response, OlogTarget target,
-                      Map<String, Object> context);
+    OlogDTO collect(HttpServletRequest request, HttpServletResponse response, OlogTarget target,
+                    Map<String, Object> context);
 
-    OlogOrder collect(HttpServletRequest request, HttpServletResponse response, OlogTarget target);
+    OlogDTO collect(HttpServletRequest request, HttpServletResponse response, OlogTarget target);
 }

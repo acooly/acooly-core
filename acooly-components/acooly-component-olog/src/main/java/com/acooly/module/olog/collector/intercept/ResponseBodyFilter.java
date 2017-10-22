@@ -1,8 +1,8 @@
 package com.acooly.module.olog.collector.intercept;
 
 import com.acooly.core.utils.Strings;
-import com.acooly.module.olog.collector.client.OlogClient;
-import com.acooly.module.olog.facade.order.OlogOrder;
+import com.acooly.module.olog.collector.OlogForwarder;
+import com.acooly.module.olog.facade.dto.OlogDTO;
 import org.apache.commons.io.output.TeeOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -15,9 +15,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import static com.acooly.module.olog.collector.intercept.OlogHandleInterceptor.OLOG_DTO_KEY;
+
 /** @author qiubo@yiji.com */
 public class ResponseBodyFilter extends OncePerRequestFilter {
-  @Autowired private OlogClient ologClient;
+  @Autowired private OlogForwarder ologClient;
 
   @Override
   protected void doFilterInternal(
@@ -34,7 +36,7 @@ public class ResponseBodyFilter extends OncePerRequestFilter {
     } finally {
       if (OlogHandleInterceptor.responseBody(request)) {
         String body = new String(responseBodyWrapper.toByteArray(), "UTF-8");
-        OlogOrder ologOrder = (OlogOrder) request.getAttribute("OlogOrder");
+        OlogDTO ologOrder = (OlogDTO) request.getAttribute(OLOG_DTO_KEY);
         if (ologOrder != null) {
           ologOrder.setOperateMessage(Strings.abbreviate(body, 256));
           ologClient.logger(ologOrder);

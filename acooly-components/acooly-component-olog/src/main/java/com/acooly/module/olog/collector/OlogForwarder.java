@@ -9,6 +9,7 @@ import com.acooly.module.olog.facade.api.OlogFacade;
 import com.acooly.module.olog.facade.dto.OlogDTO;
 import com.acooly.module.olog.facade.order.OlogOrder;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Queues;
 import io.jsonwebtoken.lang.Assert;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,6 @@ import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -50,11 +50,12 @@ public class OlogForwarder implements InitializingBean {
         if (ClassUtils.isPresent(
             "com.acooly.module.dubbo.DubboAutoConfig",
             Apps.getApplicationContext().getClassLoader())) {
-            try {
-                ologFacade = new DubboOlogFacadeProvider().getOlogFacade();
-            } catch (Exception e1) {
-                throw new AppConfigException("olog storage dubbo 服务没有找到，请在boss中启用acooly.olog.storage.enable=true",e1);
-            }
+          try {
+            ologFacade = new DubboOlogFacadeProvider().getOlogFacade();
+          } catch (Exception e1) {
+            throw new AppConfigException(
+                "olog storage dubbo 服务没有找到，请在boss中启用acooly.olog.storage.enable=true", e1);
+          }
         }
       }
     }
@@ -86,7 +87,8 @@ public class OlogForwarder implements InitializingBean {
       while (true) {
         List<OlogDTO> orderList = Lists.newArrayListWithCapacity(maxBatchSize);
         try {
-          int takeCount = take(blockingQueue, orderList, maxBatchSize, 10, TimeUnit.SECONDS);
+          int takeCount =
+              Queues.drain(blockingQueue, orderList, maxBatchSize, 10, TimeUnit.SECONDS);
           if (takeCount == 0) {
             continue;
           }
@@ -100,41 +102,6 @@ public class OlogForwarder implements InitializingBean {
           // do nothing
         }
       }
-    }
-
-    public static <T> int take(
-        BlockingQueue<T> queue,
-        Collection<? super T> batch,
-        int maxBatchSize,
-        long maxLatency,
-        TimeUnit maxLatencyUnit)
-        throws InterruptedException {
-      long maxLatencyNanos = maxLatencyUnit.toNanos(maxLatency);
-
-      int curBatchSize = 0;
-      long stopBatchTimeNanos = -1;
-
-      while (true) {
-        if (stopBatchTimeNanos == -1) {
-          batch.add(queue.take());
-          curBatchSize++;
-          stopBatchTimeNanos = System.nanoTime() + maxLatencyNanos;
-        } else {
-          T element = queue.poll(stopBatchTimeNanos - System.nanoTime(), TimeUnit.NANOSECONDS);
-          if (element == null) {
-            break;
-          }
-          batch.add(element);
-          curBatchSize++;
-        }
-        curBatchSize += queue.drainTo(batch, maxBatchSize - curBatchSize);
-
-        if (curBatchSize >= maxBatchSize) {
-          break;
-        }
-      }
-
-      return curBatchSize;
     }
   }
 }

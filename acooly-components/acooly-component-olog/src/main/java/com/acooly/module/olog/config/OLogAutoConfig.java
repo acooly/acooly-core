@@ -97,7 +97,7 @@ public class OLogAutoConfig {
 
         @Override
         public List<String> getInitSqlFile() {
-          return Lists.newArrayList("olog");
+          return Lists.newArrayList("olog","olog_urls");
         }
       };
     }

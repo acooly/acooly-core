@@ -22,6 +22,7 @@
 
     acooly.olog.storage.enable=false
 
+如果启用了`acooly.security.enableSSOAuthzService=true`，可以不配置此值。
 
 ### 2.2 日志元数据配置
 

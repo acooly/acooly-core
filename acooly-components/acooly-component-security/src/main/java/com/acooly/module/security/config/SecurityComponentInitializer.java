@@ -34,6 +34,7 @@ public class SecurityComponentInitializer implements ComponentInitializer {
         System.setProperty(
             DUBBO_CUMSTOM_CONFIG_PACKAGE, dubboConfigPackage + "," + DUBBO_SSO_CONFIG_PACKAGE);
       }
+      setPropertyIfMissing("acooly.olog.storage.enable","false");
     }
   }
 }

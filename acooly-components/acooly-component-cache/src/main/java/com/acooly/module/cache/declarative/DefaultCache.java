@@ -14,6 +14,7 @@ import org.springframework.data.redis.cache.DefaultRedisCachePrefix;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.types.Expiration;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
 import java.util.Arrays;
@@ -85,10 +86,8 @@ public class DefaultCache implements Cache {
     doit(
         key,
         (conn, newkey) -> {
-          conn.set(newkey, valueRedisSerializer.serialize(value));
-          if (expiration > 0) {
-            conn.expire(newkey, DefaultCache.this.expiration);
-          }
+          conn.set(
+              newkey, valueRedisSerializer.serialize(value), Expiration.seconds(expiration), null);
           return null;
         });
   }

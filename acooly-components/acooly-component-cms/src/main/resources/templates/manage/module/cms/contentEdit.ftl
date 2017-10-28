@@ -41,6 +41,10 @@
             </tr>
             <#if RequestParameters.cmsType = 'banner'>
             <tr>
+                <th>简介：</th>
+                <td><textarea name="subject" cols="80" rows="2" style="width:700px;"></textarea></td>
+            </tr>
+            <tr>
                 <th>链接：</th>
                 <td><input type="text" style="width: 300px;" class="text" name="link" size="128" class="easyui-validatebox"
                            data-options="required:true" class="text" validType="byteLength[1,128]"/></td>

@@ -83,13 +83,23 @@ public class OrderCheckException extends IllegalArgumentException implements Mes
       } else {
         StringBuilder sb = new StringBuilder(errorMap.size() * 15);
         for (Map.Entry entry : errorMap.entrySet()) {
-          sb.append(entry.getKey()).append(":").append(entry.getValue()).append(",");
+          String key = nomalize(entry);
+          sb.append(key).append(":").append(entry.getValue()).append(",");
         }
         sb.deleteCharAt(sb.length() - 1);
         msg = sb.toString();
       }
     }
     return msg;
+  }
+
+  private String nomalize(Map.Entry entry) {
+    String key = entry.getKey().toString();
+    int index = key.indexOf("dto.");
+    if (index > -1) {
+      key = key.substring(index + 4, key.length());
+    }
+    return key;
   }
 
   @Override

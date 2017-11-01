@@ -27,7 +27,9 @@ public class SSOAutoConfig {
   @Bean
   public AuthenticationFilter ssoFilter() {
     AuthenticationFilter authenticationFilter = new AuthenticationFilter();
-    authenticationFilter.setSSOExcludeUrl(ssoProperties.getSsoExcludeUrl());
+    //修复上传组件flash无法加载
+    authenticationFilter.setSSOExcludeUrl(
+        ssoProperties.getSsoExcludeUrl() + ",/manage/assert/plugin/**");
     authenticationFilter.setLoginUrl(ssoProperties.getSsoServerUrl());
     return authenticationFilter;
   }

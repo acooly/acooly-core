@@ -1,6 +1,7 @@
 /** create by zhangpu date:2016年1月10日 */
 package com.acooly.module.appopenapi.support.login;
 
+import com.acooly.module.appopenapi.message.LoginRequest;
 import com.acooly.module.appopenapi.support.AppApiLoginService;
 import com.acooly.module.appopenapi.support.LoginDto;
 import org.slf4j.Logger;
@@ -22,6 +23,8 @@ public class AnonymousAppApiLoginService implements AppApiLoginService {
     LoginDto loginDto = new LoginDto();
     loginDto.setAccessKey(userName);
     loginDto.setCustomerId("0");
+    LoginRequest request = (LoginRequest) context.get("request");
+    loginDto.setExtJson(request.getExtJson());
     return loginDto;
   }
 }

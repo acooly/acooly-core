@@ -4,6 +4,8 @@ import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
 import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiResponse;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
@@ -13,6 +15,8 @@ import javax.validation.constraints.Size;
  *
  * @author zhangpu
  */
+@Setter
+@Getter
 @OpenApiMessage(service = "login", type = ApiMessageType.Response)
 public class LoginResponse extends ApiResponse {
 
@@ -30,27 +34,7 @@ public class LoginResponse extends ApiResponse {
   @OpenApiField(desc = "客户id", constraint = "客户id")
   private String customerId;
 
-  public String getAccessKey() {
-    return accessKey;
-  }
-
-  public void setAccessKey(String accessKey) {
-    this.accessKey = accessKey;
-  }
-
-  public String getSecretKey() {
-    return secretKey;
-  }
-
-  public void setSecretKey(String secretKey) {
-    this.secretKey = secretKey;
-  }
-
-  public String getCustomerId() {
-    return customerId;
-  }
-
-  public void setCustomerId(String customerId) {
-    this.customerId = customerId;
-  }
+  @NotEmpty
+  @OpenApiField(desc = "扩展字段", constraint = "响应扩展字段,Json格式")
+  private String extJson;
 }

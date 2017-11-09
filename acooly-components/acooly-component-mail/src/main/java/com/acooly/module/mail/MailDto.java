@@ -30,7 +30,11 @@ public class MailDto implements Serializable {
   @NotNull private String subject;
 
   private Map<String, String> params = Maps.newHashMap();
+
   @NotEmpty private String templateName;
+
+  /** 邮件附件 */
+  private List<MailAttachmentDto> attachments;
 
   public MailDto to(String to) {
     if (this.to == null) {
@@ -52,6 +56,14 @@ public class MailDto implements Serializable {
 
   public MailDto param(String key, String value) {
     this.params.put(key, value);
+    return this;
+  }
+
+  public MailDto addAttachment(MailAttachmentDto attachment) {
+    if (this.attachments == null) {
+      this.attachments = new ArrayList<>();
+    }
+    this.attachments.add(attachment);
     return this;
   }
 }

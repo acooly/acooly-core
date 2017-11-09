@@ -9,16 +9,26 @@
  */
 package com.acooly.module.mail.service.impl;
 
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.validate.Validators;
+import com.acooly.module.mail.MailAttachmentDto;
 import com.acooly.module.mail.MailDto;
 import com.acooly.module.mail.MailProperties;
 import com.acooly.module.mail.service.MailService;
+import com.acooly.module.ofile.OFileProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
+
+import java.io.*;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 /** @author qiubo@yiji.com */
 @Service
@@ -27,6 +37,7 @@ public class MailServiceImpl implements MailService {
   @Autowired private MailTemplateService mailTemplateService;
   @Autowired private MailProperties mailProperties;
   @Autowired private TaskExecutor taskExecutor;
+  @Autowired private OFileProperties ofileProperties;
 
   @Override
   public void send(MailDto dto) {
@@ -63,10 +74,70 @@ public class MailServiceImpl implements MailService {
       email.setSubject(dto.getSubject());
       email.setHtmlMsg(content);
       email.setCharset(mailProperties.getCharset());
+      //处理附件
+      List<MailAttachmentDto> attachments = dto.getAttachments();
+      if (attachments != null && attachments.size() > 0) {
+        for (MailAttachmentDto attachmentDto : attachments) {
+
+          EmailAttachment attachment = new EmailAttachment();
+          String fileName = attachmentDto.getName();
+          String filepath = getFilePath();
+          String storageFilePath = ofileProperties.getStorageRoot() + filepath;
+          String currentName = getCurrentName(fileName);
+
+          saveFile(attachmentDto, storageFilePath, currentName);
+
+          log.info("附件存储路径：{}", storageFilePath + currentName);
+          attachment.setPath(storageFilePath + currentName);
+          attachment.setDisposition(EmailAttachment.ATTACHMENT);
+          attachment.setDescription(attachmentDto.getDescription());
+          attachment.setName(attachmentDto.getName());
+
+          email.attach(attachment);
+        }
+      }
+
       email.send();
       log.info("发送邮件成功,{}", dto.toString());
     } catch (Exception e) {
       log.error("发送邮件失败", e);
     }
+  }
+
+
+  private void saveFile(MailAttachmentDto mailAttachmentDto, String filePath, String fileName) {
+    FileOutputStream fos = null;
+    InputStream is = null;
+    try {
+      File dir = new File(filePath);
+      if (!dir.exists()) {
+        dir.mkdirs();
+      }
+      is = new ByteArrayInputStream(mailAttachmentDto.getContent());
+      fos = new FileOutputStream(new File(filePath + fileName));
+      IOUtils.copy(is, fos);
+    } catch (IOException e) {
+      throw new BusinessException("附件传输失败", e);
+    } finally {
+      IOUtils.closeQuietly(fos);
+      IOUtils.closeQuietly(is);
+    }
+  }
+
+  private String getCurrentName(String fileName) {
+    return System.currentTimeMillis() + "_" + fileName;
+  }
+
+  private String getFilePath() {
+    Calendar calendar = new GregorianCalendar();
+    int year = calendar.get(Calendar.YEAR);
+    int month = calendar.get(Calendar.MONTH);
+    int date = calendar.get(Calendar.DATE);
+    String path = year + File.separator + month + File.separator + date + File.separator;
+    File dir = new File(path);
+    if (!dir.exists()) {
+      dir.mkdirs();
+    }
+    return path;
   }
 }

@@ -15,6 +15,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 /** @author qiubo@yiji.com */
 @Controller
@@ -22,10 +23,12 @@ public class FreemarkerController {
   @Autowired(required = false) private ServletContext servletContext;
 
   @RequestMapping("/testFtl")
-  public String testFtl(ModelMap modelMap) {
+  public String testFtl(HttpServletRequest request, ModelMap modelMap) {
     servletContext.setAttribute("xxx", "aaa");
     modelMap.put("name", "na");
     modelMap.put("message", "hi");
+    request.getSession().setAttribute("valueInSession","xx");
+    request.setAttribute("valueInRequest","valueInRequest");
     return "test";
   }
 

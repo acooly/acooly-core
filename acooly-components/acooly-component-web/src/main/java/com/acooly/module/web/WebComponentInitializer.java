@@ -23,6 +23,7 @@ public class WebComponentInitializer implements ComponentInitializer {
     setPropertyIfMissing("spring.freemarker.expose-session-attributes", false);
     setPropertyIfMissing("spring.freemarker.expose-request-attributes", false);
     setPropertyIfMissing("spring.freemarker.allow-session-override", false);
+    //org.springframework.web.servlet.support.RequestContext 对象在freemarker中的名称
     setPropertyIfMissing("spring.freemarker.request-context-attribute", "rc");
 
     // 设置session

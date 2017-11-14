@@ -81,6 +81,7 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
         }
         response.setAccessKey(appCustomer.getAccessKey());
         response.setSecretKey(appCustomer.getSecretKey());
+        response.setExtJson(dto.getExtJson());
       }
 
     } catch (Exception e) {

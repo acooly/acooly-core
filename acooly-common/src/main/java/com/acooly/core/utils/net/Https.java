@@ -49,8 +49,15 @@ import java.util.Map.Entry;
 /**
  * Http 客户端工具
  *
+ * @deprecated 请使用HttpRequest
+ * <p>
+ * 使用：{@link com.github.kevinsawicki.http.HttpRequest}
+ * <p>
+ * 文档： https://github.com/kevinsawicki/http-request
+ *
  * @author zhangpu
  */
+@Deprecated
 public class Https {
   /** 默认连接超时时间 10s */
   private static final int CONNECTION_TIMEOUT = 10000;

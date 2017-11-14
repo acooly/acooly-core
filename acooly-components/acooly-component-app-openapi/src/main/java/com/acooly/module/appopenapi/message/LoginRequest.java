@@ -6,6 +6,8 @@ import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
 import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiRequest;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
@@ -15,6 +17,8 @@ import javax.validation.constraints.Size;
  *
  * @author zhangpu
  */
+@Getter
+@Setter
 @OpenApiMessage(service = "login", type = ApiMessageType.Request)
 public class LoginRequest extends ApiRequest {
 
@@ -45,59 +49,7 @@ public class LoginRequest extends ApiRequest {
   @OpenApiField(desc = "设备标识")
   private String deviceId;
 
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public String getDeviceId() {
-    return deviceId;
-  }
-
-  public void setDeviceId(String deviceId) {
-    this.deviceId = deviceId;
-  }
-
-  public DeviceType getDeviceType() {
-    return deviceType;
-  }
-
-  public void setDeviceType(DeviceType deviceType) {
-    this.deviceType = deviceType;
-  }
-
-  public String getDeviceModel() {
-    return deviceModel;
-  }
-
-  public void setDeviceModel(String deviceModel) {
-    this.deviceModel = deviceModel;
-  }
-
-  public String getChannel() {
-    return channel;
-  }
-
-  public void setChannel(String channel) {
-    this.channel = channel;
-  }
-
-  public String getCustomerIp() {
-    return customerIp;
-  }
-
-  public void setCustomerIp(String customerIp) {
-    this.customerIp = customerIp;
-  }
+  @Size(max = 512)
+  @OpenApiField(desc = "请求扩展字段,Json格式")
+  private String extJson;
 }

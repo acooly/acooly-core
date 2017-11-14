@@ -26,7 +26,7 @@
 
 ### 2.2 日志元数据配置
 
-1. 通过在类上标注`@OlogModule`配置模块名称,也可通过`acooly.olog.collector.moduleNameMapping`
-2. 通过在类或者方法上标注`@Olog.Ignore`忽略日志收集
-3. 通过在方法上标注`@OlogAction`配置操作名称，也可以通过配置`acooly.olog.collector.actionNameMapping`
+1. 通过在Controller类上标注`@OlogModule`配置模块名称,也可通过`acooly.olog.collector.moduleNameMapping`
+2. 通过在Controller类或者方法上标注`@Olog.Ignore`忽略日志收集
+3. 通过在Controller方法上标注`@OlogAction`配置操作名称，也可以通过配置`acooly.olog.collector.actionNameMapping`
 

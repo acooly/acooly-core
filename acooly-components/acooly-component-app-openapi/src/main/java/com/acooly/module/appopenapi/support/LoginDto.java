@@ -9,4 +9,5 @@ import lombok.Setter;
 public class LoginDto extends DtoBase {
   private String accessKey;
   private String customerId;
+  private String extJson;
 }

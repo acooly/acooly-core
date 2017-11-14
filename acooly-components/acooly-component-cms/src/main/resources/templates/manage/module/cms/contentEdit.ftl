@@ -50,6 +50,11 @@
                            data-options="required:true" class="text" validType="byteLength[1,128]"/></td>
             </tr>
             <#else>
+                <tr>
+                    <th>链接：</th>
+                    <td><input type="text" style="width: 300px;" class="text" name="link" size="128" class="easyui-validatebox"
+                                class="text" validType="byteLength[1,128]"/></td>
+                </tr>
             <tr>
                 <td colspan="2">
                     <textarea id="contentId" name="contents" data-options="required:true"

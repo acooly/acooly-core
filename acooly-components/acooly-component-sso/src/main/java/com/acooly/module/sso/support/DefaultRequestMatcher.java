@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 public class DefaultRequestMatcher implements RequestMatcher {
 
   private static final String DEFAULT_IGNORE_URI =
-      "/security/config/index.html,/index.html,/manage/index.html,/manage/login.html,/manage/logout.html,/mgt/**,/**/*.js,/**/*.css,/**/*.ico,/**/*.jpg,/**/*.gif,/**/*.png,/**/*.map,/**/*.jsp,/**/*.woff2,/**/*.ttf";
+      "/security/config/index.html,/index.html,/manage/index.html,/manage/login.html,/manage/logout.html,/mgt/**,/**/*.js,/**/*.css,/**/*.ico,/**/*.jpg,/**/*.gif,/**/*.png,/**/*.map,/**/*.jsp,/**/*.woff2,/**/*.ttf,/**/*.swf";
   private Iterable<String> ignoreUrls;
   private AntPathMatcher antPathMatcher = new AntPathMatcher();
 

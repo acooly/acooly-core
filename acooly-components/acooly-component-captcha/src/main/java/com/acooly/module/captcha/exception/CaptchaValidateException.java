@@ -45,9 +45,7 @@ public class CaptchaValidateException extends BusinessException {
 
   @Override
   public String getMessage() {
-    return (resultCode != null ? resultCode : "")
-        + " "
-        + (resultMessage != null ? resultMessage : "")
+    return (resultMessage != null ? resultMessage : "")
         + (super.getMessage() != null ? ":" + super.getMessage() : "");
   }
 }

@@ -41,3 +41,76 @@ safety 安全组件
 }
 ```
 
+## 集成说明
+
+### 签名
+
+所有的签名/验签的接口都采用Singer接口实现，组件内置了标准通用的集中签名/验签实现。主要包括: MD5Hex,Sha1Hex,Sha256Hex,Rsa,Cert，你可以直接在你的系统中使用。如下：
+
+```java
+Safes.getSigner("MD5Hex").sign(plain,key);
+```
+
+如果组件内的实现不能满足你的需求，你需要进行如下扩展：
+
+1、在您的集成工程中新增CustomSigner实现Signer接口,假设provider为Custom
+2、把你实现的CustomSigner放置到当前spring容器
+3、采用上面通用的方法调用：Safes.getSigner("Custom")
+
+### 秘钥加载
+
+在简单情况下，你可以自己实现秘钥信息加载。比如，你可以通过配置文件的访问注入秘钥的信息，代码构建key(String,KeyStoreInfo或者KeyPair),然后用于签名或加密。
+
+在同一项目中使用多个相同的秘钥（典型场景：网关系统），你需要通过KeyLoader接口方式加载。具体来说，你需要根据秘钥类型不同，选择实现：
+
+* KeySimpleLoader : 外部动态加载（比如数据库）字符串秘钥（MD5等）
+* KeyPairLoader: 外部加载公私钥对秘钥信息
+* KeyStoreLoader: 外部加载Keystore和证书秘钥信息
+
+你的实现代码请参考：
+
+```java
+@Slf4j
+@Component
+public class EmptyKeyPairLoader extends AbstractKeyLoadManager<KeyStoreInfo> implements KeyStoreLoader {
+
+    @Override
+    public KeyStoreInfo doLoad(String principal) {
+        log.warn("KeyPairLoader的空实现，请在集成项目中实现：KeyPairLoader接口并配置到spring容器中");
+        throw new SafetyException(SafetyResultCode.NOT_EXSIST_KEYLOADER);
+    }
+
+    @Override
+    public String getProvider() {
+        return "EmptyKeyPairLoader";
+    }
+}
+```
+
+> 关键点：同一个目标集成系统中（比如网关系统），KeyLoader的provider必须唯一，否则会覆盖冲突。推荐命名方式：providerName_xxxx
+
+完成自定义KeyLoader的实现后，获取Key信息的方法同一如下：
+
+1、注入：KeyLoadManager的springBean
+2、调用：keyLoadManager.load("身份ID信息(比如：partnerId)","providerName")
+
+```java
+@Slf4j
+@SpringBootApplication
+@BootApp(sysName = "saftyTest")
+public class KeyLoadManagerTest extends AppTestBase {
+
+    static {
+        Apps.setProfileIfNotExists("sdev");
+    }
+
+    @Autowired
+    KeyLoadManager keyStoreLoadManager;
+
+
+    @Test
+    public void testLoadKeyStore() {
+        keyStoreLoadManager.load("123123123", "EmptyKeyStoreLoader");
+    }
+}
+```

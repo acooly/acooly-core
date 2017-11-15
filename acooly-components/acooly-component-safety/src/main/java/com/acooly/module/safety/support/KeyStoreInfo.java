@@ -4,7 +4,6 @@
  */
 package com.acooly.module.safety.support;
 
-import com.acooly.core.utils.Exceptions;
 import com.acooly.core.utils.security.RSA;
 import com.acooly.module.safety.exception.SafetyException;
 import com.acooly.module.safety.exception.SafetyResultCode;
@@ -64,10 +63,17 @@ public class KeyStoreInfo {
     private X509Certificate certificate;
 
     public KeyStoreInfo loadKeys() {
-        if (privateKey == null || certificate == null) {
+        if (privateKey == null) {
             synchronized (this) {
-                if (privateKey == null || certificate == null) {
-                    initKey();
+                if (privateKey == null) {
+                    loadPrivateKey();
+                }
+            }
+        }
+        if (certificate == null) {
+            synchronized (this) {
+                if (certificate == null) {
+                    loadCertificate();
                 }
             }
         }
@@ -76,18 +82,11 @@ public class KeyStoreInfo {
 
 
     protected void initKey() {
-        try {
-            this.privateKey = loadPrivateKey();
-            this.certificate = loadCertificate();
-            log.debug("加载证书成功。cert:{},privateKey:{}", this.certificate, this.privateKey);
-        } catch (Exception e) {
-            log.warn("加载证书失败。原因: {}", e.getMessage());
-            throw new SafetyException(SafetyResultCode.LOAD_KEY_ERROR, e.getMessage());
-        }
-
+        loadPrivateKey();
+        loadCertificate();
     }
 
-    private PrivateKey loadPrivateKey() {
+    private void loadPrivateKey() {
         InputStream in = null;
         try {
             KeyStore keyStore = KeyStore.getInstance(getKeyStoreType());
@@ -100,23 +99,29 @@ public class KeyStoreInfo {
             if (enumas.hasMoreElements()) {
                 keyAlias = enumas.nextElement();
             }
-            return (PrivateKey) keyStore.getKey(keyAlias, getKeyStorePassword().toCharArray());
+            PrivateKey privateKey = (PrivateKey) keyStore.getKey(keyAlias, getKeyStorePassword().toCharArray());
+            this.privateKey = privateKey;
+            log.debug("加载keystore私钥 - [成功] , privateKey:{}", this.privateKey);
         } catch (Exception e) {
-            throw Exceptions.unchecked(e);
+            log.warn("加载keystore私钥 - [失败] , 原因: {}", e.getMessage());
+            throw new SafetyException(SafetyResultCode.LOAD_KEYSTORE_PRIVATE_ERROR, e.getMessage());
         } finally {
             IOUtils.closeQuietly(in);
         }
     }
 
-    private X509Certificate loadCertificate() {
+    private void loadCertificate() {
         InputStream in = null;
         try {
             Resource resource = new DefaultResourceLoader().getResource(getCertificateUri());
             in = resource.getInputStream();
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
-            return (X509Certificate) cf.generateCertificate(in);
+            X509Certificate x509Certificate = (X509Certificate) cf.generateCertificate(in);
+            this.certificate = x509Certificate;
+            log.debug("加载证书 - [成功] , cert:{}", x509Certificate);
         } catch (Exception e) {
-            throw Exceptions.unchecked(e);
+            log.warn("加载证书 - [失败] , 原因: {}", e.getMessage());
+            throw new SafetyException(SafetyResultCode.LOAD_CERTIFICATE_ERROR, e.getMessage());
         } finally {
             IOUtils.closeQuietly(in);
         }

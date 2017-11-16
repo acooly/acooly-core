@@ -11,6 +11,9 @@ package com.acooly.module.safety.key;
 
 import com.acooly.module.safety.exception.SafetyException;
 import com.acooly.module.safety.exception.SafetyResultCode;
+import com.google.common.collect.Maps;
+
+import java.util.Map;
 
 /**
  * Key 加载抽象类
@@ -19,15 +22,17 @@ import com.acooly.module.safety.exception.SafetyResultCode;
  */
 public abstract class AbstractKeyLoadManager<T> implements KeyLoader<T> {
 
-    protected T t;
+    protected Map<String, T> caches = Maps.newHashMap();
 
     @Override
     public T load(String principal) {
         try {
+            T t = caches.get(principal);
             if (t == null) {
                 synchronized (this) {
                     if (t == null) {
                         t = doLoad(principal);
+                        caches.put(principal, t);
                     }
                 }
             }

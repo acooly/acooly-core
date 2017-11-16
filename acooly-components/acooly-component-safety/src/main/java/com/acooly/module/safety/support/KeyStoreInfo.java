@@ -23,7 +23,7 @@ import java.util.Enumeration;
  * @author zhangpu
  */
 @Slf4j
-public class KeyStoreInfo {
+public class KeyStoreInfo extends KeySupport {
 
     public static final String KEY_STORE_JKS = "JKS";
     public static final String KEY_STORE_PKCS12 = "PKCS12";

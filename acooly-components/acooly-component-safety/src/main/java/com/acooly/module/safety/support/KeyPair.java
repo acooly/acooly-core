@@ -10,9 +10,6 @@ package com.acooly.module.safety.support;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.security.RSA;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -21,7 +18,7 @@ import java.security.PublicKey;
  * @author zhangpu
  */
 @Slf4j
-public class KeyPair {
+public class KeyPair extends KeySupport {
 
 
     /**
@@ -87,32 +84,6 @@ public class KeyPair {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        }
-    }
-
-    /**
-     * load key content from keyfile or string
-     *
-     * @param key
-     * @param fileEncoding
-     * @return
-     */
-    protected String loadKeyContent(String key, String fileEncoding) {
-        if (!Strings.startsWith(key, "classpath")
-                && !Strings.startsWith(key, "file")
-                && !Strings.startsWith(key, "/")) {
-            return key;
-        }
-        if (Strings.isBlank(fileEncoding)) {
-            fileEncoding = "UTF-8";
-        }
-        try {
-            Resource resource = new DefaultResourceLoader().getResource(key);
-            String keyContent = IOUtils.toString(resource.getInputStream(), fileEncoding);
-            log.debug("load key from file:{}, content:\n{}", key, keyContent);
-            return keyContent;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 

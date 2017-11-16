@@ -75,10 +75,9 @@ public class BannerListApiService extends BaseApiService<BannerListRequest, Bann
             fullUrl = fullUrl + "/";
         }
         if (Strings.startsWith(url, "/")) {
-            url = url + Strings.removeStart(url, "/");
+            url = Strings.removeStart(url, "/");
         }
         fullUrl = fullUrl + url;
         return fullUrl;
     }
-
 }

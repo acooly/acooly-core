@@ -26,8 +26,7 @@ public class CertSigner extends AbstractSigner<String, KeyStoreInfo> {
     protected void doVerify(String waitForSign, KeyStoreInfo key, String sign) {
         try {
             X509Certificate x509Certificate = key.loadKeys().getCertificate();
-            System.out.println(x509Certificate.getSigAlgName());
-            Signature signature = Signature.getInstance(x509Certificate.getSigAlgName());
+            Signature signature = Signature.getInstance(key.getSignatureAlgo());
             signature.initVerify(x509Certificate.getPublicKey());
             signature.update(waitForSign.getBytes(key.getPlainEncode()));
             boolean result = signature.verify(key.getSignatureCodec().decode(sign));

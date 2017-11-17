@@ -14,12 +14,15 @@ import com.acooly.module.certification.enums.CertResult;
 import com.acooly.module.certification.utils.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.ConnectException;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -33,13 +36,13 @@ import java.util.Map;
 @Service("aliRealNameAuthentication")
 public class AliRealNameAuthentication implements RealNameAuthentication {
 
-    @Autowired
-    private CertificationProperties certificationProperties;
+  @Autowired private CertificationProperties certificationProperties;
 
-    private static Map<String, String> messages =
+  private static Map<String, String> messages =
       new LinkedHashMap<String, String>() {
         /** UId */
         private static final long serialVersionUID = -847699194658395108L;
+
         {
           put("0", "匹配");
           put("5", "不匹配");
@@ -62,7 +65,9 @@ public class AliRealNameAuthentication implements RealNameAuthentication {
     result.setRealName(realName);
     result.setIdCardNo(idCardNo);
     try {
-      Response response = HttpUtil.httpGet(host, path, certificationProperties.getRealname().getTimeout(), headers, querys);
+      Response response =
+          HttpUtil.httpGet(
+              host, path, certificationProperties.getRealname().getTimeout(), headers, querys);
       if (StringUtils.isNotBlank(response.getBody())) {
         JSONObject resultObj = JSON.parseObject(response.getBody());
         JSONObject resp = resultObj.getJSONObject("resp");
@@ -87,14 +92,22 @@ public class AliRealNameAuthentication implements RealNameAuthentication {
             response.getErrorMessage());
         throw new RealNameAuthenticationException(ResultStatus.failure.getCode(), "认证失败");
       }
-    } catch (ConnectTimeoutException e) {
-      log.warn("实名认证连接超时:{}", e.getMessage());
-      throw new RealNameAuthenticationException(ResultStatus.failure.getCode(), "连接超时");
     } catch (RealNameAuthenticationException e) {
       throw e;
     } catch (Exception e) {
-      log.warn("实名认证未知异常:{}", e.getMessage());
-      throw new RealNameAuthenticationException(ResultStatus.failure.getCode(), "未知异常");
+      log.info("实名认证未知异常:{}", e.getMessage());
+      Throwable throwable = Throwables.getRootCause(e);
+      if (throwable instanceof ConnectTimeoutException
+          || throwable instanceof java.net.SocketTimeoutException
+          || throwable instanceof ConnectException) {
+        throw new RealNameAuthenticationException(
+            ResultStatus.failure.getCode(), "连接超时:" + e.getMessage());
+      } else if (throwable instanceof UnknownHostException) {
+        throw new RealNameAuthenticationException(
+            ResultStatus.failure.getCode(), "UnknownHost:" + e.getMessage());
+      } else {
+        throw new RealNameAuthenticationException(ResultStatus.failure.getCode(), e.getMessage());
+      }
     }
     return result;
   }

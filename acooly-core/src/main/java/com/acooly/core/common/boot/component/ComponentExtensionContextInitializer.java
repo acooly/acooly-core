@@ -9,12 +9,10 @@
  */
 package com.acooly.core.common.boot.component;
 
-import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.listener.DevModeDetector;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -23,8 +21,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.io.support.SpringFactoriesLoader;
 
 import java.util.List;
-
-import static com.acooly.core.common.boot.listener.ExApplicationRunListener.COMPONENTS_PACKAGE;
 
 /** @author qiubo */
 @Order(value = Ordered.LOWEST_PRECEDENCE)

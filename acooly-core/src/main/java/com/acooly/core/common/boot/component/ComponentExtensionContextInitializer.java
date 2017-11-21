@@ -40,20 +40,6 @@ public class ComponentExtensionContextInitializer implements ApplicationContextI
       exclude = new String[0];
     }
     List<String> excludes = Lists.newArrayList(exclude);
-    SpringFactoriesLoader.loadFactoryNames(
-            EnableAutoConfiguration.class, applicationContext.getClassLoader())
-        .forEach(
-            autoConfiguration -> {
-              if (autoConfiguration.startsWith("com.acooly.core")) {
-                return;
-              }
-              if (autoConfiguration.startsWith("com.acooly")) {
-                if (!autoConfiguration.startsWith(COMPONENTS_PACKAGE)) {
-                  log.error("组件：{}没有遵循规范，必须放在{}子包", autoConfiguration, COMPONENTS_PACKAGE);
-                  Apps.shutdown();
-                }
-              }
-            });
     SpringFactoriesLoader.loadFactories(
             ComponentInitializer.class, applicationContext.getClassLoader())
         .forEach(

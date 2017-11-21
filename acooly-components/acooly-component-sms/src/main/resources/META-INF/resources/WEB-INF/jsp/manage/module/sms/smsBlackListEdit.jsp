@@ -7,7 +7,7 @@
         <table class="tableForm" width="100%">
             <br>
 			<tr>
-				<th width="25%">mobile：</th>
+				<th width="25%">手机号：</th>
 				<td><input type="text" name="mobile" size="38" class="easyui-validatebox text" data-options="required:true" validType="mobile" /></td>
 			</tr>					
 			<tr>
@@ -19,7 +19,7 @@
 				</select></td>
 			</tr>					
 			<tr>
-				<th>description：</th>
+				<th>描述：</th>
 				<td><textarea rows="3" cols="40" style="width:300px;" name="description" class="easyui-validatebox"  validType="byteLength[1,512]"></textarea></td>
 			</tr>					
         </table>

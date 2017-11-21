@@ -22,12 +22,14 @@ public class RealNameAuthenticationException extends BusinessException {
   public RealNameAuthenticationException(String resultCode, String resultMessage) {
     super();
     this.resultCode = resultCode;
+    this.setCode(resultCode);
     this.resultMessage = resultMessage;
   }
 
   public RealNameAuthenticationException(String resultCode, String resultMessage, String message) {
     super(message);
     this.resultCode = resultCode;
+    this.setCode(resultCode);
     this.resultMessage = resultMessage;
   }
 

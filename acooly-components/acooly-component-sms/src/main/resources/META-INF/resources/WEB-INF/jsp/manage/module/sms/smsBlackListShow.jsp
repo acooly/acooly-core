@@ -7,7 +7,7 @@
 		<td>${smsBlackList.id}</td>
 	</tr>					
 	<tr>
-		<th width="25%">mobile:</th>
+		<th width="25%">手机号:</th>
 		<td>${smsBlackList.mobile}</td>
 	</tr>					
 	<tr>
@@ -15,7 +15,7 @@
 		<td>${smsBlackList.status.message}</td>
 	</tr>					
 	<tr>
-		<th>description:</th>
+		<th>描述:</th>
 		<td>${smsBlackList.description}</td>
 	</tr>					
 	<tr>

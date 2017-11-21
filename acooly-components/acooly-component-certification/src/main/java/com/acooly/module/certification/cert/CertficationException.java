@@ -18,12 +18,14 @@ public class CertficationException extends BusinessException {
   public CertficationException(String resultCode, String resultMessage) {
     super();
     this.resultCode = resultCode;
+    this.setCode(resultCode);
     this.resultMessage = resultMessage;
   }
 
   public CertficationException(String resultCode, String resultMessage, String message) {
     super(message);
     this.resultCode = resultCode;
+    this.setCode(resultCode);
     this.resultMessage = resultMessage;
   }
 

@@ -9,12 +9,15 @@ import com.acooly.module.certification.enums.BankCardResult;
 import com.acooly.module.certification.utils.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.ConnectException;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -57,18 +60,26 @@ public class AliBankCardCertServiceImpl implements BankCardCertService {
     BankCardResult result;
     try {
       Response response =
-          HttpUtil.httpGet(certUrl, path, certificationProperties.getBankcert().getTimeout(), headers, params);
+          HttpUtil.httpGet(
+              certUrl, path, certificationProperties.getBankcert().getTimeout(), headers, params);
 
       result = unmashall(response);
 
-    } catch (ConnectTimeoutException e) {
-      log.warn("银行卡二三四要素校验连接超时:{}", e.getMessage());
-      throw new CertficationException(ResultStatus.failure.getCode(), "连接超时");
     } catch (CertficationException e) {
       throw e;
     } catch (Exception e) {
-      log.warn("银行卡二三四要素校验未知异常:{}", e.getMessage());
-      throw new CertficationException(ResultStatus.failure.getCode(), "未知异常");
+      log.info("银行卡二三四要素校验异常:{}", e.getMessage());
+      Throwable throwable = Throwables.getRootCause(e);
+      if (throwable instanceof ConnectTimeoutException
+          || throwable instanceof java.net.SocketTimeoutException
+          || throwable instanceof ConnectException) {
+        throw new CertficationException(ResultStatus.failure.getCode(), "连接超时:" + e.getMessage());
+      } else if (throwable instanceof UnknownHostException) {
+        throw new CertficationException(
+            ResultStatus.failure.getCode(), "UnknownHost:" + e.getMessage());
+      } else {
+        throw new CertficationException(ResultStatus.failure.getCode(), e.getMessage());
+      }
     }
     return result;
   }
@@ -76,7 +87,8 @@ public class AliBankCardCertServiceImpl implements BankCardCertService {
   private BankCardResult unmashall(Response response) throws CertficationException {
 
     if (StringUtils.isEmpty(response.getBody())) {
-      throw new CertficationException(ResultStatus.failure.getCode(), "银行卡二三四要素校验返回空:"+response.getErrorMessage());
+      throw new CertficationException(
+          ResultStatus.failure.getCode(), "银行卡二三四要素校验返回空:" + response.getErrorMessage());
     }
 
     BankCardResult result = new BankCardResult();
@@ -118,7 +130,7 @@ public class AliBankCardCertServiceImpl implements BankCardCertService {
       } else {
         result.setStatus(ResultStatus.failure);
         result.setDetail(notNullmsg);
-        log.info("银行卡二三四要素校验失败：{},{}", notNullmsg,result);
+        log.info("银行卡二三四要素校验失败：{},{}", notNullmsg, result);
       }
     }
     return result;

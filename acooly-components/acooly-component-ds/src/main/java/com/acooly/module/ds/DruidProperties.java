@@ -13,6 +13,8 @@ package com.acooly.module.ds;
 import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.exception.AppConfigException;
+import com.acooly.core.common.facade.InfoBase;
+import com.acooly.core.utils.ToString;
 import com.acooly.module.ds.check.DBPatch;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.vendor.OracleValidConnectionChecker;
@@ -33,7 +35,7 @@ import java.util.Properties;
 @ConfigurationProperties(prefix = DruidProperties.PREFIX)
 @Getter
 @Setter
-public class DruidProperties implements BeanClassLoaderAware {
+public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
 
   public static final String PREFIX = "acooly.ds";
   public static final String ENABLE_KEY = PREFIX + ".enable";
@@ -56,6 +58,7 @@ public class DruidProperties implements BeanClassLoaderAware {
   private String username;
 
   /** 必填：数据库密码 */
+  @ToString.Maskable(maskAll = true)
   private String password;
 
   /** 初始连接数 */
@@ -73,12 +76,6 @@ public class DruidProperties implements BeanClassLoaderAware {
   /** 慢sql日志阈值，超过此值则打印日志 */
   private Integer slowSqlThreshold = DEFAULT_SLOW_SQL_THRESHOLD;
 
-  /** 大结果集阈值，超过此值则打印日志 */
-  private Integer maxResultThreshold = 1000;
-
-  /** 是否在非线上环境开启打印sql，默认开启 */
-  private boolean showSql = true;
-
   private boolean testOnBorrow = false;
 
   private boolean useTomcatDataSource = false;
@@ -87,10 +84,11 @@ public class DruidProperties implements BeanClassLoaderAware {
   private boolean autoCreateTable = true;
 
   /** 检查表是否缺少某些字段，如果缺少，启动报错。 */
+  @ToString.Invisible
   private Map<String, DBPatch> dbPatchs;
-
+  @ToString.Invisible
   private ClassLoader beanClassLoader;
-
+  @ToString.Invisible
   private Checker checker = new Checker();
 
   public static String normalizeUrl(String url) {

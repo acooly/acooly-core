@@ -408,19 +408,21 @@ public abstract class AbstractFileOperationController<
                 value = Strings.trimToEmpty(entityData.get(cellNum));
                 cell = row.createCell(cellNum);
                 // 简单特殊操作处理一些特殊的数字，不采用反射和类型判断处理。
-                if (Strings.isNumber(value)) {
-                    if (Strings.length(value) > 1
-                            && Strings.startsWith(value, "0")
-                            && !Strings.startsWith(value, "0.")) {
-                        cell.setCellValue(value);
-                    } else if (Strings.length(value) > 11) {
-                        cell.setCellValue(value);
-                    } else {
-                        cell.setCellValue(Double.valueOf(value));
-                    }
-                } else {
-                    cell.setCellValue(value);
-                }
+//                if (Strings.isNumber(value)) {
+//                    if (Strings.length(value) > 1
+//                            && Strings.startsWith(value, "0")
+//                            && !Strings.startsWith(value, "0.")) {
+//                        cell.setCellValue(value);
+//                    } else if (Strings.length(value) > 11) {
+//                        cell.setCellValue(value);
+//                    } else {
+//                        cell.setCellValue(Double.valueOf(value));
+//                    }
+//                } else {
+//                    cell.setCellValue(value);
+//                }
+                //防止出现excel科学计算法，都用string代替
+                cell.setCellValue(value);
             }
             rowNum = rowNum + 1;
         }

@@ -12,8 +12,6 @@ package com.acooly.module.safety.test;
 import com.acooly.core.common.BootApp;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.module.safety.key.KeyLoadManager;
-import com.acooly.module.safety.support.KeyPair;
-import com.acooly.module.safety.support.KeyStoreInfo;
 import com.acooly.module.test.AppTestBase;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;

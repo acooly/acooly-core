@@ -12,7 +12,9 @@ package com.acooly.module.safety.key.impl;
 import com.acooly.module.safety.exception.SafetyException;
 import com.acooly.module.safety.exception.SafetyResultCode;
 import com.acooly.module.safety.key.AbstractKeyLoadManager;
+import com.acooly.module.safety.key.KeyPairLoader;
 import com.acooly.module.safety.key.KeyStoreLoader;
+import com.acooly.module.safety.support.KeyPair;
 import com.acooly.module.safety.support.KeyStoreInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,10 +26,10 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class EmptyKeyPairLoader extends AbstractKeyLoadManager<KeyStoreInfo> implements KeyStoreLoader {
+public class EmptyKeyPairLoader extends AbstractKeyLoadManager<KeyPair> implements KeyPairLoader {
 
     @Override
-    public KeyStoreInfo doLoad(String principal) {
+    public KeyPair doLoad(String principal) {
         log.warn("KeyPairLoader的空实现，请在集成项目中实现：KeyPairLoader接口并配置到spring容器中");
         throw new SafetyException(SafetyResultCode.NOT_EXSIST_KEYLOADER);
     }

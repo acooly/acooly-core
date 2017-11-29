@@ -12,7 +12,6 @@ package com.acooly.core.test.web;
 import com.acooly.core.test.dao.AppDao;
 import com.acooly.core.test.domain.App;
 import com.acooly.core.test.domain.City;
-import com.acooly.core.utils.Money;
 import com.acooly.module.certification.CertificationService;
 import com.acooly.module.mail.MailDto;
 import com.acooly.module.mail.service.MailService;
@@ -36,6 +35,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 /** @author qiubo@yiji.com */
 @RestController

@@ -13,8 +13,9 @@ import com.google.common.collect.Queues;
 import io.jsonwebtoken.lang.Assert;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
@@ -25,7 +26,7 @@ import java.util.concurrent.*;
 /** @author qiubo@yiji.com */
 @Component
 @Slf4j
-public class OlogForwarder implements InitializingBean {
+public class OlogForwarder implements ApplicationListener<ContextRefreshedEvent> {
   private static int maxBatchSize = 100;
   private OlogFacade ologFacade;
   private BlockingQueue<OlogDTO> blockingQueue;
@@ -41,7 +42,7 @@ public class OlogForwarder implements InitializingBean {
   }
 
   @Override
-  public void afterPropertiesSet() throws Exception {
+  public void onApplicationEvent(ContextRefreshedEvent event) {
     try {
       ologFacade = Apps.getApplicationContext().getBean(OlogFacade.class);
     } catch (Exception e) {

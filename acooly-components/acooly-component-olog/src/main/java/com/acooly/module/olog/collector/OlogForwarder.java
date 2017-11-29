@@ -57,6 +57,10 @@ public class OlogForwarder implements InitializingBean {
                 "olog storage dubbo 服务没有找到，请在boss中启用acooly.olog.storage.enable=true", e1);
           }
         }
+        throw new AppConfigException(
+                "olog storage dubbo 服务没有找到，请在boss中启用acooly.olog.storage.enable=true",e);
+      }else{
+        throw new AppConfigException(e);
       }
     }
     Assert.notNull(ologFacade);

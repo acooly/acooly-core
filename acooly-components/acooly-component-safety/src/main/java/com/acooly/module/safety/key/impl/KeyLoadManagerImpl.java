@@ -47,8 +47,8 @@ public class KeyLoadManagerImpl implements KeyLoadManager, InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Map<String, KeyStoreLoader> map = Apps.getApplicationContext().getBeansOfType(KeyStoreLoader.class);
-        for (Map.Entry<String, KeyStoreLoader> entry : map.entrySet()) {
+        Map<String, KeyLoader> map = Apps.getApplicationContext().getBeansOfType(KeyLoader.class);
+        for (Map.Entry<String, KeyLoader> entry : map.entrySet()) {
             if (Strings.equals(entry.getValue().getProvider(), SYSTEM_INTENER_PROVIDER)) {
                 continue;
             }

@@ -11,6 +11,7 @@ package com.acooly.module.sms.sender.impl;
 
 import com.acooly.module.sms.SmsProperties;
 import com.acooly.module.sms.sender.ShortMessageSender;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -40,5 +41,9 @@ public abstract class AbstractShortMessageSender implements ShortMessageSender, 
     posfix = smsProperties.getPosfix();
     prefix = smsProperties.getPrefix();
     timeout = smsProperties.getTimeout();
+  }
+
+  protected String getContent(String content) {
+    return StringUtils.trimToEmpty(prefix) + content + StringUtils.trimToEmpty(posfix);
   }
 }

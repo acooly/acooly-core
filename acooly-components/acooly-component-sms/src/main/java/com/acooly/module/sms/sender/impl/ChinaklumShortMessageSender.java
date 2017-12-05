@@ -139,8 +139,4 @@ public class ChinaklumShortMessageSender extends AbstractShortMessageSender {
   public String getProvider() {
     return "重庆客亲通";
   }
-
-  private String getContent(String content) {
-    return StringUtils.trimToEmpty(prefix) + content + StringUtils.trimToEmpty(posfix);
-  }
 }

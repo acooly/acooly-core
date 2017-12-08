@@ -101,6 +101,12 @@ public class SmsProperties {
       Assert.hasText(this.cl253plus.getPswd());
     }
 
+    if (this.provider == Provider.CL253Json) {
+      Assert.notNull(this.getUrl(), "请求地址不能为空");
+      Assert.hasText(this.getUsername(), "账户不能为空");
+      Assert.hasText(this.getPassword(), "密码不能为空");
+    }
+
     if (this.provider == Provider.Aliyun) {
       Assert.notNull(this.aliyun);
       Assert.hasText(this.aliyun.getAccessKeyId());
@@ -126,6 +132,8 @@ public class SmsProperties {
     CL253("cl253ShortMessageSender", "创蓝253"),
     /** 创蓝253 2.0接口 */
     CL253Plus("cl253PlusShortMessageSender", "创蓝253 2.0接口"),
+    /** 创蓝253 Json接口 */
+    CL253Json("cl253JsonShortMessageSender", "创蓝253 Json接口"),
     /** 阿里云 */
     Aliyun("aliyunMessageSender", "阿里云"),
     /** 容联.云通讯 */

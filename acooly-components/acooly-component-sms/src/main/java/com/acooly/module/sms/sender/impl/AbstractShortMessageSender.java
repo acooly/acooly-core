@@ -44,6 +44,6 @@ public abstract class AbstractShortMessageSender implements ShortMessageSender, 
   }
 
   protected String getContent(String content) {
-    return StringUtils.trimToEmpty(prefix) + content + StringUtils.trimToEmpty(posfix);
+    return StringUtils.trimToEmpty(prefix) + content + " " + StringUtils.trimToEmpty(posfix);
   }
 }

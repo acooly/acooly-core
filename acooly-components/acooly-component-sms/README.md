@@ -82,11 +82,23 @@ acooly.sms.cloopen.accountToken=54b8454ee795*****f386582305b7fe
 acooly.sms.cloopen.appId=8aaf07085b8e61*****b8f6274f40111
 ```    
 
-4. 创蓝253 2.0接口
+7. 创蓝253 2.0接口
 ```
 acooly.sms.provider=cl253plus
 acooly.sms.cl253plus.account=xxx
 acooly.sms.cl253plus.pswd=xxx
+```
+8. 创蓝253 Json接口
+
+```
+acooly.sms.provider=cl253json
+acooly.sms.username=N6743116
+acooly.sms.password=acQfyo9Z6k8d01
+acooly.sms.url=http://smssh1.253.com/msg/send/json
+# 前缀就是短信签名，需要后台审核通过，配置中文需转为unicode
+acooly.sms.prefix=\u89c2\u4e16\u5b87
+# 短信后缀 选填
+acooly.sms.posfix=\u6536\u5230\u8bf7\u56de\u590d
 ```
 ### 2.4 注意
    

@@ -92,8 +92,8 @@ acooly.sms.cl253plus.pswd=xxx
 
 ```
 acooly.sms.provider=cl253json
-acooly.sms.username=N6743116
-acooly.sms.password=acQfyo9Z6k8d01
+acooly.sms.username=N674***
+acooly.sms.password=acQfyo9Z***
 acooly.sms.url=http://smssh1.253.com/msg/send/json
 # 前缀就是短信签名，需要后台审核通过，配置中文需转为unicode
 acooly.sms.prefix=\u89c2\u4e16\u5b87

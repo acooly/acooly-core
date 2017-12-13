@@ -6,6 +6,7 @@ package com.acooly.core.common.boot;
 
 import com.acooly.core.common.boot.listener.ExApplicationRunListener;
 import com.acooly.core.common.exception.AppConfigException;
+import com.acooly.core.utils.Strings;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
@@ -35,6 +36,8 @@ public class Apps {
 
   private static Boolean isTest = null;
 
+  public static String logBasePath=null;
+
   public static String getAppName() {
     String name = System.getProperty(APP_NAME);
     if (name == null) {
@@ -48,7 +51,15 @@ public class Apps {
     if (logPath != null) {
       return logPath;
     }
-    logPath = "/var/log/webapps/" + getAppName() + "/";
+    if(logBasePath==null){
+      String tmp=System.getProperty("logBasePath");
+      if (Strings.isNotBlank(tmp)) {
+        logBasePath=tmp;
+      }else{
+        logBasePath="/var/log/webapps/";
+      }
+    }
+    logPath = logBasePath + getAppName() + "/";
     return logPath;
   }
 

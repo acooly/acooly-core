@@ -55,6 +55,10 @@ public class SecurityProperties {
 
     /** 是否启用shiro */
     private boolean enable = true;
+    /**
+     * 当盐为空时，使用md5来校验(password存储的是密码的md5)
+     */
+    private boolean enableBlankSaltUseMd5Matcher=false;
 
     /** 登录页面链接 */
     private String loginUrl = "/manage/login.html";

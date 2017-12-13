@@ -47,7 +47,7 @@ public class ShortMessageSendException extends RuntimeException {
 
   @Override
   public String getMessage() {
-    return (resultMessage != null ? resultMessage : "")
+    return (resultCode != null ? resultCode : "")
         + (super.getMessage() != null ? ":" + super.getMessage() : "");
   }
 }

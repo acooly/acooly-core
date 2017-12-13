@@ -184,8 +184,9 @@ public class EmayShortMessageSender extends AbstractShortMessageSender {
     }
   }
 
-  private String getContent(String content) {
-    return properties.getEmay().getSign() + content;
+  @Override
+  protected String getContent(String content) {
+    return properties.getEmay().getSign() + content + posfix;
   }
 
   @Override

@@ -162,8 +162,4 @@ public class MaidaoShortMessageSender extends AbstractShortMessageSender {
   private String getSign(String user, String pswd) {
     return StringUtils.upperCase(DigestUtils.md5Hex(user + pswd));
   }
-
-  private String getContent(String content) {
-    return StringUtils.trimToEmpty(prefix) + content + StringUtils.trimToEmpty(posfix);
-  }
 }

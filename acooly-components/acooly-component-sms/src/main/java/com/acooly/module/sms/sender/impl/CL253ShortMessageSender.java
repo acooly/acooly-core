@@ -127,7 +127,8 @@ public class CL253ShortMessageSender extends AbstractShortMessageSender {
     return "创蓝253";
   }
 
-  private String getContent(String content) {
-    return properties.getCl253().getSign() + content;
+  @Override
+  protected String getContent(String content) {
+    return properties.getCl253().getSign() + content + posfix;
   }
 }

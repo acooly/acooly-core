@@ -10,9 +10,11 @@ import com.acooly.module.security.config.FrameworkPropertiesHolder;
 import com.acooly.module.security.dao.UserDao;
 import com.acooly.module.security.domain.User;
 import com.acooly.module.security.dto.UserDto;
+import com.acooly.module.security.service.OrgService;
 import com.acooly.module.security.service.UserService;
 import com.acooly.module.security.utils.Digests;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authc.AuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ public class UserServiceImpl extends EntityServiceImpl<User, UserDao> implements
 
     @Autowired
     private FrameworkProperties frameworkProperties;
+    @Autowired
+    private OrgService orgService;
 
     @Override
     public User findUserByUsername(String username) {
@@ -40,7 +44,13 @@ public class UserServiceImpl extends EntityServiceImpl<User, UserDao> implements
     public User getAndCheckUser(String username) {
         User user = getEntityDao().getAuthenticateUser(username);
         if (user.getStatus() != User.STATUS_ENABLE) {
-            throw new BusinessException("用户状态不可用");
+            throw new AuthenticationException("用户状态不可用");
+        }
+        //用户织机构无效情况,组织机构无效，下面所有子机构用户无法登录
+        if (user.getOrgId() != null) {
+            if (!orgService.checkOrgValid(user.getOrgId())) {
+                throw new AuthenticationException("你织机构已失效,无法登录,请联系管理员");
+            }
         }
         return user;
     }

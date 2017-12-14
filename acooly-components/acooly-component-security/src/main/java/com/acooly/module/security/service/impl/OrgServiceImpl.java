@@ -9,6 +9,7 @@ package com.acooly.module.security.service.impl;
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.module.security.dao.OrgDao;
 import com.acooly.module.security.domain.Org;
+import com.acooly.module.security.enums.OrgStatus;
 import com.acooly.module.security.service.OrgService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -27,6 +28,8 @@ import java.util.Set;
  */
 @Service("orgService")
 public class OrgServiceImpl extends EntityServiceImpl<Org, OrgDao> implements OrgService {
+
+  public static final Long ROOT_PARENT_ID=0L;
 
   @Override
   public Map<Long, Object> getOrganizeInfo(long parentId) {
@@ -58,7 +61,7 @@ public class OrgServiceImpl extends EntityServiceImpl<Org, OrgDao> implements Or
     Set<Long> mapKey = maps.keySet();
     for (Long keyId : mapKey) {
       Org organize = maps.get(keyId);
-      if (orgId == 0 && organize.getParentId() == 0) {
+      if (orgId == ROOT_PARENT_ID && organize.getParentId() == ROOT_PARENT_ID) {
         // 传入orgId=0时，查询所有节点
         result.add(organize);
       } else if (organize.getId().longValue() == orgId.longValue()) {
@@ -79,5 +82,29 @@ public class OrgServiceImpl extends EntityServiceImpl<Org, OrgDao> implements Or
       }
     }
     return result;
+  }
+
+  @Override
+  public boolean checkOrgValid(Long orgId) {
+    List<Org> organizeList = getEntityDao().getAll();
+    Map<Long, Org> maps = Maps.newHashMap();
+    for (Org organize : organizeList) {
+      maps.put(organize.getId(), organize);
+    }
+    return isValid(orgId, maps);
+  }
+
+  private boolean isValid(Long orgId, Map<Long, Org> orgMaps) {
+
+    if (orgId == ROOT_PARENT_ID) {
+      return true;
+    }
+    Org rorg = orgMaps.get(orgId);
+    if (rorg.getStatus() == OrgStatus.invalid) {
+      return false;
+    } else if (rorg.getParentId() != null) {
+      return isValid(rorg.getParentId(), orgMaps);
+    }
+    return true;
   }
 }

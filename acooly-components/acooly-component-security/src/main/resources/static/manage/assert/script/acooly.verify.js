@@ -24,7 +24,11 @@ var acooly_verify = {
     },
 
     cert: function (value) {
-        return /^\d{6}[1,2]{1}\d{3}(0+[1-9]|10|11|12)([0,1,2]+[1-9]|30|31)\d{3}[\d,X,x]{1}$/.test(value);
+        //(15位)
+        isIDCard1=/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/;
+        //(18位)
+        isIDCard2=/^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[A-Z])$/;
+        return isIDCard1.test(value)||isIDCard2.test(value);
     },
 
     phone: function (value) {

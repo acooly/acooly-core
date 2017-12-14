@@ -3,10 +3,13 @@ package com.acooly.module.security.shiro.realm;
 import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.utils.Encodes;
 import com.acooly.module.security.config.FrameworkProperties;
+import com.acooly.module.security.config.SecurityProperties;
 import com.acooly.module.security.domain.Resource;
 import com.acooly.module.security.domain.Role;
 import com.acooly.module.security.domain.User;
 import com.acooly.module.security.service.UserService;
+import com.google.common.base.Charsets;
+import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -19,7 +22,9 @@ import org.apache.shiro.util.ByteSource;
 import org.apache.shiro.web.subject.support.WebDelegatingSubject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +39,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
   public static final String IS_FUNCTION_PREFIX = "IS_FUNCTION_PREFIX";
   private static final Logger logger = LoggerFactory.getLogger(ShiroDbRealm.class);
   protected UserService userService;
+  @Autowired private SecurityProperties securityProperties;
 
   /** 设定Password校验的Hash算法与迭代次数. */
   @PostConstruct
@@ -56,13 +62,15 @@ public class ShiroDbRealm extends AuthorizingRealm {
     UsernamePasswordToken captchaToken = (UsernamePasswordToken) token;
     User user = getUserService().getAndCheckUser(captchaToken.getUsername());
     if (user != null) {
-      //设置用户
+      // 设置用户
       SecurityUtils.getSubject().getSession().setAttribute(SESSION_USER, user);
-
-      byte[] salt = Encodes.decodeHex(user.getSalt());
-      logger.debug("load user info from database. token --> " + token);
-      return new SimpleAuthenticationInfo(
-          user, user.getPassword(), ByteSource.Util.bytes(salt), getName());
+      if (Strings.isNullOrEmpty(user.getSalt())) {
+        return new SimpleAuthenticationInfo(user, user.getPassword(), null, getName());
+      } else {
+        byte[] salt = Encodes.decodeHex(user.getSalt());
+        return new SimpleAuthenticationInfo(
+            user, user.getPassword(), ByteSource.Util.bytes(salt), getName());
+      }
     } else {
       return null;
     }
@@ -130,5 +138,29 @@ public class ShiroDbRealm extends AuthorizingRealm {
       }
     }
     return contextPath + StringUtils.left(resource, resource.lastIndexOf("/") + 1) + "*";
+  }
+
+  @Override
+  protected void assertCredentialsMatch(AuthenticationToken token, AuthenticationInfo info)
+      throws AuthenticationException {
+    if (securityProperties.getShiro().isEnableBlankSaltUseMd5Matcher()) {
+      if (info instanceof SimpleAuthenticationInfo) {
+        ByteSource credentialsSalt = ((SimpleAuthenticationInfo) info).getCredentialsSalt();
+        if (credentialsSalt == null) {
+          Object credentials = info.getCredentials();
+          String hashed =
+              DigestUtils.md5DigestAsHex(
+                  new String((char[]) token.getCredentials()).getBytes(Charsets.UTF_8));
+          if (credentials.equals(hashed)) {
+            return;
+          }
+        }
+      }
+      String msg =
+          "Submitted credentials for token [" + token + "] did not match the expected credentials.";
+      throw new IncorrectCredentialsException(msg);
+    } else {
+      super.assertCredentialsMatch(token, info);
+    }
   }
 }

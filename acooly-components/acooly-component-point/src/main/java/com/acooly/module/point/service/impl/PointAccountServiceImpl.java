@@ -38,7 +38,7 @@ public class PointAccountServiceImpl extends EntityServiceImpl<PointAccount, Poi
   @Override
   @Transactional
   public PointAccount pointProduce(String userName, long point) {
-    PointAccount pointAccount = findByUserName(userName);
+    PointAccount pointAccount = findByUserNameForUpdate(userName);
     if (pointAccount == null) {
       pointAccount = new PointAccount();
       pointAccount.setUserName(userName);
@@ -61,7 +61,7 @@ public class PointAccountServiceImpl extends EntityServiceImpl<PointAccount, Poi
   @Override
   @Transactional
   public PointAccount pointExpense(String userName, long point, boolean isFreeze) {
-    PointAccount pointAccount = findByUserName(userName);
+    PointAccount pointAccount = findByUserNameForUpdate(userName);
     if (pointAccount == null) {
       throw new BusinessException(userName + "积分账户不存在,无法完成积分消费");
     }
@@ -85,7 +85,7 @@ public class PointAccountServiceImpl extends EntityServiceImpl<PointAccount, Poi
   @Override
   @Transactional
   public PointAccount pointFreeze(String userName, long point) {
-    PointAccount pointAccount = findByUserName(userName);
+    PointAccount pointAccount = findByUserNameForUpdate(userName);
     if (pointAccount == null) {
       throw new BusinessException(userName + "积分账户不存在,无法冻结");
     }
@@ -100,7 +100,7 @@ public class PointAccountServiceImpl extends EntityServiceImpl<PointAccount, Poi
   @Override
   @Transactional
   public PointAccount pointUnfreeze(String userName, long point) {
-    PointAccount pointAccount = findByUserName(userName);
+    PointAccount pointAccount = findByUserNameForUpdate(userName);
     if (pointAccount == null) {
       throw new BusinessException(userName + "积分账户不存在,无法解冻");
     }
@@ -122,4 +122,9 @@ public class PointAccountServiceImpl extends EntityServiceImpl<PointAccount, Poi
     }
     return pointRank;
   }
+    
+    @Override
+    public PointAccount findByUserNameForUpdate (String userName) {
+        return getEntityDao ().findByUserNameForUpdate (userName);
+    }
 }

@@ -74,3 +74,6 @@ acooly-components/acooly-component-openapi/target/
 acooly-components/acooly-component-app/src/test/
 acooly-components/acooly-component-lottery/src/test/
 acooly-components/acooly-component-portlet/src/test/
+.classpath
+.project
+.sts4-cache/

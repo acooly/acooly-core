@@ -100,6 +100,9 @@ public class OrgServiceImpl extends EntityServiceImpl<Org, OrgDao> implements Or
       return true;
     }
     Org rorg = orgMaps.get(orgId);
+    if(rorg == null){
+        return false;
+    }
     if (rorg.getStatus() == OrgStatus.invalid) {
       return false;
     } else if (rorg.getParentId() != null) {

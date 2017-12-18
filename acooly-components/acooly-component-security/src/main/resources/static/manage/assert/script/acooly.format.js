@@ -117,9 +117,9 @@
 			if (html.length > maxSize) {
 				temp = html.substring(0, maxSize);
 				html = '<div style="cursor: pointer;" title="' + html
-						+ '" onclick="$(this).children().toggle()">' + temp
-						+ '<span>...</span><span style="display:none;">' + html
-						+ '</span></div>';
+						+ '" onclick="$(this).children().toggle()">'
+						+ '<span>'+temp+'...</span><span style="display:none;">' + html
+						+ '</div>';
 			}
 			return html;
 		},

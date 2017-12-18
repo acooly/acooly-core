@@ -37,4 +37,12 @@ public interface PointAccountService extends EntityService<PointAccount> {
    * @return
    */
   public int pointRank(String userName, Long gradeId);
+    
+    
+    /**
+     * 根据用户名查询积分账户 并上锁
+     * @param userName
+     * @return
+     */
+  PointAccount findByUserNameForUpdate(String userName);
 }

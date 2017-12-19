@@ -153,14 +153,16 @@ public class ShiroDbRealm extends AuthorizingRealm {
                   new String((char[]) token.getCredentials()).getBytes(Charsets.UTF_8));
           if (credentials.equals(hashed)) {
             return;
+          } else {
+            String msg =
+                "Submitted credentials for token ["
+                    + token
+                    + "] did not match the expected credentials.";
+            throw new IncorrectCredentialsException(msg);
           }
         }
       }
-      String msg =
-          "Submitted credentials for token [" + token + "] did not match the expected credentials.";
-      throw new IncorrectCredentialsException(msg);
-    } else {
-      super.assertCredentialsMatch(token, info);
     }
+    super.assertCredentialsMatch(token, info);
   }
 }

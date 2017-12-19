@@ -7,7 +7,7 @@ $(function() {
 var manage_role_resource_tree_setting = {
 	check:{
 		enable: true,
-		chkboxType:{ "Y" : "ps", "N" : "ps" }
+		chkboxType:{ "Y" : "ps", "N" : "s" }
 	},
 	callback:{
   		onClick:function(event,treeId,treeNode,clickFlag){

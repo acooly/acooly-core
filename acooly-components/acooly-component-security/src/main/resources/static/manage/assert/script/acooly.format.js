@@ -116,10 +116,10 @@
 				maxSize = 20;
 			if (html.length > maxSize) {
 				temp = html.substring(0, maxSize);
-				html = '<div style="cursor: pointer;" title="' + html
-						+ '" onclick="$(this).children().toggle()">'
-						+ '<span>'+temp+'...</span><span style="display:none;">' + html
-						+ '</div>';
+				html = '<div style="cursor: pointer;" title="' + html + '" >'
+                    + '<label>'+temp+'...&nbsp;<i class="fa fa-angle-double-down" aria-hidden="true" onclick="$(this).parent().parent().children().toggle()"></i></label>'
+                    + '<label style="display:none;">' + html
+                    + '&nbsp;<i class="fa fa-angle-double-up" aria-hidden="true" onclick="$(this).parent().parent().children().toggle()"></i></label></div>';
 			}
 			return html;
 		},

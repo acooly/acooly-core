@@ -18,7 +18,9 @@ import java.util.concurrent.TimeUnit;
 public class EventBus<T> extends MBassador<T> implements InitializingBean {
 
   private TransactionTemplate transactionTemplate;
-  @Autowired private PlatformTransactionManager platformTransactionManager;
+
+  @Autowired(required = false)
+  private PlatformTransactionManager platformTransactionManager;
 
   public EventBus() {}
 
@@ -32,16 +34,18 @@ public class EventBus<T> extends MBassador<T> implements InitializingBean {
 
   /** 仅当当前事务提交成功后才发布消息,非事务环境直接发布消息 */
   public void publishAfterTransactionCommitted(T message) {
-    if (TransactionSynchronizationManager.isSynchronizationActive()) {
+    if (TransactionSynchronizationManager.isSynchronizationActive()
+        && transactionTemplate != null) {
       TransactionSynchronizationManager.registerSynchronization(
           new TransactionSynchronizationAdapter() {
             @Override
             public void afterCompletion(int status) {
               if (status == TransactionSynchronization.STATUS_COMMITTED) {
-                  transactionTemplate.execute(status1 -> {
+                transactionTemplate.execute(
+                    status1 -> {
                       EventBus.this.publish(message);
                       return null;
-                  });
+                    });
               }
             }
           });
@@ -76,10 +80,15 @@ public class EventBus<T> extends MBassador<T> implements InitializingBean {
 
   @Override
   public void afterPropertiesSet() throws Exception {
-    DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
-    defaultTransactionDefinition.setPropagationBehavior(
-        TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-    transactionTemplate =
-        new TransactionTemplate(platformTransactionManager, defaultTransactionDefinition);
+    if (platformTransactionManager != null) {
+      DefaultTransactionDefinition defaultTransactionDefinition =
+          new DefaultTransactionDefinition();
+      defaultTransactionDefinition.setPropagationBehavior(
+          TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+      transactionTemplate =
+          new TransactionTemplate(platformTransactionManager, defaultTransactionDefinition);
+    }else{
+      log.warn("spring事务管理器不存在，publishAfterTransactionCommitted方法不会绑定到事务中!");
+    }
   }
 }

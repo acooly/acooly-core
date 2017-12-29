@@ -12,7 +12,9 @@
    * `acooly.sso.ssoExcludeUrl=/manage/logout.html,/manage/error/**` 可选，不需要登录认证的地址，ant路径匹配规则， 用,分割[Ant-style path patterns](https://github.com/spring-projects/spring-framework/blob/master/spring-core/src/test/java/org/springframework/util/AntPathMatcherTests.java)
    * `acooly.sso.AuthorizationCacheTime=15` 可选，客户端资源权限缓存时间，在主boss验证资源用户的资源权限后缓存的时间,单位分钟,默认10分钟
    * `acooly.sso.enableDubboAuthz=true` 可选，启用dubbo方式去主boss校验资源权限，启用情况需要项目主动依赖dubbo组件`acooly-component-dubbo`，默认false采用http请求主boss校验资源权限
-    
+ 
+* PS: 当使用dubbo作为权限校验时候，主boss应用必须开启服务提供者，配置：`acooly.security.enableSSOAuthzService=true`。需要单点登录的子系统配置:`acooly.sso.enableDubboAuthz=true`
+                                            `
 ## 3. 子系统集成单点登录步骤
 
 1. 业务页面引入公共静态文件(只需要主页面添加，如：point.jsp需要添加，子页面pointEidt.jsp,pointImport.jsp,pointShow.jsp不用添加)

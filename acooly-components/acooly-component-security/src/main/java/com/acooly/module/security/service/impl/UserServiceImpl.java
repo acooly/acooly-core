@@ -13,6 +13,8 @@ import com.acooly.module.security.dto.UserDto;
 import com.acooly.module.security.service.OrgService;
 import com.acooly.module.security.service.UserService;
 import com.acooly.module.security.utils.Digests;
+import com.google.common.base.Charsets;
+import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.slf4j.Logger;
@@ -20,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 import java.util.Date;
 import java.util.Map;
@@ -60,7 +63,7 @@ public class UserServiceImpl extends EntityServiceImpl<User, UserDao> implements
         checkUnique(user);
         try {
             if (StringUtils.isNotBlank(user.getPassword())) {
-                entryptPassword(user);
+                entryptPassword(user,true);
             }
 
             if (FrameworkPropertiesHolder.get().isExpire()) {
@@ -96,7 +99,7 @@ public class UserServiceImpl extends EntityServiceImpl<User, UserDao> implements
     public void changePassword(User user, String newPassword) throws BusinessException {
         if (StringUtils.isNotBlank(newPassword)) {
             user.setPassword(newPassword);
-            entryptPassword(user);
+            entryptPassword(user,false);
             if (FrameworkPropertiesHolder.get().isExpire()) {
                 user.setExpirationTime(
                         Dates.addDay(new Date(), FrameworkPropertiesHolder.get().getExpireDays()));
@@ -114,20 +117,28 @@ public class UserServiceImpl extends EntityServiceImpl<User, UserDao> implements
         return entryptPassword(plaintPassword, user.getSalt()).equals(user.getPassword());
     }
 
-    /**
-     * 设定安全的密码，生成随机的salt并经过1024次 sha-1 hash
-     *
-     * @param user
-     */
-    private void entryptPassword(User user) {
-        byte[] salt = Digests.generateSalt(SALT_SIZE);
-        user.setSalt(Encodes.encodeHex(salt));
-        user.setPassword(entryptPassword(user.getPassword(), Encodes.encodeHex(salt)));
+  /**
+   * 设定安全的密码，生成随机的salt并经过1024次 sha-1 hash
+   *
+   * @param user
+   */
+  private void entryptPassword(User user, boolean isCreate) {
+    if (Strings.isNullOrEmpty(user.getSalt()) && !isCreate) {
+      user.setPassword(entryptPassword(user.getPassword(), user.getSalt()));
+    } else {
+      byte[] salt = Digests.generateSalt(SALT_SIZE);
+      user.setSalt(Encodes.encodeHex(salt));
+      user.setPassword(entryptPassword(user.getPassword(), Encodes.encodeHex(salt)));
     }
+  }
 
     private String entryptPassword(String plainPassword, String salt) {
-        return Encodes.encodeHex(
+        if (Strings.isNullOrEmpty(salt)) {
+           return DigestUtils.md5DigestAsHex(plainPassword.getBytes(Charsets.UTF_8));
+        }else {
+            return Encodes.encodeHex(
                 Digests.sha1(plainPassword.getBytes(), Encodes.decodeHex(salt), HASH_INTERATIONS));
+        }
     }
 
     private void checkUnique(User user) {

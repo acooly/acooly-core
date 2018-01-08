@@ -114,6 +114,8 @@ public class User extends AbstractEntity {
      */
     private int loginStatus;
 
+    private String roleDescn;
+
     /**
      * default constructor
      */

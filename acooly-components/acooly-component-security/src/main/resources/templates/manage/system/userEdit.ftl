@@ -80,8 +80,8 @@
 				</tr>-->
 
                 <tr>
-                    <th>所属角色</th>
-                    <td><input  class="easyui-combobox" name="role" style="height: 30px;" data-options="
+                    <th>角色</th>
+                    <td><input  class="easyui-combobox"  name="role" style="height: 30px;" data-options="
                     url:'/manage/system/role/rolesList.html',
                     method:'get',
                     valueField:'id',
@@ -96,7 +96,7 @@
 
                 <tr>
                     <th>所属机构</th>
-                    <td><input type="text" editable="false"  name="orgId" id="orgEdit"
+                    <td><input type="text" editable="false"  name="orgId" id="orgEdit" style="height: 30px;"
                                class="easyui-combobox"/></td>
                 </tr>
 				<tr>

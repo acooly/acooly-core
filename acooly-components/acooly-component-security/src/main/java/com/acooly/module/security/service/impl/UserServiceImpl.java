@@ -16,8 +16,6 @@ import com.acooly.module.security.service.UserService;
 import com.acooly.module.security.utils.Digests;
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.slf4j.Logger;
@@ -208,7 +206,8 @@ public class UserServiceImpl extends EntityServiceImpl<User, UserDao> implements
   private void removedDuplicateUser(PageInfo<UserDto> pageInfo) {
     List<UserDto> pageResults = pageInfo.getPageResults();
     Set<String> tmpset = new HashSet<>();
-    Map<Long, UserDto> removedDuplicate = Maps.newHashMap();
+    Map<Long, UserDto> removedDuplicate = new TreeMap<>();
+    Collections.sort(pageResults, Comparator.comparing(UserDto::getRoleDescn));
     for (UserDto user : pageResults) {
       if (tmpset.add(user.getUsername())) {
         removedDuplicate.put(user.getId(), user);

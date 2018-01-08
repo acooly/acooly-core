@@ -4,6 +4,7 @@ import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.MappingMethod;
+import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.mapper.JsonMapper;
@@ -70,6 +71,19 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
     return result;
   }
 
+  @RequestMapping(value = "updateJson")
+  @ResponseBody
+  public JsonEntityResult<User> updateJson(
+      HttpServletRequest request, HttpServletResponse response) {
+    JsonEntityResult<User> result = new JsonEntityResult<>();
+    JsonEntityResult<User> updateJson = super.updateJson(request, response);
+    User entity = updateJson.getEntity();
+    entity.setRoleDescn(getRoleDescns(entity.getId()));
+    result.setEntity(entity);
+    result.setMessage("更新成功！");
+    return result;
+  }
+
   @Override
   protected PageInfo getPageInfo(HttpServletRequest request) {
     PageInfo pageinfo = new PageInfo();
@@ -133,20 +147,6 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
     return result;
   }
 
-  @RequestMapping(value = {"getRoleIds"})
-  @ResponseBody
-  public String getRoleIdsByUserId(
-      HttpServletRequest request, HttpServletResponse response, Long userId) {
-    List<Long> list = Lists.newArrayList();
-    try {
-      List<UserRole> roleIds = getEntityService().getRoleIdsByUserId(userId);
-      roleIds.forEach(id -> list.add(id.getRoleId()));
-    } catch (Exception e) {
-      handleException("查询角色", e, request);
-    }
-    return JsonMapper.nonDefaultMapper().toJson(list);
-  }
-
   private String getRoleIds(Long userId) {
     List<Long> list = Lists.newArrayList();
     try {
@@ -156,6 +156,16 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
       log.error("查询角色失败", e);
     }
     return JsonMapper.nonDefaultMapper().toJson(list);
+  }
+
+  private String getRoleDescns(Long userId) {
+    String res = "";
+    List<UserRole> roleIds = getEntityService().getRoleIdsByUserId(userId);
+    for (UserRole userRole : roleIds) {
+      Role role = roleService.get(Long.valueOf(userRole.getRoleId()));
+      res = res + "," + role.getDescn();
+    }
+    return res.length() > 1 ? res.substring(1, res.length()) : res;
   }
 
   @Override
@@ -203,14 +213,14 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
     model.put("PASSWORD_REGEX", FrameworkPropertiesHolder.get().getPasswordRegex());
     model.put("PASSWORD_ERROR", FrameworkPropertiesHolder.get().getPasswordError());
     String id = request.getParameter(getEntityIdName());
-    model.put("roleIds", id == null ? "" : getRoleIds(Long.valueOf(id)));
+    model.put("roleIds", id == null ? "[]" : getRoleIds(Long.valueOf(id)));
   }
 
   private Set<Role> loadRoleFormRequest(HttpServletRequest request) {
     Set<Role> roles = new HashSet<>();
     String[] roleArray = request.getParameterValues("role");
     if (roleArray == null) {
-        throw new BusinessException("用户角色必选，请选择对应用户角色");
+      throw new BusinessException("用户角色必选，请选择对应用户角色");
     }
     List<String> rolelist = new ArrayList<>();
     for (int i = 0; i < roleArray.length; i++) {

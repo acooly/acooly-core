@@ -23,36 +23,37 @@ import java.util.Date;
 @Setter
 public class UserDto {
 
-    private Long id;
+  private Long id;
 
-    private String username;
+  private String username;
 
-    private String realName;
+  private String realName;
 
-    private String email;
+  private String email;
 
-    private String mobileNo;
+  private String mobileNo;
 
-    private int userType;
+  private int userType;
 
-    private Date createTime = new Date();
+  private Date createTime = new Date();
 
-    private Date lastModifyTime = new Date();
+  private Date lastModifyTime = new Date();
 
-    private Date unlockTime;
+  private Date unlockTime;
 
-    private int status;
+  private int status;
 
-    private String descn;
+  private String descn;
 
-    private Long orgId;
+  private Long orgId;
 
-    private String orgName;
+  private String orgName;
 
-    private Long roleId;
+  private Long roleId;
 
-    private String roleName;
+  private String roleName;
 
-    private String roleDescn;
+  private String roleDescn;
 
+  private String rolesIdStr;
 }

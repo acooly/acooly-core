@@ -5,15 +5,19 @@ import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.MappingMethod;
 import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.common.web.support.JsonResult;
+import com.acooly.core.utils.mapper.JsonMapper;
 import com.acooly.module.security.config.FrameworkPropertiesHolder;
 import com.acooly.module.security.config.SecurityProperties;
 import com.acooly.module.security.domain.Org;
 import com.acooly.module.security.domain.Role;
 import com.acooly.module.security.domain.User;
 import com.acooly.module.security.dto.UserDto;
+import com.acooly.module.security.dto.UserRole;
 import com.acooly.module.security.service.OrgService;
 import com.acooly.module.security.service.RoleService;
 import com.acooly.module.security.service.UserService;
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -29,175 +33,197 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
+@Slf4j
 @SuppressWarnings("unchecked")
 @Controller
 @RequestMapping(value = "/manage/system/user")
 @ConditionalOnProperty(
-        value = SecurityProperties.PREFIX + ".shiro.auth.enable",
-        matchIfMissing = true
+  value = SecurityProperties.PREFIX + ".shiro.auth.enable",
+  matchIfMissing = true
 )
 public class UserController extends AbstractJQueryEntityController<User, UserService> {
 
-    private static Map<Integer, String> allUserTypes = FrameworkPropertiesHolder.get().getUserTypes();
-    private static Map<Integer, String> allStatus = FrameworkPropertiesHolder.get().getUserStatus();
+  private static Map<Integer, String> allUserTypes = FrameworkPropertiesHolder.get().getUserTypes();
+  private static Map<Integer, String> allStatus = FrameworkPropertiesHolder.get().getUserStatus();
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private RoleService roleService;
-    @Autowired
-    private OrgService orgService;
+  @Autowired private UserService userService;
+  @Autowired private RoleService roleService;
+  @Autowired private OrgService orgService;
 
-    @RequestMapping(value = {"listUser"})
-    @ResponseBody
-    public JsonListResult<UserDto> listUser(HttpServletRequest request, HttpServletResponse response) {
-        JsonListResult<UserDto> result = new JsonListResult<UserDto>();
-        allow(request, response, MappingMethod.list);
-        try {
-            result.appendData(referenceData(request));
-            PageInfo<UserDto> pageInfo = getEntityService().queryDto(getPageInfo(request), getSearchParams(request), getSortMap(request));
-            result.setTotal(pageInfo.getTotalCount());
-            result.setRows(pageInfo.getPageResults());
-        } catch (Exception e) {
-            handleException(result, "分页查询", e);
-        }
-        return result;
+  @RequestMapping(value = {"listUser"})
+  @ResponseBody
+  public JsonListResult<UserDto> listUser(
+      HttpServletRequest request, HttpServletResponse response) {
+    JsonListResult<UserDto> result = new JsonListResult<UserDto>();
+    allow(request, response, MappingMethod.list);
+    try {
+      result.appendData(referenceData(request));
+      PageInfo<UserDto> pageInfo =
+          getEntityService()
+              .queryDto(getPageInfo(request), getSearchParams(request), getSortMap(request));
+      result.setTotal(pageInfo.getTotalCount());
+      result.setRows(pageInfo.getPageResults());
+    } catch (Exception e) {
+      handleException(result, "分页查询", e);
+    }
+    return result;
+  }
+
+  @Override
+  protected PageInfo getPageInfo(HttpServletRequest request) {
+    PageInfo pageinfo = new PageInfo();
+    pageinfo.setCountOfCurrentPage(getDefaultPageSize());
+    String page = request.getParameter("page");
+    if (StringUtils.isNotBlank(page)) {
+      pageinfo.setCurrentPage(Integer.parseInt(page));
+    }
+    String rows = request.getParameter("rows");
+    if (StringUtils.isNotBlank(rows)) {
+      pageinfo.setCountOfCurrentPage(Integer.parseInt(rows));
+    }
+    return pageinfo;
+  }
+
+  @RequestMapping(value = "alreadyExists")
+  @ResponseBody
+  public String alreadyExists(HttpServletRequest request, HttpServletResponse response) {
+    String username = request.getParameter("username");
+    try {
+      User user = getEntityService().getAndCheckUser(username);
+      if (user != null) {
+        return "true";
+      } else {
+        return "false";
+      }
+    } catch (Exception e) {
+      return "true";
+    }
+  }
+
+  @RequestMapping(value = "showChangePassword")
+  public String showChangePassword(
+      @ModelAttribute("loadEntity") User entity,
+      Model model,
+      HttpServletRequest request,
+      HttpServletResponse response) {
+    try {
+      model.addAttribute(getEntityName(), loadEntity(request));
+    } catch (Exception e) {
+      handleException("修改密码界面", e, request);
     }
 
-    @Override
-    protected PageInfo getPageInfo(HttpServletRequest request) {
-        PageInfo pageinfo = new PageInfo();
-        pageinfo.setCountOfCurrentPage(getDefaultPageSize());
-        String page = request.getParameter("page");
-        if (StringUtils.isNotBlank(page)) {
-            pageinfo.setCurrentPage(Integer.parseInt(page));
-        }
-        String rows = request.getParameter("rows");
-        if (StringUtils.isNotBlank(rows)) {
-            pageinfo.setCountOfCurrentPage(Integer.parseInt(rows));
-        }
-        return pageinfo;
+    String url = getRequestMapperValue() + "Password";
+    return url;
+  }
+
+  @RequestMapping(value = "changePassword")
+  @ResponseBody
+  public JsonResult changePassword(
+      HttpServletRequest request, HttpServletResponse response, Model model) {
+    String newPassword = request.getParameter("newPassword");
+    JsonResult result = new JsonResult();
+    try {
+      User entity = loadEntity(request);
+      getEntityService().changePassword(entity, newPassword);
+      result.setMessage("密码修改成功");
+    } catch (Exception e) {
+      handleException(result, "修改用户密码", e);
+    }
+    return result;
+  }
+
+  @RequestMapping(value = {"getRoleIds"})
+  @ResponseBody
+  public String getRoleIdsByUserId(
+      HttpServletRequest request, HttpServletResponse response, Long userId) {
+    List<Long> list = Lists.newArrayList();
+    try {
+      List<UserRole> roleIds = getEntityService().getRoleIdsByUserId(userId);
+      roleIds.forEach(id -> list.add(id.getRoleId()));
+    } catch (Exception e) {
+      handleException("查询角色", e, request);
+    }
+    return JsonMapper.nonDefaultMapper().toJson(list);
+  }
+
+  private String getRoleIds(Long userId) {
+    List<Long> list = Lists.newArrayList();
+    try {
+      List<UserRole> roleIds = getEntityService().getRoleIdsByUserId(userId);
+      roleIds.forEach(id -> list.add(id.getRoleId()));
+    } catch (Exception e) {
+      log.error("查询角色失败", e);
+    }
+    return JsonMapper.nonDefaultMapper().toJson(list);
+  }
+
+  @Override
+  protected User doSave(
+      HttpServletRequest request, HttpServletResponse response, Model model, boolean isCreate)
+      throws Exception {
+    User entity = loadEntity(request);
+    if (entity == null) {
+      entity = getEntityClass().newInstance();
+    }
+    doDataBinding(request, entity);
+    onSave(request, response, model, entity, isCreate);
+    if (isCreate) {
+      getEntityService().createUser(entity);
+    } else {
+      getEntityService().updateUser(entity);
     }
 
-    @RequestMapping(value = "alreadyExists")
-    @ResponseBody
-    public String alreadyExists(HttpServletRequest request, HttpServletResponse response) {
-        String username = request.getParameter("username");
-        try {
-            User user = getEntityService().getAndCheckUser(username);
-            if (user != null) {
-                return "true";
-            } else {
-                return "false";
-            }
-        } catch (Exception e) {
-            return "true";
-        }
+    return entity;
+  }
+
+  @Override
+  protected User onSave(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      Model model,
+      User entity,
+      boolean isCreate)
+      throws Exception {
+    entity.setRoles(loadRoleFormRequest(request));
+    entity.setLastModifyTime(new Date());
+    if (entity.getOrgId() != null) {
+      Org organize = orgService.get(entity.getOrgId());
+      entity.setOrgName(organize.getName());
     }
+    return entity;
+  }
 
-    @RequestMapping(value = "showChangePassword")
-    public String showChangePassword(
-            @ModelAttribute("loadEntity") User entity,
-            Model model,
-            HttpServletRequest request,
-            HttpServletResponse response) {
-        try {
-            model.addAttribute(getEntityName(), loadEntity(request));
-        } catch (Exception e) {
-            handleException("修改密码界面", e, request);
-        }
+  @Override
+  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+    model.put("allStatus", allStatus);
+    model.put("allUserTypes", allUserTypes);
+    List<Role> list = roleService.getAll();
+    model.put("allRoles", list);
+    model.put("PASSWORD_REGEX", FrameworkPropertiesHolder.get().getPasswordRegex());
+    model.put("PASSWORD_ERROR", FrameworkPropertiesHolder.get().getPasswordError());
+    String id = request.getParameter(getEntityIdName());
+    model.put("roleIds", id == null ? "" : getRoleIds(Long.valueOf(id)));
+  }
 
-        String url = getRequestMapperValue() + "Password";
-        return url;
+  private Set<Role> loadRoleFormRequest(HttpServletRequest request) {
+    String[] roleArray = request.getParameterValues("role");
+    List<String> rolelist = new ArrayList<>();
+    for (int i = 0; i < roleArray.length; i++) {
+      rolelist.add(roleArray[i]);
     }
-
-    @RequestMapping(value = "changePassword")
-    @ResponseBody
-    public JsonResult changePassword(
-            HttpServletRequest request, HttpServletResponse response, Model model) {
-        String newPassword = request.getParameter("newPassword");
-        JsonResult result = new JsonResult();
-        try {
-            User entity = loadEntity(request);
-            getEntityService().changePassword(entity, newPassword);
-            result.setMessage("密码修改成功");
-        } catch (Exception e) {
-            handleException(result, "修改用户密码", e);
-        }
-        return result;
+    Set<Role> roles = new HashSet<Role>();
+    for (String roleid : rolelist) {
+      Role role = roleService.get(Long.valueOf(roleid));
+      roles.add(role);
     }
+    return roles;
+  }
 
-    @Override
-    protected User doSave(
-            HttpServletRequest request, HttpServletResponse response, Model model, boolean isCreate)
-            throws Exception {
-        User entity = loadEntity(request);
-        if (entity == null) {
-            entity = getEntityClass().newInstance();
-        }
-        doDataBinding(request, entity);
-        onSave(request, response, model, entity, isCreate);
-        if (isCreate) {
-            getEntityService().createUser(entity);
-        } else {
-            getEntityService().updateUser(entity);
-        }
-
-        return entity;
-    }
-
-    @Override
-    protected User onSave(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            Model model,
-            User entity,
-            boolean isCreate)
-            throws Exception {
-        entity.setRoles(loadRoleFormRequest(request));
-        entity.setLastModifyTime(new Date());
-        if (entity.getOrgId() != null) {
-            Org organize = orgService.get(entity.getOrgId());
-            entity.setOrgName(organize.getName());
-        }
-        return entity;
-    }
-
-    @Override
-    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-        model.put("allStatus", allStatus);
-        model.put("allUserTypes", allUserTypes);
-        List<Role> list = roleService.getAll();
-        model.put("allRoles", list);
-        model.put("PASSWORD_REGEX", FrameworkPropertiesHolder.get().getPasswordRegex());
-        model.put("PASSWORD_ERROR", FrameworkPropertiesHolder.get().getPasswordError());
-    }
-
-    private Set<Role> loadRoleFormRequest(HttpServletRequest request) {
-        String roleStr = request.getParameter("role");
-        if (StringUtils.endsWith(roleStr, "|")) {
-            roleStr = roleStr.substring(0, roleStr.length() - 1);
-        }
-        String[] roleArray = roleStr.split("\\|");
-        List<String> rolelist = new ArrayList<String>();
-        for (int i = 0; i < roleArray.length; i++) {
-            rolelist.add(roleArray[i]);
-        }
-        Set<Role> roles = new HashSet<Role>();
-        for (String roleid : rolelist) {
-            Role role = roleService.get(Long.valueOf(roleid));
-            roles.add(role);
-        }
-        return roles;
-    }
-
-    /**
-     * 不自动绑定对象中的roleList属性，另行处理。
-     */
-    @InitBinder
-    @Override
-    public void initBinder(WebDataBinder binder) {
-        binder.setDisallowedFields("roles");
-        super.initBinder(binder);
-    }
+  /** 不自动绑定对象中的roleList属性，另行处理。 */
+  @InitBinder
+  @Override
+  public void initBinder(WebDataBinder binder) {
+    binder.setDisallowedFields("roles");
+    super.initBinder(binder);
+  }
 }

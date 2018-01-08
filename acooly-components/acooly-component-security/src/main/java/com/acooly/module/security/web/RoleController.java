@@ -13,6 +13,7 @@ import com.acooly.module.security.dto.ResourceNode;
 import com.acooly.module.security.service.ResourceService;
 import com.acooly.module.security.service.RoleService;
 import com.acooly.module.security.utils.ShiroUtils;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -59,7 +60,7 @@ public class RoleController extends AbstractJQueryEntityController<Role, RoleSer
         resources = resourceService.getAuthorizedResourceNode(user.getId(), Long.valueOf(roleId));
       }
 
-      result.setTotal(Long.valueOf(resources.size()));
+      result.setTotal((long) resources.size());
       result.setRows(resources);
     } catch (Exception e) {
       handleException(result, "查询所有数据", e);
@@ -81,6 +82,29 @@ public class RoleController extends AbstractJQueryEntityController<Role, RoleSer
     }
     String resultBody = JsonMapper.nonDefaultMapper().toJson(result);
     return resultBody;
+  }
+
+  @RequestMapping(value = {"rolesList"})
+  @ResponseBody
+  public String getRolesList(HttpServletRequest request, HttpServletResponse response) {
+    List<Role> list = Lists.newArrayList();
+    try {
+      PageInfo<Role> pageInfo = doList(request, response);
+      List<Role> pageResults = pageInfo.getPageResults();
+      pageResults.forEach(
+          role -> {
+            Role r = new Role();
+            r.setCreateTime(null);
+            r.setUpdateTime(null);
+            r.setId(role.getId());
+            r.setName(role.getName());
+            r.setDescn(role.getDescn());
+            list.add(r);
+          });
+    } catch (Exception e) {
+      handleException("查询角色", e, request);
+    }
+    return JsonMapper.nonDefaultMapper().toJson(list);
   }
 
   @Override

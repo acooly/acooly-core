@@ -1,6 +1,7 @@
 package com.acooly.module.security.web;
 
 import com.acooly.core.common.dao.support.PageInfo;
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.MappingMethod;
 import com.acooly.core.common.web.support.JsonListResult;
@@ -206,12 +207,15 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
   }
 
   private Set<Role> loadRoleFormRequest(HttpServletRequest request) {
+    Set<Role> roles = new HashSet<>();
     String[] roleArray = request.getParameterValues("role");
+    if (roleArray == null) {
+        throw new BusinessException("用户角色必选，请选择对应用户角色");
+    }
     List<String> rolelist = new ArrayList<>();
     for (int i = 0; i < roleArray.length; i++) {
       rolelist.add(roleArray[i]);
     }
-    Set<Role> roles = new HashSet<Role>();
     for (String roleid : rolelist) {
       Role role = roleService.get(Long.valueOf(roleid));
       roles.add(role);

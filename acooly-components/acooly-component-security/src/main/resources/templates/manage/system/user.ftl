@@ -103,7 +103,7 @@ $(function() {
           <th field="createTime">创建时间</th>
           <th field="lastModifyTime">修改时间</th>
           <th field="unlockTime">解锁时间</th>
-          <th field="roleDescn">角色</th>
+          <th field="roleName">角色</th>
           <th field="status" data-options="formatter:function(value){ return formatRefrence('manage_user_datagrid','allStatus',value);} ">状态</th>
           <th field="userType" data-options="formatter:function(value){ return formatRefrence('manage_user_datagrid','allUserTypes',value);} ">用户类型</th>
           <th field="orgName">所属机构</th>

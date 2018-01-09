@@ -72,13 +72,6 @@
 							<#list allStatus as k,v><option value="${k}">${v}</option></#list>
 					</select></td>
 				</tr>
-				<#--<tr>
-					<th>所属角色</th>
-					<td><select name="role" panelHeight="auto" style="width: 200px;height:27px;" class="easyui-combobox" style="height: 30px;">
-							<#list allRoles as e><option <#if user??> <#if user.roles?seq_contains(e)>selected</#if>  </#if> value="${e.id}">${e.name}</option></#list>
-					</select></td>
-				</tr>-->
-
                 <tr>
                     <th>角色</th>
                     <td><input  class="easyui-combobox"  name="role" style="height: 30px;" data-options="
@@ -93,7 +86,6 @@
                     labelPosition: 'top'
                     "></td>
                 </tr>
-
                 <tr>
                     <th>所属机构</th>
                     <td><input type="text" editable="false"  name="orgId" id="orgEdit" style="height: 30px;"

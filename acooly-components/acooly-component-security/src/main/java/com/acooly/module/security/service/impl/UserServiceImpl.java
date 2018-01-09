@@ -83,7 +83,6 @@ public class UserServiceImpl extends EntityServiceImpl<User, UserDao> implements
       String oPswd = orginalUser.getPassword();
       String oSalt = orginalUser.getSalt();
       String oUsername = orginalUser.getUsername();
-      orginalUser = null;
       user.setPassword(oPswd);
       user.setSalt(oSalt);
       user.setUsername(oUsername);
@@ -207,13 +206,15 @@ public class UserServiceImpl extends EntityServiceImpl<User, UserDao> implements
     List<UserDto> pageResults = pageInfo.getPageResults();
     Set<String> tmpset = new HashSet<>();
     Map<Long, UserDto> removedDuplicate = new TreeMap<>();
-    Collections.sort(pageResults, Comparator.comparing(UserDto::getRoleDescn));
+
+    Collections.sort(pageResults, Comparator.comparing(UserDto::getRoleName));
+
     for (UserDto user : pageResults) {
       if (tmpset.add(user.getUsername())) {
         removedDuplicate.put(user.getId(), user);
       } else {
         UserDto userDto = removedDuplicate.get(user.getId());
-        userDto.setRoleDescn(userDto.getRoleDescn() + "," + user.getRoleDescn());
+        userDto.setRoleName(userDto.getRoleName() + "," + user.getRoleName());
       }
     }
     pageResults.clear();

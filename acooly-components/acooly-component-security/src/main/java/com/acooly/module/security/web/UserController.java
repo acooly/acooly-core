@@ -48,7 +48,6 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
   private static Map<Integer, String> allUserTypes = FrameworkPropertiesHolder.get().getUserTypes();
   private static Map<Integer, String> allStatus = FrameworkPropertiesHolder.get().getUserStatus();
 
-  @Autowired private UserService userService;
   @Autowired private RoleService roleService;
   @Autowired private OrgService orgService;
 
@@ -71,6 +70,18 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
     return result;
   }
 
+  @RequestMapping(value = "saveJson")
+  @ResponseBody
+  public JsonEntityResult<User> saveJson(HttpServletRequest request, HttpServletResponse response) {
+    JsonEntityResult<User> result = new JsonEntityResult<>();
+    JsonEntityResult<User> saveJson = super.saveJson(request, response);
+    User entity = saveJson.getEntity();
+    entity.setRoleName(getRoleNames(entity.getId()));
+    result.setEntity(entity);
+    result.setMessage("保存成功！");
+    return result;
+  }
+
   @RequestMapping(value = "updateJson")
   @ResponseBody
   public JsonEntityResult<User> updateJson(
@@ -78,7 +89,7 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
     JsonEntityResult<User> result = new JsonEntityResult<>();
     JsonEntityResult<User> updateJson = super.updateJson(request, response);
     User entity = updateJson.getEntity();
-    entity.setRoleDescn(getRoleDescns(entity.getId()));
+    entity.setRoleName(getRoleNames(entity.getId()));
     result.setEntity(entity);
     result.setMessage("更新成功！");
     return result;
@@ -158,13 +169,14 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
     return JsonMapper.nonDefaultMapper().toJson(list);
   }
 
-  private String getRoleDescns(Long userId) {
-    String res = "";
+  private String getRoleNames(Long userId) {
+    StringBuilder sb = new StringBuilder();
     List<UserRole> roleIds = getEntityService().getRoleIdsByUserId(userId);
     for (UserRole userRole : roleIds) {
-      Role role = roleService.get(Long.valueOf(userRole.getRoleId()));
-      res = res + "," + role.getDescn();
+      Role role = roleService.get(userRole.getRoleId());
+      sb.append(",").append(role.getName());
     }
+    String res = sb.toString();
     return res.length() > 1 ? res.substring(1, res.length()) : res;
   }
 
@@ -223,9 +235,7 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
       throw new BusinessException("用户角色必选，请选择对应用户角色");
     }
     List<String> rolelist = new ArrayList<>();
-    for (int i = 0; i < roleArray.length; i++) {
-      rolelist.add(roleArray[i]);
-    }
+    rolelist.addAll(Arrays.asList(roleArray));
     for (String roleid : rolelist) {
       Role role = roleService.get(Long.valueOf(roleid));
       roles.add(role);

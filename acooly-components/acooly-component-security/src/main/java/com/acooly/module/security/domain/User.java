@@ -114,6 +114,7 @@ public class User extends AbstractEntity {
      */
     private int loginStatus;
 
+    @Transient
     private String roleName;
 
     /**

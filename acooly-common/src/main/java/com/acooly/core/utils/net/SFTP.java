@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
  *   <li>3.下载 {@link SFTP#download(com.jcraft.jsch.ChannelSftp, java.lang.String, java.lang.String)}
  *   <li>4.关闭channel {@link SFTP#closeChannel(com.jcraft.jsch.ChannelSftp)}
  *   <li>5.关闭session {@link SFTP#closeSession(com.jcraft.jsch.Session)}
+ *   <li>.上传 {@link SFTP#upload(com.jcraft.jsch.ChannelSftp, java.lang.String, java.lang.String)}
  * </ul>
  *
  * 可以重用session,每次创建channel执行下载任务,在程序关闭时关闭sesison <br>

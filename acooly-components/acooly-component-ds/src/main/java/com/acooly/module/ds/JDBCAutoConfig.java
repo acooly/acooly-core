@@ -54,10 +54,8 @@ public class JDBCAutoConfig {
       } else {
         dataSource = druidProperties.build();
       }
-
-      new DBPatchChecker(druidProperties).check(dataSource);
-
       ApplicationContextHolder.get().publishEvent(new DataSourceReadyEvent(dataSource));
+      new DBPatchChecker(druidProperties).check(dataSource);
       return dataSource;
     } catch (Exception e) {
       //这种方式有点挫，先就这样吧

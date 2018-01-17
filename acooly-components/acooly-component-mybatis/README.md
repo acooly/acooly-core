@@ -123,6 +123,12 @@ Mybatis增加单表增删改查通用能力，不用写一行sql语句，单表�
             @Delete("DELETE FROM city WHERE name =#{name}")
             void deleteByName(String name);
             
+            /**
+             * 支持in，参数为集合或者数组
+             */
+            @Select("select * from city where id in #{ids}")
+            List<City> selectByIn(@Param("ids") List<String> ids);
+            
         }
 
 

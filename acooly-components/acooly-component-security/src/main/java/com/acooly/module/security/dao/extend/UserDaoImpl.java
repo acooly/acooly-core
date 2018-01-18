@@ -67,7 +67,7 @@ public class UserDaoImpl extends AbstractJdbcTemplateDao implements UserDaoCusto
 
     String orgId = (String) map.get("EQ_orgId");
     if (Strings.isNotBlank(orgId)) {
-      sql += " and t1.orgId = " + orgId;
+      sql += " and t1.org_id = " + orgId;
     }
 
     sql += " order by t1.id desc";

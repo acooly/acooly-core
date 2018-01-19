@@ -62,7 +62,7 @@
 				</tr>
 				<tr>
 					<th>类型</th>
-					<td><select name="userType" panelHeight="auto" class="easyui-combobox easyui-combobox-ext" style="height: 30px;">
+					<td><select name="userType" <#if (allUserTypes?size<=10)>panelHeight="auto"</#if>  class="easyui-combobox easyui-combobox-ext" style="height: 30px;">
 						<#list allUserTypes as k,v><option value="${k}">${v}</option></#list>
 					</select></td>
 				</tr>
@@ -74,14 +74,14 @@
 				</tr>
                 <tr>
                     <th>角色</th>
-                    <td><input  class="easyui-combobox"  name="role" style="height: 30px;" data-options="
+                    <td><input  class="easyui-combobox" name="role" style="width: 200px; height: 30px;" data-options="
                     url:'/manage/system/role/rolesList.html',
                     method:'get',
                     valueField:'id',
                     textField:'name',
                     value:${roleIds},
                     multiple:true,
-                    panelHeight:'auto',
+                    <#--panelHeight: 'auto',-->
                     label: 'Language:',
                     labelPosition: 'top'
                     "></td>

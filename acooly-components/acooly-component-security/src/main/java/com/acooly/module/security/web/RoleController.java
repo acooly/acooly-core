@@ -89,9 +89,8 @@ public class RoleController extends AbstractJQueryEntityController<Role, RoleSer
   public String getRolesList(HttpServletRequest request, HttpServletResponse response) {
     List<Role> list = Lists.newArrayList();
     try {
-      PageInfo<Role> pageInfo = doList(request, response);
-      List<Role> pageResults = pageInfo.getPageResults();
-      pageResults.forEach(
+      list = roleService.getAll();
+      list.forEach(
           role -> {
             Role r = new Role();
             r.setCreateTime(null);
@@ -99,7 +98,6 @@ public class RoleController extends AbstractJQueryEntityController<Role, RoleSer
             r.setId(role.getId());
             r.setName(role.getName());
             r.setDescn(role.getDescn());
-            list.add(r);
           });
     } catch (Exception e) {
       handleException("查询角色", e, request);

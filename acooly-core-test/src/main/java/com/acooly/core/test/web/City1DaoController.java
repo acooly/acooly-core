@@ -64,6 +64,12 @@ public class City1DaoController {
     return cityDao.selectByIn(Lists.newArrayList("1","2"));
   }
 
+  @RequestMapping(value = "/selectByIn1", method = RequestMethod.GET)
+  @Transactional
+  public List<City1> selectByIn1() {
+    return cityDao.selectByIn1(Lists.newArrayList("1","2"));
+  }
+
   @RequestMapping(value = "/selectAllByPage", method = RequestMethod.GET)
   public List<City1> selectAllByPage() {
     PageInfo<City1> pageInfo = new PageInfo<>();

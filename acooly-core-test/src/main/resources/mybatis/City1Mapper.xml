@@ -6,5 +6,10 @@
     <select id="selectAllByPage1" resultType="City1">
         select * from City1 order by name desc
     </select>
-
+    <select id="selectByIn1" resultType="City1">
+        select id,state from City1 where id IN
+        <foreach collection="ids" item="st" index="index" open="(" separator="," close=")">
+            #{st}
+        </foreach>
+    </select>
 </mapper>

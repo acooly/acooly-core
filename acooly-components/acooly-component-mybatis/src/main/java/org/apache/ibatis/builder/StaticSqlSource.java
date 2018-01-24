@@ -1,5 +1,6 @@
 package org.apache.ibatis.builder;
 
+import org.apache.ibatis.binding.BindingException;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.mapping.SqlSource;
@@ -64,7 +65,12 @@ public class StaticSqlSource implements SqlSource {
                 sqlBuilder.append(e.segment);
                 if (e.index >= 0) {
                     ParameterMapping m = parameterMappings.get(e.index);
-                    Object obj = argMap.get(m.getProperty());
+                    Object obj = null;
+                    try {
+                        obj = argMap.get(m.getProperty());
+                    } catch (BindingException ex) {
+                        return new BoundSql(configuration, sql, parameterMappings, parameterObject);
+                    }
                     appendParameter(sqlBuilder, obj);
                 }
             }

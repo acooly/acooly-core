@@ -74,11 +74,18 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
   @ResponseBody
   public JsonEntityResult<User> saveJson(HttpServletRequest request, HttpServletResponse response) {
     JsonEntityResult<User> result = new JsonEntityResult<>();
-    JsonEntityResult<User> saveJson = super.saveJson(request, response);
-    User entity = saveJson.getEntity();
-    entity.setRoleName(getRoleNames(entity.getId()));
-    result.setEntity(entity);
-    result.setMessage("保存成功！");
+    try {
+      result = super.saveJson(request, response);
+      if (!result.isSuccess()) {
+        return result;
+      }
+      User entity = result.getEntity();
+      entity.setRoleName(getRoleNames(entity.getId()));
+      result.setEntity(entity);
+      result.setMessage("保存成功！");
+    } catch (Exception e) {
+      handleException(result, "保存账户", e);
+    }
     return result;
   }
 
@@ -87,11 +94,18 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
   public JsonEntityResult<User> updateJson(
       HttpServletRequest request, HttpServletResponse response) {
     JsonEntityResult<User> result = new JsonEntityResult<>();
-    JsonEntityResult<User> updateJson = super.updateJson(request, response);
-    User entity = updateJson.getEntity();
-    entity.setRoleName(getRoleNames(entity.getId()));
-    result.setEntity(entity);
-    result.setMessage("更新成功！");
+    try {
+      result = super.updateJson(request, response);
+      if (!result.isSuccess()) {
+        return result;
+      }
+      User entity = result.getEntity();
+      entity.setRoleName(getRoleNames(entity.getId()));
+      result.setEntity(entity);
+      result.setMessage("更新成功！");
+    } catch (Exception e) {
+      handleException(result, "更新账户", e);
+    }
     return result;
   }
 

@@ -8,6 +8,8 @@ import com.acooly.core.utils.security.RSA;
 import com.acooly.module.safety.exception.SafetyException;
 import com.acooly.module.safety.exception.SafetyResultCode;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -124,6 +126,16 @@ public class KeyStoreInfo extends KeySupport {
             throw new SafetyException(SafetyResultCode.LOAD_CERTIFICATE_ERROR, e.getMessage());
         } finally {
             IOUtils.closeQuietly(in);
+        }
+    }
+
+    public String getCertificateInfo(CodecEnum codecEnum) {
+        byte[] bys = null;
+        try {
+            bys = this.certificate.getEncoded();
+            return codecEnum == null || codecEnum == CodecEnum.HEX ? Hex.encodeHexString(bys) : Base64.encodeBase64String(bys);
+        } catch (Exception e) {
+            throw new SafetyException(SafetyResultCode.CERTIFICATE_ENCODING_ERROR, e.getMessage());
         }
     }
 

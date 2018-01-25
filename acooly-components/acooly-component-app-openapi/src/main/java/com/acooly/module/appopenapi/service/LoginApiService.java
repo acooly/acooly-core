@@ -14,6 +14,7 @@ import com.acooly.module.appopenapi.support.login.AnonymousAppApiLoginService;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
+import com.acooly.openapi.framework.core.auth.realm.impl.CacheableAuthInfoRealm;
 import com.acooly.openapi.framework.core.service.base.BaseApiService;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,10 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.AbstractEnvironment;
 
+import javax.annotation.Resource;
 import java.util.Map;
+
+import static com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm.APP_CLIENT_REALM;
 
 /**
  * 用户登录
@@ -44,6 +48,9 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
 
   @Autowired private AppApiLoginService appApiLoginService;
   @Autowired private AppCustomerService appCustomerService;
+
+  @Resource(name = APP_CLIENT_REALM)
+  private CacheableAuthInfoRealm cacheableAuthInfoRealm;
 
   @Override
   protected void doService(LoginRequest request, LoginResponse response) {
@@ -77,6 +84,7 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
 
           if (appOpenapiProperties.isSecretKeyDynamic()) {
             appCustomer = appCustomerService.updateSecretKey(appCustomer);
+            cacheableAuthInfoRealm.removeCache(appCustomer.getAccessKey());
           }
         }
         response.setAccessKey(appCustomer.getAccessKey());

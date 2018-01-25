@@ -41,4 +41,7 @@ public interface City1MybatisDao extends EntityMybatisDao<City1> {
   PageInfo<City1> selectAllByPage1(PageInfo pageInfo);
 
   List<City1> selectByIn1(@Param("ids") List<String> ids);
+
+  @Select("select * from City1 where id in (#{id1},#{id2})")
+  List<City1> selectByIn2(@Param("id1") String id1,@Param("id2") String id2);
 }

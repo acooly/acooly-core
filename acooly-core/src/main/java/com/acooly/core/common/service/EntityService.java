@@ -40,6 +40,13 @@ public interface EntityService<T> {
   void save(T t) throws BusinessException;
 
   /**
+   * 主键不为空时更新，为空时新增
+   * @param t
+   * @throws BusinessException
+   */
+  void saveOrUpdate(T t)throws BusinessException;
+
+  /**
    * 批量保存对象
    *
    * @param ts

@@ -2,6 +2,7 @@ package com.acooly.core.common.service;
 
 import com.acooly.core.common.dao.EntityDao;
 import com.acooly.core.common.dao.support.PageInfo;
+import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.BeanUtils;
 import com.acooly.core.utils.GenericsUtils;
@@ -9,6 +10,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -94,6 +96,20 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>>
   @Override
   public void update(T o) throws BusinessException {
     getEntityDao().update(o);
+  }
+
+  @Override
+  public void saveOrUpdate(T t) throws BusinessException {
+    Assert.notNull(t);
+    if (t instanceof Entityable) {
+      if (((Entityable) t).getId() != null) {
+        getEntityDao().update(t);
+      }else{
+        getEntityDao().create(t);
+      }
+    }else{
+      throw new UnsupportedOperationException("实体类必须继承Entityable才能使用saveOrUpdate方法");
+    }
   }
 
   @Override

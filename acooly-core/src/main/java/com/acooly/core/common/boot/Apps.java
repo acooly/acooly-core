@@ -7,11 +7,15 @@ package com.acooly.core.common.boot;
 import com.acooly.core.common.boot.listener.ExApplicationRunListener;
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.utils.Strings;
+import org.apache.commons.io.FileUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.util.StringUtils;
+
+import java.io.File;
+import java.io.IOException;
 
 /** @author qiubo */
 public class Apps {
@@ -60,6 +64,11 @@ public class Apps {
       }
     }
     logPath = logBasePath + getAppName() + "/";
+    try {
+      FileUtils.forceMkdir(new File(logPath));
+    } catch (IOException e) {
+      throw new AppConfigException("创建日志目录失败",e);
+    }
     return logPath;
   }
 

@@ -28,8 +28,10 @@ import org.springframework.boot.context.embedded.JspServlet;
 import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -48,7 +50,7 @@ public class TomcatAutoConfig {
   @Bean(name = "embeddedServletContainerCustomizer")
   public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer() {
     return container -> {
-      //1. disable jsp if possible
+      // 1. disable jsp if possible
       if (!EnvironmentHolder.get()
           .getProperty("acooly.web.jsp.enable", Boolean.class, Boolean.TRUE)) {
         JspServlet jspServlet = new JspServlet();
@@ -68,13 +70,13 @@ public class TomcatAutoConfig {
         container.setJspServlet(jspServlet);
       }
 
-      //2. 定制tomcat
+      // 2. 定制tomcat
       if (container instanceof TomcatEmbeddedServletContainerFactory) {
         TomcatEmbeddedServletContainerFactory factory =
             (TomcatEmbeddedServletContainerFactory) container;
         factory.setUriEncoding(Charset.forName(tomcatProperties.getUriEncoding()));
         setTomcatWorkDir(factory);
-        //2.1 设置最大线程数为400
+        // 2.1 设置最大线程数为400
         factory.addConnectorCustomizers(
             (TomcatConnectorCustomizer)
                 connector -> {
@@ -87,7 +89,7 @@ public class TomcatAutoConfig {
                   }
                   connector.setAttribute("acceptCount", "100");
                 });
-        //2.2 设置访问日志目录和日志格式
+        // 2.2 设置访问日志目录和日志格式
         if (tomcatProperties.isAccessLogEnable()) {
           if (factory
               .getContextValves()
@@ -96,14 +98,20 @@ public class TomcatAutoConfig {
             throw new AppConfigException("AccessLogValve已经配置，请不要启用默认spring-boot AccessLogValve配置");
           }
           AccessLogValve valve = new AccessLogValve();
-          //参数含义参考AbstractAccessLogValve 注释
+          // 参数含义参考AbstractAccessLogValve 注释
           valve.setPattern(TomcatProperties.HTTP_ACCESS_LOG_FORMAT);
           valve.setSuffix(".log");
-          //读取真实ip，参考：org.apache.catalina.valves.AbstractAccessLogValve.HostElement
+          // 读取真实ip，参考：org.apache.catalina.valves.AbstractAccessLogValve.HostElement
           valve.setRequestAttributesEnabled(true);
           valve.setDirectory(Apps.getLogPath());
           factory.addContextValves(valve);
         }
+        // 2.3 设置错误页面
+        ErrorPage error401Page =
+            new ErrorPage(HttpStatus.UNAUTHORIZED, tomcatProperties.getError401Page());
+        ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, tomcatProperties.getError404Page());
+        ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, tomcatProperties.getError500Page());
+        container.addErrorPages(error401Page, error404Page, error500Page);
       }
     };
   }

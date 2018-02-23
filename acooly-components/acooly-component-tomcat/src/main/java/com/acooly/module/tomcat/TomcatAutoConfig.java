@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.JspServlet;
 import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
@@ -35,7 +36,9 @@ import org.springframework.http.HttpStatus;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /** @author qiubo */
 @Configuration
@@ -107,26 +110,43 @@ public class TomcatAutoConfig {
           factory.addContextValves(valve);
         }
         // 2.3 设置错误页面
-        ErrorPage error401Page =
-            new ErrorPage(HttpStatus.UNAUTHORIZED, tomcatProperties.getError401Page());
-        ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, tomcatProperties.getError404Page());
-        ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, tomcatProperties.getError500Page());
-        container.addErrorPages(error401Page, error404Page, error500Page);
+        setErrorPage(container);
       }
     };
   }
 
   private void setTomcatWorkDir(TomcatEmbeddedServletContainerFactory factory) {
-    //设置tomcat base dir
+    // 设置tomcat base dir
     File file = new File(Apps.getAppDataPath() + "/tomcat-" + Apps.getHttpPort());
     file.mkdirs();
     factory.setBaseDirectory(file);
     file.deleteOnExit();
-    //设置tomcat doc base dir
+    // 设置tomcat doc base dir
     File docbase = new File(Apps.getAppDataPath() + "/tomcat-docbase-" + Apps.getHttpPort());
     docbase.mkdirs();
     factory.setDocumentRoot(docbase);
     docbase.deleteOnExit();
     logger.info("设置tomcat baseDir={},docbase={}", file, docbase);
+  }
+
+  private void setErrorPage(ConfigurableEmbeddedServletContainer container) {
+    String error40XPage = tomcatProperties.getError40XPage();
+    String error50XPage = tomcatProperties.getError50XPage();
+
+    Set<ErrorPage> errorPages = new HashSet<>();
+
+    HttpStatus[] values = HttpStatus.values();
+    for (HttpStatus v : values) {
+      int value = v.value();
+      if (value >= 400 && value < 500) {
+        ErrorPage error40X = new ErrorPage(v, error40XPage);
+        errorPages.add(error40X);
+      }
+      if (value >= 500 && value < 600) {
+        ErrorPage error50X = new ErrorPage(v, error50XPage);
+        errorPages.add(error50X);
+      }
+    }
+    container.setErrorPages(errorPages);
   }
 }

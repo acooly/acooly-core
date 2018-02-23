@@ -6,7 +6,6 @@
 配置组件参数,如下：
 
    * `acooly.tomcat.port=1234` 可选，通过配置文件自定义端口号
-   * `acooly.tomcat.error401Page=/401.html` 可选，未授权页面401，页面路径`src/main/resources/static`
-   * `acooly.tomcat.error404Page=/404.html` 可选，未找到页面404
-   * `acooly.tomcat.error500Page=/500.html` 可选，错误页面500
+   * `acooly.tomcat.error40XPage=/40X.html` 可选，定制40X状态返回的页面，页面路径`src/main/resources/static`
+   * `acooly.tomcat.error50XPage=/50X.html` 可选，定制50X状态返回的页面
     

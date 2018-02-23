@@ -33,10 +33,8 @@ public class TomcatProperties {
   /** 可选: 通过外部配置自定义tomcat端口 */
   private Integer port = null;
 
-  /** 未授权页面401 */
-  private String error401Page;
-  /** 未找到页面404 */
-  private String error404Page;
-  /** 错误页面500 */
-  private String error500Page;
+  /** 40X状态返回的页面 */
+  private String error40XPage;
+  /** 50X状态返回的页面 */
+  private String error50XPage;
 }

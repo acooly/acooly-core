@@ -101,7 +101,7 @@
 				if (node.showMode == 1) {
 					opts.href = contextPath + url;
 				} else {
-					opts.content = '<iframe src="' + contextPath + url + '" frameborder="0" style="border:0;width:100%;height:99%;background: url(/manage/assert/plugin/jquery-easyui/themes/default/images/loading.gif) center center no-repeat;" ></iframe>'
+					opts.content = '<iframe src="' + contextPath + url + '" frameborder="0" style="border:0;width:100%;height:99%;" ></iframe>'
 				}
 				$.acooly.layout.addTab(opts);
 			},

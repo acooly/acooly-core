@@ -39,11 +39,11 @@ public class AliBankCardCertServiceImpl implements BankCardCertService {
 
     String appCode = certificationProperties.getBankcert().getAppCode();
     String path = "/bank4";
-    //二要素
+    // 二要素
     if (StringUtils.isEmpty(certId) && StringUtils.isEmpty(phoneNum)) {
       path = "/bank2";
     }
-    //三要素
+    // 三要素
     if (!StringUtils.isEmpty(certId) && StringUtils.isEmpty(phoneNum)) {
       path = "/bank3";
     }
@@ -109,6 +109,7 @@ public class AliBankCardCertServiceImpl implements BankCardCertService {
       String msg = resBody.getString("msg");
 
       String notNullmsg = StringUtils.isEmpty(msg) ? RET_CODE.get(code) : msg;
+      notNullmsg = convertNull(notNullmsg);
 
       if (!SUCCESS_CODE.equals(retCode)) {
         log.info("银行卡二三四要素校验失败，结果:{}", notNullmsg);
@@ -134,6 +135,14 @@ public class AliBankCardCertServiceImpl implements BankCardCertService {
       }
     }
     return result;
+  }
+
+  private String convertNull(String msg) {
+    String res = "银行卡交易失败";
+    if ("null".equals(msg) || StringUtils.isEmpty(msg)) {
+      res = "无用户信息";
+    }
+    return res;
   }
 
   private static final Map<String, String> RET_CODE =

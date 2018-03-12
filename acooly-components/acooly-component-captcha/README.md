@@ -16,9 +16,9 @@
 
 `acooly.captcha.validTimes=30`  设置验证码最大验证次数 默认200
 
-`acooly.captcha.generatorType=default_unique_generator` 设置验证码生产方式,默认random_number（随机数字），此组件用于token方式建议：default_unique_generator
+`acooly.captcha.generatorType=default_unique_generator` 设置验证码生产方式，可选项：random_number（随机数字，默认）、random_word（随机字符）、default_unique_generator(unique生成)。生成token建议选择：default_unique_generator
 
-`acooly.captcha.handlerType=defualt_answer_handler`  设置验证码验证方式，默认字符串不区分大小写
+`acooly.captcha.handlerType=defualt_answer_handler`  设置验证码验证方式，可选项：defualt_answer_handler（不区分大小写，默认）、case_sensitive_handler（区分大小写）
 
 ### 2.2 接口使用
 

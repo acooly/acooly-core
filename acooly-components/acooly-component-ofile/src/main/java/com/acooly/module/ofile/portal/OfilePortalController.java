@@ -284,7 +284,7 @@ public class OfilePortalController
         }
         response.setHeader("Content-Disposition", "attachment");
         response.setHeader(
-                "Content-Disposition", "filename=\"" + Encodes.urlEncode(fileName, "UTF-8") + "\"");
+                "Content-Disposition", "filename=\"" + fileName + "\"");
     }
 
     protected String getSessionUser(HttpServletRequest request) {

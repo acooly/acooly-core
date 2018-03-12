@@ -338,7 +338,7 @@ public abstract class AbstractFileOperationController<
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "attachment");
         response.setHeader(
-                "Content-Disposition", "filename=\"" + Encodes.urlEncode(fileName) + ".xlsx\"");
+                "Content-Disposition", "filename=\"" + fileName + ".xlsx\"");
     }
 
     /**
@@ -436,7 +436,7 @@ public abstract class AbstractFileOperationController<
         String fileName = getExportFileName(request);
         response.setContentType("application/octet-stream");
         response.setHeader(
-                "Content-Disposition", "attachment;filename=\"" + Encodes.urlEncode(fileName) + ".csv\"");
+                "Content-Disposition", "attachment;filename=\"" + fileName + ".csv\"");
     }
 
     /**

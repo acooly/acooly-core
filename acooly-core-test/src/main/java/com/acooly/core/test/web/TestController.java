@@ -135,4 +135,12 @@ public class TestController {
   public void testCert() {
     certificationService.certification("韦崇凯", "500221198810192313");
   }
+
+  @RequestMapping("404")
+  public void test404() {}
+
+  @RequestMapping("500")
+  public void test500() {
+      throw new RuntimeException("test 500");
+  }
 }

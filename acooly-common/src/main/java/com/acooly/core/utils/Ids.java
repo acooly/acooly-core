@@ -59,7 +59,7 @@ public class Ids {
 
   /** 长度24位全球唯一标识 */
   public static String gid() {
-    return "g"+new ObjectId().toHexString();
+    return "g" + new ObjectId().toHexString();
   }
 
   /**
@@ -76,10 +76,10 @@ public class Ids {
   }
 
   public static String oid() {
-      StringBuilder sb = new StringBuilder();
-      sb.append("o");
-      sb.append(Did.getInstance().getId(20));
-      return sb.toString();
+    StringBuilder sb = new StringBuilder();
+    sb.append("o");
+    sb.append(Did.getInstance().getId(20));
+    return sb.toString();
   }
 
   /**
@@ -150,20 +150,20 @@ public class Ids {
         throw Exceptions.runtimeException("did最小长度为" + MIN_LENGTH);
       }
       StringBuilder sb = new StringBuilder();
-      //当前时间(12位)
+      // 当前时间(12位)
       sb.append(Dates.format(new Date(), "yyMMddHHmmss"));
-      //随机数字(size-18位)
+      // 随机数字(size-18位)
       sb.append(RandomNumberGenerator.getNewString((size - 18)));
-      //进程id(2位)
+      // 进程id(2位)
       sb.append(getPid());
-      //序列号(4位)
+      // 序列号(4位)
       sb.append(getSequ());
       return sb.toString();
     }
 
-    private short short2(final short x) {
-      short b = (short) (x >> 8);
-      return b > 100 ? (short) (b >> 1) : b;
+    private static short short2(final short x) {
+      short b = (short) (x % (short) 100);
+      return b <= 10 ? 10 : b;
     }
 
     /** 获取两位pid */

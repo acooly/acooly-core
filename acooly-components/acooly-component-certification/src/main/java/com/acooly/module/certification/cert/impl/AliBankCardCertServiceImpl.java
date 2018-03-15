@@ -58,6 +58,7 @@ public class AliBankCardCertServiceImpl implements BankCardCertService {
     params.put("needBelongArea", "true");
     params.put("phone_num", phoneNum);
     BankCardResult result;
+    log.info("调用银行卡二三四要素校验接口入参：{}", params.toString());
     try {
       Response response =
           HttpUtil.httpGet(
@@ -86,6 +87,7 @@ public class AliBankCardCertServiceImpl implements BankCardCertService {
 
   private BankCardResult unmashall(Response response) throws CertficationException {
 
+    log.info("调用银行卡二三四要素校验接口返回:{}", response.getBody());
     if (StringUtils.isEmpty(response.getBody())) {
       throw new CertficationException(
           ResultStatus.failure.getCode(), "银行卡二三四要素校验返回空:" + response.getErrorMessage());

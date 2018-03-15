@@ -105,15 +105,19 @@ public class AliBankCardCertServiceImpl implements BankCardCertService {
 
     if (SUCCESS_CODE.equals(resCode)) {
       JSONObject resBody = total.getJSONObject("showapi_res_body");
+      // 调用成功与否，0为成功，其他值为失败
       String retCode = resBody.getString("ret_code");
+      // 0 成功，其他为失败
       String code = resBody.getString("code");
-
       String msg = resBody.getString("msg");
-
       String notNullmsg = StringUtils.isEmpty(msg) ? RET_CODE.get(code) : msg;
-      notNullmsg = convertNull(notNullmsg);
 
       if (!SUCCESS_CODE.equals(retCode)) {
+        log.info("银行卡二三四要素校验调用接口失败");
+        throw new CertficationException(ResultStatus.failure.getCode(), "银行卡二三四要素校验调用接口失败");
+      }
+
+      if (!SUCCESS_CODE.equals(code)) {
         log.info("银行卡二三四要素校验失败，结果:{}", notNullmsg);
         throw new CertficationException(ResultStatus.failure.getCode(), notNullmsg);
       }
@@ -137,14 +141,6 @@ public class AliBankCardCertServiceImpl implements BankCardCertService {
       }
     }
     return result;
-  }
-
-  private String convertNull(String msg) {
-    String res = "银行卡交易失败";
-    if ("null".equals(msg) || StringUtils.isEmpty(msg)) {
-      res = "无用户信息";
-    }
-    return res;
   }
 
   private static final Map<String, String> RET_CODE =

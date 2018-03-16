@@ -14,6 +14,8 @@ import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.exception.AppConfigException;
 import com.google.common.collect.Maps;
+import org.apache.catalina.Lifecycle;
+import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.valves.AccessLogValve;
 import org.apache.coyote.AbstractProtocol;
@@ -111,6 +113,18 @@ public class TomcatAutoConfig {
         }
         // 2.3 设置错误页面
         setErrorPage(container);
+
+        // fix https://github.com/spring-projects/spring-boot/issues/9670
+        if (!Apps.isDevMode()) {
+          factory.addContextLifecycleListeners(
+              event -> {
+                if (event.getType().equals(Lifecycle.CONFIGURE_START_EVENT)) {
+                  ((StandardContext) event.getLifecycle())
+                      .getResources()
+                      .setCacheTtl(100l * 24 * 60 * 60 * 1000);
+                }
+              });
+        }
       }
     };
   }

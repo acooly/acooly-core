@@ -289,7 +289,7 @@ public class OfilePortalController
         userName = user.toString();
       }
     }
-    if (userName.length() > 31) {
+    if (userName != null && userName.length() > 31) {
       userName = userName.substring(0, 28) + "...";
     }
     return userName;

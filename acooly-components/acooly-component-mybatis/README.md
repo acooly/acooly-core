@@ -129,6 +129,11 @@ Mybatis增加单表增删改查通用能力，不用写一行sql语句，单表�
             @Select("select * from city where id in #{ids}")
             List<City> selectByIn(@Param("ids") List<String> ids);
             
+            //支持分页
+            PageInfo<City1> selectAllByPage1(PageInfo pageInfo);
+            mapper写入  <select id="selectAllByPage1" resultType="City1">
+                            select * from City1 order by name desc
+                        </select>
         }
 
 

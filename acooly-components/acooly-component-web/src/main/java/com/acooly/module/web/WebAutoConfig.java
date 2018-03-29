@@ -14,6 +14,7 @@ import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.module.web.filter.HttpsOnlyFilter;
 import com.acooly.module.web.formatter.MoneyFormatter;
 import com.acooly.module.web.freemarker.IncludePage;
+import com.acooly.module.web.freemarker.ShiroPrincipalTag;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import freemarker.cache.ClassTemplateLoader;
@@ -218,6 +219,8 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
           };
       Map<String, Object> variables = Maps.newHashMap();
       variables.put("includePage", new IncludePage());
+      variables.put("shiroPrincipal", new ShiroPrincipalTag());
+
       String ssoEnable = System.getProperty("acooly.sso.freemarker.include");
       if (!StringUtils.isEmpty(ssoEnable)) {
         variables.put("ssoEnable", Boolean.valueOf(ssoEnable));
@@ -225,6 +228,7 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
 
       configurer.setFreemarkerVariables(variables);
       applyProperties(configurer);
+
       return configurer;
     }
 

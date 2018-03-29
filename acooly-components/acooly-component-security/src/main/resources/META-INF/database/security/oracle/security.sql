@@ -323,7 +323,7 @@ values (1, 7);
 commit;
 
 insert into SYS_USER (ID, USERNAME, REAL_NAME, PASSWORD, SALT, USER_TYPE, EMAIL, MOBILE_NO, CREATE_TIME, LAST_MODIFY_TIME, EXPIRATION_TIME, UNLOCK_TIME, STATUS, DESCN)
-values (1, 'admin', '张浦', 'ab7cc1898fe24ef738595e56759b17893f2dbcc6', 'f10a5bda42097431', 1, 'zp820705@163.com', '13896177630', to_date('07-01-2014', 'dd-mm-yyyy'), to_date('07-01-2014', 'dd-mm-yyyy'), null, null, 1, null);
+values (1, 'admin', '超级管理员', 'ab7cc1898fe24ef738595e56759b17893f2dbcc6', 'f10a5bda42097431', 1, 'zp820705@163.com', '13896177630', to_date('07-01-2014', 'dd-mm-yyyy'), to_date('07-01-2014', 'dd-mm-yyyy'), null, null, 1, null);
 commit;
 
 insert into SYS_USER_ROLE (ROLE_ID, USER_ID)

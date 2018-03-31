@@ -13,6 +13,7 @@ package com.acooly.module.tomcat;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.exception.AppConfigException;
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import org.apache.catalina.Lifecycle;
 import org.apache.catalina.core.StandardContext;
@@ -153,14 +154,20 @@ public class TomcatAutoConfig {
     for (HttpStatus v : values) {
       int value = v.value();
       if (value >= 400 && value < 500) {
-        ErrorPage error40X = new ErrorPage(v, error40XPage);
-        errorPages.add(error40X);
+        if (!Strings.isNullOrEmpty(error40XPage)) {
+          ErrorPage error40X = new ErrorPage(v, error40XPage);
+          errorPages.add(error40X);
+        }
       }
       if (value >= 500 && value < 600) {
-        ErrorPage error50X = new ErrorPage(v, error50XPage);
-        errorPages.add(error50X);
+        if (!Strings.isNullOrEmpty(error50XPage)) {
+          ErrorPage error50X = new ErrorPage(v, error50XPage);
+          errorPages.add(error50X);
+        }
       }
     }
-    container.setErrorPages(errorPages);
+    if (!errorPages.isEmpty()) {
+      container.setErrorPages(errorPages);
+    }
   }
 }

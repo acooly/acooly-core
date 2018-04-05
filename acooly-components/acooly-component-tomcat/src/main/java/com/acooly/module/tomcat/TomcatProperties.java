@@ -24,6 +24,8 @@ public class TomcatProperties {
   /** 可选：最大线程数 */
   private volatile int maxThreads = 400;
 
+  private int acceptCount=100;
+
   /** 可选：是否启用访问日志 */
   private boolean accessLogEnable = false;
 

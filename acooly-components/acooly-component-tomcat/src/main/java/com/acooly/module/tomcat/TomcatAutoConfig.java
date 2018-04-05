@@ -93,7 +93,7 @@ public class TomcatAutoConfig {
                     protocol.setMaxThreads(tomcatProperties.getMaxThreads());
                     protocol.setMinSpareThreads(tomcatProperties.getMinSpareThreads());
                   }
-                  connector.setAttribute("acceptCount", "100");
+                  connector.setAttribute("acceptCount", Integer.toString(tomcatProperties.getAcceptCount()));
                 });
         // 2.2 设置访问日志目录和日志格式
         if (tomcatProperties.isAccessLogEnable()) {

@@ -21,7 +21,7 @@ import java.util.List;
 /** @author qiubo@yiji.com */
 @Getter
 @Setter
-public class ListResult<T> extends ResultBase {
+public class ListResult<T> extends ResultBase implements DtoAble{
   private List<T> dto;
 
   public static <T> ListResult<T> from(List<T> list) {

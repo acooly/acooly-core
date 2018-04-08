@@ -13,7 +13,7 @@ import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.core.utils.mapper.BeanCopier;
 
 /** @author qiubo@yiji.com */
-public class SingleResult<T> extends ResultBase {
+public class SingleResult<T> extends ResultBase implements DtoAble{
   private T dto;
 
   public static <T> SingleResult<T> from(T dto) {

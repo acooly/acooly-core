@@ -17,7 +17,7 @@ import lombok.Setter;
 /** @author qiubo@yiji.com */
 @Getter
 @Setter
-public class PageResult<T> extends ResultBase {
+public class PageResult<T> extends ResultBase implements DtoAble{
   private PageInfo<T> dto;
 
   public static <T> PageResult<T> from(PageInfo<T> pageInfo) {

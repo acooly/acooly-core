@@ -9,6 +9,8 @@
  */
 package com.acooly.core.test.web;
 
+import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.common.view.ViewResult;
 import com.acooly.core.test.dao.AppDao;
 import com.acooly.core.test.domain.App;
 import com.acooly.core.test.domain.City;
@@ -51,6 +53,11 @@ public class TestController {
   private String valueFromProp;
 
   @Autowired private CertificationService certificationService;
+
+  @RequestMapping("ex")
+  public ViewResult testEx(){
+    throw new BusinessException("内部有问题","xx");
+  }
 
   @RequestMapping("app")
   @Transactional

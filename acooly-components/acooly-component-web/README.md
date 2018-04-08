@@ -167,3 +167,9 @@
 
       `<@shiroPrincipal/>` 展示`username[realName]`,比如`admin[水镜]`
       `<@shiroPrincipal property="username"/>` 展示username 比如 `admin` property可取com.acooly.module.security.domain.User的属性
+
+### 2.5.4 前后端分离
+
+1. 所有controller响应`ViewResult`对象
+2. 启用`acooly.web.enableMVCGlobalExceptionHandler=true`，自动把异常转换为`ViewResult`
+3. 建议前端请求访问使用后缀`.data`或者`.json`,`ACCEPT_HEADER`设置为包含`application/json`.（.data后缀的请求不会过shiro、xss、crsf，性能会好些）

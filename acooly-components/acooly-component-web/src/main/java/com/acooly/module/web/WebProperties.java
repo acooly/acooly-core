@@ -10,6 +10,7 @@
  */
 package com.acooly.module.web;
 
+import com.acooly.module.web.exceptionhandler.GlobalExceptionHandler;
 import com.google.common.base.Strings;
 import lombok.Data;
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
@@ -52,7 +53,9 @@ public class WebProperties {
   /** 是否启用Money用元展示 */
   private boolean enableMoneyDisplayYuan = false;
 
-  private boolean httpsOnly=false;
+  private boolean httpsOnly = false;
+  /** 是否启用全局异常处理器 {@link GlobalExceptionHandler} */
+  private boolean enableMVCGlobalExceptionHandler = false;
 
   public List<String> buildMappingUrlList() {
     List mappingUrlList = new ArrayList<>();

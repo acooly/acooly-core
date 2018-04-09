@@ -30,3 +30,7 @@
 2. 通过在Controller类或者方法上标注`@Olog.Ignore`忽略日志收集
 3. 通过在Controller方法上标注`@OlogAction`配置操作名称，也可以通过配置`acooly.olog.collector.actionNameMapping`
 
+### 2.3 审计日志生效条件
+
+1. 请求路径`/manage/**.html`
+

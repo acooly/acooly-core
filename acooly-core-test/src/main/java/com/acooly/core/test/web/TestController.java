@@ -12,14 +12,17 @@ package com.acooly.core.test.web;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.view.ViewResult;
 import com.acooly.core.test.dao.AppDao;
+import com.acooly.core.test.dao.City1MybatisDao;
 import com.acooly.core.test.domain.App;
 import com.acooly.core.test.domain.City;
+import com.acooly.core.test.domain.City1;
 import com.acooly.module.certification.CertificationService;
 import com.acooly.module.mail.MailDto;
 import com.acooly.module.mail.service.MailService;
 import com.acooly.module.sms.SmsService;
 import com.acooly.module.sms.sender.support.AliyunSmsSendVo;
 import com.acooly.module.sms.sender.support.CloopenSmsSendVo;
+import com.acooly.module.threadpool.TransactionExecutor;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -48,6 +51,8 @@ public class TestController {
   @Autowired private MailService mailService;
   @Autowired private DataSource dataSource;
   @Autowired private AppDao appDao;
+  @Autowired private City1MybatisDao city1;
+  @Autowired private TransactionExecutor transactionExecutor;
 
   @Value("${prop}")
   private String valueFromProp;
@@ -55,8 +60,8 @@ public class TestController {
   @Autowired private CertificationService certificationService;
 
   @RequestMapping("ex")
-  public ViewResult testEx(){
-    throw new BusinessException("内部有问题","xx");
+  public ViewResult testEx() {
+    throw new BusinessException("内部有问题", "xx");
   }
 
   @RequestMapping("app")
@@ -148,6 +153,15 @@ public class TestController {
 
   @RequestMapping("500")
   public void test500() {
-      throw new RuntimeException("test 500");
+    throw new RuntimeException("test 500");
+  }
+
+  @RequestMapping("tsExe")
+  public void testTransactionExecutor() {
+    transactionExecutor.run(
+        () -> {
+          City1 city1 = this.city1.selectById("1");
+          log.info(city1.toString());
+        });
   }
 }

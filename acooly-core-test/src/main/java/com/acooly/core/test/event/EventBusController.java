@@ -1,5 +1,6 @@
 package com.acooly.core.test.event;
 
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.test.dao.CityMybatisDao;
 import com.acooly.module.event.EventBus;
 import com.acooly.module.event.EventHandler;
@@ -51,6 +52,7 @@ public class EventBusController {
     log.info("{}", event);
     cityDao.get(1l);
     log.info("{}", event);
+    throw new Error("x");
     // do what you like
   }
 }

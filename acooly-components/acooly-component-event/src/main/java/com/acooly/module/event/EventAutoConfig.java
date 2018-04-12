@@ -6,7 +6,6 @@ import net.engio.mbassy.bus.MessagePublication;
 import net.engio.mbassy.bus.config.BusConfiguration;
 import net.engio.mbassy.bus.config.Feature;
 import net.engio.mbassy.bus.config.IBusConfiguration;
-import net.engio.mbassy.bus.error.IPublicationErrorHandler;
 import net.engio.mbassy.listener.MetadataReader;
 import net.engio.mbassy.subscription.SubscriptionManagerProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 @Configuration
@@ -31,18 +32,29 @@ public class EventAutoConfig {
     Feature.AsynchronousHandlerInvocation asynchronousHandlerInvocation =
         new Feature.AsynchronousHandlerInvocation();
     asynchronousHandlerInvocation.setExecutor(poolTaskExecutor.getThreadPoolExecutor());
-      Feature.SyncPubSub syncPubSub = new Feature.SyncPubSub()
-          .setMetadataReader(new MetadataReader())
-          .setPublicationFactory(new MessagePublication.Factory())
-          .setSubscriptionFactory(new ExSubscriptionFactory())
-          .setSubscriptionManagerProvider(new SubscriptionManagerProvider());
-      EventBus bus =
+    Feature.SyncPubSub syncPubSub =
+        new Feature.SyncPubSub()
+            .setMetadataReader(new MetadataReader())
+            .setPublicationFactory(new MessagePublication.Factory())
+            .setSubscriptionFactory(new ExSubscriptionFactory())
+            .setSubscriptionManagerProvider(new SubscriptionManagerProvider());
+    EventBus bus =
         new EventBus(
             new BusConfiguration()
                 .addFeature(syncPubSub)
                 .addFeature(asynchronousHandlerInvocation)
                 .addFeature(Feature.AsynchronousMessageDispatch.Default())
-                .addPublicationErrorHandler(new IPublicationErrorHandler.ConsoleLogger())
+                .addPublicationErrorHandler(
+                    error -> {
+                      Method handler = error.getHandler();
+                      String name =
+                          handler.getDeclaringClass().getSimpleName() + "#" + handler.getName();
+                      Throwable throwable = error.getCause();
+                      if (throwable instanceof InvocationTargetException) {
+                        throwable = ((InvocationTargetException) throwable).getTargetException();
+                      }
+                      log.error("调用方法:{} 失败，异常为：", name, throwable);
+                    })
                 .setProperty(IBusConfiguration.Properties.BusId, "global bus"));
     return bus;
   }

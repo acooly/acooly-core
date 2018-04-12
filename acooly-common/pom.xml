@@ -26,6 +26,11 @@
             <version>3.0.3</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <!-- google java library -->
         <dependency>
             <groupId>com.google.guava</groupId>

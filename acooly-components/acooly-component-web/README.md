@@ -173,3 +173,22 @@
 1. 所有controller响应`ViewResult`对象
 2. 启用`acooly.web.enableMVCGlobalExceptionHandler=true`，自动把异常转换为`ViewResult`
 3. 建议前端请求访问使用后缀`.data`或者`.json`,`ACCEPT_HEADER`设置为包含`application/json`.（.data后缀的请求不会过shiro、xss、crsf，性能会好些）
+
+
+### 2.5.5 收集业务日志
+
+请求路径：http://ip:port/xdata/ingest.data
+
+发送数据如下：
+
+    {
+     "logType": "1.1",
+      "body": {
+        "a": 123,
+        "b": "dfdf"
+      }
+    }
+    
+日志输出文件：/var/log/webapps/${appName}/busi，输出内容如下:
+
+    {"appName":"acooly-test","body":{"a":123,"b":"dfdf"},"env":"sdev","hostName":"192.168.49.25","logType":"1.1","timestamp":"2018-04-12 14:43:35"}

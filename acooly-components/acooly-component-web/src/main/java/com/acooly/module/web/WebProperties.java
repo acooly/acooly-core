@@ -57,6 +57,9 @@ public class WebProperties {
   /** 是否启用全局异常处理器 {@link GlobalExceptionHandler} */
   private boolean enableMVCGlobalExceptionHandler = false;
 
+  /** 是否启用数据收集 */
+  private boolean enableDataCollector = false;
+
   public List<String> buildMappingUrlList() {
     List mappingUrlList = new ArrayList<>();
     if (simplePageMap == null) {

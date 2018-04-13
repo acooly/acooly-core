@@ -14,7 +14,6 @@ import java.util.List;
 
 import static com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm.APP_CLIENT_REALM;
 
-
 /**
  * APP-API认证和授权realm实现
  *
@@ -25,6 +24,7 @@ public class AppClientAuthInfoRealm extends CacheableAuthInfoRealm {
 
   @Autowired private AppCustomerService appCustomerService;
   @Autowired private AppOpenapiProperties appOpenapiProperties;
+  protected static final String CLIENT_SUFFIX = "client";
 
   @Override
   public String getSecretKey(String partnerId) {
@@ -46,5 +46,13 @@ public class AppClientAuthInfoRealm extends CacheableAuthInfoRealm {
     } else {
       return Lists.newArrayList("*");
     }
+  }
+
+  protected String authorizationKey(String accessKey) {
+    return accessKey + AUTHZ_CACHE_KEY_PREFIX + CLIENT_SUFFIX;
+  }
+
+  protected String authenticationKey(String accessKey) {
+    return accessKey + AUTHZ_CACHE_KEY_PREFIX + CLIENT_SUFFIX;
   }
 }

@@ -3,11 +3,16 @@ package com.acooly.module.app.web;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.mapper.JsonMapper;
+import com.acooly.core.utils.validate.Validators;
 import com.acooly.module.app.domain.AppMessage;
 import com.acooly.module.app.enums.AppMessageContentType;
 import com.acooly.module.app.enums.AppMessageStatus;
 import com.acooly.module.app.enums.AppMessageType;
+import com.acooly.module.app.notify.AppNotifyService;
+import com.acooly.module.app.notify.NotifyMessage;
 import com.acooly.module.app.service.AppMessageService;
+import com.acooly.module.ofile.OFileProperties;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,8 +33,8 @@ public class AppMessageManagerController
   private static Map<String, String> allStatuss = AppMessageStatus.mapping();
 
   @Autowired private AppMessageService appMessageService;
-  //@Autowired
-  //private AppNotifyService appNotifyService;
+  @Autowired private AppNotifyService appNotifyService;
+  @Autowired private OFileProperties fileProperties;
 
   /**
    * 群发或广播
@@ -44,8 +49,8 @@ public class AppMessageManagerController
       HttpServletRequest request, HttpServletResponse response) {
     JsonEntityResult<AppMessage> result = new JsonEntityResult<AppMessage>();
     try {
-      //String sessionUser = getSessionUser(request);
-      //appNotifyService.group(getNotifyMessage(request), getTargets(request), sessionUser, true);
+      String sessionUser = getSessionUser(request);
+      appNotifyService.group(getNotifyMessage(request), getTargets(request), sessionUser, true);
       result.setMessage("推送成功");
     } catch (Exception e) {
       handleException(result, "推送", e);
@@ -62,42 +67,42 @@ public class AppMessageManagerController
     }
   }
 
-  //	protected NotifyMessage getNotifyMessage(HttpServletRequest request) {
-  //		NotifyMessage nm = new NotifyMessage();
-  //		nm.setTitle(request.getParameter("title"));
-  //		nm.setContent(request.getParameter("content"));
-  //		String online = request.getParameter("online");
-  //		nm.setOnline(Strings.equalsIgnoreCase("true", online));
-  //		String context = request.getParameter("context");
-  //		String contentType = request.getParameter("contentType");
-  //		if (Strings.isBlank(contentType)) {
-  //			nm.setContentType(AppMessageContentType.normal);
-  //		} else {
-  //			nm.setContentType(AppMessageContentType.findStatus(contentType));
-  //		}
-  //		if (Strings.isNotBlank(context)) {
-  //			@SuppressWarnings("unchecked")
-  //			Map<String, Object> contextMap = JsonMapper.nonDefaultMapper().fromJson(context, Map.class);
-  //			nm.setContext(contextMap);
-  //		}
-  //		Validators.assertJSR303(nm);
-  //		return nm;
-  //	}
-  //
-  //	protected String getSessionUser(HttpServletRequest request) {
-  //		String[] keys = Strings.split(OFileConfig.OFILE_CHECK_SESSION_KEYS, ",");
-  //		Object user = null;
-  //		for (String key : keys) {
-  //			user = request.getSession().getAttribute(key);
-  //			if (user != null) {
-  //				break;
-  //			}
-  //		}
-  //		if (user != null) {
-  //			return user.toString();
-  //		}
-  //		return null;
-  //	}
+  protected NotifyMessage getNotifyMessage(HttpServletRequest request) {
+    NotifyMessage nm = new NotifyMessage();
+    nm.setTitle(request.getParameter("title"));
+    nm.setContent(request.getParameter("content"));
+    String online = request.getParameter("online");
+    nm.setOnline(Strings.equalsIgnoreCase("true", online));
+    String context = request.getParameter("context");
+    String contentType = request.getParameter("contentType");
+    if (Strings.isBlank(contentType)) {
+      nm.setContentType(AppMessageContentType.normal);
+    } else {
+      nm.setContentType(AppMessageContentType.findStatus(contentType));
+    }
+    if (Strings.isNotBlank(context)) {
+      @SuppressWarnings("unchecked")
+      Map<String, Object> contextMap = JsonMapper.nonDefaultMapper().fromJson(context, Map.class);
+      nm.setContext(contextMap);
+    }
+    Validators.assertJSR303(nm);
+    return nm;
+  }
+
+  protected String getSessionUser(HttpServletRequest request) {
+    String[] keys = Strings.split(fileProperties.getCheckSessionKey(), ",");
+    Object user = null;
+    for (String key : keys) {
+      user = request.getSession().getAttribute(key);
+      if (user != null) {
+        break;
+      }
+    }
+    if (user != null) {
+      return user.toString();
+    }
+    return null;
+  }
 
   @Override
   protected void referenceData(HttpServletRequest request, Map<String, Object> model) {

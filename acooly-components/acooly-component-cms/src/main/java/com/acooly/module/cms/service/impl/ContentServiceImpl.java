@@ -70,9 +70,9 @@ public class ContentServiceImpl extends EntityServiceImpl<Content, ContentDao>
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("EQ_status", Content.STATUS_ENABLED);
         paramMap.put("EQ_contentType.code", typeCode);
-        if (StringUtils.isNotBlank(carrierCode)) {
-            paramMap.put("EQ_carrierCode", carrierCode);
-        }
+//        if (StringUtils.isNotBlank(carrierCode)) {
+//            paramMap.put("EQ_carrierCode", carrierCode);
+//        }
         // 是否单独显示业务
         pageInfo = query(pageInfo, paramMap, sortMap);
         if (pageInfo == null || Collections3.isEmpty(pageInfo.getPageResults())) {

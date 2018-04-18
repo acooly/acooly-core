@@ -11,15 +11,15 @@ import java.util.Map;
  * @author shuijing
  */
 @Slf4j
-@Service(group = "demo",version = "1.5")
+@Service(group = "demo", version = "1.5")
 public class DemoScheduleCallBackService implements ScheduleCallBackService {
     @Override
     public void justDoIT() {
         Map<String, String> attachments = RpcContext.getContext().getAttachments();
-        String myname="";
-        if (attachments.size()>0){
-             myname = attachments.get("myname");
+        String myname = "";
+        if (attachments.size() > 0) {
+            myname = attachments.get("myname");
         }
-        log.info("run scheduleCallBackService by dubbo invoke,my name is {}",myname);
+        log.info("run scheduleCallBackService by dubbo invoke,my name is {}", myname);
     }
 }

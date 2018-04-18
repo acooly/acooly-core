@@ -21,40 +21,40 @@ import org.springframework.data.redis.core.RedisTemplate;
  * 配置spring 声明式cache
  *
  * <ul>
- *   <li>1. 根据codis特性优化性能
- *   <li>2. 响应结果为null时不缓存数据，需要缓存null时，建议用空对象代替(我们的使用场景很少会对结果为null时缓存)
- *   <li>3. 当缓存操作异常时不抛出异常
- *   <li>4. 缓存key格式为:namespace+{@link Cacheable#cacheNames}+":"+param
+ * <li>1. 根据codis特性优化性能
+ * <li>2. 响应结果为null时不缓存数据，需要缓存null时，建议用空对象代替(我们的使用场景很少会对结果为null时缓存)
+ * <li>3. 当缓存操作异常时不抛出异常
+ * <li>4. 缓存key格式为:namespace+{@link Cacheable#cacheNames}+":"+param
  * </ul>
  *
  * @author qiubo
  */
 public class DefaultCachingConfigurer implements CachingConfigurer {
-  private RedisTemplate redisTemplate;
-  private long expiration;
+    private RedisTemplate redisTemplate;
+    private long expiration;
 
-  public DefaultCachingConfigurer(RedisTemplate redisTemplate, long expiration) {
-    this.redisTemplate = redisTemplate;
-    this.expiration = expiration;
-  }
+    public DefaultCachingConfigurer(RedisTemplate redisTemplate, long expiration) {
+        this.redisTemplate = redisTemplate;
+        this.expiration = expiration;
+    }
 
-  @Override
-  public CacheManager cacheManager() {
-    return new DefaultCacheManager(redisTemplate, expiration);
-  }
+    @Override
+    public CacheManager cacheManager() {
+        return new DefaultCacheManager(redisTemplate, expiration);
+    }
 
-  @Override
-  public CacheResolver cacheResolver() {
-    return null;
-  }
+    @Override
+    public CacheResolver cacheResolver() {
+        return null;
+    }
 
-  @Override
-  public KeyGenerator keyGenerator() {
-    return null;
-  }
+    @Override
+    public KeyGenerator keyGenerator() {
+        return null;
+    }
 
-  @Override
-  public CacheErrorHandler errorHandler() {
-    return new DefaultCacheErrorHandler();
-  }
+    @Override
+    public CacheErrorHandler errorHandler() {
+        return new DefaultCacheErrorHandler();
+    }
 }

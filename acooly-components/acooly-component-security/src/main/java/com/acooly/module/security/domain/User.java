@@ -15,7 +15,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "SYS_USER")
-@JsonIgnoreProperties({"password", "roles","salt", "hibernateLazyInitializer"})
+@JsonIgnoreProperties({"password", "roles", "salt", "hibernateLazyInitializer"})
 @Getter
 @Setter
 public class User extends AbstractEntity {

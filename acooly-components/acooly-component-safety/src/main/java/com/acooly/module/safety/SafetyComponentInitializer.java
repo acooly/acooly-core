@@ -4,10 +4,13 @@ import com.acooly.core.common.boot.component.ComponentInitializer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ConfigurableApplicationContext;
 
-/** @author zhangpu */
+/**
+ * @author zhangpu
+ */
 @Slf4j
 public class SafetyComponentInitializer implements ComponentInitializer {
 
-  @Override
-  public void initialize(ConfigurableApplicationContext applicationContext) {}
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+    }
 }

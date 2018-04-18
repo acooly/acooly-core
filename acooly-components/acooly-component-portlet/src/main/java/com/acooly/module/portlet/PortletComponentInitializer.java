@@ -14,11 +14,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 
-/** @author acooly */
+/**
+ * @author acooly
+ */
 public class PortletComponentInitializer implements ComponentInitializer {
 
-  private static final Logger logger = LoggerFactory.getLogger(PortletComponentInitializer.class);
+    private static final Logger logger = LoggerFactory.getLogger(PortletComponentInitializer.class);
 
-  @Override
-  public void initialize(ConfigurableApplicationContext applicationContext) {}
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+    }
 }

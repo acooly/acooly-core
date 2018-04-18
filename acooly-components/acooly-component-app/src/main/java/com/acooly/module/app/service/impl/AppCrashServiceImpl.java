@@ -8,4 +8,5 @@ import org.springframework.stereotype.Service;
 
 @Service("appCrashService")
 public class AppCrashServiceImpl extends EntityServiceImpl<AppCrash, AppCrashDao>
-    implements AppCrashService {}
+        implements AppCrashService {
+}

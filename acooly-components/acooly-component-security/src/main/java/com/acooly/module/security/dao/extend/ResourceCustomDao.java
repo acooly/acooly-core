@@ -12,15 +12,15 @@ import java.util.List;
  */
 public interface ResourceCustomDao {
 
-  List<Resource> getAuthorizedResources(Long userId);
+    List<Resource> getAuthorizedResources(Long userId);
 
-  List<Resource> getTopAuthorizedResource(Long userId);
+    List<Resource> getTopAuthorizedResource(Long userId);
 
-  List<Resource> getResourcesByRole(Long roleId);
+    List<Resource> getResourcesByRole(Long roleId);
 
-  List<ResourceNode> getAuthorizedResourceNodeAsRole(Long roleId);
+    List<ResourceNode> getAuthorizedResourceNodeAsRole(Long roleId);
 
-  List<ResourceNode> getAuthorizedResourceNodeAsUser(Long userId);
+    List<ResourceNode> getAuthorizedResourceNodeAsUser(Long userId);
 
-  List<ResourceNode> getResourcesNodeByRole(Long roleId);
+    List<ResourceNode> getResourcesNodeByRole(Long roleId);
 }

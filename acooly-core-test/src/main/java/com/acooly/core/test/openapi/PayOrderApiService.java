@@ -17,20 +17,22 @@ import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.core.service.base.BaseApiService;
 import lombok.extern.slf4j.Slf4j;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @OpenApiDependence("createOrder")
 @OpenApiService(
-  name = "payOrder",
-  desc = "支付订单服务",
-  responseType = ResponseType.SYN,
-  owner = "openApi-arch",
-  busiType = ApiBusiType.Trade
+        name = "payOrder",
+        desc = "支付订单服务",
+        responseType = ResponseType.SYN,
+        owner = "openApi-arch",
+        busiType = ApiBusiType.Trade
 )
 @Slf4j
 public class PayOrderApiService extends BaseApiService<PayOrderRequest, PayOrderResponse> {
-  @Override
-  protected void doService(PayOrderRequest request, PayOrderResponse response) {
-    log.info("success");
-    response.setResult(ApiServiceResultCode.PROCESSING);
-  }
+    @Override
+    protected void doService(PayOrderRequest request, PayOrderResponse response) {
+        log.info("success");
+        response.setResult(ApiServiceResultCode.PROCESSING);
+    }
 }

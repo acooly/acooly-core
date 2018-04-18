@@ -16,4 +16,5 @@ import com.acooly.module.portlet.entity.ActionLog;
  *
  * @author acooly
  */
-public interface ActionLogDao extends EntityMybatisDao<ActionLog> {}
+public interface ActionLogDao extends EntityMybatisDao<ActionLog> {
+}

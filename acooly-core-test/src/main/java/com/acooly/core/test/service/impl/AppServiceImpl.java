@@ -23,4 +23,5 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service("appService")
 @Transactional
-public class AppServiceImpl extends EntityServiceImpl<App, AppDao> implements AppService {}
+public class AppServiceImpl extends EntityServiceImpl<App, AppDao> implements AppService {
+}

@@ -13,13 +13,20 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @Getter
 @Setter
 public class DtoBase extends InfoBase {
-  private static final long serialVersionUID = 1L;
-  /** 商户订单号 */
-  private String merchOrderNo;
-  /** 业务订单号 * */
-  @NotEmpty private String bizOrderNo;
+    private static final long serialVersionUID = 1L;
+    /**
+     * 商户订单号
+     */
+    private String merchOrderNo;
+    /**
+     * 业务订单号 *
+     */
+    @NotEmpty
+    private String bizOrderNo;
 }

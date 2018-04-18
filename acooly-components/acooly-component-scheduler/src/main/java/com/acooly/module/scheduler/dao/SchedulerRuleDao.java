@@ -11,15 +11,15 @@ import java.util.Date;
 
 public interface SchedulerRuleDao extends EntityJpaDao<SchedulerRule, Long> {
 
-  @Query(value = "select  current_timestamp from dual", nativeQuery = true)
-  Date getSysdate();
+    @Query(value = "select  current_timestamp from dual", nativeQuery = true)
+    Date getSysdate();
 
-  @Transactional
-  @Modifying
-  @Query(
-    value =
-        "UPDATE scheduler_rule SET exception_at_last_execute= :lastExecute , last_execute_time= current_timestamp,execute_num=execute_num+1  WHERE id= :id ",
-    nativeQuery = true
-  )
-  void updateExceptionAtLastExecute(@Param("lastExecute") String lastExecute, @Param("id") Long id);
+    @Transactional
+    @Modifying
+    @Query(
+            value =
+                    "UPDATE scheduler_rule SET exception_at_last_execute= :lastExecute , last_execute_time= current_timestamp,execute_num=execute_num+1  WHERE id= :id ",
+            nativeQuery = true
+    )
+    void updateExceptionAtLastExecute(@Param("lastExecute") String lastExecute, @Param("id") Long id);
 }

@@ -28,95 +28,97 @@ import javax.servlet.http.HttpServletResponse;
  * @author zhangpu
  */
 public abstract class AbstractLotteryPortalController
-    extends AbstractStandardEntityController<Lottery, LotteryService> {
+        extends AbstractStandardEntityController<Lottery, LotteryService> {
 
-  @Resource protected LotteryFacade lotteryFacade;
-  @Resource protected LotteryWinnerService lotteryWinnerService;
+    @Resource
+    protected LotteryFacade lotteryFacade;
+    @Resource
+    protected LotteryWinnerService lotteryWinnerService;
 
-  /**
-   * 抽奖
-   *
-   * @param request
-   * @param response
-   * @return
-   */
-  @RequestMapping("lottery")
-  @ResponseBody
-  public JsonEntityResult<LotteryResult> lottery(
-      HttpServletRequest request, HttpServletResponse response) {
-    JsonEntityResult<LotteryResult> result = new JsonEntityResult<LotteryResult>();
-    try {
-      doLotteryCheck(request);
-      LotteryOrder lotteryOrder =
-          new LotteryOrder(getLotteryCode(request), getLotteryUser(request), "测试");
-      LotteryResult lotteryResult = lotteryFacade.lottery(lotteryOrder);
-      result.setEntity(lotteryResult);
-    } catch (Exception e) {
-      handleException(result, "抽奖", e);
+    /**
+     * 抽奖
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("lottery")
+    @ResponseBody
+    public JsonEntityResult<LotteryResult> lottery(
+            HttpServletRequest request, HttpServletResponse response) {
+        JsonEntityResult<LotteryResult> result = new JsonEntityResult<LotteryResult>();
+        try {
+            doLotteryCheck(request);
+            LotteryOrder lotteryOrder =
+                    new LotteryOrder(getLotteryCode(request), getLotteryUser(request), "测试");
+            LotteryResult lotteryResult = lotteryFacade.lottery(lotteryOrder);
+            result.setEntity(lotteryResult);
+        } catch (Exception e) {
+            handleException(result, "抽奖", e);
+        }
+        return result;
     }
-    return result;
-  }
 
-  /**
-   * 添加抽奖次数
-   *
-   * @param request
-   * @param response
-   * @return
-   */
-  @RequestMapping("addCount")
-  @ResponseBody
-  public JsonResult addLotteryCount(HttpServletRequest request, HttpServletResponse response) {
-    JsonResult result = new JsonResult();
-    try {
-      String requCount = request.getParameter("count");
-      if (Strings.isBlank(requCount) || !Strings.isNumeric(requCount)) {
-        throw new RuntimeException("必须传入增加的次数参数：count");
-      }
-      LotteryCountOrder lotteryCountOrder =
-          new LotteryCountOrder(getLotteryCode(request), getLotteryUser(request));
-      lotteryCountOrder.setCount(Integer.parseInt(requCount));
-      lotteryCountOrder.setGid(Ids.gid());
-      lotteryCountOrder.setPartnerId(Ids.getDid());
-      ResultBase resultBase = lotteryFacade.addLotteryCount(lotteryCountOrder);
-      result.setCode(resultBase.getCode());
-      result.setMessage(resultBase.getDetail());
-      result.setSuccess(resultBase.getStatus() == ResultStatus.success);
-    } catch (Exception e) {
-      handleException(result, "增加抽奖次数", e);
+    /**
+     * 添加抽奖次数
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("addCount")
+    @ResponseBody
+    public JsonResult addLotteryCount(HttpServletRequest request, HttpServletResponse response) {
+        JsonResult result = new JsonResult();
+        try {
+            String requCount = request.getParameter("count");
+            if (Strings.isBlank(requCount) || !Strings.isNumeric(requCount)) {
+                throw new RuntimeException("必须传入增加的次数参数：count");
+            }
+            LotteryCountOrder lotteryCountOrder =
+                    new LotteryCountOrder(getLotteryCode(request), getLotteryUser(request));
+            lotteryCountOrder.setCount(Integer.parseInt(requCount));
+            lotteryCountOrder.setGid(Ids.gid());
+            lotteryCountOrder.setPartnerId(Ids.getDid());
+            ResultBase resultBase = lotteryFacade.addLotteryCount(lotteryCountOrder);
+            result.setCode(resultBase.getCode());
+            result.setMessage(resultBase.getDetail());
+            result.setSuccess(resultBase.getStatus() == ResultStatus.success);
+        } catch (Exception e) {
+            handleException(result, "增加抽奖次数", e);
+        }
+        return result;
     }
-    return result;
-  }
 
-  @RequestMapping("getCount")
-  @ResponseBody
-  public JsonResult getCount(HttpServletRequest request, HttpServletResponse response) {
-    JsonResult result = new JsonResult();
-    try {
-      LotteryCountOrder lotteryCountOrder =
-          new LotteryCountOrder(getLotteryCode(request), getLotteryUser(request));
-      lotteryCountOrder.setGid(Ids.gid());
-      lotteryCountOrder.setPartnerId(Ids.getDid());
-      LotteryCountResult lotteryCountResult = lotteryFacade.getLotteryCount(lotteryCountOrder);
-      result.setCode(lotteryCountResult.getCode());
-      result.setMessage(lotteryCountResult.getDetail());
-      result.setSuccess(lotteryCountResult.getStatus() == ResultStatus.success);
-      result.appendData("totalTimes", lotteryCountResult.getTotalTimes());
-      result.appendData("playTimes", lotteryCountResult.getPlayTimes());
-    } catch (Exception e) {
-      handleException(result, "查询抽奖次数", e);
+    @RequestMapping("getCount")
+    @ResponseBody
+    public JsonResult getCount(HttpServletRequest request, HttpServletResponse response) {
+        JsonResult result = new JsonResult();
+        try {
+            LotteryCountOrder lotteryCountOrder =
+                    new LotteryCountOrder(getLotteryCode(request), getLotteryUser(request));
+            lotteryCountOrder.setGid(Ids.gid());
+            lotteryCountOrder.setPartnerId(Ids.getDid());
+            LotteryCountResult lotteryCountResult = lotteryFacade.getLotteryCount(lotteryCountOrder);
+            result.setCode(lotteryCountResult.getCode());
+            result.setMessage(lotteryCountResult.getDetail());
+            result.setSuccess(lotteryCountResult.getStatus() == ResultStatus.success);
+            result.appendData("totalTimes", lotteryCountResult.getTotalTimes());
+            result.appendData("playTimes", lotteryCountResult.getPlayTimes());
+        } catch (Exception e) {
+            handleException(result, "查询抽奖次数", e);
+        }
+        return result;
     }
-    return result;
-  }
 
-  protected abstract String getLotteryCode(HttpServletRequest request);
+    protected abstract String getLotteryCode(HttpServletRequest request);
 
-  protected abstract String getLotteryUser(HttpServletRequest request);
+    protected abstract String getLotteryUser(HttpServletRequest request);
 
-  /**
-   * 根据具体抽奖逻辑check当前用户是否可以参与抽奖
-   *
-   * @param request
-   */
-  protected abstract void doLotteryCheck(HttpServletRequest request);
+    /**
+     * 根据具体抽奖逻辑check当前用户是否可以参与抽奖
+     *
+     * @param request
+     */
+    protected abstract void doLotteryCheck(HttpServletRequest request);
 }

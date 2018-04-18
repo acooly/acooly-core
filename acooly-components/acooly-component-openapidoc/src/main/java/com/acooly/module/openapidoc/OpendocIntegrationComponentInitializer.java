@@ -12,13 +12,15 @@ package com.acooly.module.openapidoc;
 import com.acooly.core.common.boot.component.ComponentInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 public class OpendocIntegrationComponentInitializer implements ComponentInitializer {
-  @Override
-  public void initialize(ConfigurableApplicationContext applicationContext) {
-    setPropertyIfMissing(
-        "acooly.jpa.entityPackagesToScan.openapidoc1", "com.acooly.openapi.apidoc.**.domain");
-      setPropertyIfMissing(
-          "acooly.jpa.entityPackagesToScan.openapidoc2", "com.acooly.openapi.apidoc.**.entity");
-  }
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        setPropertyIfMissing(
+                "acooly.jpa.entityPackagesToScan.openapidoc1", "com.acooly.openapi.apidoc.**.domain");
+        setPropertyIfMissing(
+                "acooly.jpa.entityPackagesToScan.openapidoc2", "com.acooly.openapi.apidoc.**.entity");
+    }
 }

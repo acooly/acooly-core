@@ -17,31 +17,33 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 public interface City1MybatisDao extends EntityMybatisDao<City1> {
-  @Select("select * from City1")
-  List<City1> selectAll();
+    @Select("select * from City1")
+    List<City1> selectAll();
 
-  /**
-   * 分页查询
-   *
-   * @param pageInfo
-   * @return
-   */
-  @Select("select * from City1")
-  List<City1> selectAllByPage(PageInfo<City1> pageInfo);
+    /**
+     * 分页查询
+     *
+     * @param pageInfo
+     * @return
+     */
+    @Select("select * from City1")
+    List<City1> selectAllByPage(PageInfo<City1> pageInfo);
 
 
-  @Select("select * from City1 where id in #{ids}")
-  List<City1> selectByIn(@Param("ids") List<String> ids);
+    @Select("select * from City1 where id in #{ids}")
+    List<City1> selectByIn(@Param("ids") List<String> ids);
 
-  @Select("select * from City1  where id=#{id} for update")
-  City1 selectById(@Param("id") String id);
+    @Select("select * from City1  where id=#{id} for update")
+    City1 selectById(@Param("id") String id);
 
-  PageInfo<City1> selectAllByPage1(PageInfo pageInfo);
+    PageInfo<City1> selectAllByPage1(PageInfo pageInfo);
 
-  List<City1> selectByIn1(@Param("ids") List<String> ids);
+    List<City1> selectByIn1(@Param("ids") List<String> ids);
 
-  @Select("select * from City1 where id in (#{id1},#{id2})")
-  List<City1> selectByIn2(@Param("id1") String id1,@Param("id2") String id2);
+    @Select("select * from City1 where id in (#{id1},#{id2})")
+    List<City1> selectByIn2(@Param("id1") String id1, @Param("id2") String id2);
 }

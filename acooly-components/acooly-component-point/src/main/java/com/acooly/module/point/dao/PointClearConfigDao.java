@@ -11,11 +11,9 @@ import com.acooly.module.point.domain.PointClearConfig;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import java.util.List;
-
 /**
  * 积分清零设置 Mybatis Dao
- *
+ * <p>
  * <p>
  * Date: 2017-04-19 16:24:31
  *
@@ -23,6 +21,6 @@ import java.util.List;
  */
 public interface PointClearConfigDao extends EntityMybatisDao<PointClearConfig> {
 
-	@Select("select * from point_clear_config where start_trade_time<=#{tradeTimeStr} and end_trade_time>= #{tradeTimeStr} limit 1")
-	PointClearConfig getOneClearConfigByTradeTime(@Param("tradeTimeStr") String tradeTimeStr);
+    @Select("select * from point_clear_config where start_trade_time<=#{tradeTimeStr} and end_trade_time>= #{tradeTimeStr} limit 1")
+    PointClearConfig getOneClearConfigByTradeTime(@Param("tradeTimeStr") String tradeTimeStr);
 }

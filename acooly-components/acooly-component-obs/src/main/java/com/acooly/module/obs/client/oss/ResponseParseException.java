@@ -6,21 +6,21 @@ package com.acooly.module.obs.client.oss;
  * @author shuijing
  */
 public class ResponseParseException extends Exception {
-  private static final long serialVersionUID = -6660159156997037589L;
+    private static final long serialVersionUID = -6660159156997037589L;
 
-  public ResponseParseException() {
-    super();
-  }
+    public ResponseParseException() {
+        super();
+    }
 
-  public ResponseParseException(String message) {
-    super(message);
-  }
+    public ResponseParseException(String message) {
+        super(message);
+    }
 
-  public ResponseParseException(Throwable cause) {
-    super(cause);
-  }
+    public ResponseParseException(Throwable cause) {
+        super(cause);
+    }
 
-  public ResponseParseException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    public ResponseParseException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

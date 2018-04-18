@@ -15,23 +15,24 @@ import javax.servlet.ServletContextListener;
 @Deprecated
 public class SystemPropertyIntergrationListener implements ServletContextListener {
 
-  @Override
-  public void contextInitialized(ServletContextEvent event) {
-    String springprofilesActive =
+    @Override
+    public void contextInitialized(ServletContextEvent event) {
+        String springprofilesActive =
+                event
+                        .getServletContext()
+                        .getInitParameter(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME);
+        System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, springprofilesActive);
         event
-            .getServletContext()
-            .getInitParameter(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME);
-    System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, springprofilesActive);
-    event
-        .getServletContext()
-        .log(
-            "Sett System Property: '"
-                + AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME
-                + "' = "
-                + springprofilesActive
-                + " according to web.xml.");
-  }
+                .getServletContext()
+                .log(
+                        "Sett System Property: '"
+                                + AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME
+                                + "' = "
+                                + springprofilesActive
+                                + " according to web.xml.");
+    }
 
-  @Override
-  public void contextDestroyed(ServletContextEvent event) {}
+    @Override
+    public void contextDestroyed(ServletContextEvent event) {
+    }
 }

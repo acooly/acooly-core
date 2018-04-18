@@ -23,86 +23,90 @@ import java.util.Map;
  * @author zhangpu
  */
 public class ShireLoginLogoutSubject
-    implements LoginLogoutListener, ApplicationContextAware, InitializingBean {
+        implements LoginLogoutListener, ApplicationContextAware, InitializingBean {
 
-  private static final Logger logger = LoggerFactory.getLogger(ShireLoginLogoutSubject.class);
+    private static final Logger logger = LoggerFactory.getLogger(ShireLoginLogoutSubject.class);
 
-  /** 需要通知的监听器 */
-  private Map<String, LoginLogoutListener> listeners;
-  /** Spring 容器 */
-  private ApplicationContext applicationContext;
+    /**
+     * 需要通知的监听器
+     */
+    private Map<String, LoginLogoutListener> listeners;
+    /**
+     * Spring 容器
+     */
+    private ApplicationContext applicationContext;
 
-  @Override
-  public void beforeLogout(
-      HttpServletRequest request, HttpServletResponse response, Subject subject) {
-    if (listeners == null || listeners.size() == 0) {
-      return;
+    @Override
+    public void beforeLogout(
+            HttpServletRequest request, HttpServletResponse response, Subject subject) {
+        if (listeners == null || listeners.size() == 0) {
+            return;
+        }
+        for (Map.Entry<String, LoginLogoutListener> entry : listeners.entrySet()) {
+            logger.debug("Notify beforeLogout to " + entry.getKey());
+            notifyBeforeLogout(request, response, subject, entry.getValue());
+        }
     }
-    for (Map.Entry<String, LoginLogoutListener> entry : listeners.entrySet()) {
-      logger.debug("Notify beforeLogout to " + entry.getKey());
-      notifyBeforeLogout(request, response, subject, entry.getValue());
-    }
-  }
 
-  @Override
-  public void afterLogin(
-      AuthenticationToken token,
-      AuthenticationException e,
-      HttpServletRequest request,
-      HttpServletResponse response) {
-    if (listeners == null || listeners.size() == 0) {
-      return;
+    @Override
+    public void afterLogin(
+            AuthenticationToken token,
+            AuthenticationException e,
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        if (listeners == null || listeners.size() == 0) {
+            return;
+        }
+        for (Map.Entry<String, LoginLogoutListener> entry : listeners.entrySet()) {
+            if (entry.getValue().getClass().getName().equals(this.getClass().getName())) {
+                continue;
+            }
+            logger.debug("Notify afterLogin to " + entry.getKey());
+            notifyAfterLogin(token, e, request, response, entry.getValue());
+        }
     }
-    for (Map.Entry<String, LoginLogoutListener> entry : listeners.entrySet()) {
-      if (entry.getValue().getClass().getName().equals(this.getClass().getName())) {
-        continue;
-      }
-      logger.debug("Notify afterLogin to " + entry.getKey());
-      notifyAfterLogin(token, e, request, response, entry.getValue());
-    }
-  }
 
-  private void notifyBeforeLogout(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      Subject subject,
-      LoginLogoutListener listener) {
-    try {
-      listener.beforeLogout(request, response, subject);
-    } catch (Exception e2) {
-      // Do not do anything
-      logger.debug("notifyAfterLogin failure. " + e2.getMessage());
+    private void notifyBeforeLogout(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Subject subject,
+            LoginLogoutListener listener) {
+        try {
+            listener.beforeLogout(request, response, subject);
+        } catch (Exception e2) {
+            // Do not do anything
+            logger.debug("notifyAfterLogin failure. " + e2.getMessage());
+        }
     }
-  }
 
-  private void notifyAfterLogin(
-      AuthenticationToken token,
-      AuthenticationException e,
-      HttpServletRequest request,
-      HttpServletResponse response,
-      LoginLogoutListener listener) {
-    try {
-      listener.afterLogin(token, e, request, response);
-    } catch (Exception e2) {
-      // Do not do anything
-      logger.debug("notifyAfterLogin failure. " + e2.getMessage());
+    private void notifyAfterLogin(
+            AuthenticationToken token,
+            AuthenticationException e,
+            HttpServletRequest request,
+            HttpServletResponse response,
+            LoginLogoutListener listener) {
+        try {
+            listener.afterLogin(token, e, request, response);
+        } catch (Exception e2) {
+            // Do not do anything
+            logger.debug("notifyAfterLogin failure. " + e2.getMessage());
+        }
     }
-  }
 
-  @Override
-  public void afterPropertiesSet() throws Exception {
-    listeners = applicationContext.getBeansOfType(LoginLogoutListener.class);
-    Iterator<Map.Entry<String, LoginLogoutListener>> iterator = listeners.entrySet().iterator();
-    while (iterator.hasNext()) {
-      Map.Entry<String, LoginLogoutListener> entry = iterator.next();
-      if (entry.getValue().equals(this)) {
-        iterator.remove();
-      }
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        listeners = applicationContext.getBeansOfType(LoginLogoutListener.class);
+        Iterator<Map.Entry<String, LoginLogoutListener>> iterator = listeners.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, LoginLogoutListener> entry = iterator.next();
+            if (entry.getValue().equals(this)) {
+                iterator.remove();
+            }
+        }
     }
-  }
 
-  @Override
-  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-    this.applicationContext = applicationContext;
-  }
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 }

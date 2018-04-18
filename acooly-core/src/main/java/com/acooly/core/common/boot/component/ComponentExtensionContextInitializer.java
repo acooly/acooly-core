@@ -22,30 +22,32 @@ import org.springframework.core.io.support.SpringFactoriesLoader;
 
 import java.util.List;
 
-/** @author qiubo */
+/**
+ * @author qiubo
+ */
 @Order(value = Ordered.LOWEST_PRECEDENCE)
 @Slf4j
 public class ComponentExtensionContextInitializer implements ApplicationContextInitializer {
-  @Override
-  public void initialize(ConfigurableApplicationContext applicationContext) {
-    new DevModeDetector().apply(applicationContext.getEnvironment());
-    RelaxedPropertyResolver resolver =
-        new RelaxedPropertyResolver(applicationContext.getEnvironment(), "spring.autoconfigure.");
-    String[] exclude = resolver.getProperty("exclude", String[].class);
-    if (exclude == null) {
-      exclude = new String[0];
-    }
-    List<String> excludes = Lists.newArrayList(exclude);
-    SpringFactoriesLoader.loadFactories(
-            ComponentInitializer.class, applicationContext.getClassLoader())
-        .forEach(
-            componentInitializer -> {
-              componentInitializer.initialize(applicationContext);
-              excludes.addAll(componentInitializer.excludeAutoconfigClassNames());
-            });
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        new DevModeDetector().apply(applicationContext.getEnvironment());
+        RelaxedPropertyResolver resolver =
+                new RelaxedPropertyResolver(applicationContext.getEnvironment(), "spring.autoconfigure.");
+        String[] exclude = resolver.getProperty("exclude", String[].class);
+        if (exclude == null) {
+            exclude = new String[0];
+        }
+        List<String> excludes = Lists.newArrayList(exclude);
+        SpringFactoriesLoader.loadFactories(
+                ComponentInitializer.class, applicationContext.getClassLoader())
+                .forEach(
+                        componentInitializer -> {
+                            componentInitializer.initialize(applicationContext);
+                            excludes.addAll(componentInitializer.excludeAutoconfigClassNames());
+                        });
 
-    if (!excludes.isEmpty()) {
-      System.setProperty("spring.autoconfigure.exclude", Joiner.on(',').join(excludes));
+        if (!excludes.isEmpty()) {
+            System.setProperty("spring.autoconfigure.exclude", Joiner.on(',').join(excludes));
+        }
     }
-  }
 }

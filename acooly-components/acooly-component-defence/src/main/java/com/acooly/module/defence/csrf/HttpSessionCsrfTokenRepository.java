@@ -27,41 +27,41 @@ import javax.servlet.http.HttpSession;
  */
 public final class HttpSessionCsrfTokenRepository implements CsrfTokenRepository {
 
-  private static final String DEFAULT_CSRF_TOKEN_ATTR_NAME =
-      HttpSessionCsrfTokenRepository.class.getName().concat(".CSRF_TOKEN");
+    private static final String DEFAULT_CSRF_TOKEN_ATTR_NAME =
+            HttpSessionCsrfTokenRepository.class.getName().concat(".CSRF_TOKEN");
 
-  private String sessionAttributeName = DEFAULT_CSRF_TOKEN_ATTR_NAME;
+    private String sessionAttributeName = DEFAULT_CSRF_TOKEN_ATTR_NAME;
 
-  /*
-   * (non-Javadoc)
-   * @see org.springframework.security.web.csrf.CsrfTokenRepository#saveToken(org.springframework.security.web.csrf.CsrfToken, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-   */
-  public void saveToken(CsrfToken token, HttpServletRequest request, HttpServletResponse response) {
-    if (token == null) {
-      HttpSession session = request.getSession(false);
-      if (session != null) {
-        session.removeAttribute(sessionAttributeName);
-      }
-    } else {
-      HttpSession session = request.getSession();
-      session.setAttribute(sessionAttributeName, token);
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.security.web.csrf.CsrfTokenRepository#saveToken(org.springframework.security.web.csrf.CsrfToken, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     */
+    public void saveToken(CsrfToken token, HttpServletRequest request, HttpServletResponse response) {
+        if (token == null) {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.removeAttribute(sessionAttributeName);
+            }
+        } else {
+            HttpSession session = request.getSession();
+            session.setAttribute(sessionAttributeName, token);
+        }
     }
-  }
 
-  /* (non-Javadoc)
-   * @see org.springframework.security.web.csrf.CsrfTokenRepository#loadToken(javax.servlet.http.HttpServletRequest)
-   */
-  public CsrfToken loadToken(HttpServletRequest request) {
-    HttpSession session = request.getSession(false);
-    if (session == null) {
-      return null;
+    /* (non-Javadoc)
+     * @see org.springframework.security.web.csrf.CsrfTokenRepository#loadToken(javax.servlet.http.HttpServletRequest)
+     */
+    public CsrfToken loadToken(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            return null;
+        }
+        return (CsrfToken) session.getAttribute(sessionAttributeName);
     }
-    return (CsrfToken) session.getAttribute(sessionAttributeName);
-  }
 
-  /*
-   * (non-Javadoc)
-   * @see org.springframework.security.web.csrf.CsrfTokenRepository#generateToken(javax.servlet.http.HttpServletRequest)
-   */
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.security.web.csrf.CsrfTokenRepository#generateToken(javax.servlet.http.HttpServletRequest)
+     */
 
 }

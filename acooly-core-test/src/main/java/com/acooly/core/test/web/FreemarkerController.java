@@ -17,24 +17,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @Controller
 public class FreemarkerController {
-  @Autowired(required = false) private ServletContext servletContext;
+    @Autowired(required = false)
+    private ServletContext servletContext;
 
-  @RequestMapping("/testFtl")
-  public String testFtl(HttpServletRequest request, ModelMap modelMap) {
-    servletContext.setAttribute("xxx", "aaa");
-    modelMap.put("name", "na");
-    modelMap.put("message", "hi");
-    request.getSession().setAttribute("valueInSession","xx");
-    request.setAttribute("valueInRequest","valueInRequest");
-    return "test";
-  }
+    @RequestMapping("/testFtl")
+    public String testFtl(HttpServletRequest request, ModelMap modelMap) {
+        servletContext.setAttribute("xxx", "aaa");
+        modelMap.put("name", "na");
+        modelMap.put("message", "hi");
+        request.getSession().setAttribute("valueInSession", "xx");
+        request.setAttribute("valueInRequest", "valueInRequest");
+        return "test";
+    }
 
-  @RequestMapping("/testInclude")
-  public String testInclude(ModelMap modelMap) {
-    modelMap.put("where", "out");
-    return "testInclude";
-  }
+    @RequestMapping("/testInclude")
+    public String testInclude(ModelMap modelMap) {
+        modelMap.put("where", "out");
+        return "testInclude";
+    }
 }

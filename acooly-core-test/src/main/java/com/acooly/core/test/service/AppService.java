@@ -17,4 +17,5 @@ import com.acooly.core.test.domain.App;
  *
  * @author acooly
  */
-public interface AppService extends EntityService<App> {}
+public interface AppService extends EntityService<App> {
+}

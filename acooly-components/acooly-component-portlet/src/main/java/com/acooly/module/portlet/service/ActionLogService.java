@@ -23,14 +23,14 @@ import javax.validation.constraints.NotNull;
  */
 public interface ActionLogService extends EntityService<ActionLog> {
 
-  ActionLog logger(
-      String action,
-      String actionName,
-      String userName,
-      ActionChannelEnum actionChannel,
-      String version,
-      String comments,
-      HttpServletRequest request);
+    ActionLog logger(
+            String action,
+            String actionName,
+            String userName,
+            ActionChannelEnum actionChannel,
+            String version,
+            String comments,
+            HttpServletRequest request);
 
-  ActionLog logger(@NotNull HttpServletRequest request, String userName);
+    ActionLog logger(@NotNull HttpServletRequest request, String userName);
 }

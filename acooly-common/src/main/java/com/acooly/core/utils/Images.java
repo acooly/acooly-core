@@ -14,9 +14,8 @@ import java.io.InputStream;
 
 public class Images {
 
-    private static Logger logger = LoggerFactory.getLogger(Images.class);
-
     private static final String IMAGE_EXTS = "JPG,PNG,GIF,BMP";
+    private static Logger logger = LoggerFactory.getLogger(Images.class);
 
     /**
      * 生成缩略图
@@ -90,7 +89,6 @@ public class Images {
     }
 
     /**
-     *
      * @param inputStream 水印图片
      * @param targetImg
      * @param x
@@ -111,12 +109,12 @@ public class Images {
             int wideth_biao = src_biao.getWidth(null);
             int height_biao = src_biao.getHeight(null);
             g.drawImage(
-                src_biao,
-                wideth - wideth_biao - x,
-                height - height_biao - y,
-                wideth_biao,
-                height_biao,
-                null);
+                    src_biao,
+                    wideth - wideth_biao - x,
+                    height - height_biao - y,
+                    wideth_biao,
+                    height_biao,
+                    null);
             g.dispose();
             ImageIO.write(image, getImageFormat(targetImg), _file);
         } catch (Exception e) {

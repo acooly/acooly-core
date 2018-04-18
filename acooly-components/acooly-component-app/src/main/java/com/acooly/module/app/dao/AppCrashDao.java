@@ -10,4 +10,5 @@ import com.acooly.module.jpa.EntityJpaDao;
  *
  * @author Acooly Code Generator
  */
-public interface AppCrashDao extends EntityJpaDao<AppCrash, Long> {}
+public interface AppCrashDao extends EntityJpaDao<AppCrash, Long> {
+}

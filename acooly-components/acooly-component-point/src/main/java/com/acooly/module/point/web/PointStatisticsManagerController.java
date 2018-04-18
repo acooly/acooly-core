@@ -25,18 +25,18 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/manage/point/pointStatistics")
 public class PointStatisticsManagerController
-    extends AbstractJQueryEntityController<PointStatistics, PointStatisticsService> {
+        extends AbstractJQueryEntityController<PointStatistics, PointStatisticsService> {
 
-  @SuppressWarnings("unused")
-  @Autowired
-  private PointStatisticsService pointStatisticsService;
+    @SuppressWarnings("unused")
+    @Autowired
+    private PointStatisticsService pointStatisticsService;
 
-  {
-    allowMapping = "*";
-  }
+    {
+        allowMapping = "*";
+    }
 
-  @Override
-  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-    model.put("allStatuss", PointStaticsStatus.mapping());
-  }
+    @Override
+    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+        model.put("allStatuss", PointStaticsStatus.mapping());
+    }
 }

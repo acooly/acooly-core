@@ -11,10 +11,12 @@ import com.acooly.core.utils.enums.Messageable;
 
 import java.io.Serializable;
 
-/** @author zhangpu */
+/**
+ * @author zhangpu
+ */
 public interface Resultable extends Serializable {
 
-  Messageable getStatus();
+    Messageable getStatus();
 
-  String getDetail();
+    String getDetail();
 }

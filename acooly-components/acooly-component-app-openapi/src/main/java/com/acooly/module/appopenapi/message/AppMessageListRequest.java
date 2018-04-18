@@ -1,4 +1,6 @@
-/** create by zhangpu date:2016年2月13日 */
+/**
+ * create by zhangpu date:2016年2月13日
+ */
 package com.acooly.module.appopenapi.message;
 
 import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
@@ -12,4 +14,5 @@ import com.acooly.openapi.framework.common.message.PageApiRequest;
  * @date 2016年2月13日
  */
 @OpenApiMessage(service = "appMessageList", type = ApiMessageType.Request)
-public class AppMessageListRequest extends PageApiRequest {}
+public class AppMessageListRequest extends PageApiRequest {
+}

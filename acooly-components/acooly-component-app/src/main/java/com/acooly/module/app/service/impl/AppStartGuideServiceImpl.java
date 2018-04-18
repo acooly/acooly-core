@@ -11,10 +11,10 @@ import java.util.List;
 
 @Service("appStartGuideService")
 public class AppStartGuideServiceImpl extends EntityServiceImpl<AppStartGuide, AppStartGuideDao>
-    implements AppStartGuideService {
+        implements AppStartGuideService {
 
-  @Override
-  public List<AppStartGuide> loadValidGuides() {
-    return getEntityDao().findByStatusOrderBySortOrderAsc(EntityStatus.Enable);
-  }
+    @Override
+    public List<AppStartGuide> loadValidGuides() {
+        return getEntityDao().findByStatusOrderBySortOrderAsc(EntityStatus.Enable);
+    }
 }

@@ -14,27 +14,29 @@ import com.acooly.core.common.boot.component.ComponentInitializer;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ConfigurableApplicationContext;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 public class SecurityComponentInitializer implements ComponentInitializer {
-  public static final String DUBBO_CUMSTOM_CONFIG_PACKAGE = "acooly.dubbo.cumstomConfigPackage";
+    public static final String DUBBO_CUMSTOM_CONFIG_PACKAGE = "acooly.dubbo.cumstomConfigPackage";
 
-  public static final String DUBBO_SSO_CONFIG_PACKAGE = "com.acooly.module.security.service";
+    public static final String DUBBO_SSO_CONFIG_PACKAGE = "com.acooly.module.security.service";
 
-  @Override
-  public void initialize(ConfigurableApplicationContext applicationContext) {
-    setPropertyIfMissing(
-        "acooly.ds.Checker.excludedColumnTables.security", "SYS_ROLE_RESC, SYS_USER_ROLE");
-    SecurityProperties securityProperties = new SecurityProperties();
-    EnvironmentHolder.buildProperties(securityProperties);
-    if (securityProperties.isEnableSSOAuthzService()) {
-      String dubboConfigPackage = EnvironmentHolder.get().getProperty(DUBBO_CUMSTOM_CONFIG_PACKAGE);
-      if (StringUtils.isEmpty(dubboConfigPackage)) {
-        System.setProperty(DUBBO_CUMSTOM_CONFIG_PACKAGE, DUBBO_SSO_CONFIG_PACKAGE);
-      } else {
-        System.setProperty(
-            DUBBO_CUMSTOM_CONFIG_PACKAGE, dubboConfigPackage + "," + DUBBO_SSO_CONFIG_PACKAGE);
-      }
-      setPropertyIfMissing("acooly.olog.storage.enable","false");
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        setPropertyIfMissing(
+                "acooly.ds.Checker.excludedColumnTables.security", "SYS_ROLE_RESC, SYS_USER_ROLE");
+        SecurityProperties securityProperties = new SecurityProperties();
+        EnvironmentHolder.buildProperties(securityProperties);
+        if (securityProperties.isEnableSSOAuthzService()) {
+            String dubboConfigPackage = EnvironmentHolder.get().getProperty(DUBBO_CUMSTOM_CONFIG_PACKAGE);
+            if (StringUtils.isEmpty(dubboConfigPackage)) {
+                System.setProperty(DUBBO_CUMSTOM_CONFIG_PACKAGE, DUBBO_SSO_CONFIG_PACKAGE);
+            } else {
+                System.setProperty(
+                        DUBBO_CUMSTOM_CONFIG_PACKAGE, dubboConfigPackage + "," + DUBBO_SSO_CONFIG_PACKAGE);
+            }
+            setPropertyIfMissing("acooly.olog.storage.enable", "false");
+        }
     }
-  }
 }

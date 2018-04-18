@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping(value = "/manage/module/lottery/lotteryCount")
 public class LotteryCountManagerController
-    extends AbstractJQueryEntityController<LotteryCount, LotteryCountService> {
+        extends AbstractJQueryEntityController<LotteryCount, LotteryCountService> {
 
-  @Autowired private LotteryCountService lotteryCountService;
+    @Autowired
+    private LotteryCountService lotteryCountService;
 }

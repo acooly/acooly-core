@@ -13,9 +13,8 @@ import com.acooly.core.common.boot.Apps;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.safety.exception.SafetyException;
 import com.acooly.module.safety.exception.SafetyResultCode;
-import com.acooly.module.safety.key.KeyLoader;
 import com.acooly.module.safety.key.KeyLoadManager;
-import com.acooly.module.safety.key.KeyStoreLoader;
+import com.acooly.module.safety.key.KeyLoader;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -30,10 +29,8 @@ import java.util.Map;
 @Component
 public class KeyLoadManagerImpl implements KeyLoadManager, InitializingBean {
 
-    private Map<String, KeyLoader> container = Maps.newHashMap();
-
     private static final String SYSTEM_INTENER_PROVIDER = "SYSTEM_INTENER_PROVIDER";
-
+    private Map<String, KeyLoader> container = Maps.newHashMap();
 
     @Override
     public <T> T load(String principal, String provider) {

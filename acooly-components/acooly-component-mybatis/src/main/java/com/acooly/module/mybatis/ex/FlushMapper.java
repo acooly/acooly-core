@@ -14,19 +14,21 @@ import org.apache.ibatis.mapping.MappedStatement;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 public interface FlushMapper<T> {
-  @DeleteProvider(type = FlushProvider.class, method = "dynamicSQL")
-  void flush();
+    @DeleteProvider(type = FlushProvider.class, method = "dynamicSQL")
+    void flush();
 
-  class FlushProvider extends MapperTemplate {
+    class FlushProvider extends MapperTemplate {
 
-    public FlushProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
-      super(mapperClass, mapperHelper);
+        public FlushProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
+            super(mapperClass, mapperHelper);
+        }
+
+        public String flush(MappedStatement ms) {
+            return "SELECT now();";
+        }
     }
-
-    public String flush(MappedStatement ms) {
-      return "SELECT now();";
-    }
-  }
 }

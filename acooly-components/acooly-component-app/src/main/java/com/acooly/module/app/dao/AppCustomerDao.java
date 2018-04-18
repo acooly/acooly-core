@@ -15,5 +15,5 @@ import java.util.List;
  */
 public interface AppCustomerDao extends EntityJpaDao<AppCustomer, Long> {
 
-  List<AppCustomer> findByUserNameAndStatus(String userName, EntityStatus status);
+    List<AppCustomer> findByUserNameAndStatus(String userName, EntityStatus status);
 }

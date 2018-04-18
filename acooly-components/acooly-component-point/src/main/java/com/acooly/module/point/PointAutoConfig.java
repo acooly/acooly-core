@@ -18,23 +18,23 @@ import static com.acooly.module.point.PointProperties.PREFIX;
 @ComponentScan
 @AutoConfigureAfter(SecurityAutoConfig.class)
 public class PointAutoConfig {
-  @Bean
-  public StandardDatabaseScriptIniter pointScriptIniter() {
-    return new StandardDatabaseScriptIniter() {
-      @Override
-      public String getEvaluateTable() {
-        return "point_trade";
-      }
+    @Bean
+    public StandardDatabaseScriptIniter pointScriptIniter() {
+        return new StandardDatabaseScriptIniter() {
+            @Override
+            public String getEvaluateTable() {
+                return "point_trade";
+            }
 
-      @Override
-      public String getComponentName() {
-        return "point";
-      }
+            @Override
+            public String getComponentName() {
+                return "point";
+            }
 
-      @Override
-      public List<String> getInitSqlFile() {
-        return Lists.newArrayList("point", "point_urls");
-      }
-    };
-  }
+            @Override
+            public List<String> getInitSqlFile() {
+                return Lists.newArrayList("point", "point_urls");
+            }
+        };
+    }
 }

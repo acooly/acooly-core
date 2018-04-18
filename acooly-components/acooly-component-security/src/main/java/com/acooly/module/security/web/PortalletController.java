@@ -21,52 +21,53 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/manage/system/portallet")
 @ConditionalOnProperty(
-  value = SecurityProperties.PREFIX + ".shiro.auth.enable",
-  matchIfMissing = true
+        value = SecurityProperties.PREFIX + ".shiro.auth.enable",
+        matchIfMissing = true
 )
 public class PortalletController
-    extends AbstractJQueryEntityController<Portallet, PortalletService> {
+        extends AbstractJQueryEntityController<Portallet, PortalletService> {
 
-  private static Map<Integer, String> allCollapsibles = Maps.newTreeMap();
+    private static Map<Integer, String> allCollapsibles = Maps.newTreeMap();
 
-  static {
-    allCollapsibles.put(1, "true");
-    allCollapsibles.put(0, "false");
-  }
-
-  @Autowired private PortalletService portalletService;
-
-  @Override
-  protected Map<String, Object> getSearchParams(HttpServletRequest request) {
-    Map<String, Object> map = super.getSearchParams(request);
-    User user = ShiroUtils.getCurrentUser();
-    if (user.getUserType() != User.USER_TYPE_ADMIN) {
-      map.put("EQ_userName", user.getUsername());
+    static {
+        allCollapsibles.put(1, "true");
+        allCollapsibles.put(0, "false");
     }
-    return map;
-  }
 
-  @Override
-  protected Portallet onSave(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      Model model,
-      Portallet entity,
-      boolean isCreate)
-      throws Exception {
-    User user = ShiroUtils.getCurrentUser();
-    if (user.getUserType() != User.USER_TYPE_ADMIN) {
-      entity.setUserName(user.getUsername());
-    } else {
-      entity.setUserName(null);
+    @Autowired
+    private PortalletService portalletService;
+
+    @Override
+    protected Map<String, Object> getSearchParams(HttpServletRequest request) {
+        Map<String, Object> map = super.getSearchParams(request);
+        User user = ShiroUtils.getCurrentUser();
+        if (user.getUserType() != User.USER_TYPE_ADMIN) {
+            map.put("EQ_userName", user.getUsername());
+        }
+        return map;
     }
-    return entity;
-  }
 
-  @Override
-  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-    model.put("allCollapsibles", allCollapsibles);
-    model.put("allLoadModes", FrameworkPropertiesHolder.get().getLoadModes());
-    model.put("allShowModes", FrameworkPropertiesHolder.get().getShowModes());
-  }
+    @Override
+    protected Portallet onSave(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Model model,
+            Portallet entity,
+            boolean isCreate)
+            throws Exception {
+        User user = ShiroUtils.getCurrentUser();
+        if (user.getUserType() != User.USER_TYPE_ADMIN) {
+            entity.setUserName(user.getUsername());
+        } else {
+            entity.setUserName(null);
+        }
+        return entity;
+    }
+
+    @Override
+    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+        model.put("allCollapsibles", allCollapsibles);
+        model.put("allLoadModes", FrameworkPropertiesHolder.get().getLoadModes());
+        model.put("allShowModes", FrameworkPropertiesHolder.get().getShowModes());
+    }
 }

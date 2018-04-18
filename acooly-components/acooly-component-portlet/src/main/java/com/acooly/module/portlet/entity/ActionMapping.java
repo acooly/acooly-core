@@ -19,38 +19,46 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "portlet_action_mapping")
 public class ActionMapping extends AbstractEntity {
-  /** serialVersionUID */
-  private static final long serialVersionUID = 1L;
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = 1L;
 
-  /** 连接 */
-  private String url;
+    /**
+     * 连接
+     */
+    private String url;
 
-  /** 名称 */
-  private String title;
-  /** 备注 */
-  private String comments;
+    /**
+     * 名称
+     */
+    private String title;
+    /**
+     * 备注
+     */
+    private String comments;
 
-  public String getUrl() {
-    return this.url;
-  }
+    public String getUrl() {
+        return this.url;
+    }
 
-  public void setUrl(String url) {
-    this.url = url;
-  }
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-  public String getTitle() {
-    return this.title;
-  }
+    public String getTitle() {
+        return this.title;
+    }
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-  public String getComments() {
-    return this.comments;
-  }
+    public String getComments() {
+        return this.comments;
+    }
 
-  public void setComments(String comments) {
-    this.comments = comments;
-  }
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
 }

@@ -18,60 +18,60 @@ import javax.validation.ConstraintValidatorContext;
  * @author zhangpu
  */
 public class MoneyConstraintValidator extends ConstraintValidatorSupport
-    implements ConstraintValidator<MoneyConstraint, com.acooly.core.utils.Money> {
+        implements ConstraintValidator<MoneyConstraint, com.acooly.core.utils.Money> {
 
-  private long min;
-  private long max;
-  private boolean nullable;
+    private long min;
+    private long max;
+    private boolean nullable;
 
-  @Override
-  public void initialize(MoneyConstraint constraintAnnotation) {
-    min = constraintAnnotation.min();
-    max = constraintAnnotation.max();
-    nullable = constraintAnnotation.nullable();
-    this.message = constraintAnnotation.message();
-    if (min < 0) {
-      throw Exceptions.runtimeException("金额约束最小值不能小于零");
-    }
-    if (max <= min) {
-      throw Exceptions.runtimeException("金额约束最大值必须大于最小值");
-    }
-  }
-
-  @Override
-  public boolean isValid(com.acooly.core.utils.Money value, ConstraintValidatorContext context) {
-
-    if (value == null) {
-      if (!nullable) {
-        if (hasCustomMessage()) {
-          context.disableDefaultConstraintViolation();
-          context
-              .buildConstraintViolationWithTemplate(
-                  "{com.acooly.utils.validator.Money.message.notNull}")
-              .addConstraintViolation();
+    @Override
+    public void initialize(MoneyConstraint constraintAnnotation) {
+        min = constraintAnnotation.min();
+        max = constraintAnnotation.max();
+        nullable = constraintAnnotation.nullable();
+        this.message = constraintAnnotation.message();
+        if (min < 0) {
+            throw Exceptions.runtimeException("金额约束最小值不能小于零");
         }
-      }
-      return nullable;
+        if (max <= min) {
+            throw Exceptions.runtimeException("金额约束最大值必须大于最小值");
+        }
     }
-    if (value.getCent() < min) {
-      if (hasCustomMessage()) {
-        context.disableDefaultConstraintViolation();
-        context
-            .buildConstraintViolationWithTemplate("{com.acooly.utils.validator.Money.Min.message}")
-            .addConstraintViolation();
-      }
 
-      return false;
+    @Override
+    public boolean isValid(com.acooly.core.utils.Money value, ConstraintValidatorContext context) {
+
+        if (value == null) {
+            if (!nullable) {
+                if (hasCustomMessage()) {
+                    context.disableDefaultConstraintViolation();
+                    context
+                            .buildConstraintViolationWithTemplate(
+                                    "{com.acooly.utils.validator.Money.message.notNull}")
+                            .addConstraintViolation();
+                }
+            }
+            return nullable;
+        }
+        if (value.getCent() < min) {
+            if (hasCustomMessage()) {
+                context.disableDefaultConstraintViolation();
+                context
+                        .buildConstraintViolationWithTemplate("{com.acooly.utils.validator.Money.Min.message}")
+                        .addConstraintViolation();
+            }
+
+            return false;
+        }
+        if (value.getCent() >= max) {
+            if (hasCustomMessage()) {
+                context.disableDefaultConstraintViolation();
+                context
+                        .buildConstraintViolationWithTemplate("{com.acooly.utils.validator.Money.Max.message}")
+                        .addConstraintViolation();
+            }
+            return false;
+        }
+        return true;
     }
-    if (value.getCent() >= max) {
-      if (hasCustomMessage()) {
-        context.disableDefaultConstraintViolation();
-        context
-            .buildConstraintViolationWithTemplate("{com.acooly.utils.validator.Money.Max.message}")
-            .addConstraintViolation();
-      }
-      return false;
-    }
-    return true;
-  }
 }

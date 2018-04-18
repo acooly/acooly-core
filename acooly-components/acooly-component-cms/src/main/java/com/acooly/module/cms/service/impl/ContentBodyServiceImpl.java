@@ -1,4 +1,3 @@
-
 package com.acooly.module.cms.service.impl;
 
 import com.acooly.core.common.service.EntityServiceImpl;
@@ -9,4 +8,5 @@ import org.springframework.stereotype.Service;
 
 @Service("contentBodyService")
 public class ContentBodyServiceImpl extends EntityServiceImpl<ContentBody, ContentBodyDao>
-    implements ContentBodyService {}
+        implements ContentBodyService {
+}

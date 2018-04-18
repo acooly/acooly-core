@@ -21,30 +21,32 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import java.util.List;
 
-/** @author acooly */
+/**
+ * @author acooly
+ */
 @Configuration
 @ConditionalOnProperty(value = "acooly.cms.enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.module.cms")
 @AutoConfigureAfter(SecurityAutoConfig.class)
 public class CmsAutoConfig extends WebMvcConfigurerAdapter {
 
-  @Bean
-  public StandardDatabaseScriptIniter cmsScriptIniter() {
-    return new StandardDatabaseScriptIniter() {
-      @Override
-      public String getEvaluateTable() {
-        return "cms_content";
-      }
+    @Bean
+    public StandardDatabaseScriptIniter cmsScriptIniter() {
+        return new StandardDatabaseScriptIniter() {
+            @Override
+            public String getEvaluateTable() {
+                return "cms_content";
+            }
 
-      @Override
-      public String getComponentName() {
-        return "cms";
-      }
+            @Override
+            public String getComponentName() {
+                return "cms";
+            }
 
-      @Override
-      public List<String> getInitSqlFile() {
-        return Lists.newArrayList("cms", "cms_urls");
-      }
-    };
-  }
+            @Override
+            public List<String> getInitSqlFile() {
+                return Lists.newArrayList("cms", "cms_urls");
+            }
+        };
+    }
 }

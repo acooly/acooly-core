@@ -26,19 +26,19 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/manage/module/portlet/siteConfig")
 public class SiteConfigManagerController
-    extends AbstractJQueryEntityController<SiteConfig, SiteConfigService> {
+        extends AbstractJQueryEntityController<SiteConfig, SiteConfigService> {
 
-  @SuppressWarnings("unused")
-  @Autowired
-  private SiteConfigService siteConfigService;
+    @SuppressWarnings("unused")
+    @Autowired
+    private SiteConfigService siteConfigService;
 
-  {
-    allowMapping = "*";
-  }
+    {
+        allowMapping = "*";
+    }
 
-  @Override
-  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-    model.put("allTypes", SiteConfigTypeEnum.mapping());
-    model.put("allKeys", SiteConfigKeyEnum.mapping());
-  }
+    @Override
+    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+        model.put("allTypes", SiteConfigTypeEnum.mapping());
+        model.put("allKeys", SiteConfigKeyEnum.mapping());
+    }
 }

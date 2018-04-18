@@ -24,32 +24,35 @@ import java.util.List;
 
 import static com.acooly.module.app.AppProperties.PREFIX;
 
-/** @author kuli@yiji.com */
+/**
+ * @author kuli@yiji.com
+ */
 @Configuration
 @EnableConfigurationProperties({AppProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.module.app")
 @AutoConfigureAfter(SecurityAutoConfig.class)
 public class AppAutoConfig {
-  @Autowired private AppProperties appProperties;
+    @Autowired
+    private AppProperties appProperties;
 
-  @Bean
-  public StandardDatabaseScriptIniter appScriptIniter() {
-    return new StandardDatabaseScriptIniter() {
-      @Override
-      public String getEvaluateTable() {
-        return "app_banner";
-      }
+    @Bean
+    public StandardDatabaseScriptIniter appScriptIniter() {
+        return new StandardDatabaseScriptIniter() {
+            @Override
+            public String getEvaluateTable() {
+                return "app_banner";
+            }
 
-      @Override
-      public String getComponentName() {
-        return "app";
-      }
+            @Override
+            public String getComponentName() {
+                return "app";
+            }
 
-      @Override
-      public List<String> getInitSqlFile() {
-        return Lists.newArrayList("app", "app_urls");
-      }
-    };
-  }
+            @Override
+            public List<String> getInitSqlFile() {
+                return Lists.newArrayList("app", "app_urls");
+            }
+        };
+    }
 }

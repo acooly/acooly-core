@@ -16,20 +16,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("roleService")
 @Transactional
 @ConditionalOnProperty(
-  value = SecurityProperties.PREFIX + ".shiro.auth.enable",
-  matchIfMissing = true
+        value = SecurityProperties.PREFIX + ".shiro.auth.enable",
+        matchIfMissing = true
 )
 public class RoleServiceImpl extends EntityServiceImpl<Role, RoleDao> implements RoleService {
 
-  @Autowired private ShiroDbRealm shiroDbRealm;
+    @Autowired
+    private ShiroDbRealm shiroDbRealm;
 
-  @Override
-  public void save(Role o) throws BusinessException {
-    super.save(o);
-    try {
-      shiroDbRealm.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
-    } catch (Exception e) {
-      // ig
+    @Override
+    public void save(Role o) throws BusinessException {
+        super.save(o);
+        try {
+            shiroDbRealm.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
+        } catch (Exception e) {
+            // ig
+        }
     }
-  }
 }

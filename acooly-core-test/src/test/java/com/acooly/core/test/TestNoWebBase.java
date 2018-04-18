@@ -12,11 +12,13 @@ package com.acooly.core.test;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.module.test.AppTestBase;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 public abstract class TestNoWebBase extends AppTestBase {
-  protected static final String PROFILE = "sdev";
+    protected static final String PROFILE = "sdev";
 
-  static {
-    Apps.setProfileIfNotExists(PROFILE);
-  }
+    static {
+        Apps.setProfileIfNotExists(PROFILE);
+    }
 }

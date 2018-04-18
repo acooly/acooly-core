@@ -1,4 +1,6 @@
-/** create by zhangpu date:2015年7月14日 */
+/**
+ * create by zhangpu date:2015年7月14日
+ */
 package com.acooly.module.ofile.auth;
 
 import com.acooly.core.utils.Strings;
@@ -19,21 +21,22 @@ import java.util.List;
  */
 @Service
 public class OFileUploadSessionAuthenticate implements OFileUploadAuthenticate {
-  @Autowired private OFileProperties oFileProperties;
+    @Autowired
+    private OFileProperties oFileProperties;
 
-  @Override
-  public void authenticate(HttpServletRequest request) {
-    if (!oFileProperties.isCheckSession()
-        || Strings.isBlank(oFileProperties.getCheckSessionKey())) {
-      return;
+    @Override
+    public void authenticate(HttpServletRequest request) {
+        if (!oFileProperties.isCheckSession()
+                || Strings.isBlank(oFileProperties.getCheckSessionKey())) {
+            return;
+        }
+        List<String> sessionKeys =
+                Lists.newArrayList(Strings.split(oFileProperties.getCheckSessionKey(), ","));
+        for (String sessionKey : sessionKeys) {
+            if (request.getSession().getAttribute(sessionKey) != null) {
+                return;
+            }
+        }
+        throw new HttpServerErrorException(HttpStatus.UNAUTHORIZED, "Session认证未通过");
     }
-    List<String> sessionKeys =
-        Lists.newArrayList(Strings.split(oFileProperties.getCheckSessionKey(), ","));
-    for (String sessionKey : sessionKeys) {
-      if (request.getSession().getAttribute(sessionKey) != null) {
-        return;
-      }
-    }
-    throw new HttpServerErrorException(HttpStatus.UNAUTHORIZED, "Session认证未通过");
-  }
 }

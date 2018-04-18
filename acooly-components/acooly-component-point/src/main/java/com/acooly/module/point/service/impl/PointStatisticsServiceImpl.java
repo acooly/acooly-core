@@ -23,13 +23,16 @@ import org.springframework.stereotype.Service;
  */
 @Service("pointStatisticsService")
 public class PointStatisticsServiceImpl
-    extends EntityServiceImpl<PointStatistics, PointStatisticsDao>
-    implements PointStatisticsService {
+        extends EntityServiceImpl<PointStatistics, PointStatisticsDao>
+        implements PointStatisticsService {
 
-  @Autowired private PointStatisticsExtDao pointStatisticsExtDao;
+    @Autowired
+    private PointStatisticsExtDao pointStatisticsExtDao;
 
-  /** 格式化时间 */
-  public void pointStatistics(String startTime, String endTime) {
-    pointStatisticsExtDao.pointStatistics(startTime, endTime);
-  }
+    /**
+     * 格式化时间
+     */
+    public void pointStatistics(String startTime, String endTime) {
+        pointStatisticsExtDao.pointStatistics(startTime, endTime);
+    }
 }

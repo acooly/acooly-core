@@ -22,40 +22,40 @@ import java.util.Map;
  * @author zhangpu
  */
 public class ShiroFilterFactoryBeanExtention extends ShiroFilterFactoryBean
-    implements ApplicationContextAware {
+        implements ApplicationContextAware {
 
-  private static final Logger logger =
-      LoggerFactory.getLogger(ShiroFilterFactoryBeanExtention.class);
+    private static final Logger logger =
+            LoggerFactory.getLogger(ShiroFilterFactoryBeanExtention.class);
 
-  private ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
 
-  public void appendCustomFilter() {
-    logger.info("Append custome Filter to Shiro-Filters");
-    Map<String, String> chains = getFilterChainDefinitionMap();
-    if (!CollectionUtils.isEmpty(chains)) {
-      for (Map.Entry<String, String> entry : chains.entrySet()) {
-        String chainDefinition = entry.getValue();
-        Object filter = null;
-        try {
-          filter = (Object) applicationContext.getBean(chainDefinition);
-        } catch (Exception e) {
-          // 如果找不到自定义的Bean,则忽略
-          continue;
+    public void appendCustomFilter() {
+        logger.info("Append custome Filter to Shiro-Filters");
+        Map<String, String> chains = getFilterChainDefinitionMap();
+        if (!CollectionUtils.isEmpty(chains)) {
+            for (Map.Entry<String, String> entry : chains.entrySet()) {
+                String chainDefinition = entry.getValue();
+                Object filter = null;
+                try {
+                    filter = (Object) applicationContext.getBean(chainDefinition);
+                } catch (Exception e) {
+                    // 如果找不到自定义的Bean,则忽略
+                    continue;
+                }
+                if (filter != null && filter instanceof Filter) {
+                    postProcessBeforeInitialization(filter, chainDefinition);
+                    logger.info(
+                            "Append/Override filter implements : "
+                                    + chainDefinition
+                                    + " -- > "
+                                    + filter.getClass().getName());
+                }
+            }
         }
-        if (filter != null && filter instanceof Filter) {
-          postProcessBeforeInitialization(filter, chainDefinition);
-          logger.info(
-              "Append/Override filter implements : "
-                  + chainDefinition
-                  + " -- > "
-                  + filter.getClass().getName());
-        }
-      }
     }
-  }
 
-  @Override
-  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-    this.applicationContext = applicationContext;
-  }
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 }

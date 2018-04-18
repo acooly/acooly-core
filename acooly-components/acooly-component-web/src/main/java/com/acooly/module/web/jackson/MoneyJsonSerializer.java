@@ -19,26 +19,28 @@ import org.springframework.boot.jackson.JsonComponent;
 
 import java.io.IOException;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @JsonComponent
 public class MoneyJsonSerializer extends JsonSerializer<Money> {
-  private WebProperties webProperties;
+    private WebProperties webProperties;
 
-  @Override
-  public void serialize(Money value, JsonGenerator jgen, SerializerProvider provider)
-      throws IOException {
-    if (webProperties == null) {
-      webProperties = Apps.buildProperties(WebProperties.class);
+    @Override
+    public void serialize(Money value, JsonGenerator jgen, SerializerProvider provider)
+            throws IOException {
+        if (webProperties == null) {
+            webProperties = Apps.buildProperties(WebProperties.class);
+        }
+        if (webProperties.isEnableMoneyDisplayYuan()) {
+            jgen.writeString(value.getAmount().toString());
+        } else {
+            jgen.writeNumber(value.getCent());
+        }
     }
-    if (webProperties.isEnableMoneyDisplayYuan()) {
-      jgen.writeString(value.getAmount().toString());
-    } else {
-      jgen.writeNumber(value.getCent());
-    }
-  }
 
-  @Override
-  public Class<Money> handledType() {
-    return Money.class;
-  }
+    @Override
+    public Class<Money> handledType() {
+        return Money.class;
+    }
 }

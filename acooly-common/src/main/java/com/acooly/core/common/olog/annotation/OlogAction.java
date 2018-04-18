@@ -8,7 +8,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface OlogAction {
-	/** 操作名称 */
-	String action() default "";
-	String actionName() default "";
+    /**
+     * 操作名称
+     */
+    String action() default "";
+
+    String actionName() default "";
 }

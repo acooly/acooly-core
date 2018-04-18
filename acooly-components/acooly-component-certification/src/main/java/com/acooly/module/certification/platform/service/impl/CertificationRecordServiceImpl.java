@@ -21,11 +21,11 @@ import org.springframework.stereotype.Service;
  */
 @Service("certificationRecordService")
 public class CertificationRecordServiceImpl
-    extends EntityServiceImpl<CertificationRecord, CertificationRecordDao>
-    implements CertificationRecordService {
+        extends EntityServiceImpl<CertificationRecord, CertificationRecordDao>
+        implements CertificationRecordService {
 
-  @Override
-  public CertificationRecord findEntityByCarNoAndRealName(String idCarNo, String realName) {
-    return getEntityDao().findEntityByCarNoAndRealName(idCarNo, realName);
-  }
+    @Override
+    public CertificationRecord findEntityByCarNoAndRealName(String idCarNo, String realName) {
+        return getEntityDao().findEntityByCarNoAndRealName(idCarNo, realName);
+    }
 }

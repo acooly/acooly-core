@@ -13,11 +13,13 @@ import com.acooly.core.common.BootApp;
 import com.acooly.core.common.boot.Apps;
 import org.springframework.boot.SpringApplication;
 
-/** @author qiubo */
+/**
+ * @author qiubo
+ */
 @BootApp(sysName = "acooly-test", httpPort = 8081)
 public class Main {
-  public static void main(String[] args) {
-    Apps.setProfileIfNotExists("sdev");
-    SpringApplication.run(Main.class, args);
-  }
+    public static void main(String[] args) {
+        Apps.setProfileIfNotExists("sdev");
+        SpringApplication.run(Main.class, args);
+    }
 }

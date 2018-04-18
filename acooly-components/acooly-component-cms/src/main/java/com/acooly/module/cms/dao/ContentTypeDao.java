@@ -11,6 +11,6 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface ContentTypeDao extends EntityJpaDao<ContentType, Long> {
 
-  @Query("select Max(code) from ContentType where parent is null")
-  String getLevelMax(Long parentId);
+    @Query("select Max(code) from ContentType where parent is null")
+    String getLevelMax(Long parentId);
 }

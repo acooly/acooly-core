@@ -10,4 +10,5 @@ import com.acooly.module.ofile.domain.OnlineFile;
  *
  * @author Acooly Code Generator
  */
-public interface OnlineFileService extends EntityService<OnlineFile> {}
+public interface OnlineFileService extends EntityService<OnlineFile> {
+}

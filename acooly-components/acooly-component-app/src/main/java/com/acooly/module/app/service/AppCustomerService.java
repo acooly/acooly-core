@@ -13,9 +13,9 @@ import com.acooly.module.app.enums.EntityStatus;
  */
 public interface AppCustomerService extends EntityService<AppCustomer> {
 
-  AppCustomer loadAppCustomer(String usreName, EntityStatus status);
+    AppCustomer loadAppCustomer(String usreName, EntityStatus status);
 
-  AppCustomer createAppCustomer(AppCustomer appCustomer);
+    AppCustomer createAppCustomer(AppCustomer appCustomer);
 
-  AppCustomer updateSecretKey(AppCustomer appCustomer);
+    AppCustomer updateSecretKey(AppCustomer appCustomer);
 }

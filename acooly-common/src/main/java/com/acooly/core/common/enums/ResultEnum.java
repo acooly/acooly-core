@@ -1,4 +1,6 @@
-/** create by zhangpu date:2015年11月13日 */
+/**
+ * create by zhangpu date:2015年11月13日
+ */
 package com.acooly.core.common.enums;
 
 /**
@@ -10,7 +12,7 @@ package com.acooly.core.common.enums;
 @Deprecated
 public interface ResultEnum {
 
-  String getCode();
+    String getCode();
 
-  String getMessage();
+    String getMessage();
 }

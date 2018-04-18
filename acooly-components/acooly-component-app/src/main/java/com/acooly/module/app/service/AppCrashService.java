@@ -10,4 +10,5 @@ import com.acooly.module.app.domain.AppCrash;
  *
  * @author Acooly Code Generator
  */
-public interface AppCrashService extends EntityService<AppCrash> {}
+public interface AppCrashService extends EntityService<AppCrash> {
+}

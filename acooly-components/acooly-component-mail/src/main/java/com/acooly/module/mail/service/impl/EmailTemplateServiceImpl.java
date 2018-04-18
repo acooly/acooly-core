@@ -14,13 +14,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 @Service("emailTemplateService")
 public class EmailTemplateServiceImpl extends EntityServiceImpl<EmailTemplate, EmailTemplateDao>
-    implements EmailTemplateService {
+        implements EmailTemplateService {
 
-  @Override
-  public List<EmailTemplate> find(String property, Object value) {
-    return getEntityDao().find(property, value);
-  }
+    @Override
+    public List<EmailTemplate> find(String property, Object value) {
+        return getEntityDao().find(property, value);
+    }
 }

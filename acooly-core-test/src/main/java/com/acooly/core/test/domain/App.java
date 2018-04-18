@@ -11,8 +11,6 @@ import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.utils.Money;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,25 +28,47 @@ import java.util.Date;
 @Getter
 @Setter
 public class App extends AbstractEntity {
-  /** serialVersionUID */
-  private static final long serialVersionUID = 1L;
-  /** id */
-  @Id @GeneratedValue private Long id;
-  /** display_name */
-  private String displayName;
-  /** name */
-  private String name;
-  /** parent_app_id */
-  private Long parentAppId;
-  /** type */
-  private String type;
-  /** user_id */
-  private Long userId;
-  /** 创建时间 */
-  private Date rawAddTime = new Date();
-  /** 修改时间 */
-  private Date rawUpdateTime = new Date();
-  /** parent_id */
-  private Long parentId;
-  private Money price;
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = 1L;
+    /**
+     * id
+     */
+    @Id
+    @GeneratedValue
+    private Long id;
+    /**
+     * display_name
+     */
+    private String displayName;
+    /**
+     * name
+     */
+    private String name;
+    /**
+     * parent_app_id
+     */
+    private Long parentAppId;
+    /**
+     * type
+     */
+    private String type;
+    /**
+     * user_id
+     */
+    private Long userId;
+    /**
+     * 创建时间
+     */
+    private Date rawAddTime = new Date();
+    /**
+     * 修改时间
+     */
+    private Date rawUpdateTime = new Date();
+    /**
+     * parent_id
+     */
+    private Long parentId;
+    private Money price;
 }

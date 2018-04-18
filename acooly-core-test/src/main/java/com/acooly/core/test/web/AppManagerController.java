@@ -29,65 +29,65 @@ import java.util.List;
 @RequestMapping(value = "/manage/module/app/app")
 public class AppManagerController extends AbstractJQueryEntityController<App, AppService> {
 
-  private static List<String> APP_EXPORT_TITLES =
-      Lists.newArrayList(new String[] {"编号", "昵称", "名称", "类型", "用户编码", "注册时间"});
+    private static List<String> APP_EXPORT_TITLES =
+            Lists.newArrayList(new String[]{"编号", "昵称", "名称", "类型", "用户编码", "注册时间"});
 
-  @SuppressWarnings("unused")
-  @Autowired
-  private AppService appService;
+    @SuppressWarnings("unused")
+    @Autowired
+    private AppService appService;
 
-  {
-    allowMapping = "*";
-  }
+    {
+        allowMapping = "*";
+    }
 
-  @RequestMapping("/testFtl")
-  public String testFtl(ModelMap modelMap) {
-    modelMap.put("name", "na");
-    modelMap.put("message", "hi");
-    return "test";
-  }
+    @RequestMapping("/testFtl")
+    public String testFtl(ModelMap modelMap) {
+        modelMap.put("name", "na");
+        modelMap.put("message", "hi");
+        return "test";
+    }
 
-  /**
-   * 导入
-   *
-   * @param fields
-   * @return
-   */
-  @Override
-  protected App doImportEntity(List<String> fields) {
-    App app = new App();
-    app.setDisplayName(fields.get(1));
-    app.setName(fields.get(2));
-    app.setParentAppId(Long.parseLong(fields.get(3)));
-    app.setType(fields.get(4));
-    return app;
-  }
+    /**
+     * 导入
+     *
+     * @param fields
+     * @return
+     */
+    @Override
+    protected App doImportEntity(List<String> fields) {
+        App app = new App();
+        app.setDisplayName(fields.get(1));
+        app.setName(fields.get(2));
+        app.setParentAppId(Long.parseLong(fields.get(3)));
+        app.setType(fields.get(4));
+        return app;
+    }
 
-  @Override
-  protected boolean isIgnoreTitle(HttpServletRequest request) {
-    return true;
-  }
+    @Override
+    protected boolean isIgnoreTitle(HttpServletRequest request) {
+        return true;
+    }
 
-  /**
-   * 导出
-   *
-   * @param entity
-   * @return
-   */
-  @Override
-  protected List<String> doExportEntity(App entity) {
-    List<String> row = Lists.newArrayList();
-    row.add(String.valueOf(entity.getId()));
-    row.add(entity.getDisplayName());
-    row.add(entity.getName());
-    row.add(entity.getType());
-    row.add(String.valueOf(entity.getUserId()));
-    row.add(Dates.format(entity.getRawAddTime()));
-    return row;
-  }
+    /**
+     * 导出
+     *
+     * @param entity
+     * @return
+     */
+    @Override
+    protected List<String> doExportEntity(App entity) {
+        List<String> row = Lists.newArrayList();
+        row.add(String.valueOf(entity.getId()));
+        row.add(entity.getDisplayName());
+        row.add(entity.getName());
+        row.add(entity.getType());
+        row.add(String.valueOf(entity.getUserId()));
+        row.add(Dates.format(entity.getRawAddTime()));
+        return row;
+    }
 
-  @Override
-  protected List<String> getExportTitles() {
-    return APP_EXPORT_TITLES;
-  }
+    @Override
+    protected List<String> getExportTitles() {
+        return APP_EXPORT_TITLES;
+    }
 }

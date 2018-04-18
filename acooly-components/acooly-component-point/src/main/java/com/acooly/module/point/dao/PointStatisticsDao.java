@@ -16,4 +16,5 @@ import com.acooly.module.point.domain.PointStatistics;
  *
  * @author acooly
  */
-public interface PointStatisticsDao extends EntityMybatisDao<PointStatistics> {}
+public interface PointStatisticsDao extends EntityMybatisDao<PointStatistics> {
+}

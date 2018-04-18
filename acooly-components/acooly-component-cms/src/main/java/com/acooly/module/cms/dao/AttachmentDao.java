@@ -10,4 +10,5 @@ import com.acooly.module.jpa.EntityJpaDao;
  *
  * @author Acooly Code Generator
  */
-public interface AttachmentDao extends EntityJpaDao<Attachment, Long> {}
+public interface AttachmentDao extends EntityJpaDao<Attachment, Long> {
+}

@@ -24,32 +24,47 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "cert_certification_record")
 public class CertificationRecord extends AbstractEntity {
-  /** serialVersionUID */
-  private static final long serialVersionUID = 1L;
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = 1L;
 
-  /** 真实姓名 */
-  @Size(max = 32)
-  private String realName;
+    /**
+     * 真实姓名
+     */
+    @Size(max = 32)
+    private String realName;
 
-  /** 身份证号 */
-  @Size(max = 18)
-  private String idCarNo;
+    /**
+     * 身份证号
+     */
+    @Size(max = 18)
+    private String idCarNo;
 
-  /** 性别 */
-  @NotEmpty
-  @Size(max = 18)
-  private String sex;
+    /**
+     * 性别
+     */
+    @NotEmpty
+    @Size(max = 18)
+    private String sex;
 
-  /** 所在地址 */
-  @NotEmpty
-  @Size(max = 512)
-  private String address;
+    /**
+     * 所在地址
+     */
+    @NotEmpty
+    @Size(max = 512)
+    private String address;
 
-  /** 出生日期 */
-  @NotEmpty
-  @Size(max = 32)
-  private String birthday;
+    /**
+     * 出生日期
+     */
+    @NotEmpty
+    @Size(max = 32)
+    private String birthday;
 
-  /** 状态 */
-  @NotNull private Integer status = 0;
+    /**
+     * 状态
+     */
+    @NotNull
+    private Integer status = 0;
 }

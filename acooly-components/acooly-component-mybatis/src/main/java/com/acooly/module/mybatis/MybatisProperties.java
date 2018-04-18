@@ -29,80 +29,96 @@ import java.util.Map;
 
 import static com.acooly.core.common.boot.listener.ExApplicationRunListener.COMPONENTS_PACKAGE;
 
-/** @author qiubo */
+/**
+ * @author qiubo
+ */
 @ConfigurationProperties(prefix = MybatisProperties.PREFIX)
 @Data
 public class MybatisProperties implements InitializingBean {
-  public static final String PREFIX = "acooly.mybatis";
+    public static final String PREFIX = "acooly.mybatis";
 
-  private static final String MAPPER_RESOURCE_PATTERN =
-      ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + "/mybatis/**/*Mapper.xml";
+    private static final String MAPPER_RESOURCE_PATTERN =
+            ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + "/mybatis/**/*Mapper.xml";
 
-  /** 是否启用此组件 */
-  private boolean enable = true;
+    /**
+     * 是否启用此组件
+     */
+    private boolean enable = true;
 
-  /** 可选: mybatis配置 ,ref:http://www.mybatis.org/mybatis-3/configuration.html#settings */
-  private Map<String, String> settings;
-  /** 可选：自定义类型处理器TypeHandler所在的包，多个包用逗号分隔 */
-  private String typeHandlersPackage;
+    /**
+     * 可选: mybatis配置 ,ref:http://www.mybatis.org/mybatis-3/configuration.html#settings
+     */
+    private Map<String, String> settings;
+    /**
+     * 可选：自定义类型处理器TypeHandler所在的包，多个包用逗号分隔
+     */
+    private String typeHandlersPackage;
 
-  private Map<String, String> typeAliasesPackage = Maps.newHashMap();
+    private Map<String, String> typeAliasesPackage = Maps.newHashMap();
 
-  private String configLocation;
+    private String configLocation;
 
-  /** 扩展dao扫描包 */
-  private List<String> daoScanPackages = Lists.newArrayList();
+    /**
+     * 扩展dao扫描包
+     */
+    private List<String> daoScanPackages = Lists.newArrayList();
 
-  private boolean supportMultiDataSource;
-  private Map<String, Multi> multi = Maps.newHashMap();
+    private boolean supportMultiDataSource;
+    private Map<String, Multi> multi = Maps.newHashMap();
 
-  @Override
-  public void afterPropertiesSet() throws Exception {
-    if (settings == null) {
-      settings = Maps.newHashMap();
-    }
-    if (!settings.containsKey("localCacheScope")) {
-      settings.put("localCacheScope", LocalCacheScope.STATEMENT.name());
-    }
-    settings.put("mapUnderscoreToCamelCase", Boolean.TRUE.toString());
-    if (typeHandlersPackage == null) {
-      typeHandlersPackage = "com.acooly.module.mybatis.typehandler";
-    } else {
-      typeHandlersPackage += ",com.acooly.module.mybatis.typehandler";
-    }
-    typeAliasesPackage.put("app", Apps.getBasePackage());
-    typeAliasesPackage.put("components", COMPONENTS_PACKAGE);
-    daoScanPackages.add(COMPONENTS_PACKAGE + ".**.dao");
-    daoScanPackages.add(Apps.getBasePackage());
-    if (supportMultiDataSource) {
-      Assert.notEmpty(multi, "启用多数据源时，必须配置数据源信息");
-      int primaryCount = 0;
-      for (Multi m : multi.values()) {
-        if (m.isPrimary()) {
-          primaryCount++;
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        if (settings == null) {
+            settings = Maps.newHashMap();
         }
-      }
-      if (primaryCount != 1) {
-        throw new AppConfigException("有且只能有一个主数据源：" + this.getMulti());
-      }
+        if (!settings.containsKey("localCacheScope")) {
+            settings.put("localCacheScope", LocalCacheScope.STATEMENT.name());
+        }
+        settings.put("mapUnderscoreToCamelCase", Boolean.TRUE.toString());
+        if (typeHandlersPackage == null) {
+            typeHandlersPackage = "com.acooly.module.mybatis.typehandler";
+        } else {
+            typeHandlersPackage += ",com.acooly.module.mybatis.typehandler";
+        }
+        typeAliasesPackage.put("app", Apps.getBasePackage());
+        typeAliasesPackage.put("components", COMPONENTS_PACKAGE);
+        daoScanPackages.add(COMPONENTS_PACKAGE + ".**.dao");
+        daoScanPackages.add(Apps.getBasePackage());
+        if (supportMultiDataSource) {
+            Assert.notEmpty(multi, "启用多数据源时，必须配置数据源信息");
+            int primaryCount = 0;
+            for (Multi m : multi.values()) {
+                if (m.isPrimary()) {
+                    primaryCount++;
+                }
+            }
+            if (primaryCount != 1) {
+                throw new AppConfigException("有且只能有一个主数据源：" + this.getMulti());
+            }
+        }
     }
-  }
 
-  public Resource[] resolveMapperLocations() {
-    try {
-      return new PathMatchingResourcePatternResolver().getResources(MAPPER_RESOURCE_PATTERN);
-    } catch (IOException e) {
-      return null;
+    public Resource[] resolveMapperLocations() {
+        try {
+            return new PathMatchingResourcePatternResolver().getResources(MAPPER_RESOURCE_PATTERN);
+        } catch (IOException e) {
+            return null;
+        }
     }
-  }
 
-  @Data
-  public static class Multi {
-    /** 数据源配置前缀 */
-    private String dsPrefix;
-    /** 当前数据源Dao包路径 */
-    private String scanPackage;
-    /** 是否为主数据库 */
-    private boolean primary;
-  }
+    @Data
+    public static class Multi {
+        /**
+         * 数据源配置前缀
+         */
+        private String dsPrefix;
+        /**
+         * 当前数据源Dao包路径
+         */
+        private String scanPackage;
+        /**
+         * 是否为主数据库
+         */
+        private boolean primary;
+    }
 }

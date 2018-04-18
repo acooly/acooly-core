@@ -13,17 +13,18 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GenericRequest extends WebServiceRequest {
-    
+
     private String bucketName;
     private String key;
 
-    
-    public GenericRequest() { }
-    
+
+    public GenericRequest() {
+    }
+
     public GenericRequest(String bucketName) {
         this(bucketName, null);
     }
-    
+
     public GenericRequest(String bucketName, String key) {
         this.bucketName = bucketName;
         this.key = key;

@@ -2,12 +2,14 @@ package com.acooly.module.captcha;
 
 import java.io.Serializable;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 public interface Captcha<V> extends Serializable {
 
-  String getId();
+    String getId();
 
-  V getValue();
+    V getValue();
 
-  long getExpiredTimeMillis();
+    long getExpiredTimeMillis();
 }

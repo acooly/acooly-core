@@ -23,59 +23,61 @@ import org.springframework.core.type.AnnotationMetadata;
 import java.util.List;
 import java.util.Map;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 public class MapperScannerRegistrar
-    implements BeanFactoryAware, ImportBeanDefinitionRegistrar, ResourceLoaderAware {
+        implements BeanFactoryAware, ImportBeanDefinitionRegistrar, ResourceLoaderAware {
 
-  private BeanFactory beanFactory;
+    private BeanFactory beanFactory;
 
-  private ResourceLoader resourceLoader;
+    private ResourceLoader resourceLoader;
 
-  @Override
-  public void registerBeanDefinitions(
-      AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-    MybatisProperties mybatisProperties = Apps.buildProperties(MybatisProperties.class);
-    if (!mybatisProperties.isSupportMultiDataSource()) {
-      ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
-      try {
-        if (this.resourceLoader != null) {
-          scanner.setResourceLoader(this.resourceLoader);
+    @Override
+    public void registerBeanDefinitions(
+            AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+        MybatisProperties mybatisProperties = Apps.buildProperties(MybatisProperties.class);
+        if (!mybatisProperties.isSupportMultiDataSource()) {
+            ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
+            try {
+                if (this.resourceLoader != null) {
+                    scanner.setResourceLoader(this.resourceLoader);
+                }
+                scanner.setMarkerInterface(EntityMybatisDao.class);
+                scanner.registerFilters();
+                List<String> daoScanPackages = mybatisProperties.getDaoScanPackages();
+                scanner.doScan(daoScanPackages.toArray(new String[daoScanPackages.size()]));
+            } catch (IllegalStateException ex) {
+            }
+        } else {
+            for (Map.Entry<String, MybatisProperties.Multi> entry :
+                    mybatisProperties.getMulti().entrySet()) {
+                ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
+                try {
+                    if (this.resourceLoader != null) {
+                        scanner.setResourceLoader(this.resourceLoader);
+                    }
+                    scanner.setMarkerInterface(EntityMybatisDao.class);
+                    if (entry.getValue().isPrimary()) {
+                        scanner.setSqlSessionFactoryBeanName("sqlSessionFactory");
+                    } else {
+                        scanner.setSqlSessionFactoryBeanName(entry.getKey() + "SqlSessionFactory");
+                    }
+                    scanner.registerFilters();
+                    scanner.doScan(entry.getValue().getScanPackage());
+                } catch (IllegalStateException ex) {
+                }
+            }
         }
-        scanner.setMarkerInterface(EntityMybatisDao.class);
-        scanner.registerFilters();
-        List<String> daoScanPackages = mybatisProperties.getDaoScanPackages();
-        scanner.doScan(daoScanPackages.toArray(new String[daoScanPackages.size()]));
-      } catch (IllegalStateException ex) {
-      }
-    } else {
-      for (Map.Entry<String, MybatisProperties.Multi> entry :
-          mybatisProperties.getMulti().entrySet()) {
-        ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
-        try {
-          if (this.resourceLoader != null) {
-            scanner.setResourceLoader(this.resourceLoader);
-          }
-          scanner.setMarkerInterface(EntityMybatisDao.class);
-          if (entry.getValue().isPrimary()) {
-            scanner.setSqlSessionFactoryBeanName("sqlSessionFactory");
-          } else {
-            scanner.setSqlSessionFactoryBeanName(entry.getKey() + "SqlSessionFactory");
-          }
-          scanner.registerFilters();
-          scanner.doScan(entry.getValue().getScanPackage());
-        } catch (IllegalStateException ex) {
-        }
-      }
     }
-  }
 
-  @Override
-  public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-    this.beanFactory = beanFactory;
-  }
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = beanFactory;
+    }
 
-  @Override
-  public void setResourceLoader(ResourceLoader resourceLoader) {
-    this.resourceLoader = resourceLoader;
-  }
+    @Override
+    public void setResourceLoader(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
+    }
 }

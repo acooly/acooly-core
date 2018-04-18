@@ -11,23 +11,25 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.StringReader;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 public class BaseMessageResponseParser extends BaseXMLSerializer {
 
-  public static Document parse(String xml)
-      throws ParserConfigurationException, IOException, SAXException {
-    InputSource is = new InputSource();
-    is.setCharacterStream(new StringReader(xml));
-    Document parse = getDocmentBuilder().parse(is);
-    return parse;
-  }
-
-  public static String getCharacterDataFromElement(Element e) {
-    Node child = e.getFirstChild();
-    if (child instanceof CharacterData) {
-      CharacterData cd = (CharacterData) child;
-      return cd.getData();
+    public static Document parse(String xml)
+            throws ParserConfigurationException, IOException, SAXException {
+        InputSource is = new InputSource();
+        is.setCharacterStream(new StringReader(xml));
+        Document parse = getDocmentBuilder().parse(is);
+        return parse;
     }
-    return "";
-  }
+
+    public static String getCharacterDataFromElement(Element e) {
+        Node child = e.getFirstChild();
+        if (child instanceof CharacterData) {
+            CharacterData cd = (CharacterData) child;
+            return cd.getData();
+        }
+        return "";
+    }
 }

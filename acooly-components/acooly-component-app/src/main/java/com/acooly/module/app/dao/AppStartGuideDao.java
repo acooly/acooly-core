@@ -14,5 +14,5 @@ import java.util.List;
  * @author Acooly Code Generator
  */
 public interface AppStartGuideDao extends EntityJpaDao<AppStartGuide, Long> {
-  List<AppStartGuide> findByStatusOrderBySortOrderAsc(EntityStatus status);
+    List<AppStartGuide> findByStatusOrderBySortOrderAsc(EntityStatus status);
 }

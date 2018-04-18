@@ -10,4 +10,5 @@ import com.acooly.module.jpa.EntityJpaDao;
  *
  * @author Acooly Code Generator
  */
-public interface AppMessageDao extends EntityJpaDao<AppMessage, Long>, AppMessageDaoCustom {}
+public interface AppMessageDao extends EntityJpaDao<AppMessage, Long>, AppMessageDaoCustom {
+}

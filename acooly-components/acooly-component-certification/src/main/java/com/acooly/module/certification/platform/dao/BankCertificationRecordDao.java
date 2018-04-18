@@ -6,8 +6,8 @@
  */
 package com.acooly.module.certification.platform.dao;
 
-import com.acooly.module.jpa.EntityJpaDao;
 import com.acooly.module.certification.platform.entity.BankCertificationRecord;
+import com.acooly.module.jpa.EntityJpaDao;
 import org.springframework.data.jpa.repository.Query;
 
 /**
@@ -18,6 +18,6 @@ import org.springframework.data.jpa.repository.Query;
  * @author shuijing
  */
 public interface BankCertificationRecordDao extends EntityJpaDao<BankCertificationRecord, Long> {
-  @Query("from BankCertificationRecord where cardNo = ?1 ")
-  BankCertificationRecord findEntityByCardNo(String cardNo);
+    @Query("from BankCertificationRecord where cardNo = ?1 ")
+    BankCertificationRecord findEntityByCardNo(String cardNo);
 }

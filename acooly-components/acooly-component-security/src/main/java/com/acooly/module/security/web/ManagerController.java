@@ -14,7 +14,9 @@ import com.acooly.module.security.domain.User;
 import com.acooly.module.security.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.Maps;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Header;
+import io.jsonwebtoken.Jwt;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -44,161 +46,161 @@ import static com.acooly.module.security.shiro.realm.ShiroDbRealm.SESSION_USER;
 @Controller
 @RequestMapping(value = "/manage/")
 @ConditionalOnProperty(
-  value = SecurityProperties.PREFIX + ".shiro.auth.enable",
-  matchIfMissing = true
+        value = SecurityProperties.PREFIX + ".shiro.auth.enable",
+        matchIfMissing = true
 )
 @Olog.Ignore
 public class ManagerController extends AbstractJQueryEntityController<User, UserService> {
 
-  private static final Logger logger = LoggerFactory.getLogger(ManagerController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ManagerController.class);
 
-  @Override
-  public String index(HttpServletRequest request, HttpServletResponse response, Model model) {
-    Subject subject = SecurityUtils.getSubject();
-    if (subject.isAuthenticated()) {
-      // 如果已经登录的情况，直接回到主框架界面
-      return "/manage/index";
-    } else {
-      // 如果没有登录的首次进入登录界面，直接返回到登录界面。
-      FrameworkProperties frameworkProperties = FrameworkPropertiesHolder.get();
-      // model.addAttribute("securityConfig", securityConfig);
-      request.getSession(true).setAttribute("securityConfig", frameworkProperties);
-      return "/manage/login";
-    }
-  }
-
-  /**
-   * GET访问，直接进入登陆界面
-   *
-   * @return
-   */
-  @RequestMapping(value = "login")
-  public String login(HttpServletRequest request, Model model) {
-    Subject subject = SecurityUtils.getSubject();
-    if (subject.isAuthenticated()) {
-      /** 如果已经登录的情况，其他系统集成sso则重定向目标地址，否则直接跳主页 */
-      String targetUrl = ServletUtil.getRequestParameter(JWTUtils.KEY_TARGETURL);
-      // targetUrl = (String) ServletUtil.getSessionAttribute(JWTUtils.KEY_TARGETURL);
-      if (StringUtils.isNotBlank(targetUrl)) {
-        String jwt = JWTUtils.getJwtFromCookie(request.getCookies());
-        if (!StringUtils.isEmpty(jwt)) {
-          Jwt<Header, Claims> jws = null;
-          try {
-            jws = JWTUtils.parseJws(jwt, SIGN_KEY);
-          } catch (Exception e) {
-            logger.error("解析jwt错误", e);
-          }
-          boolean timeout = JWTUtils.validateTimeout(jws);
-          if (timeout) {
-            String newJws = JWTUtils.refreshJwt(jws);
-            return "redirect:" + fomartRederectUrl(targetUrl, newJws);
-          } else {
-            return "redirect:" + fomartRederectUrl(targetUrl, jwt);
-          }
+    @Override
+    public String index(HttpServletRequest request, HttpServletResponse response, Model model) {
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.isAuthenticated()) {
+            // 如果已经登录的情况，直接回到主框架界面
+            return "/manage/index";
         } else {
-          User user = (User) subject.getPrincipal();
-          if (user != null) {
-            String newJwt = genarateJwt(user);
-            JWTUtils.addJwtCookie(ServletUtil.getResponse(), newJwt, JWTUtils.getDomainName());
-            return "redirect:" + fomartRederectUrl(targetUrl, newJwt);
-          }
+            // 如果没有登录的首次进入登录界面，直接返回到登录界面。
+            FrameworkProperties frameworkProperties = FrameworkPropertiesHolder.get();
+            // model.addAttribute("securityConfig", securityConfig);
+            request.getSession(true).setAttribute("securityConfig", frameworkProperties);
+            return "/manage/login";
         }
-      }
-      return "redirect:/manage/index.html";
-    } else {
-      // 如果没有登录的首次进入登录界面，直接返回到登录界面。
-      FrameworkProperties frameworkProperties = FrameworkPropertiesHolder.get();
-      // model.addAttribute("securityConfig", securityConfig);
-      request.getSession(true).setAttribute("securityConfig", frameworkProperties);
-      return "/manage/login";
     }
-  }
 
-  @RequestMapping(value = "onLoginSuccess")
-  @ResponseBody
-  public JsonResult onLoginSuccess(HttpServletRequest request) {
-    logger.debug("OnLoginSuccess, redirect to index.jsp");
-    JsonResult jsonResult = new JsonResult();
-    User user = (User) SecurityUtils.getSubject().getSession().getAttribute(SESSION_USER);
-    if (user != null) {
-      String jwt = genarateJwt(user);
-      JWTUtils.addJwtCookie(ServletUtil.getResponse(), jwt, JWTUtils.getDomainName());
-
-      HashMap<Object, Object> resmap = Maps.newHashMap();
-      String targetUrl = (String) ServletUtil.getSessionAttribute(JWTUtils.KEY_TARGETURL);
-      if (StringUtils.isNotBlank(targetUrl)) {
-        resmap.put("isRedirect", true);
-        resmap.put(JWTUtils.KEY_TARGETURL, fomartRederectUrl(targetUrl, jwt));
-      } else {
-        resmap.put("isRedirect", false);
-        resmap.put(JWTUtils.KEY_TARGETURL, "");
-      }
-      jsonResult.setData(resmap);
+    /**
+     * GET访问，直接进入登陆界面
+     *
+     * @return
+     */
+    @RequestMapping(value = "login")
+    public String login(HttpServletRequest request, Model model) {
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.isAuthenticated()) {
+            /** 如果已经登录的情况，其他系统集成sso则重定向目标地址，否则直接跳主页 */
+            String targetUrl = ServletUtil.getRequestParameter(JWTUtils.KEY_TARGETURL);
+            // targetUrl = (String) ServletUtil.getSessionAttribute(JWTUtils.KEY_TARGETURL);
+            if (StringUtils.isNotBlank(targetUrl)) {
+                String jwt = JWTUtils.getJwtFromCookie(request.getCookies());
+                if (!StringUtils.isEmpty(jwt)) {
+                    Jwt<Header, Claims> jws = null;
+                    try {
+                        jws = JWTUtils.parseJws(jwt, SIGN_KEY);
+                    } catch (Exception e) {
+                        logger.error("解析jwt错误", e);
+                    }
+                    boolean timeout = JWTUtils.validateTimeout(jws);
+                    if (timeout) {
+                        String newJws = JWTUtils.refreshJwt(jws);
+                        return "redirect:" + fomartRederectUrl(targetUrl, newJws);
+                    } else {
+                        return "redirect:" + fomartRederectUrl(targetUrl, jwt);
+                    }
+                } else {
+                    User user = (User) subject.getPrincipal();
+                    if (user != null) {
+                        String newJwt = genarateJwt(user);
+                        JWTUtils.addJwtCookie(ServletUtil.getResponse(), newJwt, JWTUtils.getDomainName());
+                        return "redirect:" + fomartRederectUrl(targetUrl, newJwt);
+                    }
+                }
+            }
+            return "redirect:/manage/index.html";
+        } else {
+            // 如果没有登录的首次进入登录界面，直接返回到登录界面。
+            FrameworkProperties frameworkProperties = FrameworkPropertiesHolder.get();
+            // model.addAttribute("securityConfig", securityConfig);
+            request.getSession(true).setAttribute("securityConfig", frameworkProperties);
+            return "/manage/login";
+        }
     }
-    jsonResult.setSuccess(true);
-    return jsonResult;
-  }
 
-  private String genarateJwt(User user) {
-    String username = user.getUsername();
-    String subjectStr = "";
-    try {
-      subjectStr = JsonMapper.nonEmptyMapper().getMapper().writeValueAsString(user);
-    } catch (JsonProcessingException e) {
-      logger.error("创建jwt时user转String失败", e.getMessage());
+    @RequestMapping(value = "onLoginSuccess")
+    @ResponseBody
+    public JsonResult onLoginSuccess(HttpServletRequest request) {
+        logger.debug("OnLoginSuccess, redirect to index.jsp");
+        JsonResult jsonResult = new JsonResult();
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute(SESSION_USER);
+        if (user != null) {
+            String jwt = genarateJwt(user);
+            JWTUtils.addJwtCookie(ServletUtil.getResponse(), jwt, JWTUtils.getDomainName());
+
+            HashMap<Object, Object> resmap = Maps.newHashMap();
+            String targetUrl = (String) ServletUtil.getSessionAttribute(JWTUtils.KEY_TARGETURL);
+            if (StringUtils.isNotBlank(targetUrl)) {
+                resmap.put("isRedirect", true);
+                resmap.put(JWTUtils.KEY_TARGETURL, fomartRederectUrl(targetUrl, jwt));
+            } else {
+                resmap.put("isRedirect", false);
+                resmap.put(JWTUtils.KEY_TARGETURL, "");
+            }
+            jsonResult.setData(resmap);
+        }
+        jsonResult.setSuccess(true);
+        return jsonResult;
     }
-    return JWTUtils.createJwt(username, subjectStr);
-  }
 
-  private String fomartRederectUrl(String targetUrl, String jwt) {
-    if (targetUrl.contains("?")) {
-      targetUrl = String.format("%s&jwt=%s", targetUrl, jwt);
-    } else {
-      targetUrl = String.format("%s?jwt=%s", targetUrl, jwt);
+    private String genarateJwt(User user) {
+        String username = user.getUsername();
+        String subjectStr = "";
+        try {
+            subjectStr = JsonMapper.nonEmptyMapper().getMapper().writeValueAsString(user);
+        } catch (JsonProcessingException e) {
+            logger.error("创建jwt时user转String失败", e.getMessage());
+        }
+        return JWTUtils.createJwt(username, subjectStr);
     }
-    return targetUrl;
-  }
 
-  @RequestMapping(value = "onLoginFailure")
-  @ResponseBody
-  public JsonResult onLoginFailure(HttpServletRequest request) {
-    logger.debug("OnLoginFailure");
-    // 获取Shiro的错误信息
-    String obj = request.getParameter(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
-    String message = request.getParameter("message");
-    String msg = "";
-    if (obj != null) {
-      if ("org.apache.shiro.authc.UnknownAccountException".equals(obj)) {
-        msg = "用户名或密码错误";
-      } else if ("org.apache.shiro.authc.IncorrectCredentialsException".equals(obj)) {
-        msg = "用户名或密码错误";
-      } else if ("com.acooly.module.security.shiro.exception.InvaildCaptchaException".equals(obj)) {
-        msg = "验证码错误";
-      } else if ("org.apache.shiro.authc.AuthenticationException".equals(obj)) {
-        msg = message;
-      } else {
-        msg = message;
-      }
-      logger.debug(msg + " --> " + obj + ": " + message);
+    private String fomartRederectUrl(String targetUrl, String jwt) {
+        if (targetUrl.contains("?")) {
+            targetUrl = String.format("%s&jwt=%s", targetUrl, jwt);
+        } else {
+            targetUrl = String.format("%s?jwt=%s", targetUrl, jwt);
+        }
+        return targetUrl;
     }
-    JsonResult result = new JsonResult(obj, msg);
-    result.appendData(Servlets.getParameters(request, null, false));
-    return result;
-  }
 
-  /**
-   * 会话过期，或未授权访问的情况的回调，框架配置中没有使用，而是使用遇到未授权访问直接注销返回到登录界面。 这里保留是为了，如果有需求可以配置框架返回到这里进行后续处理。
-   *
-   * @param request
-   * @return
-   */
-  @RequestMapping(value = "onUnauthorized")
-  public String onUnauthorized(HttpServletRequest request) {
-    return "/manage/error/403";
-  }
+    @RequestMapping(value = "onLoginFailure")
+    @ResponseBody
+    public JsonResult onLoginFailure(HttpServletRequest request) {
+        logger.debug("OnLoginFailure");
+        // 获取Shiro的错误信息
+        String obj = request.getParameter(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
+        String message = request.getParameter("message");
+        String msg = "";
+        if (obj != null) {
+            if ("org.apache.shiro.authc.UnknownAccountException".equals(obj)) {
+                msg = "用户名或密码错误";
+            } else if ("org.apache.shiro.authc.IncorrectCredentialsException".equals(obj)) {
+                msg = "用户名或密码错误";
+            } else if ("com.acooly.module.security.shiro.exception.InvaildCaptchaException".equals(obj)) {
+                msg = "验证码错误";
+            } else if ("org.apache.shiro.authc.AuthenticationException".equals(obj)) {
+                msg = message;
+            } else {
+                msg = message;
+            }
+            logger.debug(msg + " --> " + obj + ": " + message);
+        }
+        JsonResult result = new JsonResult(obj, msg);
+        result.appendData(Servlets.getParameters(request, null, false));
+        return result;
+    }
 
-  @RequestMapping(value = "north")
-  public String north(HttpServletRequest request) {
-    return "/manage/north";
-  }
+    /**
+     * 会话过期，或未授权访问的情况的回调，框架配置中没有使用，而是使用遇到未授权访问直接注销返回到登录界面。 这里保留是为了，如果有需求可以配置框架返回到这里进行后续处理。
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "onUnauthorized")
+    public String onUnauthorized(HttpServletRequest request) {
+        return "/manage/error/403";
+    }
+
+    @RequestMapping(value = "north")
+    public String north(HttpServletRequest request) {
+        return "/manage/north";
+    }
 }

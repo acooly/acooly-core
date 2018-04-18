@@ -1,4 +1,6 @@
-/** create by zhangpu date:2015年7月14日 */
+/**
+ * create by zhangpu date:2015年7月14日
+ */
 package com.acooly.module.ofile.auth;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,5 +14,5 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface OFileUploadAuthenticate {
 
-  void authenticate(HttpServletRequest request);
+    void authenticate(HttpServletRequest request);
 }

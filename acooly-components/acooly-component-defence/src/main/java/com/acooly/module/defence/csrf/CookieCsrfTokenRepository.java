@@ -13,34 +13,36 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** @author qiubo */
+/**
+ * @author qiubo
+ */
 public class CookieCsrfTokenRepository implements CsrfTokenRepository {
 
-  @Override
-  public void saveToken(CsrfToken token, HttpServletRequest request, HttpServletResponse response) {
-    Cookie tokenCookie = new Cookie(token.getParameterName(), token.getToken());
-    tokenCookie.setPath(request.getContextPath() + "/");
-    response.addCookie(tokenCookie);
-  }
-
-  @Override
-  public CsrfToken loadToken(HttpServletRequest request) {
-    String csrf = getCsrfFromCookie(request);
-    if (csrf == null) {
-      return null;
+    @Override
+    public void saveToken(CsrfToken token, HttpServletRequest request, HttpServletResponse response) {
+        Cookie tokenCookie = new Cookie(token.getParameterName(), token.getToken());
+        tokenCookie.setPath(request.getContextPath() + "/");
+        response.addCookie(tokenCookie);
     }
-    return generateToken(csrf);
-  }
 
-  private String getCsrfFromCookie(HttpServletRequest request) {
-    Cookie[] cookies = request.getCookies();
-    if (cookies != null) {
-      for (Cookie cookie : cookies) {
-        if (cookie.getName().equals(CsrfTokenRepository.CSRF_PARAMETER_NAME)) {
-          return cookie.getValue();
+    @Override
+    public CsrfToken loadToken(HttpServletRequest request) {
+        String csrf = getCsrfFromCookie(request);
+        if (csrf == null) {
+            return null;
         }
-      }
+        return generateToken(csrf);
     }
-    return null;
-  }
+
+    private String getCsrfFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(CsrfTokenRepository.CSRF_PARAMETER_NAME)) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
 }

@@ -25,18 +25,18 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/manage/module/portlet/actionLog")
 public class ActionLogManagerController
-    extends AbstractJQueryEntityController<ActionLog, ActionLogService> {
+        extends AbstractJQueryEntityController<ActionLog, ActionLogService> {
 
-  @SuppressWarnings("unused")
-  @Autowired
-  private ActionLogService actionLogService;
+    @SuppressWarnings("unused")
+    @Autowired
+    private ActionLogService actionLogService;
 
-  {
-    allowMapping = "*";
-  }
+    {
+        allowMapping = "*";
+    }
 
-  @Override
-  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-    model.put("allChannels", ActionChannelEnum.mapping());
-  }
+    @Override
+    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+        model.put("allChannels", ActionChannelEnum.mapping());
+    }
 }

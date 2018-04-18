@@ -22,6 +22,6 @@ import java.util.List;
  */
 public interface ActionMappingDao extends EntityMybatisDao<ActionMapping> {
 
-  @Select("select * from portlet_action_mapping where url like \"%\"#{url}")
-  List<ActionMapping> findByLikeUrl(@Param("url") String url);
+    @Select("select * from portlet_action_mapping where url like \"%\"#{url}")
+    List<ActionMapping> findByLikeUrl(@Param("url") String url);
 }

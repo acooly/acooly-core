@@ -4,5 +4,4 @@ com.acooly.module.dubbo.DubboProviderAutoConfig
 com.acooly.core.common.boot.log.initializer.LogInitializer=\
 com.acooly.module.dubbo.DubboMonitorLogInitializer
 com.acooly.core.common.boot.component.ComponentInitializer=com.acooly.module.dubbo.DubboComponentInitializer
-
 com.acooly.core.common.boot.component.DependencyChecker=com.acooly.module.dubbo.DubboDependencyChecker

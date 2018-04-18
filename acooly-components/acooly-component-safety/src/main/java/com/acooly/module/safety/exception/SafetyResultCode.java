@@ -34,9 +34,9 @@ public enum SafetyResultCode implements Messageable {
 
     LOAD_KEYSTORE_PRIVATE_ERROR("LOAD_KEYSTORE_PRIVATE_ERROR", "证书库私钥加载失败"),
 
-    NOT_EXSIST_KEYLOADMANAGER_PROVIDER_IMPL("NOT_EXSIST_KEYLOADMANAGER_PROVIDER_IMPL","没有提供商对应的KeyloadManager实现"),
+    NOT_EXSIST_KEYLOADMANAGER_PROVIDER_IMPL("NOT_EXSIST_KEYLOADMANAGER_PROVIDER_IMPL", "没有提供商对应的KeyloadManager实现"),
 
-    NOT_EXSIST_KEYLOADER("NOT_EXSIST_KEYLOADER","没有KeyLoader实现"),
+    NOT_EXSIST_KEYLOADER("NOT_EXSIST_KEYLOADER", "没有KeyLoader实现"),
 
     SIGN_CALC_ERROR("SIGN_CALC_ERROR", "签名失败"),
 
@@ -49,22 +49,6 @@ public enum SafetyResultCode implements Messageable {
     private SafetyResultCode(String code, String message) {
         this.code = code;
         this.message = message;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String code() {
-        return code;
-    }
-
-    public String message() {
-        return message;
     }
 
     public static Map<String, String> mapping() {
@@ -115,6 +99,22 @@ public enum SafetyResultCode implements Messageable {
             list.add(status.code());
         }
         return list;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String code() {
+        return code;
+    }
+
+    public String message() {
+        return message;
     }
 
 }

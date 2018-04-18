@@ -14,26 +14,26 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface LoginLogoutListener {
 
-  /**
-   * 注销前回调
-   *
-   * @param request
-   * @param response
-   * @param subject
-   */
-  void beforeLogout(HttpServletRequest request, HttpServletResponse response, Subject subject);
+    /**
+     * 注销前回调
+     *
+     * @param request
+     * @param response
+     * @param subject
+     */
+    void beforeLogout(HttpServletRequest request, HttpServletResponse response, Subject subject);
 
-  /**
-   * 登录后回调
-   *
-   * @param request
-   * @param response
-   * @param subject
-   * @throws AuthenticationException
-   */
-  void afterLogin(
-      AuthenticationToken token,
-      AuthenticationException e,
-      HttpServletRequest request,
-      HttpServletResponse response);
+    /**
+     * 登录后回调
+     *
+     * @param request
+     * @param response
+     * @param subject
+     * @throws AuthenticationException
+     */
+    void afterLogin(
+            AuthenticationToken token,
+            AuthenticationException e,
+            HttpServletRequest request,
+            HttpServletResponse response);
 }

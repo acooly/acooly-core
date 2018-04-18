@@ -27,60 +27,61 @@ import java.util.Map;
 @Slf4j
 public class EventAutoConfig {
 
-  @Bean
-  public EventBus messageBus(ThreadPoolTaskExecutor poolTaskExecutor) {
-    Feature.AsynchronousHandlerInvocation asynchronousHandlerInvocation =
-        new Feature.AsynchronousHandlerInvocation();
-    asynchronousHandlerInvocation.setExecutor(poolTaskExecutor.getThreadPoolExecutor());
-    Feature.SyncPubSub syncPubSub =
-        new Feature.SyncPubSub()
-            .setMetadataReader(new MetadataReader())
-            .setPublicationFactory(new MessagePublication.Factory())
-            .setSubscriptionFactory(new ExSubscriptionFactory())
-            .setSubscriptionManagerProvider(new SubscriptionManagerProvider());
-    EventBus bus =
-        new EventBus(
-            new BusConfiguration()
-                .addFeature(syncPubSub)
-                .addFeature(asynchronousHandlerInvocation)
-                .addFeature(Feature.AsynchronousMessageDispatch.Default())
-                .addPublicationErrorHandler(
-                    error -> {
-                      Method handler = error.getHandler();
-                      String name =
-                          handler.getDeclaringClass().getSimpleName() + "#" + handler.getName();
-                      Throwable throwable = error.getCause();
-                      if (throwable instanceof InvocationTargetException) {
-                        throwable = ((InvocationTargetException) throwable).getTargetException();
-                      }
-                      log.error("调用方法:{} 失败，异常为：", name, throwable);
-                    })
-                .setProperty(IBusConfiguration.Properties.BusId, "global bus"));
-    return bus;
-  }
-
-  @Configuration
-  public static class EventHandlerConfig {
-    @Autowired private EventBus eventBus;
-
-    @PostConstruct
-    public void afterPropertiesSet() throws Exception {
-      Map<String, Object> beansWithAnnotation =
-          Apps.getApplicationContext().getBeansWithAnnotation(EventHandler.class);
-      for (Object o : beansWithAnnotation.values()) {
-        eventBus.subscribe(o);
-        log.info("注册事件处理器:{}", o.getClass().getName());
-      }
+    @Bean
+    public EventBus messageBus(ThreadPoolTaskExecutor poolTaskExecutor) {
+        Feature.AsynchronousHandlerInvocation asynchronousHandlerInvocation =
+                new Feature.AsynchronousHandlerInvocation();
+        asynchronousHandlerInvocation.setExecutor(poolTaskExecutor.getThreadPoolExecutor());
+        Feature.SyncPubSub syncPubSub =
+                new Feature.SyncPubSub()
+                        .setMetadataReader(new MetadataReader())
+                        .setPublicationFactory(new MessagePublication.Factory())
+                        .setSubscriptionFactory(new ExSubscriptionFactory())
+                        .setSubscriptionManagerProvider(new SubscriptionManagerProvider());
+        EventBus bus =
+                new EventBus(
+                        new BusConfiguration()
+                                .addFeature(syncPubSub)
+                                .addFeature(asynchronousHandlerInvocation)
+                                .addFeature(Feature.AsynchronousMessageDispatch.Default())
+                                .addPublicationErrorHandler(
+                                        error -> {
+                                            Method handler = error.getHandler();
+                                            String name =
+                                                    handler.getDeclaringClass().getSimpleName() + "#" + handler.getName();
+                                            Throwable throwable = error.getCause();
+                                            if (throwable instanceof InvocationTargetException) {
+                                                throwable = ((InvocationTargetException) throwable).getTargetException();
+                                            }
+                                            log.error("调用方法:{} 失败，异常为：", name, throwable);
+                                        })
+                                .setProperty(IBusConfiguration.Properties.BusId, "global bus"));
+        return bus;
     }
 
-    @PreDestroy
-    public void destroy() throws Exception {
-      Map<String, Object> beansWithAnnotation =
-          Apps.getApplicationContext().getBeansWithAnnotation(EventHandler.class);
-      for (Object o : beansWithAnnotation.values()) {
-        eventBus.unsubscribe(o);
-        log.info("销毁事件处理器:{}", o.getClass().getName());
-      }
+    @Configuration
+    public static class EventHandlerConfig {
+        @Autowired
+        private EventBus eventBus;
+
+        @PostConstruct
+        public void afterPropertiesSet() throws Exception {
+            Map<String, Object> beansWithAnnotation =
+                    Apps.getApplicationContext().getBeansWithAnnotation(EventHandler.class);
+            for (Object o : beansWithAnnotation.values()) {
+                eventBus.subscribe(o);
+                log.info("注册事件处理器:{}", o.getClass().getName());
+            }
+        }
+
+        @PreDestroy
+        public void destroy() throws Exception {
+            Map<String, Object> beansWithAnnotation =
+                    Apps.getApplicationContext().getBeansWithAnnotation(EventHandler.class);
+            for (Object o : beansWithAnnotation.values()) {
+                eventBus.unsubscribe(o);
+                log.info("销毁事件处理器:{}", o.getClass().getName());
+            }
+        }
     }
-  }
 }

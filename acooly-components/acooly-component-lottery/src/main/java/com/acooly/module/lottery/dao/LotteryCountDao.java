@@ -18,13 +18,13 @@ import java.math.BigInteger;
  */
 public interface LotteryCountDao extends EntityJpaDao<LotteryCount, Long> {
 
-  @Lock(LockModeType.PESSIMISTIC_WRITE)
-  public LotteryCount findByUkey(String key);
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    public LotteryCount findByUkey(String key);
 
-  @Modifying
-  @Query(value = "update lottery_count set count = count + 1 where ukey = ?1", nativeQuery = true)
-  public void appendCount(String key);
+    @Modifying
+    @Query(value = "update lottery_count set count = count + 1 where ukey = ?1", nativeQuery = true)
+    public void appendCount(String key);
 
-  @Query(value = "select sum(count) from lottery_count where lottery_id = ?1", nativeQuery = true)
-  public BigInteger getCount(Long lotteryId);
+    @Query(value = "select sum(count) from lottery_count where lottery_id = ?1", nativeQuery = true)
+    public BigInteger getCount(Long lotteryId);
 }

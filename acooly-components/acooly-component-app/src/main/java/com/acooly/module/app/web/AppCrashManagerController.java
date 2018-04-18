@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping(value = "/manage/module/app/appCrash")
 public class AppCrashManagerController
-    extends AbstractJQueryEntityController<AppCrash, AppCrashService> {
+        extends AbstractJQueryEntityController<AppCrash, AppCrashService> {
 
-  @Autowired private AppCrashService appCrashService;
+    @Autowired
+    private AppCrashService appCrashService;
 }

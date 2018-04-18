@@ -23,15 +23,9 @@ import javax.annotation.Resource;
 @Component
 public class Safes1 {
 
+    private static Safes1 safes;
     @Resource(name = "safetySignerFactory")
     private SignerFactory signerFactory;
-
-    private static Safes1 safes;
-
-    @PostConstruct
-    public void init() {
-        safes = this;
-    }
 
     public static Signer getSigner(String signType) {
         return safes.signerFactory.getSigner(signType);
@@ -39,6 +33,11 @@ public class Safes1 {
 
     public static Signer getSigner(SignTypeEnum signType) {
         return safes.signerFactory.getSigner(signType.name());
+    }
+
+    @PostConstruct
+    public void init() {
+        safes = this;
     }
 
 }

@@ -12,19 +12,19 @@ import java.util.List;
  */
 public class TimestampTypeConverter extends AbstractTypeConverter<Timestamp> {
 
-  public Class<Timestamp> getTargetType() {
-    return Timestamp.class;
-  }
-
-  public List<Class<?>> getSupportedSourceTypes() {
-    return Arrays.asList(CharSequence.class, String[].class, Date.class);
-  }
-
-  public Timestamp convert(Object value, Class<? extends Timestamp> toType) {
-    try {
-      return (Timestamp) DateTypeConverter.dateValue(value, toType);
-    } catch (ClassCastException e) {
-      throw new TypeConversionException(e);
+    public Class<Timestamp> getTargetType() {
+        return Timestamp.class;
     }
-  }
+
+    public List<Class<?>> getSupportedSourceTypes() {
+        return Arrays.asList(CharSequence.class, String[].class, Date.class);
+    }
+
+    public Timestamp convert(Object value, Class<? extends Timestamp> toType) {
+        try {
+            return (Timestamp) DateTypeConverter.dateValue(value, toType);
+        } catch (ClassCastException e) {
+            throw new TypeConversionException(e);
+        }
+    }
 }

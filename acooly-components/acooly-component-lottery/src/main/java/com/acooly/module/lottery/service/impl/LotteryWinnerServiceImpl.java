@@ -8,20 +8,20 @@ import org.springframework.stereotype.Service;
 
 @Service("lotteryWinnerService")
 public class LotteryWinnerServiceImpl extends EntityServiceImpl<LotteryWinner, LotteryWinnerDao>
-    implements LotteryWinnerService {
+        implements LotteryWinnerService {
 
-  @Override
-  public int count(Long lotteryId, Long awardId) {
-    return getEntityDao().getWinnerCount(lotteryId, awardId).intValue();
-  }
+    @Override
+    public int count(Long lotteryId, Long awardId) {
+        return getEntityDao().getWinnerCount(lotteryId, awardId).intValue();
+    }
 
-  @Override
-  public int getWinnerCount(Long lotteryId, String winner) {
-    return getEntityDao().getWinners(lotteryId, winner).intValue();
-  }
+    @Override
+    public int getWinnerCount(Long lotteryId, String winner) {
+        return getEntityDao().getWinners(lotteryId, winner).intValue();
+    }
 
-  @Override
-  public int getCount(Long lotteryId) {
-    return getEntityDao().getCount(lotteryId).intValue();
-  }
+    @Override
+    public int getCount(Long lotteryId) {
+        return getEntityDao().getCount(lotteryId).intValue();
+    }
 }

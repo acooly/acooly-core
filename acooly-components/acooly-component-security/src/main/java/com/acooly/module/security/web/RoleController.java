@@ -33,120 +33,123 @@ import java.util.Set;
 @Controller
 @RequestMapping(value = "/manage/system/role")
 @ConditionalOnProperty(
-  value = SecurityProperties.PREFIX + ".shiro.auth.enable",
-  matchIfMissing = true
+        value = SecurityProperties.PREFIX + ".shiro.auth.enable",
+        matchIfMissing = true
 )
 public class RoleController extends AbstractJQueryEntityController<Role, RoleService> {
 
-  @Autowired private RoleService roleService;
-  @Autowired private ResourceService resourceService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private ResourceService resourceService;
 
-  @RequestMapping(value = {"getAllResourceNode"})
-  @ResponseBody
-  public JsonListResult<ResourceNode> getAllResourceNode(
-      HttpServletRequest request, HttpServletResponse response) {
-    JsonListResult<ResourceNode> result = new JsonListResult<ResourceNode>();
-    String roleId = request.getParameter("roleId");
-    try {
-      User user = ShiroUtils.getCurrentUser();
-      result.appendData(referenceData(request));
-      List<ResourceNode> resources = null;
+    @RequestMapping(value = {"getAllResourceNode"})
+    @ResponseBody
+    public JsonListResult<ResourceNode> getAllResourceNode(
+            HttpServletRequest request, HttpServletResponse response) {
+        JsonListResult<ResourceNode> result = new JsonListResult<ResourceNode>();
+        String roleId = request.getParameter("roleId");
+        try {
+            User user = ShiroUtils.getCurrentUser();
+            result.appendData(referenceData(request));
+            List<ResourceNode> resources = null;
 
-      if (user.getUserType() == User.USER_TYPE_ADMIN) {
-        // 如果是超级管理员，则显示全部可选资源
-        resources = resourceService.getAllResourceNode(Long.valueOf(roleId));
-      } else {
-        // 当前用户有权限的资源
-        resources = resourceService.getAuthorizedResourceNode(user.getId(), Long.valueOf(roleId));
-      }
+            if (user.getUserType() == User.USER_TYPE_ADMIN) {
+                // 如果是超级管理员，则显示全部可选资源
+                resources = resourceService.getAllResourceNode(Long.valueOf(roleId));
+            } else {
+                // 当前用户有权限的资源
+                resources = resourceService.getAuthorizedResourceNode(user.getId(), Long.valueOf(roleId));
+            }
 
-      result.setTotal((long) resources.size());
-      result.setRows(resources);
-    } catch (Exception e) {
-      handleException(result, "查询所有数据", e);
+            result.setTotal((long) resources.size());
+            result.setRows(resources);
+        } catch (Exception e) {
+            handleException(result, "查询所有数据", e);
+        }
+        return result;
     }
-    return result;
-  }
 
-  @RequestMapping(value = {"listJson1"})
-  @ResponseBody
-  public String listJson1(HttpServletRequest request, HttpServletResponse response) {
-    JsonListResult<Role> result = new JsonListResult<Role>();
-    try {
-      result.appendData(referenceData(request));
-      PageInfo<Role> pageInfo = doList(request, response);
-      result.setTotal(pageInfo.getTotalCount());
-      result.setRows(pageInfo.getPageResults());
-    } catch (Exception e) {
-      handleException(result, "分页查询", e);
+    @RequestMapping(value = {"listJson1"})
+    @ResponseBody
+    public String listJson1(HttpServletRequest request, HttpServletResponse response) {
+        JsonListResult<Role> result = new JsonListResult<Role>();
+        try {
+            result.appendData(referenceData(request));
+            PageInfo<Role> pageInfo = doList(request, response);
+            result.setTotal(pageInfo.getTotalCount());
+            result.setRows(pageInfo.getPageResults());
+        } catch (Exception e) {
+            handleException(result, "分页查询", e);
+        }
+        String resultBody = JsonMapper.nonDefaultMapper().toJson(result);
+        return resultBody;
     }
-    String resultBody = JsonMapper.nonDefaultMapper().toJson(result);
-    return resultBody;
-  }
 
-  @RequestMapping(value = {"rolesList"})
-  @ResponseBody
-  public String getRolesList(HttpServletRequest request, HttpServletResponse response) {
-    List<Role> list = Lists.newArrayList();
-    try {
-      list = roleService.getAll();
-      list.forEach(
-          role -> {
-            Role r = new Role();
-            r.setCreateTime(null);
-            r.setUpdateTime(null);
-            r.setId(role.getId());
-            r.setName(role.getName());
-            r.setDescn(role.getDescn());
-          });
-    } catch (Exception e) {
-      handleException("查询角色", e, request);
+    @RequestMapping(value = {"rolesList"})
+    @ResponseBody
+    public String getRolesList(HttpServletRequest request, HttpServletResponse response) {
+        List<Role> list = Lists.newArrayList();
+        try {
+            list = roleService.getAll();
+            list.forEach(
+                    role -> {
+                        Role r = new Role();
+                        r.setCreateTime(null);
+                        r.setUpdateTime(null);
+                        r.setId(role.getId());
+                        r.setName(role.getName());
+                        r.setDescn(role.getDescn());
+                    });
+        } catch (Exception e) {
+            handleException("查询角色", e, request);
+        }
+        return JsonMapper.nonDefaultMapper().toJson(list);
     }
-    return JsonMapper.nonDefaultMapper().toJson(list);
-  }
 
-  @Override
-  protected Role onSave(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      Model model,
-      Role entity,
-      boolean isCreate)
-      throws Exception {
-    String resourceIds = request.getParameter("resourceIds");
-    Set<Resource> resources = null;
-    if (StringUtils.isNotBlank(resourceIds)) {
-      String[] rids = StringUtils.split(resourceIds, ",");
-      if (rids != null & rids.length > 0) {
-        resources = new HashSet<Resource>();
-        for (String resourceId : rids) {
-          resources.add(resourceService.get(Long.valueOf(resourceId)));
+    @Override
+    protected Role onSave(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Model model,
+            Role entity,
+            boolean isCreate)
+            throws Exception {
+        String resourceIds = request.getParameter("resourceIds");
+        Set<Resource> resources = null;
+        if (StringUtils.isNotBlank(resourceIds)) {
+            String[] rids = StringUtils.split(resourceIds, ",");
+            if (rids != null & rids.length > 0) {
+                resources = new HashSet<Resource>();
+                for (String resourceId : rids) {
+                    resources.add(resourceService.get(Long.valueOf(resourceId)));
+                }
+                entity.setRescs(resources);
+            }
         }
         entity.setRescs(resources);
-      }
+        return entity;
     }
-    entity.setRescs(resources);
-    return entity;
-  }
 
-  /**
-   * 删除前逻辑检查
-   *
-   * <p>删除前检查是否已分配用户，如果已分配则不允许删除
-   */
-  @Override
-  protected void onRemove(
-      HttpServletRequest request, HttpServletResponse response, Model model, Serializable... ids)
-      throws Exception {
-    Role role = null;
-    for (Serializable id : ids) {
-      role = getEntityService().get(id);
-      if (role != null && Collections3.isNotEmpty(role.getUsers())) {
-        throw new RuntimeException("角色已被用户使用，不能直接删除，请先解除该角色对应用户的关系");
-      }
+    /**
+     * 删除前逻辑检查
+     *
+     * <p>删除前检查是否已分配用户，如果已分配则不允许删除
+     */
+    @Override
+    protected void onRemove(
+            HttpServletRequest request, HttpServletResponse response, Model model, Serializable... ids)
+            throws Exception {
+        Role role = null;
+        for (Serializable id : ids) {
+            role = getEntityService().get(id);
+            if (role != null && Collections3.isNotEmpty(role.getUsers())) {
+                throw new RuntimeException("角色已被用户使用，不能直接删除，请先解除该角色对应用户的关系");
+            }
+        }
     }
-  }
 
-  @Override
-  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {}
+    @Override
+    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+    }
 }

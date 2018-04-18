@@ -15,39 +15,45 @@ package com.acooly.core.utils.arithmetic.ketama;
  * @author zhangpu
  */
 public class KetamaNode {
-  /** 节点名称 */
-  private String name;
-  /** 节点描述 */
-  private String data;
+    /**
+     * 节点名称
+     */
+    private String name;
+    /**
+     * 节点描述
+     */
+    private String data;
 
-  /** 构造函数 */
-  public KetamaNode(String name) {
-    this.name = name;
-  }
+    /**
+     * 构造函数
+     */
+    public KetamaNode(String name) {
+        this.name = name;
+    }
 
-  public KetamaNode(String name, String descn) {
-    this.name = name;
-    this.data = descn;
-  }
+    public KetamaNode(String name, String descn) {
+        this.name = name;
+        this.data = descn;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public String getData() {
-    return data;
-  }
+    public String getData() {
+        return data;
+    }
 
-  public void setData(String data) {
-    this.data = data;
-  }
+    public void setData(String data) {
+        this.data = data;
+    }
 
-  @Override
-  public String toString() {
-    return "KetamaNode{" + "name='" + name + '\'' + ", data='" + data + '\'' + '}';
-  }
+    @Override
+    public String toString() {
+        return "KetamaNode{" + "name='" + name + '\'' + ", data='" + data + '\'' + '}';
+    }
 }

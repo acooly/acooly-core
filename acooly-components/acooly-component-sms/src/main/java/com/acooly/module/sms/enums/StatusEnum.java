@@ -7,18 +7,18 @@
  */
 package com.acooly.module.sms.enums;
 
+import com.acooly.core.utils.enums.Messageable;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.acooly.core.utils.enums.Messageable;
-
 /**
  * 短信黑名单 StatusEnum 枚举定义
  *
  * @author shuijing
- *         Date: 2017-08-01 17:28:24
+ * Date: 2017-08-01 17:28:24
  */
 public enum StatusEnum implements Messageable {
 
@@ -32,22 +32,6 @@ public enum StatusEnum implements Messageable {
     private StatusEnum(String code, String message) {
         this.code = code;
         this.message = message;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String code() {
-        return code;
-    }
-
-    public String message() {
-        return message;
     }
 
     public static Map<String, String> mapping() {
@@ -98,6 +82,22 @@ public enum StatusEnum implements Messageable {
             list.add(status.code());
         }
         return list;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String code() {
+        return code;
+    }
+
+    public String message() {
+        return message;
     }
 
 }

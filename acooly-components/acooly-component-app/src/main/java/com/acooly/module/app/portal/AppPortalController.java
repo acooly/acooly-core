@@ -28,96 +28,97 @@ import java.io.OutputStream;
 @Controller
 @RequestMapping(value = "/app")
 public class AppPortalController
-    extends AbstractStandardEntityController<AppVersion, AppVersionService> {
+        extends AbstractStandardEntityController<AppVersion, AppVersionService> {
 
-  private static final String DEF_APP_CODE = "loan";
-  @Resource private AppVersionService appVersionService;
+    private static final String DEF_APP_CODE = "loan";
+    @Resource
+    private AppVersionService appVersionService;
 
-  @RequestMapping(value = "index")
-  @Override
-  public String index(HttpServletRequest request, HttpServletResponse response, Model model) {
-    String appCode = getAppCode(request);
-    AppVersion iphone = appVersionService.getLatest(appCode, AppVersion.DEVICE_TYPE_IPHONE);
-    AppVersion android = appVersionService.getLatest(appCode, AppVersion.DEVICE_TYPE_ANDROID);
-    String profiles = System.getProperty("spring.profiles.active");
-    if (profiles == null) {
-      profiles = "dev";
+    @RequestMapping(value = "index")
+    @Override
+    public String index(HttpServletRequest request, HttpServletResponse response, Model model) {
+        String appCode = getAppCode(request);
+        AppVersion iphone = appVersionService.getLatest(appCode, AppVersion.DEVICE_TYPE_IPHONE);
+        AppVersion android = appVersionService.getLatest(appCode, AppVersion.DEVICE_TYPE_ANDROID);
+        String profiles = System.getProperty("spring.profiles.active");
+        if (profiles == null) {
+            profiles = "dev";
+        }
+        String profileName = profiles.equals("dev") ? "开发" : (profiles.equals("test") ? "测试" : "");
+        model.addAttribute("android", android);
+        model.addAttribute("iphone", iphone);
+        model.addAttribute("profileName", profileName);
+        model.addAttribute("profiles", profiles);
+        model.addAttribute("viewType", request.getParameter("viewType"));
+        return "index";
     }
-    String profileName = profiles.equals("dev") ? "开发" : (profiles.equals("test") ? "测试" : "");
-    model.addAttribute("android", android);
-    model.addAttribute("iphone", iphone);
-    model.addAttribute("profileName", profileName);
-    model.addAttribute("profiles", profiles);
-    model.addAttribute("viewType", request.getParameter("viewType"));
-    return "index";
-  }
 
-  @RequestMapping(value = "json")
-  @ResponseBody
-  public AppDownload json(HttpServletRequest request, HttpServletResponse response) {
-    String appCode = getAppCode(request);
-    AppDownload appDownload = new AppDownload();
-    appDownload.setProfile(System.getProperty("spring.profiles.active"));
-    appDownload.setIphone(appVersionService.getLatest(appCode, AppVersion.DEVICE_TYPE_IPHONE));
-    appDownload.setAndroid(appVersionService.getLatest(appCode, AppVersion.DEVICE_TYPE_ANDROID));
-    return appDownload;
-  }
-
-  @RequestMapping(value = "{appCode}/{deviceType}")
-  @ResponseBody
-  public Object download(
-      @PathVariable("appCode") String appCode,
-      @PathVariable("deviceType") String deviceType,
-      HttpServletRequest request,
-      HttpServletResponse response) {
-    OutputStream out = null;
-    InputStream in = null;
-    try {
-      AppVersion appVersion = appVersionService.getLatest(appCode, deviceType);
-      if (appVersion == null) {
-        throw new RuntimeException("没有对应的最新版本存在");
-      }
-      File file = new File(appVersion.getPath());
-      if (!file.exists()) {
-        throw new RuntimeException("文件不存在");
-      }
-      doDownloadHeader(
-          appVersion.getAppName()
-              + "v"
-              + appVersion.getVersionName()
-              + "."
-              + Files.getFileExtension(file.getName()),
-          response,
-          deviceType);
-      in = FileUtils.openInputStream(file);
-      out = response.getOutputStream();
-      IOUtils.copy(in, out);
-      out.flush();
-    } catch (Exception e) {
-      return "ERROR:" + e.getMessage();
-    } finally {
-      IOUtils.closeQuietly(out);
-      IOUtils.closeQuietly(in);
+    @RequestMapping(value = "json")
+    @ResponseBody
+    public AppDownload json(HttpServletRequest request, HttpServletResponse response) {
+        String appCode = getAppCode(request);
+        AppDownload appDownload = new AppDownload();
+        appDownload.setProfile(System.getProperty("spring.profiles.active"));
+        appDownload.setIphone(appVersionService.getLatest(appCode, AppVersion.DEVICE_TYPE_IPHONE));
+        appDownload.setAndroid(appVersionService.getLatest(appCode, AppVersion.DEVICE_TYPE_ANDROID));
+        return appDownload;
     }
-    return null;
-  }
 
-  protected void doDownloadHeader(
-      String fileName, HttpServletResponse response, String deviceType) {
-    if (deviceType.equalsIgnoreCase("android")) {
-      response.setContentType("application/vnd.android.package-archive");
-    } else {
-      response.setContentType("application/octet-stream");
+    @RequestMapping(value = "{appCode}/{deviceType}")
+    @ResponseBody
+    public Object download(
+            @PathVariable("appCode") String appCode,
+            @PathVariable("deviceType") String deviceType,
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        OutputStream out = null;
+        InputStream in = null;
+        try {
+            AppVersion appVersion = appVersionService.getLatest(appCode, deviceType);
+            if (appVersion == null) {
+                throw new RuntimeException("没有对应的最新版本存在");
+            }
+            File file = new File(appVersion.getPath());
+            if (!file.exists()) {
+                throw new RuntimeException("文件不存在");
+            }
+            doDownloadHeader(
+                    appVersion.getAppName()
+                            + "v"
+                            + appVersion.getVersionName()
+                            + "."
+                            + Files.getFileExtension(file.getName()),
+                    response,
+                    deviceType);
+            in = FileUtils.openInputStream(file);
+            out = response.getOutputStream();
+            IOUtils.copy(in, out);
+            out.flush();
+        } catch (Exception e) {
+            return "ERROR:" + e.getMessage();
+        } finally {
+            IOUtils.closeQuietly(out);
+            IOUtils.closeQuietly(in);
+        }
+        return null;
     }
-    response.setHeader("Content-Disposition", "attachment");
-    response.setHeader("Content-Disposition", "filename=\"" + fileName + "\"");
-  }
 
-  private String getAppCode(HttpServletRequest request) {
-    String appCode = request.getParameter("appCode");
-    if (Strings.isBlank(appCode)) {
-      appCode = DEF_APP_CODE;
+    protected void doDownloadHeader(
+            String fileName, HttpServletResponse response, String deviceType) {
+        if (deviceType.equalsIgnoreCase("android")) {
+            response.setContentType("application/vnd.android.package-archive");
+        } else {
+            response.setContentType("application/octet-stream");
+        }
+        response.setHeader("Content-Disposition", "attachment");
+        response.setHeader("Content-Disposition", "filename=\"" + fileName + "\"");
     }
-    return appCode;
-  }
+
+    private String getAppCode(HttpServletRequest request) {
+        String appCode = request.getParameter("appCode");
+        if (Strings.isBlank(appCode)) {
+            appCode = DEF_APP_CODE;
+        }
+        return appCode;
+    }
 }

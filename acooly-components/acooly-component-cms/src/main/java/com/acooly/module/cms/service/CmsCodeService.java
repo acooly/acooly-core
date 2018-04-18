@@ -17,4 +17,5 @@ import com.acooly.module.cms.domain.CmsCode;
  *
  * @author acooly
  */
-public interface CmsCodeService extends EntityService<CmsCode> {}
+public interface CmsCodeService extends EntityService<CmsCode> {
+}

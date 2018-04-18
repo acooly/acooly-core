@@ -9,9 +9,14 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface OlogModule {
 
-	/** 模块 */
-	String module() default "";
-	/** 模块名称 */
-	String moduleName() default "";
+    /**
+     * 模块
+     */
+    String module() default "";
+
+    /**
+     * 模块名称
+     */
+    String moduleName() default "";
 
 }

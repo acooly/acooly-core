@@ -13,10 +13,12 @@ import org.springframework.context.ApplicationEvent;
 
 import javax.sql.DataSource;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 public class DataSourceReadyEvent extends ApplicationEvent {
 
-  public DataSourceReadyEvent(DataSource source) {
-    super(source);
-  }
+    public DataSourceReadyEvent(DataSource source) {
+        super(source);
+    }
 }

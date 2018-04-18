@@ -23,105 +23,107 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 public class DatabaseTableChecker
-    implements ApplicationListener<DataSourceReadyEvent>, DisposableBean {
+        implements ApplicationListener<DataSourceReadyEvent>, DisposableBean {
 
-  private static Logger logger = LoggerFactory.getLogger(DatabaseTableChecker.class);
+    private static Logger logger = LoggerFactory.getLogger(DatabaseTableChecker.class);
 
-  private ExecutorService executorService =
-      Executors.newSingleThreadExecutor(new CustomizableThreadFactory("DatabaseTableCheckThread"));
+    private ExecutorService executorService =
+            Executors.newSingleThreadExecutor(new CustomizableThreadFactory("DatabaseTableCheckThread"));
 
-  private Map<String, String> excludedDatabaseTables;
+    private Map<String, String> excludedDatabaseTables;
 
-  private DruidProperties druidProperties;
+    private DruidProperties druidProperties;
 
-  //沒有通过检查的表
-  private List<String> tableNamesNotPassCheck = new ArrayList<>();
+    //沒有通过检查的表
+    private List<String> tableNamesNotPassCheck = new ArrayList<>();
 
-  public DatabaseTableChecker(DruidProperties druidProperties) {
-    this.druidProperties = druidProperties;
-    this.excludedDatabaseTables = druidProperties.getChecker().getExcludedColumnTables();
-  }
-
-  @Override
-  public void onApplicationEvent(DataSourceReadyEvent event) {
-    //tofix 在开发者模式下 AbstractDatabaseScriptIniter 同样监听DataSourceReadyEvent
-    //      在执行数据库脚本初始化未完成的时候 执行了表检查 第一次检查结果会不准确
-    //开发者模式下检查
-    if (!Apps.isDevMode()) {
-      return;
+    public DatabaseTableChecker(DruidProperties druidProperties) {
+        this.druidProperties = druidProperties;
+        this.excludedDatabaseTables = druidProperties.getChecker().getExcludedColumnTables();
     }
-    executorService.execute(
-        () -> {
-          DataSource dataSource = (DataSource) event.getSource();
-          try {
-            TableLoader tableLoader = TableLoaderProvider.getTableLoader(dataSource);
-            String schema = getMysqlschema(dataSource);
 
-            //检查数据库版本
-            boolean passVersion = tableLoader.checkDatabaseVersion();
-            if (!passVersion) {
-              throw new AppConfigException("为正常运行，mysql数据库版本5.6以上版本 !!!");
-            }
-            Map<String, List<Column>> allTables = tableLoader.loadAllTables(schema);
+    @Override
+    public void onApplicationEvent(DataSourceReadyEvent event) {
+        //tofix 在开发者模式下 AbstractDatabaseScriptIniter 同样监听DataSourceReadyEvent
+        //      在执行数据库脚本初始化未完成的时候 执行了表检查 第一次检查结果会不准确
+        //开发者模式下检查
+        if (!Apps.isDevMode()) {
+            return;
+        }
+        executorService.execute(
+                () -> {
+                    DataSource dataSource = (DataSource) event.getSource();
+                    try {
+                        TableLoader tableLoader = TableLoaderProvider.getTableLoader(dataSource);
+                        String schema = getMysqlschema(dataSource);
 
-            //去掉不需要检查的表
-            String excludedDatabaseStr = excludedDatabaseTables.values().toString();
-            allTables
-                .keySet()
-                .removeAll(
-                    Splitter.on(',')
-                        .trimResults()
-                        .omitEmptyStrings()
-                        .splitToList(
-                            excludedDatabaseStr.substring(1, excludedDatabaseStr.length() - 1)));
-            //检查表结构
-            for (Map.Entry<String, List<Column>> entry : allTables.entrySet()) {
-              String tableName = entry.getKey();
-              List<Column> columns = entry.getValue();
-              boolean hasColums = tableLoader.checkTableColums(columns);
-              if (!hasColums) {
-                tableNamesNotPassCheck.add(tableName);
-              }
-            }
-            //输出检查没通过的表名
-            if (!tableNamesNotPassCheck.isEmpty()) {
-              // 是否退出 System.exit(0);
-              StringBuilder expMsg = new StringBuilder();
-              expMsg
-                  .append("数据库表检查，有")
-                  .append(tableNamesNotPassCheck.size())
-                  .append("个表没有按照标准设置id或createTime或updateTime:")
-                  .append(tableNamesNotPassCheck.toString())
-                  .append("\n")
-                  .append(
-                      "如果是关联用的表或者系统表，请用例如'acooly.ds.Checker.excludedColumnTables.${componentName}=sys_role_resc,sys_user_role' 排除掉\n")
-                  .append("标准的id、createTime、updateTime 格式分别为：\n")
-                  .append("id  bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID' \n")
-                  .append("create_time timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'\n")
-                  .append(
-                      "update_time timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'");
-              throw new AppConfigException(expMsg.toString());
-            }
-          } catch (SQLException e) {
-            logger.error("异步检查所有表结构异常", e.getMessage());
-            throw new AppConfigException(e);
-          }
-        });
-  }
+                        //检查数据库版本
+                        boolean passVersion = tableLoader.checkDatabaseVersion();
+                        if (!passVersion) {
+                            throw new AppConfigException("为正常运行，mysql数据库版本5.6以上版本 !!!");
+                        }
+                        Map<String, List<Column>> allTables = tableLoader.loadAllTables(schema);
 
-  private String getMysqlschema(DataSource dataSource) throws SQLException {
-    String scheme =
-        StringUtils.substringAfterLast(dataSource.getConnection().getMetaData().getURL(), "/");
-    if (StringUtils.contains(scheme, "?")) {
-      scheme = StringUtils.substringBefore(scheme, "?");
+                        //去掉不需要检查的表
+                        String excludedDatabaseStr = excludedDatabaseTables.values().toString();
+                        allTables
+                                .keySet()
+                                .removeAll(
+                                        Splitter.on(',')
+                                                .trimResults()
+                                                .omitEmptyStrings()
+                                                .splitToList(
+                                                        excludedDatabaseStr.substring(1, excludedDatabaseStr.length() - 1)));
+                        //检查表结构
+                        for (Map.Entry<String, List<Column>> entry : allTables.entrySet()) {
+                            String tableName = entry.getKey();
+                            List<Column> columns = entry.getValue();
+                            boolean hasColums = tableLoader.checkTableColums(columns);
+                            if (!hasColums) {
+                                tableNamesNotPassCheck.add(tableName);
+                            }
+                        }
+                        //输出检查没通过的表名
+                        if (!tableNamesNotPassCheck.isEmpty()) {
+                            // 是否退出 System.exit(0);
+                            StringBuilder expMsg = new StringBuilder();
+                            expMsg
+                                    .append("数据库表检查，有")
+                                    .append(tableNamesNotPassCheck.size())
+                                    .append("个表没有按照标准设置id或createTime或updateTime:")
+                                    .append(tableNamesNotPassCheck.toString())
+                                    .append("\n")
+                                    .append(
+                                            "如果是关联用的表或者系统表，请用例如'acooly.ds.Checker.excludedColumnTables.${componentName}=sys_role_resc,sys_user_role' 排除掉\n")
+                                    .append("标准的id、createTime、updateTime 格式分别为：\n")
+                                    .append("id  bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID' \n")
+                                    .append("create_time timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'\n")
+                                    .append(
+                                            "update_time timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'");
+                            throw new AppConfigException(expMsg.toString());
+                        }
+                    } catch (SQLException e) {
+                        logger.error("异步检查所有表结构异常", e.getMessage());
+                        throw new AppConfigException(e);
+                    }
+                });
     }
-    return scheme;
-  }
 
-  @Override
-  public void destroy() throws Exception {
-    executorService.shutdownNow();
-  }
+    private String getMysqlschema(DataSource dataSource) throws SQLException {
+        String scheme =
+                StringUtils.substringAfterLast(dataSource.getConnection().getMetaData().getURL(), "/");
+        if (StringUtils.contains(scheme, "?")) {
+            scheme = StringUtils.substringBefore(scheme, "?");
+        }
+        return scheme;
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        executorService.shutdownNow();
+    }
 }

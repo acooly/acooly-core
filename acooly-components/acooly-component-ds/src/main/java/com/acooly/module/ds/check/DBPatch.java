@@ -4,12 +4,14 @@ import lombok.Data;
 
 import java.util.Set;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @Data
 public class DBPatch {
-  private String patchSql;
+    private String patchSql;
     /**
      * 多个字段用逗号隔开
      */
-  private Set<String> columnName;
+    private Set<String> columnName;
 }

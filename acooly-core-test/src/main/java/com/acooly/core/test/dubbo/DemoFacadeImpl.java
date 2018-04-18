@@ -19,36 +19,38 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.dubbo.rpc.RpcContext;
 import lombok.extern.slf4j.Slf4j;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @Service(version = "1.0")
 @Slf4j
 public class DemoFacadeImpl implements DemoFacade {
-  @Reference(version = "1.0")
-  private Demo1Facade demo1Facade;
+    @Reference(version = "1.0")
+    private Demo1Facade demo1Facade;
 
-  @Override
-  public SingleResult<String> echo(SingleOrder<String> msg) {
-    return getStringSingleResult(msg);
-  }
-
-  private SingleResult<String> getStringSingleResult(SingleOrder<String> msg) {
-    log.info(RpcContext.getContext().getRemoteHost() + ":" + msg);
-    demo1Facade.echo(SingleOrder.from(msg.getDto()));
-    PageResult<String> result =
-        demo1Facade.echo1(
-            PageOrder.from()
-                .pageInfo()
-                .map("EQ_name", "bohr")
-                .sortMap("name", Boolean.TRUE));
-    if (result.success()) {
-      log.info("remote invoke success:{}", result.getDto().getPageResults());
+    @Override
+    public SingleResult<String> echo(SingleOrder<String> msg) {
+        return getStringSingleResult(msg);
     }
-    return SingleResult.from(msg.getDto());
-  }
 
-  @AppService(logPrefix = "测试")
-  @Override
-  public SingleResult<String> echo1(SingleOrder<String> msg) {
-    return SingleResult.from("a");
-  }
+    private SingleResult<String> getStringSingleResult(SingleOrder<String> msg) {
+        log.info(RpcContext.getContext().getRemoteHost() + ":" + msg);
+        demo1Facade.echo(SingleOrder.from(msg.getDto()));
+        PageResult<String> result =
+                demo1Facade.echo1(
+                        PageOrder.from()
+                                .pageInfo()
+                                .map("EQ_name", "bohr")
+                                .sortMap("name", Boolean.TRUE));
+        if (result.success()) {
+            log.info("remote invoke success:{}", result.getDto().getPageResults());
+        }
+        return SingleResult.from(msg.getDto());
+    }
+
+    @AppService(logPrefix = "测试")
+    @Override
+    public SingleResult<String> echo1(SingleOrder<String> msg) {
+        return SingleResult.from("a");
+    }
 }

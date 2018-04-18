@@ -15,17 +15,19 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/manage/module/lottery/lotteryWhitelist")
 public class LotteryWhitelistManagerController
-    extends AbstractJQueryEntityController<LotteryWhitelist, LotteryWhitelistService> {
+        extends AbstractJQueryEntityController<LotteryWhitelist, LotteryWhitelistService> {
 
-  private static Map<String, String> allStatuss = LotteryWhitelistStatus.mapping();
+    private static Map<String, String> allStatuss = LotteryWhitelistStatus.mapping();
 
-  @Autowired private LotteryWhitelistService lotteryWhitelistService;
+    @Autowired
+    private LotteryWhitelistService lotteryWhitelistService;
 
-  @Autowired private LotteryService lotteryService;
+    @Autowired
+    private LotteryService lotteryService;
 
-  @Override
-  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-    model.put("allStatuss", allStatuss);
-    model.put("allLotterys", lotteryService.getAll());
-  }
+    @Override
+    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+        model.put("allStatuss", allStatuss);
+        model.put("allLotterys", lotteryService.getAll());
+    }
 }

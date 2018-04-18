@@ -15,6 +15,6 @@ import java.util.List;
  */
 public interface PortalletDao extends EntityJpaDao<Portallet, Long> {
 
-  @Query("from Portallet where userName is null or userName = ?1")
-  List<Portallet> queryByUserName(String userName);
+    @Query("from Portallet where userName is null or userName = ?1")
+    List<Portallet> queryByUserName(String userName);
 }

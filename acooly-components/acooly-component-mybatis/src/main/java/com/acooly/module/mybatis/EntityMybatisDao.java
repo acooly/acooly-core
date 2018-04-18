@@ -15,9 +15,11 @@ import tk.mybatis.mapper.common.BaseMapper;
 import tk.mybatis.mapper.common.ExampleMapper;
 import tk.mybatis.mapper.common.Marker;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 public interface EntityMybatisDao<T>
-    extends EntityDao<T>,
+        extends EntityDao<T>,
         BaseMapper<T>,
         ExampleMapper<T>,
         Marker,
@@ -28,4 +30,5 @@ public interface EntityMybatisDao<T>
         RemoveMapper<T>,
         SavesMapper<T>,
         FindMapper<T>,
-        ListMapper<T> {}
+        ListMapper<T> {
+}

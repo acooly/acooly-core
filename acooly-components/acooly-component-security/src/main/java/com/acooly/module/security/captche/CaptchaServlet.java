@@ -18,21 +18,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/** @author qiubo */
+/**
+ * @author qiubo
+ */
 @Slf4j
 public class CaptchaServlet extends HttpServlet {
-  /** 回调执行 */
-  protected void doGet(
-      HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
-      throws ServletException, IOException {
-    try {
-      byte[] imageBytes = Captchas.generateImage(httpServletRequest.getSession());
-      ServletOutputStream out = httpServletResponse.getOutputStream();
-      out.write(imageBytes);
-      out.flush();
-      out.close();
-    } catch (Exception e) {
-      log.error("生成验证码错误", e);
+    /**
+     * 回调执行
+     */
+    protected void doGet(
+            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
+            throws ServletException, IOException {
+        try {
+            byte[] imageBytes = Captchas.generateImage(httpServletRequest.getSession());
+            ServletOutputStream out = httpServletResponse.getOutputStream();
+            out.write(imageBytes);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            log.error("生成验证码错误", e);
+        }
     }
-  }
 }

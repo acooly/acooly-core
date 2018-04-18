@@ -32,7 +32,7 @@ import java.util.concurrent.BlockingQueue;
 
 /**
  * portlet_action_log Service实现
- * <p>
+ *
  * <p>Date: 2017-03-20 23:36:29
  *
  * @author acooly
@@ -43,15 +43,11 @@ public class ActionLogServiceImpl extends EntityServiceImpl<ActionLog, ActionLog
         implements ActionLogService {
 
     private static final Logger logger = LoggerFactory.getLogger(ActionLogServiceImpl.class);
-
+    private static final int ACTION_LOG_CACHE_SIZE_DEFAULT = 100;
     @Resource
     private ActionMappingService actionMappingService;
-
     @Autowired
     private PortletProperties portletProperties;
-
-    private static final int ACTION_LOG_CACHE_SIZE_DEFAULT = 100;
-
     private BlockingQueue<ActionLog> queue;
 
 

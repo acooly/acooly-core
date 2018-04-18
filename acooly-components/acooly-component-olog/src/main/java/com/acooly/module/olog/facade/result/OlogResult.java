@@ -11,5 +11,8 @@ package com.acooly.module.olog.facade.result;
 
 import com.acooly.core.common.facade.ResultBase;
 
-/** @author acooly */
-public class OlogResult extends ResultBase {}
+/**
+ * @author acooly
+ */
+public class OlogResult extends ResultBase {
+}

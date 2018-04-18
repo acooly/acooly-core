@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 
 @Service("appWelcomeService")
 public class AppWelcomeServiceImpl extends EntityServiceImpl<AppWelcome, AppWelcomeDao>
-    implements AppWelcomeService {
+        implements AppWelcomeService {
 
-  @Override
-  public AppWelcome getLatestOne() {
-    return getEntityDao().getLatestOne();
-  }
+    @Override
+    public AppWelcome getLatestOne() {
+        return getEntityDao().getLatestOne();
+    }
 }

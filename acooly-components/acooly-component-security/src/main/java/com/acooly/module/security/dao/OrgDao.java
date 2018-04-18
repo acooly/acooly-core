@@ -21,6 +21,6 @@ import java.util.List;
  * @author shuijing
  */
 public interface OrgDao extends EntityJpaDao<Org, Long> {
-  @Query(value = "select * from sys_org where parent_id= :parentId", nativeQuery = true)
-  List<Org> findByParentId(@Param("parentId") long parentId);
+    @Query(value = "select * from sys_org where parent_id= :parentId", nativeQuery = true)
+    List<Org> findByParentId(@Param("parentId") long parentId);
 }

@@ -1,35 +1,39 @@
-/** create by zhangpu date:2015年5月7日 */
+/**
+ * create by zhangpu date:2015年5月7日
+ */
 package com.acooly.module.appopenapi.enums;
 
 import com.acooly.core.utils.enums.Messageable;
 
-/** @author zhangpu */
+/**
+ * @author zhangpu
+ */
 public enum DeviceType implements Messageable {
-  IPHONE("IPHONE", "IPHONE"),
+    IPHONE("IPHONE", "IPHONE"),
 
-  IPHONE4("IPHONE4", "IPHONE4"),
+    IPHONE4("IPHONE4", "IPHONE4"),
 
-  IPHONE5("IPHONE5", "IPHONE5"),
+    IPHONE5("IPHONE5", "IPHONE5"),
 
-  IPHONE6("IPHONE6", "IPHONE6"),
+    IPHONE6("IPHONE6", "IPHONE6"),
 
-  ANDROID("ANDROID", "ANDROID");
+    ANDROID("ANDROID", "ANDROID");
 
-  private String code;
-  private String message;
+    private String code;
+    private String message;
 
-  private DeviceType(String code, String message) {
-    this.code = code;
-    this.message = message;
-  }
+    private DeviceType(String code, String message) {
+        this.code = code;
+        this.message = message;
+    }
 
-  @Override
-  public String code() {
-    return code;
-  }
+    @Override
+    public String code() {
+        return code;
+    }
 
-  @Override
-  public String message() {
-    return message;
-  }
+    @Override
+    public String message() {
+        return message;
+    }
 }

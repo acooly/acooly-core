@@ -7,12 +7,18 @@
  */
 package com.acooly.core.utils.enums;
 
-/** @author zhangpu */
+/**
+ * @author zhangpu
+ */
 public interface Messageable {
 
-  /** 编码 */
-  String code();
+    /**
+     * 编码
+     */
+    String code();
 
-  /** 消息 */
-  String message();
+    /**
+     * 消息
+     */
+    String message();
 }

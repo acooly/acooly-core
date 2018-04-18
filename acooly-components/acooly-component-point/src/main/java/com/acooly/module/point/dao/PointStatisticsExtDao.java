@@ -9,11 +9,11 @@ package com.acooly.module.point.dao;
  */
 public interface PointStatisticsExtDao {
 
-  /**
-   * 根据用户交易记录统计用户积分
-   *
-   * @param startTime
-   * @param endTime
-   */
-  void pointStatistics(String startTime, String endTime);
+    /**
+     * 根据用户交易记录统计用户积分
+     *
+     * @param startTime
+     * @param endTime
+     */
+    void pointStatistics(String startTime, String endTime);
 }

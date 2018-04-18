@@ -24,118 +24,123 @@ import java.util.List;
  */
 public abstract class AbstractSpringServlet extends HttpServlet {
 
-  /** UID */
-  private static final long serialVersionUID = 902161018414718234L;
+    /**
+     * UID
+     */
+    private static final long serialVersionUID = 902161018414718234L;
 
-  private static final Logger logger = LoggerFactory.getLogger(AbstractSpringServlet.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractSpringServlet.class);
 
-  /** WebApplicationContext for this servlet */
-  private WebApplicationContext webApplicationContext;
+    /**
+     * WebApplicationContext for this servlet
+     */
+    private WebApplicationContext webApplicationContext;
 
-  @Override
-  public void init() throws ServletException {
-    logger.debug("Initializing Spring-based Servlet '" + getServletName() + "'");
-    this.webApplicationContext =
-        WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-    doInit();
-  }
-
-  protected <T> T getBean(String name, Class<T> requestType) {
-    return webApplicationContext.getBean(name, requestType);
-  }
-
-  protected Object getBean(String name) {
-    return webApplicationContext.getBean(name);
-  }
-
-  protected String getStringParameter(String name) {
-    return getInitParameter(name);
-  }
-
-  protected long getLongParameter(String name) {
-    try {
-      return Long.parseLong(getStringParameter(name));
-    } catch (Exception e) {
-      throw new IllegalArgumentException(
-          "Parse init parameter to long failure.["
-              + name
-              + ":"
-              + getStringParameter(name)
-              + "]"
-              + e.getMessage());
+    @Override
+    public void init() throws ServletException {
+        logger.debug("Initializing Spring-based Servlet '" + getServletName() + "'");
+        this.webApplicationContext =
+                WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+        doInit();
     }
-  }
 
-  protected int getIntParameter(String name) {
-    try {
-      return Integer.parseInt(getStringParameter(name));
-    } catch (Exception e) {
-      throw new IllegalArgumentException(
-          "Parse init parameter to int failure.["
-              + name
-              + ":"
-              + getStringParameter(name)
-              + "]"
-              + e.getMessage());
+    protected <T> T getBean(String name, Class<T> requestType) {
+        return webApplicationContext.getBean(name, requestType);
     }
-  }
 
-  protected List<String> getParameter(String name) {
-    String value = getStringParameter(name);
-    if (value == null || "".equals(value)) {
-      return new ArrayList<String>(0);
+    protected Object getBean(String name) {
+        return webApplicationContext.getBean(name);
     }
-    String[] array = value.split(",");
-    return Arrays.asList(array);
-  }
 
-  protected void doInit() {}
+    protected String getStringParameter(String name) {
+        return getInitParameter(name);
+    }
 
-  protected abstract void doService(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException;
+    protected long getLongParameter(String name) {
+        try {
+            return Long.parseLong(getStringParameter(name));
+        } catch (Exception e) {
+            throw new IllegalArgumentException(
+                    "Parse init parameter to long failure.["
+                            + name
+                            + ":"
+                            + getStringParameter(name)
+                            + "]"
+                            + e.getMessage());
+        }
+    }
 
-  @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-      throws ServletException, IOException {
-    doService(req, resp);
-  }
+    protected int getIntParameter(String name) {
+        try {
+            return Integer.parseInt(getStringParameter(name));
+        } catch (Exception e) {
+            throw new IllegalArgumentException(
+                    "Parse init parameter to int failure.["
+                            + name
+                            + ":"
+                            + getStringParameter(name)
+                            + "]"
+                            + e.getMessage());
+        }
+    }
 
-  @Override
-  protected void doHead(HttpServletRequest req, HttpServletResponse resp)
-      throws ServletException, IOException {
-    doService(req, resp);
-  }
+    protected List<String> getParameter(String name) {
+        String value = getStringParameter(name);
+        if (value == null || "".equals(value)) {
+            return new ArrayList<String>(0);
+        }
+        String[] array = value.split(",");
+        return Arrays.asList(array);
+    }
 
-  @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-      throws ServletException, IOException {
-    doService(req, resp);
-  }
+    protected void doInit() {
+    }
 
-  @Override
-  protected void doPut(HttpServletRequest req, HttpServletResponse resp)
-      throws ServletException, IOException {
-    doService(req, resp);
-  }
+    protected abstract void doService(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException;
 
-  @Override
-  protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
-      throws ServletException, IOException {
-    doService(req, resp);
-  }
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        doService(req, resp);
+    }
 
-  @Override
-  protected void doOptions(HttpServletRequest req, HttpServletResponse resp)
-      throws ServletException, IOException {
-    doService(req, resp);
-  }
+    @Override
+    protected void doHead(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        doService(req, resp);
+    }
 
-  @Override
-  public void destroy() {
-    webApplicationContext = null;
-  }
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        doService(req, resp);
+    }
 
-  public WebApplicationContext getWebApplicationContext() {
-    return webApplicationContext;
-  }
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        doService(req, resp);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        doService(req, resp);
+    }
+
+    @Override
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        doService(req, resp);
+    }
+
+    @Override
+    public void destroy() {
+        webApplicationContext = null;
+    }
+
+    public WebApplicationContext getWebApplicationContext() {
+        return webApplicationContext;
+    }
 }

@@ -7,56 +7,58 @@ import lombok.Setter;
 
 import java.util.Map;
 
-/** 测试pdf数据VO */
+/**
+ * 测试pdf数据VO
+ */
 @Getter
 @Setter
 public class PdfDemoVo extends AbstractDocumentVo {
 
-  private String policyNo;
+    private String policyNo;
 
-  private String holderName;
+    private String holderName;
 
-  private String relation;
+    private String relation;
 
-  private String holderAdress;
+    private String holderAdress;
 
-  private String holderPostCode;
+    private String holderPostCode;
 
-  private String insuredName;
+    private String insuredName;
 
-  private String insuredPingyinName;
+    private String insuredPingyinName;
 
-  private String insuredPassportNo;
+    private String insuredPassportNo;
 
-  private String insuredSex;
+    private String insuredSex;
 
-  private String insuredBirthday;
+    private String insuredBirthday;
 
-  private String insuredPhone;
+    private String insuredPhone;
 
-  private String insuredIDNo;
+    private String insuredIDNo;
 
-  private String destination;
+    private String destination;
 
-  private String beneficiaryName;
+    private String beneficiaryName;
 
-  private String remarks;
+    private String remarks;
 
-  private String period;
+    private String period;
 
-  private String accidentalSumInsured;
+    private String accidentalSumInsured;
 
-  private String emergencySumInsured;
+    private String emergencySumInsured;
 
-  private String medicalSumInsured;
+    private String medicalSumInsured;
 
-  private String premium;
+    private String premium;
 
-  private String issueDate;
+    private String issueDate;
 
-  private String branchName;
+    private String branchName;
 
-  private String companyName;
+    private String companyName;
 
-  private Map<String, String> names = Maps.newHashMap();
+    private Map<String, String> names = Maps.newHashMap();
 }

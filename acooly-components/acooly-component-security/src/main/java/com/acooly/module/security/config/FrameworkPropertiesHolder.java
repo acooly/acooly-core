@@ -2,21 +2,23 @@ package com.acooly.module.security.config;
 
 import com.acooly.core.common.boot.EnvironmentHolder;
 
-/** @author qiubo */
+/**
+ * @author qiubo
+ */
 public class FrameworkPropertiesHolder {
 
-  private static volatile FrameworkProperties config = null;
+    private static volatile FrameworkProperties config = null;
 
-  @SuppressWarnings("unchecked")
-  public static FrameworkProperties get() {
-    if (config == null) {
-      synchronized (FrameworkPropertiesHolder.class) {
+    @SuppressWarnings("unchecked")
+    public static FrameworkProperties get() {
         if (config == null) {
-          config = new FrameworkProperties();
-          EnvironmentHolder.buildProperties(config);
+            synchronized (FrameworkPropertiesHolder.class) {
+                if (config == null) {
+                    config = new FrameworkProperties();
+                    EnvironmentHolder.buildProperties(config);
+                }
+            }
         }
-      }
+        return config;
     }
-    return config;
-  }
 }

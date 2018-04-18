@@ -22,16 +22,16 @@ import com.acooly.core.common.boot.log.LogbackConfigurator;
  * @author qiubo
  */
 public class FileErrorLogInitializer extends AbstractLogInitializer {
-  @Override
-  public void init(LogbackConfigurator configurator) {
-    String fileName = Apps.getAppName() + "-error-30de.log";
-    configurator.log("设置error级别的文件日志，日志文件为:%s", fileName);
-    Appender<ILoggingEvent> appender =
-        configurator.asyncFileAppender("FILE-ERROR", configurator.getPattern(), fileName);
-    ThresholdFilter thresholdFilter = new ThresholdFilter();
-    thresholdFilter.setLevel("ERROR");
-    configurator.start(thresholdFilter);
-    appender.addFilter(thresholdFilter);
-    configurator.getRootLogger().addAppender(appender);
-  }
+    @Override
+    public void init(LogbackConfigurator configurator) {
+        String fileName = Apps.getAppName() + "-error-30de.log";
+        configurator.log("设置error级别的文件日志，日志文件为:%s", fileName);
+        Appender<ILoggingEvent> appender =
+                configurator.asyncFileAppender("FILE-ERROR", configurator.getPattern(), fileName);
+        ThresholdFilter thresholdFilter = new ThresholdFilter();
+        thresholdFilter.setLevel("ERROR");
+        configurator.start(thresholdFilter);
+        appender.addFilter(thresholdFilter);
+        configurator.getRootLogger().addAppender(appender);
+    }
 }

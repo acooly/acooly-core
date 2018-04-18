@@ -16,19 +16,21 @@ import com.acooly.core.utils.enums.ResultStatus;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 public class ConstraintViolationExceptionHandler
-    implements ExceptionHandler<ConstraintViolationException> {
-  @Override
-  public void handle(ExceptionContext<?> context, ConstraintViolationException e) {
-    OrderCheckException exception = new OrderCheckException();
-    for (ConstraintViolation<?> constraintViolation : e.getConstraintViolations()) {
-      exception.addError(
-          constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
+        implements ExceptionHandler<ConstraintViolationException> {
+    @Override
+    public void handle(ExceptionContext<?> context, ConstraintViolationException e) {
+        OrderCheckException exception = new OrderCheckException();
+        for (ConstraintViolation<?> constraintViolation : e.getConstraintViolations()) {
+            exception.addError(
+                    constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
+        }
+        ResultBase res = context.getResponse();
+        res.setStatus(ResultStatus.failure);
+        res.setDetail(e.getMessage());
+        res.setCode(ResultStatus.failure.getCode());
     }
-    ResultBase res = context.getResponse();
-    res.setStatus(ResultStatus.failure);
-    res.setDetail(e.getMessage());
-      res.setCode(ResultStatus.failure.getCode());
-  }
 }

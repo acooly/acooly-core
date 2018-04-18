@@ -32,58 +32,59 @@ import java.io.IOException;
 @Slf4j
 public class PortalActionLogFilter extends OncePerRequestFilter {
 
-  PathMatcher pathMatcher = new AntPathMatcher();
-  @Resource private ActionLogService actionLogService;
-  private String sessionUserKey;
-  private String filterUrlPatterns;
+    PathMatcher pathMatcher = new AntPathMatcher();
+    @Resource
+    private ActionLogService actionLogService;
+    private String sessionUserKey;
+    private String filterUrlPatterns;
 
-  @Override
-  protected void doFilterInternal(
-      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-      throws ServletException, IOException {
-    doActionLog(request);
-    filterChain.doFilter(request, response);
-  }
-
-  protected void doActionLog(HttpServletRequest request) {
-    if (!allow(request)) {
-      return;
+    @Override
+    protected void doFilterInternal(
+            HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        doActionLog(request);
+        filterChain.doFilter(request, response);
     }
-    try {
-      actionLogService.logger(request, getSessionUserName(request));
-    } catch (Exception e) {
-      log.warn("PortalActionLogFilter记录访问日志失败: {}", e.getMessage());
+
+    protected void doActionLog(HttpServletRequest request) {
+        if (!allow(request)) {
+            return;
+        }
+        try {
+            actionLogService.logger(request, getSessionUserName(request));
+        } catch (Exception e) {
+            log.warn("PortalActionLogFilter记录访问日志失败: {}", e.getMessage());
+        }
     }
-  }
 
-  protected boolean allow(HttpServletRequest request) {
-    String requestPath = Servlets.getRequestPath(request);
-    for (String allowPattern : Strings.split(filterUrlPatterns, ",")) {
-      if (pathMatcher.match(allowPattern, requestPath)) {
-        return true;
-      }
+    protected boolean allow(HttpServletRequest request) {
+        String requestPath = Servlets.getRequestPath(request);
+        for (String allowPattern : Strings.split(filterUrlPatterns, ",")) {
+            if (pathMatcher.match(allowPattern, requestPath)) {
+                return true;
+            }
+        }
+        return false;
     }
-    return false;
-  }
 
-  protected String getSessionUserName(HttpServletRequest request) {
-    Object object = request.getSession().getAttribute(sessionUserKey);
-    if (object == null) {
-      return null;
-    } else {
-      return object.toString();
+    protected String getSessionUserName(HttpServletRequest request) {
+        Object object = request.getSession().getAttribute(sessionUserKey);
+        if (object == null) {
+            return null;
+        } else {
+            return object.toString();
+        }
     }
-  }
 
-  public void setActionLogService(ActionLogService actionLogService) {
-    this.actionLogService = actionLogService;
-  }
+    public void setActionLogService(ActionLogService actionLogService) {
+        this.actionLogService = actionLogService;
+    }
 
-  public void setSessionUserKey(String sessionUserKey) {
-    this.sessionUserKey = sessionUserKey;
-  }
+    public void setSessionUserKey(String sessionUserKey) {
+        this.sessionUserKey = sessionUserKey;
+    }
 
-  public void setFilterUrlPatterns(String filterUrlPatterns) {
-    this.filterUrlPatterns = filterUrlPatterns;
-  }
+    public void setFilterUrlPatterns(String filterUrlPatterns) {
+        this.filterUrlPatterns = filterUrlPatterns;
+    }
 }

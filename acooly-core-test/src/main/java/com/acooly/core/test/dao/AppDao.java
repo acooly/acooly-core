@@ -17,4 +17,5 @@ import com.acooly.module.jpa.EntityJpaDao;
  *
  * @author Acooly Code Generator
  */
-public interface AppDao extends EntityJpaDao<App, Long> {}
+public interface AppDao extends EntityJpaDao<App, Long> {
+}

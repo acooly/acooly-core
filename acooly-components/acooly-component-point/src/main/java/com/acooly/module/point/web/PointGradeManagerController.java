@@ -21,13 +21,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping(value = "/manage/point/pointGrade")
 public class PointGradeManagerController
-    extends AbstractJQueryEntityController<PointGrade, PointGradeService> {
+        extends AbstractJQueryEntityController<PointGrade, PointGradeService> {
 
-  @SuppressWarnings("unused")
-  @Autowired
-  private PointGradeService pointGradeService;
+    @SuppressWarnings("unused")
+    @Autowired
+    private PointGradeService pointGradeService;
 
-  {
-    allowMapping = "*";
-  }
+    {
+        allowMapping = "*";
+    }
 }

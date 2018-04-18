@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
  */
 @TestConfiguration
 public class TestAutoConfig {
-    @ConditionalOnProperty(value = "acooly.test.lazyInitBean",matchIfMissing = true)
+    @ConditionalOnProperty(value = "acooly.test.lazyInitBean", matchIfMissing = true)
     @Bean
     public static BeanFactoryPostProcessor lazyBeanPostProcessor() {
         return new LazyInitBeanFactoryPostProcessor();

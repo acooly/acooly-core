@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class SchedulerJob {
-  public void exe() {
-    log.info("run in quartz!");
-  }
+    public void exe() {
+        log.info("run in quartz!");
+    }
 }

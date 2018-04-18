@@ -18,81 +18,85 @@ import java.lang.reflect.Constructor;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/** @author qiubo */
+/**
+ * @author qiubo
+ */
 public class ReflectionFactorySupportKryo extends Kryo {
 
-  private static final ReflectionFactory REFLECTION_FACTORY =
-      ReflectionFactory.getReflectionFactory();
-  private static final Object[] INITARGS = new Object[0];
+    private static final ReflectionFactory REFLECTION_FACTORY =
+            ReflectionFactory.getReflectionFactory();
+    private static final Object[] INITARGS = new Object[0];
 
-  private static final Map<Class<?>, Constructor<?>> _constructors =
-      new ConcurrentHashMap<Class<?>, Constructor<?>>();
+    private static final Map<Class<?>, Constructor<?>> _constructors =
+            new ConcurrentHashMap<Class<?>, Constructor<?>>();
 
-  private static Object newInstanceFrom(final Constructor<?> constructor) {
-    try {
-      return constructor.newInstance(INITARGS);
-    } catch (final Exception e) {
-      throw new RuntimeException(e);
+    private static Object newInstanceFrom(final Constructor<?> constructor) {
+        try {
+            return constructor.newInstance(INITARGS);
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
+        }
     }
-  }
 
-  @SuppressWarnings("unchecked")
-  public static <T> T newInstanceFromReflectionFactory(final Class<T> type) {
-    Constructor<?> constructor = _constructors.get(type);
-    if (constructor == null) {
-      constructor = newConstructorForSerialization(type);
-      _constructors.put(type, constructor);
+    @SuppressWarnings("unchecked")
+    public static <T> T newInstanceFromReflectionFactory(final Class<T> type) {
+        Constructor<?> constructor = _constructors.get(type);
+        if (constructor == null) {
+            constructor = newConstructorForSerialization(type);
+            _constructors.put(type, constructor);
+        }
+        return (T) newInstanceFrom(constructor);
     }
-    return (T) newInstanceFrom(constructor);
-  }
 
-  private static <T> Constructor<?> newConstructorForSerialization(final Class<T> type) {
-    try {
-      final Constructor<?> constructor =
-          REFLECTION_FACTORY.newConstructorForSerialization(
-              type, Object.class.getDeclaredConstructor(new Class[0]));
-      constructor.setAccessible(true);
-      return constructor;
-    } catch (final Exception e) {
-      throw new RuntimeException(e);
+    private static <T> Constructor<?> newConstructorForSerialization(final Class<T> type) {
+        try {
+            final Constructor<?> constructor =
+                    REFLECTION_FACTORY.newConstructorForSerialization(
+                            type, Object.class.getDeclaredConstructor(new Class[0]));
+            constructor.setAccessible(true);
+            return constructor;
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
+        }
     }
-  }
 
-  private static Constructor<?> getNoArgsConstructor(final Class<?> type) {
-    final Constructor<?>[] constructors = type.getConstructors();
-    for (final Constructor<?> constructor : constructors) {
-      if (constructor.getParameterTypes().length == 0) {
-        constructor.setAccessible(true);
-        return constructor;
-      }
+    private static Constructor<?> getNoArgsConstructor(final Class<?> type) {
+        final Constructor<?>[] constructors = type.getConstructors();
+        for (final Constructor<?> constructor : constructors) {
+            if (constructor.getParameterTypes().length == 0) {
+                constructor.setAccessible(true);
+                return constructor;
+            }
+        }
+        return null;
     }
-    return null;
-  }
 
-  @Override
-  public Serializer<?> getDefaultSerializer(@SuppressWarnings("rawtypes") final Class type) {
-    final Serializer<?> result = super.getDefaultSerializer(type);
-    if (result instanceof FieldSerializer) {
-      ((FieldSerializer<?>) result).setIgnoreSyntheticFields(false);
+    @Override
+    public Serializer<?> getDefaultSerializer(@SuppressWarnings("rawtypes") final Class type) {
+        final Serializer<?> result = super.getDefaultSerializer(type);
+        if (result instanceof FieldSerializer) {
+            ((FieldSerializer<?>) result).setIgnoreSyntheticFields(false);
+        }
+        return result;
     }
-    return result;
-  }
 
-  /** {@inheritDoc} */
-  @Override
-  @SuppressWarnings("unchecked")
-  public <T> T newInstance(final Class<T> type) {
-    if (type == null) {
-      throw new IllegalArgumentException("type cannot be null.");
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T newInstance(final Class<T> type) {
+        if (type == null) {
+            throw new IllegalArgumentException("type cannot be null.");
+        }
+        Constructor<?> constructor = _constructors.get(type);
+        if (constructor == null) {
+            constructor = getNoArgsConstructor(type);
+            if (constructor == null) {
+                constructor = newConstructorForSerialization(type);
+            }
+            _constructors.put(type, constructor);
+        }
+        return (T) newInstanceFrom(constructor);
     }
-    Constructor<?> constructor = _constructors.get(type);
-    if (constructor == null) {
-      constructor = getNoArgsConstructor(type);
-      if (constructor == null) {
-        constructor = newConstructorForSerialization(type);
-      }
-      _constructors.put(type, constructor);
-    }
-    return (T) newInstanceFrom(constructor);
-  }
 }

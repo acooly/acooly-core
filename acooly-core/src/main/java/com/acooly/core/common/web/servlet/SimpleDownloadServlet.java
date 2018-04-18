@@ -13,34 +13,38 @@ import java.io.*;
 
 public class SimpleDownloadServlet extends HttpServlet {
 
-  /** UID */
-  private static final long serialVersionUID = 3564889414796099465L;
-  /** 日志 */
-  private static final Logger logger = LoggerFactory.getLogger(SimpleDownloadServlet.class);
+    /**
+     * UID
+     */
+    private static final long serialVersionUID = 3564889414796099465L;
+    /**
+     * 日志
+     */
+    private static final Logger logger = LoggerFactory.getLogger(SimpleDownloadServlet.class);
 
-  @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-    String downloadFile = request.getParameter("file");
-    if (StringUtils.isBlank(downloadFile)) {
-      logger.warn("请求下载的文件参数[file]不存在");
-      response.sendError(404, "请求下载的文件参数[file]不存在");
-      return;
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String downloadFile = request.getParameter("file");
+        if (StringUtils.isBlank(downloadFile)) {
+            logger.warn("请求下载的文件参数[file]不存在");
+            response.sendError(404, "请求下载的文件参数[file]不存在");
+            return;
+        }
+        File file = new File(downloadFile);
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = new FileInputStream(file);
+            out = response.getOutputStream();
+            IOUtils.copy(in, out);
+            out.flush();
+        } catch (Exception e) {
+            logger.warn("请求下载文件失败", e);
+            response.sendError(500, "请求下载文件失败");
+        } finally {
+            IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(out);
+        }
     }
-    File file = new File(downloadFile);
-    InputStream in = null;
-    OutputStream out = null;
-    try {
-      in = new FileInputStream(file);
-      out = response.getOutputStream();
-      IOUtils.copy(in, out);
-      out.flush();
-    } catch (Exception e) {
-      logger.warn("请求下载文件失败", e);
-      response.sendError(500, "请求下载文件失败");
-    } finally {
-      IOUtils.closeQuietly(in);
-      IOUtils.closeQuietly(out);
-    }
-  }
 }

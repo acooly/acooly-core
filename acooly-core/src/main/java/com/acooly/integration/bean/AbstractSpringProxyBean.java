@@ -1,4 +1,6 @@
-/** acooly.cn Inc. Copyright (c) 2016 All Rights Reserved. create by zhangpu date:2016年3月17日 */
+/**
+ * acooly.cn Inc. Copyright (c) 2016 All Rights Reserved. create by zhangpu date:2016年3月17日
+ */
 package com.acooly.integration.bean;
 
 import com.acooly.core.utils.GenericsUtils;
@@ -13,7 +15,7 @@ import java.util.Map;
 /**
  * Spring Proxy Bean 基类
  *
- * <p>
+ *
  * <li>T: 被代理接口
  * <li>D: 被代理接口的默认实现
  *
@@ -21,40 +23,41 @@ import java.util.Map;
  */
 public abstract class AbstractSpringProxyBean<T, D> implements InitializingBean {
 
-  private static final Logger logger = LoggerFactory.getLogger(AbstractSpringProxyBean.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractSpringProxyBean.class);
 
-  @Autowired protected ApplicationContext applicationContext;
-  private T target;
+    @Autowired
+    protected ApplicationContext applicationContext;
+    private T target;
 
-  public T getTarget() {
-    return target;
-  }
-
-  @SuppressWarnings("unchecked")
-  protected Class<T> getTargetInterface() {
-    return GenericsUtils.getSuperClassGenricType(getClass(), 0);
-  }
-
-  @SuppressWarnings("unchecked")
-  protected Class<D> getDefaultClass() {
-    return GenericsUtils.getSuperClassGenricType(getClass(), 1);
-  }
-
-  @SuppressWarnings("unchecked")
-  @Override
-  public void afterPropertiesSet() throws Exception {
-    try {
-      Map<String, T> targets = applicationContext.getBeansOfType(getTargetInterface());
-      this.target = (T) applicationContext.getBean(getDefaultClass());
-      for (T t : targets.values()) {
-        if (!t.getClass().equals(getDefaultClass()) && t != this) {
-          this.target = t;
-          break;
-        }
-      }
-      logger.info("代理接口:{},实现:{}", getTargetInterface().getName(), target.getClass().getName());
-    } catch (Exception e) {
-      throw new RuntimeException("Spring容器自定义代理接口初始化失败", e);
+    public T getTarget() {
+        return target;
     }
-  }
+
+    @SuppressWarnings("unchecked")
+    protected Class<T> getTargetInterface() {
+        return GenericsUtils.getSuperClassGenricType(getClass(), 0);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected Class<D> getDefaultClass() {
+        return GenericsUtils.getSuperClassGenricType(getClass(), 1);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        try {
+            Map<String, T> targets = applicationContext.getBeansOfType(getTargetInterface());
+            this.target = (T) applicationContext.getBean(getDefaultClass());
+            for (T t : targets.values()) {
+                if (!t.getClass().equals(getDefaultClass()) && t != this) {
+                    this.target = t;
+                    break;
+                }
+            }
+            logger.info("代理接口:{},实现:{}", getTargetInterface().getName(), target.getClass().getName());
+        } catch (Exception e) {
+            throw new RuntimeException("Spring容器自定义代理接口初始化失败", e);
+        }
+    }
 }

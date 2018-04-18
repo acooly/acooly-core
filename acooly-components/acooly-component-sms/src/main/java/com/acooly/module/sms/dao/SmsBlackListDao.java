@@ -1,9 +1,9 @@
 /*
-* acooly.cn Inc.
-* Copyright (c) 2017 All Rights Reserved.
-* create by shuijing
-* date:2017-08-01
-*/
+ * acooly.cn Inc.
+ * Copyright (c) 2017 All Rights Reserved.
+ * create by shuijing
+ * date:2017-08-01
+ */
 package com.acooly.module.sms.dao;
 
 import com.acooly.module.jpa.EntityJpaDao;

@@ -1,29 +1,28 @@
 /*
-* acooly.cn Inc.
-* Copyright (c) 2017 All Rights Reserved.
-* create by shuijing
-* date:2017-08-01
-*/
+ * acooly.cn Inc.
+ * Copyright (c) 2017 All Rights Reserved.
+ * create by shuijing
+ * date:2017-08-01
+ */
 package com.acooly.module.sms.domain;
 
+
+import com.acooly.core.common.domain.AbstractEntity;
+import com.acooly.module.sms.enums.StatusEnum;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
-
-import org.hibernate.validator.constraints.*;
-
-import javax.validation.constraints.*;
-
-import com.acooly.core.common.domain.AbstractEntity;
-import com.acooly.module.sms.enums.StatusEnum;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * 短信黑名单 Entity
  *
  * @author shuijing
- *         Date: 2017-08-01 17:28:24
+ * Date: 2017-08-01 17:28:24
  */
 @Entity
 @Table(name = "sms_black_list")

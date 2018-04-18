@@ -10,4 +10,5 @@ import com.acooly.module.portlet.entity.Feedback;
  *
  * @author Acooly Code Generator
  */
-public interface FeedbackDao extends EntityMybatisDao<Feedback> {}
+public interface FeedbackDao extends EntityMybatisDao<Feedback> {
+}

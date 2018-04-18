@@ -12,5 +12,5 @@ import com.acooly.module.ofile.domain.OnlineFile;
  */
 public interface OnlineFileDao extends EntityJpaDao<OnlineFile, Long> {
 
-  OnlineFile findByObjectId(String objectId);
+    OnlineFile findByObjectId(String objectId);
 }

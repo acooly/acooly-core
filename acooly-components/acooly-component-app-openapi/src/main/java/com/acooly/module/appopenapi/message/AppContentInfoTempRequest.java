@@ -1,4 +1,6 @@
-/** create by zhangpu date:2015年10月18日 */
+/**
+ * create by zhangpu date:2015年10月18日
+ */
 package com.acooly.module.appopenapi.message;
 
 import com.acooly.module.appopenapi.enums.QueryType;
@@ -13,10 +15,12 @@ import com.acooly.openapi.framework.common.message.AppRequest;
  */
 public class AppContentInfoTempRequest extends AppRequest {
 
-  @OpenApiField(desc = "查询方式", constraint = "默认按唯一标识方式查询")
-  private QueryType queryType = QueryType.byId;
+    @OpenApiField(desc = "查询方式", constraint = "默认按唯一标识方式查询")
+    private QueryType queryType = QueryType.byId;
 
-  /** 内容信息唯一标识(可以是数字或字符编码，由服务器端确定并转型) */
-  @OpenApiField(desc = "标识", constraint = "内容信息唯一标识")
-  private String id;
+    /**
+     * 内容信息唯一标识(可以是数字或字符编码，由服务器端确定并转型)
+     */
+    @OpenApiField(desc = "标识", constraint = "内容信息唯一标识")
+    private String id;
 }

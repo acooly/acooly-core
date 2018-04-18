@@ -15,38 +15,38 @@ import java.util.UUID;
 
 @Service("appCustomerService")
 public class AppCustomerServiceImpl extends EntityServiceImpl<AppCustomer, AppCustomerDao>
-    implements AppCustomerService {
+        implements AppCustomerService {
 
-  @Override
-  public AppCustomer loadAppCustomer(String userName, EntityStatus status) {
-    List<AppCustomer> appCustomers = getEntityDao().findByUserNameAndStatus(userName, status);
-    if (Collections3.isEmpty(appCustomers)) {
-      return null;
-    } else {
-      return Collections3.getFirst(appCustomers);
+    @Override
+    public AppCustomer loadAppCustomer(String userName, EntityStatus status) {
+        List<AppCustomer> appCustomers = getEntityDao().findByUserNameAndStatus(userName, status);
+        if (Collections3.isEmpty(appCustomers)) {
+            return null;
+        } else {
+            return Collections3.getFirst(appCustomers);
+        }
     }
-  }
 
-  @Override
-  public AppCustomer createAppCustomer(AppCustomer appCustomer) {
-    String accessKey = appCustomer.getAccessKey();
-    if (Strings.isBlank(appCustomer.getAccessKey())) {
-      accessKey = appCustomer.getUserName();
+    @Override
+    public AppCustomer createAppCustomer(AppCustomer appCustomer) {
+        String accessKey = appCustomer.getAccessKey();
+        if (Strings.isBlank(appCustomer.getAccessKey())) {
+            accessKey = appCustomer.getUserName();
+        }
+        String secretKey = DigestUtils.sha1Hex(UUID.randomUUID().toString());
+        appCustomer.setAccessKey(accessKey);
+        appCustomer.setSecretKey(secretKey);
+        appCustomer.setStatus(EntityStatus.Enable);
+        appCustomer.setUpdateTime(appCustomer.getCreateTime());
+        save(appCustomer);
+        return appCustomer;
     }
-    String secretKey = DigestUtils.sha1Hex(UUID.randomUUID().toString());
-    appCustomer.setAccessKey(accessKey);
-    appCustomer.setSecretKey(secretKey);
-    appCustomer.setStatus(EntityStatus.Enable);
-    appCustomer.setUpdateTime(appCustomer.getCreateTime());
-    save(appCustomer);
-    return appCustomer;
-  }
 
-  @Override
-  public AppCustomer updateSecretKey(AppCustomer appCustomer) {
-    String secretKey = DigestUtils.sha1Hex(UUID.randomUUID().toString());
-    appCustomer.setSecretKey(secretKey);
-    save(appCustomer);
-    return appCustomer;
-  }
+    @Override
+    public AppCustomer updateSecretKey(AppCustomer appCustomer) {
+        String secretKey = DigestUtils.sha1Hex(UUID.randomUUID().toString());
+        appCustomer.setSecretKey(secretKey);
+        save(appCustomer);
+        return appCustomer;
+    }
 }

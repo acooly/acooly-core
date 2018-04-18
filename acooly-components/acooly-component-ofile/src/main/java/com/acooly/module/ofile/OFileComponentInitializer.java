@@ -20,26 +20,28 @@ import org.springframework.context.ConfigurableApplicationContext;
 import java.io.File;
 import java.io.IOException;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 public class OFileComponentInitializer implements ComponentInitializer {
-  private static final Logger logger = LoggerFactory.getLogger(OFileComponentInitializer.class);
+    private static final Logger logger = LoggerFactory.getLogger(OFileComponentInitializer.class);
 
-  @Override
-  public void initialize(ConfigurableApplicationContext applicationContext) {
-    OFileProperties oFileProperties = Apps.buildProperties(OFileProperties.class);
-    File file = new File(oFileProperties.getStorageRoot());
-    if (!file.exists()) {
-      if (Apps.isDevMode()) {
-        try {
-          FileUtils.forceMkdir(file);
-          logger.info("开发模式下创建ofile存储路径:{}", file.getAbsolutePath());
-        } catch (IOException e) {
-          throw new AppConfigException(e);
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        OFileProperties oFileProperties = Apps.buildProperties(OFileProperties.class);
+        File file = new File(oFileProperties.getStorageRoot());
+        if (!file.exists()) {
+            if (Apps.isDevMode()) {
+                try {
+                    FileUtils.forceMkdir(file);
+                    logger.info("开发模式下创建ofile存储路径:{}", file.getAbsolutePath());
+                } catch (IOException e) {
+                    throw new AppConfigException(e);
+                }
+            } else {
+                logger.error("ofile存储路径不存在，请配置nfs路径[{}]映射", file.getAbsolutePath());
+                Apps.shutdown();
+            }
         }
-      } else {
-        logger.error("ofile存储路径不存在，请配置nfs路径[{}]映射", file.getAbsolutePath());
-        Apps.shutdown();
-      }
     }
-  }
 }

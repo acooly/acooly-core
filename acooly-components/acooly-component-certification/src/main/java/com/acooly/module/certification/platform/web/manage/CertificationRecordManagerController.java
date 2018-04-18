@@ -25,25 +25,25 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/manage/module/certification/certificationRecord")
 public class CertificationRecordManagerController
-    extends AbstractJQueryEntityController<CertificationRecord, CertificationRecordService> {
+        extends AbstractJQueryEntityController<CertificationRecord, CertificationRecordService> {
 
-  private static Map<Integer, String> allStatuss = Maps.newLinkedHashMap();
+    private static Map<Integer, String> allStatuss = Maps.newLinkedHashMap();
 
-  static {
-    allStatuss.put(1, "验证通过");
-    allStatuss.put(0, "未通过");
-  }
+    static {
+        allStatuss.put(1, "验证通过");
+        allStatuss.put(0, "未通过");
+    }
 
-  @SuppressWarnings("unused")
-  @Autowired
-  private CertificationRecordService certificationRecordService;
+    @SuppressWarnings("unused")
+    @Autowired
+    private CertificationRecordService certificationRecordService;
 
-  {
-    allowMapping = "*";
-  }
+    {
+        allowMapping = "*";
+    }
 
-  @Override
-  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-    model.put("allStatuss", allStatuss);
-  }
+    @Override
+    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+        model.put("allStatuss", allStatuss);
+    }
 }

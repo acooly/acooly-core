@@ -17,16 +17,18 @@ import org.springframework.context.ApplicationListener;
 import static org.apache.commons.lang3.SystemUtils.IS_OS_LINUX;
 import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
 
-/** @author qiubo */
+/**
+ * @author qiubo
+ */
 public class AnsiSupportApplicationListener
-    implements ApplicationListener<ApplicationStartedEvent> {
-  @Override
-  public void onApplicationEvent(ApplicationStartedEvent event) {
-    if (IS_OS_WINDOWS || (IS_OS_LINUX && !Apps.isDevMode())) {
-      return;
+        implements ApplicationListener<ApplicationStartedEvent> {
+    @Override
+    public void onApplicationEvent(ApplicationStartedEvent event) {
+        if (IS_OS_WINDOWS || (IS_OS_LINUX && !Apps.isDevMode())) {
+            return;
+        }
+        if (Strings.isNullOrEmpty(System.getProperty("spring.output.ansi.enabled"))) {
+            System.setProperty("spring.output.ansi.enabled", "ALWAYS");
+        }
     }
-    if (Strings.isNullOrEmpty(System.getProperty("spring.output.ansi.enabled"))) {
-      System.setProperty("spring.output.ansi.enabled", "ALWAYS");
-    }
-  }
 }

@@ -21,7 +21,9 @@ import javax.servlet.DispatcherType;
 import java.util.EnumSet;
 import java.util.List;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @Configuration
 @ConditionalOnWebApplication
 @EnableConfigurationProperties({DefenceProperties.class})

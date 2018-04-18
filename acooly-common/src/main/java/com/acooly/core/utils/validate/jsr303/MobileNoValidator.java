@@ -12,42 +12,44 @@ import com.acooly.core.utils.validate.predicate.MobileNoPredicate;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-/** @author zhangpu */
+/**
+ * @author zhangpu
+ */
 public class MobileNoValidator extends ConstraintValidatorSupport
-    implements ConstraintValidator<MobileNo, String> {
+        implements ConstraintValidator<MobileNo, String> {
 
-  private boolean blankable;
+    private boolean blankable;
 
-  @Override
-  public void initialize(MobileNo constraintAnnotation) {
-    blankable = constraintAnnotation.blankable();
-    this.message = constraintAnnotation.message();
-  }
+    @Override
+    public void initialize(MobileNo constraintAnnotation) {
+        blankable = constraintAnnotation.blankable();
+        this.message = constraintAnnotation.message();
+    }
 
-  @Override
-  public boolean isValid(String value, ConstraintValidatorContext context) {
-    if (value == null || value.length() == 0) {
-      if (!blankable) {
-        if (hasCustomMessage()) {
-          context.disableDefaultConstraintViolation();
-          context
-              .buildConstraintViolationWithTemplate(
-                  "{org.hibernate.validator.constraints.NotBlank.message}")
-              .addConstraintViolation();
+    @Override
+    public boolean isValid(String value, ConstraintValidatorContext context) {
+        if (value == null || value.length() == 0) {
+            if (!blankable) {
+                if (hasCustomMessage()) {
+                    context.disableDefaultConstraintViolation();
+                    context
+                            .buildConstraintViolationWithTemplate(
+                                    "{org.hibernate.validator.constraints.NotBlank.message}")
+                            .addConstraintViolation();
+                }
+            }
+            return blankable;
         }
-      }
-      return blankable;
+        if (!MobileNoPredicate.INSTANCE.apply(value)) {
+            if (hasCustomMessage()) {
+                context.disableDefaultConstraintViolation();
+                context
+                        .buildConstraintViolationWithTemplate(
+                                "{com.acooly.utils.validator.MobileNo.format.message}")
+                        .addConstraintViolation();
+            }
+            return false;
+        }
+        return true;
     }
-    if (!MobileNoPredicate.INSTANCE.apply(value)) {
-      if (hasCustomMessage()) {
-        context.disableDefaultConstraintViolation();
-        context
-            .buildConstraintViolationWithTemplate(
-                "{com.acooly.utils.validator.MobileNo.format.message}")
-            .addConstraintViolation();
-      }
-      return false;
-    }
-    return true;
-  }
 }

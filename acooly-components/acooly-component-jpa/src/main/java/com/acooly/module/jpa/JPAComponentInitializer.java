@@ -16,28 +16,30 @@ import com.acooly.core.common.exception.AppConfigException;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.context.ConfigurableApplicationContext;
 
-/** @author qiubo */
+/**
+ * @author qiubo
+ */
 public class JPAComponentInitializer implements ComponentInitializer {
-  @Override
-  public void initialize(ConfigurableApplicationContext applicationContext) {
-    if (!applicationContext
-        .getEnvironment()
-        .getProperty(JPAProperties.ENABLE_KEY, Boolean.class, Boolean.TRUE)) {
-      System.setProperty("spring.data.jpa.repositories.enabled", "false");
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        if (!applicationContext
+                .getEnvironment()
+                .getProperty(JPAProperties.ENABLE_KEY, Boolean.class, Boolean.TRUE)) {
+            System.setProperty("spring.data.jpa.repositories.enabled", "false");
+        }
+        if (!Env.isOnline()) {
+            setPropertyIfMissing("spring.jpa.hibernate.ddl-auto", "update");
+        } else {
+            JpaProperties jpaProperties = new JpaProperties();
+            EnvironmentHolder.buildProperties(jpaProperties);
+            String ddlAuto = jpaProperties.getHibernate().getDdlAuto();
+            if (ddlAuto != null && !ddlAuto.equals("none")) {
+                AppConfigException.throwIt("线上环境不能设置jpa自动执行，spring.jpa.hibernate.ddl-auto=" + ddlAuto);
+            }
+        }
+        //因为shiro的原因，使用filter代替 ref:com.acooly.core.common.boot.component.jpa.JPAAutoConfig.openEntityManagerInViewFilter
+        System.setProperty("spring.jpa.open-in-view", "false");
+        //关闭jpa校验
+        System.setProperty("spring.jpa.properties.javax.persistence.validation.mode", "none");
     }
-    if (!Env.isOnline()) {
-      setPropertyIfMissing("spring.jpa.hibernate.ddl-auto", "update");
-    } else {
-      JpaProperties jpaProperties = new JpaProperties();
-      EnvironmentHolder.buildProperties(jpaProperties);
-      String ddlAuto = jpaProperties.getHibernate().getDdlAuto();
-      if (ddlAuto != null && !ddlAuto.equals("none")) {
-        AppConfigException.throwIt("线上环境不能设置jpa自动执行，spring.jpa.hibernate.ddl-auto=" + ddlAuto);
-      }
-    }
-    //因为shiro的原因，使用filter代替 ref:com.acooly.core.common.boot.component.jpa.JPAAutoConfig.openEntityManagerInViewFilter
-    System.setProperty("spring.jpa.open-in-view", "false");
-    //关闭jpa校验
-    System.setProperty("spring.jpa.properties.javax.persistence.validation.mode", "none");
-  }
 }

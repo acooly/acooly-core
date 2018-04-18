@@ -1,4 +1,6 @@
-/** create by zhangpu date:2015年5月10日 */
+/**
+ * create by zhangpu date:2015年5月10日
+ */
 package com.acooly.module.appopenapi.message;
 
 
@@ -12,4 +14,5 @@ import com.acooly.openapi.framework.common.message.AppRequest;
  * @author zhangpu
  */
 @OpenApiMessage(service = "bannerList", type = ApiMessageType.Request)
-public class BannerListRequest extends AppRequest {}
+public class BannerListRequest extends AppRequest {
+}

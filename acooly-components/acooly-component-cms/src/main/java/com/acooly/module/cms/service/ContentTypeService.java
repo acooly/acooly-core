@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface ContentTypeService extends EntityService<ContentType> {
 
-  List<ContentType> getLevel(String parentId);
+    List<ContentType> getLevel(String parentId);
 
-  ContentType getContentType(String code);
+    ContentType getContentType(String code);
 }

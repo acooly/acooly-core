@@ -20,40 +20,44 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
-/** @author acooly */
+/**
+ * @author acooly
+ */
 //@Controller
 //@RequestMapping("/portlet")
 public class PortletTestController {
 
-  @Autowired private SiteConfigService siteConfigService;
-  @Autowired private FeedbackService feedbackService;
+    @Autowired
+    private SiteConfigService siteConfigService;
+    @Autowired
+    private FeedbackService feedbackService;
 
-  @RequestMapping("siteConfig")
-  @ResponseBody
-  public SiteConfig getSiteConfig(HttpServletRequest request) {
-    String name = request.getParameter("name");
-    return siteConfigService.findUnique(name);
-  }
-
-  @RequestMapping("feedback")
-  @ResponseBody
-  public JsonResult feedback(HttpServletRequest request) {
-    JsonResult result = new JsonResult();
-    try {
-      String contactInfo = "pu.zhang@foxmail.com";
-      String userName = "zhangpu";
-      String address = "重庆 渝北";
-      String telephone = "13896177630";
-      FeedbackTypeEnum type = FeedbackTypeEnum.complaint;
-      String content = "这就是一个客户反馈的测试内容";
-      String title = "测试反馈建议";
-
-      feedbackService.submit(type, content);
-
-    } catch (Exception e) {
-      result.setSuccess(false);
-      result.setMessage(e.getMessage());
+    @RequestMapping("siteConfig")
+    @ResponseBody
+    public SiteConfig getSiteConfig(HttpServletRequest request) {
+        String name = request.getParameter("name");
+        return siteConfigService.findUnique(name);
     }
-    return result;
-  }
+
+    @RequestMapping("feedback")
+    @ResponseBody
+    public JsonResult feedback(HttpServletRequest request) {
+        JsonResult result = new JsonResult();
+        try {
+            String contactInfo = "pu.zhang@foxmail.com";
+            String userName = "zhangpu";
+            String address = "重庆 渝北";
+            String telephone = "13896177630";
+            FeedbackTypeEnum type = FeedbackTypeEnum.complaint;
+            String content = "这就是一个客户反馈的测试内容";
+            String title = "测试反馈建议";
+
+            feedbackService.submit(type, content);
+
+        } catch (Exception e) {
+            result.setSuccess(false);
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
 }

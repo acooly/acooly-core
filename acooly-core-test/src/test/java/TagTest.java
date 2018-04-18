@@ -12,15 +12,17 @@ import com.acooly.openapi.framework.common.enums.SecretType;
 import com.acooly.openapi.framework.domain.ApiPartner;
 import org.apache.commons.beanutils.BeanUtils;
 
-/** @author acooly */
+/**
+ * @author acooly
+ */
 public class TagTest {
 
-  public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 
-    ApiPartner p = new ApiPartner();
-    p.setSecretType(SecretType.cert);
+        ApiPartner p = new ApiPartner();
+        p.setSecretType(SecretType.cert);
 
-    String value = BeanUtils.getProperty(p, "secretType");
-    System.out.println(value);
-  }
+        String value = BeanUtils.getProperty(p, "secretType");
+        System.out.println(value);
+    }
 }

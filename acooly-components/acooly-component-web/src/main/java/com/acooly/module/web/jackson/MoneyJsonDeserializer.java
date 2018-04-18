@@ -19,34 +19,36 @@ import org.springframework.boot.jackson.JsonComponent;
 
 import java.io.IOException;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @JsonComponent
 public class MoneyJsonDeserializer extends StdDeserializer<Money> {
-  private WebProperties webProperties;
+    private WebProperties webProperties;
 
-  public MoneyJsonDeserializer() {
-    this(null);
-  }
-
-  public MoneyJsonDeserializer(Class<?> vc) {
-    super(vc);
-  }
-
-  @Override
-  public Money deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-    if (webProperties == null) {
-      webProperties = Apps.buildProperties(WebProperties.class);
+    public MoneyJsonDeserializer() {
+        this(null);
     }
-    if (webProperties.isEnableMoneyDisplayYuan()) {
-      return new Money(p.getValueAsString());
-    } else {
-      long value = p.getLongValue();
-      return Money.cent(value);
-    }
-  }
 
-  @Override
-  public Class<Money> handledType() {
-    return Money.class;
-  }
+    public MoneyJsonDeserializer(Class<?> vc) {
+        super(vc);
+    }
+
+    @Override
+    public Money deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        if (webProperties == null) {
+            webProperties = Apps.buildProperties(WebProperties.class);
+        }
+        if (webProperties.isEnableMoneyDisplayYuan()) {
+            return new Money(p.getValueAsString());
+        } else {
+            long value = p.getLongValue();
+            return Money.cent(value);
+        }
+    }
+
+    @Override
+    public Class<Money> handledType() {
+        return Money.class;
+    }
 }

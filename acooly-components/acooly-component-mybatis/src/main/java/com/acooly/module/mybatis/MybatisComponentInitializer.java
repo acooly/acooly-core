@@ -17,28 +17,30 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.List;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 public class MybatisComponentInitializer implements ComponentInitializer {
-  @Override
-  public void initialize(ConfigurableApplicationContext applicationContext) {
-    setPropertyIfMissing("mapper.mappers", "com.acooly.module.mybatis.EntityMybatisDao");
-  }
-
-  @Override
-  public List<String> excludeAutoconfigClassNames() {
-    Boolean supportMultiDataSource =
-        EnvironmentHolder.get()
-            .getProperty("acooly.mybatis.supportMultiDataSource", Boolean.class, Boolean.FALSE);
-    if (supportMultiDataSource) {
-      setPropertyIfMissing("acooly.ds.enable", "false");
-      return Lists.newArrayList(
-          "com.github.pagehelper.autoconfigure.MapperAutoConfiguration",
-          "org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration",
-          "com.acooly.module.mybatis.MybatisAutoConfig");
-    } else {
-      return Lists.newArrayList(
-          "com.github.pagehelper.autoconfigure.MapperAutoConfiguration",
-          "org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration");
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        setPropertyIfMissing("mapper.mappers", "com.acooly.module.mybatis.EntityMybatisDao");
     }
-  }
+
+    @Override
+    public List<String> excludeAutoconfigClassNames() {
+        Boolean supportMultiDataSource =
+                EnvironmentHolder.get()
+                        .getProperty("acooly.mybatis.supportMultiDataSource", Boolean.class, Boolean.FALSE);
+        if (supportMultiDataSource) {
+            setPropertyIfMissing("acooly.ds.enable", "false");
+            return Lists.newArrayList(
+                    "com.github.pagehelper.autoconfigure.MapperAutoConfiguration",
+                    "org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration",
+                    "com.acooly.module.mybatis.MybatisAutoConfig");
+        } else {
+            return Lists.newArrayList(
+                    "com.github.pagehelper.autoconfigure.MapperAutoConfiguration",
+                    "org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration");
+        }
+    }
 }

@@ -22,37 +22,39 @@ import static com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm.APP_CLI
 @Component(APP_CLIENT_REALM)
 public class AppClientAuthInfoRealm extends CacheableAuthInfoRealm {
 
-  @Autowired private AppCustomerService appCustomerService;
-  @Autowired private AppOpenapiProperties appOpenapiProperties;
-  protected static final String CLIENT_SUFFIX = "client";
+    protected static final String CLIENT_SUFFIX = "client";
+    @Autowired
+    private AppCustomerService appCustomerService;
+    @Autowired
+    private AppOpenapiProperties appOpenapiProperties;
 
-  @Override
-  public String getSecretKey(String partnerId) {
-    if (partnerId.equals(appOpenapiProperties.getAnonymous().getAccessKey())) {
-      return appOpenapiProperties.getAnonymous().getSecretKey();
-    } else {
-      AppCustomer appCustomer = appCustomerService.loadAppCustomer(partnerId, EntityStatus.Enable);
-      if (appCustomer == null) {
-        throw new ApiServiceAuthenticationException("app认证用户信息不存在，partnerId=" + partnerId);
-      }
-      return appCustomer.getSecretKey();
+    @Override
+    public String getSecretKey(String partnerId) {
+        if (partnerId.equals(appOpenapiProperties.getAnonymous().getAccessKey())) {
+            return appOpenapiProperties.getAnonymous().getSecretKey();
+        } else {
+            AppCustomer appCustomer = appCustomerService.loadAppCustomer(partnerId, EntityStatus.Enable);
+            if (appCustomer == null) {
+                throw new ApiServiceAuthenticationException("app认证用户信息不存在，partnerId=" + partnerId);
+            }
+            return appCustomer.getSecretKey();
+        }
     }
-  }
 
-  @Override
-  public List<String> getAuthorizedServices(String partnerId) {
-    if (partnerId.equals(appOpenapiProperties.getAnonymous().getAccessKey())) {
-      return appOpenapiProperties.getAnonymous().getServices();
-    } else {
-      return Lists.newArrayList("*");
+    @Override
+    public List<String> getAuthorizedServices(String partnerId) {
+        if (partnerId.equals(appOpenapiProperties.getAnonymous().getAccessKey())) {
+            return appOpenapiProperties.getAnonymous().getServices();
+        } else {
+            return Lists.newArrayList("*");
+        }
     }
-  }
 
-  protected String authorizationKey(String accessKey) {
-    return accessKey + AUTHZ_CACHE_KEY_PREFIX + CLIENT_SUFFIX;
-  }
+    protected String authorizationKey(String accessKey) {
+        return accessKey + AUTHZ_CACHE_KEY_PREFIX + CLIENT_SUFFIX;
+    }
 
-  protected String authenticationKey(String accessKey) {
-    return accessKey + AUTHZ_CACHE_KEY_PREFIX + CLIENT_SUFFIX;
-  }
+    protected String authenticationKey(String accessKey) {
+        return accessKey + AUTHZ_CACHE_KEY_PREFIX + CLIENT_SUFFIX;
+    }
 }

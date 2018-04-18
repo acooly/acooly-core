@@ -21,5 +21,5 @@ import java.util.Date;
  */
 public interface PointClearConfigService extends EntityService<PointClearConfig> {
 
-  public long getClearPoint(String userName, Date tradeTime);
+    public long getClearPoint(String userName, Date tradeTime);
 }

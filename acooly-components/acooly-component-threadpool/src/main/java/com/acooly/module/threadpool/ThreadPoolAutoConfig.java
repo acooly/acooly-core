@@ -20,46 +20,48 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @Configuration
 @EnableConfigurationProperties({ThreadPoolProperties.class})
 public class ThreadPoolAutoConfig {
-  @Bean
-  public ThreadPoolTaskExecutor commonTaskExecutor(ThreadPoolProperties properties) {
-    ThreadPoolTaskExecutor bean = new ThreadPoolTaskExecutor();
-    bean.setCorePoolSize(properties.getThreadMin());
-    bean.setMaxPoolSize(properties.getThreadMax());
-    bean.setQueueCapacity(properties.getThreadQueue());
-    bean.setKeepAliveSeconds(300);
-    bean.setWaitForTasksToCompleteOnShutdown(true);
-    bean.setAllowCoreThreadTimeOut(true);
-    bean.setThreadNamePrefix("common-thread-pool-");
-    bean.setTaskDecorator(new LogTaskDecorator());
-    bean.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
-    return bean;
-  }
-
-  @Bean
-  public TransactionExecutor transactionExecutor(
-      @Qualifier("commonTaskExecutor") ThreadPoolTaskExecutor commonTaskExecutor,
-      TransactionTemplate transactionTemplate) {
-    return new TransactionExecutor(commonTaskExecutor, transactionTemplate);
-  }
-
-  @Slf4j
-  public static class LogTaskDecorator implements TaskDecorator {
-
-    @Override
-    public Runnable decorate(Runnable runnable) {
-      Runnable newR =
-          () -> {
-            try {
-              runnable.run();
-            } catch (Exception e) {
-              log.error("线程池任务处理异常", e);
-            }
-          };
-      return newR;
+    @Bean
+    public ThreadPoolTaskExecutor commonTaskExecutor(ThreadPoolProperties properties) {
+        ThreadPoolTaskExecutor bean = new ThreadPoolTaskExecutor();
+        bean.setCorePoolSize(properties.getThreadMin());
+        bean.setMaxPoolSize(properties.getThreadMax());
+        bean.setQueueCapacity(properties.getThreadQueue());
+        bean.setKeepAliveSeconds(300);
+        bean.setWaitForTasksToCompleteOnShutdown(true);
+        bean.setAllowCoreThreadTimeOut(true);
+        bean.setThreadNamePrefix("common-thread-pool-");
+        bean.setTaskDecorator(new LogTaskDecorator());
+        bean.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
+        return bean;
     }
-  }
+
+    @Bean
+    public TransactionExecutor transactionExecutor(
+            @Qualifier("commonTaskExecutor") ThreadPoolTaskExecutor commonTaskExecutor,
+            TransactionTemplate transactionTemplate) {
+        return new TransactionExecutor(commonTaskExecutor, transactionTemplate);
+    }
+
+    @Slf4j
+    public static class LogTaskDecorator implements TaskDecorator {
+
+        @Override
+        public Runnable decorate(Runnable runnable) {
+            Runnable newR =
+                    () -> {
+                        try {
+                            runnable.run();
+                        } catch (Exception e) {
+                            log.error("线程池任务处理异常", e);
+                        }
+                    };
+            return newR;
+        }
+    }
 }

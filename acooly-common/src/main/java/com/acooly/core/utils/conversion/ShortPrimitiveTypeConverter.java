@@ -10,28 +10,28 @@ import java.util.List;
  */
 public class ShortPrimitiveTypeConverter extends AbstractTypeConverter<Short> {
 
-  public static short shortValue(Object value) throws NumberFormatException {
-    return (short) IntTypeConverter.intValue(value);
-  }
-
-  public Class<Short> getTargetType() {
-    return Short.TYPE;
-  }
-
-  public List<Class<?>> getSupportedSourceTypes() {
-    List<Class<?>> classes = super.getSupportedSourceTypes();
-    classes.add(Object[].class);
-    classes.add(Collection.class);
-    classes.add(CharSequence.class);
-    classes.add(CharSequence[].class);
-    return classes;
-  }
-
-  public Short convert(Object value, Class<? extends Short> toType) {
-    try {
-      return shortValue(value);
-    } catch (Exception e) {
-      throw new TypeConversionException(e);
+    public static short shortValue(Object value) throws NumberFormatException {
+        return (short) IntTypeConverter.intValue(value);
     }
-  }
+
+    public Class<Short> getTargetType() {
+        return Short.TYPE;
+    }
+
+    public List<Class<?>> getSupportedSourceTypes() {
+        List<Class<?>> classes = super.getSupportedSourceTypes();
+        classes.add(Object[].class);
+        classes.add(Collection.class);
+        classes.add(CharSequence.class);
+        classes.add(CharSequence[].class);
+        return classes;
+    }
+
+    public Short convert(Object value, Class<? extends Short> toType) {
+        try {
+            return shortValue(value);
+        } catch (Exception e) {
+            throw new TypeConversionException(e);
+        }
+    }
 }

@@ -11,15 +11,15 @@ import java.util.List;
  */
 public class ArrayTypeConverter extends ArrayTypeConverterSupport<Object[]> {
 
-  public ArrayTypeConverter(TypeConverterManager typeConverterManager) {
-    super(typeConverterManager);
-  }
+    public ArrayTypeConverter(TypeConverterManager typeConverterManager) {
+        super(typeConverterManager);
+    }
 
-  public Class<Object[]> getTargetType() {
-    return Object[].class;
-  }
+    public Class<Object[]> getTargetType() {
+        return Object[].class;
+    }
 
-  public List<Class<?>> getSupportedSourceTypes() {
-    return Arrays.asList(Object[].class, Collection.class);
-  }
+    public List<Class<?>> getSupportedSourceTypes() {
+        return Arrays.asList(Object[].class, Collection.class);
+    }
 }

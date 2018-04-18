@@ -27,7 +27,7 @@ public class IdsTest {
 
 
     @Test
-    public void testIds() throws Exception{
+    public void testIds() throws Exception {
         final Set<String> container = Collections.synchronizedSet(new HashSet<>());
 
         int times = 999;
@@ -57,11 +57,11 @@ public class IdsTest {
         System.out.println("test saved count:" + container.size());
     }
 
-  @Test
-  public void name() throws Exception {
+    @Test
+    public void name() throws Exception {
 
-      NetAddressIdWorker netAddressIdWorker=new NetAddressIdWorker();
-      Long generate = netAddressIdWorker.generate();
-    System.out.println(generate+":"+Long.toString(generate).toString().length());
-  }
+        NetAddressIdWorker netAddressIdWorker = new NetAddressIdWorker();
+        Long generate = netAddressIdWorker.generate();
+        System.out.println(generate + ":" + Long.toString(generate).toString().length());
+    }
 }

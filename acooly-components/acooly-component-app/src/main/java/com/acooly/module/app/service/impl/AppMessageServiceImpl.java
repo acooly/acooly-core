@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 
 @Service("appMessageService")
 public class AppMessageServiceImpl extends EntityServiceImpl<AppMessage, AppMessageDao>
-    implements AppMessageService {
+        implements AppMessageService {
 
-  @Override
-  public PageInfo<AppMessage> query(PageInfo<AppMessage> pageInfo, String userName) {
-    return getEntityDao().pageQueryUserMessages(pageInfo, userName);
-  }
+    @Override
+    public PageInfo<AppMessage> query(PageInfo<AppMessage> pageInfo, String userName) {
+        return getEntityDao().pageQueryUserMessages(pageInfo, userName);
+    }
 }

@@ -16,23 +16,25 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Collection;
 
-/** @author qiubo */
+/**
+ * @author qiubo
+ */
 public class DefaultCacheManager extends AbstractCacheManager {
-  private RedisTemplate redisTemplate;
-  private long expiration;
+    private RedisTemplate redisTemplate;
+    private long expiration;
 
-  public DefaultCacheManager(RedisTemplate redisTemplate, long expiration) {
-    this.redisTemplate = redisTemplate;
-    this.expiration = expiration;
-  }
+    public DefaultCacheManager(RedisTemplate redisTemplate, long expiration) {
+        this.redisTemplate = redisTemplate;
+        this.expiration = expiration;
+    }
 
-  @Override
-  protected Collection<? extends Cache> loadCaches() {
-    return Lists.newArrayList();
-  }
+    @Override
+    protected Collection<? extends Cache> loadCaches() {
+        return Lists.newArrayList();
+    }
 
-  @Override
-  protected Cache getMissingCache(String name) {
-    return new DefaultCache(redisTemplate, name, expiration);
-  }
+    @Override
+    protected Cache getMissingCache(String name) {
+        return new DefaultCache(redisTemplate, name, expiration);
+    }
 }

@@ -22,9 +22,9 @@ import java.util.List;
  */
 public interface SiteConfigDao extends EntityMybatisDao<SiteConfig> {
 
-  @Select("select * from portlet_site_config where type = #{type} order by id")
-  List<SiteConfig> findByType(@Param("type") String type);
+    @Select("select * from portlet_site_config where type = #{type} order by id")
+    List<SiteConfig> findByType(@Param("type") String type);
 
-  @Select("select * from portlet_site_config where type = #{type} and name = #{name}")
-  SiteConfig findUnique(@Param("type") String type, @Param("name") String name);
+    @Select("select * from portlet_site_config where type = #{type} and name = #{name}")
+    SiteConfig findUnique(@Param("type") String type, @Param("name") String name);
 }

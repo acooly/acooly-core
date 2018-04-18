@@ -31,61 +31,64 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
 
-/** @author qiubo */
+/**
+ * @author qiubo
+ */
 @Configuration
 @EnableConfigurationProperties({DruidProperties.class})
 @ConditionalOnProperty(value = DruidProperties.ENABLE_KEY, matchIfMissing = true)
 @Slf4j
 public class JDBCAutoConfig {
 
-  @Autowired private DruidProperties druidProperties;
+    @Autowired
+    private DruidProperties druidProperties;
 
-  @Bean
-  @ConditionalOnMissingBean
-  public DataSource dataSource() {
-    DataSource dataSource;
-    try {
-      if (druidProperties == null) {
-        druidProperties = new DruidProperties();
-        EnvironmentHolder.buildProperties(druidProperties, DruidProperties.PREFIX);
-      }
-      if (druidProperties.isUseTomcatDataSource()) {
-        dataSource = new TomcatDataSourceProperties().build(druidProperties);
-      } else {
-        dataSource = druidProperties.build();
-      }
-      ApplicationContextHolder.get().publishEvent(new DataSourceReadyEvent(dataSource));
-      new DBPatchChecker(druidProperties).check(dataSource);
-      return dataSource;
-    } catch (Exception e) {
-      //这种方式有点挫，先就这样吧
-      log.error("初始化数据库连接池异常，关闭应用", e);
-      System.exit(0);
-      throw new AppConfigException("数据源配置异常", e);
+    @Bean
+    @ConditionalOnMissingBean
+    public DataSource dataSource() {
+        DataSource dataSource;
+        try {
+            if (druidProperties == null) {
+                druidProperties = new DruidProperties();
+                EnvironmentHolder.buildProperties(druidProperties, DruidProperties.PREFIX);
+            }
+            if (druidProperties.isUseTomcatDataSource()) {
+                dataSource = new TomcatDataSourceProperties().build(druidProperties);
+            } else {
+                dataSource = druidProperties.build();
+            }
+            ApplicationContextHolder.get().publishEvent(new DataSourceReadyEvent(dataSource));
+            new DBPatchChecker(druidProperties).check(dataSource);
+            return dataSource;
+        } catch (Exception e) {
+            //这种方式有点挫，先就这样吧
+            log.error("初始化数据库连接池异常，关闭应用", e);
+            System.exit(0);
+            throw new AppConfigException("数据源配置异常", e);
+        }
     }
-  }
 
-  @Bean
-  @ConditionalOnMissingBean(JdbcOperations.class)
-  public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-    return new JdbcTemplate(dataSource);
-  }
+    @Bean
+    @ConditionalOnMissingBean(JdbcOperations.class)
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+    }
 
-  @Bean
-  public PagedJdbcTemplate pagedJdbcTemplate(DataSource dataSource) {
-    return new PagedJdbcTemplate(dataSource);
-  }
+    @Bean
+    public PagedJdbcTemplate pagedJdbcTemplate(DataSource dataSource) {
+        return new PagedJdbcTemplate(dataSource);
+    }
 
-  @Bean
-  @ConditionalOnMissingBean(NamedParameterJdbcOperations.class)
-  public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
-    return new NamedParameterJdbcTemplate(dataSource);
-  }
+    @Bean
+    @ConditionalOnMissingBean(NamedParameterJdbcOperations.class)
+    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
+        return new NamedParameterJdbcTemplate(dataSource);
+    }
 
-  @Bean
-  @ConditionalOnMissingBean(TransactionTemplate.class)
-  public TransactionTemplate transactionTemplate(
-      PlatformTransactionManager platformTransactionManager) {
-    return new TransactionTemplate(platformTransactionManager);
-  }
+    @Bean
+    @ConditionalOnMissingBean(TransactionTemplate.class)
+    public TransactionTemplate transactionTemplate(
+            PlatformTransactionManager platformTransactionManager) {
+        return new TransactionTemplate(platformTransactionManager);
+    }
 }

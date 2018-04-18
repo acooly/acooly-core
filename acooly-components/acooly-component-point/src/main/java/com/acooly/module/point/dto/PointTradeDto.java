@@ -10,63 +10,73 @@ import org.apache.commons.lang.builder.ToStringStyle;
  */
 public class PointTradeDto {
 
-  /** 相关业务Id * */
-  private String busiId;
+    /**
+     * 相关业务Id *
+     */
+    private String busiId;
 
-  /** 相关业务类型 * */
-  private String busiType;
+    /**
+     * 相关业务类型 *
+     */
+    private String busiType;
 
-  /** 相关业务类型描述 * */
-  private String busiTypeText;
+    /**
+     * 相关业务类型描述 *
+     */
+    private String busiTypeText;
 
-  /** 相关业务数据 * */
-  private String busiData;
+    /**
+     * 相关业务数据 *
+     */
+    private String busiData;
 
-  /** 备注 * */
-  private String memo;
+    /**
+     * 备注 *
+     */
+    private String memo;
 
-  public String getBusiId() {
-    return busiId;
-  }
+    public String getBusiId() {
+        return busiId;
+    }
 
-  public void setBusiId(String busiId) {
-    this.busiId = busiId;
-  }
+    public void setBusiId(String busiId) {
+        this.busiId = busiId;
+    }
 
-  public String getBusiType() {
-    return busiType;
-  }
+    public String getBusiType() {
+        return busiType;
+    }
 
-  public void setBusiType(String busiType) {
-    this.busiType = busiType;
-  }
+    public void setBusiType(String busiType) {
+        this.busiType = busiType;
+    }
 
-  public String getBusiTypeText() {
-    return busiTypeText;
-  }
+    public String getBusiTypeText() {
+        return busiTypeText;
+    }
 
-  public void setBusiTypeText(String busiTypeText) {
-    this.busiTypeText = busiTypeText;
-  }
+    public void setBusiTypeText(String busiTypeText) {
+        this.busiTypeText = busiTypeText;
+    }
 
-  public String getBusiData() {
-    return busiData;
-  }
+    public String getBusiData() {
+        return busiData;
+    }
 
-  public void setBusiData(String busiData) {
-    this.busiData = busiData;
-  }
+    public void setBusiData(String busiData) {
+        this.busiData = busiData;
+    }
 
-  public String getMemo() {
-    return memo;
-  }
+    public String getMemo() {
+        return memo;
+    }
 
-  public void setMemo(String memo) {
-    this.memo = memo;
-  }
+    public void setMemo(String memo) {
+        this.memo = memo;
+    }
 
-  @Override
-  public String toString() {
-    return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-  }
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
 }

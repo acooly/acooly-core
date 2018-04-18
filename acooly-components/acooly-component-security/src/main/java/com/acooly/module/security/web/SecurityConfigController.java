@@ -18,15 +18,15 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping(value = "/security/config")
 public class SecurityConfigController {
 
-  /**
-   * 授权功能顶级菜单
-   *
-   * @return
-   */
-  @RequestMapping("index")
-  @ResponseBody
-  public FrameworkProperties authorisedMenus(
-      HttpServletRequest request, HttpServletResponse response) {
-    return FrameworkPropertiesHolder.get();
-  }
+    /**
+     * 授权功能顶级菜单
+     *
+     * @return
+     */
+    @RequestMapping("index")
+    @ResponseBody
+    public FrameworkProperties authorisedMenus(
+            HttpServletRequest request, HttpServletResponse response) {
+        return FrameworkPropertiesHolder.get();
+    }
 }

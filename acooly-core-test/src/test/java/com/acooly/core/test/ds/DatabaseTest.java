@@ -17,20 +17,22 @@ import org.junit.Test;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 public class DatabaseTest extends TestNoWebBase {
 
-  @Resource
-  protected DataSource dataSource;
+    @Resource
+    protected DataSource dataSource;
 
-  @AfterClass
-  public static void testW() throws Exception {
-    System.out.println("a");
-  }
+    @AfterClass
+    public static void testW() throws Exception {
+        System.out.println("a");
+    }
 
-  @Test
-  public void testDataSource() throws Exception {
-    String url = dataSource.getConnection().getMetaData().getURL();
-    Assert.notNull(url);
-  }
+    @Test
+    public void testDataSource() throws Exception {
+        String url = dataSource.getConnection().getMetaData().getURL();
+        Assert.notNull(url);
+    }
 }

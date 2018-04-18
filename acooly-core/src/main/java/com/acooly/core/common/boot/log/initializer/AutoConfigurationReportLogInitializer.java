@@ -22,14 +22,14 @@ import org.springframework.boot.autoconfigure.logging.AutoConfigurationReportLog
  * @author qiubo
  */
 public class AutoConfigurationReportLogInitializer extends AbstractLogInitializer {
-  @Override
-  public void init(LogbackConfigurator configurator) {
-    String fileName = "autoconfig-10dt.log";
-    configurator.log("设置AUTO-CONFIG日志，日志文件为:%s", fileName);
-    Appender<ILoggingEvent> appender =
-        configurator.fileAppender(
-            "AUTO-CONFIG", "%d{yyyy-MM-dd HH:mm:ss.SSS} - %msg%n", fileName, 1);
-    configurator.logger(
-        AutoConfigurationReportLoggingInitializer.class.getName(), Level.DEBUG, false, appender);
-  }
+    @Override
+    public void init(LogbackConfigurator configurator) {
+        String fileName = "autoconfig-10dt.log";
+        configurator.log("设置AUTO-CONFIG日志，日志文件为:%s", fileName);
+        Appender<ILoggingEvent> appender =
+                configurator.fileAppender(
+                        "AUTO-CONFIG", "%d{yyyy-MM-dd HH:mm:ss.SSS} - %msg%n", fileName, 1);
+        configurator.logger(
+                AutoConfigurationReportLoggingInitializer.class.getName(), Level.DEBUG, false, appender);
+    }
 }

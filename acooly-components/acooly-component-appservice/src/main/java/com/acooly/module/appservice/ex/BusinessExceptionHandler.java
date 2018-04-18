@@ -16,10 +16,10 @@ import com.acooly.core.utils.enums.ResultStatus;
 
 public class BusinessExceptionHandler implements ExceptionHandler<BusinessException> {
 
-  public void handle(ExceptionContext<?> context, BusinessException e) {
-    ResultBase res = context.getResponse();
-    res.setStatus(ResultStatus.failure);
-    res.setDetail(e.message());
-    res.setCode(e.code());
-  }
+    public void handle(ExceptionContext<?> context, BusinessException e) {
+        ResultBase res = context.getResponse();
+        res.setStatus(ResultStatus.failure);
+        res.setDetail(e.message());
+        res.setCode(e.code());
+    }
 }

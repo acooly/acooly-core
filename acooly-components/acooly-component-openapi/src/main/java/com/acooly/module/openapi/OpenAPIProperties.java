@@ -14,19 +14,21 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import static com.acooly.module.openapi.OpenAPIProperties.PREFIX;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @ConfigurationProperties(prefix = PREFIX)
 @Data
 public class OpenAPIProperties {
-  public static final String PREFIX = "acooly.openpai";
+    public static final String PREFIX = "acooly.openpai";
 
     /**
      * 查询日志分离到不同的日志文件
      */
-  private Boolean queryLogSeparationEnable=false;
+    private Boolean queryLogSeparationEnable = false;
 
     /**
      * 是否启用openapi性能日志
      */
-  private Boolean enablePerfLog=true;
+    private Boolean enablePerfLog = true;
 }

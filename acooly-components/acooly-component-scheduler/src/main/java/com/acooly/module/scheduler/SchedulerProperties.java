@@ -6,18 +6,24 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import static com.acooly.module.scheduler.SchedulerProperties.PREFIX;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 @Data
 @Slf4j
 @ConfigurationProperties(prefix = PREFIX)
 public class SchedulerProperties {
-  public static final String PREFIX = "acooly.scheduler";
+    public static final String PREFIX = "acooly.scheduler";
 
-  public boolean enable;
+    public boolean enable;
 
-  /** quartz执行线程数 */
-  private int threadCount = 10;
+    /**
+     * quartz执行线程数
+     */
+    private int threadCount = 10;
 
-  /** 集群检查时间间隔 ms */
-  private int clusterCheckinInterval = 20000;
+    /**
+     * 集群检查时间间隔 ms
+     */
+    private int clusterCheckinInterval = 20000;
 }

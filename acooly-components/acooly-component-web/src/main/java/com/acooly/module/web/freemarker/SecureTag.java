@@ -15,28 +15,31 @@ import freemarker.template.*;
 import java.io.IOException;
 import java.util.Map;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 public abstract class SecureTag implements TemplateDirectiveModel {
-  @Override
-  public void execute(
-      Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body)
-      throws TemplateException, IOException {
-    verifyParameters(params);
-    render(env, params, body);
-  }
-
-  protected void verifyParameters(Map params) throws TemplateModelException {}
-
-  public abstract void render(Environment env, Map params, TemplateDirectiveBody body)
-      throws IOException, TemplateException;
-
-  protected String getParam(Map params, String name) {
-    Object value = params.get(name);
-
-    if (value instanceof SimpleScalar) {
-      return ((SimpleScalar) value).getAsString();
+    @Override
+    public void execute(
+            Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body)
+            throws TemplateException, IOException {
+        verifyParameters(params);
+        render(env, params, body);
     }
 
-    return null;
-  }
+    protected void verifyParameters(Map params) throws TemplateModelException {
+    }
+
+    public abstract void render(Environment env, Map params, TemplateDirectiveBody body)
+            throws IOException, TemplateException;
+
+    protected String getParam(Map params, String name) {
+        Object value = params.get(name);
+
+        if (value instanceof SimpleScalar) {
+            return ((SimpleScalar) value).getAsString();
+        }
+
+        return null;
+    }
 }

@@ -19,30 +19,31 @@ import com.acooly.module.point.domain.PointAccount;
  */
 public interface PointAccountService extends EntityService<PointAccount> {
 
-  PointAccount findByUserName(String userName);
+    PointAccount findByUserName(String userName);
 
-  PointAccount pointProduce(String userName, long point);
+    PointAccount pointProduce(String userName, long point);
 
-  PointAccount pointExpense(String userName, long point, boolean isFreeze);
+    PointAccount pointExpense(String userName, long point, boolean isFreeze);
 
-  PointAccount pointFreeze(String userName, long point);
+    PointAccount pointFreeze(String userName, long point);
 
-  PointAccount pointUnfreeze(String userName, long point);
+    PointAccount pointUnfreeze(String userName, long point);
 
-  /**
-   * 同一个等级的排名
-   *
-   * @param userName
-   * @param gradeId
-   * @return
-   */
-  public int pointRank(String userName, Long gradeId);
-    
-    
+    /**
+     * 同一个等级的排名
+     *
+     * @param userName
+     * @param gradeId
+     * @return
+     */
+    public int pointRank(String userName, Long gradeId);
+
+
     /**
      * 根据用户名查询积分账户 并上锁
+     *
      * @param userName
      * @return
      */
-  PointAccount findByUserNameForUpdate(String userName);
+    PointAccount findByUserNameForUpdate(String userName);
 }

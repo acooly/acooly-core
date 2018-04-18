@@ -1,22 +1,36 @@
 package com.acooly.module.obs.common;
 
-/** 表示HTTP的请求方法。 */
+/**
+ * 表示HTTP的请求方法。
+ */
 public enum HttpMethod {
-  /** DELETE方法。 */
-  DELETE,
+    /**
+     * DELETE方法。
+     */
+    DELETE,
 
-  /** GET方法。 */
-  GET,
+    /**
+     * GET方法。
+     */
+    GET,
 
-  /** HEAD方法。 */
-  HEAD,
+    /**
+     * HEAD方法。
+     */
+    HEAD,
 
-  /** POST方法。 */
-  POST,
+    /**
+     * POST方法。
+     */
+    POST,
 
-  /** PUT方法。 */
-  PUT,
+    /**
+     * PUT方法。
+     */
+    PUT,
 
-  /** OPTION方法。 */
-  OPTIONS
+    /**
+     * OPTION方法。
+     */
+    OPTIONS
 }

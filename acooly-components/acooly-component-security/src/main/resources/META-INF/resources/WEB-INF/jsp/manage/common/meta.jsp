@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <title>${sessionScope.securityConfig.title }</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <meta http-equiv="pragma" content="no-cache">

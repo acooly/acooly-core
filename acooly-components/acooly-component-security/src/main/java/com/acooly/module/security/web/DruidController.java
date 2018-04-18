@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/manage/druid")
 public class DruidController {
 
-  @RequestMapping("/index")
-  public String index() {
-    return "redirect:/manage/druid/index.html";
-  }
+    @RequestMapping("/index")
+    public String index() {
+        return "redirect:/manage/druid/index.html";
+    }
 }

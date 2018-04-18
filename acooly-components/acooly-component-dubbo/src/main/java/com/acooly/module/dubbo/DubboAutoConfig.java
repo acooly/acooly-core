@@ -32,172 +32,175 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.Ordered;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @Configuration
 @EnableConfigurationProperties({DubboProperties.class})
 @AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
 @ConditionalOnProperty(value = "acooly.dubbo.enable", matchIfMissing = true)
 public class DubboAutoConfig implements InitializingBean {
 
-  private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DubboAutoConfig.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DubboAutoConfig.class);
 
-  private static DubboProperties dubboProperties;
+    private static DubboProperties dubboProperties;
 
-  private static void initDubboProperties() {
-    try {
-      if (dubboProperties == null) {
-        DubboProperties tmp = new DubboProperties();
-        EnvironmentHolder.buildProperties(tmp);
-        tmp.afterPropertiesSet();
-        DubboAutoConfig.dubboProperties = tmp;
-      }
-    } catch (Exception e) {
-      throw new AppConfigException("dubbo配置错误", e);
+    private static void initDubboProperties() {
+        try {
+            if (dubboProperties == null) {
+                DubboProperties tmp = new DubboProperties();
+                EnvironmentHolder.buildProperties(tmp);
+                tmp.afterPropertiesSet();
+                DubboAutoConfig.dubboProperties = tmp;
+            }
+        } catch (Exception e) {
+            throw new AppConfigException("dubbo配置错误", e);
+        }
     }
-  }
 
-  @Bean
-  public static ApplicationConfig applicationConfig() {
-    initDubboProperties();
-    ApplicationConfig config = new ApplicationConfig();
-    config.setName(Apps.getAppName());
-    config.setOwner(dubboProperties.getOwner());
-    Apps.exposeInfo("dubbo.owner", config.getOwner());
-    if (!Strings.isNullOrEmpty(dubboProperties.getVersion())) {
-      config.setVersion(dubboProperties.getVersion());
+    @Bean
+    public static ApplicationConfig applicationConfig() {
+        initDubboProperties();
+        ApplicationConfig config = new ApplicationConfig();
+        config.setName(Apps.getAppName());
+        config.setOwner(dubboProperties.getOwner());
+        Apps.exposeInfo("dubbo.owner", config.getOwner());
+        if (!Strings.isNullOrEmpty(dubboProperties.getVersion())) {
+            config.setVersion(dubboProperties.getVersion());
+        }
+        return config;
     }
-    return config;
-  }
 
-  @Bean
-  @DependsOn("applicationConfig")
-  public static RegistryConfig registryConfig() {
-    initDubboProperties();
-    RegistryConfig config = new RegistryConfig();
-    config.setProtocol("zookeeper");
-    logger.info(
-        "dubbo使用注册中心地址:{}, 是否注册:{}", dubboProperties.getZkUrl(), dubboProperties.isRegister());
-    config.setRegister(dubboProperties.isRegister());
-    config.setAddress(dubboProperties.getZkUrl());
-    if (!Apps.isRunInTest()) {
-      config.setFile(Apps.getAppDataPath() + "/dubbo/dubbo.cache");
+    @Bean
+    @DependsOn("applicationConfig")
+    public static RegistryConfig registryConfig() {
+        initDubboProperties();
+        RegistryConfig config = new RegistryConfig();
+        config.setProtocol("zookeeper");
+        logger.info(
+                "dubbo使用注册中心地址:{}, 是否注册:{}", dubboProperties.getZkUrl(), dubboProperties.isRegister());
+        config.setRegister(dubboProperties.isRegister());
+        config.setAddress(dubboProperties.getZkUrl());
+        if (!Apps.isRunInTest()) {
+            config.setFile(Apps.getAppDataPath() + "/dubbo/dubbo.cache");
+        }
+        return config;
     }
-    return config;
-  }
 
-  @Bean
-  @ConditionalOnProperty(value = "acooly.dubbo.refOnlyZkUrl1")
-  @DependsOn("applicationConfig")
-  public static RegistryConfig refOnlyRegistryConfig1() {
-    initDubboProperties();
-    final String refOnlyZkUrl1 = dubboProperties.getRefOnlyZkUrl1();
-    if (StringUtils.isBlank(refOnlyZkUrl1)) {
-      throw new AppConfigException("acooly.dubbo.refOnlyZkUrl1 属性的值不能为空!");
+    @Bean
+    @ConditionalOnProperty(value = "acooly.dubbo.refOnlyZkUrl1")
+    @DependsOn("applicationConfig")
+    public static RegistryConfig refOnlyRegistryConfig1() {
+        initDubboProperties();
+        final String refOnlyZkUrl1 = dubboProperties.getRefOnlyZkUrl1();
+        if (StringUtils.isBlank(refOnlyZkUrl1)) {
+            throw new AppConfigException("acooly.dubbo.refOnlyZkUrl1 属性的值不能为空!");
+        }
+        return createRefOnlyRegistry(refOnlyZkUrl1, "1");
     }
-    return createRefOnlyRegistry(refOnlyZkUrl1, "1");
-  }
 
-  @Bean
-  @ConditionalOnProperty(value = "acooly.dubbo.refOnlyZkUrl2")
-  @DependsOn("applicationConfig")
-  public static RegistryConfig refOnlyRegistryConfig2() {
-    initDubboProperties();
-    final String refOnlyZkUrl2 = dubboProperties.getRefOnlyZkUrl2();
-    if (StringUtils.isBlank(refOnlyZkUrl2)) {
-      throw new AppConfigException("acooly.dubbo.refOnlyZkUrl2 属性的值不能为空!");
+    @Bean
+    @ConditionalOnProperty(value = "acooly.dubbo.refOnlyZkUrl2")
+    @DependsOn("applicationConfig")
+    public static RegistryConfig refOnlyRegistryConfig2() {
+        initDubboProperties();
+        final String refOnlyZkUrl2 = dubboProperties.getRefOnlyZkUrl2();
+        if (StringUtils.isBlank(refOnlyZkUrl2)) {
+            throw new AppConfigException("acooly.dubbo.refOnlyZkUrl2 属性的值不能为空!");
+        }
+        return createRefOnlyRegistry(refOnlyZkUrl2, "2");
     }
-    return createRefOnlyRegistry(refOnlyZkUrl2, "2");
-  }
 
-  @Bean
-  @ConditionalOnProperty(value = "acooly.dubbo.refOnlyZkUrl3")
-  @DependsOn("applicationConfig")
-  public static RegistryConfig refOnlyRegistryConfig3() {
-    initDubboProperties();
-    final String refOnlyZkUrl3 = dubboProperties.getRefOnlyZkUrl3();
-    if (StringUtils.isBlank(refOnlyZkUrl3)) {
-      throw new AppConfigException("acooly.dubbo.refOnlyZkUrl3 属性的值不能为空!");
+    @Bean
+    @ConditionalOnProperty(value = "acooly.dubbo.refOnlyZkUrl3")
+    @DependsOn("applicationConfig")
+    public static RegistryConfig refOnlyRegistryConfig3() {
+        initDubboProperties();
+        final String refOnlyZkUrl3 = dubboProperties.getRefOnlyZkUrl3();
+        if (StringUtils.isBlank(refOnlyZkUrl3)) {
+            throw new AppConfigException("acooly.dubbo.refOnlyZkUrl3 属性的值不能为空!");
+        }
+        return createRefOnlyRegistry(refOnlyZkUrl3, "3");
     }
-    return createRefOnlyRegistry(refOnlyZkUrl3, "3");
-  }
 
-  private static RegistryConfig createRefOnlyRegistry(String zkUrl, String id) {
-    RegistryConfig config = new RegistryConfig();
-    config.setProtocol("zookeeper");
-    String cacheFile = Apps.getAppDataPath() + "/dubbo/dubbo.cache.refOnly" + id;
+    private static RegistryConfig createRefOnlyRegistry(String zkUrl, String id) {
+        RegistryConfig config = new RegistryConfig();
+        config.setProtocol("zookeeper");
+        String cacheFile = Apps.getAppDataPath() + "/dubbo/dubbo.cache.refOnly" + id;
 
-    logger.info("dubbo使用注册中心(只消费)地址:{}", zkUrl);
-    config.setAddress(zkUrl);
-    if (!Apps.isRunInTest()) {
-      config.setFile(cacheFile);
+        logger.info("dubbo使用注册中心(只消费)地址:{}", zkUrl);
+        config.setAddress(zkUrl);
+        if (!Apps.isRunInTest()) {
+            config.setFile(cacheFile);
+        }
+        config.setRegister(false);
+        return config;
     }
-    config.setRegister(false);
-    return config;
-  }
 
-  @Bean
-  @DependsOn({"applicationConfig", "registryConfig"})
-  public static ConsumerConfig consumerConfig() {
-    initDubboProperties();
-    ConsumerConfig config = new ConsumerConfig();
-    config.setCheck(false);
-    config.setLoadbalance("roundrobin");
-    if (dubboProperties.isConsumerLog()) {
-      config.setFilter("consumerLogFilter");
+    @Bean
+    @DependsOn({"applicationConfig", "registryConfig"})
+    public static ConsumerConfig consumerConfig() {
+        initDubboProperties();
+        ConsumerConfig config = new ConsumerConfig();
+        config.setCheck(false);
+        config.setLoadbalance("roundrobin");
+        if (dubboProperties.isConsumerLog()) {
+            config.setFilter("consumerLogFilter");
+        }
+        return config;
     }
-    return config;
-  }
 
-  @Bean
-  @DependsOn({"registryConfig"})
-  @ConditionalOnProperty(
-    name = {"acooly.devMode", "acooly.dubbo.monitor.disable"},
-    havingValue = "false",
-    matchIfMissing = true
-  )
-  public static MonitorConfig monitorConfig() {
-    MonitorConfig config = new MonitorConfig();
-    config.setProtocol("registry");
-    return config;
-  }
+    @Bean
+    @DependsOn({"registryConfig"})
+    @ConditionalOnProperty(
+            name = {"acooly.devMode", "acooly.dubbo.monitor.disable"},
+            havingValue = "false",
+            matchIfMissing = true
+    )
+    public static MonitorConfig monitorConfig() {
+        MonitorConfig config = new MonitorConfig();
+        config.setProtocol("registry");
+        return config;
+    }
 
-  @Bean
-  public static AnnotationBean annotationBean() {
-    AnnotationBean config = new AnnotationBean();
-    initDubboProperties();
-    String cumstomConfigPackage = dubboProperties.getCumstomConfigPackage();
-    String basePackage =
-        cumstomConfigPackage == null
-            ? Apps.getBasePackage()
-            : Apps.getBasePackage() + "," + cumstomConfigPackage;
-    config.setPackage(basePackage);
-    return config;
-  }
+    @Bean
+    public static AnnotationBean annotationBean() {
+        AnnotationBean config = new AnnotationBean();
+        initDubboProperties();
+        String cumstomConfigPackage = dubboProperties.getCumstomConfigPackage();
+        String basePackage =
+                cumstomConfigPackage == null
+                        ? Apps.getBasePackage()
+                        : Apps.getBasePackage() + "," + cumstomConfigPackage;
+        config.setPackage(basePackage);
+        return config;
+    }
 
-  @Bean
-  public static DubboMockBeanPostProcessor dubboMockBeanPostProcessor() {
-    DubboMockBeanPostProcessor config = new DubboMockBeanPostProcessor();
-    initDubboProperties();
-    config.setAnnotationPackage(Apps.getBasePackage());
-    config.setMockInterfaces(dubboProperties.getConsumer().getMockInterfaces());
-    return config;
-  }
+    @Bean
+    public static DubboMockBeanPostProcessor dubboMockBeanPostProcessor() {
+        DubboMockBeanPostProcessor config = new DubboMockBeanPostProcessor();
+        initDubboProperties();
+        config.setAnnotationPackage(Apps.getBasePackage());
+        config.setMockInterfaces(dubboProperties.getConsumer().getMockInterfaces());
+        return config;
+    }
 
-  @Override
-  public void afterPropertiesSet() throws Exception {}
+    @Override
+    public void afterPropertiesSet() throws Exception {
+    }
 
-  @Bean
-  public DubboRemoteProxyFacotry dubboRemoteProxyFacotry() {
-    return new DubboRemoteProxyFacotry();
-  }
+    @Bean
+    public DubboRemoteProxyFacotry dubboRemoteProxyFacotry() {
+        return new DubboRemoteProxyFacotry();
+    }
 
-  @Bean
-  public DubboFactory dubboFactory(DubboRemoteProxyFacotry dubboRemoteProxyFacotry) {
-    return new DubboFactoryImpl(dubboRemoteProxyFacotry);
-  }
+    @Bean
+    public DubboFactory dubboFactory(DubboRemoteProxyFacotry dubboRemoteProxyFacotry) {
+        return new DubboFactoryImpl(dubboRemoteProxyFacotry);
+    }
 
-  @Bean
-  public DubboShutdownApplicationListener dubboShutdownApplicationListener() {
-    return new DubboShutdownApplicationListener();
-  }
+    @Bean
+    public DubboShutdownApplicationListener dubboShutdownApplicationListener() {
+        return new DubboShutdownApplicationListener();
+    }
 }

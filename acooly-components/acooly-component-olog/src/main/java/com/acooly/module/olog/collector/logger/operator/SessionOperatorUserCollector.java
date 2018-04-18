@@ -15,19 +15,21 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
-/** @author acooly */
+/**
+ * @author acooly
+ */
 @Component
 public class SessionOperatorUserCollector implements OperatorUserCollector {
 
-  @Override
-  public OlogOperator getOperatorUser(HttpServletRequest request) {
+    @Override
+    public OlogOperator getOperatorUser(HttpServletRequest request) {
 
-    DefaultOlogOperator ologOperator = new DefaultOlogOperator();
-    User currentUser = ShiroUtils.getCurrentUser();
-    if (currentUser != null) {
-      ologOperator.setOperatorUserName(currentUser.getUsername());
-      ologOperator.setOperatorUserId(currentUser.getId());
+        DefaultOlogOperator ologOperator = new DefaultOlogOperator();
+        User currentUser = ShiroUtils.getCurrentUser();
+        if (currentUser != null) {
+            ologOperator.setOperatorUserName(currentUser.getUsername());
+            ologOperator.setOperatorUserId(currentUser.getId());
+        }
+        return ologOperator;
     }
-    return ologOperator;
-  }
 }

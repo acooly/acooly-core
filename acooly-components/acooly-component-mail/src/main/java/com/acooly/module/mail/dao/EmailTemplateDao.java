@@ -9,5 +9,8 @@ package com.acooly.module.mail.dao;
 import com.acooly.module.jpa.EntityJpaDao;
 import com.acooly.module.mail.entity.EmailTemplate;
 
-/** @author shuijing */
-public interface EmailTemplateDao extends EntityJpaDao<EmailTemplate, Long> {}
+/**
+ * @author shuijing
+ */
+public interface EmailTemplateDao extends EntityJpaDao<EmailTemplate, Long> {
+}

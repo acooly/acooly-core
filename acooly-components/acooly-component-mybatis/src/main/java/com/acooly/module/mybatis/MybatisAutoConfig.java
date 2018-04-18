@@ -39,7 +39,9 @@ import javax.sql.DataSource;
 
 import static com.acooly.module.mybatis.MybatisProperties.PREFIX;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @Configuration
 @Import({MapperScannerRegistrar.class})
 @EnableConfigurationProperties({MybatisProperties.class})
@@ -47,94 +49,95 @@ import static com.acooly.module.mybatis.MybatisProperties.PREFIX;
 @AutoConfigureAfter(JDBCAutoConfig.class)
 public class MybatisAutoConfig {
 
-  @Autowired(required = false)
-  private Interceptor[] interceptors;
+    @Autowired(required = false)
+    private Interceptor[] interceptors;
 
-  @Autowired(required = false)
-  private DatabaseIdProvider databaseIdProvider;
+    @Autowired(required = false)
+    private DatabaseIdProvider databaseIdProvider;
 
-  @Autowired private ResourceLoader resourceLoader;
+    @Autowired
+    private ResourceLoader resourceLoader;
 
-  @Bean
-  public SqlSessionFactory sqlSessionFactory(DataSource dataSource, MybatisProperties properties) {
-    SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
-    factory.setDataSource(dataSource);
-    factory.setVfs(SpringBootVFS.class);
-    if (StringUtils.hasText(properties.getConfigLocation())) {
-      factory.setConfigLocation(this.resourceLoader.getResource(properties.getConfigLocation()));
+    @Bean
+    public SqlSessionFactory sqlSessionFactory(DataSource dataSource, MybatisProperties properties) {
+        SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
+        factory.setDataSource(dataSource);
+        factory.setVfs(SpringBootVFS.class);
+        if (StringUtils.hasText(properties.getConfigLocation())) {
+            factory.setConfigLocation(this.resourceLoader.getResource(properties.getConfigLocation()));
+        }
+        if (!ObjectUtils.isEmpty(this.interceptors)) {
+            factory.setPlugins(this.interceptors);
+        }
+        if (this.databaseIdProvider != null) {
+            factory.setDatabaseIdProvider(this.databaseIdProvider);
+        }
+        if (!properties.getTypeAliasesPackage().isEmpty()) {
+            String packages = Joiner.on(',').join(properties.getTypeAliasesPackage().values().iterator());
+            factory.setTypeAliasesPackage(packages);
+        }
+        factory.setTypeAliasesSuperType(Entityable.class);
+        if (StringUtils.hasLength(properties.getTypeHandlersPackage())) {
+            factory.setTypeHandlersPackage(properties.getTypeHandlersPackage());
+        }
+        if (!ObjectUtils.isEmpty(properties.resolveMapperLocations())) {
+            factory.setMapperLocations(properties.resolveMapperLocations());
+        }
+        SqlSessionFactory sqlSessionFactory;
+        try {
+            sqlSessionFactory = factory.getObject();
+        } catch (Exception e) {
+            throw new AppConfigException(e);
+        }
+        customConfig(sqlSessionFactory.getConfiguration(), properties);
+        return sqlSessionFactory;
     }
-    if (!ObjectUtils.isEmpty(this.interceptors)) {
-      factory.setPlugins(this.interceptors);
+
+    private void customConfig(
+            org.apache.ibatis.session.Configuration configuration, MybatisProperties mybatisProperties) {
+        BeanWrapperImpl wrapper = new BeanWrapperImpl(configuration);
+        mybatisProperties
+                .getSettings()
+                .entrySet()
+                .stream()
+                .forEach(entry -> wrapper.setPropertyValue(entry.getKey(), entry.getValue()));
+        configuration.setObjectFactory(new PageObjectFactory());
+        configuration.setObjectWrapperFactory(new PageObjectWrapperFactory());
     }
-    if (this.databaseIdProvider != null) {
-      factory.setDatabaseIdProvider(this.databaseIdProvider);
+
+    public Interceptor[] getInterceptors() {
+        return interceptors;
     }
-    if (!properties.getTypeAliasesPackage().isEmpty()) {
-      String packages = Joiner.on(',').join(properties.getTypeAliasesPackage().values().iterator());
-      factory.setTypeAliasesPackage(packages);
+
+    public void setInterceptors(Interceptor[] interceptors) {
+        this.interceptors = interceptors;
     }
-    factory.setTypeAliasesSuperType(Entityable.class);
-    if (StringUtils.hasLength(properties.getTypeHandlersPackage())) {
-      factory.setTypeHandlersPackage(properties.getTypeHandlersPackage());
+
+    public DatabaseIdProvider getDatabaseIdProvider() {
+        return databaseIdProvider;
     }
-    if (!ObjectUtils.isEmpty(properties.resolveMapperLocations())) {
-      factory.setMapperLocations(properties.resolveMapperLocations());
+
+    public void setDatabaseIdProvider(DatabaseIdProvider databaseIdProvider) {
+        this.databaseIdProvider = databaseIdProvider;
     }
-    SqlSessionFactory sqlSessionFactory;
-    try {
-      sqlSessionFactory = factory.getObject();
-    } catch (Exception e) {
-      throw new AppConfigException(e);
+
+    public ResourceLoader getResourceLoader() {
+        return resourceLoader;
     }
-    customConfig(sqlSessionFactory.getConfiguration(), properties);
-    return sqlSessionFactory;
-  }
 
-  private void customConfig(
-      org.apache.ibatis.session.Configuration configuration, MybatisProperties mybatisProperties) {
-    BeanWrapperImpl wrapper = new BeanWrapperImpl(configuration);
-    mybatisProperties
-        .getSettings()
-        .entrySet()
-        .stream()
-        .forEach(entry -> wrapper.setPropertyValue(entry.getKey(), entry.getValue()));
-    configuration.setObjectFactory(new PageObjectFactory());
-    configuration.setObjectWrapperFactory(new PageObjectWrapperFactory());
-  }
+    public void setResourceLoader(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
+    }
 
-  public Interceptor[] getInterceptors() {
-    return interceptors;
-  }
+    @Bean
+    @ConditionalOnMissingBean
+    public PageExecutorInterceptor pageExecutorInterceptor() {
+        return new PageExecutorInterceptor();
+    }
 
-  public void setInterceptors(Interceptor[] interceptors) {
-    this.interceptors = interceptors;
-  }
-
-  public DatabaseIdProvider getDatabaseIdProvider() {
-    return databaseIdProvider;
-  }
-
-  public void setDatabaseIdProvider(DatabaseIdProvider databaseIdProvider) {
-    this.databaseIdProvider = databaseIdProvider;
-  }
-
-  public ResourceLoader getResourceLoader() {
-    return resourceLoader;
-  }
-
-  public void setResourceLoader(ResourceLoader resourceLoader) {
-    this.resourceLoader = resourceLoader;
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
-  public PageExecutorInterceptor pageExecutorInterceptor() {
-    return new PageExecutorInterceptor();
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
-  public DateInterceptor updateInterceptor() {
-    return new DateInterceptor();
-  }
+    @Bean
+    @ConditionalOnMissingBean
+    public DateInterceptor updateInterceptor() {
+        return new DateInterceptor();
+    }
 }

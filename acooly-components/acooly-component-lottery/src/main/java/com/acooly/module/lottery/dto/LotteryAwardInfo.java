@@ -14,109 +14,127 @@ import com.acooly.module.lottery.enums.LotteryAwardType;
 
 import java.io.Serializable;
 
-/** @author acooly */
+/**
+ * @author acooly
+ */
 public class LotteryAwardInfo implements Serializable {
 
-  private Long id;
+    private Long id;
 
-  /** 抽奖ID */
-  private Long lotteryId;
+    /**
+     * 抽奖ID
+     */
+    private Long lotteryId;
 
-  /** 编码 */
-  private String code;
+    /**
+     * 编码
+     */
+    private String code;
 
-  /** 奖励类型 */
-  private LotteryAwardType awardType;
+    /**
+     * 奖励类型
+     */
+    private LotteryAwardType awardType;
 
-  /** 奖项 */
-  private String award;
+    /**
+     * 奖项
+     */
+    private String award;
 
-  /** 奖项金额(分) */
-  private Long awardValue;
+    /**
+     * 奖项金额(分)
+     */
+    private Long awardValue;
 
-  /** 奖项说明 */
-  private String awardNote;
+    /**
+     * 奖项说明
+     */
+    private String awardNote;
 
-  /** 奖项位置 */
-  private String awardPosition;
+    /**
+     * 奖项位置
+     */
+    private String awardPosition;
 
-  /** 备注 */
-  private String comments;
+    /**
+     * 备注
+     */
+    private String comments;
 
-  public Long getId() {
-    return id;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public Long getLotteryId() {
-    return lotteryId;
-  }
+    public Long getLotteryId() {
+        return lotteryId;
+    }
 
-  public void setLotteryId(Long lotteryId) {
-    this.lotteryId = lotteryId;
-  }
+    public void setLotteryId(Long lotteryId) {
+        this.lotteryId = lotteryId;
+    }
 
-  public String getCode() {
-    return code;
-  }
+    public String getCode() {
+        return code;
+    }
 
-  public void setCode(String code) {
-    this.code = code;
-  }
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-  public LotteryAwardType getAwardType() {
-    return awardType;
-  }
+    public LotteryAwardType getAwardType() {
+        return awardType;
+    }
 
-  public void setAwardType(LotteryAwardType awardType) {
-    this.awardType = awardType;
-  }
+    public void setAwardType(LotteryAwardType awardType) {
+        this.awardType = awardType;
+    }
 
-  public String getAward() {
-    return award;
-  }
+    public String getAward() {
+        return award;
+    }
 
-  public void setAward(String award) {
-    this.award = award;
-  }
+    public void setAward(String award) {
+        this.award = award;
+    }
 
-  public Long getAwardValue() {
-    return awardValue;
-  }
+    public Long getAwardValue() {
+        return awardValue;
+    }
 
-  public void setAwardValue(Long awardValue) {
-    this.awardValue = awardValue;
-  }
+    public void setAwardValue(Long awardValue) {
+        this.awardValue = awardValue;
+    }
 
-  public String getAwardNote() {
-    return awardNote;
-  }
+    public String getAwardNote() {
+        return awardNote;
+    }
 
-  public void setAwardNote(String awardNote) {
-    this.awardNote = awardNote;
-  }
+    public void setAwardNote(String awardNote) {
+        this.awardNote = awardNote;
+    }
 
-  public String getAwardPosition() {
-    return awardPosition;
-  }
+    public String getAwardPosition() {
+        return awardPosition;
+    }
 
-  public void setAwardPosition(String awardPosition) {
-    this.awardPosition = awardPosition;
-  }
+    public void setAwardPosition(String awardPosition) {
+        this.awardPosition = awardPosition;
+    }
 
-  public String getComments() {
-    return comments;
-  }
+    public String getComments() {
+        return comments;
+    }
 
-  public void setComments(String comments) {
-    this.comments = comments;
-  }
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
 
-  @Override
-  public String toString() {
-    return ToString.toString(this);
-  }
+    @Override
+    public String toString() {
+        return ToString.toString(this);
+    }
 }

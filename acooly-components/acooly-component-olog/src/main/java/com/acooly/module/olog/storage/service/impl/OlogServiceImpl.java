@@ -12,21 +12,22 @@ import java.util.Date;
 
 @Service
 public class OlogServiceImpl extends EntityServiceImpl<OlogEntity, OlogDao> implements OlogService {
-  @Autowired private OlogArchiveService ologArchiveService;
+    @Autowired
+    private OlogArchiveService ologArchiveService;
 
-  @Transactional
-  @Override
-  public void cleanup(Date beforeDate) {
-    getEntityDao().cleanup(beforeDate);
-  }
+    @Transactional
+    @Override
+    public void cleanup(Date beforeDate) {
+        getEntityDao().cleanup(beforeDate);
+    }
 
-  @Override
-  public void insert(OlogEntity olog) {
-    getEntityDao().save(olog);
-  }
+    @Override
+    public void insert(OlogEntity olog) {
+        getEntityDao().save(olog);
+    }
 
-  @Override
-  public void archive() {
-    ologArchiveService.archive();
-  }
+    @Override
+    public void archive() {
+        ologArchiveService.archive();
+    }
 }

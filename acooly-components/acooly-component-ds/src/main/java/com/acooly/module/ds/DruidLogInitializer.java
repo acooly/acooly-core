@@ -24,26 +24,26 @@ import com.acooly.core.common.boot.log.initializer.AbstractLogInitializer;
  * @author qiubo
  */
 public class DruidLogInitializer extends AbstractLogInitializer {
-  @Override
-  public void init(LogbackConfigurator configurator) {
-    //此组件启用时才添加日志配置
-    if (configurator
-        .getEnvironment()
-        .getProperty(DruidProperties.ENABLE_KEY, Boolean.class, Boolean.TRUE)) {
-      String fileName = "sql-2dt.log";
-      configurator.log("设置数据库访问性能日志，日志文件为:%s", fileName);
-      //创建异步file appender
-      Appender<ILoggingEvent> appender =
-          configurator.asyncFileAppender("DRUID-SQL", "%d{yyyy-MM-dd HH:mm:ss.SSS} %msg%n", fileName, 2);
-      //异步日志不收集栈信息
-      if (appender instanceof LogbackAsyncAppender) {
-        ((LogbackAsyncAppender) appender).setIncludeCallerData(false);
-      }
-      if(Apps.isDevMode()){
-          configurator.logger("com.alibaba.druid.filter.stat.StatFilter", Level.INFO, true, appender);
-      }else{
-          configurator.logger("com.alibaba.druid.filter.stat.StatFilter", Level.INFO, false, appender);
-      }
+    @Override
+    public void init(LogbackConfigurator configurator) {
+        //此组件启用时才添加日志配置
+        if (configurator
+                .getEnvironment()
+                .getProperty(DruidProperties.ENABLE_KEY, Boolean.class, Boolean.TRUE)) {
+            String fileName = "sql-2dt.log";
+            configurator.log("设置数据库访问性能日志，日志文件为:%s", fileName);
+            //创建异步file appender
+            Appender<ILoggingEvent> appender =
+                    configurator.asyncFileAppender("DRUID-SQL", "%d{yyyy-MM-dd HH:mm:ss.SSS} %msg%n", fileName, 2);
+            //异步日志不收集栈信息
+            if (appender instanceof LogbackAsyncAppender) {
+                ((LogbackAsyncAppender) appender).setIncludeCallerData(false);
+            }
+            if (Apps.isDevMode()) {
+                configurator.logger("com.alibaba.druid.filter.stat.StatFilter", Level.INFO, true, appender);
+            } else {
+                configurator.logger("com.alibaba.druid.filter.stat.StatFilter", Level.INFO, false, appender);
+            }
+        }
     }
-  }
 }

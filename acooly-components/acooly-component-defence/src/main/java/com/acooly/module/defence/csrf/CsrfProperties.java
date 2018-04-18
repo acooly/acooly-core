@@ -12,29 +12,35 @@ package com.acooly.module.defence.csrf;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/** @author qiubo */
+/**
+ * @author qiubo
+ */
 @ConfigurationProperties("yiji.csrf")
 public class CsrfProperties {
 
-  /** 是否启用CSRF过滤 */
-  private boolean enable = true;
+    /**
+     * 是否启用CSRF过滤
+     */
+    private boolean enable = true;
 
-  /** 可选：crsf忽略的uri，多个uri用逗号隔开，支持ant路径模式 */
-  private String ignoreUris;
+    /**
+     * 可选：crsf忽略的uri，多个uri用逗号隔开，支持ant路径模式
+     */
+    private String ignoreUris;
 
-  public boolean isEnable() {
-    return enable;
-  }
+    public boolean isEnable() {
+        return enable;
+    }
 
-  public void setEnable(boolean enable) {
-    this.enable = enable;
-  }
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
 
-  public String getIgnoreUris() {
-    return ignoreUris;
-  }
+    public String getIgnoreUris() {
+        return ignoreUris;
+    }
 
-  public void setIgnoreUris(String ignoreUris) {
-    this.ignoreUris = ignoreUris;
-  }
+    public void setIgnoreUris(String ignoreUris) {
+        this.ignoreUris = ignoreUris;
+    }
 }

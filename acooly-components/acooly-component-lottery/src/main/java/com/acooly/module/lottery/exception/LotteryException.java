@@ -1,4 +1,6 @@
-/** create by zhangpu date:2015年11月30日 */
+/**
+ * create by zhangpu date:2015年11月30日
+ */
 package com.acooly.module.lottery.exception;
 
 /**
@@ -9,49 +11,53 @@ package com.acooly.module.lottery.exception;
  */
 public class LotteryException extends RuntimeException {
 
-  /** serialVersionUID */
-  private static final long serialVersionUID = 3350243421569983052L;
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = 3350243421569983052L;
 
-  private String code;
+    private String code;
 
-  private String message;
+    private String message;
 
-  public LotteryException() {
-    super();
-  }
+    public LotteryException() {
+        super();
+    }
 
-  /**
-   * @param message
-   * @param cause
-   */
-  public LotteryException(String code, String message, Throwable cause) {
-    super(message, cause);
-    this.code = code;
-    this.message = message;
-  }
+    /**
+     * @param message
+     * @param cause
+     */
+    public LotteryException(String code, String message, Throwable cause) {
+        super(message, cause);
+        this.code = code;
+        this.message = message;
+    }
 
-  /** @param message */
-  public LotteryException(LotteryErrorCode lotteryErrorCode, Throwable cause) {
-    this(lotteryErrorCode.getCode(), lotteryErrorCode.getMessage(), cause);
-  }
+    /**
+     * @param message
+     */
+    public LotteryException(LotteryErrorCode lotteryErrorCode, Throwable cause) {
+        this(lotteryErrorCode.getCode(), lotteryErrorCode.getMessage(), cause);
+    }
 
-  public LotteryException(LotteryErrorCode lotteryErrorCode) {
-    this(lotteryErrorCode, null);
-  }
+    public LotteryException(LotteryErrorCode lotteryErrorCode) {
+        this(lotteryErrorCode, null);
+    }
 
-  public String getCode() {
-    return code;
-  }
+    public String getCode() {
+        return code;
+    }
 
-  public void setCode(String code) {
-    this.code = code;
-  }
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-  public String getMessage() {
-    return message;
-  }
+    public String getMessage() {
+        return message;
+    }
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

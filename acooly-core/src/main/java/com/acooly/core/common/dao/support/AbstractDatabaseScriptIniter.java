@@ -33,66 +33,72 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @Order(0)
 public abstract class AbstractDatabaseScriptIniter
-    implements ApplicationListener<DataSourceReadyEvent> {
-  private static final Logger logger = LoggerFactory.getLogger(StandardDatabaseScriptIniter.class);
+        implements ApplicationListener<DataSourceReadyEvent> {
+    private static final Logger logger = LoggerFactory.getLogger(StandardDatabaseScriptIniter.class);
 
-  @Override
-  public void onApplicationEvent(DataSourceReadyEvent event) {
-    if (Env.isOnline()
-        || !Apps.getEnvironment()
-            .getProperty("acooly.ds.autoCreateTable", Boolean.class, Boolean.TRUE)) {
-      return;
-    }
-    DataSource dataSource = (DataSource) event.getSource();
-    try {
-      DatabaseType databaseType;
-      databaseType = DatabaseDialectManager.getDatabaseType(dataSource.getConnection());
-      try {
-        String evSql = getEvaluateSql(databaseType);
-        if (Strings.isNullOrEmpty(evSql)) {
-          return;
+    @Override
+    public void onApplicationEvent(DataSourceReadyEvent event) {
+        if (Env.isOnline()
+                || !Apps.getEnvironment()
+                .getProperty("acooly.ds.autoCreateTable", Boolean.class, Boolean.TRUE)) {
+            return;
         }
-        try (Connection connection = dataSource.getConnection()) {
-          ScriptUtils.executeSqlScript(
-              connection, new ByteArrayResource(evSql.getBytes(Charsets.UTF_8)));
+        DataSource dataSource = (DataSource) event.getSource();
+        try {
+            DatabaseType databaseType;
+            databaseType = DatabaseDialectManager.getDatabaseType(dataSource.getConnection());
+            try {
+                String evSql = getEvaluateSql(databaseType);
+                if (Strings.isNullOrEmpty(evSql)) {
+                    return;
+                }
+                try (Connection connection = dataSource.getConnection()) {
+                    ScriptUtils.executeSqlScript(
+                            connection, new ByteArrayResource(evSql.getBytes(Charsets.UTF_8)));
+                }
+            } catch (DataAccessException e) {
+                Throwable throwable = Throwables.getRootCause(e);
+                String msg = throwable.getMessage();
+                if (throwable.getClass().getName().endsWith("MySQLSyntaxErrorException")
+                        && msg.endsWith("doesn't exist")) {
+                    List<String> files = getInitSqlFile(databaseType);
+                    if (Env.isOnline()) {
+                        logger.error("组件相关表不存在，请初始化[{}]", files);
+                        Apps.shutdown();
+                    }
+                    files.forEach(sqlPath -> exeSqlFile(dataSource, sqlPath));
+                }
+            }
+        } catch (SQLException e) {
+            throw new AppConfigException(e);
         }
-      } catch (DataAccessException e) {
-        Throwable throwable = Throwables.getRootCause(e);
-        String msg = throwable.getMessage();
-        if (throwable.getClass().getName().endsWith("MySQLSyntaxErrorException")
-            && msg.endsWith("doesn't exist")) {
-          List<String> files = getInitSqlFile(databaseType);
-          if (Env.isOnline()) {
-            logger.error("组件相关表不存在，请初始化[{}]", files);
-            Apps.shutdown();
-          }
-          files.forEach(sqlPath -> exeSqlFile(dataSource, sqlPath));
+    }
+
+    /**
+     * 判断表是否存在
+     */
+    public abstract String getEvaluateSql(DatabaseType databaseType);
+
+    /**
+     * 数据库初始化脚本
+     */
+    public abstract List<String> getInitSqlFile(DatabaseType databaseType);
+
+    private void exeSqlFile(DataSource dataSource, String sqlpath) {
+        logger.info("发现数据库基础数据还没有初始化，开始初始化:{}", sqlpath);
+        try {
+            Resource scriptResource = ApplicationContextHolder.get().getResource("classpath:" + sqlpath);
+            EncodedResource encodedResource = new EncodedResource(scriptResource, Charsets.UTF_8);
+            try (Connection connection = dataSource.getConnection()) {
+                ScriptUtils.executeSqlScript(connection, encodedResource);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-      }
-    } catch (SQLException e) {
-      throw new AppConfigException(e);
     }
-  }
-
-  /** 判断表是否存在 */
-  public abstract String getEvaluateSql(DatabaseType databaseType);
-
-  /** 数据库初始化脚本 */
-  public abstract List<String> getInitSqlFile(DatabaseType databaseType);
-
-  private void exeSqlFile(DataSource dataSource, String sqlpath) {
-    logger.info("发现数据库基础数据还没有初始化，开始初始化:{}", sqlpath);
-    try {
-      Resource scriptResource = ApplicationContextHolder.get().getResource("classpath:" + sqlpath);
-      EncodedResource encodedResource = new EncodedResource(scriptResource, Charsets.UTF_8);
-      try (Connection connection = dataSource.getConnection()) {
-        ScriptUtils.executeSqlScript(connection, encodedResource);
-      }
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
-  }
 }

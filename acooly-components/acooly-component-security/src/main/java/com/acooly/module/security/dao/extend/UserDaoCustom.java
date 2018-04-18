@@ -9,8 +9,8 @@ import java.util.Map;
 
 public interface UserDaoCustom {
 
-  PageInfo<UserDto> queryDto(
-      PageInfo<UserDto> pageInfo, Map<String, Object> map, Map<String, Boolean> orderMap);
+    PageInfo<UserDto> queryDto(
+            PageInfo<UserDto> pageInfo, Map<String, Object> map, Map<String, Boolean> orderMap);
 
-  List<UserRole> getRoleIdsByUserId(Long userId);
+    List<UserRole> getRoleIdsByUserId(Long userId);
 }

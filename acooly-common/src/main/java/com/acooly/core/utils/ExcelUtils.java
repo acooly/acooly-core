@@ -15,130 +15,130 @@ import java.util.List;
  */
 public class ExcelUtils {
 
-  public static void write(
-      String[] headerNames, String[] propertyNames, List<Object> dtos, OutputStream stream) {
-    WritableWorkbook workbook = null;
-    try {
-      workbook = Workbook.createWorkbook(stream);
-      WritableSheet sheet = workbook.createSheet("Sheet1", 0);
-      int row = 0;
-      // 写入header
-      Label label = null;
-      for (int i = 0; i < headerNames.length; i++) {
-        label = new Label(i, row, headerNames[i]);
-        sheet.addCell(label);
-      }
-      // 写入数据
-      row++;
-      CellValue cell = null;
-      for (Object instance : dtos) {
-        for (int i = 0; i < propertyNames.length; i++) {
-          Object cellObject = Reflections.invokeGetter(instance, propertyNames[i]);
-
-          if (cellObject == null) {
-            cell = new Blank(i, row);
-          } else {
-            if (cellObject.getClass().isAssignableFrom(Date.class)) {
-              cell = new DateTime(i, row, (Date) cellObject);
-            } else if (cellObject.getClass().isAssignableFrom(Double.class)) {
-              cell = new jxl.write.Number(i, row, (Double) cellObject);
-            } else if (cellObject.getClass().isAssignableFrom(Float.class)) {
-              cell = new jxl.write.Number(i, row, (Float) cellObject);
-            } else if (cellObject.getClass().isAssignableFrom(Long.class)) {
-              cell = new jxl.write.Number(i, row, (Long) cellObject);
-            } else if (cellObject.getClass().isAssignableFrom(Integer.class)) {
-              cell = new jxl.write.Number(i, row, (Integer) cellObject);
-            } else {
-              cell = new Label(i, row, cellObject.toString());
+    public static void write(
+            String[] headerNames, String[] propertyNames, List<Object> dtos, OutputStream stream) {
+        WritableWorkbook workbook = null;
+        try {
+            workbook = Workbook.createWorkbook(stream);
+            WritableSheet sheet = workbook.createSheet("Sheet1", 0);
+            int row = 0;
+            // 写入header
+            Label label = null;
+            for (int i = 0; i < headerNames.length; i++) {
+                label = new Label(i, row, headerNames[i]);
+                sheet.addCell(label);
             }
-          }
-          sheet.addCell(cell);
+            // 写入数据
+            row++;
+            CellValue cell = null;
+            for (Object instance : dtos) {
+                for (int i = 0; i < propertyNames.length; i++) {
+                    Object cellObject = Reflections.invokeGetter(instance, propertyNames[i]);
+
+                    if (cellObject == null) {
+                        cell = new Blank(i, row);
+                    } else {
+                        if (cellObject.getClass().isAssignableFrom(Date.class)) {
+                            cell = new DateTime(i, row, (Date) cellObject);
+                        } else if (cellObject.getClass().isAssignableFrom(Double.class)) {
+                            cell = new jxl.write.Number(i, row, (Double) cellObject);
+                        } else if (cellObject.getClass().isAssignableFrom(Float.class)) {
+                            cell = new jxl.write.Number(i, row, (Float) cellObject);
+                        } else if (cellObject.getClass().isAssignableFrom(Long.class)) {
+                            cell = new jxl.write.Number(i, row, (Long) cellObject);
+                        } else if (cellObject.getClass().isAssignableFrom(Integer.class)) {
+                            cell = new jxl.write.Number(i, row, (Integer) cellObject);
+                        } else {
+                            cell = new Label(i, row, cellObject.toString());
+                        }
+                    }
+                    sheet.addCell(cell);
+                }
+                row++;
+            }
+            workbook.write();
+        } catch (Exception e) {
+            throw new RuntimeException("Write to Excel with jxl fault.", e);
+        } finally {
+            try {
+                workbook.close();
+            } catch (Exception e2) {
+                // ig
+            }
         }
-        row++;
-      }
-      workbook.write();
-    } catch (Exception e) {
-      throw new RuntimeException("Write to Excel with jxl fault.", e);
-    } finally {
-      try {
-        workbook.close();
-      } catch (Exception e2) {
-        // ig
-      }
-    }
-  }
-
-  static class PojoEntity {
-
-    private Long id;
-    private String name;
-    private int type;
-    private float rate;
-    private double balance;
-    private Date createTime;
-
-    public PojoEntity() {
-      super();
     }
 
-    public PojoEntity(Long id, String name, int type, float rate, double balance, Date createTime) {
-      super();
-      this.id = id;
-      this.name = name;
-      this.type = type;
-      this.rate = rate;
-      this.balance = balance;
-      this.createTime = createTime;
-    }
+    static class PojoEntity {
 
-    public Long getId() {
-      return id;
-    }
+        private Long id;
+        private String name;
+        private int type;
+        private float rate;
+        private double balance;
+        private Date createTime;
 
-    public void setId(Long id) {
-      this.id = id;
-    }
+        public PojoEntity() {
+            super();
+        }
 
-    public String getName() {
-      return name;
-    }
+        public PojoEntity(Long id, String name, int type, float rate, double balance, Date createTime) {
+            super();
+            this.id = id;
+            this.name = name;
+            this.type = type;
+            this.rate = rate;
+            this.balance = balance;
+            this.createTime = createTime;
+        }
 
-    public void setName(String name) {
-      this.name = name;
-    }
+        public Long getId() {
+            return id;
+        }
 
-    public int getType() {
-      return type;
-    }
+        public void setId(Long id) {
+            this.id = id;
+        }
 
-    public void setType(int type) {
-      this.type = type;
-    }
+        public String getName() {
+            return name;
+        }
 
-    public Date getCreateTime() {
-      return createTime;
-    }
+        public void setName(String name) {
+            this.name = name;
+        }
 
-    public void setCreateTime(Date createTime) {
-      this.createTime = createTime;
-    }
+        public int getType() {
+            return type;
+        }
 
-    public float getRate() {
-      return rate;
-    }
+        public void setType(int type) {
+            this.type = type;
+        }
 
-    public void setRate(float rate) {
-      this.rate = rate;
-    }
+        public Date getCreateTime() {
+            return createTime;
+        }
 
-    public double getBalance() {
-      return balance;
-    }
+        public void setCreateTime(Date createTime) {
+            this.createTime = createTime;
+        }
 
-    public void setBalance(double balance) {
-      this.balance = balance;
+        public float getRate() {
+            return rate;
+        }
+
+        public void setRate(float rate) {
+            this.rate = rate;
+        }
+
+        public double getBalance() {
+            return balance;
+        }
+
+        public void setBalance(double balance) {
+            this.balance = balance;
+        }
     }
-  }
 
   /*public static void main(String[] args) throws Exception {
   	List<String> headerNames = new ArrayList<String>();

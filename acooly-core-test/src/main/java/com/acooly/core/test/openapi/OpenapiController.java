@@ -25,79 +25,81 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 @Slf4j
 @RestController
 @RequestMapping(value = "/notify")
 public class OpenapiController implements ApplicationContextAware {
 
-  private ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
 
-  @RequestMapping("sender")
-  @ResponseBody
-  public void send(HttpServletRequest req, HttpServletResponse resp, Model model)
-      throws IOException {
+    @RequestMapping("sender")
+    @ResponseBody
+    public void send(HttpServletRequest req, HttpServletResponse resp, Model model)
+            throws IOException {
 
-    Map<String, String> requestData = Servlets.getParameters(req);
-    log.info("MOCK下层调用OpenApiArchServcie：{}", requestData);
-    String partnerId = req.getParameter(ApiConstants.PARTNER_ID);
-    String gid = req.getParameter(ApiConstants.GID);
-    String type = req.getParameter("type");
-    if (StringUtils.isBlank(type)) {
-      type = "async";
+        Map<String, String> requestData = Servlets.getParameters(req);
+        log.info("MOCK下层调用OpenApiArchServcie：{}", requestData);
+        String partnerId = req.getParameter(ApiConstants.PARTNER_ID);
+        String gid = req.getParameter(ApiConstants.GID);
+        String type = req.getParameter("type");
+        if (StringUtils.isBlank(type)) {
+            type = "async";
+        }
+        requestData.remove(ApiConstants.PARTNER_ID);
+        requestData.remove(ApiConstants.GID);
+
+        Writer w = resp.getWriter();
+        Object result = null;
+        try {
+            w.write("call :" + type);
+            OpenApiRemoteService openApiRemoteService =
+                    applicationContext.getBean(OpenApiRemoteService.class);
+            if (StringUtils.equals(type, "async")) {
+                ApiNotifyOrder order = new ApiNotifyOrder();
+                order.setParameters(requestData);
+                order.setPartnerId(partnerId);
+                order.setGid(gid);
+                openApiRemoteService.asyncNotify(order);
+                w.write("success. result:" + result);
+            } else {
+            }
+            log.info("MOCK调用通知结果:{}", result);
+        } catch (Exception e) {
+            w.write("failure:" + e.getMessage());
+            log.info("MOCK调用通知失败, result:{},error:{}", result, e.getMessage());
+        } finally {
+            IOUtils.closeQuietly(w);
+        }
     }
-    requestData.remove(ApiConstants.PARTNER_ID);
-    requestData.remove(ApiConstants.GID);
 
-    Writer w = resp.getWriter();
-    Object result = null;
-    try {
-      w.write("call :" + type);
-        OpenApiRemoteService openApiRemoteService =
-          applicationContext.getBean(OpenApiRemoteService.class);
-      if (StringUtils.equals(type, "async")) {
-        ApiNotifyOrder order = new ApiNotifyOrder();
-        order.setParameters(requestData);
-        order.setPartnerId(partnerId);
-        order.setGid(gid);
-        openApiRemoteService.asyncNotify(order);
-        w.write("success. result:" + result);
-      } else {
-      }
-      log.info("MOCK调用通知结果:{}", result);
-    } catch (Exception e) {
-      w.write("failure:" + e.getMessage());
-      log.info("MOCK调用通知失败, result:{},error:{}", result, e.getMessage());
-    } finally {
-      IOUtils.closeQuietly(w);
+    @RequestMapping("receiver")
+    @ResponseBody
+    public String receiver(HttpServletRequest req, HttpServletResponse resp, Model model) {
+        String signType = req.getParameter("signType");
+        log.info("success. signType:{}", signType);
+        return "success";
     }
-  }
 
-  @RequestMapping("receiver")
-  @ResponseBody
-  public String receiver(HttpServletRequest req, HttpServletResponse resp, Model model) {
-    String signType = req.getParameter("signType");
-    log.info("success. signType:{}", signType);
-    return "success";
-  }
+    @Test
+    public void testPayApiNotify() throws Exception {
+        Map<String, String> postData = Maps.newHashMap();
+        postData.put("gid", "59365e393d01ea1284f5b5bf");
+        postData.put("partnerId", "test");
+        postData.put("orderNo", "411111111111111111131");
 
-  @Test
-  public void testPayApiNotify() throws Exception {
-    Map<String, String> postData = Maps.newHashMap();
-    postData.put("gid", "59365e393d01ea1284f5b5bf");
-    postData.put("partnerId", "test");
-    postData.put("orderNo", "411111111111111111131");
+        postData.put("outOrderNo", "41111111111111111113");
+        postData.put("tradeNo", "123456789");
+        postData.put("amount", "111111");
+        HttpResult result =
+                Https.getInstance().post("http://localhost:8081/notify/sender", postData, "utf-8");
+        log.info(result.toString());
+    }
 
-    postData.put("outOrderNo", "41111111111111111113");
-    postData.put("tradeNo", "123456789");
-    postData.put("amount", "111111");
-    HttpResult result =
-        Https.getInstance().post("http://localhost:8081/notify/sender", postData, "utf-8");
-    log.info(result.toString());
-  }
-
-  @Override
-  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-    this.applicationContext = applicationContext;
-  }
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 }

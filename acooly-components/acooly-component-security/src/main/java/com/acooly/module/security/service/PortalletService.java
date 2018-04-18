@@ -14,5 +14,5 @@ import java.util.List;
  */
 public interface PortalletService extends EntityService<Portallet> {
 
-  List<Portallet> queryByUserName(String userName);
+    List<Portallet> queryByUserName(String userName);
 }

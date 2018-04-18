@@ -16,29 +16,31 @@ import org.junit.Test;
 
 import java.util.UUID;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 public class PayOrderApiServiceTest extends AbstractApiServieTests {
-  {
-    gatewayUrl = "http://localhost:8081/gateway.html";
-    partnerId = "test";
-    key = "06f7aab08aa2431e6dae6a156fc9e0b4";
-    notifyUrl = "http://127.0.0.1:8081/notify/receiver";
-    version = null;
-    signType = null;
-  }
+    {
+        gatewayUrl = "http://localhost:8081/gateway.html";
+        partnerId = "test";
+        key = "06f7aab08aa2431e6dae6a156fc9e0b4";
+        notifyUrl = "http://127.0.0.1:8081/notify/receiver";
+        version = null;
+        signType = null;
+    }
 
-  @Test
-  public void testPayOrder() throws Exception {
-    service = "payOrder";
-    Money amount = Money.amout("1000.00");
-    PayOrderRequest request = new PayOrderRequest();
-    request.setRequestNo(UUID.randomUUID().toString());
-    request.setMerchOrderNo("1234567890=-09876543");
-    request.setAmount(amount);
-    request.setPayerUserId("09876543211234567890");
-    request.setSignType(SignTypeEnum.MD5.toString());
-    request.setContext("这是客户端参数:{userName:1,\"password\":\"12121\"}");
-    request.setNotifyUrl(notifyUrl);
-    request(request, PayOrderResponse.class);
-  }
+    @Test
+    public void testPayOrder() throws Exception {
+        service = "payOrder";
+        Money amount = Money.amout("1000.00");
+        PayOrderRequest request = new PayOrderRequest();
+        request.setRequestNo(UUID.randomUUID().toString());
+        request.setMerchOrderNo("1234567890=-09876543");
+        request.setAmount(amount);
+        request.setPayerUserId("09876543211234567890");
+        request.setSignType(SignTypeEnum.MD5.toString());
+        request.setContext("这是客户端参数:{userName:1,\"password\":\"12121\"}");
+        request.setNotifyUrl(notifyUrl);
+        request(request, PayOrderResponse.class);
+    }
 }

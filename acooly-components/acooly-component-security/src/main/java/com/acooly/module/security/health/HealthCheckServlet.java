@@ -7,13 +7,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 public class HealthCheckServlet extends HttpServlet {
 
-  protected void doGet(
-      HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
-      throws ServletException, IOException {
-    new Date();
-    httpServletResponse.getWriter().write("ok");
-  }
+    protected void doGet(
+            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
+            throws ServletException, IOException {
+        new Date();
+        httpServletResponse.getWriter().write("ok");
+    }
 }

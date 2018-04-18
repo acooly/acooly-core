@@ -1,9 +1,7 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.acooly.module.web.WebAutoConfig
-
 com.acooly.core.common.boot.component.ComponentInitializer=\
 com.acooly.module.web.WebComponentInitializer
-
 com.acooly.core.common.boot.log.initializer.LogInitializer=\
 com.acooly.module.web.WebLogInitializer,\
 com.acooly.core.common.boot.log.initializer.DataCollectorLogInitializer

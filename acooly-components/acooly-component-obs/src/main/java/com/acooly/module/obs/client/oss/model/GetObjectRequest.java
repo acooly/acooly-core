@@ -1,4 +1,5 @@
 package com.acooly.module.obs.client.oss.model;
+
 import com.acooly.module.obs.client.oss.ResponseHeaderOverrides;
 
 import java.net.URL;
@@ -11,17 +12,17 @@ import java.util.Map;
  * 指定从OSS下载Object的请求参数。
  */
 public class GetObjectRequest extends GenericRequest {
-   
+
     private List<String> matchingETagConstraints = new ArrayList<String>();
     private List<String> nonmatchingEtagConstraints = new ArrayList<String>();
     private Date unmodifiedSinceConstraint;
     private Date modifiedSinceConstraint;
     private String process;
 
-	private long[] range;
+    private long[] range;
 
     private ResponseHeaderOverrides responseHeaders;
-    
+
     /**
      * Fields releated with getobject operation by using url signature.
      */
@@ -30,17 +31,17 @@ public class GetObjectRequest extends GenericRequest {
 
     /**
      * 构造函数。
-     * @param bucketName
-     *          Bucket名称。
-     * @param key
-     *          Object Key。
+     *
+     * @param bucketName Bucket名称。
+     * @param key        Object Key。
      */
     public GetObjectRequest(String bucketName, String key) {
         super(bucketName, key);
     }
-    
+
     /**
      * 使用URL签名及用户自定义头作为参数的构造函数。
+     *
      * @param requestHeaders 请求头。
      */
     public GetObjectRequest(URL absoluteUrl, Map<String, String> requestHeaders) {
@@ -51,9 +52,10 @@ public class GetObjectRequest extends GenericRequest {
             this.getHeaders().putAll(requestHeaders);
         }
     }
-    
+
     /**
      * 返回一个值表示请求应当返回Object内容的字节范围。
+     *
      * @return 一个值表示请求应当返回Object内容的字节范围。
      */
     public long[] getRange() {
@@ -62,39 +64,37 @@ public class GetObjectRequest extends GenericRequest {
 
     /**
      * 设置一个值表示请求应当返回Object内容的字节范围（可选）。
-     * @param start
-     *          <p>范围的起始值。</p>
-     *          <p>当值大于或等于0时，表示起始的字节位置。
-     *          当值为-1时，表示不设置起始的字节位置，此时end参数不能-1，
-     *          例如end为100，Range请求头的值为bytes=-100，表示获取最后100个字节。
-     *          </p>
-     * @param end
-     *          <p>范围的结束值。</p>
-     *          <p>当值小于或等于0时，表示结束的字节位或最后的字节数。
-     *          当值为-1时，表示不设置结束的字节位置，此时start参数不能为-1，
-     *          例如start为99，Range请求头的值为bytes=99-，表示获取第100个字节及
-     *          以后的所有内容。
-     *          </p>
+     *
+     * @param start <p>范围的起始值。</p>
+     *              <p>当值大于或等于0时，表示起始的字节位置。
+     *              当值为-1时，表示不设置起始的字节位置，此时end参数不能-1，
+     *              例如end为100，Range请求头的值为bytes=-100，表示获取最后100个字节。
+     *              </p>
+     * @param end   <p>范围的结束值。</p>
+     *              <p>当值小于或等于0时，表示结束的字节位或最后的字节数。
+     *              当值为-1时，表示不设置结束的字节位置，此时start参数不能为-1，
+     *              例如start为99，Range请求头的值为bytes=99-，表示获取第100个字节及
+     *              以后的所有内容。
+     *              </p>
      */
     public void setRange(long start, long end) {
-        range = new long[] {start, end};
+        range = new long[]{start, end};
     }
-    
+
     /**
      * 设置一个值表示请求应当返回Object内容的字节范围（可选）。
-     * @param start
-     *          <p>范围的起始值。</p>
-     *          <p>当值大于或等于0时，表示起始的字节位置。
-     *          当值为-1时，表示不设置起始的字节位置，此时end参数不能-1，
-     *          例如end为100，Range请求头的值为bytes=-100，表示获取最后100个字节。
-     *          </p>
-     * @param end
-     *          <p>范围的结束值。</p>
-     *          <p>当值小于或等于0时，表示结束的字节位或最后的字节数。
-     *          当值为-1时，表示不设置结束的字节位置，此时start参数不能为-1，
-     *          例如start为99，Range请求头的值为bytes=99-，表示获取第100个字节及
-     *          以后的所有内容。
-     *          </p>
+     *
+     * @param start <p>范围的起始值。</p>
+     *              <p>当值大于或等于0时，表示起始的字节位置。
+     *              当值为-1时，表示不设置起始的字节位置，此时end参数不能-1，
+     *              例如end为100，Range请求头的值为bytes=-100，表示获取最后100个字节。
+     *              </p>
+     * @param end   <p>范围的结束值。</p>
+     *              <p>当值小于或等于0时，表示结束的字节位或最后的字节数。
+     *              当值为-1时，表示不设置结束的字节位置，此时start参数不能为-1，
+     *              例如start为99，Range请求头的值为bytes=99-，表示获取第100个字节及
+     *              以后的所有内容。
+     *              </p>
      */
     public GetObjectRequest withRange(long start, long end) {
         setRange(start, end);
@@ -104,6 +104,7 @@ public class GetObjectRequest extends GenericRequest {
     /**
      * 返回“If-Match”参数，表示：如果传入期望的 ETag 和 object 的 ETag 匹配，正常的发送文件。
      * 如果不符合，返回错误。
+     *
      * @return 表示期望object的ETag与之匹配的ETag列表。
      */
     public List<String> getMatchingETagConstraints() {
@@ -114,9 +115,9 @@ public class GetObjectRequest extends GenericRequest {
      * 返回“If-Match”参数（可选）。
      * 表示如果传入期望的 ETag 和 Object 的 ETag 匹配，则正常的发送文件。
      * 如果不符合，则返回错误。
-     * @param eTagList
-     *          表示期望object的ETag与之匹配的ETag列表。
-     *          目前OSS支持传入一个ETag，如果传入多于一个ETag，将只有列表中的第一个有效。
+     *
+     * @param eTagList 表示期望object的ETag与之匹配的ETag列表。
+     *                 目前OSS支持传入一个ETag，如果传入多于一个ETag，将只有列表中的第一个有效。
      */
     public void setMatchingETagConstraints(List<String> eTagList) {
         this.matchingETagConstraints.clear();
@@ -124,14 +125,15 @@ public class GetObjectRequest extends GenericRequest {
             this.matchingETagConstraints.addAll(eTagList);
         }
     }
-    
+
     public void clearMatchingETagConstraints() {
         this.matchingETagConstraints.clear();
     }
 
     /**
      * 返回“If-None-Match”参数，可以用来检查文件是否有更新。
-     * 如果传入的 ETag值和Object的ETag 相同，返回错误；否则正常传输文件。 
+     * 如果传入的 ETag值和Object的ETag 相同，返回错误；否则正常传输文件。
+     *
      * @return 表示期望Object的ETag与之不匹配的ETag列表。
      */
     public List<String> getNonmatchingETagConstraints() {
@@ -140,10 +142,10 @@ public class GetObjectRequest extends GenericRequest {
 
     /**
      * 返回“If-None-Match”参数，可以用来检查文件是否有更新（可选）。
-     * 如果传入的 ETag值和Object的ETag 相同，返回错误；否则正常传输文件。 
-     * @param eTagList
-     *          表示期望Object的ETag与之不匹配的ETag列表。
-     *          目前OSS支持传入一个ETag，如果传入多于一个ETag，将只有列表中的第一个有效。
+     * 如果传入的 ETag值和Object的ETag 相同，返回错误；否则正常传输文件。
+     *
+     * @param eTagList 表示期望Object的ETag与之不匹配的ETag列表。
+     *                 目前OSS支持传入一个ETag，如果传入多于一个ETag，将只有列表中的第一个有效。
      */
     public void setNonmatchingETagConstraints(List<String> eTagList) {
         this.nonmatchingEtagConstraints.clear();
@@ -151,7 +153,7 @@ public class GetObjectRequest extends GenericRequest {
             this.nonmatchingEtagConstraints.addAll(eTagList);
         }
     }
-    
+
     public void clearNonmatchingETagConstraints() {
         this.nonmatchingEtagConstraints.clear();
     }
@@ -159,7 +161,8 @@ public class GetObjectRequest extends GenericRequest {
     /**
      * 返回“If-Unmodified-Since”参数。
      * 表示：如果传入参数中的时间等于或者晚于文件实际修改时间，则传送文件；
-     * 如果早于实际修改时间，则返回错误。 
+     * 如果早于实际修改时间，则返回错误。
+     *
      * @return “If-Unmodified-Since”参数。
      */
     public Date getUnmodifiedSinceConstraint() {
@@ -169,9 +172,9 @@ public class GetObjectRequest extends GenericRequest {
     /**
      * 设置“If-Unmodified-Since”参数（可选）。
      * 表示：如果传入参数中的时间等于或者晚于文件实际修改时间，则传送文件；
-     * 如果早于实际修改时间，则返回错误。 
-     * @param date
-     *          “If-Unmodified-Since”参数。
+     * 如果早于实际修改时间，则返回错误。
+     *
+     * @param date “If-Unmodified-Since”参数。
      */
     public void setUnmodifiedSinceConstraint(Date date) {
         this.unmodifiedSinceConstraint = date;
@@ -181,6 +184,7 @@ public class GetObjectRequest extends GenericRequest {
      * 返回“If-Modified-Since”参数。
      * 表示：如果指定的时间早于实际修改时间，则正常传送文件，并返回 200 OK；
      * 如果参数中的时间和实际修改时间一样或者更晚，会返回错误。
+     *
      * @return “If-Modified-Since”参数。
      */
     public Date getModifiedSinceConstraint() {
@@ -191,8 +195,8 @@ public class GetObjectRequest extends GenericRequest {
      * 设置“If-Modified-Since”参数（可选）。
      * 表示：如果指定的时间早于实际修改时间，则正常传送文件，并返回 200 OK；
      * 如果参数中的时间和实际修改时间一样或者更晚，会返回错误。
-     * @param date
-     *          “If-Modified-Since”参数。
+     *
+     * @param date “If-Modified-Since”参数。
      */
     public void setModifiedSinceConstraint(Date date) {
         this.modifiedSinceConstraint = date;
@@ -200,6 +204,7 @@ public class GetObjectRequest extends GenericRequest {
 
     /**
      * 返回要重载的返回请求头。
+     *
      * @return 要重载的返回请求头。
      */
     public ResponseHeaderOverrides getResponseHeaders() {
@@ -208,8 +213,8 @@ public class GetObjectRequest extends GenericRequest {
 
     /**
      * 设置要重载的返回请求头（可选）。
-     * @param responseHeaders
-     *          要重载的返回请求头。
+     *
+     * @param responseHeaders 要重载的返回请求头。
      */
     public void setResponseHeaders(ResponseHeaderOverrides responseHeaders) {
         this.responseHeaders = responseHeaders;
@@ -230,13 +235,13 @@ public class GetObjectRequest extends GenericRequest {
     public void setUseUrlSignature(boolean useUrlSignature) {
         this.useUrlSignature = useUrlSignature;
     }
-    
-    public String getProcess() {
-		return process;
-	}
 
-	public void setProcess(String process) {
-		this.process = process;
-	}
-	
+    public String getProcess() {
+        return process;
+    }
+
+    public void setProcess(String process) {
+        this.process = process;
+    }
+
 }

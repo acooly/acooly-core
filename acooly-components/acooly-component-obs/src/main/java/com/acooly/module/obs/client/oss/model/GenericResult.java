@@ -12,9 +12,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public abstract class GenericResult {
-   
+
+    ResponseMessage response = new ResponseMessage();
     private String requestId;
     private Long clientCRC;
     private Long serverCRC;
-    ResponseMessage response=new ResponseMessage();
 }

@@ -10,19 +10,19 @@ import java.util.List;
  */
 public class IntArrayTypeConverter extends ArrayTypeConverterSupport<int[]> {
 
-  public IntArrayTypeConverter(TypeConverterManager typeConverterManager) {
-    super(typeConverterManager);
-  }
+    public IntArrayTypeConverter(TypeConverterManager typeConverterManager) {
+        super(typeConverterManager);
+    }
 
-  public Class<int[]> getTargetType() {
-    return int[].class;
-  }
+    public Class<int[]> getTargetType() {
+        return int[].class;
+    }
 
-  public List<Class<?>> getSupportedSourceTypes() {
-    List<Class<?>> classes = super.getSupportedSourceTypes();
-    classes.add(Object[].class);
-    classes.add(Collection.class);
-    classes.add(CharSequence[].class);
-    return classes;
-  }
+    public List<Class<?>> getSupportedSourceTypes() {
+        List<Class<?>> classes = super.getSupportedSourceTypes();
+        classes.add(Object[].class);
+        classes.add(Collection.class);
+        classes.add(CharSequence[].class);
+        return classes;
+    }
 }

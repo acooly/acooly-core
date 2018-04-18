@@ -31,39 +31,41 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/manage/module/cms/cmsCode")
 public class CmsCodeManagerController
-    extends AbstractJQueryEntityController<CmsCode, CmsCodeService> {
+        extends AbstractJQueryEntityController<CmsCode, CmsCodeService> {
 
-  @Autowired private CmsCodeService cmsCodeService;
-  @Autowired private ContentService contentService;
+    @Autowired
+    private CmsCodeService cmsCodeService;
+    @Autowired
+    private ContentService contentService;
 
-  {
-    allowMapping = "*";
-  }
-
-  @Override
-  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-    model.put("allStatuss", ContentManagerController.allStatuss);
-  }
-
-  @Override
-  public JsonResult deleteJson(HttpServletRequest request, HttpServletResponse response) {
-    CmsCode cmsCode = getCmsCode(request);
-    String keyCode = null;
-    if (cmsCode != null) {
-      keyCode = cmsCode.getKeycode();
+    {
+        allowMapping = "*";
     }
-    Content content = contentService.getByKeycode(keyCode);
-    if (content != null) {
-      log.error("任务编码有其他新闻在使用，不能删除：code{}", keyCode);
-      JsonEntityResult<CmsCode> result = new JsonEntityResult<>();
-      result.setSuccess(false);
-      result.setMessage("任务编码有其他新闻在使用，不能删除!");
-      return result;
-    }
-    return super.deleteJson(request, response);
-  }
 
-  private CmsCode getCmsCode(HttpServletRequest request) {
-    return getEntityService().get(Long.valueOf(request.getParameter("id")));
-  }
+    @Override
+    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+        model.put("allStatuss", ContentManagerController.allStatuss);
+    }
+
+    @Override
+    public JsonResult deleteJson(HttpServletRequest request, HttpServletResponse response) {
+        CmsCode cmsCode = getCmsCode(request);
+        String keyCode = null;
+        if (cmsCode != null) {
+            keyCode = cmsCode.getKeycode();
+        }
+        Content content = contentService.getByKeycode(keyCode);
+        if (content != null) {
+            log.error("任务编码有其他新闻在使用，不能删除：code{}", keyCode);
+            JsonEntityResult<CmsCode> result = new JsonEntityResult<>();
+            result.setSuccess(false);
+            result.setMessage("任务编码有其他新闻在使用，不能删除!");
+            return result;
+        }
+        return super.deleteJson(request, response);
+    }
+
+    private CmsCode getCmsCode(HttpServletRequest request) {
+        return getEntityService().get(Long.valueOf(request.getParameter("id")));
+    }
 }

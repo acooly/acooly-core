@@ -19,5 +19,5 @@ import com.acooly.module.portlet.entity.ActionMapping;
  */
 public interface ActionMappingService extends EntityService<ActionMapping> {
 
-  ActionMapping getActionMapping(String url);
+    ActionMapping getActionMapping(String url);
 }

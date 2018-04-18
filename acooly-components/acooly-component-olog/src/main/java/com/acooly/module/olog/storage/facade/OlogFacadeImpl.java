@@ -12,30 +12,33 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @Component
 public class OlogFacadeImpl implements OlogFacade {
-  @Autowired private OlogService ologService;
+    @Autowired
+    private OlogService ologService;
 
-  @Override
-  public OlogResult logger(OlogOrder order) {
-    OlogResult result = new OlogResult();
-    try {
-      order.check();
-      List<OlogEntity> entityList = Lists.newArrayListWithCapacity(order.getList().size());
-      order
-          .getList()
-          .forEach(
-              ologDTO -> {
-                OlogEntity ologEntity = new OlogEntity();
-                ologEntity.from(ologDTO);
-                entityList.add(ologEntity);
-              });
-      ologService.saves(entityList);
-    } catch (Exception e) {
-      result.setStatus(ResultStatus.failure);
-      result.setDetail(e.getMessage());
+    @Override
+    public OlogResult logger(OlogOrder order) {
+        OlogResult result = new OlogResult();
+        try {
+            order.check();
+            List<OlogEntity> entityList = Lists.newArrayListWithCapacity(order.getList().size());
+            order
+                    .getList()
+                    .forEach(
+                            ologDTO -> {
+                                OlogEntity ologEntity = new OlogEntity();
+                                ologEntity.from(ologDTO);
+                                entityList.add(ologEntity);
+                            });
+            ologService.saves(entityList);
+        } catch (Exception e) {
+            result.setStatus(ResultStatus.failure);
+            result.setDetail(e.getMessage());
+        }
+        return result;
     }
-    return result;
-  }
 }

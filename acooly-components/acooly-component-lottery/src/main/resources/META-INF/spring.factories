@@ -1,5 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.acooly.module.lottery.LotteryAutoConfig
-
 com.acooly.core.common.boot.component.ComponentInitializer=\
 com.acooly.module.lottery.LotteryComponentInitializer

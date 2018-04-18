@@ -13,6 +13,14 @@ import java.util.Map;
 public class IdCards {
 
     private static final Map<String, String> birthplaces = new HashMap<String, String>();
+    /**
+     * 身份证号码前17位各位校验计算值
+     */
+    private static int[] IDCARD_CHECK_CALC_VALS = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};
+    /**
+     * 身份证号码校验位码表
+     */
+    private static char[] IDCARD_VERIFY_CODES = new char[]{'1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'};
 
     static {
         birthplaces.put("140202", "山西省大同市城区");
@@ -3568,16 +3576,6 @@ public class IdCards {
         birthplaces.put("510282", "重庆市江津市");
         birthplaces.put("510283", "重庆市合川市");
     }
-
-    /**
-     * 身份证号码前17位各位校验计算值
-     */
-    private static int[] IDCARD_CHECK_CALC_VALS = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};
-    /**
-     * 身份证号码校验位码表
-     */
-    private static char[] IDCARD_VERIFY_CODES = new char[]{'1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'};
-
 
     /**
      * 升级

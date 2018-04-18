@@ -41,90 +41,93 @@ import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** @author qiubo */
+/**
+ * @author qiubo
+ */
 @Configuration
 @ConditionalOnProperty(value = JPAProperties.ENABLE_KEY, matchIfMissing = true)
 @Import(JPAAutoConfig.JpaRegistrar.class)
 @AutoConfigureAfter(HibernateJpaAutoConfiguration.class)
 @EnableConfigurationProperties({JPAProperties.class})
 @EnableJpaRepositories(
-  repositoryBaseClass = AbstractEntityJpaDao.class,
-  basePackages = "com.acooly.module.**.dao"
+        repositoryBaseClass = AbstractEntityJpaDao.class,
+        basePackages = "com.acooly.module.**.dao"
 )
 public class JPAAutoConfig {
 
-  @Bean
-  @ConditionalOnProperty(
-    value = "acooly.jpa.openEntityManagerInViewFilterEnable",
-    matchIfMissing = true
-  )
-  @ConditionalOnWebApplication
-  public FilterRegistrationBean openEntityManagerInViewFilter() {
-    OpenEntityManagerInViewFilter filter = new OpenEntityManagerInViewFilter();
-
-    FilterRegistrationBean registration = new FilterRegistrationBean();
-    registration.setFilter(filter);
-    registration.addUrlPatterns(
-        Lists.newArrayList("*.html", "*.jsp", "/services/*").toArray(new String[0]));
-    registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
-    registration.setName("openSessionInViewFilter");
-    registration.setOrder(Ordered.LOWEST_PRECEDENCE - 100);
-
-    return registration;
-  }
-
-  @Bean
-  public JpaVendorAdapter jpaVendorAdapter(JpaProperties properties, DataSource dataSource) {
-    AbstractJpaVendorAdapter adapter = new ExHibernateJpaVendorAdapter();
-    adapter.setShowSql(properties.isShowSql());
-    adapter.setDatabase(properties.determineDatabase(dataSource));
-    adapter.setDatabasePlatform(properties.getDatabasePlatform());
-    adapter.setGenerateDdl(properties.isGenerateDdl());
-    return adapter;
-  }
-
-  @Bean
-  public SessionFactory sessionFactory(EntityManagerFactory factory) {
-    return factory.unwrap(SessionFactory.class);
-  }
-
-  @Bean
-  public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-      EntityManagerFactoryBuilder factoryBuilder,
-      DataSource dataSource,
-      JpaProperties properties,
-      JPAProperties jpaProperties) {
-    Map<String, Object> vendorProperties = new LinkedHashMap<String, Object>();
-    vendorProperties.putAll(properties.getHibernateProperties(dataSource));
-    return factoryBuilder
-        .dataSource(dataSource)
-        .packages(jpaProperties.getEntityPackagesToScan().values().toArray(new String[0]))
-        .properties(vendorProperties)
-        .jta(false)
-        .build();
-  }
-
-  static class JpaRegistrar extends AbstractRepositoryConfigurationSourceSupport {
-
-    @Override
-    protected Class<? extends Annotation> getAnnotation() {
-      return EnableJpaRepositories.class;
-    }
-
-    @Override
-    protected Class<?> getConfiguration() {
-      return EnableJpaRepositoriesConfiguration.class;
-    }
-
-    @Override
-    protected RepositoryConfigurationExtension getRepositoryConfigurationExtension() {
-      return new JpaRepositoryConfigExtension();
-    }
-
-    @EnableJpaRepositories(
-      repositoryBaseClass = AbstractEntityJpaDao.class,
-      basePackages = "com.acooly.module.**.dao"
+    @Bean
+    @ConditionalOnProperty(
+            value = "acooly.jpa.openEntityManagerInViewFilterEnable",
+            matchIfMissing = true
     )
-    private class EnableJpaRepositoriesConfiguration {}
-  }
+    @ConditionalOnWebApplication
+    public FilterRegistrationBean openEntityManagerInViewFilter() {
+        OpenEntityManagerInViewFilter filter = new OpenEntityManagerInViewFilter();
+
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(filter);
+        registration.addUrlPatterns(
+                Lists.newArrayList("*.html", "*.jsp", "/services/*").toArray(new String[0]));
+        registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
+        registration.setName("openSessionInViewFilter");
+        registration.setOrder(Ordered.LOWEST_PRECEDENCE - 100);
+
+        return registration;
+    }
+
+    @Bean
+    public JpaVendorAdapter jpaVendorAdapter(JpaProperties properties, DataSource dataSource) {
+        AbstractJpaVendorAdapter adapter = new ExHibernateJpaVendorAdapter();
+        adapter.setShowSql(properties.isShowSql());
+        adapter.setDatabase(properties.determineDatabase(dataSource));
+        adapter.setDatabasePlatform(properties.getDatabasePlatform());
+        adapter.setGenerateDdl(properties.isGenerateDdl());
+        return adapter;
+    }
+
+    @Bean
+    public SessionFactory sessionFactory(EntityManagerFactory factory) {
+        return factory.unwrap(SessionFactory.class);
+    }
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+            EntityManagerFactoryBuilder factoryBuilder,
+            DataSource dataSource,
+            JpaProperties properties,
+            JPAProperties jpaProperties) {
+        Map<String, Object> vendorProperties = new LinkedHashMap<String, Object>();
+        vendorProperties.putAll(properties.getHibernateProperties(dataSource));
+        return factoryBuilder
+                .dataSource(dataSource)
+                .packages(jpaProperties.getEntityPackagesToScan().values().toArray(new String[0]))
+                .properties(vendorProperties)
+                .jta(false)
+                .build();
+    }
+
+    static class JpaRegistrar extends AbstractRepositoryConfigurationSourceSupport {
+
+        @Override
+        protected Class<? extends Annotation> getAnnotation() {
+            return EnableJpaRepositories.class;
+        }
+
+        @Override
+        protected Class<?> getConfiguration() {
+            return EnableJpaRepositoriesConfiguration.class;
+        }
+
+        @Override
+        protected RepositoryConfigurationExtension getRepositoryConfigurationExtension() {
+            return new JpaRepositoryConfigExtension();
+        }
+
+        @EnableJpaRepositories(
+                repositoryBaseClass = AbstractEntityJpaDao.class,
+                basePackages = "com.acooly.module.**.dao"
+        )
+        private class EnableJpaRepositoriesConfiguration {
+        }
+    }
 }

@@ -8,7 +8,6 @@
 package com.acooly.module.store.service;
 
 import com.acooly.core.common.service.EntityService;
-import com.acooly.module.store.entity.Category;
 import com.acooly.module.store.entity.Goods;
 
 import java.util.List;

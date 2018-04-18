@@ -13,5 +13,5 @@ import java.util.List;
  * @author Acooly Code Generator
  */
 public interface AppStartGuideService extends EntityService<AppStartGuide> {
-  List<AppStartGuide> loadValidGuides();
+    List<AppStartGuide> loadValidGuides();
 }

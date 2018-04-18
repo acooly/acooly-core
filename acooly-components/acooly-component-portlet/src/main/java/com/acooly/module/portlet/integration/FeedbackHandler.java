@@ -20,10 +20,10 @@ import com.acooly.module.portlet.entity.Feedback;
  */
 public interface FeedbackHandler {
 
-  /**
-   * 处理接口，如果抛出异常，则表示该项的处理失败。
-   *
-   * @param feedback
-   */
-  void handle(Feedback feedback);
+    /**
+     * 处理接口，如果抛出异常，则表示该项的处理失败。
+     *
+     * @param feedback
+     */
+    void handle(Feedback feedback);
 }

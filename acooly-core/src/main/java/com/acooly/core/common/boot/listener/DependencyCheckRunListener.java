@@ -19,41 +19,46 @@ import org.springframework.util.ClassUtils;
 
 import java.util.List;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 public class DependencyCheckRunListener implements SpringApplicationRunListener {
-  private SpringApplication application;
-  private String[] args;
+    private SpringApplication application;
+    private String[] args;
 
-  public DependencyCheckRunListener(SpringApplication application, String[] args) {
-    this.application = application;
-    this.args = args;
-  }
+    public DependencyCheckRunListener(SpringApplication application, String[] args) {
+        this.application = application;
+        this.args = args;
+    }
 
-  @Override
-  public void starting() {
-    // Do nothing
-  }
+    @Override
+    public void starting() {
+        // Do nothing
+    }
 
-  @Override
-  public void environmentPrepared(ConfigurableEnvironment configurableEnvironment) {}
+    @Override
+    public void environmentPrepared(ConfigurableEnvironment configurableEnvironment) {
+    }
 
-  @Override
-  public void contextPrepared(ConfigurableApplicationContext configurableApplicationContext) {}
+    @Override
+    public void contextPrepared(ConfigurableApplicationContext configurableApplicationContext) {
+    }
 
-  @Override
-  public void contextLoaded(ConfigurableApplicationContext configurableApplicationContext) {
-    List<DependencyChecker> dependencyCheckers =
-        SpringFactoriesLoader.loadFactories(
-            DependencyChecker.class, ClassUtils.getDefaultClassLoader());
-    dependencyCheckers
-        .stream()
-        .forEach(
-            dependencyChecker -> {
-              dependencyChecker.check(configurableApplicationContext.getEnvironment());
-            });
-  }
+    @Override
+    public void contextLoaded(ConfigurableApplicationContext configurableApplicationContext) {
+        List<DependencyChecker> dependencyCheckers =
+                SpringFactoriesLoader.loadFactories(
+                        DependencyChecker.class, ClassUtils.getDefaultClassLoader());
+        dependencyCheckers
+                .stream()
+                .forEach(
+                        dependencyChecker -> {
+                            dependencyChecker.check(configurableApplicationContext.getEnvironment());
+                        });
+    }
 
-  @Override
-  public void finished(
-      ConfigurableApplicationContext configurableApplicationContext, Throwable throwable) {}
+    @Override
+    public void finished(
+            ConfigurableApplicationContext configurableApplicationContext, Throwable throwable) {
+    }
 }

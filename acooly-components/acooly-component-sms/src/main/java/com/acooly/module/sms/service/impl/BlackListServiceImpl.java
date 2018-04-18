@@ -6,12 +6,11 @@
  */
 package com.acooly.module.sms.service.impl;
 
-import com.acooly.module.sms.domain.SmsBlackList;
+import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.module.sms.dao.SmsBlackListDao;
+import com.acooly.module.sms.domain.SmsBlackList;
 import com.acooly.module.sms.service.BlackListService;
 import org.springframework.stereotype.Service;
-
-import com.acooly.core.common.service.EntityServiceImpl;
 
 /**
  * 短信黑名单 Service实现

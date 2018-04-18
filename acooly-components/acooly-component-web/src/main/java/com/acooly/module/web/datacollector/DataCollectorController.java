@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class DataCollectorController {
-  @RequestMapping("/xdata/ingest.data")
-  public void collectData(@RequestBody BusinessLog businessLog) {
-    BusinessLog.log(businessLog);
-  }
+    @RequestMapping("/xdata/ingest.data")
+    public void collectData(@RequestBody BusinessLog businessLog) {
+        BusinessLog.log(businessLog);
+    }
 }

@@ -14,74 +14,75 @@ import java.util.StringTokenizer;
 @Slf4j
 public class Mimetypes {
 
-  /* The default MIME type */
-  public static final String DEFAULT_MIMETYPE = "application/octet-stream";
+    /* The default MIME type */
+    public static final String DEFAULT_MIMETYPE = "application/octet-stream";
 
-  private static Mimetypes mimetypes = null;
+    private static Mimetypes mimetypes = null;
 
-  private HashMap<String, String> extensionToMimetypeMap = new HashMap<String, String>();
+    private HashMap<String, String> extensionToMimetypeMap = new HashMap<String, String>();
 
-  private Mimetypes() {}
+    private Mimetypes() {
+    }
 
-  public static synchronized Mimetypes getInstance() {
-    if (mimetypes != null) return mimetypes;
+    public static synchronized Mimetypes getInstance() {
+        if (mimetypes != null) return mimetypes;
 
-    mimetypes = new Mimetypes();
-    InputStream is = mimetypes.getClass().getResourceAsStream("/util/mime.types");
-    if (is != null) {
-      log.debug("Loading mime types from file in the classpath: mime.types");
+        mimetypes = new Mimetypes();
+        InputStream is = mimetypes.getClass().getResourceAsStream("/util/mime.types");
+        if (is != null) {
+            log.debug("Loading mime types from file in the classpath: mime.types");
 
-      try {
-        mimetypes.loadMimetypes(is);
-      } catch (IOException e) {
-        log.error("Failed to load mime types from file in the classpath: mime.types", e);
-      } finally {
-        try {
-          is.close();
-        } catch (IOException ex) {
+            try {
+                mimetypes.loadMimetypes(is);
+            } catch (IOException e) {
+                log.error("Failed to load mime types from file in the classpath: mime.types", e);
+            } finally {
+                try {
+                    is.close();
+                } catch (IOException ex) {
+                }
+            }
+        } else {
+            log.warn("Unable to find 'mime.types' file in classpath");
         }
-      }
-    } else {
-      log.warn("Unable to find 'mime.types' file in classpath");
+        return mimetypes;
     }
-    return mimetypes;
-  }
 
-  public void loadMimetypes(InputStream is) throws IOException {
-    BufferedReader br = new BufferedReader(new InputStreamReader(is));
-    String line = null;
+    public void loadMimetypes(InputStream is) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        String line = null;
 
-    while ((line = br.readLine()) != null) {
-      line = line.trim();
+        while ((line = br.readLine()) != null) {
+            line = line.trim();
 
-      if (line.startsWith("#") || line.length() == 0) {
-        // Ignore comments and empty lines.
-      } else {
-        StringTokenizer st = new StringTokenizer(line, " \t");
-        if (st.countTokens() > 1) {
-          String extension = st.nextToken();
-          if (st.hasMoreTokens()) {
-            String mimetype = st.nextToken();
-            extensionToMimetypeMap.put(extension.toLowerCase(), mimetype);
-          }
+            if (line.startsWith("#") || line.length() == 0) {
+                // Ignore comments and empty lines.
+            } else {
+                StringTokenizer st = new StringTokenizer(line, " \t");
+                if (st.countTokens() > 1) {
+                    String extension = st.nextToken();
+                    if (st.hasMoreTokens()) {
+                        String mimetype = st.nextToken();
+                        extensionToMimetypeMap.put(extension.toLowerCase(), mimetype);
+                    }
+                }
+            }
         }
-      }
     }
-  }
 
-  public String getMimetype(String fileName) {
-    int lastPeriodIndex = fileName.lastIndexOf(".");
-    if (lastPeriodIndex > 0 && lastPeriodIndex + 1 < fileName.length()) {
-      String ext = fileName.substring(lastPeriodIndex + 1).toLowerCase();
-      if (extensionToMimetypeMap.keySet().contains(ext)) {
-        String mimetype = (String) extensionToMimetypeMap.get(ext);
-        return mimetype;
-      }
+    public String getMimetype(String fileName) {
+        int lastPeriodIndex = fileName.lastIndexOf(".");
+        if (lastPeriodIndex > 0 && lastPeriodIndex + 1 < fileName.length()) {
+            String ext = fileName.substring(lastPeriodIndex + 1).toLowerCase();
+            if (extensionToMimetypeMap.keySet().contains(ext)) {
+                String mimetype = (String) extensionToMimetypeMap.get(ext);
+                return mimetype;
+            }
+        }
+        return DEFAULT_MIMETYPE;
     }
-    return DEFAULT_MIMETYPE;
-  }
 
-  public String getMimetype(File file) {
-    return getMimetype(file.getName());
-  }
+    public String getMimetype(File file) {
+        return getMimetype(file.getName());
+    }
 }

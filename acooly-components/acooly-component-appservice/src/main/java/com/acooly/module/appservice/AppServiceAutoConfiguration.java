@@ -17,17 +17,19 @@ import org.springframework.context.annotation.Configuration;
 
 import static com.acooly.module.appservice.AppServiceProperties.PREFIX;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @Configuration
 @EnableConfigurationProperties({AppServiceProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 public class AppServiceAutoConfiguration {
 
-  @Bean
-  public static AppServiceBeanPostProcessor facadeBeanPostProcessor(
-      AppServiceProperties appServiceProperties) {
-    EnvironmentHolder.buildProperties(appServiceProperties);
-    appServiceProperties.check();
-    return new AppServiceBeanPostProcessor(appServiceProperties);
-  }
+    @Bean
+    public static AppServiceBeanPostProcessor facadeBeanPostProcessor(
+            AppServiceProperties appServiceProperties) {
+        EnvironmentHolder.buildProperties(appServiceProperties);
+        appServiceProperties.check();
+        return new AppServiceBeanPostProcessor(appServiceProperties);
+    }
 }

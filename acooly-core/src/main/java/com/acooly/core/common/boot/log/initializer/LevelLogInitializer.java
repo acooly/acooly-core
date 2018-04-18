@@ -27,19 +27,19 @@ import java.util.Map;
  */
 @Order
 public class LevelLogInitializer extends AbstractLogInitializer {
-  @Override
-  public void init(LogbackConfigurator configurator) {
-    Map<String, Object> levels =
-        new RelaxedPropertyResolver(configurator.getEnvironment())
-            .getSubProperties("acooly.log.level.");
-    for (Map.Entry<String, Object> entry : levels.entrySet()) {
-      String loggerName = entry.getKey();
-      String level = entry.getValue().toString();
-      configurator.log("设置loggerName=%s,日志级别为:%s", loggerName, level);
-      if (loggerName.equalsIgnoreCase("root")) {
-        loggerName = Logger.ROOT_LOGGER_NAME;
-      }
-      configurator.logger(loggerName, Level.toLevel(level));
+    @Override
+    public void init(LogbackConfigurator configurator) {
+        Map<String, Object> levels =
+                new RelaxedPropertyResolver(configurator.getEnvironment())
+                        .getSubProperties("acooly.log.level.");
+        for (Map.Entry<String, Object> entry : levels.entrySet()) {
+            String loggerName = entry.getKey();
+            String level = entry.getValue().toString();
+            configurator.log("设置loggerName=%s,日志级别为:%s", loggerName, level);
+            if (loggerName.equalsIgnoreCase("root")) {
+                loggerName = Logger.ROOT_LOGGER_NAME;
+            }
+            configurator.logger(loggerName, Level.toLevel(level));
+        }
     }
-  }
 }

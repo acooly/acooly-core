@@ -13,37 +13,41 @@ import java.util.stream.Collectors;
  * @author shuijing
  */
 public abstract class AbstractDocumentVo implements DocumentVo {
-  /** VO转换为Map */
-  @Override
-  public Map<String, Object> getDataMap() throws DocumentGeneratingException {
-    DocumentVo vo = this.getDocumentVo();
-    Map<String, Object> map;
-    try {
-      map = toKeyValuePairs(vo);
-    } catch (Exception e) {
-      throw new DocumentGeneratingException(e);
+    /**
+     * VO转换为Map
+     */
+    @Override
+    public Map<String, Object> getDataMap() throws DocumentGeneratingException {
+        DocumentVo vo = this.getDocumentVo();
+        Map<String, Object> map;
+        try {
+            map = toKeyValuePairs(vo);
+        } catch (Exception e) {
+            throw new DocumentGeneratingException(e);
+        }
+        return map;
     }
-    return map;
-  }
 
-  /** java bean转换属性为map对象，暂时不支持bean父类feild */
-  protected Map<String, Object> toKeyValuePairs(Object object) {
-    return Arrays.stream(object.getClass().getDeclaredFields())
-        .collect(
-            Collectors.toMap(
-                Field::getName,
-                field -> {
-                  try {
-                    field.setAccessible(true);
-                    Object result = field.get(object);
-                    return result != null ? result : "";
-                  } catch (Exception e) {
-                    return "";
-                  }
-                }));
-  }
+    /**
+     * java bean转换属性为map对象，暂时不支持bean父类feild
+     */
+    protected Map<String, Object> toKeyValuePairs(Object object) {
+        return Arrays.stream(object.getClass().getDeclaredFields())
+                .collect(
+                        Collectors.toMap(
+                                Field::getName,
+                                field -> {
+                                    try {
+                                        field.setAccessible(true);
+                                        Object result = field.get(object);
+                                        return result != null ? result : "";
+                                    } catch (Exception e) {
+                                        return "";
+                                    }
+                                }));
+    }
 
-  private DocumentVo getDocumentVo() {
-    return this;
-  }
+    private DocumentVo getDocumentVo() {
+        return this;
+    }
 }

@@ -9,24 +9,26 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @RunWith(SpringRunner.class)
 @DubboTest
 public class DubboConsumerTest {
-  protected static final String PROFILE = "sdev";
+    protected static final String PROFILE = "sdev";
 
-  static {
-    Apps.setProfileIfNotExists(PROFILE);
-  }
+    static {
+        Apps.setProfileIfNotExists(PROFILE);
+    }
 
-  @Reference(version = "1.0")
-  private DemoFacade demoFacade;
+    @Reference(version = "1.0")
+    private DemoFacade demoFacade;
 
-  @Test
-  public void test() {
-    SingleOrder<String> request = new SingleOrder<>();
-    request.gid().partnerId("test");
-    request.setDto("123");
-    demoFacade.echo(request);
-  }
+    @Test
+    public void test() {
+        SingleOrder<String> request = new SingleOrder<>();
+        request.gid().partnerId("test");
+        request.setDto("123");
+        demoFacade.echo(request);
+    }
 }

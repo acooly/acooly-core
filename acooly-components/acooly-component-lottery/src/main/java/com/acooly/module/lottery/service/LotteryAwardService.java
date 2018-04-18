@@ -13,7 +13,7 @@ import java.util.List;
  * @author Acooly Code Generator
  */
 public interface LotteryAwardService extends EntityService<LotteryAward> {
-  List<LotteryAward> findBylotteryId(Long lotteryId);
+    List<LotteryAward> findBylotteryId(Long lotteryId);
 
-  LotteryAward findByCode(String code);
+    LotteryAward findByCode(String code);
 }

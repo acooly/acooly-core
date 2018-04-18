@@ -1,13 +1,49 @@
 @charset "utf-8";
 /* CSS Document */
-body{
-    margin:0px;padding:0px; font:14px/1.6em "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;color:#666
+body {
+    margin: 0px;
+    padding: 0px;
+    font: 14px/1.6em "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+    color: #666
 }
-div,form,img,ul,ol,li,dl,dt,dd,span{margin:0px;padding:0px;border:none;vertical-align:top}
-ul,dl,ol{list-style-type:none;}
 
-.form{}
-.form div {margin: 10px;height: 30px;line-height: 30px;}
-label {display: inline-block; width: 100px; text-align: right;padding-right: 5px;font-weight: bold;}
-.form input { height: 25px; padding: 2px 5px; border: 1px solid #efefef; width: 200px;}
-.form span {color:#a6a6a6;font-size: 12px; margin-left: 10px;}
+div, form, img, ul, ol, li, dl, dt, dd, span {
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    vertical-align: top
+}
+
+ul, dl, ol {
+    list-style-type: none;
+}
+
+.form {
+}
+
+.form div {
+    margin: 10px;
+    height: 30px;
+    line-height: 30px;
+}
+
+label {
+    display: inline-block;
+    width: 100px;
+    text-align: right;
+    padding-right: 5px;
+    font-weight: bold;
+}
+
+.form input {
+    height: 25px;
+    padding: 2px 5px;
+    border: 1px solid #efefef;
+    width: 200px;
+}
+
+.form span {
+    color: #a6a6a6;
+    font-size: 12px;
+    margin-left: 10px;
+}

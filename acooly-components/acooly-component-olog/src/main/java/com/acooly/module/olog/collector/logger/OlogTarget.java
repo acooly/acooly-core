@@ -16,9 +16,9 @@ import java.lang.reflect.Method;
 @Setter
 @AllArgsConstructor
 public class OlogTarget extends InfoBase {
-  private Object bean;
-  private Method method;
-  private Object[] args;
-  private Object result;
-  private long executeMilliseconds;
+    private Object bean;
+    private Method method;
+    private Object[] args;
+    private Object result;
+    private long executeMilliseconds;
 }

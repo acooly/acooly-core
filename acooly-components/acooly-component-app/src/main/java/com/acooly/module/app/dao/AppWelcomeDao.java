@@ -13,6 +13,6 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface AppWelcomeDao extends EntityJpaDao<AppWelcome, Long> {
 
-  @Query(value = "select * from app_welcome order by id desc limit 0,1", nativeQuery = true)
-  AppWelcome getLatestOne();
+    @Query(value = "select * from app_welcome order by id desc limit 0,1", nativeQuery = true)
+    AppWelcome getLatestOne();
 }

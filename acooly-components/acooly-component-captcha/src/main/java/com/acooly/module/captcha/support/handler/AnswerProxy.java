@@ -12,34 +12,37 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 @Service("answerHandler")
 public class AnswerProxy<UA>
-    implements AnswerHandler<UA>,
+        implements AnswerHandler<UA>,
         ApplicationContextAware,
         ApplicationListener<ContextRefreshedEvent> {
 
-  private ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
 
-  private AnswerHandler handler;
+    private AnswerHandler handler;
 
-  @Autowired private CaptchaProperties properties;
+    @Autowired
+    private CaptchaProperties properties;
 
-  @Override
-  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-    this.applicationContext = applicationContext;
-  }
-
-  @Override
-  public void onApplicationEvent(ContextRefreshedEvent event) {
-    if (handler == null) {
-      handler =
-          (AnswerHandler) this.applicationContext.getBean(properties.getHandlerType().code());
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
-  }
 
-  @Override
-  public boolean isValid(AnswerDto<UA> answerDto) throws CaptchaValidateException {
-    return handler.isValid(answerDto);
-  }
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        if (handler == null) {
+            handler =
+                    (AnswerHandler) this.applicationContext.getBean(properties.getHandlerType().code());
+        }
+    }
+
+    @Override
+    public boolean isValid(AnswerDto<UA> answerDto) throws CaptchaValidateException {
+        return handler.isValid(answerDto);
+    }
 }

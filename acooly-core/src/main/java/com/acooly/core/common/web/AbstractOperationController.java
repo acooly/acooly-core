@@ -26,279 +26,286 @@ import java.util.Map;
  *
  * <p>负责：框架基本功能(CRUD)的服务层调用
  *
- * @author zhangpu
  * @param <T>
  * @param <M>
+ * @author zhangpu
  */
 public abstract class AbstractOperationController<T extends Entityable, M extends EntityService<T>>
-    extends AbstractGenericsController<T, M> {
-  /** 实体ID名称 */
-  protected String entityIdName = "id";
-  /** 默认分页大小 */
-  protected int defaultPageSize = 15;
+        extends AbstractGenericsController<T, M> {
+    /**
+     * 实体ID名称
+     */
+    protected String entityIdName = "id";
+    /**
+     * 默认分页大小
+     */
+    protected int defaultPageSize = 15;
 
-  /**
-   * 執行分頁查詢
-   *
-   * @param model
-   * @param request
-   * @param response
-   */
-  protected PageInfo<T> doList(
-      HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
-    return getEntityService()
-        .query(getPageInfo(request), getSearchParams(request), getSortMap(request));
-  }
-
-  protected PageInfo<T> doList(HttpServletRequest request, HttpServletResponse response)
-      throws Exception {
-    return doList(request, response, null);
-  }
-
-  /**
-   * 执行查询
-   *
-   * @param model
-   * @param request
-   * @param response
-   * @return
-   * @throws Exception
-   */
-  protected List<T> doQuery(HttpServletRequest request, HttpServletResponse response, Model model)
-      throws Exception {
-    return getEntityService().query(getSearchParams(request), getSortMap(request));
-  }
-
-  protected List<T> doQuery(HttpServletRequest request, HttpServletResponse response)
-      throws Exception {
-    return doQuery(request, response, null);
-  }
-
-  /**
-   * 执行保存实体(根據請求中是否存在ID選擇保存或更新)
-   *
-   * @param request
-   * @param response
-   * @param model
-   * @param isCreate
-   * @throws Exception
-   */
-  protected T doSave(
-      HttpServletRequest request, HttpServletResponse response, Model model, boolean isCreate)
-      throws Exception {
-    T entity = loadEntity(request);
-    if (entity == null) {
-      // create
-      allow(request, response, MappingMethod.create);
-      entity = getEntityClass().newInstance();
-    } else {
-      // update
-      allow(request, response, MappingMethod.update);
+    /**
+     * 執行分頁查詢
+     *
+     * @param model
+     * @param request
+     * @param response
+     */
+    protected PageInfo<T> doList(
+            HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
+        return getEntityService()
+                .query(getPageInfo(request), getSearchParams(request), getSortMap(request));
     }
-    doDataBinding(request, entity);
-    onSave(request, response, model, entity, isCreate);
-    // 这里服务层默认是根据entity的Id是否为空自动判断是SAVE还是UPDATE.
-    if (isCreate) {
-      getEntityService().save(entity);
-    } else {
-      getEntityService().update(entity);
-    }
-    return entity;
-  }
 
-  /**
-   * 根据传入的ids删除实体。
-   *
-   * <p>
-   * <li>ids.length ==1 则调用删除单个实体的服务 getEntityService().removeById(id)
-   * <li>ids.length > 1 则调用批量删除服务 getEntityService().removes(ids);
-   *
-   * @param request
-   * @param response
-   * @param model
-   * @param ids
-   * @throws Exception
-   */
-  protected void doRemove(
-      HttpServletRequest request, HttpServletResponse response, Model model, Serializable... ids)
-      throws Exception {
-
-    if (ids == null || ids.length == 0) {
-      throw new IllegalArgumentException("请求参数中没有指定需要删除的实体Id");
+    protected PageInfo<T> doList(HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        return doList(request, response, null);
     }
-    if (ids.length == 1) {
-      getEntityService().removeById(ids[0]);
-    } else {
-      getEntityService().removes(ids);
-    }
-  }
 
-  /**
-   * 从request中获取需要删除的实体的ID
-   *
-   * <p>依次支持：
-   * <li>request.getParameterValues方式获取多个同名ID表单的值
-   * <li>request.getParameter方法获取单个ID表单的值，如果该值有逗号分割，则分割为多个ID
-   *
-   * @param request
-   * @param response
-   * @param model
-   * @throws Exception
-   */
-  @Deprecated
-  protected void doRemove(HttpServletRequest request, HttpServletResponse response, Model model)
-      throws Exception {
-    String[] ids = request.getParameterValues(getEntityIdName());
-    List<Long> idList = Lists.newArrayList();
-    getIds(idList, ids);
-    if (idList.isEmpty()) {
-      throw new IllegalArgumentException("请求参数中没有指定需要删除的实体Id");
+    /**
+     * 执行查询
+     *
+     * @param model
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    protected List<T> doQuery(HttpServletRequest request, HttpServletResponse response, Model model)
+            throws Exception {
+        return getEntityService().query(getSearchParams(request), getSortMap(request));
     }
-    Serializable[] lid = idList.toArray(new Long[] {});
-    doRemove(request, response, model, lid);
-  }
 
-  /**
-   * 从request中获取需要删除的实体的ID
-   *
-   * <p>依次支持：
-   * <li>request.getParameterValues方式获取多个同名ID表单的值
-   * <li>request.getParameter方法获取单个ID表单的值，如果该值有逗号分割，则分割为多个ID
-   *
-   * @param request
-   * @return
-   */
-  protected Serializable[] getRequestIds(HttpServletRequest request) {
-    String[] ids = request.getParameterValues(getEntityIdName());
-    List<Long> idList = Lists.newArrayList();
-    getIds(idList, ids);
-    if (idList.size() == 0) {
-      throw new RuntimeException("请求参数中没有指定需要删除的实体Id");
+    protected List<T> doQuery(HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        return doQuery(request, response, null);
     }
-    return idList.toArray(new Long[] {});
-  }
 
-  private void getIds(List<Long> idList, String[] ids) {
-    if (ids != null && ids.length > 0) {
-      for (String id : ids) {
-        if (StringUtils.isNotBlank(id)) {
-          if (StringUtils.contains(id, ",")) {
-            String[] subIds = StringUtils.split(id, ",");
-            for (String subId : subIds) {
-              idList.add(Long.valueOf(subId));
-            }
-          } else {
-            idList.add(Long.valueOf(id));
-          }
+    /**
+     * 执行保存实体(根據請求中是否存在ID選擇保存或更新)
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @param isCreate
+     * @throws Exception
+     */
+    protected T doSave(
+            HttpServletRequest request, HttpServletResponse response, Model model, boolean isCreate)
+            throws Exception {
+        T entity = loadEntity(request);
+        if (entity == null) {
+            // create
+            allow(request, response, MappingMethod.create);
+            entity = getEntityClass().newInstance();
+        } else {
+            // update
+            allow(request, response, MappingMethod.update);
         }
-      }
+        doDataBinding(request, entity);
+        onSave(request, response, model, entity, isCreate);
+        // 这里服务层默认是根据entity的Id是否为空自动判断是SAVE还是UPDATE.
+        if (isCreate) {
+            getEntityService().save(entity);
+        } else {
+            getEntityService().update(entity);
+        }
+        return entity;
     }
-  }
 
-  /**
-   * 加载实体
-   *
-   * @param request
-   * @return
-   */
-  protected T loadEntity(HttpServletRequest request) throws Exception {
-    String id = request.getParameter(getEntityIdName());
-    if (StringUtils.isNotBlank(id)) {
-      return getEntityService().get(Long.valueOf(id));
+    /**
+     * 根据传入的ids删除实体。
+     *
+     *
+     * <li>ids.length ==1 则调用删除单个实体的服务 getEntityService().removeById(id)
+     * <li>ids.length > 1 则调用批量删除服务 getEntityService().removes(ids);
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @param ids
+     * @throws Exception
+     */
+    protected void doRemove(
+            HttpServletRequest request, HttpServletResponse response, Model model, Serializable... ids)
+            throws Exception {
+
+        if (ids == null || ids.length == 0) {
+            throw new IllegalArgumentException("请求参数中没有指定需要删除的实体Id");
+        }
+        if (ids.length == 1) {
+            getEntityService().removeById(ids[0]);
+        } else {
+            getEntityService().removes(ids);
+        }
     }
-    return null;
-  }
 
-  /**
-   * 保存实体前，自定义组装对象。用于子类扩展实体组装或保存前检查
-   *
-   * @param request
-   * @param response
-   * @param model
-   * @param isCreate
-   * @throws Exception
-   */
-  protected T onSave(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      Model model,
-      T entity,
-      boolean isCreate)
-      throws Exception {
-    return entity;
-  }
+    /**
+     * 从request中获取需要删除的实体的ID
+     *
+     * <p>依次支持：
+     * <li>request.getParameterValues方式获取多个同名ID表单的值
+     * <li>request.getParameter方法获取单个ID表单的值，如果该值有逗号分割，则分割为多个ID
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @throws Exception
+     */
+    @Deprecated
+    protected void doRemove(HttpServletRequest request, HttpServletResponse response, Model model)
+            throws Exception {
+        String[] ids = request.getParameterValues(getEntityIdName());
+        List<Long> idList = Lists.newArrayList();
+        getIds(idList, ids);
+        if (idList.isEmpty()) {
+            throw new IllegalArgumentException("请求参数中没有指定需要删除的实体Id");
+        }
+        Serializable[] lid = idList.toArray(new Long[]{});
+        doRemove(request, response, model, lid);
+    }
 
-  /**
-   * 默认分页对象
-   *
-   * @param request
-   * @return
-   */
-  protected PageInfo<T> getPageInfo(HttpServletRequest request) {
-    PageInfo<T> pageinfo = new PageInfo<T>();
-    pageinfo.setCountOfCurrentPage(getDefaultPageSize());
-    return pageinfo;
-  }
+    /**
+     * 从request中获取需要删除的实体的ID
+     *
+     * <p>依次支持：
+     * <li>request.getParameterValues方式获取多个同名ID表单的值
+     * <li>request.getParameter方法获取单个ID表单的值，如果该值有逗号分割，则分割为多个ID
+     *
+     * @param request
+     * @return
+     */
+    protected Serializable[] getRequestIds(HttpServletRequest request) {
+        String[] ids = request.getParameterValues(getEntityIdName());
+        List<Long> idList = Lists.newArrayList();
+        getIds(idList, ids);
+        if (idList.size() == 0) {
+            throw new RuntimeException("请求参数中没有指定需要删除的实体Id");
+        }
+        return idList.toArray(new Long[]{});
+    }
 
-  /**
-   * 默认查询条件
-   *
-   * @param request
-   * @return
-   */
-  protected Map<String, Object> getSearchParams(HttpServletRequest request) {
-    return Servlets.getParametersStartingWith(request, "search_");
-  }
+    private void getIds(List<Long> idList, String[] ids) {
+        if (ids != null && ids.length > 0) {
+            for (String id : ids) {
+                if (StringUtils.isNotBlank(id)) {
+                    if (StringUtils.contains(id, ",")) {
+                        String[] subIds = StringUtils.split(id, ",");
+                        for (String subId : subIds) {
+                            idList.add(Long.valueOf(subId));
+                        }
+                    } else {
+                        idList.add(Long.valueOf(id));
+                    }
+                }
+            }
+        }
+    }
 
-  /**
-   * 默认排序
-   *
-   * @param request
-   * @return
-   */
-  protected Map<String, Boolean> getSortMap(HttpServletRequest request) {
-    return Maps.newHashMap();
-  }
+    /**
+     * 加载实体
+     *
+     * @param request
+     * @return
+     */
+    protected T loadEntity(HttpServletRequest request) throws Exception {
+        String id = request.getParameter(getEntityIdName());
+        if (StringUtils.isNotBlank(id)) {
+            return getEntityService().get(Long.valueOf(id));
+        }
+        return null;
+    }
 
-  protected void doDataBinding(HttpServletRequest request, Object command) throws Exception {
-    bind(request, command);
-  }
+    /**
+     * 保存实体前，自定义组装对象。用于子类扩展实体组装或保存前检查
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @param isCreate
+     * @throws Exception
+     */
+    protected T onSave(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Model model,
+            T entity,
+            boolean isCreate)
+            throws Exception {
+        return entity;
+    }
 
-  protected Map<String, Object> referenceData(HttpServletRequest request) {
-    Map<String, Object> map = Maps.newHashMap();
-    referenceData(request, map);
-    return map;
-  }
+    /**
+     * 默认分页对象
+     *
+     * @param request
+     * @return
+     */
+    protected PageInfo<T> getPageInfo(HttpServletRequest request) {
+        PageInfo<T> pageinfo = new PageInfo<T>();
+        pageinfo.setCountOfCurrentPage(getDefaultPageSize());
+        return pageinfo;
+    }
 
-  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {}
+    /**
+     * 默认查询条件
+     *
+     * @param request
+     * @return
+     */
+    protected Map<String, Object> getSearchParams(HttpServletRequest request) {
+        return Servlets.getParametersStartingWith(request, "search_");
+    }
 
-  /** 兼容设置 */
-  @Override
-  protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder)
-      throws Exception {
-    initBinder(binder);
-  }
+    /**
+     * 默认排序
+     *
+     * @param request
+     * @return
+     */
+    protected Map<String, Boolean> getSortMap(HttpServletRequest request) {
+        return Maps.newHashMap();
+    }
 
-  @InitBinder
-  public void initBinder(WebDataBinder binder) {
-    binder.registerCustomEditor(Date.class, new MultiFormatCustomDateEditor());
-    binder.registerCustomEditor(Integer.class, new CustomNumberEditor(Integer.class, true));
-    binder.registerCustomEditor(Double.class, new CustomNumberEditor(Double.class, true));
-  }
+    protected void doDataBinding(HttpServletRequest request, Object command) throws Exception {
+        bind(request, command);
+    }
 
-  public int getDefaultPageSize() {
-    return defaultPageSize;
-  }
+    protected Map<String, Object> referenceData(HttpServletRequest request) {
+        Map<String, Object> map = Maps.newHashMap();
+        referenceData(request, map);
+        return map;
+    }
 
-  public void setDefaultPageSize(int defaultPageSize) {
-    this.defaultPageSize = defaultPageSize;
-  }
+    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+    }
 
-  public String getEntityIdName() {
-    return entityIdName;
-  }
+    /**
+     * 兼容设置
+     */
+    @Override
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder)
+            throws Exception {
+        initBinder(binder);
+    }
 
-  public void setEntityIdName(String entityIdName) {
-    this.entityIdName = entityIdName;
-  }
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Date.class, new MultiFormatCustomDateEditor());
+        binder.registerCustomEditor(Integer.class, new CustomNumberEditor(Integer.class, true));
+        binder.registerCustomEditor(Double.class, new CustomNumberEditor(Double.class, true));
+    }
+
+    public int getDefaultPageSize() {
+        return defaultPageSize;
+    }
+
+    public void setDefaultPageSize(int defaultPageSize) {
+        this.defaultPageSize = defaultPageSize;
+    }
+
+    public String getEntityIdName() {
+        return entityIdName;
+    }
+
+    public void setEntityIdName(String entityIdName) {
+        this.entityIdName = entityIdName;
+    }
 }

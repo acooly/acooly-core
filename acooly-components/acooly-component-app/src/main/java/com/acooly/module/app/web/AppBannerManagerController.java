@@ -106,7 +106,7 @@ public class AppBannerManagerController
     @Override
     protected Map<String, Boolean> getSortMap(HttpServletRequest request) {
         Map<String, Boolean> sortMap = Maps.newHashMap();
-        sortMap.put("sortTime",false);
+        sortMap.put("sortTime", false);
         return sortMap;
     }
 

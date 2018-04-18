@@ -14,9 +14,9 @@ import java.util.Date;
  */
 public interface OlogService extends EntityService<OlogEntity> {
 
-  void cleanup(Date beforeDate);
+    void cleanup(Date beforeDate);
 
-  void insert(OlogEntity olog);
+    void insert(OlogEntity olog);
 
-  void archive();
+    void archive();
 }

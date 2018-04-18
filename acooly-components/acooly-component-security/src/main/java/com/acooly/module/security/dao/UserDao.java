@@ -9,16 +9,16 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserDao extends EntityJpaDao<User, Long>, UserDaoCustom {
-  User findByUsername(String username);
+    User findByUsername(String username);
 
-  @Query("from User where username = ?1 or email = ?1 or mobileNo = ?1")
-  User getAuthenticateUser(String key);
+    @Query("from User where username = ?1 or email = ?1 or mobileNo = ?1")
+    User getAuthenticateUser(String key);
 
-  @Modifying
-  @Query("update User set loginFailTimes = 0 where username = ?1")
-  void clearLoginFailureCount(String username);
+    @Modifying
+    @Query("update User set loginFailTimes = 0 where username = ?1")
+    void clearLoginFailureCount(String username);
 
-  @Modifying
-  @Query("update User set loginFailTimes = loginFailTimes + 1 where username = ?1")
-  void addLoginFailureCount(String username);
+    @Modifying
+    @Query("update User set loginFailTimes = loginFailTimes + 1 where username = ?1")
+    void addLoginFailureCount(String username);
 }

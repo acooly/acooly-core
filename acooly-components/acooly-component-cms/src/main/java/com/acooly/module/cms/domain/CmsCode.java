@@ -24,12 +24,19 @@ import javax.persistence.Table;
 @Getter
 @Setter
 public class CmsCode extends AbstractEntity {
-  /** serialVersionUID */
-  private static final long serialVersionUID = 1L;
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = 1L;
 
-  /** KEYCODE */
-  @NotEmpty private String keycode;
+    /**
+     * KEYCODE
+     */
+    @NotEmpty
+    private String keycode;
 
-  /** 状态 */
-  private Integer status = 1;
+    /**
+     * 状态
+     */
+    private Integer status = 1;
 }

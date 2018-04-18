@@ -16,38 +16,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @RestController
 @RequestMapping("appservice")
 public class AppServiceTestContorller {
 
-  @Autowired private AppServiceTestService appServiceTestService;
+    @Autowired
+    private AppServiceTestService appServiceTestService;
 
-  @RequestMapping("/test")
-  public ResultBase test(AppDto appRequest) {
-    return appServiceTestService.test(newTestOrder(appRequest));
-  }
+    @RequestMapping("/test")
+    public ResultBase test(AppDto appRequest) {
+        return appServiceTestService.test(newTestOrder(appRequest));
+    }
 
-  @RequestMapping("/test1")
-  public ResultBase test1(AppDto appRequest) {
-    return appServiceTestService.test1(newTestOrder(appRequest));
-  }
+    @RequestMapping("/test1")
+    public ResultBase test1(AppDto appRequest) {
+        return appServiceTestService.test1(newTestOrder(appRequest));
+    }
 
-  @RequestMapping("/test2")
-  public ResultBase test2(AppDto appRequest) {
-    return appServiceTestService.test2(newTestOrder(appRequest));
-  }
+    @RequestMapping("/test2")
+    public ResultBase test2(AppDto appRequest) {
+        return appServiceTestService.test2(newTestOrder(appRequest));
+    }
 
-  @RequestMapping("/test3")
-  public ResultBase test3(AppDto appRequest) {
-    return appServiceTestService.test3(newTestOrder(appRequest));
-  }
+    @RequestMapping("/test3")
+    public ResultBase test3(AppDto appRequest) {
+        return appServiceTestService.test3(newTestOrder(appRequest));
+    }
 
-  private SingleOrder<AppDto> newTestOrder(AppDto appRequest) {
-    SingleOrder<AppDto> testOrder = new SingleOrder<>();
-    testOrder.setGid(Ids.gid());
-    testOrder.setPartnerId("1");
-    testOrder.setDto(appRequest);
-    return testOrder;
-  }
+    private SingleOrder<AppDto> newTestOrder(AppDto appRequest) {
+        SingleOrder<AppDto> testOrder = new SingleOrder<>();
+        testOrder.setGid(Ids.gid());
+        testOrder.setPartnerId("1");
+        testOrder.setDto(appRequest);
+        return testOrder;
+    }
 }

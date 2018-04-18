@@ -11,9 +11,11 @@ package com.acooly.core.test.event;
 
 import lombok.Data;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @Data
 public class CreateCustomerEvent {
-  private Long id;
-  private String userName;
+    private Long id;
+    private String userName;
 }

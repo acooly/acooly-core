@@ -9,11 +9,13 @@ package com.acooly.core.common.facade;
 
 import java.io.Serializable;
 
-/** @author zhangpu */
+/**
+ * @author zhangpu
+ */
 public interface Orderable extends Serializable {
-  String getGid();
+    String getGid();
 
-  String getPartnerId();
+    String getPartnerId();
 
-  void check();
+    void check();
 }

@@ -15,19 +15,21 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class NotifyLogoutFilter extends LogoutFilter {
 
-  /** 监听处理 */
-  private ShireLoginLogoutSubject shireLoginLogoutSubject;
+    /**
+     * 监听处理
+     */
+    private ShireLoginLogoutSubject shireLoginLogoutSubject;
 
-  @Override
-  protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
-    shireLoginLogoutSubject.beforeLogout(
-        (HttpServletRequest) request,
-        (HttpServletResponse) response,
-        getSubject(request, response));
-    return super.preHandle(request, response);
-  }
+    @Override
+    protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
+        shireLoginLogoutSubject.beforeLogout(
+                (HttpServletRequest) request,
+                (HttpServletResponse) response,
+                getSubject(request, response));
+        return super.preHandle(request, response);
+    }
 
-  public void setShireLoginLogoutSubject(ShireLoginLogoutSubject shireLoginLogoutSubject) {
-    this.shireLoginLogoutSubject = shireLoginLogoutSubject;
-  }
+    public void setShireLoginLogoutSubject(ShireLoginLogoutSubject shireLoginLogoutSubject) {
+        this.shireLoginLogoutSubject = shireLoginLogoutSubject;
+    }
 }

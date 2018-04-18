@@ -27,87 +27,90 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/manage/module/app/appMessage")
 public class AppMessageManagerController
-    extends AbstractJQueryEntityController<AppMessage, AppMessageService> {
+        extends AbstractJQueryEntityController<AppMessage, AppMessageService> {
 
-  private static Map<String, String> allTypes = AppMessageType.mapping();
-  private static Map<String, String> allStatuss = AppMessageStatus.mapping();
+    private static Map<String, String> allTypes = AppMessageType.mapping();
+    private static Map<String, String> allStatuss = AppMessageStatus.mapping();
 
-  @Autowired private AppMessageService appMessageService;
-  @Autowired private AppNotifyService appNotifyService;
-  @Autowired private OFileProperties fileProperties;
+    @Autowired
+    private AppMessageService appMessageService;
+    @Autowired
+    private AppNotifyService appNotifyService;
+    @Autowired
+    private OFileProperties fileProperties;
 
-  /**
-   * 群发或广播
-   *
-   * @param request
-   * @param response
-   * @return
-   */
-  @RequestMapping(value = "push")
-  @ResponseBody
-  public JsonEntityResult<AppMessage> push(
-      HttpServletRequest request, HttpServletResponse response) {
-    JsonEntityResult<AppMessage> result = new JsonEntityResult<AppMessage>();
-    try {
-      String sessionUser = getSessionUser(request);
-      appNotifyService.group(getNotifyMessage(request), getTargets(request), sessionUser, true);
-      result.setMessage("推送成功");
-    } catch (Exception e) {
-      handleException(result, "推送", e);
+    /**
+     * 群发或广播
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "push")
+    @ResponseBody
+    public JsonEntityResult<AppMessage> push(
+            HttpServletRequest request, HttpServletResponse response) {
+        JsonEntityResult<AppMessage> result = new JsonEntityResult<AppMessage>();
+        try {
+            String sessionUser = getSessionUser(request);
+            appNotifyService.group(getNotifyMessage(request), getTargets(request), sessionUser, true);
+            result.setMessage("推送成功");
+        } catch (Exception e) {
+            handleException(result, "推送", e);
+        }
+        return result;
     }
-    return result;
-  }
 
-  protected List<String> getTargets(HttpServletRequest request) {
-    String target = request.getParameter("receivers");
-    if (Strings.isNotBlank(target)) {
-      return Lists.newArrayList(Strings.split(target, ","));
-    } else {
-      return null;
+    protected List<String> getTargets(HttpServletRequest request) {
+        String target = request.getParameter("receivers");
+        if (Strings.isNotBlank(target)) {
+            return Lists.newArrayList(Strings.split(target, ","));
+        } else {
+            return null;
+        }
     }
-  }
 
-  protected NotifyMessage getNotifyMessage(HttpServletRequest request) {
-    NotifyMessage nm = new NotifyMessage();
-    nm.setTitle(request.getParameter("title"));
-    nm.setContent(request.getParameter("content"));
-    String online = request.getParameter("online");
-    nm.setOnline(Strings.equalsIgnoreCase("true", online));
-    String context = request.getParameter("context");
-    String contentType = request.getParameter("contentType");
-    if (Strings.isBlank(contentType)) {
-      nm.setContentType(AppMessageContentType.normal);
-    } else {
-      nm.setContentType(AppMessageContentType.findStatus(contentType));
+    protected NotifyMessage getNotifyMessage(HttpServletRequest request) {
+        NotifyMessage nm = new NotifyMessage();
+        nm.setTitle(request.getParameter("title"));
+        nm.setContent(request.getParameter("content"));
+        String online = request.getParameter("online");
+        nm.setOnline(Strings.equalsIgnoreCase("true", online));
+        String context = request.getParameter("context");
+        String contentType = request.getParameter("contentType");
+        if (Strings.isBlank(contentType)) {
+            nm.setContentType(AppMessageContentType.normal);
+        } else {
+            nm.setContentType(AppMessageContentType.findStatus(contentType));
+        }
+        if (Strings.isNotBlank(context)) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> contextMap = JsonMapper.nonDefaultMapper().fromJson(context, Map.class);
+            nm.setContext(contextMap);
+        }
+        Validators.assertJSR303(nm);
+        return nm;
     }
-    if (Strings.isNotBlank(context)) {
-      @SuppressWarnings("unchecked")
-      Map<String, Object> contextMap = JsonMapper.nonDefaultMapper().fromJson(context, Map.class);
-      nm.setContext(contextMap);
-    }
-    Validators.assertJSR303(nm);
-    return nm;
-  }
 
-  protected String getSessionUser(HttpServletRequest request) {
-    String[] keys = Strings.split(fileProperties.getCheckSessionKey(), ",");
-    Object user = null;
-    for (String key : keys) {
-      user = request.getSession().getAttribute(key);
-      if (user != null) {
-        break;
-      }
+    protected String getSessionUser(HttpServletRequest request) {
+        String[] keys = Strings.split(fileProperties.getCheckSessionKey(), ",");
+        Object user = null;
+        for (String key : keys) {
+            user = request.getSession().getAttribute(key);
+            if (user != null) {
+                break;
+            }
+        }
+        if (user != null) {
+            return user.toString();
+        }
+        return null;
     }
-    if (user != null) {
-      return user.toString();
-    }
-    return null;
-  }
 
-  @Override
-  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-    model.put("allTypes", allTypes);
-    model.put("allStatuss", allStatuss);
-    model.put("allContentTypes", AppMessageContentType.mapping());
-  }
+    @Override
+    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+        model.put("allTypes", allTypes);
+        model.put("allStatuss", allStatuss);
+        model.put("allContentTypes", AppMessageContentType.mapping());
+    }
 }

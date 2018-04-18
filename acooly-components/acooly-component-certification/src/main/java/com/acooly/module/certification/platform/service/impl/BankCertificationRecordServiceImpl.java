@@ -6,12 +6,11 @@
  */
 package com.acooly.module.certification.platform.service.impl;
 
-import org.springframework.stereotype.Service;
-
 import com.acooly.core.common.service.EntityServiceImpl;
-import com.acooly.module.certification.platform.service.BankCertificationRecordService;
 import com.acooly.module.certification.platform.dao.BankCertificationRecordDao;
 import com.acooly.module.certification.platform.entity.BankCertificationRecord;
+import com.acooly.module.certification.platform.service.BankCertificationRecordService;
+import org.springframework.stereotype.Service;
 
 /**
  * 银行卡四要素记录表 Service实现
@@ -22,11 +21,11 @@ import com.acooly.module.certification.platform.entity.BankCertificationRecord;
  */
 @Service("bankCertificationRecordService")
 public class BankCertificationRecordServiceImpl
-    extends EntityServiceImpl<BankCertificationRecord, BankCertificationRecordDao>
-    implements BankCertificationRecordService {
+        extends EntityServiceImpl<BankCertificationRecord, BankCertificationRecordDao>
+        implements BankCertificationRecordService {
 
-  @Override
-  public BankCertificationRecord findEntityByCardNo(String cardNo) {
-    return getEntityDao().findEntityByCardNo(cardNo);
-  }
+    @Override
+    public BankCertificationRecord findEntityByCardNo(String cardNo) {
+        return getEntityDao().findEntityByCardNo(cardNo);
+    }
 }

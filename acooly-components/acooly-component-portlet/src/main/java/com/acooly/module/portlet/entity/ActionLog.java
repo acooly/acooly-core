@@ -13,7 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
-import java.util.Date;
 
 /**
  * portlet_action_log Entity
@@ -23,106 +22,126 @@ import java.util.Date;
 @Entity
 @Table(name = "portlet_action_log")
 public class ActionLog extends AbstractEntity {
-  /** serialVersionUID */
-  private static final long serialVersionUID = 1L;
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = 1L;
 
-  /** 操作 */
-  private String actionKey;
+    /**
+     * 操作
+     */
+    private String actionKey;
 
-  /** 操作名称 */
-  private String actionName;
+    /**
+     * 操作名称
+     */
+    private String actionName;
 
-  /** URL连接 */
-  private String actionUrl;
+    /**
+     * URL连接
+     */
+    private String actionUrl;
 
-  /** 用户名 */
-  private String userName;
+    /**
+     * 用户名
+     */
+    private String userName;
 
-  /** 渠道 */
-  @Enumerated(EnumType.STRING)
-  private ActionChannelEnum channel;
+    /**
+     * 渠道
+     */
+    @Enumerated(EnumType.STRING)
+    private ActionChannelEnum channel;
 
-  /** 渠道信息 */
-  private String channelInfo;
+    /**
+     * 渠道信息
+     */
+    private String channelInfo;
 
-  /** 渠道版本 */
-  private String channelVersion;
+    /**
+     * 渠道版本
+     */
+    private String channelVersion;
 
-  /** 访问IP */
-  private String userIp;
+    /**
+     * 访问IP
+     */
+    private String userIp;
 
-  /** 备注 */
-  private String comments;
+    /**
+     * 备注
+     */
+    private String comments;
 
-  public String getActionKey() {
-    return this.actionKey;
-  }
+    public String getActionKey() {
+        return this.actionKey;
+    }
 
-  public void setActionKey(String actionKey) {
-    this.actionKey = actionKey;
-  }
+    public void setActionKey(String actionKey) {
+        this.actionKey = actionKey;
+    }
 
-  public String getActionName() {
-    return this.actionName;
-  }
+    public String getActionName() {
+        return this.actionName;
+    }
 
-  public void setActionName(String actionName) {
-    this.actionName = actionName;
-  }
+    public void setActionName(String actionName) {
+        this.actionName = actionName;
+    }
 
-  public String getActionUrl() {
-    return this.actionUrl;
-  }
+    public String getActionUrl() {
+        return this.actionUrl;
+    }
 
-  public void setActionUrl(String actionUrl) {
-    this.actionUrl = actionUrl;
-  }
+    public void setActionUrl(String actionUrl) {
+        this.actionUrl = actionUrl;
+    }
 
-  public String getUserName() {
-    return this.userName;
-  }
+    public String getUserName() {
+        return this.userName;
+    }
 
-  public void setUserName(String userName) {
-    this.userName = userName;
-  }
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-  public ActionChannelEnum getChannel() {
-    return channel;
-  }
+    public ActionChannelEnum getChannel() {
+        return channel;
+    }
 
-  public void setChannel(ActionChannelEnum channel) {
-    this.channel = channel;
-  }
+    public void setChannel(ActionChannelEnum channel) {
+        this.channel = channel;
+    }
 
-  public String getChannelInfo() {
-    return this.channelInfo;
-  }
+    public String getChannelInfo() {
+        return this.channelInfo;
+    }
 
-  public void setChannelInfo(String channelInfo) {
-    this.channelInfo = channelInfo;
-  }
+    public void setChannelInfo(String channelInfo) {
+        this.channelInfo = channelInfo;
+    }
 
-  public String getChannelVersion() {
-    return this.channelVersion;
-  }
+    public String getChannelVersion() {
+        return this.channelVersion;
+    }
 
-  public void setChannelVersion(String channelVersion) {
-    this.channelVersion = channelVersion;
-  }
+    public void setChannelVersion(String channelVersion) {
+        this.channelVersion = channelVersion;
+    }
 
-  public String getUserIp() {
-    return this.userIp;
-  }
+    public String getUserIp() {
+        return this.userIp;
+    }
 
-  public void setUserIp(String userIp) {
-    this.userIp = userIp;
-  }
+    public void setUserIp(String userIp) {
+        this.userIp = userIp;
+    }
 
-  public String getComments() {
-    return this.comments;
-  }
+    public String getComments() {
+        return this.comments;
+    }
 
-  public void setComments(String comments) {
-    this.comments = comments;
-  }
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
 }

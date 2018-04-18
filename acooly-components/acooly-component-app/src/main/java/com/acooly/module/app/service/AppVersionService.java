@@ -12,5 +12,5 @@ import com.acooly.module.app.domain.AppVersion;
  */
 public interface AppVersionService extends EntityService<AppVersion> {
 
-  AppVersion getLatest(String appCode, String deviceType);
+    AppVersion getLatest(String appCode, String deviceType);
 }

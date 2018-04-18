@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface LotteryAwardDao extends EntityJpaDao<LotteryAward, Long> {
 
-  List<LotteryAward> findBylotteryId(Long lotteryId);
+    List<LotteryAward> findBylotteryId(Long lotteryId);
 
-  LotteryAward findByCode(String code);
+    LotteryAward findByCode(String code);
 }

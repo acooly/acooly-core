@@ -14,21 +14,32 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 @Getter
 @Setter
 @Entity
 @Table(name = "email_template")
 public class EmailTemplate extends AbstractEntity {
-  /** serialVersionUID */
-  private static final long serialVersionUID = 1L;
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = 1L;
 
-  /** 模版名称 */
-  @NotEmpty private String name;
+    /**
+     * 模版名称
+     */
+    @NotEmpty
+    private String name;
 
-  /** 模板邮件主题 */
-  private String subject;
+    /**
+     * 模板邮件主题
+     */
+    private String subject;
 
-  /** 模板邮件内容 */
-  private String content;
+    /**
+     * 模板邮件内容
+     */
+    private String content;
 }

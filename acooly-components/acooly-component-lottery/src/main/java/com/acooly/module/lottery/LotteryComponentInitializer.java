@@ -14,10 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 
-/** @author kuli@yiji.com */
+/**
+ * @author kuli@yiji.com
+ */
 public class LotteryComponentInitializer implements ComponentInitializer {
-  private static final Logger logger = LoggerFactory.getLogger(LotteryComponentInitializer.class);
+    private static final Logger logger = LoggerFactory.getLogger(LotteryComponentInitializer.class);
 
-  @Override
-  public void initialize(ConfigurableApplicationContext applicationContext) {}
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+    }
 }

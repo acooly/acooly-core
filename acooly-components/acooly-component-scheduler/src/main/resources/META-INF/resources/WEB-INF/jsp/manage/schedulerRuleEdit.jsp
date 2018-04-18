@@ -44,6 +44,7 @@
             DVersion.hide();
             DParam.hide();
         }
+
         function httpShow() {
             properties.show();
             className.hide();

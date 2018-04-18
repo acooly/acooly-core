@@ -18,11 +18,11 @@ import com.acooly.module.certification.platform.entity.CertificationRecord;
  * @author acooly
  */
 public interface CertificationRecordService extends EntityService<CertificationRecord> {
-  /**
-   * 根据身份证号查询数据
-   *
-   * @param idCarNo
-   * @return
-   */
-  CertificationRecord findEntityByCarNoAndRealName(String idCarNo, String realName);
+    /**
+     * 根据身份证号查询数据
+     *
+     * @param idCarNo
+     * @return
+     */
+    CertificationRecord findEntityByCarNoAndRealName(String idCarNo, String realName);
 }

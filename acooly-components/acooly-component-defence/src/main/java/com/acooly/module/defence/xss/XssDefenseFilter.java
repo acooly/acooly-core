@@ -15,18 +15,22 @@ import java.io.IOException;
  */
 public class XssDefenseFilter implements Filter {
 
-  @Getter @Setter private DefenceProperties defenceProperties;
+    @Getter
+    @Setter
+    private DefenceProperties defenceProperties;
 
-  public void init(FilterConfig filterConfig) throws ServletException {}
-
-  public void destroy() {}
-
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-      throws IOException, ServletException {
-    if (defenceProperties.getXss().matches((HttpServletRequest) request)) {
-      chain.doFilter(new XssHttpServletRequestWrapper((HttpServletRequest) request), response);
-    } else {
-      chain.doFilter(request, response);
+    public void init(FilterConfig filterConfig) throws ServletException {
     }
-  }
+
+    public void destroy() {
+    }
+
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        if (defenceProperties.getXss().matches((HttpServletRequest) request)) {
+            chain.doFilter(new XssHttpServletRequestWrapper((HttpServletRequest) request), response);
+        } else {
+            chain.doFilter(request, response);
+        }
+    }
 }

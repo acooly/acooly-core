@@ -1,4 +1,6 @@
-/** create by zhangpu date:2015年5月10日 */
+/**
+ * create by zhangpu date:2015年5月10日
+ */
 package com.acooly.module.appopenapi.message;
 
 import com.acooly.module.appopenapi.dto.MediaInfo;
@@ -18,18 +20,18 @@ import java.util.List;
 @OpenApiMessage(service = "bannerList", type = ApiMessageType.Response)
 public class BannerListResponse extends ApiResponse {
 
-  @OpenApiField(desc = "媒体列表")
-  private List<MediaInfo> banners = Lists.newArrayList();
+    @OpenApiField(desc = "媒体列表")
+    private List<MediaInfo> banners = Lists.newArrayList();
 
-  public void append(MediaInfo dto) {
-    banners.add(dto);
-  }
+    public void append(MediaInfo dto) {
+        banners.add(dto);
+    }
 
-  public List<MediaInfo> getBanners() {
-    return banners;
-  }
+    public List<MediaInfo> getBanners() {
+        return banners;
+    }
 
-  public void setBanners(List<MediaInfo> banners) {
-    this.banners = banners;
-  }
+    public void setBanners(List<MediaInfo> banners) {
+        this.banners = banners;
+    }
 }

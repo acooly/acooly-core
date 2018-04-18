@@ -8,6 +8,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface OlogParameterMapping {
-	/** 中文名称映射 {"name":"名称",...} */
-	String[] value() default "";
+    /**
+     * 中文名称映射 {"name":"名称",...}
+     */
+    String[] value() default "";
 }

@@ -10,23 +10,23 @@ import java.util.List;
  */
 public class BooleanTypeConverter extends AbstractTypeConverter<Boolean> {
 
-  public Class<Boolean> getTargetType() {
-    return Boolean.class;
-  }
-
-  public List<Class<?>> getSupportedSourceTypes() {
-    List<Class<?>> classes = super.getSupportedSourceTypes();
-    classes.add(Object[].class);
-    classes.add(Collection.class);
-    classes.add(CharSequence.class);
-    classes.add(CharSequence[].class);
-    return classes;
-  }
-
-  public Boolean convert(Object value, Class<? extends Boolean> toType) {
-    if (value == null) {
-      return null;
+    public Class<Boolean> getTargetType() {
+        return Boolean.class;
     }
-    return BooleanPrimitiveTypeConverter.booleanValue(value) ? Boolean.TRUE : Boolean.FALSE;
-  }
+
+    public List<Class<?>> getSupportedSourceTypes() {
+        List<Class<?>> classes = super.getSupportedSourceTypes();
+        classes.add(Object[].class);
+        classes.add(Collection.class);
+        classes.add(CharSequence.class);
+        classes.add(CharSequence[].class);
+        return classes;
+    }
+
+    public Boolean convert(Object value, Class<? extends Boolean> toType) {
+        if (value == null) {
+            return null;
+        }
+        return BooleanPrimitiveTypeConverter.booleanValue(value) ? Boolean.TRUE : Boolean.FALSE;
+    }
 }

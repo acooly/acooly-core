@@ -13,11 +13,13 @@ import com.acooly.core.utils.ToString;
 
 import java.io.Serializable;
 
-/** @author acooly */
+/**
+ * @author acooly
+ */
 public class LotteryWinnerInfo implements Serializable {
 
-  @Override
-  public String toString() {
-    return ToString.toString(this);
-  }
+    @Override
+    public String toString() {
+        return ToString.toString(this);
+    }
 }

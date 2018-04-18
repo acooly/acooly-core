@@ -9,21 +9,33 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Olog {
 
-  /** 系统 */
-  String system() default "";
-  /** 模块 */
-  String module() default "";
-  /** 模块名称 */
-  String moduleName() default "";
-  /** 操作名称 */
-  String action() default "";
+    /**
+     * 系统
+     */
+    String system() default "";
 
-  String actionName() default "";
+    /**
+     * 模块
+     */
+    String module() default "";
+
+    /**
+     * 模块名称
+     */
+    String moduleName() default "";
+
+    /**
+     * 操作名称
+     */
+    String action() default "";
+
+    String actionName() default "";
 
     /**
      * 忽略日志收集
      */
-  @Target({ElementType.TYPE, ElementType.METHOD})
-  @Retention(RetentionPolicy.RUNTIME)
-  @interface Ignore {}
+    @Target({ElementType.TYPE, ElementType.METHOD})
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Ignore {
+    }
 }

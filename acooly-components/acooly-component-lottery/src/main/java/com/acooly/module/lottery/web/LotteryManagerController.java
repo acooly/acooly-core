@@ -27,61 +27,62 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/manage/module/lottery/lottery")
 public class LotteryManagerController
-    extends AbstractJQueryEntityController<Lottery, LotteryService> {
+        extends AbstractJQueryEntityController<Lottery, LotteryService> {
 
-  @Autowired private LotteryService lotteryService;
+    @Autowired
+    private LotteryService lotteryService;
 
-  @Override
-  protected Lottery onSave(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      Model model,
-      Lottery entity,
-      boolean isCreate)
-      throws Exception {
-    if (isCreate) {
-      entity.setCode(Ids.getDid());
+    @Override
+    protected Lottery onSave(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Model model,
+            Lottery entity,
+            boolean isCreate)
+            throws Exception {
+        if (isCreate) {
+            entity.setCode(Ids.getDid());
+        }
+        return entity;
     }
-    return entity;
-  }
 
-  @RequestMapping(value = "status")
-  @ResponseBody
-  public JsonEntityResult<Lottery> status(
-      HttpServletRequest request, HttpServletResponse response) {
-    JsonEntityResult<Lottery> result = new JsonEntityResult<Lottery>();
-    try {
-      Lottery lottery = loadEntity(request);
-      LotteryStatus status = null;
-      if (lottery.getStatus() == LotteryStatus.enable) {
-        status = LotteryStatus.pause;
-      } else if (lottery.getStatus() == LotteryStatus.pause) {
-        status = LotteryStatus.enable;
-      } else {
-        throw new RuntimeException("活动已" + lottery.getStatus());
-      }
-      lottery.setStatus(status);
-      getEntityService().save(lottery);
-      result.setEntity(lottery);
-      result.setMessage("状态成功修改为:" + status.getMessage());
-    } catch (Exception e) {
-      handleException(result, "状态修改", e);
+    @RequestMapping(value = "status")
+    @ResponseBody
+    public JsonEntityResult<Lottery> status(
+            HttpServletRequest request, HttpServletResponse response) {
+        JsonEntityResult<Lottery> result = new JsonEntityResult<Lottery>();
+        try {
+            Lottery lottery = loadEntity(request);
+            LotteryStatus status = null;
+            if (lottery.getStatus() == LotteryStatus.enable) {
+                status = LotteryStatus.pause;
+            } else if (lottery.getStatus() == LotteryStatus.pause) {
+                status = LotteryStatus.enable;
+            } else {
+                throw new RuntimeException("活动已" + lottery.getStatus());
+            }
+            lottery.setStatus(status);
+            getEntityService().save(lottery);
+            result.setEntity(lottery);
+            result.setMessage("状态成功修改为:" + status.getMessage());
+        } catch (Exception e) {
+            handleException(result, "状态修改", e);
+        }
+        return result;
     }
-    return result;
-  }
 
-  @Override
-  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-    model.put("allTypes", LotteryType.mapping());
-    model.put("allStatuss", LotteryStatus.mapping());
-    model.put("allUserCounters", SimpleStatus.mapping());
-  }
+    @Override
+    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+        model.put("allTypes", LotteryType.mapping());
+        model.put("allStatuss", LotteryStatus.mapping());
+        model.put("allUserCounters", SimpleStatus.mapping());
+    }
 
-  @InitBinder
-  public void initBinder(WebDataBinder binder) {
-    super.initBinder(binder);
-    SimpleDateFormat dateFormat = new SimpleDateFormat(Dates.CHINESE_DATE_FORMAT_LINE);
-    dateFormat.setLenient(true);
-    binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
-  }
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        super.initBinder(binder);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Dates.CHINESE_DATE_FORMAT_LINE);
+        dateFormat.setLenient(true);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+    }
 }

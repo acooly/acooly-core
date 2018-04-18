@@ -26,11 +26,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Constraint(validatedBy = {MobileNoValidator.class})
 public @interface MobileNo {
-  String message() default "{com.acooly.utils.validator.MobileNo.message}";
+    String message() default "{com.acooly.utils.validator.MobileNo.message}";
 
-  Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
-  Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 
-  boolean blankable() default false;
+    boolean blankable() default false;
 }

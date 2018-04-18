@@ -1,4 +1,6 @@
-/** create by zhangpu date:2015年11月4日 */
+/**
+ * create by zhangpu date:2015年11月4日
+ */
 package com.acooly.module.app.enums;
 
 import com.google.common.collect.Maps;
@@ -12,40 +14,40 @@ import java.util.Map;
  * @date 2015年11月4日
  */
 public enum AppMessageStatus {
-  apply("apply", "提交"),
+    apply("apply", "提交"),
 
-  sending("sending", "发送中"),
+    sending("sending", "发送中"),
 
-  success("success", "成功"),
+    success("success", "成功"),
 
-  fail("fail", "失败");
+    fail("fail", "失败");
 
-  private String code;
-  private String message;
+    private String code;
+    private String message;
 
-  private AppMessageStatus(String code, String message) {
-    this.code = code;
-    this.message = message;
-  }
-
-  public static Map<String, String> mapping() {
-    Map<String, String> map = Maps.newLinkedHashMap();
-    for (AppMessageStatus type : values()) {
-      map.put(type.getCode(), type.getMessage());
+    private AppMessageStatus(String code, String message) {
+        this.code = code;
+        this.message = message;
     }
-    return map;
-  }
 
-  public String getCode() {
-    return code;
-  }
+    public static Map<String, String> mapping() {
+        Map<String, String> map = Maps.newLinkedHashMap();
+        for (AppMessageStatus type : values()) {
+            map.put(type.getCode(), type.getMessage());
+        }
+        return map;
+    }
 
-  public String getMessage() {
-    return message;
-  }
+    public String getCode() {
+        return code;
+    }
 
-  @Override
-  public String toString() {
-    return this.code + " : " + this.message;
-  }
+    public String getMessage() {
+        return message;
+    }
+
+    @Override
+    public String toString() {
+        return this.code + " : " + this.message;
+    }
 }

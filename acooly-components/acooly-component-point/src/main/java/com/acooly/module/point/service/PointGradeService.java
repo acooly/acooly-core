@@ -20,11 +20,11 @@ import com.acooly.module.point.domain.PointGrade;
  */
 public interface PointGradeService extends EntityService<PointGrade> {
 
-  /**
-   * 获取用户积分等级
-   *
-   * @param point
-   * @return
-   */
-  PointGrade getSectionPoint(PointAccount pointAccount);
+    /**
+     * 获取用户积分等级
+     *
+     * @param point
+     * @return
+     */
+    PointGrade getSectionPoint(PointAccount pointAccount);
 }

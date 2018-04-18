@@ -25,7 +25,9 @@ import org.springframework.test.context.junit4.rules.SpringMethodRule;
 @RunWith(JUnitParamsRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class IntegrationTestBase {
-  @ClassRule public static final SpringClassRule SPRING_CLASS_RULE = new SpringClassRule();
+    @ClassRule
+    public static final SpringClassRule SPRING_CLASS_RULE = new SpringClassRule();
 
-  @Rule public final SpringMethodRule springMethodRule = new SpringMethodRule();
+    @Rule
+    public final SpringMethodRule springMethodRule = new SpringMethodRule();
 }

@@ -19,43 +19,48 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @RestController
 @EventHandler
 @RequestMapping(value = "/event")
 @Slf4j
 public class EventBusController {
-  @Resource private EventBus eventBus;
+    @Resource
+    private EventBus eventBus;
 
-  @Autowired private CityMybatisDao cityDao;
-  @Autowired private SqlSessionFactory sessionFactory;
+    @Autowired
+    private CityMybatisDao cityDao;
+    @Autowired
+    private SqlSessionFactory sessionFactory;
 
-  @RequestMapping("test")
-  @Transactional
-  public void test() {
-    val holder = (SqlSessionHolder) TransactionSynchronizationManager.getResource(sessionFactory);
-    if (holder != null) {
-      log.info("{}", holder.getSqlSession().getConnection());
+    @RequestMapping("test")
+    @Transactional
+    public void test() {
+        val holder = (SqlSessionHolder) TransactionSynchronizationManager.getResource(sessionFactory);
+        if (holder != null) {
+            log.info("{}", holder.getSqlSession().getConnection());
+        }
+        cityDao.get(1l);
+        CreateCustomerEvent event = new CreateCustomerEvent();
+        event.setId(1l);
+        event.setUserName("dfd");
+        eventBus.publishAfterTransactionCommitted(event);
+        eventBus.publishAfterTransactionCommitted(event);
+        cityDao.get(1l);
     }
-    cityDao.get(1l);
-    CreateCustomerEvent event = new CreateCustomerEvent();
-    event.setId(1l);
-    event.setUserName("dfd");
-    eventBus.publishAfterTransactionCommitted(event);
-    eventBus.publishAfterTransactionCommitted(event);
-    cityDao.get(1l);
-  }
 
-  // 同步事件处理器
-  @Handler(delivery = Invoke.Asynchronously)
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public void handleCreateCustomerEvent(CreateCustomerEvent event) {
-    log.info("{}", event);
-    cityDao.get(1l);
-    log.info("{}", event);
+    // 同步事件处理器
+    @Handler(delivery = Invoke.Asynchronously)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void handleCreateCustomerEvent(CreateCustomerEvent event) {
+        log.info("{}", event);
+        cityDao.get(1l);
+        log.info("{}", event);
 
 
-    throw new CannotAcquireLockException("x");
-    // do what you like
-  }
+        throw new CannotAcquireLockException("x");
+        // do what you like
+    }
 }

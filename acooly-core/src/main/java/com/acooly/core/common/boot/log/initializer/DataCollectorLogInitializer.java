@@ -8,17 +8,17 @@ import com.acooly.core.common.boot.log.LogbackConfigurator;
 import com.acooly.core.common.log.BusinessLog;
 
 public class DataCollectorLogInitializer extends AbstractLogInitializer {
-  @Override
-  public void init(LogbackConfigurator configurator) {
-    String fileName = "busi/business-2dt.log";
-    configurator.log("设置业务监控日志，日志文件为:%s", fileName);
-    // 创建异步file appender
-    Appender<ILoggingEvent> appender =
-        configurator.asyncFileAppender(BusinessLog.LOGGER_NAME, "%msg%n", fileName, 5);
-    // 异步日志不收集栈信息
-    if (appender instanceof LogbackAsyncAppender) {
-      ((LogbackAsyncAppender) appender).setIncludeCallerData(false);
+    @Override
+    public void init(LogbackConfigurator configurator) {
+        String fileName = "busi/business-2dt.log";
+        configurator.log("设置业务监控日志，日志文件为:%s", fileName);
+        // 创建异步file appender
+        Appender<ILoggingEvent> appender =
+                configurator.asyncFileAppender(BusinessLog.LOGGER_NAME, "%msg%n", fileName, 5);
+        // 异步日志不收集栈信息
+        if (appender instanceof LogbackAsyncAppender) {
+            ((LogbackAsyncAppender) appender).setIncludeCallerData(false);
+        }
+        configurator.logger(BusinessLog.LOGGER_NAME, Level.INFO, false, appender);
     }
-    configurator.logger(BusinessLog.LOGGER_NAME, Level.INFO, false, appender);
-  }
 }

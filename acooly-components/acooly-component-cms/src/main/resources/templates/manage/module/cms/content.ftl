@@ -7,16 +7,15 @@
     });
 
 
-    function manage_content${RequestParameters.code}_size(){
+    function manage_content${RequestParameters.code}_size() {
         var cmsType = '${RequestParameters.cmsType}';
-        var scale = {w : 1000, h: 600};
-        if(cmsType == 'banner'){
+        var scale = {w: 1000, h: 600};
+        if (cmsType == 'banner') {
             scale.w = 500;
             scale.h = 400;
         }
         return scale;
     }
-
 
 
     function manage_content${RequestParameters.code}_show() {
@@ -40,8 +39,8 @@
             <table class="tableForm" width="100%">
                 <tr>
                     <td align="left">
-                        标题:<input type="text" class="text" name="search_LIKE_title"  />
-                        关键字:<input type="text" class="text" name="search_LIKE_keywords"  "/>
+                        标题:<input type="text" class="text" name="search_LIKE_title"/>
+                        关键字:<input type="text" class="text" name="search_LIKE_keywords" "/>
                         <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true"
                            onclick="$.acooly.framework.search('manage_content${RequestParameters.code}_searchform', 'manage_content${RequestParameters.code}_datagrid');">查询</a>
                     </td>
@@ -64,14 +63,20 @@
                 <th field="contentType" data-options="formatter:function(e){return e.name;}">类型</th>
                 <th field="title">标题</th>
                 <#if RequestParameters.cmsType = 'banner'>
-                <th field="cover" data-options="formatter:function(v,r,i){ if(v){return '<img src=\'${mediaRoot}/'+v+'\' width=\'100\'>';}else{return '';} }">图片</th>
+                <th field="cover"
+                    data-options="formatter:function(v,r,i){ if(v){return '<img src=\'${mediaRoot}/'+v+'\' width=\'100\'>';}else{return '';} }">
+                    图片
+                </th>
                 <th field="link" formatter="linkFormatter">链接</th>
                 <#else >
                 <th field="keywords">关键字</th>
                 <th field="keycode">编码</th>
                 </#if>
                 <th field="createTime" formatter="dateTimeFormatter">发布时间</th>
-                <th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_content${RequestParameters.code}_action',value,row)}">动作</th>
+                <th field="rowActions"
+                    data-options="formatter:function(value, row, index){return formatAction('manage_content${RequestParameters.code}_action',value,row)}">
+                    动作
+                </th>
             </tr>
             </thead>
         </table>

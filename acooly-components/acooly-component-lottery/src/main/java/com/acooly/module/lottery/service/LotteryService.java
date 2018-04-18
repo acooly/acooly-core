@@ -17,19 +17,19 @@ import java.util.Map;
  */
 public interface LotteryService extends EntityService<Lottery> {
 
-  Map<String, Object> lottery(String code, String user);
+    Map<String, Object> lottery(String code, String user);
 
-  Map<String, Object> lottery(String code, String user, String comments);
+    Map<String, Object> lottery(String code, String user, String comments);
 
-  /**
-   * 抽奖
-   *
-   * @param order
-   * @return
-   */
-  LotteryResult lottery(LotteryOrder order);
+    /**
+     * 抽奖
+     *
+     * @param order
+     * @return
+     */
+    LotteryResult lottery(LotteryOrder order);
 
-  Lottery findByCode(String code);
+    Lottery findByCode(String code);
 
-  Lottery updateStatus(Long id, LotteryStatus lotteryStatus);
+    Lottery updateStatus(Long id, LotteryStatus lotteryStatus);
 }

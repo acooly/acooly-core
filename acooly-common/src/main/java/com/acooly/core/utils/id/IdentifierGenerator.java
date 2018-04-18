@@ -6,10 +6,10 @@ package com.acooly.core.utils.id;
  * @author qiubo
  */
 public interface IdentifierGenerator<T> {
-  /**
-   * 生成长度19位的全局唯一的、全为数字的id
-   *
-   * @return
-   */
-  T generate();
+    /**
+     * 生成长度19位的全局唯一的、全为数字的id
+     *
+     * @return
+     */
+    T generate();
 }

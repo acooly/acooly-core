@@ -5,15 +5,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @RestController
 @RequestMapping(value = "/seq")
 public class SeqController {
 
-  @Autowired private SeqService seqService;
+    @Autowired
+    private SeqService seqService;
 
-  @RequestMapping("next")
-  public Long next(String name) {
-    return seqService.nextId(name);
-  }
+    @RequestMapping("next")
+    public Long next(String name) {
+        return seqService.nextId(name);
+    }
 }

@@ -14,25 +14,25 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Slf4j
 public class TransactionExecutor {
 
-  private ThreadPoolTaskExecutor taskExecutor;
+    private ThreadPoolTaskExecutor taskExecutor;
 
-  private TransactionTemplate transactionTemplate;
+    private TransactionTemplate transactionTemplate;
 
-  public TransactionExecutor(
-      ThreadPoolTaskExecutor taskExecutor, TransactionTemplate transactionTemplate) {
-    this.taskExecutor = taskExecutor;
-    this.transactionTemplate = transactionTemplate;
-  }
+    public TransactionExecutor(
+            ThreadPoolTaskExecutor taskExecutor, TransactionTemplate transactionTemplate) {
+        this.taskExecutor = taskExecutor;
+        this.transactionTemplate = transactionTemplate;
+    }
 
-  public void run(final Runnable runnable) {
-    taskExecutor.execute(
-        () ->
-            transactionTemplate.execute(
-                new TransactionCallbackWithoutResult() {
-                  @Override
-                  protected void doInTransactionWithoutResult(TransactionStatus status) {
-                    runnable.run();
-                  }
-                }));
-  }
+    public void run(final Runnable runnable) {
+        taskExecutor.execute(
+                () ->
+                        transactionTemplate.execute(
+                                new TransactionCallbackWithoutResult() {
+                                    @Override
+                                    protected void doInTransactionWithoutResult(TransactionStatus status) {
+                                        runnable.run();
+                                    }
+                                }));
+    }
 }

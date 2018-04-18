@@ -12,4 +12,5 @@ package com.acooly.core.utils.collection;
  *
  * @author Agreal·Lee (e-mail:lixiang@yiji.com)
  */
-public interface AutoClearable {}
+public interface AutoClearable {
+}

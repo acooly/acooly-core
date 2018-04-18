@@ -14,6 +14,9 @@ import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
 import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @OpenApiMessage(service = "payOrder", type = ApiMessageType.Response)
-public class PayOrderResponse extends ApiResponse {}
+public class PayOrderResponse extends ApiResponse {
+}

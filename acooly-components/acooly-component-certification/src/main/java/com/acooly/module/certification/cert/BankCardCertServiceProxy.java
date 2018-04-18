@@ -8,27 +8,30 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 @Service("bankCardCertService")
 public class BankCardCertServiceProxy
-    implements BankCardCertService, ApplicationListener<ContextRefreshedEvent> {
+        implements BankCardCertService, ApplicationListener<ContextRefreshedEvent> {
 
-  private BankCardCertService bankCardCertService;
+    private BankCardCertService bankCardCertService;
 
-  @Autowired private CertificationProperties properties;
+    @Autowired
+    private CertificationProperties properties;
 
-  @Override
-  public BankCardResult bankCardCert(
-      String realName, String cardNo, String certId, String phoneNum) {
-    return bankCardCertService.bankCardCert(realName, cardNo, certId, phoneNum);
-  }
-
-  @Override
-  public void onApplicationEvent(ContextRefreshedEvent event) {
-    if (bankCardCertService == null) {
-      bankCardCertService =
-          (BankCardCertService)
-              ApplicationContextHolder.get().getBean(properties.getBankCertProvider().code());
+    @Override
+    public BankCardResult bankCardCert(
+            String realName, String cardNo, String certId, String phoneNum) {
+        return bankCardCertService.bankCardCert(realName, cardNo, certId, phoneNum);
     }
-  }
+
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        if (bankCardCertService == null) {
+            bankCardCertService =
+                    (BankCardCertService)
+                            ApplicationContextHolder.get().getBean(properties.getBankCertProvider().code());
+        }
+    }
 }

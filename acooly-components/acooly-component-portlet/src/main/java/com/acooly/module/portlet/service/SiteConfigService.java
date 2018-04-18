@@ -21,35 +21,35 @@ import java.util.List;
  */
 public interface SiteConfigService extends EntityService<SiteConfig> {
 
-  /**
-   * 通过类型查询所有配置实体
-   *
-   * @param type
-   * @return
-   */
-  List<SiteConfig> findByType(String type);
+    /**
+     * 通过类型查询所有配置实体
+     *
+     * @param type
+     * @return
+     */
+    List<SiteConfig> findByType(String type);
 
-  /**
-   * 查询默认类型的所有配置
-   *
-   * @return
-   */
-  List<SiteConfig> findByType();
+    /**
+     * 查询默认类型的所有配置
+     *
+     * @return
+     */
+    List<SiteConfig> findByType();
 
-  /**
-   * 通过类型和名称查询唯一的配置
-   *
-   * @param type
-   * @param name
-   * @return
-   */
-  SiteConfig findUnique(String type, String name);
+    /**
+     * 通过类型和名称查询唯一的配置
+     *
+     * @param type
+     * @param name
+     * @return
+     */
+    SiteConfig findUnique(String type, String name);
 
-  /**
-   * 查询默认类型的指定名称的配置
-   *
-   * @param name
-   * @return
-   */
-  SiteConfig findUnique(String name);
+    /**
+     * 查询默认类型的指定名称的配置
+     *
+     * @param name
+     * @return
+     */
+    SiteConfig findUnique(String name);
 }

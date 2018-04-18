@@ -11,7 +11,9 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @Configuration
 @EnableConfigurationProperties({SeqProperties.class})
 @ConditionalOnProperty(value = "acooly.seq.enable", matchIfMissing = true)
@@ -19,23 +21,23 @@ import java.util.List;
 @ComponentScan
 public class SeqAutoConfig {
 
-  @Bean
-  public StandardDatabaseScriptIniter seqScriptIniter() {
-    return new StandardDatabaseScriptIniter() {
-      @Override
-      public String getEvaluateTable() {
-        return "sys_seq";
-      }
+    @Bean
+    public StandardDatabaseScriptIniter seqScriptIniter() {
+        return new StandardDatabaseScriptIniter() {
+            @Override
+            public String getEvaluateTable() {
+                return "sys_seq";
+            }
 
-      @Override
-      public String getComponentName() {
-        return "seq";
-      }
+            @Override
+            public String getComponentName() {
+                return "seq";
+            }
 
-      @Override
-      public List<String> getInitSqlFile() {
-        return Lists.newArrayList("seq");
-      }
-    };
-  }
+            @Override
+            public List<String> getInitSqlFile() {
+                return Lists.newArrayList("seq");
+            }
+        };
+    }
 }

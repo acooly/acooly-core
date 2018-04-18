@@ -1,4 +1,6 @@
-/** create by zhangpu date:2015年11月5日 */
+/**
+ * create by zhangpu date:2015年11月5日
+ */
 package com.acooly.module.app.notify.jpush;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,63 +13,65 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class JPushResult {
 
-  /** http 状态码 */
-  private int httpStatus;
+    /**
+     * http 状态码
+     */
+    private int httpStatus;
 
-  private String code;
+    private String code;
 
-  private String message;
+    private String message;
 
-  @JsonProperty("sendno")
-  private String sendNo;
+    @JsonProperty("sendno")
+    private String sendNo;
 
-  @JsonProperty("msg_id")
-  private String msgId;
+    @JsonProperty("msg_id")
+    private String msgId;
 
-  public int getHttpStatus() {
-    return httpStatus;
-  }
+    public int getHttpStatus() {
+        return httpStatus;
+    }
 
-  public void setHttpStatus(int httpStatus) {
-    this.httpStatus = httpStatus;
-  }
+    public void setHttpStatus(int httpStatus) {
+        this.httpStatus = httpStatus;
+    }
 
-  public String getCode() {
-    return code;
-  }
+    public String getCode() {
+        return code;
+    }
 
-  public void setCode(String code) {
-    this.code = code;
-  }
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-  public String getMessage() {
-    return message;
-  }
+    public String getMessage() {
+        return message;
+    }
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-  public String getSendNo() {
-    return sendNo;
-  }
+    public String getSendNo() {
+        return sendNo;
+    }
 
-  public void setSendNo(String sendNo) {
-    this.sendNo = sendNo;
-  }
+    public void setSendNo(String sendNo) {
+        this.sendNo = sendNo;
+    }
 
-  public String getMsgId() {
-    return msgId;
-  }
+    public String getMsgId() {
+        return msgId;
+    }
 
-  public void setMsgId(String msgId) {
-    this.msgId = msgId;
-  }
+    public void setMsgId(String msgId) {
+        this.msgId = msgId;
+    }
 
-  @Override
-  public String toString() {
-    return String.format(
-        "{httpStatus:%s, code:%s, message:%s, sendNo:%s, msgId:%s}",
-        httpStatus, code, message, sendNo, msgId);
-  }
+    @Override
+    public String toString() {
+        return String.format(
+                "{httpStatus:%s, code:%s, message:%s, sendNo:%s, msgId:%s}",
+                httpStatus, code, message, sendNo, msgId);
+    }
 }

@@ -12,9 +12,9 @@ import com.acooly.module.sms.domain.SmsLog;
  */
 public interface SmsLogService extends EntityService<SmsLog> {
 
-  void saveInNewTrans(SmsLog smsLog);
+    void saveInNewTrans(SmsLog smsLog);
 
-  int countByIp(String ip, long ms);
+    int countByIp(String ip, long ms);
 
-  int countByMobileNo(String mobileNo, long ms);
+    int countByMobileNo(String mobileNo, long ms);
 }

@@ -15,13 +15,15 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @ConditionalOnProperty(value = "acooly.ds.checker.checkColumn")
 @EnableConfigurationProperties({DruidProperties.class})
 @Configuration
 public class DatabaseTableCheckerConfig {
-  @Bean
-  public DatabaseTableChecker databaseTableChecker(DruidProperties druidProperties) {
-    return new DatabaseTableChecker(druidProperties);
-  }
+    @Bean
+    public DatabaseTableChecker databaseTableChecker(DruidProperties druidProperties) {
+        return new DatabaseTableChecker(druidProperties);
+    }
 }

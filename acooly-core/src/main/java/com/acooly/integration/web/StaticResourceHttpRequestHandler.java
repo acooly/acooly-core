@@ -1,4 +1,6 @@
-/** create by zhangpu date:2015年10月12日 */
+/**
+ * create by zhangpu date:2015年10月12日
+ */
 package com.acooly.integration.web;
 
 import com.acooly.core.common.exception.AppConfigException;
@@ -25,34 +27,34 @@ import java.util.List;
  */
 public class StaticResourceHttpRequestHandler extends ResourceHttpRequestHandler {
 
-  private String classpathViewRoot = "static/";
-  private String webappViewRoot = "/";
+    private String classpathViewRoot = "static/";
+    private String webappViewRoot = "/";
 
-  @Override
-  public void afterPropertiesSet() throws Exception {
-    super.afterPropertiesSet();
-    List<Resource> locations = Lists.newArrayList();
-    locations.add(new ServletContextResource(getServletContext(), this.webappViewRoot));
-    locations.add(new ClassPathResource(this.classpathViewRoot));
-    setLocations(locations);
-  }
-
-  @Override
-  protected Resource getResource(HttpServletRequest request) {
-    request.setAttribute(
-        HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE, request.getRequestURI());
-    try {
-      return super.getResource(request);
-    } catch (IOException e) {
-      throw new AppConfigException(e);
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        super.afterPropertiesSet();
+        List<Resource> locations = Lists.newArrayList();
+        locations.add(new ServletContextResource(getServletContext(), this.webappViewRoot));
+        locations.add(new ClassPathResource(this.classpathViewRoot));
+        setLocations(locations);
     }
-  }
 
-  public void setClasspathViewRoot(String classpathViewRoot) {
-    this.classpathViewRoot = classpathViewRoot;
-  }
+    @Override
+    protected Resource getResource(HttpServletRequest request) {
+        request.setAttribute(
+                HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE, request.getRequestURI());
+        try {
+            return super.getResource(request);
+        } catch (IOException e) {
+            throw new AppConfigException(e);
+        }
+    }
 
-  public void setWebappViewRoot(String webappViewRoot) {
-    this.webappViewRoot = webappViewRoot;
-  }
+    public void setClasspathViewRoot(String classpathViewRoot) {
+        this.classpathViewRoot = classpathViewRoot;
+    }
+
+    public void setWebappViewRoot(String webappViewRoot) {
+        this.webappViewRoot = webappViewRoot;
+    }
 }

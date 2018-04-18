@@ -15,16 +15,18 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
 
-/** @author qiubo */
+/**
+ * @author qiubo
+ */
 public class HolderInitApplicationContextInitializer
-    implements ApplicationContextInitializer<ConfigurableApplicationContext>, PriorityOrdered {
-  @Override
-  public void initialize(ConfigurableApplicationContext applicationContext) {
-    new ApplicationContextHolder().setApplicationContext(applicationContext);
-  }
+        implements ApplicationContextInitializer<ConfigurableApplicationContext>, PriorityOrdered {
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        new ApplicationContextHolder().setApplicationContext(applicationContext);
+    }
 
-  @Override
-  public int getOrder() {
-    return Ordered.HIGHEST_PRECEDENCE;
-  }
+    @Override
+    public int getOrder() {
+        return Ordered.HIGHEST_PRECEDENCE;
+    }
 }

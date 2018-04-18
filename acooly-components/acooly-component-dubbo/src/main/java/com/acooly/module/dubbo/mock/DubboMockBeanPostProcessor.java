@@ -15,74 +15,76 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @Slf4j
 @Getter
 @Setter
 public class DubboMockBeanPostProcessor implements BeanPostProcessor {
-  private String annotationPackage;
-  private List<String> mockInterfaces;
+    private String annotationPackage;
+    private List<String> mockInterfaces;
 
-  @Override
-  public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-    return bean;
-  }
-
-  private boolean isMatchPackage(Object bean) {
-    return isMatchPackage(bean.getClass());
-  }
-
-  private boolean isMatchPackage(Class clazz) {
-    if (annotationPackage == null) {
-      return true;
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        return bean;
     }
-    String beanClassName = clazz.getName();
-    return beanClassName.startsWith(annotationPackage);
-  }
 
-  @Override
-  public Object postProcessBeforeInitialization(Object bean, String beanName)
-      throws BeansException {
-    if (mockInterfaces == null) {
-      return bean;
+    private boolean isMatchPackage(Object bean) {
+        return isMatchPackage(bean.getClass());
     }
-    if (!isMatchPackage(bean)) {
-      return bean;
+
+    private boolean isMatchPackage(Class clazz) {
+        if (annotationPackage == null) {
+            return true;
+        }
+        String beanClassName = clazz.getName();
+        return beanClassName.startsWith(annotationPackage);
     }
-    // 处理代理bean，不能获取targetClass
-    ReflectionUtils.doWithFields(
-        bean.getClass(),
-        field -> {
-          Reference reference = field.getAnnotation(Reference.class);
-          if (reference != null) {
-            if (mockInterfaces.contains(field.getType().getName())) {
-              field.setAccessible(true);
-              Object mockService = findMockBean(field);
-              if (!Objects.equals(field.get(bean), mockService)) {
-                field.set(bean, mockService);
-                log.info(
-                    "[MOCK]dubbo @Reference {}.{} has bean mocked with {}",
-                    field.getDeclaringClass().getSimpleName(),
-                    field.getName(),
-                    mockService.getClass().getName());
-              }
+
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName)
+            throws BeansException {
+        if (mockInterfaces == null) {
+            return bean;
+        }
+        if (!isMatchPackage(bean)) {
+            return bean;
+        }
+        // 处理代理bean，不能获取targetClass
+        ReflectionUtils.doWithFields(
+                bean.getClass(),
+                field -> {
+                    Reference reference = field.getAnnotation(Reference.class);
+                    if (reference != null) {
+                        if (mockInterfaces.contains(field.getType().getName())) {
+                            field.setAccessible(true);
+                            Object mockService = findMockBean(field);
+                            if (!Objects.equals(field.get(bean), mockService)) {
+                                field.set(bean, mockService);
+                                log.info(
+                                        "[MOCK]dubbo @Reference {}.{} has bean mocked with {}",
+                                        field.getDeclaringClass().getSimpleName(),
+                                        field.getName(),
+                                        mockService.getClass().getName());
+                            }
+                        }
+                    }
+                });
+        return bean;
+    }
+
+    private Object findMockBean(Field field) {
+        Map<String, ?> beansOfType = Apps.getApplicationContext().getBeansOfType(field.getType());
+        Object mockService = null;
+        for (Object o : beansOfType.values()) {
+            if (o.getClass().getName().endsWith("Mock")) {
+                mockService = o;
             }
-          }
-        });
-    return bean;
-  }
-
-  private Object findMockBean(Field field) {
-    Map<String, ?> beansOfType = Apps.getApplicationContext().getBeansOfType(field.getType());
-    Object mockService = null;
-    for (Object o : beansOfType.values()) {
-      if (o.getClass().getName().endsWith("Mock")) {
-        mockService = o;
-      }
+        }
+        if (mockService == null) {
+            throw new AppConfigException("dubbo消费者:" + field.getType() + " mock实现类不存在,类名必须以Mock为后缀");
+        }
+        return mockService;
     }
-    if (mockService == null) {
-      throw new AppConfigException("dubbo消费者:" + field.getType() + " mock实现类不存在,类名必须以Mock为后缀");
-    }
-    return mockService;
-  }
 }

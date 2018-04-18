@@ -15,17 +15,19 @@ import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
-/** @author acooly */
+/**
+ * @author acooly
+ */
 public interface Entityable extends Serializable, Persistable<Serializable> {
 
-  Serializable getId();
+    Serializable getId();
 
-  Date getCreateTime();
+    Date getCreateTime();
 
-  Date getUpdateTime();
+    Date getUpdateTime();
 
-  @Transient
-  default boolean isNew() {
-    return null == getId();
-  }
+    @Transient
+    default boolean isNew() {
+        return null == getId();
+    }
 }

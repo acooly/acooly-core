@@ -14,26 +14,28 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
 
-/** @author qiubo */
+/**
+ * @author qiubo
+ */
 public class ApplicationContextHolder implements ApplicationContextAware {
 
-  private static ApplicationContext CONTEXT;
+    private static ApplicationContext CONTEXT;
 
-  private static void setContext(ApplicationContext context) {
-    ApplicationContextHolder.CONTEXT = context;
-  }
-
-  public static ConfigurableApplicationContext get() {
-    return (ConfigurableApplicationContext) CONTEXT;
-  }
-
-  public void setApplicationContext(ApplicationContext context) throws BeansException {
-    if (CONTEXT != null) {
-      if (context.getParent() == CONTEXT) {
-        setContext(context);
-      }
-    } else {
-      setContext(context);
+    private static void setContext(ApplicationContext context) {
+        ApplicationContextHolder.CONTEXT = context;
     }
-  }
+
+    public static ConfigurableApplicationContext get() {
+        return (ConfigurableApplicationContext) CONTEXT;
+    }
+
+    public void setApplicationContext(ApplicationContext context) throws BeansException {
+        if (CONTEXT != null) {
+            if (context.getParent() == CONTEXT) {
+                setContext(context);
+            }
+        } else {
+            setContext(context);
+        }
+    }
 }

@@ -7,9 +7,13 @@
  */
 package com.acooly.core.common.exception;
 
-/** @author zhangpu */
+/**
+ * @author zhangpu
+ */
 public class UnMappingMethodException extends BusinessException {
 
-  /** serialVersionUID */
-  private static final long serialVersionUID = 890039513065283173L;
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = 890039513065283173L;
 }

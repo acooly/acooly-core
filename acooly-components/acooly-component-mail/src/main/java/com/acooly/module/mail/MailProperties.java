@@ -19,34 +19,54 @@ import org.springframework.validation.annotation.Validated;
 
 import static com.acooly.module.mail.MailProperties.PREFIX;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @ConfigurationProperties(prefix = PREFIX)
 @Data
 @Slf4j
 @Validated
 public class MailProperties implements InitializingBean {
-  public static final String PREFIX = "acooly.mail";
-  private final String charset = Charsets.UTF_8.name();
-  /** 模板路径，邮件模板放在此路径下<b> 文件名作为key(不带后缀)，文件内容为模板内容 */
-  private final String mailTemplatePath = "classpath:/mail/";
+    public static final String PREFIX = "acooly.mail";
+    private final String charset = Charsets.UTF_8.name();
+    /**
+     * 模板路径，邮件模板放在此路径下<b> 文件名作为key(不带后缀)，文件内容为模板内容
+     */
+    private final String mailTemplatePath = "classpath:/mail/";
 
-  private boolean enable = true;
-  private boolean debug = false;
-  /** 邮件服务器地址 */
-  @NotEmpty private String hostname;
-  /** 邮件服务器用户名 */
-  @NotEmpty private String username;
-  /** 邮件服务器密码 */
-  @NotEmpty private String password;
-  /** 邮件发送者名称：比如 xx客服 */
-  @NotEmpty private String fromName;
-  /** 邮件发送者邮箱地址：比如 xx@xx.com */
-  @NotEmpty private String fromAddress;
+    private boolean enable = true;
+    private boolean debug = false;
+    /**
+     * 邮件服务器地址
+     */
+    @NotEmpty
+    private String hostname;
+    /**
+     * 邮件服务器用户名
+     */
+    @NotEmpty
+    private String username;
+    /**
+     * 邮件服务器密码
+     */
+    @NotEmpty
+    private String password;
+    /**
+     * 邮件发送者名称：比如 xx客服
+     */
+    @NotEmpty
+    private String fromName;
+    /**
+     * 邮件发送者邮箱地址：比如 xx@xx.com
+     */
+    @NotEmpty
+    private String fromAddress;
 
-  private int threadMin = 1;
-  private int threadMax = 20;
-  private int threadQueue = 20;
+    private int threadMin = 1;
+    private int threadMax = 20;
+    private int threadQueue = 20;
 
-  @Override
-  public void afterPropertiesSet() throws Exception {}
+    @Override
+    public void afterPropertiesSet() throws Exception {
+    }
 }

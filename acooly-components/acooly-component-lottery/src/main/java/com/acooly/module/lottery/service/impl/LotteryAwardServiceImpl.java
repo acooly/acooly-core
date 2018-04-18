@@ -10,15 +10,15 @@ import java.util.List;
 
 @Service("lotteryAwardService")
 public class LotteryAwardServiceImpl extends EntityServiceImpl<LotteryAward, LotteryAwardDao>
-    implements LotteryAwardService {
+        implements LotteryAwardService {
 
-  @Override
-  public List<LotteryAward> findBylotteryId(Long lotteryId) {
-    return getEntityDao().findBylotteryId(lotteryId);
-  }
+    @Override
+    public List<LotteryAward> findBylotteryId(Long lotteryId) {
+        return getEntityDao().findBylotteryId(lotteryId);
+    }
 
-  @Override
-  public LotteryAward findByCode(String code) {
-    return getEntityDao().findByCode(code);
-  }
+    @Override
+    public LotteryAward findByCode(String code) {
+        return getEntityDao().findByCode(code);
+    }
 }

@@ -10,47 +10,49 @@ import org.springframework.beans.factory.support.AbstractBeanFactory;
 import javax.persistence.MappedSuperclass;
 import java.util.List;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @MappedSuperclass
 @Getter
 @Setter
 public class AbstractDomain extends AbstractEntity {
-  private static volatile AutowiredAnnotationBeanPostProcessor
-      autowiredAnnotationBeanPostProcessor = null;
+    private static volatile AutowiredAnnotationBeanPostProcessor
+            autowiredAnnotationBeanPostProcessor = null;
 
-  private static boolean inited = false;
+    private static boolean inited = false;
 
-  public AbstractDomain() {
-    if (inited) {
-      autowire();
-    }
-  }
-
-  private void autowire() {
-    if (autowiredAnnotationBeanPostProcessor == null) {
-      synchronized (AbstractEntity.class) {
-        if (autowiredAnnotationBeanPostProcessor == null) {
-          List<BeanPostProcessor> beanPostProcessors =
-              ((AbstractBeanFactory) ApplicationContextHolder.get().getBeanFactory())
-                  .getBeanPostProcessors();
-          for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {
-            if (beanPostProcessor instanceof AutowiredAnnotationBeanPostProcessor
-                && beanPostProcessor
-                    .getClass()
-                    .getName()
-                    .contains("AutowiredAnnotationBeanPostProcessor")) {
-              autowiredAnnotationBeanPostProcessor =
-                  (AutowiredAnnotationBeanPostProcessor) beanPostProcessor;
-            }
-          }
+    public AbstractDomain() {
+        if (inited) {
+            autowire();
         }
-      }
     }
-    autowiredAnnotationBeanPostProcessor.postProcessPropertyValues(
-        null, null, this, getClass().getName());
-  }
 
-  public static void inited() {
-    inited = true;
-  }
+    public static void inited() {
+        inited = true;
+    }
+
+    private void autowire() {
+        if (autowiredAnnotationBeanPostProcessor == null) {
+            synchronized (AbstractEntity.class) {
+                if (autowiredAnnotationBeanPostProcessor == null) {
+                    List<BeanPostProcessor> beanPostProcessors =
+                            ((AbstractBeanFactory) ApplicationContextHolder.get().getBeanFactory())
+                                    .getBeanPostProcessors();
+                    for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {
+                        if (beanPostProcessor instanceof AutowiredAnnotationBeanPostProcessor
+                                && beanPostProcessor
+                                .getClass()
+                                .getName()
+                                .contains("AutowiredAnnotationBeanPostProcessor")) {
+                            autowiredAnnotationBeanPostProcessor =
+                                    (AutowiredAnnotationBeanPostProcessor) beanPostProcessor;
+                        }
+                    }
+                }
+            }
+        }
+        autowiredAnnotationBeanPostProcessor.postProcessPropertyValues(
+                null, null, this, getClass().getName());
+    }
 }

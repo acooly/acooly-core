@@ -17,29 +17,30 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/manage/module/app/appCustomer")
 public class AppCustomerManagerController
-    extends AbstractJQueryEntityController<AppCustomer, AppCustomerService> {
+        extends AbstractJQueryEntityController<AppCustomer, AppCustomerService> {
 
-  private static Map<String, String> allStatuss = EntityStatus.mapping();
+    private static Map<String, String> allStatuss = EntityStatus.mapping();
 
-  @Autowired private AppCustomerService appCustomerService;
+    @Autowired
+    private AppCustomerService appCustomerService;
 
-  @RequestMapping(value = "disable")
-  @ResponseBody
-  public JsonResult disable(HttpServletRequest request, HttpServletResponse response) {
-    JsonResult result = new JsonResult();
-    try {
-      AppCustomer appCustomer = loadEntity(request);
-      appCustomer.setStatus(EntityStatus.Disable);
-      getEntityService().save(appCustomer);
-      result.setMessage("禁用成功");
-    } catch (Exception e) {
-      handleException(result, "禁用", e);
+    @RequestMapping(value = "disable")
+    @ResponseBody
+    public JsonResult disable(HttpServletRequest request, HttpServletResponse response) {
+        JsonResult result = new JsonResult();
+        try {
+            AppCustomer appCustomer = loadEntity(request);
+            appCustomer.setStatus(EntityStatus.Disable);
+            getEntityService().save(appCustomer);
+            result.setMessage("禁用成功");
+        } catch (Exception e) {
+            handleException(result, "禁用", e);
+        }
+        return result;
     }
-    return result;
-  }
 
-  @Override
-  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-    model.put("allStatuss", allStatuss);
-  }
+    @Override
+    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+        model.put("allStatuss", allStatuss);
+    }
 }

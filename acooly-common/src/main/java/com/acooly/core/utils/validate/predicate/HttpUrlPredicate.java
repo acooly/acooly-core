@@ -18,13 +18,14 @@ import org.apache.commons.validator.routines.UrlValidator;
  */
 public final class HttpUrlPredicate implements Predicate<String> {
 
-  public static final HttpUrlPredicate INSTANCE = new HttpUrlPredicate();
-  private UrlValidator httpUrlValidator = new UrlValidator(new String[] {"http", "https"});
+    public static final HttpUrlPredicate INSTANCE = new HttpUrlPredicate();
+    private UrlValidator httpUrlValidator = new UrlValidator(new String[]{"http", "https"});
 
-  private HttpUrlPredicate() {}
+    private HttpUrlPredicate() {
+    }
 
-  @Override
-  public boolean apply(String input) {
-    return !Strings.isBlank(input) && httpUrlValidator.isValid(input);
-  }
+    @Override
+    public boolean apply(String input) {
+        return !Strings.isBlank(input) && httpUrlValidator.isValid(input);
+    }
 }

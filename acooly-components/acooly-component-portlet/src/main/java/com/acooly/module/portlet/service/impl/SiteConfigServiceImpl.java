@@ -25,27 +25,27 @@ import java.util.List;
  */
 @Service("siteConfigService")
 public class SiteConfigServiceImpl extends EntityServiceImpl<SiteConfig, SiteConfigDao>
-    implements SiteConfigService {
+        implements SiteConfigService {
 
-  @Cacheable(value = "cacheName", key = "#type")
-  @Override
-  public List<SiteConfig> findByType(String type) {
-    return getEntityDao().findByType(type);
-  }
+    @Cacheable(value = "cacheName", key = "#type")
+    @Override
+    public List<SiteConfig> findByType(String type) {
+        return getEntityDao().findByType(type);
+    }
 
-  @Override
-  public List<SiteConfig> findByType() {
-    return findByType(SiteConfigTypeEnum.def.code());
-  }
+    @Override
+    public List<SiteConfig> findByType() {
+        return findByType(SiteConfigTypeEnum.def.code());
+    }
 
-  @Override
-  @Cacheable(value = "cacheName", key = "#type + '_' + #name")
-  public SiteConfig findUnique(String type, String name) {
-    return getEntityDao().findUnique(type, name);
-  }
+    @Override
+    @Cacheable(value = "cacheName", key = "#type + '_' + #name")
+    public SiteConfig findUnique(String type, String name) {
+        return getEntityDao().findUnique(type, name);
+    }
 
-  @Override
-  public SiteConfig findUnique(String name) {
-    return findUnique(SiteConfigTypeEnum.def.code(), name);
-  }
+    @Override
+    public SiteConfig findUnique(String name) {
+        return findUnique(SiteConfigTypeEnum.def.code(), name);
+    }
 }

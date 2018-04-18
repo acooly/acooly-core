@@ -17,27 +17,29 @@ import javax.validation.ValidatorFactory;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-/** @author zhangpu */
+/**
+ * @author zhangpu
+ */
 public class HibernateValidatorFactory {
 
-  static ValidatorFactory validatorFactory;
+    static ValidatorFactory validatorFactory;
 
-  static {
-    HibernateValidatorConfiguration configure =
-        Validation.byProvider(HibernateValidator.class).configure();
-    ResourceBundleLocator resourceBundleLocator =
-        new ResourceBundleLocator() {
-          @Override
-          public ResourceBundle getResourceBundle(Locale locale) {
-            ResourceBundle resb1 = ResourceBundle.getBundle("validation/validationMessage");
-            return resb1;
-          }
-        };
-    configure.messageInterpolator(new ResourceBundleMessageInterpolator(resourceBundleLocator));
-    validatorFactory = configure.buildValidatorFactory();
-  }
+    static {
+        HibernateValidatorConfiguration configure =
+                Validation.byProvider(HibernateValidator.class).configure();
+        ResourceBundleLocator resourceBundleLocator =
+                new ResourceBundleLocator() {
+                    @Override
+                    public ResourceBundle getResourceBundle(Locale locale) {
+                        ResourceBundle resb1 = ResourceBundle.getBundle("validation/validationMessage");
+                        return resb1;
+                    }
+                };
+        configure.messageInterpolator(new ResourceBundleMessageInterpolator(resourceBundleLocator));
+        validatorFactory = configure.buildValidatorFactory();
+    }
 
-  public static ValidatorFactory getInstance() {
-    return validatorFactory;
-  }
+    public static ValidatorFactory getInstance() {
+        return validatorFactory;
+    }
 }

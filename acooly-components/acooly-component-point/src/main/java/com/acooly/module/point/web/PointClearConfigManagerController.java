@@ -32,51 +32,52 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/manage/point/pointClearConfig")
 public class PointClearConfigManagerController
-    extends AbstractJQueryEntityController<PointClearConfig, PointClearConfigService> {
+        extends AbstractJQueryEntityController<PointClearConfig, PointClearConfigService> {
 
-  @SuppressWarnings("unused")
-  @Autowired
-  private PointClearConfigService pointClearConfigService;
-  @Autowired private PointTradeService pointTradeService;
+    @SuppressWarnings("unused")
+    @Autowired
+    private PointClearConfigService pointClearConfigService;
+    @Autowired
+    private PointTradeService pointTradeService;
 
-  {
-    allowMapping = "*";
-  }
-
-  @Override
-  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-    model.put("allStatuss", PointClearConfigStatus.mapping());
-  }
-
-  @RequestMapping(value = "pointClear")
-  @ResponseBody
-  public JsonEntityResult<PointClearConfig> clearJson(
-      HttpServletRequest request, HttpServletResponse response) {
-    JsonEntityResult<PointClearConfig> result = new JsonEntityResult<PointClearConfig>();
-    allow(request, response, MappingMethod.create);
-    try {
-      String id = request.getParameter("id");
-      PointClearConfig pointClearConfig = pointClearConfigService.get(Long.parseLong(id));
-      String startTime =
-          Dates.format(pointClearConfig.getStartClearTime(), Dates.CHINESE_DATETIME_FORMAT_LINE);
-      String endTime =
-          Dates.format(pointClearConfig.getEndClearTime(), Dates.CHINESE_DATETIME_FORMAT_LINE);
-      String memo = pointClearConfig.getMemo();
-      pointClearConfig.setStatus(PointClearConfigStatus.finish);
-      pointClearConfigService.update(pointClearConfig);
-
-      PointTradeDto pointTradeDto = new PointTradeDto();
-      pointTradeDto.setBusiId("0");
-      pointTradeDto.setBusiType("pointClear");
-      pointTradeDto.setBusiTypeText("清分清零");
-      pointTradeDto.setBusiData(memo);
-      pointTradeDto.setMemo(memo);
-
-      pointTradeService.pointClearThread(startTime, endTime, pointTradeDto);
-      result.setMessage("积分清零正在处理中,之后刷新查看结果");
-    } catch (Exception e) {
-      handleException(result, "新增", e);
+    {
+        allowMapping = "*";
     }
-    return result;
-  }
+
+    @Override
+    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+        model.put("allStatuss", PointClearConfigStatus.mapping());
+    }
+
+    @RequestMapping(value = "pointClear")
+    @ResponseBody
+    public JsonEntityResult<PointClearConfig> clearJson(
+            HttpServletRequest request, HttpServletResponse response) {
+        JsonEntityResult<PointClearConfig> result = new JsonEntityResult<PointClearConfig>();
+        allow(request, response, MappingMethod.create);
+        try {
+            String id = request.getParameter("id");
+            PointClearConfig pointClearConfig = pointClearConfigService.get(Long.parseLong(id));
+            String startTime =
+                    Dates.format(pointClearConfig.getStartClearTime(), Dates.CHINESE_DATETIME_FORMAT_LINE);
+            String endTime =
+                    Dates.format(pointClearConfig.getEndClearTime(), Dates.CHINESE_DATETIME_FORMAT_LINE);
+            String memo = pointClearConfig.getMemo();
+            pointClearConfig.setStatus(PointClearConfigStatus.finish);
+            pointClearConfigService.update(pointClearConfig);
+
+            PointTradeDto pointTradeDto = new PointTradeDto();
+            pointTradeDto.setBusiId("0");
+            pointTradeDto.setBusiType("pointClear");
+            pointTradeDto.setBusiTypeText("清分清零");
+            pointTradeDto.setBusiData(memo);
+            pointTradeDto.setMemo(memo);
+
+            pointTradeService.pointClearThread(startTime, endTime, pointTradeDto);
+            result.setMessage("积分清零正在处理中,之后刷新查看结果");
+        } catch (Exception e) {
+            handleException(result, "新增", e);
+        }
+        return result;
+    }
 }

@@ -17,39 +17,41 @@ import java.util.Map;
  */
 public class UserDaoCustomImpl implements UserDaoCustom {
 
-  @Autowired private JdbcTemplate pagedJdbcTemplate;
-  @Autowired private EntityManager entityManager;
+    @Autowired
+    private JdbcTemplate pagedJdbcTemplate;
+    @Autowired
+    private EntityManager entityManager;
 
-  @Transactional("transactionManager")
-  @Override
-  public User findByJdbcTemplate(Long id) {
-    String sql = "select * from SYS_USER where id = ?";
-    SqlRowSet rowSet = pagedJdbcTemplate.queryForRowSet(sql, new Object[] {id});
-    User user = null;
-    if (rowSet.next()) {
-      user = new User();
-      user.setId(rowSet.getLong(1));
-      // ......
+    @Transactional("transactionManager")
+    @Override
+    public User findByJdbcTemplate(Long id) {
+        String sql = "select * from SYS_USER where id = ?";
+        SqlRowSet rowSet = pagedJdbcTemplate.queryForRowSet(sql, new Object[]{id});
+        User user = null;
+        if (rowSet.next()) {
+            user = new User();
+            user.setId(rowSet.getLong(1));
+            // ......
+        }
+        return user;
     }
-    return user;
-  }
 
-  @Override
-  public User findByCustomJap(Long id) {
-    throw new UnsupportedOperationException("Spring3-Hibernate4整合方案不支持JAP");
-  }
+    @Override
+    public User findByCustomJap(Long id) {
+        throw new UnsupportedOperationException("Spring3-Hibernate4整合方案不支持JAP");
+    }
 
-  @Transactional("transactionManager")
-  public User findByHibernate4(Long id) {
-    User users = entityManager.find(User.class, 1);
-    ;
-    return users;
-  }
+    @Transactional("transactionManager")
+    public User findByHibernate4(Long id) {
+        User users = entityManager.find(User.class, 1);
+        ;
+        return users;
+    }
 
-  @Override
-  public PageInfo<User> customeQueryWithPagedJdbcTemplate(
-      PageInfo<User> pageInfo, Map<String, String> map) {
-    // TODO Auto-generated method stub
-    return null;
-  }
+    @Override
+    public PageInfo<User> customeQueryWithPagedJdbcTemplate(
+            PageInfo<User> pageInfo, Map<String, String> map) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

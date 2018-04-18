@@ -12,9 +12,12 @@ package com.acooly.module.certification;
 import com.acooly.core.common.boot.component.ComponentInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 public class CertificationComponentInitializer implements ComponentInitializer {
 
-  @Override
-  public void initialize(ConfigurableApplicationContext applicationContext) {}
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+    }
 }

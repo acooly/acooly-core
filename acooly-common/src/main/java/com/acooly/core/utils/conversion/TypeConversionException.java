@@ -7,22 +7,24 @@ package com.acooly.core.utils.conversion;
  */
 public class TypeConversionException extends RuntimeException {
 
-  /** 版本号 */
-  private static final long serialVersionUID = -7926442618855461965L;
+    /**
+     * 版本号
+     */
+    private static final long serialVersionUID = -7926442618855461965L;
 
-  public TypeConversionException() {
-    super();
-  }
+    public TypeConversionException() {
+        super();
+    }
 
-  public TypeConversionException(String msg, Throwable cause) {
-    super(msg, cause);
-  }
+    public TypeConversionException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 
-  public TypeConversionException(String msg) {
-    super(msg);
-  }
+    public TypeConversionException(String msg) {
+        super(msg);
+    }
 
-  public TypeConversionException(Throwable cause) {
-    super(cause);
-  }
+    public TypeConversionException(Throwable cause) {
+        super(cause);
+    }
 }

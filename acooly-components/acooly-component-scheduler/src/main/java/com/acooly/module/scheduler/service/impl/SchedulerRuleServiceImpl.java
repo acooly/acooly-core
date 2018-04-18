@@ -8,4 +8,5 @@ import org.springframework.stereotype.Service;
 
 @Service("schedulerRuleService")
 public class SchedulerRuleServiceImpl extends EntityServiceImpl<SchedulerRule, SchedulerRuleDao>
-    implements SchedulerRuleService {}
+        implements SchedulerRuleService {
+}

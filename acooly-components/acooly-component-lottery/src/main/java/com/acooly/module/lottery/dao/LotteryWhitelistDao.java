@@ -15,8 +15,8 @@ import java.util.List;
  */
 public interface LotteryWhitelistDao extends EntityJpaDao<LotteryWhitelist, Long> {
 
-  List<LotteryWhitelist> findByLotteryIdAndStatus(Long lotteryId, LotteryWhitelistStatus status);
+    List<LotteryWhitelist> findByLotteryIdAndStatus(Long lotteryId, LotteryWhitelistStatus status);
 
-  List<LotteryWhitelist> findByLotteryIdAndUserAndStatus(
-      Long lotteryId, String user, LotteryWhitelistStatus status);
+    List<LotteryWhitelist> findByLotteryIdAndUserAndStatus(
+            Long lotteryId, String user, LotteryWhitelistStatus status);
 }

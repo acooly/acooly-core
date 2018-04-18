@@ -12,7 +12,7 @@ import com.acooly.module.lottery.domain.LotteryWhitelist;
  */
 public interface LotteryWhitelistService extends EntityService<LotteryWhitelist> {
 
-  LotteryWhitelist getValid(Long lotteryId, String user);
+    LotteryWhitelist getValid(Long lotteryId, String user);
 
-  void saveInNewTrans(LotteryWhitelist whitelist);
+    void saveInNewTrans(LotteryWhitelist whitelist);
 }

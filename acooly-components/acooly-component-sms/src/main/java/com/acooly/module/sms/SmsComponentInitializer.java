@@ -14,10 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 public class SmsComponentInitializer implements ComponentInitializer {
-  private static final Logger logger = LoggerFactory.getLogger(SmsComponentInitializer.class);
+    private static final Logger logger = LoggerFactory.getLogger(SmsComponentInitializer.class);
 
-  @Override
-  public void initialize(ConfigurableApplicationContext applicationContext) {}
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+    }
 }

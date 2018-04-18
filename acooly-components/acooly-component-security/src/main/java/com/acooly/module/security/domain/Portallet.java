@@ -23,46 +23,64 @@ import javax.persistence.Table;
 @Getter
 @Setter
 public class Portallet extends AbstractEntity {
-  private static final long serialVersionUID = 7760426571421698795L;
+    private static final long serialVersionUID = 7760426571421698795L;
 
-  /** 标题 */
-  @Column(name = "title", nullable = false, length = 64)
-  private String title;
+    /**
+     * 标题
+     */
+    @Column(name = "title", nullable = false, length = 64)
+    private String title;
 
-  /** 高度 */
-  @Column(name = "width", nullable = false, length = 4)
-  private int width = 400;
+    /**
+     * 高度
+     */
+    @Column(name = "width", nullable = false, length = 4)
+    private int width = 400;
 
-  /** 宽度 */
-  @Column(name = "height", nullable = false, length = 4)
-  private int height = 200;
+    /**
+     * 宽度
+     */
+    @Column(name = "height", nullable = false, length = 4)
+    private int height = 200;
 
-  /** 可否收缩 */
-  @Column(name = "collapsible", nullable = false, length = 4)
-  private int collapsible;
+    /**
+     * 可否收缩
+     */
+    @Column(name = "collapsible", nullable = false, length = 4)
+    private int collapsible;
 
-  /** 内容类型 1:url,2:html */
-  @Column(name = "load_mode", nullable = false, length = 4)
-  private int loadMode = FrameworkProperties.LOAD_MODE_URL;
+    /**
+     * 内容类型 1:url,2:html
+     */
+    @Column(name = "load_mode", nullable = false, length = 4)
+    private int loadMode = FrameworkProperties.LOAD_MODE_URL;
 
-  /** 加载方式 1:ajax,2:iframe */
-  @Column(name = "show_mode", nullable = false, length = 4)
-  private int showMode = FrameworkProperties.SHOW_MODE_AJAXLOAD;
+    /**
+     * 加载方式 1:ajax,2:iframe
+     */
+    @Column(name = "show_mode", nullable = false, length = 4)
+    private int showMode = FrameworkProperties.SHOW_MODE_AJAXLOAD;
 
-  /** 连接地址 */
-  @Column(name = "href", nullable = true, length = 128)
-  private String href;
+    /**
+     * 连接地址
+     */
+    @Column(name = "href", nullable = true, length = 128)
+    private String href;
 
-  /** HTML内容 */
-  @Column(name = "content", nullable = true)
-  private String content;
+    /**
+     * HTML内容
+     */
+    @Column(name = "content", nullable = true)
+    private String content;
 
-  /** 所属用户 */
-  @Column(name = "userName", nullable = true, length = 32)
-  private String userName;
+    /**
+     * 所属用户
+     */
+    @Column(name = "userName", nullable = true, length = 32)
+    private String userName;
 
-  @Override
-  public String toString() {
-    return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-  }
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
 }

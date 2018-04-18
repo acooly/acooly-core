@@ -2,5 +2,4 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.acooly.module.mybatis.MybatisAutoConfig,\
 com.acooly.module.mybatis.MapperConfig,\
 com.acooly.module.mybatis.MultiMybatisAutoConfig
-
 com.acooly.core.common.boot.component.ComponentInitializer=com.acooly.module.mybatis.MybatisComponentInitializer

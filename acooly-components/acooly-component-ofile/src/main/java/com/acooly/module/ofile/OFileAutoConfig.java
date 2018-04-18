@@ -28,7 +28,9 @@ import java.util.List;
 
 import static com.acooly.module.ofile.OFileProperties.PREFIX;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @Configuration
 @EnableConfigurationProperties({OFileProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
@@ -36,40 +38,41 @@ import static com.acooly.module.ofile.OFileProperties.PREFIX;
 @AutoConfigureAfter(SecurityAutoConfig.class)
 @Slf4j
 public class OFileAutoConfig extends WebMvcConfigurerAdapter {
-  @Autowired private OFileProperties oFileProperties;
+    @Autowired
+    private OFileProperties oFileProperties;
 
-  @Bean
-  public StandardDatabaseScriptIniter ofileScriptIniter() {
+    @Bean
+    public StandardDatabaseScriptIniter ofileScriptIniter() {
 
-    return new StandardDatabaseScriptIniter() {
-      @Override
-      public String getEvaluateTable() {
-        return "ofile";
-      }
+        return new StandardDatabaseScriptIniter() {
+            @Override
+            public String getEvaluateTable() {
+                return "ofile";
+            }
 
-      @Override
-      public String getComponentName() {
-        return "ofile";
-      }
+            @Override
+            public String getComponentName() {
+                return "ofile";
+            }
 
-      @Override
-      public List<String> getInitSqlFile() {
-        return Lists.newArrayList("ofile", "ofile_urls");
-      }
-    };
-  }
-
-  @Override
-  public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    if (oFileProperties.isEnableLocalMapping()) {
-      boolean useResourceCache = !Apps.isDevMode();
-      String pathPatterns = oFileProperties.getServerRootMappingPath() + "/**";
-      String resourceLocations = "file:" + oFileProperties.getStorageRoot();
-      log.info("ofile pathPatterns={},resourceLocations={}", pathPatterns, resourceLocations);
-      registry
-          .addResourceHandler(pathPatterns)
-          .addResourceLocations(resourceLocations)
-          .resourceChain(useResourceCache);
+            @Override
+            public List<String> getInitSqlFile() {
+                return Lists.newArrayList("ofile", "ofile_urls");
+            }
+        };
     }
-  }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        if (oFileProperties.isEnableLocalMapping()) {
+            boolean useResourceCache = !Apps.isDevMode();
+            String pathPatterns = oFileProperties.getServerRootMappingPath() + "/**";
+            String resourceLocations = "file:" + oFileProperties.getStorageRoot();
+            log.info("ofile pathPatterns={},resourceLocations={}", pathPatterns, resourceLocations);
+            registry
+                    .addResourceHandler(pathPatterns)
+                    .addResourceLocations(resourceLocations)
+                    .resourceChain(useResourceCache);
+        }
+    }
 }

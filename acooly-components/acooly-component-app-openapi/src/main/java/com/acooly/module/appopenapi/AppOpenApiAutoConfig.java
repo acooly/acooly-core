@@ -22,7 +22,9 @@ import org.springframework.context.annotation.Configuration;
 
 import static com.acooly.module.appopenapi.AppOpenapiProperties.PREFIX;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @Configuration
 @EnableConfigurationProperties({AppOpenapiProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
@@ -30,17 +32,17 @@ import static com.acooly.module.appopenapi.AppOpenapiProperties.PREFIX;
 @Slf4j
 public class AppOpenApiAutoConfig {
 
-  @ConditionalOnMissingBean(AppApiLoginService.class)
-  @Bean
-  public AppApiLoginService appApiLoginService() {
-    return new AnonymousAppApiLoginService();
-  }
+    @ConditionalOnMissingBean(AppApiLoginService.class)
+    @Bean
+    public AppApiLoginService appApiLoginService() {
+        return new AnonymousAppApiLoginService();
+    }
 
-  @Bean
-  public DefaultApiNotifySender defaultApiNotifySender(AppOpenapiProperties appOpenapiProperties) {
-    DefaultApiNotifySender sender = new DefaultApiNotifySender();
-    sender.setConnectionTimeout(appOpenapiProperties.getNotifysender().getConnectionTimeout());
-    sender.setSocketTimeout(appOpenapiProperties.getNotifysender().getSocketTimeout());
-    return sender;
-  }
+    @Bean
+    public DefaultApiNotifySender defaultApiNotifySender(AppOpenapiProperties appOpenapiProperties) {
+        DefaultApiNotifySender sender = new DefaultApiNotifySender();
+        sender.setConnectionTimeout(appOpenapiProperties.getNotifysender().getConnectionTimeout());
+        sender.setSocketTimeout(appOpenapiProperties.getNotifysender().getSocketTimeout());
+        return sender;
+    }
 }

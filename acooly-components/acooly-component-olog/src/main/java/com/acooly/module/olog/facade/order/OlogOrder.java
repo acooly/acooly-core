@@ -16,9 +16,11 @@ import lombok.Setter;
 
 import java.util.List;
 
-/** @author acooly */
+/**
+ * @author acooly
+ */
 @Getter
 @Setter
 public class OlogOrder extends OrderBase {
-  private List<OlogDTO> list;
+    private List<OlogDTO> list;
 }

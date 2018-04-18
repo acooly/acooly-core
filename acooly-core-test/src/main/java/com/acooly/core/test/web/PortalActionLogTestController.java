@@ -20,17 +20,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-/** @author acooly */
+/**
+ * @author acooly
+ */
 @Controller
 @RequestMapping("/portal/acionlog")
 public class PortalActionLogTestController {
 
-  @Autowired private CityMybatisDao cityDao;
+    @Autowired
+    private CityMybatisDao cityDao;
 
-  @RequestMapping(value = "/index", method = RequestMethod.GET)
-  @ResponseBody
-  public List<City> index(HttpServletRequest request) {
-    request.getSession().setAttribute("sessionCustomer", "zhangpu(张浦)");
-    return cityDao.getAll();
-  }
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    @ResponseBody
+    public List<City> index(HttpServletRequest request) {
+        request.getSession().setAttribute("sessionCustomer", "zhangpu(张浦)");
+        return cityDao.getAll();
+    }
 }

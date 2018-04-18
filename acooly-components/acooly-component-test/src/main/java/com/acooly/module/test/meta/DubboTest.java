@@ -9,7 +9,9 @@ import org.springframework.test.context.BootstrapWith;
 
 import java.lang.annotation.*;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -20,4 +22,5 @@ import java.lang.annotation.*;
 @ImportAutoConfiguration
 @SpringBootApplication
 @BootApp(sysName = "test")
-public @interface DubboTest {}
+public @interface DubboTest {
+}

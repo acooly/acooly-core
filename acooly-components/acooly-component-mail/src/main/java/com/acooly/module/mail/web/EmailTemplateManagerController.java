@@ -13,17 +13,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 @Controller
 @RequestMapping(value = "/manage/module/mail/emailTemplate")
 public class EmailTemplateManagerController
-    extends AbstractJQueryEntityController<EmailTemplate, EmailTemplateService> {
+        extends AbstractJQueryEntityController<EmailTemplate, EmailTemplateService> {
 
-  @SuppressWarnings("unused")
-  @Autowired
-  private EmailTemplateService emailTemplateService;
+    @SuppressWarnings("unused")
+    @Autowired
+    private EmailTemplateService emailTemplateService;
 
-  {
-    allowMapping = "*";
-  }
+    {
+        allowMapping = "*";
+    }
 }

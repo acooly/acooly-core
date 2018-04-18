@@ -15,14 +15,14 @@ import javax.persistence.LockModeType;
  */
 public interface LotteryUserCountDao extends EntityJpaDao<LotteryUserCount, Long> {
 
-  @Lock(LockModeType.PESSIMISTIC_WRITE)
-  LotteryUserCount findByLotteryIdAndUser(Long lotteryId, String user);
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    LotteryUserCount findByLotteryIdAndUser(Long lotteryId, String user);
 
-  LotteryUserCount findByLotteryCodeAndUser(String lotteryCode, String user);
+    LotteryUserCount findByLotteryCodeAndUser(String lotteryCode, String user);
 
-  //	@Transactional
-  //	@Modifying
-  //	@Query("update LotteryUserCount l set l.totalTimes = l.totalTimes + ?3 where lotteryId = ?1 and user = ?2")
-  //	void appendTimes(Long lotteryId, String user, int times);
+    //	@Transactional
+    //	@Modifying
+    //	@Query("update LotteryUserCount l set l.totalTimes = l.totalTimes + ?3 where lotteryId = ?1 and user = ?2")
+    //	void appendTimes(Long lotteryId, String user, int times);
 
 }

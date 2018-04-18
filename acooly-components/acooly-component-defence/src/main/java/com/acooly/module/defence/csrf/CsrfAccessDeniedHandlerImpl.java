@@ -19,42 +19,45 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/** @author qiubo */
+/**
+ * @author qiubo
+ */
 public class CsrfAccessDeniedHandlerImpl implements AccessDeniedHandler {
-  private static final Logger logger = LoggerFactory.getLogger(CsrfAccessDeniedHandlerImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(CsrfAccessDeniedHandlerImpl.class);
 
-  private String errorPage;
+    private String errorPage;
 
-  public CsrfAccessDeniedHandlerImpl() {}
-
-  public void handle(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      AccessDeniedException accessDeniedException)
-      throws IOException, ServletException {
-    if (!response.isCommitted()) {
-      logger.error("csrf校验异常,url={}", getRequestUrl(request), accessDeniedException);
-      if (this.errorPage != null) {
-        request.setAttribute("SPRING_SECURITY_403_EXCEPTION", accessDeniedException);
-        response.setStatus(403);
-        RequestDispatcher dispatcher = request.getRequestDispatcher(this.errorPage);
-        dispatcher.forward(request, response);
-      } else {
-        response.sendError(403, accessDeniedException.getMessage());
-      }
+    public CsrfAccessDeniedHandlerImpl() {
     }
-  }
 
-  private String getRequestUrl(HttpServletRequest request) {
-    return request.getRequestURI()
-        + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
-  }
-
-  public void setErrorPage(String errorPage) {
-    if (errorPage != null && !errorPage.startsWith("/")) {
-      throw new IllegalArgumentException("errorPage must begin with \'/\'");
-    } else {
-      this.errorPage = errorPage;
+    public void handle(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AccessDeniedException accessDeniedException)
+            throws IOException, ServletException {
+        if (!response.isCommitted()) {
+            logger.error("csrf校验异常,url={}", getRequestUrl(request), accessDeniedException);
+            if (this.errorPage != null) {
+                request.setAttribute("SPRING_SECURITY_403_EXCEPTION", accessDeniedException);
+                response.setStatus(403);
+                RequestDispatcher dispatcher = request.getRequestDispatcher(this.errorPage);
+                dispatcher.forward(request, response);
+            } else {
+                response.sendError(403, accessDeniedException.getMessage());
+            }
+        }
     }
-  }
+
+    private String getRequestUrl(HttpServletRequest request) {
+        return request.getRequestURI()
+                + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
+    }
+
+    public void setErrorPage(String errorPage) {
+        if (errorPage != null && !errorPage.startsWith("/")) {
+            throw new IllegalArgumentException("errorPage must begin with \'/\'");
+        } else {
+            this.errorPage = errorPage;
+        }
+    }
 }

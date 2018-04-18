@@ -18,40 +18,40 @@ import javax.validation.ConstraintValidatorContext;
  * @author zhangpu
  */
 public class CertNoValidator extends ConstraintValidatorSupport
-    implements ConstraintValidator<CertNo, String> {
-  private boolean blankable;
+        implements ConstraintValidator<CertNo, String> {
+    private boolean blankable;
 
-  @Override
-  public void initialize(CertNo constraintAnnotation) {
-    this.blankable = constraintAnnotation.blankable();
-    this.message = constraintAnnotation.message();
-  }
+    @Override
+    public void initialize(CertNo constraintAnnotation) {
+        this.blankable = constraintAnnotation.blankable();
+        this.message = constraintAnnotation.message();
+    }
 
-  @Override
-  public boolean isValid(String value, ConstraintValidatorContext context) {
-    if (value == null || value.length() == 0) {
-      if (!this.blankable && hasCustomMessage()) {
-        context.disableDefaultConstraintViolation();
-        context
-            .buildConstraintViolationWithTemplate(
-                "{org.hibernate.validator.constraints.NotEmpty.message}")
-            .addConstraintViolation();
-        return false;
-      } else {
+    @Override
+    public boolean isValid(String value, ConstraintValidatorContext context) {
+        if (value == null || value.length() == 0) {
+            if (!this.blankable && hasCustomMessage()) {
+                context.disableDefaultConstraintViolation();
+                context
+                        .buildConstraintViolationWithTemplate(
+                                "{org.hibernate.validator.constraints.NotEmpty.message}")
+                        .addConstraintViolation();
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        if (!CertNoPredicate.INSTANCE.apply(value)) {
+            if (hasCustomMessage()) {
+                context.disableDefaultConstraintViolation();
+                context
+                        .buildConstraintViolationWithTemplate(
+                                "{com.acooly.utils.validator.CertNo.invalid.message}")
+                        .addConstraintViolation();
+            }
+            return false;
+        }
         return true;
-      }
     }
-
-    if (!CertNoPredicate.INSTANCE.apply(value)) {
-      if (hasCustomMessage()) {
-        context.disableDefaultConstraintViolation();
-        context
-            .buildConstraintViolationWithTemplate(
-                "{com.acooly.utils.validator.CertNo.invalid.message}")
-            .addConstraintViolation();
-      }
-      return false;
-    }
-    return true;
-  }
 }

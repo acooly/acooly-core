@@ -1,11 +1,13 @@
 package com.acooly.module.captcha.util;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 public interface NumericGenerator {
 
-  String getNextNumberAsString();
+    String getNextNumberAsString();
 
-  int maxLength();
+    int maxLength();
 
-  int minLength();
+    int minLength();
 }

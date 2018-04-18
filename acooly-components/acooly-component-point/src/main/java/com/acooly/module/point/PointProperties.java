@@ -15,11 +15,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import static com.acooly.module.point.PointProperties.PREFIX;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @ConfigurationProperties(prefix = PREFIX)
 @Data
 @Slf4j
 public class PointProperties {
-  public static final String PREFIX = "acooly.point";
-  private boolean enable;
+    public static final String PREFIX = "acooly.point";
+    private boolean enable;
 }

@@ -13,12 +13,14 @@ import com.acooly.module.portlet.entity.Feedback;
 import com.acooly.module.portlet.integration.FeedbackHandler;
 import lombok.extern.slf4j.Slf4j;
 
-/** @author acooly */
+/**
+ * @author acooly
+ */
 @Slf4j
 public class DefaultFeedbackHandler implements FeedbackHandler {
 
-  @Override
-  public void handle(Feedback feedback) {
-    log.info("acooly-component-portlet组件默认FeedbackHandler实现:{}", feedback);
-  }
+    @Override
+    public void handle(Feedback feedback) {
+        log.info("acooly-component-portlet组件默认FeedbackHandler实现:{}", feedback);
+    }
 }

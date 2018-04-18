@@ -15,15 +15,16 @@ import java.util.Map;
 @RequestMapping(value = "/manage/module/sms/smsLog")
 public class SmsLogManagerController extends AbstractJQueryEntityController<SmsLog, SmsLogService> {
 
-  private static Map<Integer, String> allStatuss = SmsStatus.getMapping();
-  @Autowired private SmsLogService smsLogService;
+    private static Map<Integer, String> allStatuss = SmsStatus.getMapping();
+    @Autowired
+    private SmsLogService smsLogService;
 
-  {
-    allowMapping = "list";
-  }
+    {
+        allowMapping = "list";
+    }
 
-  @Override
-  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-    model.put("allStatuss", allStatuss);
-  }
+    @Override
+    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+        model.put("allStatuss", allStatuss);
+    }
 }

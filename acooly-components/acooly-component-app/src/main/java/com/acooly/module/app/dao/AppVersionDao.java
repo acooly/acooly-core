@@ -13,10 +13,10 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface AppVersionDao extends EntityJpaDao<AppVersion, Long> {
 
-  @Query(
-    nativeQuery = true,
-    value =
-        "select * from app_version where APP_CODE=?1 and DEVICE_TYPE = ?2 and VERSION_CODE = (select max(t1.VERSION_CODE) from app_version t1 where t1.APP_CODE=?1 and t1.DEVICE_TYPE = ?2)"
-  )
-  AppVersion getLatest(String appCode, String deviceType);
+    @Query(
+            nativeQuery = true,
+            value =
+                    "select * from app_version where APP_CODE=?1 and DEVICE_TYPE = ?2 and VERSION_CODE = (select max(t1.VERSION_CODE) from app_version t1 where t1.APP_CODE=?1 and t1.DEVICE_TYPE = ?2)"
+    )
+    AppVersion getLatest(String appCode, String deviceType);
 }

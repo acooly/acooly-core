@@ -11,17 +11,17 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FunctionName {
-  /**
-   * 存储过程调用名称
-   *
-   * @return String
-   */
-  String name();
+    /**
+     * 存储过程调用名称
+     *
+     * @return String
+     */
+    String name();
 
-  /**
-   * pojo中代表总行数的名称
-   *
-   * @return String
-   */
-  String countName();
+    /**
+     * pojo中代表总行数的名称
+     *
+     * @return String
+     */
+    String countName();
 }

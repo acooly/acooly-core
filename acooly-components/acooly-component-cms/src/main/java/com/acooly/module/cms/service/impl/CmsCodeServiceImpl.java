@@ -21,4 +21,5 @@ import org.springframework.stereotype.Service;
  */
 @Service("cmsCodeService")
 public class CmsCodeServiceImpl extends EntityServiceImpl<CmsCode, CmsCodeDao>
-    implements CmsCodeService {}
+        implements CmsCodeService {
+}

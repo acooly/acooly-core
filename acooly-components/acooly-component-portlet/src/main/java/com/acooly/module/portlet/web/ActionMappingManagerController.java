@@ -21,13 +21,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping(value = "/manage/module/portlet/actionMapping")
 public class ActionMappingManagerController
-    extends AbstractJQueryEntityController<ActionMapping, ActionMappingService> {
+        extends AbstractJQueryEntityController<ActionMapping, ActionMappingService> {
 
-  @SuppressWarnings("unused")
-  @Autowired
-  private ActionMappingService actionMappingService;
+    @SuppressWarnings("unused")
+    @Autowired
+    private ActionMappingService actionMappingService;
 
-  {
-    allowMapping = "*";
-  }
+    {
+        allowMapping = "*";
+    }
 }

@@ -16,48 +16,48 @@ import com.acooly.core.utils.Strings;
  */
 public class KetamaHashs {
 
-  public static final int NODES = 100;
-  public static final int NODE_COPIES = 160;
-  private static volatile KetamaHashs ketamaHashs;
-  protected KetamaNodeLocator locator;
-  private String nodeNamePrefix;
-  private int nodes = NODES;
-  private int nodeCopies = NODE_COPIES;
-  private String nodeNameSplits = "_";
+    public static final int NODES = 100;
+    public static final int NODE_COPIES = 160;
+    private static volatile KetamaHashs ketamaHashs;
+    protected KetamaNodeLocator locator;
+    private String nodeNamePrefix;
+    private int nodes = NODES;
+    private int nodeCopies = NODE_COPIES;
+    private String nodeNameSplits = "_";
 
-  private KetamaHashs(
-      String nodeNamePrefix, String nodeNameSplits, Integer nodes, Integer nodeCopies) {
-    this.nodeNamePrefix = nodeNamePrefix;
-    this.nodeNameSplits = Strings.isBlankDefault(nodeNameSplits, "_");
-    this.nodes = Strings.isBlankDefault(nodes, NODES);
-    this.nodeCopies = Strings.isBlankDefault(nodeCopies, NODE_COPIES);
-    locator =
-        new KetamaNodeLocator(
-            this.nodeNamePrefix, this.nodes, this.nodeCopies, this.nodeNameSplits);
-  }
-
-  public static KetamaHashs INSTANCE(String nodeNameProfix) {
-    return INSTANCE(nodeNameProfix, null, null, null);
-  }
-
-  public static KetamaHashs INSTANCE(
-      String nodeNamePrefix, String nodeNameSplits, Integer nodes, Integer nodeCopies) {
-    if (ketamaHashs == null) {
-      synchronized (KetamaHashs.class) {
-        if (ketamaHashs == null) {
-          ketamaHashs = new KetamaHashs(nodeNamePrefix, nodeNameSplits, nodes, nodeCopies);
-        }
-      }
+    private KetamaHashs(
+            String nodeNamePrefix, String nodeNameSplits, Integer nodes, Integer nodeCopies) {
+        this.nodeNamePrefix = nodeNamePrefix;
+        this.nodeNameSplits = Strings.isBlankDefault(nodeNameSplits, "_");
+        this.nodes = Strings.isBlankDefault(nodes, NODES);
+        this.nodeCopies = Strings.isBlankDefault(nodeCopies, NODE_COPIES);
+        locator =
+                new KetamaNodeLocator(
+                        this.nodeNamePrefix, this.nodes, this.nodeCopies, this.nodeNameSplits);
     }
-    return ketamaHashs;
-  }
 
-  public String getPrimary(String key) {
-    KetamaNode node = locator.getPrimary(key);
-    return this.nodeNamePrefix + this.nodeNameSplits + node.getName();
-  }
+    public static KetamaHashs INSTANCE(String nodeNameProfix) {
+        return INSTANCE(nodeNameProfix, null, null, null);
+    }
 
-  public KetamaNodeLocator getLocator() {
-    return locator;
-  }
+    public static KetamaHashs INSTANCE(
+            String nodeNamePrefix, String nodeNameSplits, Integer nodes, Integer nodeCopies) {
+        if (ketamaHashs == null) {
+            synchronized (KetamaHashs.class) {
+                if (ketamaHashs == null) {
+                    ketamaHashs = new KetamaHashs(nodeNamePrefix, nodeNameSplits, nodes, nodeCopies);
+                }
+            }
+        }
+        return ketamaHashs;
+    }
+
+    public String getPrimary(String key) {
+        KetamaNode node = locator.getPrimary(key);
+        return this.nodeNamePrefix + this.nodeNameSplits + node.getName();
+    }
+
+    public KetamaNodeLocator getLocator() {
+        return locator;
+    }
 }

@@ -10,4 +10,5 @@ import com.acooly.module.jpa.EntityJpaDao;
  *
  * @author Acooly Code Generator
  */
-public interface AppBannerDao extends EntityJpaDao<AppBanner, Long> {}
+public interface AppBannerDao extends EntityJpaDao<AppBanner, Long> {
+}

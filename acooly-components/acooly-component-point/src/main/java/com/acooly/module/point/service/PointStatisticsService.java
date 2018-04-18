@@ -19,5 +19,5 @@ import com.acooly.module.point.domain.PointStatistics;
  */
 public interface PointStatisticsService extends EntityService<PointStatistics> {
 
-  public void pointStatistics(String startTime, String endTime);
+    public void pointStatistics(String startTime, String endTime);
 }

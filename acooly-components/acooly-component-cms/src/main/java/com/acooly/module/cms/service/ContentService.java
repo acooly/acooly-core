@@ -16,29 +16,29 @@ import java.util.List;
  */
 public interface ContentService extends EntityService<Content> {
 
-  void updateStatusBatch(Integer status, Serializable... ids);
+    void updateStatusBatch(Integer status, Serializable... ids);
 
-  PageInfo<Content> search(PageInfo<Content> pageInfo, String q, int status);
+    PageInfo<Content> search(PageInfo<Content> pageInfo, String q, int status);
 
-  void delects(Serializable... ids);
+    void delects(Serializable... ids);
 
-  void moveTop(Long valueOf);
+    void moveTop(Long valueOf);
 
-  void moveUp(Long valueOf);
+    void moveUp(Long valueOf);
 
-  List<Content> topByTypeCode(String typeCode, int count);
+    List<Content> topByTypeCode(String typeCode, int count);
 
-  List<Content> topByTypeCodeNoLazy(String typeCode, int count);
+    List<Content> topByTypeCodeNoLazy(String typeCode, int count);
 
-  Content getLatestByTypeCode(String typeCode);
+    Content getLatestByTypeCode(String typeCode);
 
-  Content getLatestByTypeCode(String typeCode, String carrierCode);
+    Content getLatestByTypeCode(String typeCode, String carrierCode);
 
-  Content getLatestByTypeCodeNoLazy(String typeCode);
+    Content getLatestByTypeCodeNoLazy(String typeCode);
 
-  Content getByKeycode(String keycode);
+    Content getByKeycode(String keycode);
 
-  Content getByKeycodeNoLazy(String keycode);
+    Content getByKeycodeNoLazy(String keycode);
 
-  Content getByIdNoLazy(Long id);
+    Content getByIdNoLazy(Long id);
 }

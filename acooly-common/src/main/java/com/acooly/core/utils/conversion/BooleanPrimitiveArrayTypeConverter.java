@@ -10,19 +10,19 @@ import java.util.List;
  */
 public class BooleanPrimitiveArrayTypeConverter extends ArrayTypeConverterSupport<boolean[]> {
 
-  public BooleanPrimitiveArrayTypeConverter(TypeConverterManager typeConverterManager) {
-    super(typeConverterManager);
-  }
+    public BooleanPrimitiveArrayTypeConverter(TypeConverterManager typeConverterManager) {
+        super(typeConverterManager);
+    }
 
-  public Class<boolean[]> getTargetType() {
-    return boolean[].class;
-  }
+    public Class<boolean[]> getTargetType() {
+        return boolean[].class;
+    }
 
-  public List<Class<?>> getSupportedSourceTypes() {
-    List<Class<?>> classes = super.getSupportedSourceTypes();
-    classes.add(Object[].class);
-    classes.add(Collection.class);
-    classes.add(CharSequence[].class);
-    return classes;
-  }
+    public List<Class<?>> getSupportedSourceTypes() {
+        List<Class<?>> classes = super.getSupportedSourceTypes();
+        classes.add(Object[].class);
+        classes.add(Collection.class);
+        classes.add(CharSequence[].class);
+        return classes;
+    }
 }

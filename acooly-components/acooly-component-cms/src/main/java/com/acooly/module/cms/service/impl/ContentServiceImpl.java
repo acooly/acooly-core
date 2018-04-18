@@ -1,4 +1,3 @@
-
 package com.acooly.module.cms.service.impl;
 
 import com.acooly.core.common.dao.support.PageInfo;
@@ -14,7 +13,6 @@ import com.acooly.module.cms.service.ContentService;
 import com.acooly.module.cms.service.ContentTypeService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;

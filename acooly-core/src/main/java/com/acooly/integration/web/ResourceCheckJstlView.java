@@ -1,4 +1,6 @@
-/** create by zhangpu date:2015年10月15日 */
+/**
+ * create by zhangpu date:2015年10月15日
+ */
 package com.acooly.integration.web;
 
 import org.springframework.context.ApplicationContextException;
@@ -17,15 +19,15 @@ import java.util.Locale;
  */
 public class ResourceCheckJstlView extends JstlView {
 
-  @Override
-  public boolean checkResource(Locale locale) throws Exception {
-    try {
-      String filePath = getServletContext().getRealPath(getUrl());
-      File file = new File(filePath);
-      return file.exists();
-    } catch (Exception ex) {
-      throw new ApplicationContextException(
-          "Could not load webapp file for URL [" + getUrl() + "]", ex);
+    @Override
+    public boolean checkResource(Locale locale) throws Exception {
+        try {
+            String filePath = getServletContext().getRealPath(getUrl());
+            File file = new File(filePath);
+            return file.exists();
+        } catch (Exception ex) {
+            throw new ApplicationContextException(
+                    "Could not load webapp file for URL [" + getUrl() + "]", ex);
+        }
     }
-  }
 }

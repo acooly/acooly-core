@@ -26,11 +26,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Constraint(validatedBy = {CertNoValidator.class})
 public @interface CertNo {
-  String message() default "{com.acooly.utils.validator.CertNo.message}";
+    String message() default "{com.acooly.utils.validator.CertNo.message}";
 
-  Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
-  Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 
-  boolean blankable() default false;
+    boolean blankable() default false;
 }

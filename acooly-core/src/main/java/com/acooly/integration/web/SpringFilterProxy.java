@@ -1,4 +1,6 @@
-/** create by zhangpu date:2015年2月27日 */
+/**
+ * create by zhangpu date:2015年2月27日
+ */
 package com.acooly.integration.web;
 
 import com.acooly.core.utils.Servlets;
@@ -25,46 +27,46 @@ import java.util.List;
  * @author zhangpu
  */
 public class SpringFilterProxy extends DelegatingFilterProxy {
-  PathMatcher pathMatcher = new AntPathMatcher();
-  private List<String> exclusions = new ArrayList<String>();
+    PathMatcher pathMatcher = new AntPathMatcher();
+    private List<String> exclusions = new ArrayList<String>();
 
-  @Override
-  protected void initFilterBean() throws ServletException {
-    initExclusions();
-    super.initFilterBean();
-  }
+    @Override
+    protected void initFilterBean() throws ServletException {
+        initExclusions();
+        super.initFilterBean();
+    }
 
-  @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
-      throws ServletException, IOException {
-    String requestUrl = Servlets.getRequestPath((HttpServletRequest) request);
-    boolean isIgnore = false;
-    if (!exclusions.isEmpty()) {
-      for (String ignoreUrl : exclusions) {
-        isIgnore = pathMatcher.match(ignoreUrl, requestUrl);
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        String requestUrl = Servlets.getRequestPath((HttpServletRequest) request);
+        boolean isIgnore = false;
+        if (!exclusions.isEmpty()) {
+            for (String ignoreUrl : exclusions) {
+                isIgnore = pathMatcher.match(ignoreUrl, requestUrl);
+                if (isIgnore) {
+                    break;
+                }
+            }
+        }
         if (isIgnore) {
-          break;
+            filterChain.doFilter(request, response);
+            return;
         }
-      }
+        super.doFilter(request, response, filterChain);
     }
-    if (isIgnore) {
-      filterChain.doFilter(request, response);
-      return;
-    }
-    super.doFilter(request, response, filterChain);
-  }
 
-  private void initExclusions() {
-    String ignores = getFilterConfig().getInitParameter("exclusions");
-    if (StringUtils.isNotBlank(ignores)) {
-      String[] ignoreArray = ignores.split(",");
-      for (int i = 0; i < ignoreArray.length; i++) {
-        if (StringUtils.isNotBlank(ignoreArray[i])) {
-          exclusions.add(ignoreArray[i]);
+    private void initExclusions() {
+        String ignores = getFilterConfig().getInitParameter("exclusions");
+        if (StringUtils.isNotBlank(ignores)) {
+            String[] ignoreArray = ignores.split(",");
+            for (int i = 0; i < ignoreArray.length; i++) {
+                if (StringUtils.isNotBlank(ignoreArray[i])) {
+                    exclusions.add(ignoreArray[i]);
+                }
+            }
         }
-      }
+        Collections.sort(exclusions);
+        Collections.reverse(exclusions);
     }
-    Collections.sort(exclusions);
-    Collections.reverse(exclusions);
-  }
 }

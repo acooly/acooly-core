@@ -35,94 +35,97 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/manage/system/")
 @ConditionalOnProperty(
-  value = SecurityProperties.PREFIX + ".shiro.auth.enable",
-  matchIfMissing = true
+        value = SecurityProperties.PREFIX + ".shiro.auth.enable",
+        matchIfMissing = true
 )
 @Olog.Ignore
 public class SystemController extends AbstractJQueryEntityController<User, UserService> {
 
-  @Autowired private UserService userService;
-  @Autowired private ResourceService resourceService;
-  @Autowired private PortalletService portalletService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private ResourceService resourceService;
+    @Autowired
+    private PortalletService portalletService;
 
-  /**
-   * 授权功能顶级菜单
-   *
-   * @return
-   */
-  @Olog.Ignore
-  @RequestMapping("authorisedMenus")
-  @ResponseBody
-  public List<ResourceNode> authorisedMenus(
-      HttpServletRequest request, HttpServletResponse response) {
-    User user = ShiroUtils.getCurrentUser();
-    List<ResourceNode> resourceNodes = resourceService.getAuthorizedResourceNode(user.getId());
-    return resourceNodes;
-  }
-
-  @RequestMapping(value = "portallets")
-  @ResponseBody
-  @Olog.Ignore
-  public List<Portallet> portallets(
-      Model model, HttpServletRequest request, HttpServletResponse response) {
-    try {
-      User user = ShiroUtils.getCurrentUser();
-      List<Portallet> portallets = portalletService.queryByUserName(user.getUsername());
-      List<Portallet> authPortallets = Lists.newArrayList();
-      for (Portallet p : portallets) {
-        String url = p.getHref();
-        if (StringUtils.isNotBlank(url)
-            && (Strings.endsWith(url, ".html") || Strings.endsWith(url, ".jsp"))) {
-          if (SecurityUtils.getSecurityManager()
-              .isPermitted(
-                  SecurityUtils.getSubject().getPrincipals(),
-                  "do" + PathMatchPermission.PART_DIVIDER_TOKEN + url)) {
-            authPortallets.add(p);
-          }
-        } else {
-          authPortallets.add(p);
-        }
-      }
-      return authPortallets;
-    } catch (Exception e) {
-      return Lists.newArrayList();
+    /**
+     * 授权功能顶级菜单
+     *
+     * @return
+     */
+    @Olog.Ignore
+    @RequestMapping("authorisedMenus")
+    @ResponseBody
+    public List<ResourceNode> authorisedMenus(
+            HttpServletRequest request, HttpServletResponse response) {
+        User user = ShiroUtils.getCurrentUser();
+        List<ResourceNode> resourceNodes = resourceService.getAuthorizedResourceNode(user.getId());
+        return resourceNodes;
     }
-  }
 
-  @RequestMapping(value = "changePasswordView")
-  public String changePasswordView(
-      Model model, HttpServletRequest request, HttpServletResponse response) {
-    User user = ShiroUtils.getCurrentUser();
-    model.addAttribute("user", user);
-    return "/manage/system/changePassword";
-  }
-
-  @RequestMapping(value = "changePassword")
-  @ResponseBody
-  public JsonResult changePassword(
-      Model model, HttpServletRequest request, HttpServletResponse response) {
-    String orginalPassword = request.getParameter("password");
-    String newPassword = request.getParameter("newPassword");
-
-    JsonResult result = new JsonResult();
-    try {
-      User user = ShiroUtils.getCurrentUser();
-      if (user != null) {
-        boolean checkResult = userService.validatePassword(user, orginalPassword);
-        if (checkResult) {
-          userService.changePassword(user, newPassword);
-        } else {
-          throw new RuntimeException("原始密码错误");
+    @RequestMapping(value = "portallets")
+    @ResponseBody
+    @Olog.Ignore
+    public List<Portallet> portallets(
+            Model model, HttpServletRequest request, HttpServletResponse response) {
+        try {
+            User user = ShiroUtils.getCurrentUser();
+            List<Portallet> portallets = portalletService.queryByUserName(user.getUsername());
+            List<Portallet> authPortallets = Lists.newArrayList();
+            for (Portallet p : portallets) {
+                String url = p.getHref();
+                if (StringUtils.isNotBlank(url)
+                        && (Strings.endsWith(url, ".html") || Strings.endsWith(url, ".jsp"))) {
+                    if (SecurityUtils.getSecurityManager()
+                            .isPermitted(
+                                    SecurityUtils.getSubject().getPrincipals(),
+                                    "do" + PathMatchPermission.PART_DIVIDER_TOKEN + url)) {
+                        authPortallets.add(p);
+                    }
+                } else {
+                    authPortallets.add(p);
+                }
+            }
+            return authPortallets;
+        } catch (Exception e) {
+            return Lists.newArrayList();
         }
-      } else {
-        throw new RuntimeException("当前用户会话过期，未找到对应用户");
-      }
-      result.setMessage("密码修改成功");
-    } catch (Exception e) {
-      result.setSuccess(false);
-      result.setCode(e.getClass().toString());
-      result.setMessage(e.getMessage());
     }
-    return result;
-  }
+
+    @RequestMapping(value = "changePasswordView")
+    public String changePasswordView(
+            Model model, HttpServletRequest request, HttpServletResponse response) {
+        User user = ShiroUtils.getCurrentUser();
+        model.addAttribute("user", user);
+        return "/manage/system/changePassword";
+    }
+
+    @RequestMapping(value = "changePassword")
+    @ResponseBody
+    public JsonResult changePassword(
+            Model model, HttpServletRequest request, HttpServletResponse response) {
+        String orginalPassword = request.getParameter("password");
+        String newPassword = request.getParameter("newPassword");
+
+        JsonResult result = new JsonResult();
+        try {
+            User user = ShiroUtils.getCurrentUser();
+            if (user != null) {
+                boolean checkResult = userService.validatePassword(user, orginalPassword);
+                if (checkResult) {
+                    userService.changePassword(user, newPassword);
+                } else {
+                    throw new RuntimeException("原始密码错误");
+                }
+            } else {
+                throw new RuntimeException("当前用户会话过期，未找到对应用户");
+            }
+            result.setMessage("密码修改成功");
+        } catch (Exception e) {
+            result.setSuccess(false);
+            result.setCode(e.getClass().toString());
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
 }

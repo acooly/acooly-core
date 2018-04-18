@@ -14,14 +14,14 @@ import java.util.List;
 @Service("portalletService")
 @Transactional
 @ConditionalOnProperty(
-  value = SecurityProperties.PREFIX + ".shiro.auth.enable",
-  matchIfMissing = true
+        value = SecurityProperties.PREFIX + ".shiro.auth.enable",
+        matchIfMissing = true
 )
 public class PortalletServiceImpl extends EntityServiceImpl<Portallet, PortalletDao>
-    implements PortalletService {
+        implements PortalletService {
 
-  @Override
-  public List<Portallet> queryByUserName(String userName) {
-    return getEntityDao().queryByUserName(userName);
-  }
+    @Override
+    public List<Portallet> queryByUserName(String userName) {
+        return getEntityDao().queryByUserName(userName);
+    }
 }

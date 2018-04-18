@@ -27,26 +27,28 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = {MoneyConstraintValidator.class})
 public @interface MoneyConstraint {
 
-  String message() default "{com.acooly.utils.validator.Money.message}";
+    String message() default "{com.acooly.utils.validator.Money.message}";
 
-  Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
-  Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 
-  /**
-   * 最小值 <br>
-   * 单位：分 <br>
-   * 在校验时会包含此值
-   */
-  long min() default 0;
+    /**
+     * 最小值 <br>
+     * 单位：分 <br>
+     * 在校验时会包含此值
+     */
+    long min() default 0;
 
-  /**
-   * 最大值， <br>
-   * 单位：分 <br>
-   * 在校验时会包含此值
-   */
-  long max() default Long.MAX_VALUE;
+    /**
+     * 最大值， <br>
+     * 单位：分 <br>
+     * 在校验时会包含此值
+     */
+    long max() default Long.MAX_VALUE;
 
-  /** 是否可以为null,默认不可为null */
-  boolean nullable() default false;
+    /**
+     * 是否可以为null,默认不可为null
+     */
+    boolean nullable() default false;
 }

@@ -14,68 +14,70 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 @TaskExecutor.Type(type = TaskTypeEnum.LOCAL_TASK)
 public class LocalTaskExecutor implements TaskExecutor {
 
-  //缓存 bean
-  private Map<Class<?>, Object> beanMap;
+    //缓存 bean
+    private Map<Class<?>, Object> beanMap;
 
-  //缓存 class
-  private Map<String, Class<?>> classMap;
+    //缓存 class
+    private Map<String, Class<?>> classMap;
 
-  private ExecutorService executorService =
-      Executors.newCachedThreadPool(new CustomizableThreadFactory("scheduler-LocalTaskExecutor-"));
+    private ExecutorService executorService =
+            Executors.newCachedThreadPool(new CustomizableThreadFactory("scheduler-LocalTaskExecutor-"));
 
-  @Override
-  public Boolean execute(SchedulerRule schedulerRule) {
-    String className = schedulerRule.getClassName();
-    try {
-      Class<?> clazz = getClassByCache(className);
-      Object bean = getBeanByCache(clazz);
-      String methodName = schedulerRule.getMethodName();
-      Method declaredMethod = clazz.getDeclaredMethod(methodName, null);
-      declaredMethod.setAccessible(true);
-      CompletableFuture.runAsync(
-              () -> ReflectionUtils.invokeMethod(declaredMethod, bean), executorService)
-          .get(TIME_OUT, TimeUnit.SECONDS);
-    } catch (Exception e) {
-      throw new SchedulerExecuteException(e);
+    @Override
+    public Boolean execute(SchedulerRule schedulerRule) {
+        String className = schedulerRule.getClassName();
+        try {
+            Class<?> clazz = getClassByCache(className);
+            Object bean = getBeanByCache(clazz);
+            String methodName = schedulerRule.getMethodName();
+            Method declaredMethod = clazz.getDeclaredMethod(methodName, null);
+            declaredMethod.setAccessible(true);
+            CompletableFuture.runAsync(
+                    () -> ReflectionUtils.invokeMethod(declaredMethod, bean), executorService)
+                    .get(TIME_OUT, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            throw new SchedulerExecuteException(e);
+        }
+        return true;
     }
-    return true;
-  }
 
-  private Class<?> getClassByCache(String className) throws ClassNotFoundException {
-    Class<?> clazz;
-    if (classMap.containsKey(className)) {
-      clazz = classMap.get(className);
-    } else {
-      clazz = Class.forName(className);
-      classMap.put(className, clazz);
+    private Class<?> getClassByCache(String className) throws ClassNotFoundException {
+        Class<?> clazz;
+        if (classMap.containsKey(className)) {
+            clazz = classMap.get(className);
+        } else {
+            clazz = Class.forName(className);
+            classMap.put(className, clazz);
+        }
+        return clazz;
     }
-    return clazz;
-  }
 
-  private Object getBeanByCache(Class<?> clazz) {
-    Object object;
-    if (beanMap.containsKey(clazz)) {
-      object = beanMap.get(clazz);
-    } else {
-      object = ApplicationContextHolder.get().getBean(clazz);
-      beanMap.put(clazz, object);
+    private Object getBeanByCache(Class<?> clazz) {
+        Object object;
+        if (beanMap.containsKey(clazz)) {
+            object = beanMap.get(clazz);
+        } else {
+            object = ApplicationContextHolder.get().getBean(clazz);
+            beanMap.put(clazz, object);
+        }
+        return object;
     }
-    return object;
-  }
 
-  @Override
-  public void destroy() throws Exception {
-    classMap.clear();
-    beanMap.clear();
-  }
+    @Override
+    public void destroy() throws Exception {
+        classMap.clear();
+        beanMap.clear();
+    }
 
-  @Override
-  public void afterPropertiesSet() throws Exception {
-    classMap = Maps.newConcurrentMap();
-    beanMap = Maps.newConcurrentMap();
-  }
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        classMap = Maps.newConcurrentMap();
+        beanMap = Maps.newConcurrentMap();
+    }
 }

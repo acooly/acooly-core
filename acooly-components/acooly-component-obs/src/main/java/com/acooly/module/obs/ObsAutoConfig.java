@@ -7,9 +7,12 @@ import org.springframework.context.annotation.Configuration;
 
 import static com.acooly.module.obs.ObsProperties.PREFIX;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 @Configuration
 @EnableConfigurationProperties({ObsProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.module.obs")
-public class ObsAutoConfig {}
+public class ObsAutoConfig {
+}

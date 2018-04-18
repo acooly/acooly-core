@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 
 @Service("appVersionService")
 public class AppVersionServiceImpl extends EntityServiceImpl<AppVersion, AppVersionDao>
-    implements AppVersionService {
+        implements AppVersionService {
 
-  @Override
-  public AppVersion getLatest(String appCode, String deviceType) {
-    return getEntityDao().getLatest(appCode, deviceType);
-  }
+    @Override
+    public AppVersion getLatest(String appCode, String deviceType) {
+        return getEntityDao().getLatest(appCode, deviceType);
+    }
 }

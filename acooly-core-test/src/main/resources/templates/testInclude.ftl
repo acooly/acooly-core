@@ -1,9 +1,9 @@
 <html>
-  <head>
-        <title>include 测试</title>
-    </head>
-    <body>
-    ${where}
+<head>
+    <title>include 测试</title>
+</head>
+<body>
+${where}
     <@includePage path="/testFtl.html"/>
-    </body>
+</body>
 </html>

@@ -1,4 +1,6 @@
-/** create by zhangpu date:2015年9月11日 */
+/**
+ * create by zhangpu date:2015年9月11日
+ */
 package com.acooly.module.appopenapi.message;
 
 
@@ -13,4 +15,5 @@ import com.acooly.openapi.framework.common.message.ApiResponse;
  * @date 2015年9月11日
  */
 @OpenApiMessage(service = "appCrashReport", type = ApiMessageType.Response)
-public class AppCrashReportResponse extends ApiResponse {}
+public class AppCrashReportResponse extends ApiResponse {
+}

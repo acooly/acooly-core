@@ -15,73 +15,81 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @ConfigurationProperties(DefenceProperties.PREFIX)
 @Data
 public class DefenceProperties {
-  public static final String PREFIX = "acooly.security";
-  private CSRF csrf = new CSRF();
-  private Xss xss = new Xss();
-  private Url url = new Url();
+    public static final String PREFIX = "acooly.security";
+    private CSRF csrf = new CSRF();
+    private Xss xss = new Xss();
+    private Url url = new Url();
 
-  @PostConstruct
-  public void initXss() {
-    this.xss.init();
-  }
-
-  @Getter
-  @Setter
-  public static class CSRF {
-    private boolean enable = true;
-    private Map<String, List<String>> exclusions = Maps.newHashMap();
-    private String errorPage = "/error/csrf.htm";
-
-    public CSRF() {
-      List<String> list = Lists.newArrayList();
-      list.add("/gateway.html");
-      list.add("/ofile/upload.html");
-      list.add("/mock/gateway/**");
-      exclusions.put("security", list);
+    @PostConstruct
+    public void initXss() {
+        this.xss.init();
     }
-  }
 
-  @Data
-  public static class Url {
-    private boolean enable = true;
-    private final String key = "hbxENKbfoQ3g";
+    @Getter
+    @Setter
+    public static class CSRF {
+        private boolean enable = true;
+        private Map<String, List<String>> exclusions = Maps.newHashMap();
+        private String errorPage = "/error/csrf.htm";
 
-    public String paddingKey() {
-      return Strings.leftPad(key, 16, '0');
-    }
-  }
-
-  @ToString
-  public static class Xss {
-    private final AntPathMatcher antPathMatcher = new AntPathMatcher();
-    @Getter @Setter private boolean enable = true;
-    /** 路径支持ant表达式 */
-    @Getter @Setter private Map<String, List<String>> exclusions = Maps.newHashMap();
-
-    private List<String> ex = Lists.newArrayList();
-
-    public boolean matches(HttpServletRequest request) {
-      if (ex != null) {
-        String uri = request.getRequestURI();
-        int idx = uri.indexOf(';');
-        if (idx > -1) {
-          uri = uri.substring(0, idx);
+        public CSRF() {
+            List<String> list = Lists.newArrayList();
+            list.add("/gateway.html");
+            list.add("/ofile/upload.html");
+            list.add("/mock/gateway/**");
+            exclusions.put("security", list);
         }
-        for (String ignoreAntPathMatcherPattern : ex) {
-          if (antPathMatcher.match(ignoreAntPathMatcherPattern, uri)) {
-            return false;
-          }
-        }
-      }
-      return true;
     }
 
-    public void init() {
-      exclusions.values().forEach(v -> ex.addAll(v));
+    @Data
+    public static class Url {
+        private final String key = "hbxENKbfoQ3g";
+        private boolean enable = true;
+
+        public String paddingKey() {
+            return Strings.leftPad(key, 16, '0');
+        }
     }
-  }
+
+    @ToString
+    public static class Xss {
+        private final AntPathMatcher antPathMatcher = new AntPathMatcher();
+        @Getter
+        @Setter
+        private boolean enable = true;
+        /**
+         * 路径支持ant表达式
+         */
+        @Getter
+        @Setter
+        private Map<String, List<String>> exclusions = Maps.newHashMap();
+
+        private List<String> ex = Lists.newArrayList();
+
+        public boolean matches(HttpServletRequest request) {
+            if (ex != null) {
+                String uri = request.getRequestURI();
+                int idx = uri.indexOf(';');
+                if (idx > -1) {
+                    uri = uri.substring(0, idx);
+                }
+                for (String ignoreAntPathMatcherPattern : ex) {
+                    if (antPathMatcher.match(ignoreAntPathMatcherPattern, uri)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public void init() {
+            exclusions.values().forEach(v -> ex.addAll(v));
+        }
+    }
 }

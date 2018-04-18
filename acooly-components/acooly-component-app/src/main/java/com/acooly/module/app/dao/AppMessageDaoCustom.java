@@ -12,5 +12,5 @@ import com.acooly.module.app.domain.AppMessage;
  */
 public interface AppMessageDaoCustom {
 
-  PageInfo<AppMessage> pageQueryUserMessages(PageInfo<AppMessage> pageInfo, String userName);
+    PageInfo<AppMessage> pageQueryUserMessages(PageInfo<AppMessage> pageInfo, String userName);
 }

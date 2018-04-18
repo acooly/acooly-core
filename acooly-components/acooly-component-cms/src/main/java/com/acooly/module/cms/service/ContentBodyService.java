@@ -1,4 +1,3 @@
-
 package com.acooly.module.cms.service;
 
 import com.acooly.core.common.service.EntityService;
@@ -9,4 +8,5 @@ import com.acooly.module.cms.domain.ContentBody;
  *
  * @author Acooly Code Generator
  */
-public interface ContentBodyService extends EntityService<ContentBody> {}
+public interface ContentBodyService extends EntityService<ContentBody> {
+}

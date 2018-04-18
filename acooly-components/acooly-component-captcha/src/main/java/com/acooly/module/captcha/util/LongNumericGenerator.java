@@ -1,6 +1,8 @@
 package com.acooly.module.captcha.util;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 public interface LongNumericGenerator extends NumericGenerator {
-  long getNextLong();
+    long getNextLong();
 }

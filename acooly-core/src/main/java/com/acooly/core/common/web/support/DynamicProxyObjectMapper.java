@@ -10,10 +10,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  */
 public class DynamicProxyObjectMapper extends ObjectMapper {
 
-  private static final long serialVersionUID = 6931339368333683269L;
+    private static final long serialVersionUID = 6931339368333683269L;
 
-  public DynamicProxyObjectMapper() {
-    super();
-    disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-  }
+    public DynamicProxyObjectMapper() {
+        super();
+        disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+    }
 }

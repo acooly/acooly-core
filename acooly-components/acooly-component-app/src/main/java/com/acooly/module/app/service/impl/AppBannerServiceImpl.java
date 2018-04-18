@@ -29,7 +29,7 @@ public class AppBannerServiceImpl extends EntityServiceImpl<AppBanner, AppBanner
             Map<String, Boolean> sortMap = Maps.newLinkedHashMap();
             sortMap.put("sortTime", true);
             Map<String, Object> searchMap = Maps.newHashMap();
-            searchMap.put("GT_sortTime",current);
+            searchMap.put("GT_sortTime", current);
             pageInfo = getEntityDao().query(pageInfo, searchMap, sortMap);
             if (pageInfo.getPageResults() != null && pageInfo.getPageResults().size() > 0) {
                 perv = pageInfo.getPageResults().get(0);

@@ -24,7 +24,7 @@ package com.acooly.module.defence.csrf;
 @SuppressWarnings("serial")
 public class MissingCsrfTokenException extends CsrfException {
 
-  public MissingCsrfTokenException(String actualToken) {
-    super("Expected CSRF token not found.");
-  }
+    public MissingCsrfTokenException(String actualToken) {
+        super("Expected CSRF token not found.");
+    }
 }

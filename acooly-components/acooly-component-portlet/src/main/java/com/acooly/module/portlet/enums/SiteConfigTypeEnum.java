@@ -20,85 +20,84 @@ import java.util.Map;
  * @author acooly Date: 2017-03-01 00:53:18
  */
 public enum SiteConfigTypeEnum implements Messageable {
-  def("def", "默认"),
-  ;
+    def("def", "默认"),;
 
-  private final String code;
-  private final String message;
+    private final String code;
+    private final String message;
 
-  private SiteConfigTypeEnum(String code, String message) {
-    this.code = code;
-    this.message = message;
-  }
-
-  public static Map<String, String> mapping() {
-    Map<String, String> map = new LinkedHashMap<String, String>();
-    for (SiteConfigTypeEnum type : values()) {
-      map.put(type.getCode(), type.getMessage());
+    private SiteConfigTypeEnum(String code, String message) {
+        this.code = code;
+        this.message = message;
     }
-    return map;
-  }
 
-  /**
-   * 通过枚举值码查找枚举值。
-   *
-   * @param code 查找枚举值的枚举值码。
-   * @return 枚举值码对应的枚举值。
-   * @throws IllegalArgumentException 如果 code 没有对应的 Status 。
-   */
-  public static SiteConfigTypeEnum find(String code) {
-    for (SiteConfigTypeEnum status : values()) {
-      if (status.getCode().equals(code)) {
-        return status;
-      }
+    public static Map<String, String> mapping() {
+        Map<String, String> map = new LinkedHashMap<String, String>();
+        for (SiteConfigTypeEnum type : values()) {
+            map.put(type.getCode(), type.getMessage());
+        }
+        return map;
     }
-    throw new IllegalArgumentException("Type not legal:" + code);
-  }
 
-  /**
-   * 获取全部枚举值。
-   *
-   * @return 全部枚举值。
-   */
-  public static List<SiteConfigTypeEnum> getAll() {
-    List<SiteConfigTypeEnum> list = new ArrayList<SiteConfigTypeEnum>();
-    for (SiteConfigTypeEnum status : values()) {
-      list.add(status);
+    /**
+     * 通过枚举值码查找枚举值。
+     *
+     * @param code 查找枚举值的枚举值码。
+     * @return 枚举值码对应的枚举值。
+     * @throws IllegalArgumentException 如果 code 没有对应的 Status 。
+     */
+    public static SiteConfigTypeEnum find(String code) {
+        for (SiteConfigTypeEnum status : values()) {
+            if (status.getCode().equals(code)) {
+                return status;
+            }
+        }
+        throw new IllegalArgumentException("Type not legal:" + code);
     }
-    return list;
-  }
 
-  /**
-   * 获取全部枚举值码。
-   *
-   * @return 全部枚举值码。
-   */
-  public static List<String> getAllCode() {
-    List<String> list = new ArrayList<String>();
-    for (SiteConfigTypeEnum status : values()) {
-      list.add(status.code());
+    /**
+     * 获取全部枚举值。
+     *
+     * @return 全部枚举值。
+     */
+    public static List<SiteConfigTypeEnum> getAll() {
+        List<SiteConfigTypeEnum> list = new ArrayList<SiteConfigTypeEnum>();
+        for (SiteConfigTypeEnum status : values()) {
+            list.add(status);
+        }
+        return list;
     }
-    return list;
-  }
 
-  public String getCode() {
-    return code;
-  }
+    /**
+     * 获取全部枚举值码。
+     *
+     * @return 全部枚举值码。
+     */
+    public static List<String> getAllCode() {
+        List<String> list = new ArrayList<String>();
+        for (SiteConfigTypeEnum status : values()) {
+            list.add(status.code());
+        }
+        return list;
+    }
 
-  public String getMessage() {
-    return message;
-  }
+    public String getCode() {
+        return code;
+    }
 
-  public String code() {
-    return code;
-  }
+    public String getMessage() {
+        return message;
+    }
 
-  public String message() {
-    return message;
-  }
+    public String code() {
+        return code;
+    }
 
-  @Override
-  public String toString() {
-    return String.format("%s:%s", this.code, this.message);
-  }
+    public String message() {
+        return message;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s:%s", this.code, this.message);
+    }
 }

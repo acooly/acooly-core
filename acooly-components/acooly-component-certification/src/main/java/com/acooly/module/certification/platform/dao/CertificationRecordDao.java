@@ -19,6 +19,6 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface CertificationRecordDao extends EntityJpaDao<CertificationRecord, Long> {
 
-  @Query("from CertificationRecord where idCarNo = ?1 and realName = ?2")
-  CertificationRecord findEntityByCarNoAndRealName(String idCarNo, String realName);
+    @Query("from CertificationRecord where idCarNo = ?1 and realName = ?2")
+    CertificationRecord findEntityByCarNoAndRealName(String idCarNo, String realName);
 }

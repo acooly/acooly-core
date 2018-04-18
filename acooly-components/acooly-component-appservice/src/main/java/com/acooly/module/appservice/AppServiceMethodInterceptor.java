@@ -19,61 +19,63 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 public class AppServiceMethodInterceptor implements MethodInterceptor {
-  private Object target;
+    private Object target;
 
-  private Set<String> proxiedSet = Sets.newHashSet();
-  private AppServiceFilterChain appServiceFilterChain;
+    private Set<String> proxiedSet = Sets.newHashSet();
+    private AppServiceFilterChain appServiceFilterChain;
 
-  public AppServiceMethodInterceptor(Object target, AppServiceFilterChain appServiceFilterChain) {
-    this.appServiceFilterChain = appServiceFilterChain;
-    this.target = target;
-  }
-
-  public void register(Method method, Class targetClass) {
-    AppService appService = method.getAnnotation(AppService.class);
-    if (appService == null) {
-      appService = method.getDeclaringClass().getAnnotation(AppService.class);
+    public AppServiceMethodInterceptor(Object target, AppServiceFilterChain appServiceFilterChain) {
+        this.appServiceFilterChain = appServiceFilterChain;
+        this.target = target;
     }
-    if (appService == null) {
-      appService = (AppService) targetClass.getAnnotation(AppService.class);
-    }
-    if (appService == null || !appService.enable()) {
-      return;
-    }
-    proxiedSet.add(getMethodKey(method));
-  }
 
-  public boolean canBeProxy() {
-    return !proxiedSet.isEmpty();
-  }
-
-  private String getMethodKey(Method method) {
-    StringBuilder key = new StringBuilder();
-    key.append(method.getName());
-    key.append("#");
-    Class<?>[] classes = method.getParameterTypes();
-    for (Class<?> aClass : classes) {
-      key.append(aClass.getName());
-      key.append(",");
+    public void register(Method method, Class targetClass) {
+        AppService appService = method.getAnnotation(AppService.class);
+        if (appService == null) {
+            appService = method.getDeclaringClass().getAnnotation(AppService.class);
+        }
+        if (appService == null) {
+            appService = (AppService) targetClass.getAnnotation(AppService.class);
+        }
+        if (appService == null || !appService.enable()) {
+            return;
+        }
+        proxiedSet.add(getMethodKey(method));
     }
-    return key.toString();
-  }
 
-  public Object invoke(MethodInvocation methodInvocation) throws Throwable {
-    if (proxiedSet.contains(getMethodKey(methodInvocation.getMethod()))) {
-      AppServiceContext appServiceContext = new AppServiceContext();
-      appServiceContext.setTarget(target);
-      appServiceContext.setMethodInvocation(methodInvocation);
-      appServiceFilterChain.doFilter(appServiceContext);
-      return appServiceContext.getResult();
-    } else {
-        try {
-            return methodInvocation.getMethod().invoke(target, methodInvocation.getArguments());
-        } catch (InvocationTargetException e) {
-           throw e.getTargetException();
+    public boolean canBeProxy() {
+        return !proxiedSet.isEmpty();
+    }
+
+    private String getMethodKey(Method method) {
+        StringBuilder key = new StringBuilder();
+        key.append(method.getName());
+        key.append("#");
+        Class<?>[] classes = method.getParameterTypes();
+        for (Class<?> aClass : classes) {
+            key.append(aClass.getName());
+            key.append(",");
+        }
+        return key.toString();
+    }
+
+    public Object invoke(MethodInvocation methodInvocation) throws Throwable {
+        if (proxiedSet.contains(getMethodKey(methodInvocation.getMethod()))) {
+            AppServiceContext appServiceContext = new AppServiceContext();
+            appServiceContext.setTarget(target);
+            appServiceContext.setMethodInvocation(methodInvocation);
+            appServiceFilterChain.doFilter(appServiceContext);
+            return appServiceContext.getResult();
+        } else {
+            try {
+                return methodInvocation.getMethod().invoke(target, methodInvocation.getArguments());
+            } catch (InvocationTargetException e) {
+                throw e.getTargetException();
+            }
         }
     }
-  }
 }

@@ -55,22 +55,6 @@ public enum CodecEnum implements Messageable, StringCodec {
         this.message = message;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String code() {
-        return code;
-    }
-
-    public String message() {
-        return message;
-    }
-
     public static Map<String, String> mapping() {
         Map<String, String> map = Maps.newLinkedHashMap();
         for (CodecEnum type : values()) {
@@ -119,6 +103,22 @@ public enum CodecEnum implements Messageable, StringCodec {
             list.add(status.code());
         }
         return list;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String code() {
+        return code;
+    }
+
+    public String message() {
+        return message;
     }
 
 }

@@ -15,9 +15,9 @@ import java.util.Date;
  */
 public interface SmsLogDao extends EntityJpaDao<SmsLog, Long> {
 
-  @Query("select count(e) from SmsLog e where e.clientIp=?1 and e.createTime > ?2")
-  Long countByIp(String ip, Date startTime);
+    @Query("select count(e) from SmsLog e where e.clientIp=?1 and e.createTime > ?2")
+    Long countByIp(String ip, Date startTime);
 
-  @Query("select count(e) from SmsLog e where e.mobileNo=?1 and e.createTime > ?2")
-  Long countByMobileNo(String mobileNo, Date startTime);
+    @Query("select count(e) from SmsLog e where e.mobileNo=?1 and e.createTime > ?2")
+    Long countByMobileNo(String mobileNo, Date startTime);
 }

@@ -18,5 +18,5 @@ import com.acooly.module.certification.platform.entity.BankCertificationRecord;
  * @author shuijing
  */
 public interface BankCertificationRecordService extends EntityService<BankCertificationRecord> {
-  BankCertificationRecord findEntityByCardNo(String cardNo);
+    BankCertificationRecord findEntityByCardNo(String cardNo);
 }

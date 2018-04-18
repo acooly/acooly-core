@@ -16,7 +16,7 @@ import java.util.Date;
  */
 public interface OlogDao extends EntityJpaDao<OlogEntity, Long> {
 
-  @Modifying
-  @Query("delete from OlogEntity where operateTime < ?1")
-  void cleanup(Date beforeDate);
+    @Modifying
+    @Query("delete from OlogEntity where operateTime < ?1")
+    void cleanup(Date beforeDate);
 }

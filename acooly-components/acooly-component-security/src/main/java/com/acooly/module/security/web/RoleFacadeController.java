@@ -18,21 +18,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping(value = "/role/facade")
 @ConditionalOnProperty(
-  value = SecurityProperties.PREFIX + ".shiro.auth.enable",
-  matchIfMissing = true
+        value = SecurityProperties.PREFIX + ".shiro.auth.enable",
+        matchIfMissing = true
 )
 public class RoleFacadeController {
 
-  @Autowired private SSOAuthzService ssoAuthzService;
+    @Autowired
+    private SSOAuthzService ssoAuthzService;
 
-  @RequestMapping("isPermitted")
-  @ResponseBody
-  public Boolean isPermitted(String uri, String username) {
-    try {
-      return ssoAuthzService.permitted(uri, username);
-    } catch (Exception e) {
-      log.error("检查权限异常", e);
-      return false;
+    @RequestMapping("isPermitted")
+    @ResponseBody
+    public Boolean isPermitted(String uri, String username) {
+        try {
+            return ssoAuthzService.permitted(uri, username);
+        } catch (Exception e) {
+            log.error("检查权限异常", e);
+            return false;
+        }
     }
-  }
 }

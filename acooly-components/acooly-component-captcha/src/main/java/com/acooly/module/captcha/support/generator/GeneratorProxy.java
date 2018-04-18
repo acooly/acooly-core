@@ -12,35 +12,38 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 @Service("captchaGenerator")
 public class GeneratorProxy<V>
-    implements CaptchaGenerator<V>,
+        implements CaptchaGenerator<V>,
         ApplicationContextAware,
         ApplicationListener<ContextRefreshedEvent> {
 
-  private ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
 
-  private CaptchaGenerator generator;
+    private CaptchaGenerator generator;
 
-  @Autowired private CaptchaProperties properties;
+    @Autowired
+    private CaptchaProperties properties;
 
-  @Override
-  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-    this.applicationContext = applicationContext;
-  }
-
-  @Override
-  public void onApplicationEvent(ContextRefreshedEvent event) {
-    if (generator == null) {
-      generator =
-          (CaptchaGenerator)
-              this.applicationContext.getBean(properties.getGeneratorType().code());
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
-  }
 
-  @Override
-  public Captcha<V> createCaptcha(String key, Long seconds) throws CaptchaGenerateException {
-    return generator.createCaptcha(key, seconds);
-  }
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        if (generator == null) {
+            generator =
+                    (CaptchaGenerator)
+                            this.applicationContext.getBean(properties.getGeneratorType().code());
+        }
+    }
+
+    @Override
+    public Captcha<V> createCaptcha(String key, Long seconds) throws CaptchaGenerateException {
+        return generator.createCaptcha(key, seconds);
+    }
 }

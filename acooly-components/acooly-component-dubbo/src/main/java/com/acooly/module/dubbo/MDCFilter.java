@@ -17,42 +17,44 @@ import org.slf4j.MDC;
 
 import static com.acooly.core.common.boot.log.LogAutoConfig.LogProperties.GID_KEY;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 @Activate(
-  group = {Constants.PROVIDER},
-  order = Integer.MIN_VALUE
+        group = {Constants.PROVIDER},
+        order = Integer.MIN_VALUE
 )
 public class MDCFilter implements Filter {
 
-  @Override
-  public Result invoke(Invoker<?> invoker, Invocation inv) throws RpcException {
-    Object[] args = inv.getArguments();
-    boolean mdcEnable = false;
-    if (args != null) {
-      for (Object arg : args) {
-        if (arg instanceof Orderable) {
-          mdcEnable = true;
-          setGid((Orderable) arg);
-          break;
+    @Override
+    public Result invoke(Invoker<?> invoker, Invocation inv) throws RpcException {
+        Object[] args = inv.getArguments();
+        boolean mdcEnable = false;
+        if (args != null) {
+            for (Object arg : args) {
+                if (arg instanceof Orderable) {
+                    mdcEnable = true;
+                    setGid((Orderable) arg);
+                    break;
+                }
+            }
         }
-      }
+        Result result;
+        try {
+            result = invoker.invoke(inv);
+        } finally {
+            if (mdcEnable) {
+                MDC.remove(GID_KEY);
+            }
+        }
+        return result;
     }
-    Result result;
-    try {
-      result = invoker.invoke(inv);
-    } finally {
-      if (mdcEnable) {
-        MDC.remove(GID_KEY);
-      }
-    }
-    return result;
-  }
 
-  private void setGid(Orderable arg) {
-    String gid = arg.getGid();
-    if (gid == null) {
-      gid = "";
+    private void setGid(Orderable arg) {
+        String gid = arg.getGid();
+        if (gid == null) {
+            gid = "";
+        }
+        MDC.put(GID_KEY, gid);
     }
-    MDC.put(GID_KEY, gid);
-  }
 }

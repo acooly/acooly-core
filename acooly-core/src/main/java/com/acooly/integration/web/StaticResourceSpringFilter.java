@@ -1,4 +1,6 @@
-/** create by zhangpu date:2015年10月12日 */
+/**
+ * create by zhangpu date:2015年10月12日
+ */
 package com.acooly.integration.web;
 
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,13 +20,13 @@ import java.io.IOException;
  */
 public class StaticResourceSpringFilter extends OncePerRequestFilter {
 
-  @Resource(name = "staticResourceHttpRequestHandler")
-  private StaticResourceHttpRequestHandler staticResourceHttpRequestHandler;
+    @Resource(name = "staticResourceHttpRequestHandler")
+    private StaticResourceHttpRequestHandler staticResourceHttpRequestHandler;
 
-  @Override
-  protected void doFilterInternal(
-      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-      throws ServletException, IOException {
-    staticResourceHttpRequestHandler.handleRequest(request, response);
-  }
+    @Override
+    protected void doFilterInternal(
+            HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        staticResourceHttpRequestHandler.handleRequest(request, response);
+    }
 }

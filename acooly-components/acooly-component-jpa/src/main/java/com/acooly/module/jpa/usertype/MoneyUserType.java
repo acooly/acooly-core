@@ -11,11 +11,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-/** @author qiubo */
+
+/**
+ * @author qiubo
+ */
 @TypeDef(defaultForType = Money.class, typeClass = MoneyUserType.class)
 public class MoneyUserType implements UserType {
 
-    private static final int[] SQL_TYPES = { Types.INTEGER };
+    private static final int[] SQL_TYPES = {Types.INTEGER};
 
     @Override
     public int[] sqlTypes() {

@@ -13,5 +13,5 @@ import com.acooly.module.app.domain.AppMessage;
  */
 public interface AppMessageService extends EntityService<AppMessage> {
 
-  PageInfo<AppMessage> query(PageInfo<AppMessage> pageInfo, String userName);
+    PageInfo<AppMessage> query(PageInfo<AppMessage> pageInfo, String userName);
 }

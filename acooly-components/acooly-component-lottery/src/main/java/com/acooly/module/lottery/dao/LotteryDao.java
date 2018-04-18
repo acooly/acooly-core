@@ -12,5 +12,5 @@ import com.acooly.module.lottery.domain.Lottery;
  */
 public interface LotteryDao extends EntityJpaDao<Lottery, Long> {
 
-  Lottery findByCode(String code);
+    Lottery findByCode(String code);
 }

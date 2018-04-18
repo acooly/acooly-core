@@ -17,21 +17,23 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.List;
 
-/** @author qiubo */
+/**
+ * @author qiubo
+ */
 public class DruidComponentInitializer implements ComponentInitializer {
-  @Override
-  public void initialize(ConfigurableApplicationContext applicationContext) {
-    //tuning druid logger ,avoid log4j initialize
-    System.setProperty("druid.logType", "slf4j");
-    //关闭org.springframework.boot.autoconfigure.jdbc.DataSourceInitializer加载数据源,在加载多个数据源时会出错
-    if (Strings.isNullOrEmpty(System.getProperty("spring.datasource.initialize"))) {
-      System.setProperty("spring.datasource.initialize", Boolean.FALSE.toString());
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        //tuning druid logger ,avoid log4j initialize
+        System.setProperty("druid.logType", "slf4j");
+        //关闭org.springframework.boot.autoconfigure.jdbc.DataSourceInitializer加载数据源,在加载多个数据源时会出错
+        if (Strings.isNullOrEmpty(System.getProperty("spring.datasource.initialize"))) {
+            System.setProperty("spring.datasource.initialize", Boolean.FALSE.toString());
+        }
     }
-  }
 
-  @Override
-  public List<String> excludeAutoconfigClassNames() {
-    return Lists.newArrayList(
-        "org.springframework.boot.devtools.autoconfigure.DevToolsDataSourceAutoConfiguration");
-  }
+    @Override
+    public List<String> excludeAutoconfigClassNames() {
+        return Lists.newArrayList(
+                "org.springframework.boot.devtools.autoconfigure.DevToolsDataSourceAutoConfiguration");
+    }
 }

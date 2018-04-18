@@ -20,5 +20,5 @@ import org.springframework.core.annotation.Order;
  */
 @Order(0)
 public interface LogInitializer {
-  void init(LogbackConfigurator configurator);
+    void init(LogbackConfigurator configurator);
 }

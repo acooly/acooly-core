@@ -8,30 +8,32 @@ import org.hibernate.integrator.spi.Integrator;
 import org.hibernate.service.spi.SessionFactoryServiceRegistry;
 import org.hibernate.usertype.UserType;
 
-/** @author qiubo */
+/**
+ * @author qiubo
+ */
 @Slf4j
 public class CustomUserTypesIntegrator implements Integrator {
-	@Override
-	public void integrate(Metadata metadata, SessionFactoryImplementor sessionFactory,
+    @Override
+    public void integrate(Metadata metadata, SessionFactoryImplementor sessionFactory,
                           SessionFactoryServiceRegistry serviceRegistry) {
-		final MetadataImplementor mi;
-		if (metadata instanceof MetadataImplementor) {
-			mi = (MetadataImplementor) metadata;
-		} else {
-			throw new IllegalArgumentException(
-				"Metadata was not assignable to MetadataImplementor: " + metadata.getClass());
-		}
-		registerType(mi, new MoneyUserType());
-	}
-	
-	private void registerType(MetadataImplementor mi, UserType type) {
-		log.info("自动注册jpa usertype:{}",type.getClass().getName());
-		String className = type.returnedClass().getName();
-		mi.getTypeResolver().registerTypeOverride(type, new String[] { className });
-	}
-	
-	@Override
-	public void disintegrate(SessionFactoryImplementor sessionFactory, SessionFactoryServiceRegistry serviceRegistry) {
-		
-	}
+        final MetadataImplementor mi;
+        if (metadata instanceof MetadataImplementor) {
+            mi = (MetadataImplementor) metadata;
+        } else {
+            throw new IllegalArgumentException(
+                    "Metadata was not assignable to MetadataImplementor: " + metadata.getClass());
+        }
+        registerType(mi, new MoneyUserType());
+    }
+
+    private void registerType(MetadataImplementor mi, UserType type) {
+        log.info("自动注册jpa usertype:{}", type.getClass().getName());
+        String className = type.returnedClass().getName();
+        mi.getTypeResolver().registerTypeOverride(type, new String[]{className});
+    }
+
+    @Override
+    public void disintegrate(SessionFactoryImplementor sessionFactory, SessionFactoryServiceRegistry serviceRegistry) {
+
+    }
 }

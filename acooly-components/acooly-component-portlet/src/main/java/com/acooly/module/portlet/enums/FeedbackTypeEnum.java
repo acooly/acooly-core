@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/** @author zhangpu */
+/**
+ * @author zhangpu
+ */
 public enum FeedbackTypeEnum implements Messageable {
     suggest("suggest", "建议"),
 

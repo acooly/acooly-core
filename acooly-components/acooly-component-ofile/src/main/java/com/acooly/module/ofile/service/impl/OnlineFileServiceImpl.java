@@ -8,4 +8,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OnlineFileServiceImpl extends EntityServiceImpl<OnlineFile, OnlineFileDao>
-    implements OnlineFileService {}
+        implements OnlineFileService {
+}

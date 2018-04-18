@@ -12,7 +12,9 @@ package com.acooly.module.olog.facade.api;
 import com.acooly.module.olog.facade.order.OlogOrder;
 import com.acooly.module.olog.facade.result.OlogResult;
 
-/** @author acooly */
+/**
+ * @author acooly
+ */
 public interface OlogFacade {
-  OlogResult logger(OlogOrder order);
+    OlogResult logger(OlogOrder order);
 }

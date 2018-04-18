@@ -16,13 +16,16 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import static com.acooly.module.lottery.LotteryProperties.PREFIX;
 
-/** @author kuli@yiji.com */
+/**
+ * @author kuli@yiji.com
+ */
 @ConfigurationProperties(prefix = PREFIX)
 @Data
 @Slf4j
 public class LotteryProperties implements InitializingBean {
-  public static final String PREFIX = "acooly.lottery";
+    public static final String PREFIX = "acooly.lottery";
 
-  @Override
-  public void afterPropertiesSet() throws Exception {}
+    @Override
+    public void afterPropertiesSet() throws Exception {
+    }
 }

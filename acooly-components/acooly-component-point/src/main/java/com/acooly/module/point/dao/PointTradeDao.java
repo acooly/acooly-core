@@ -13,7 +13,7 @@ import org.apache.ibatis.annotations.Select;
 
 /**
  * 积分交易信息 Mybatis Dao
- *
+ * <p>
  * <p>
  * Date: 2017-02-03 22:50:14
  *
@@ -21,21 +21,21 @@ import org.apache.ibatis.annotations.Select;
  */
 public interface PointTradeDao extends EntityMybatisDao<PointTrade> {
 
-	@Select("select coalesce(sum(case trade_type when 'produce' then amount else 0 end)-sum(case trade_type when 'expense' then amount else 0 end) ,0) as point "
-			+ "from point_trade where user_name=#{userName} " //
-			+ "and create_time>=#{startTime} and create_time<=#{endTime} " //
-			+ "and trade_type in('produce','expense')")
-	long getClearPoint(@Param("userName") String userName, @Param("startTime") String startTime,
-			@Param("endTime") String endTime);
+    @Select("select coalesce(sum(case trade_type when 'produce' then amount else 0 end)-sum(case trade_type when 'expense' then amount else 0 end) ,0) as point "
+            + "from point_trade where user_name=#{userName} " //
+            + "and create_time>=#{startTime} and create_time<=#{endTime} " //
+            + "and trade_type in('produce','expense')")
+    long getClearPoint(@Param("userName") String userName, @Param("startTime") String startTime,
+                       @Param("endTime") String endTime);
 
-	@Select("select coalesce(sum(amount),0) as point from point_trade where user_name=#{userName} " //
-			+ "and create_time>=#{startTime} and create_time<=#{endTime} and trade_type ='produce'")
-	long getProducePoint(@Param("userName") String userName, @Param("startTime") String startTime,
-			@Param("endTime") String endTime);
-	
-	@Select("select coalesce(sum(amount),0) as point from point_trade where user_name=#{userName} " //
-			+ "and create_time>=#{startTime} and create_time<=#{endTime} and trade_type ='expense'")
-	long getExpensePoint(@Param("userName") String userName, @Param("startTime") String startTime,
-			@Param("endTime") String endTime);
+    @Select("select coalesce(sum(amount),0) as point from point_trade where user_name=#{userName} " //
+            + "and create_time>=#{startTime} and create_time<=#{endTime} and trade_type ='produce'")
+    long getProducePoint(@Param("userName") String userName, @Param("startTime") String startTime,
+                         @Param("endTime") String endTime);
+
+    @Select("select coalesce(sum(amount),0) as point from point_trade where user_name=#{userName} " //
+            + "and create_time>=#{startTime} and create_time<=#{endTime} and trade_type ='expense'")
+    long getExpensePoint(@Param("userName") String userName, @Param("startTime") String startTime,
+                         @Param("endTime") String endTime);
 
 }

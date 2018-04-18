@@ -9,7 +9,9 @@
  */
 package com.acooly.core.utils.lang;
 
-/** @author qiubo@yiji.com */
+/**
+ * @author qiubo@yiji.com
+ */
 public interface Named {
-  String getName();
+    String getName();
 }

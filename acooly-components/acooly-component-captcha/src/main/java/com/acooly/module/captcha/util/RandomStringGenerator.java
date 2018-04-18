@@ -1,13 +1,15 @@
 package com.acooly.module.captcha.util;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 public interface RandomStringGenerator {
 
-  int getMinLength();
+    int getMinLength();
 
-  int getMaxLength();
+    int getMaxLength();
 
-  String getNewString();
+    String getNewString();
 
-  byte[] getNewStringAsBytes();
+    byte[] getNewStringAsBytes();
 }

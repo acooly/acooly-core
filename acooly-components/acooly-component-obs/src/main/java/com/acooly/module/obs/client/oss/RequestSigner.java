@@ -2,8 +2,10 @@ package com.acooly.module.obs.client.oss;
 
 import com.acooly.module.obs.exceptions.ClientException;
 
-/** @author shuijing */
+/**
+ * @author shuijing
+ */
 public interface RequestSigner {
 
-  void sign(RequestMessage request) throws ClientException;
+    void sign(RequestMessage request) throws ClientException;
 }

@@ -12,9 +12,9 @@ import com.acooly.module.lottery.domain.LotteryUserCount;
  */
 public interface LotteryUserCountService extends EntityService<LotteryUserCount> {
 
-  LotteryUserCount findAndLockUniqueUser(Long lotteryId, String user);
+    LotteryUserCount findAndLockUniqueUser(Long lotteryId, String user);
 
-  LotteryUserCount findUniqueUser(String lotteryCode, String user);
+    LotteryUserCount findUniqueUser(String lotteryCode, String user);
 
-  void appendTimes(Long lotteryId, String lotteryCode, String lotteryTitle, String user, int times);
+    void appendTimes(Long lotteryId, String lotteryCode, String lotteryTitle, String user, int times);
 }

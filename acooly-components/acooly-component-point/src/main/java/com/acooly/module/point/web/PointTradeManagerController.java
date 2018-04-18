@@ -25,18 +25,18 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/manage/point/pointTrade")
 public class PointTradeManagerController
-    extends AbstractJQueryEntityController<PointTrade, PointTradeService> {
+        extends AbstractJQueryEntityController<PointTrade, PointTradeService> {
 
-  @SuppressWarnings("unused")
-  @Autowired
-  private PointTradeService pointTradeService;
+    @SuppressWarnings("unused")
+    @Autowired
+    private PointTradeService pointTradeService;
 
-  {
-    allowMapping = "*";
-  }
+    {
+        allowMapping = "*";
+    }
 
-  @Override
-  protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-    model.put("allTradeTypes", PointTradeType.mapping());
-  }
+    @Override
+    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+        model.put("allTradeTypes", PointTradeType.mapping());
+    }
 }

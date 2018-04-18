@@ -24,38 +24,40 @@ import java.util.UUID;
  * An API to allow changing the method in which the expected {@link CsrfToken} is associated to the
  * {@link HttpServletRequest}. For example, it may be stored in {@link HttpSession}.
  *
- * @see HttpSessionCsrfTokenRepository
  * @author Rob Winch
+ * @see HttpSessionCsrfTokenRepository
  * @since 3.2
  */
 public interface CsrfTokenRepository {
 
-  String CSRF_PARAMETER_NAME = "_csrf";
-  String CSRF_HEADER_NAME = "X-CSRF-TOKEN";
+    String CSRF_PARAMETER_NAME = "_csrf";
+    String CSRF_HEADER_NAME = "X-CSRF-TOKEN";
 
-  /** 生成token */
-  default CsrfToken generateToken(String value) {
-    if (value == null) {
-      value = UUID.randomUUID().toString();
+    /**
+     * 生成token
+     */
+    default CsrfToken generateToken(String value) {
+        if (value == null) {
+            value = UUID.randomUUID().toString();
+        }
+        return new DefaultCsrfToken(CSRF_HEADER_NAME, CSRF_PARAMETER_NAME, value);
     }
-    return new DefaultCsrfToken(CSRF_HEADER_NAME, CSRF_PARAMETER_NAME, value);
-  }
 
-  /**
-   * Saves the {@link CsrfToken} using the {@link HttpServletRequest} and {@link
-   * HttpServletResponse}. If the {@link CsrfToken} is null, it is the same as deleting it.
-   *
-   * @param token the {@link CsrfToken} to save or null to delete
-   * @param request the {@link HttpServletRequest} to use
-   * @param response the {@link HttpServletResponse} to use
-   */
-  void saveToken(CsrfToken token, HttpServletRequest request, HttpServletResponse response);
+    /**
+     * Saves the {@link CsrfToken} using the {@link HttpServletRequest} and {@link
+     * HttpServletResponse}. If the {@link CsrfToken} is null, it is the same as deleting it.
+     *
+     * @param token    the {@link CsrfToken} to save or null to delete
+     * @param request  the {@link HttpServletRequest} to use
+     * @param response the {@link HttpServletResponse} to use
+     */
+    void saveToken(CsrfToken token, HttpServletRequest request, HttpServletResponse response);
 
-  /**
-   * Loads the expected {@link CsrfToken} from the {@link HttpServletRequest}
-   *
-   * @param request the {@link HttpServletRequest} to use
-   * @return the {@link CsrfToken} or null if none exists
-   */
-  CsrfToken loadToken(HttpServletRequest request);
+    /**
+     * Loads the expected {@link CsrfToken} from the {@link HttpServletRequest}
+     *
+     * @param request the {@link HttpServletRequest} to use
+     * @return the {@link CsrfToken} or null if none exists
+     */
+    CsrfToken loadToken(HttpServletRequest request);
 }

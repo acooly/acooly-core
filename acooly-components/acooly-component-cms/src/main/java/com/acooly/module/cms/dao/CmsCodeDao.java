@@ -16,4 +16,5 @@ import com.acooly.module.jpa.EntityJpaDao;
  *
  * @author acooly
  */
-public interface CmsCodeDao extends EntityJpaDao<CmsCode, Long> {}
+public interface CmsCodeDao extends EntityJpaDao<CmsCode, Long> {
+}

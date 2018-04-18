@@ -58,9 +58,4 @@ public class AppAutoConfig {
             }
         };
     }
-    @Bean
-    @ConditionalOnMissingBean
-    public AppNotifyService jPushAppNotifyService(){
-        return new JPushAppNotifyServiceImpl();
-    }
 }

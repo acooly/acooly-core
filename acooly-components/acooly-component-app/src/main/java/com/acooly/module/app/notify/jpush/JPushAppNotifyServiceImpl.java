@@ -20,6 +20,7 @@ import com.acooly.module.app.service.AppMessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -33,6 +34,8 @@ import java.util.Map;
  * @author zhangpu
  * @date 2015年11月4日
  */
+@Service
+@ConditionalOnMissingBean
 public class JPushAppNotifyServiceImpl implements AppNotifyService {
 
     private static final Logger logger = LoggerFactory.getLogger(JPushAppNotifyServiceImpl.class);

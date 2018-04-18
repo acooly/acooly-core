@@ -10,11 +10,13 @@
 package com.acooly.module.jpa;
 
 import com.acooly.core.common.boot.Apps;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.acooly.core.common.boot.listener.ExApplicationRunListener.COMPONENTS_PACKAGE;
@@ -31,6 +33,7 @@ public class JPAProperties {
     public static final String ENABLE_KEY = PREFIX + ".enable";
     private boolean enable = true;
     private boolean openEntityManagerInViewFilterEnable = true;
+    private List<String> openEntityManagerInViewFilterUrlPatterns = Lists.newArrayList();
     private Map<String, String> entityPackagesToScan = Maps.newHashMap();
 
     public JPAProperties() {
@@ -39,5 +42,8 @@ public class JPAProperties {
 
         entityPackagesToScan.put("components0", COMPONENTS_PACKAGE + ".**.domain");
         entityPackagesToScan.put("components1", COMPONENTS_PACKAGE + ".**.entity");
+        openEntityManagerInViewFilterUrlPatterns.add("*.html");
+        openEntityManagerInViewFilterUrlPatterns.add("*.jsp");
+        openEntityManagerInViewFilterUrlPatterns.add("/services/*");
     }
 }

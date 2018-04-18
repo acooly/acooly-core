@@ -10,7 +10,6 @@
 package com.acooly.module.jpa;
 
 import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
-import com.google.common.collect.Lists;
 import org.hibernate.SessionFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -61,13 +60,13 @@ public class JPAAutoConfig {
             matchIfMissing = true
     )
     @ConditionalOnWebApplication
-    public FilterRegistrationBean openEntityManagerInViewFilter() {
+    public FilterRegistrationBean openEntityManagerInViewFilter(JPAProperties properties) {
         OpenEntityManagerInViewFilter filter = new OpenEntityManagerInViewFilter();
 
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(filter);
         registration.addUrlPatterns(
-                Lists.newArrayList("*.html", "*.jsp", "/services/*").toArray(new String[0]));
+                properties.getOpenEntityManagerInViewFilterUrlPatterns().toArray(new String[0]));
         registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
         registration.setName("openSessionInViewFilter");
         registration.setOrder(Ordered.LOWEST_PRECEDENCE - 100);

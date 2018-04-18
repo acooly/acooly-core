@@ -10,10 +10,13 @@
 package com.acooly.module.app;
 
 import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
+import com.acooly.module.app.notify.AppNotifyService;
+import com.acooly.module.app.notify.jpush.JPushAppNotifyServiceImpl;
 import com.acooly.module.security.config.SecurityAutoConfig;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -54,5 +57,10 @@ public class AppAutoConfig {
                 return Lists.newArrayList("app", "app_urls");
             }
         };
+    }
+    @Bean
+    @ConditionalOnMissingBean
+    public AppNotifyService jPushAppNotifyService(){
+        return new JPushAppNotifyServiceImpl();
     }
 }

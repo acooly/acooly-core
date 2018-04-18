@@ -33,7 +33,6 @@ import java.util.Map;
  * @author zhangpu
  * @date 2015年11月4日
  */
-@Service
 public class JPushAppNotifyServiceImpl implements AppNotifyService {
 
     private static final Logger logger = LoggerFactory.getLogger(JPushAppNotifyServiceImpl.class);

@@ -55,6 +55,6 @@ public class AppClientAuthInfoRealm extends CacheableAuthInfoRealm {
     }
 
     protected String authenticationKey(String accessKey) {
-        return accessKey + AUTHZ_CACHE_KEY_PREFIX + CLIENT_SUFFIX;
+        return accessKey + AUTHC_CACHE_KEY_PREFIX + CLIENT_SUFFIX;
     }
 }

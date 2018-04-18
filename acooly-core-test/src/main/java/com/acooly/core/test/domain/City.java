@@ -4,6 +4,7 @@ import com.acooly.core.common.domain.AbstractEntity;
 import lombok.Data;
 
 import javax.persistence.Transient;
+import java.util.Map;
 
 @Data
 public class City extends AbstractEntity {
@@ -13,4 +14,6 @@ public class City extends AbstractEntity {
 
     @Transient
     private String data;
+
+    private Map<String,String> ext;
 }

@@ -9,6 +9,7 @@
  */
 package com.acooly.core.common.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.Transient;
@@ -27,6 +28,7 @@ public interface Entityable extends Serializable, Persistable<Serializable> {
     Date getUpdateTime();
 
     @Transient
+    @JsonIgnore
     default boolean isNew() {
         return null == getId();
     }

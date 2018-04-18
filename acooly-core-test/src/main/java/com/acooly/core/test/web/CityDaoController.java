@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,6 +85,10 @@ public class CityDaoController {
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public City create(City city) {
+        HashMap<String, String> ext = Maps.newHashMap();
+        ext.put("key","value");
+        ext.put("key1","value1");
+        city.setExt(ext);
         cityDao.create(city);
         return city;
     }

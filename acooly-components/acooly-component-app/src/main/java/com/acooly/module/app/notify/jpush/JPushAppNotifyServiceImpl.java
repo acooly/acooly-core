@@ -35,7 +35,6 @@ import java.util.Map;
  * @date 2015年11月4日
  */
 @Service
-@ConditionalOnMissingBean
 public class JPushAppNotifyServiceImpl implements AppNotifyService {
 
     private static final Logger logger = LoggerFactory.getLogger(JPushAppNotifyServiceImpl.class);

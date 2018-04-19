@@ -6,6 +6,7 @@ import com.acooly.module.cms.domain.Content;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 内容主表 Service
@@ -41,4 +42,5 @@ public interface ContentService extends EntityService<Content> {
     Content getByKeycodeNoLazy(String keycode);
 
     Content getByIdNoLazy(Long id);
+
 }

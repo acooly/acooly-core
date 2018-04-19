@@ -4,6 +4,7 @@ import com.acooly.core.common.service.EntityService;
 import com.acooly.module.cms.domain.ContentType;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 内容类型 Service
@@ -17,4 +18,7 @@ public interface ContentTypeService extends EntityService<ContentType> {
     List<ContentType> getLevel(String parentId);
 
     ContentType getContentType(String code);
+
+    Map<String, String> getEnabledCodeAndName();
+
 }

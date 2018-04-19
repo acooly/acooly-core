@@ -13,6 +13,7 @@ import com.acooly.module.cms.domain.CmsCode;
 import com.acooly.module.cms.domain.Content;
 import com.acooly.module.cms.service.CmsCodeService;
 import com.acooly.module.cms.service.ContentService;
+import com.acooly.module.cms.service.ContentTypeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,6 +38,8 @@ public class CmsCodeManagerController
     private CmsCodeService cmsCodeService;
     @Autowired
     private ContentService contentService;
+    @Autowired
+    private ContentTypeService contentTypeService;
 
     {
         allowMapping = "*";
@@ -45,7 +48,10 @@ public class CmsCodeManagerController
     @Override
     protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
         model.put("allStatuss", ContentManagerController.allStatuss);
+        Map<String, String> codeAndNames = contentTypeService.getEnabledCodeAndName();
+        model.put("codeAndNames", codeAndNames);
     }
+
 
     @Override
     public JsonResult deleteJson(HttpServletRequest request, HttpServletResponse response) {

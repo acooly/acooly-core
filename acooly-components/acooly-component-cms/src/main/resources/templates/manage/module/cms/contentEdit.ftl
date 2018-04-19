@@ -1,4 +1,11 @@
 <#assign jodd=JspTaglibs["http://www.springside.org.cn/jodd_form"] />
+<head>
+    <style type="text/css">
+        th {
+            width: 20%;
+        }
+    </style>
+</head>
 <div>
     <form id="manage_content${RequestParameters.code}_editform"
           action="${rc.contextPath}/manage/module/cms/content/<#if action == 'create'>save<#else>update</#if>Json.html" method="post"
@@ -36,7 +43,7 @@
             </tr>
             </#if>
             <tr>
-                <th>图片(封面)：</th>
+                <th>pc图片(封面)：</th>
                 <td>
                     <input type="file" name="cover_f" id="cover_f" class="easyui-validatebox"
                            validType="validImg['jpg,gif,png','只能上传jpg,gif,png格式的图片']"/>
@@ -46,10 +53,21 @@
                     </#if>
                 </td>
             </tr>
+            <tr>
+                <th>app图片(封面)：</th>
+                <td>
+                    <input type="file" name="cover_app" id="cover_f" class="easyui-validatebox"
+                           validType="validImg['jpg,gif,png','只能上传jpg,gif,png格式的图片']"/>
+                    <#if content.appcover?? && content.appcover != '' && action!='create'>
+                        <div><a href="${mediaRoot}/${content.appcover}" target="_blank" data-lightbox="cover"><img
+                                src="${mediaRoot}/${content.appcover}" width="200"></a></div>
+                    </#if>
+                </td>
+            </tr>
             <#if RequestParameters.cmsType = 'banner'>
             <tr>
-                <th>简介：</th>
-                <td><textarea name="subject" cols="80" rows="2" style="width:700px;"></textarea></td>
+                <th width="20%">简介：</th>
+                <td><textarea name="subject" cols="100" rows="2" style="width:360px;"></textarea></td>
             </tr>
             <tr>
                 <th>链接：</th>

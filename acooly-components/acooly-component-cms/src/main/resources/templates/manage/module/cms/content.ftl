@@ -65,8 +65,13 @@
                 <#if RequestParameters.cmsType = 'banner'>
                 <th field="cover"
                     data-options="formatter:function(v,r,i){ if(v){return '<img src=\'${mediaRoot}/'+v+'\' width=\'100\'>';}else{return '';} }">
-                    图片
+                    pc图片
                 </th>
+                <th field="appcover"
+                    data-options="formatter:function(v,r,i){ if(v){return '<img src=\'${mediaRoot}/'+v+'\' width=\'100\'>';}else{return '';} }">
+                    app图片
+                </th>
+
                 <th field="link" formatter="linkFormatter">链接</th>
                 <#else >
                 <th field="keywords">关键字</th>

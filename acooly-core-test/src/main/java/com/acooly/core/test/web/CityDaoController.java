@@ -27,6 +27,7 @@ package com.acooly.core.test.web;
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.test.dao.CityMybatisDao;
 import com.acooly.core.test.domain.City;
+import com.acooly.module.mybatis.typehandler.DBMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +52,13 @@ public class CityDaoController {
 
     @Autowired
     private CityMybatisDao cityDao;
+    @RequestMapping(value = "/findByName", method = RequestMethod.GET)
+    @Transactional
+    public Map findByName(String name) {
+        Map map = cityDao.findByName(name);
+        return map;
+    }
+
 
     @RequestMapping(value = "/selectById", method = RequestMethod.GET)
     @Transactional
@@ -85,7 +93,7 @@ public class CityDaoController {
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public City create(City city) {
-        HashMap<String, String> ext = Maps.newHashMap();
+        DBMap<String, String> ext = new DBMap();
         ext.put("key","value");
         ext.put("key1","value1");
         city.setExt(ext);

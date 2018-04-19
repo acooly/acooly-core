@@ -16,6 +16,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author qiubo@yiji.com
@@ -23,6 +24,9 @@ import java.util.List;
 public interface CityMybatisDao extends EntityMybatisDao<City> {
     @Select("select * from City")
     List<City> selectAll();
+
+    @Select("select * from City where name=#{name}")
+    Map findByName(@Param("name")String name);
 
     /**
      * 分页查询

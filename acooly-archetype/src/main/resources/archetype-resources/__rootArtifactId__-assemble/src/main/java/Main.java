@@ -1,11 +1,13 @@
+#set($symbol_pound='#')
+#set($symbol_dollar='$')
+#set($symbol_escape='\' )
+package ${package};
+
+
+
 import com.acooly.core.common.BootApp;
 import com.acooly.core.common.boot.Apps;
 import org.springframework.boot.SpringApplication;
-
-#set($symbol_pound='#')
-        #set($symbol_dollar='$')
-        #set($symbol_escape='\' )
-        package ${package};
 
 
 /**

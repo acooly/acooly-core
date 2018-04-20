@@ -22,8 +22,8 @@
                     <#if RequestParameters.cmsType != 'banner'>
                     <span style="margin-left: 10px;">编码: <select name="keycode" editable="false" style="width: 80px;" panelHeight="auto"
                                                                  class="easyui-combobox"><option value="">选择编码</option>
-                                     <#list allCodes as v>
-                                         <option value="${v}">${v}</option></#list>
+                                     <#list allCodes as k,v>
+                                         <option value="${k}">${v}</option></#list>
                                </select></span>
                     </#if>
                 </td>

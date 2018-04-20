@@ -162,12 +162,12 @@ public class ContentManagerController
         model.put("mediaRoot", getFileServerRoot());
 
         List<CmsCode> allCode = cmsCodeService.getAll();
-        List<String> codes = new ArrayList<>();
+        Map<String,String> codes = Maps.newHashMap();
         String code = request.getParameter("code");
         allCode.forEach(
                 cmsCode -> {
-                    if (1 == cmsCode.getStatus() && cmsCode.getTypeCode().equals(code)) {
-                        codes.add(cmsCode.getKeycode());
+                    if (1 == cmsCode.getStatus() && (cmsCode.getTypeCode() != null && cmsCode.getTypeCode().equals(code))) {
+                        codes.put(cmsCode.getKeycode(),cmsCode.getDescn());
                     }
                 });
         model.put("allCodes", codes);

@@ -613,9 +613,9 @@ public abstract class AbstractFileOperationController<
             Images.resize(sourceFile.getPath(), destFile.getPath(), uploadConfig.getThumbnailSize(), uploadConfig.getThumbnailSize(), true);
             return destFile;
         } catch (Exception e) {
-            logger.warn("上传文件 缩略图生成失败。file:{}", sourceFile);
+            logger.warn("上传文件 缩略图生成失败，使用原图。file:{}", sourceFile);
+            return sourceFile;
         }
-        return null;
     }
 
     /**

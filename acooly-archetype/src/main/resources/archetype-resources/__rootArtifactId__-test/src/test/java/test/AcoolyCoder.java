@@ -1,12 +1,11 @@
+#set($symbol_pound='#')
+#set($symbol_dollar='$')
+#set($symbol_escape='\' )
+
+package ${package}.test;
 import com.acooly.coder.Generator;
 import com.acooly.coder.generate.impl.DefaultCodeGenerateService;
 import org.apache.commons.lang3.StringUtils;
-
-#set($symbol_pound='#')
-        #set($symbol_dollar='$')
-        #set($symbol_escape='\' )
-
-        package ${package}.test;
 
 /**
  * 代码生成工具

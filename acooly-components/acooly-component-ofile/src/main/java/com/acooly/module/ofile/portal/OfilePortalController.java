@@ -247,6 +247,7 @@ public class OfilePortalController
         onlineFile.setObjectId(DigestUtils.sha1Hex(UUID.randomUUID().toString()));
         onlineFile.setUserName(getSessionUser(request));
         if (onlineFile.getFileType() == OFileType.picture) {
+            String thumbnailFilePath;
             File thumbnailFile =
                     new File(
                             file.getParent(),
@@ -255,8 +256,14 @@ public class OfilePortalController
                                     + FilenameUtils.getExtension(file.getName()));
 
             int thumbSize = getThumbnailSize(request);
-            Images.resize(file.getPath(), thumbnailFile.getPath(), thumbSize, thumbSize, false);
-            onlineFile.setThumbnail(getFilePath(request, thumbnailFile));
+            try {
+                Images.resize(file.getPath(), thumbnailFile.getPath(), thumbSize, thumbSize, false);
+                thumbnailFilePath = thumbnailFile.getPath();
+            } catch (Exception e) {
+                logger.error("缩略图生成失败,使用原图地址", e);
+                thumbnailFilePath = file.getPath();
+            }
+            onlineFile.setThumbnail(getFilePath(thumbnailFilePath));
         }
         return onlineFile;
     }
@@ -320,6 +327,10 @@ public class OfilePortalController
 
     protected String getFilePath(HttpServletRequest request, File file) {
         String filePath = file.getPath();
+        return getFilePath(filePath);
+    }
+
+    protected String getFilePath(String filePath) {
         filePath = filePath.replaceAll("\\\\", "/");
         return "/" + StringUtils.substringAfter(filePath, getStorageRoot());
     }

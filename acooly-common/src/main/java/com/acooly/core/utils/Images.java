@@ -1,5 +1,8 @@
 package com.acooly.core.utils;
 
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGImageDecoder;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -8,9 +11,7 @@ import org.slf4j.LoggerFactory;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 public class Images {
 
@@ -28,18 +29,76 @@ public class Images {
      */
     public static void resize(String filePath, String target, int height, int width, boolean bb) {
         try {
-            double ratio = 1; // 缩放比例
-            File f = new File(filePath);
-            BufferedImage bi = ImageIO.read(f);
-            // 计算比例
-            if ((bi.getHeight() > height) || (bi.getWidth() > width)) {
-                if (bi.getHeight() > bi.getWidth()) {
-                    ratio = (new Integer(height)).doubleValue() / bi.getHeight();
-                } else {
-                    ratio = (new Integer(width)).doubleValue() / bi.getWidth();
+            if (isImageJPG(filePath)) {
+                resizeJPEG(filePath, target, height, width, bb);
+            } else {
+                double ratio = 1; // 缩放比例
+                File f = new File(filePath);
+                BufferedImage bi = ImageIO.read(f);
+                // 计算比例
+                if ((bi.getHeight() > height) || (bi.getWidth() > width)) {
+                    if (bi.getHeight() > bi.getWidth()) {
+                        ratio = (new Integer(height)).doubleValue() / bi.getHeight();
+                    } else {
+                        ratio = (new Integer(width)).doubleValue() / bi.getWidth();
+                    }
                 }
+                Thumbnails.of(filePath).scale(ratio).toFile(target);
             }
-            Thumbnails.of(filePath).scale(ratio).toFile(target);
+        } catch (IOException e) {
+            logger.warn("图片缩放", e);
+            throw new RuntimeException("图片缩放");
+        }
+    }
+
+
+    /**
+     * 生成缩略图
+     *
+     * @param filePath
+     * @param target
+     * @param height
+     * @param width
+     * @param isScale
+     */
+    public static void resizeJPEG(String filePath, String target, int height, int width, boolean isScale) {
+        try {
+            File srcImageFile = new File(target);
+            JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(new FileInputStream(filePath));
+            BufferedImage image = decoder.decodeAsBufferedImage();
+
+            ImageIO.write(image, "JPEG", srcImageFile);
+            BufferedImage srcImage = ImageIO.read(srcImageFile);
+
+            int srcWidth = srcImage.getWidth(null);//原图片宽度
+            int srcHeight = srcImage.getHeight(null);//原图片高度
+            int dstMaxWidth = width;//目标缩略图的最大宽度
+            //int dstmaxHeight = height;//目标缩略图的最大高度
+            int dstWidth = srcWidth;//缩略图宽度
+            int dstHeight = srcHeight;//缩略图高度
+            float scale = 0;
+            //计算缩略图的宽和高
+            if (isScale) {
+                if (srcWidth > width) {
+                    dstWidth = dstMaxWidth;
+                    scale = (float) srcWidth / (float) dstMaxWidth;
+                    dstHeight = Math.round((float) srcHeight / scale);
+                }
+                if (dstHeight > height) {
+                    dstHeight = height;
+                    scale = (float) srcHeight / (float) height;
+                    dstWidth = Math.round((float) srcWidth / scale);
+                }
+            } else {
+                dstWidth = width;
+                dstHeight = height;
+            }
+            //生成缩略图
+            BufferedImage tagImage = new BufferedImage(dstWidth, dstHeight, BufferedImage.TYPE_INT_RGB);
+            tagImage.getGraphics().drawImage(srcImage.getScaledInstance(dstWidth, dstHeight, Image.SCALE_SMOOTH), 0, 0, null);
+            FileOutputStream fileOutputStream = new FileOutputStream(target);
+            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(fileOutputStream);
+            encoder.encode(tagImage);
         } catch (IOException e) {
             logger.warn("图片缩放", e);
             throw new RuntimeException("图片缩放");
@@ -188,6 +247,14 @@ public class Images {
     public static boolean isImage(String fileName) {
         String ext = StringUtils.substringAfterLast(fileName, ".");
         if (Strings.indexOfIgnoreCase(IMAGE_EXTS, ext) != -1) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isImageJPG(String fileName) {
+        String ext = StringUtils.substringAfterLast(fileName, ".");
+        if (Strings.indexOfIgnoreCase("JPG", ext) != -1) {
             return true;
         }
         return false;

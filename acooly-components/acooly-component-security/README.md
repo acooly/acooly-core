@@ -38,3 +38,7 @@
 当使用dubbo作为权限校验时候，主boss应用必须开启服务提供者：
 `acooly.security.enableSSOAuthzService=true
 `
+
+### 5. 新增用户后，需要做其他业务操作，如何扩展？
+       
+       可扩展实现接口`com.acooly.module.security.service.UserCreatedService`，并标记为@Service

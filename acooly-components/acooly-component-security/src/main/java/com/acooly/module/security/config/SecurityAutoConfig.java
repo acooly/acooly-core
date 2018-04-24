@@ -14,7 +14,10 @@ import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
 import com.acooly.module.jpa.JPAAutoConfig;
 import com.acooly.module.security.captche.CaptchaServlet;
+import com.acooly.module.security.event.UserCreatedListener;
 import com.acooly.module.security.health.HealthCheckServlet;
+import com.acooly.module.security.service.UserCreatedService;
+import com.acooly.module.security.service.impl.DefaultUserCreatedImpl;
 import com.acooly.module.security.shiro.cache.ShiroCacheManager;
 import com.acooly.module.security.shiro.filter.CaptchaFormAuthenticationFilter;
 import com.acooly.module.security.shiro.filter.NotifyLogoutFilter;
@@ -384,4 +387,17 @@ public class SecurityAutoConfig {
                     "META-INF/database/security/" + databaseType.name() + "/security.sql");
         }
     }
+
+    @Bean
+    @ConditionalOnMissingBean(UserCreatedService.class)
+    public UserCreatedService userCreatedService() {
+        return new DefaultUserCreatedImpl();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean()
+    public UserCreatedListener userCreatedListener(UserCreatedService userCreatedService) {
+        return new UserCreatedListener(userCreatedService);
+    }
+
 }

@@ -9,16 +9,14 @@
  */
 package com.acooly.module.security.event;
 
+import com.acooly.module.security.domain.User;
 import org.springframework.context.ApplicationEvent;
-
-import javax.sql.DataSource;
 
 /**
  * @author shuijing@yiji.com
  */
 public class UserCreatedEvent extends ApplicationEvent {
-
-    public UserCreatedEvent(DataSource source) {
-        super(source);
+    public UserCreatedEvent(User user) {
+        super(user);
     }
 }

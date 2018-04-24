@@ -1,12 +1,13 @@
 package com.acooly.module.cms.web;
 
+import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonResult;
-import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.cms.domain.*;
+import com.acooly.module.cms.event.CmsContentSavedEvent;
 import com.acooly.module.cms.service.AttachmentService;
 import com.acooly.module.cms.service.CmsCodeService;
 import com.acooly.module.cms.service.ContentService;
@@ -32,8 +33,6 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.*;
 import java.util.Map.Entry;
-
-import static com.acooly.core.utils.Dates.CHINESE_DATE_FORMAT_LINE;
 
 @Controller
 @RequestMapping(value = "/manage/module/cms/content")
@@ -246,6 +245,9 @@ public class ContentManagerController
         // 这里服务层默认是根据entity的Id是否为空自动判断是SAVE还是UPDATE.
         getEntityService().save(entity);
         entity.setContentBody(new ContentBody()); // IE8 兼容性问题，html 转JSON
+        //发布事件
+        ApplicationContextHolder.get().publishEvent(new CmsContentSavedEvent(entity));
+
         return entity;
     }
 

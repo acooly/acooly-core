@@ -10,9 +10,13 @@
 package com.acooly.module.cms;
 
 import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
+import com.acooly.module.cms.event.CmsContentSavedListener;
+import com.acooly.module.cms.service.CmsContentSavedService;
+import com.acooly.module.cms.service.impl.CmsContentSavedImpl;
 import com.acooly.module.security.config.SecurityAutoConfig;
 import com.google.common.collect.Lists;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -48,5 +52,17 @@ public class CmsAutoConfig extends WebMvcConfigurerAdapter {
                 return Lists.newArrayList("cms", "cms_urls");
             }
         };
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(CmsContentSavedService.class)
+    public CmsContentSavedService userCreatedService() {
+        return new CmsContentSavedImpl();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean()
+    public CmsContentSavedListener userCreatedListener(CmsContentSavedService cmsContentSavedService) {
+        return new CmsContentSavedListener(cmsContentSavedService);
     }
 }

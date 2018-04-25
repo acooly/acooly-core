@@ -10,7 +10,6 @@
 package com.acooly.module.cms;
 
 import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
-import com.acooly.module.cms.event.CmsContentSavedListener;
 import com.acooly.module.cms.service.CmsContentSavedService;
 import com.acooly.module.cms.service.impl.CmsContentSavedImpl;
 import com.acooly.module.security.config.SecurityAutoConfig;
@@ -56,13 +55,8 @@ public class CmsAutoConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     @ConditionalOnMissingBean(CmsContentSavedService.class)
-    public CmsContentSavedService userCreatedService() {
+    public CmsContentSavedService cmsContentSavedService() {
         return new CmsContentSavedImpl();
     }
 
-    @Bean
-    @ConditionalOnMissingBean()
-    public CmsContentSavedListener userCreatedListener(CmsContentSavedService cmsContentSavedService) {
-        return new CmsContentSavedListener(cmsContentSavedService);
-    }
 }

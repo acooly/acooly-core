@@ -17,12 +17,6 @@
             <artifactId>acooly-component-ofile</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-threadpool</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
         <dependency>
             <groupId>org.jsoup</groupId>

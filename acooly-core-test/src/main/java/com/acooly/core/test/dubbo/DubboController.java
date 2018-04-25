@@ -13,11 +13,15 @@ import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.common.facade.SingleOrder;
 import com.acooly.core.common.facade.SingleResult;
 import com.acooly.core.test.dubbo.mock.XXFacade;
+import com.acooly.module.dubbo.ProviderLogFilter;
 import com.acooly.module.security.service.SSOAuthzService;
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.dubbo.rpc.RpcContext;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import static com.acooly.module.dubbo.ProviderLogFilter.NOT_NEED_LOG_METHOD_KEY;
 
 /**
  * @author qiubo@yiji.com
@@ -38,6 +42,10 @@ public class DubboController {
         SingleOrder<String> request = new SingleOrder<>();
         request.gid().partnerId("test");
         request.setDto(msg);
+        RpcContext context = RpcContext.getContext();
+        context.set(NOT_NEED_LOG_METHOD_KEY,"DemoFacade#echo");
+        //context.set(NOT_NEED_LOG_METHOD_KEY,"Demo1Facade#echo");
+        ProviderLogFilter.markCurrentMethodNotPrintLog();
         return demoFacade.echo(request);
     }
 

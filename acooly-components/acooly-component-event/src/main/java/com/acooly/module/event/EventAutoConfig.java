@@ -9,6 +9,7 @@ import net.engio.mbassy.bus.config.IBusConfiguration;
 import net.engio.mbassy.listener.MetadataReader;
 import net.engio.mbassy.subscription.SubscriptionManagerProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +29,7 @@ import java.util.Map;
 public class EventAutoConfig {
 
     @Bean
-    public EventBus messageBus(ThreadPoolTaskExecutor poolTaskExecutor) {
+    public EventBus messageBus(@Qualifier("commonTaskExecutor") ThreadPoolTaskExecutor poolTaskExecutor) {
         Feature.AsynchronousHandlerInvocation asynchronousHandlerInvocation =
                 new Feature.AsynchronousHandlerInvocation();
         asynchronousHandlerInvocation.setExecutor(poolTaskExecutor.getThreadPoolExecutor());

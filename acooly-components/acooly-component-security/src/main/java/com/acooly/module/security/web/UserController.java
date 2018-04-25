@@ -7,7 +7,9 @@ import com.acooly.core.common.web.MappingMethod;
 import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.common.web.support.JsonResult;
+import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.core.utils.mapper.JsonMapper;
+import com.acooly.module.event.EventBus;
 import com.acooly.module.security.config.FrameworkPropertiesHolder;
 import com.acooly.module.security.config.SecurityProperties;
 import com.acooly.module.security.domain.Org;
@@ -15,16 +17,15 @@ import com.acooly.module.security.domain.Role;
 import com.acooly.module.security.domain.User;
 import com.acooly.module.security.dto.UserDto;
 import com.acooly.module.security.dto.UserRole;
+import com.acooly.module.security.event.UserCreatedEvent;
 import com.acooly.module.security.service.OrgService;
 import com.acooly.module.security.service.RoleService;
-import com.acooly.module.security.service.UserCreatedService;
 import com.acooly.module.security.service.UserService;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -55,9 +56,7 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
     @Autowired
     private OrgService orgService;
     @Autowired
-    private UserCreatedService userCreatedService;
-    @Autowired
-    private ThreadPoolTaskExecutor taskExecutor;
+    private EventBus eventBus;
 
     @RequestMapping(value = {"listUser"})
     @ResponseBody
@@ -92,7 +91,10 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
             result.setEntity(entity);
             result.setMessage("保存成功！");
 
-            taskExecutor.execute(() -> userCreatedService.afterUserCreated(entity));
+            UserCreatedEvent userCreatedEvent = new UserCreatedEvent();
+            BeanCopier.copy(entity, userCreatedEvent);
+
+            eventBus.publishAsync(userCreatedEvent);
 
         } catch (Exception e) {
             handleException(result, "保存账户", e);

@@ -43,7 +43,7 @@
        
                //异步事件处理器
                @Handler(delivery = Invoke.Asynchronously)
-               public void handleCreateCustomerEventAsyn(User user) {
+               public void handleCreateCustomerEventAsyn(UserCreatedEvent user) {
                    //do what you like
                    log.info("异步用户保存事件处理器{}",user.toString());
                }

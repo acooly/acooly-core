@@ -7,7 +7,7 @@
 
                    //异步事件处理器
                    @Handler(delivery = Invoke.Asynchronously)
-                   public void handleCreateCustomerEventAsyn(Content c) {
+                   public void handleCreateCustomerEventAsyn(ContentCreatedEvent c) {
                        //do what you like
                        log.info("异步保存内容后事件处理器{}",c.toString());
                    }

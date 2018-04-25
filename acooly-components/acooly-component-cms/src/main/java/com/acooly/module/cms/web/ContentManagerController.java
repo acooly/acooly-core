@@ -5,7 +5,9 @@ import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.module.cms.domain.*;
+import com.acooly.module.cms.event.ContentCreatedEvent;
 import com.acooly.module.cms.service.AttachmentService;
 import com.acooly.module.cms.service.CmsCodeService;
 import com.acooly.module.cms.service.ContentService;
@@ -246,7 +248,10 @@ public class ContentManagerController
         getEntityService().save(entity);
         entity.setContentBody(new ContentBody()); // IE8 兼容性问题，html 转JSON
 
-        eventBus.publishAsync(entity);
+        ContentCreatedEvent event = new ContentCreatedEvent();
+        BeanCopier.copy(entity, event);
+
+        eventBus.publishAsync(event);
 
         return entity;
     }

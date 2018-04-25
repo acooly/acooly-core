@@ -7,6 +7,7 @@ import com.acooly.core.common.web.MappingMethod;
 import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.common.web.support.JsonResult;
+import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.core.utils.mapper.JsonMapper;
 import com.acooly.module.event.EventBus;
 import com.acooly.module.security.config.FrameworkPropertiesHolder;
@@ -16,6 +17,7 @@ import com.acooly.module.security.domain.Role;
 import com.acooly.module.security.domain.User;
 import com.acooly.module.security.dto.UserDto;
 import com.acooly.module.security.dto.UserRole;
+import com.acooly.module.security.event.UserCreatedEvent;
 import com.acooly.module.security.service.OrgService;
 import com.acooly.module.security.service.RoleService;
 import com.acooly.module.security.service.UserService;
@@ -89,7 +91,10 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
             result.setEntity(entity);
             result.setMessage("保存成功！");
 
-            eventBus.publishAsync(entity);
+            UserCreatedEvent userCreatedEvent = new UserCreatedEvent();
+            BeanCopier.copy(entity, userCreatedEvent);
+
+            eventBus.publishAsync(userCreatedEvent);
 
         } catch (Exception e) {
             handleException(result, "保存账户", e);

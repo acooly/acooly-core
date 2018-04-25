@@ -1,8 +1,10 @@
 package com.acooly.core.test.event;
 
 import com.acooly.core.test.dao.CityMybatisDao;
+import com.acooly.module.cms.domain.Content;
 import com.acooly.module.event.EventBus;
 import com.acooly.module.event.EventHandler;
+import com.acooly.module.security.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import net.engio.mbassy.listener.Handler;
@@ -62,5 +64,35 @@ public class EventBusController {
 
         throw new CannotAcquireLockException("x");
         // do what you like
+    }
+
+    @EventHandler
+    public class CmsEventHandler {
+        //同步事件处理器
+        @Handler
+        public void handleCreateCustomerEvent(Content event) {
+            log.info("同步cms Content事件处理器{}",event.getId());
+        }
+        //异步事件处理器
+        @Handler(delivery = Invoke.Asynchronously)
+        public void handleCreateCustomerEventAsyn(Content event) {
+            //do what you like
+            log.info("异步cms Content事件处理器{}",event.getId());
+        }
+    }
+
+    @EventHandler
+    public class UerCreatedEventHandler {
+        //同步事件处理器
+        @Handler
+        public void handleCreateCustomerEvent(User event) {
+            log.info("同步security事件处理器{}",event.toString());
+        }
+        //异步事件处理器
+        @Handler(delivery = Invoke.Asynchronously)
+        public void handleCreateCustomerEventAsyn(User event) {
+            //do what you like
+            log.info("异步security事件处理器{}",event.toString());
+        }
     }
 }

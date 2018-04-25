@@ -58,6 +58,12 @@
 
     组件会依赖其他组件来提供能力。比如`acooly-component-web`依赖`acooly-component-tomcat`提供web服务。依赖`acooly-component-cache`提供分布式session能力。
 
+* 组件扩展
+
+    组件扩展分为两类：
+    
+    1. 外部使用方关心组件处理的结果：使用event组件来扩展，处理完后发布事件。鉴于外部处理的时长我们不清楚，使用异步发送。
+    2. 外部使用方参与组件处理的中间过程：使用spring ioc机制，框架提供默认行为(通过@ConditionalOnMissingBean注册默认行为)，业务方提供扩展行为
 
 ### 2. 使用组件
 

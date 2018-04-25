@@ -76,11 +76,6 @@
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-threadpool</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
             <artifactId>acooly-component-event</artifactId>
             <version>${project.version}</version>
         </dependency>

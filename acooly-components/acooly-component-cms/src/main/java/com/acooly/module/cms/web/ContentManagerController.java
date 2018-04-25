@@ -6,7 +6,11 @@ import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.cms.domain.*;
-import com.acooly.module.cms.service.*;
+import com.acooly.module.cms.service.AttachmentService;
+import com.acooly.module.cms.service.CmsCodeService;
+import com.acooly.module.cms.service.ContentService;
+import com.acooly.module.cms.service.ContentTypeService;
+import com.acooly.module.event.EventBus;
 import com.acooly.module.ofile.OFileProperties;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +21,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,10 +57,7 @@ public class ContentManagerController
     @Autowired
     private OFileProperties oFileProperties;
     @Autowired
-    private CmsContentSavedService cmsContentSavedService;
-    @Autowired
-    private ThreadPoolTaskExecutor taskExecutor;
-
+    private EventBus eventBus;
 
     @RequestMapping(value = "removeAttachment")
     @ResponseBody
@@ -246,8 +246,7 @@ public class ContentManagerController
         getEntityService().save(entity);
         entity.setContentBody(new ContentBody()); // IE8 兼容性问题，html 转JSON
 
-        final Content content = entity;
-        taskExecutor.execute(() -> cmsContentSavedService.afterCmsContentSaved(content));
+        eventBus.publishAsync(entity);
 
         return entity;
     }

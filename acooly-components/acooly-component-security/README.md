@@ -41,4 +41,9 @@
 
 ### 5. 新增用户后，需要做其他业务操作，如何扩展？
        
-       可扩展实现接口`com.acooly.module.security.service.UserCreatedService`，并标记为@Service
+               //异步事件处理器
+               @Handler(delivery = Invoke.Asynchronously)
+               public void handleCreateCustomerEventAsyn(User user) {
+                   //do what you like
+                   log.info("异步用户保存事件处理器{}",user.toString());
+               }

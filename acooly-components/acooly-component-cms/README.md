@@ -5,6 +5,11 @@
 
 ### 2.1 保存内容后，需要做其他业务操作，如何扩展？
 
-可扩展实现接口`com.acooly.module.cms.service.CmsContentSavedService`，并标记为@Service
+                   //异步事件处理器
+                   @Handler(delivery = Invoke.Asynchronously)
+                   public void handleCreateCustomerEventAsyn(Content c) {
+                       //do what you like
+                       log.info("异步保存内容后事件处理器{}",c.toString());
+                   }
 
 

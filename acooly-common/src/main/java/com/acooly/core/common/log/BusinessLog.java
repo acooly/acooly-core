@@ -48,9 +48,8 @@ public class BusinessLog {
     }
 
     /**
-     *
      * @param businessName 业务日志名称
-     * @param bodys 业务体参数
+     * @param bodys        业务体参数
      */
     public static void log(String businessName, Object... bodys) {
         BusinessLog bl = new BusinessLog();
@@ -69,6 +68,18 @@ public class BusinessLog {
 
             body.put(key, bodys[i + 1]);
         }
+        bl.body = body;
+        LOGGER.info(bl.toJSONString());
+    }
+
+    /**
+     * @param businessName 业务日志名称
+     * @param body        业务体参数
+     */
+    public static void log(String businessName, Map<String, Object> body) {
+        BusinessLog bl = new BusinessLog();
+        bl.setBusinessName(businessName);
+        Assert.notNull(body, "日志类型不能为空");
         bl.body = body;
         LOGGER.info(bl.toJSONString());
     }

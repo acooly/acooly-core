@@ -33,7 +33,7 @@ public class BusinessLog {
     }
 
     private String appName;
-    private String logType;
+    private String businessName;
     private String env;
     private String hostName;
     private Date timestamp;
@@ -44,12 +44,16 @@ public class BusinessLog {
         this.env = ENV;
         this.hostName = IP;
         this.timestamp = new Date();
-        this.logType = DEFAULT_LOG_TYPE;
+        this.businessName = DEFAULT_LOG_TYPE;
     }
 
+    /**
+     * @param businessName 业务日志名称
+     * @param bodys        业务体参数
+     */
     public static void log(String businessName, Object... bodys) {
         BusinessLog bl = new BusinessLog();
-        bl.setLogType(businessName);
+        bl.setBusinessName(businessName);
         Assert.notNull(bodys, "日志类型不能为空");
         Assert.isTrue(bodys.length % 2 == 0, "业务信息为键值对形式");
         Map<String, Object> body = Maps.newHashMapWithExpectedSize(bodys.length / 2);
@@ -64,6 +68,18 @@ public class BusinessLog {
 
             body.put(key, bodys[i + 1]);
         }
+        bl.body = body;
+        LOGGER.info(bl.toJSONString());
+    }
+
+    /**
+     * @param businessName 业务日志名称
+     * @param body        业务体参数
+     */
+    public static void log(String businessName, Map<String, Object> body) {
+        BusinessLog bl = new BusinessLog();
+        bl.setBusinessName(businessName);
+        Assert.notNull(body, "日志类型不能为空");
         bl.body = body;
         LOGGER.info(bl.toJSONString());
     }
@@ -86,7 +102,7 @@ public class BusinessLog {
     }
 
     public String toJSONString() {
-        Assert.notNull(this.logType, "日志类型不能为空");
+        Assert.notNull(this.businessName, "日志类型不能为空");
         return JSON.toJSONString(this, SerializerFeature.WriteDateUseDateFormat);
     }
 }

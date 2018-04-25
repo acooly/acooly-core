@@ -12,6 +12,19 @@
                     <td><input type="text" name="keycode" size="28" class="easyui-validatebox text" validType="byteLength[1,32]"/></td>
                 </tr>
                 <tr>
+                    <th width="25%">描述：</th>
+                    <td><input type="text" name="descn" size="28" class="easyui-validatebox text" validType="byteLength[1,32]"/></td>
+                </tr>
+                <tr>
+                    <th>所属类型：</th>
+                    <td><select name="typeCode" editable="false" style="height:27px;" panelHeight="auto" class="easyui-combobox"
+                                data-options="required:true">
+                        <c:forEach items="${codeAndNames}" var="e">
+                            <option value="${e.key}">${e.value}</option>
+                        </c:forEach>
+                    </select></td>
+                </tr>
+                <tr>
                     <th>状态：</th>
                     <td><select name="status" editable="false" style="height:27px;" panelHeight="auto" class="easyui-combobox"
                                 data-options="required:true">

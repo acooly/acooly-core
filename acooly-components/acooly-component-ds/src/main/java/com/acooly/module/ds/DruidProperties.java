@@ -28,6 +28,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -109,7 +110,7 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
      * 检查表是否缺少某些字段，如果缺少，启动报错。
      */
     @ToString.Invisible
-    private Map<String, DBPatch> dbPatchs;
+    private Map<String, List<DBPatch>> dbPatchs;
     @ToString.Invisible
     private ClassLoader beanClassLoader;
     @ToString.Invisible

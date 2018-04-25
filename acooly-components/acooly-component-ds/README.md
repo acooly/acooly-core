@@ -29,8 +29,8 @@
 
 比如`api_service`增加了`gid`字段。我们可以在api组件初始化器中加入如下代码：
 
-        setPropertyIfMissing("acooly.ds.dbPatchs.api_service.columnName", "gid");//多个字段用逗号隔开
-        setPropertyIfMissing("acooly.ds.dbPatchs.api_service.patchSql", "ALTER TABLE `api_service` ADD COLUMN `gid` VARCHAR(45) NULL COMMENT '全局唯一id';");
+        setPropertyIfMissing("acooly.ds.dbPatchs.api_service[0].columnName", "gid");//多个字段用逗号隔开
+        setPropertyIfMissing("acooly.ds.dbPatchs.api_service[0].patchSql", "ALTER TABLE `api_service` ADD COLUMN `gid` VARCHAR(45) NULL COMMENT '全局唯一id';");
 
 也可以在应用配置文件中加入如下配置:
 

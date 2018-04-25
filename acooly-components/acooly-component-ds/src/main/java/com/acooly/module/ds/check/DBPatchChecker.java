@@ -49,8 +49,8 @@ public class DBPatchChecker {
                         TableLoader tableLoader = TableLoaderProvider.getTableLoader(dataSource);
                         String schema = getMysqlschema(dataSource);
                         Map<String, List<Column>> allTables = tableLoader.loadAllTables(schema);
-                        Map<String, DBPatch> dbPatchs = druidProperties.getDbPatchs();
-                        for (Map.Entry<String, DBPatch> entry : dbPatchs.entrySet()) {
+                        Map<String, List<DBPatch>> dbPatchs = druidProperties.getDbPatchs();
+                        for (Map.Entry<String, List<DBPatch>> entry : dbPatchs.entrySet()) {
                             List<Column> columns = allTables.get(entry.getKey());
                             if (CollectionUtils.isEmpty(columns)) {
                                 log.error("业务缺少表:{}，请增加此表", entry.getKey());
@@ -58,36 +58,27 @@ public class DBPatchChecker {
                             }
                             Set<String> existsColums =
                                     columns.stream().map(column -> column.getName()).collect(Collectors.toSet());
-                            List<String> missingColums = Lists.newArrayList();
-                            entry
-                                    .getValue()
-                                    .getColumnName()
-                                    .forEach(
-                                            s -> {
-                                                if (!existsColums.contains(s)) {
-                                                    missingColums.add(s);
-                                                }
-                                            });
-                            if (!missingColums.isEmpty()) {
-                                log.warn(
-                                        "表:{}缺少以下字段：{}，自动执行下列sql语句:\n{}",
-                                        entry.getKey(),
-                                        missingColums,
-                                        entry.getValue().getPatchSql());
-                                try {
-                                    executeSql(dataSource, entry.getValue().getPatchSql());
-                                } catch (Exception e) {
-                                    log.error(
-                                            "自动执行sql失败，表:{}缺少以下字段：{}，请按照提示执行sql语句:\n{}",
+                            entry.getValue().forEach(dbPatch -> {
+                                String columnName = dbPatch.getColumnName();
+                                if (!existsColums.contains(columnName)) {
+                                    log.warn(
+                                            "表:{}缺少以下字段：{}，自动执行下列sql语句:\n{}",
                                             entry.getKey(),
-                                            missingColums,
-                                            entry.getValue().getPatchSql());
-                                    System.exit(0);
+                                            columnName,
+                                            dbPatch.getPatchSql());
+                                    try {
+                                        executeSql(dataSource, dbPatch.getPatchSql());
+                                    } catch (Exception e) {
+                                        log.error(
+                                                "自动执行sql失败，表:{}缺少以下字段：{}，请按照提示执行sql语句:\n{}",
+                                                entry.getKey(),
+                                                columnName,
+                                                dbPatch.getPatchSql());
+                                        System.exit(0);
+                                    }
                                 }
-
-                            }
+                            });
                         }
-
                     } catch (SQLException e) {
                         log.error("执行表字段检查失败", e);
                     }

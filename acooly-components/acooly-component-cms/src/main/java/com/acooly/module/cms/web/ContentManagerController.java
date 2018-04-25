@@ -6,10 +6,7 @@ import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.cms.domain.*;
-import com.acooly.module.cms.service.AttachmentService;
-import com.acooly.module.cms.service.CmsCodeService;
-import com.acooly.module.cms.service.ContentService;
-import com.acooly.module.cms.service.ContentTypeService;
+import com.acooly.module.cms.service.*;
 import com.acooly.module.ofile.OFileProperties;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +17,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +53,10 @@ public class ContentManagerController
     private CmsCodeService cmsCodeService;
     @Autowired
     private OFileProperties oFileProperties;
+    @Autowired
+    private CmsContentSavedService cmsContentSavedService;
+    @Autowired
+    private ThreadPoolTaskExecutor taskExecutor;
 
 
     @RequestMapping(value = "removeAttachment")
@@ -117,6 +119,12 @@ public class ContentManagerController
                     entity.setCover(uploadResult.getRelativeFile());
                 }
             }
+            UploadResult appUploadResult = uploadResults.get("cover_app");
+            if (appUploadResult != null) {
+                if (appUploadResult.getSize() > 0) {
+                    entity.setAppcover(appUploadResult.getRelativeFile());
+                }
+            }
         }
         String code = request.getParameter("code");
         String id = request.getParameter("id");
@@ -136,9 +144,6 @@ public class ContentManagerController
         return entity;
     }
 
-    /**
-     * @return
-     */
     private String getFileStorageRoot() {
         return oFileProperties.getStorageRoot();
     }
@@ -156,11 +161,12 @@ public class ContentManagerController
         model.put("mediaRoot", getFileServerRoot());
 
         List<CmsCode> allCode = cmsCodeService.getAll();
-        List<String> codes = new ArrayList<>();
+        Map<String, String> codes = Maps.newHashMap();
+        String code = request.getParameter("code");
         allCode.forEach(
                 cmsCode -> {
-                    if (1 == cmsCode.getStatus()) {
-                        codes.add(cmsCode.getKeycode());
+                    if (1 == cmsCode.getStatus() && (cmsCode.getTypeCode() != null && cmsCode.getTypeCode().equals(code))) {
+                        codes.put(cmsCode.getKeycode(), cmsCode.getDescn());
                     }
                 });
         model.put("allCodes", codes);
@@ -239,6 +245,10 @@ public class ContentManagerController
         // 这里服务层默认是根据entity的Id是否为空自动判断是SAVE还是UPDATE.
         getEntityService().save(entity);
         entity.setContentBody(new ContentBody()); // IE8 兼容性问题，html 转JSON
+
+        final Content content = entity;
+        taskExecutor.execute(() -> cmsContentSavedService.afterCmsContentSaved(content));
+
         return entity;
     }
 

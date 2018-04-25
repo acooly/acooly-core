@@ -30,11 +30,19 @@ public class CmsCode extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 
     /**
-     * KEYCODE
+     * 二级编码
      */
     @NotEmpty
     private String keycode;
 
+    /**
+     * 类型编码，关联CMS_CONTENT_TYPE
+     */
+    private String typeCode;
+    /**
+     * 描述
+     */
+    private String descn;
     /**
      * 状态
      */

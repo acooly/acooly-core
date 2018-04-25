@@ -16,12 +16,21 @@
                     <td align="left">
                         <div>
                             编码: <input type="text" class="text" size="15" name="search_LIKE_keycode"/>
+
+                            所属类型: <select style="width:100px;height:27px;" name="search_EQ_typeCode" editable="false" panelHeight="auto"
+                                          class="easyui-combobox">
+                            <option value="">所有</option>
+                            <c:forEach var="e" items="${codeAndNames}">
+                                <option value="${e.key}" ${param.search_EQ_typeCode == e.key?'selected':''}>${e.value}</option>
+                            </c:forEach></select>
+
                             状态: <select style="width:100px;height:27px;" name="search_EQ_status" editable="false" panelHeight="auto"
                                         class="easyui-combobox">
                             <option value="">所有</option>
                             <c:forEach var="e" items="${allStatuss}">
                                 <option value="${e.key}" ${param.search_EQ_status == e.key?'selected':''}>${e.value}</option>
                             </c:forEach></select>
+
                             <a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false"
                                onclick="$.acooly.framework.search('manage_cmsCode_searchform','manage_cmsCode_datagrid');"><i
                                     class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
@@ -43,9 +52,14 @@
             <tr>
                 <th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
                 <th field="id" sum="true">主键</th>
-                <th field="keycode">KEYCODE</th>
+                <th field="keycode">编码</th>
+                <th field="descn">描述</th>
+
                 <th field="status"
                     data-options="formatter:function(value){ return formatRefrence('manage_cmsCode_datagrid','allStatuss',value);} ">状态
+                </th>
+                <th field="typeCode"
+                    data-options="formatter:function(value){ return formatRefrence('manage_cmsCode_datagrid','codeAndNames',value);} ">所属类型
                 </th>
                 <th field="createTime" formatter="formatDate">创建时间</th>
                 <th field="updateTime" formatter="formatDate">修改时间</th>
@@ -65,7 +79,7 @@
         <!-- 表格的工具栏 -->
         <div id="manage_cmsCode_toolbar">
             <a href="#" class="easyui-linkbutton" plain="true"
-               onclick="$.acooly.framework.create({url:'/manage/module/cms/cmsCode/create.html',entity:'cmsCode',width:500,height:180})"><i
+               onclick="$.acooly.framework.create({url:'/manage/module/cms/cmsCode/create.html',entity:'cmsCode',width:500,height:240})"><i
                     class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
         </div>
     </div>

@@ -10,8 +10,5 @@ import java.util.Set;
 @Data
 public class DBPatch {
     private String patchSql;
-    /**
-     * 多个字段用逗号隔开
-     */
-    private Set<String> columnName;
+    private String columnName;
 }

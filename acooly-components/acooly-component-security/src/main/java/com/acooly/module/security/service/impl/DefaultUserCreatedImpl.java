@@ -20,6 +20,5 @@ import lombok.extern.slf4j.Slf4j;
 public class DefaultUserCreatedImpl implements UserCreatedService {
     @Override
     public void afterUserCreated(User user) {
-        log.info("新增一个用户,todo,user={}", user.toString());
     }
 }

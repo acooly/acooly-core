@@ -4,6 +4,7 @@ import com.acooly.core.common.olog.annotation.Olog;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Strings;
+import com.acooly.module.security.config.FrameworkPropertiesHolder;
 import com.acooly.module.security.config.SecurityProperties;
 import com.acooly.module.security.domain.Portallet;
 import com.acooly.module.security.domain.User;
@@ -97,6 +98,10 @@ public class SystemController extends AbstractJQueryEntityController<User, UserS
             Model model, HttpServletRequest request, HttpServletResponse response) {
         User user = ShiroUtils.getCurrentUser();
         model.addAttribute("user", user);
+
+        model.addAttribute("PASSWORD_REGEX", FrameworkPropertiesHolder.get().getPasswordRegex());
+        model.addAttribute("PASSWORD_ERROR", FrameworkPropertiesHolder.get().getPasswordError());
+
         return "/manage/system/changePassword";
     }
 

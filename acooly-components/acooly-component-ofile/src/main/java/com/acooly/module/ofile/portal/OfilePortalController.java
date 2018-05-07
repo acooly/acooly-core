@@ -3,6 +3,7 @@
  */
 package com.acooly.module.ofile.portal;
 
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.common.web.support.JsonResult;
@@ -35,6 +36,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
@@ -127,6 +129,8 @@ public class OfilePortalController
     public Object download(
             @PathVariable String id, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+
+
         OnlineFile onlineFile = getEntityService().get(Long.valueOf(id));
         return doDownload(
                 request,
@@ -186,9 +190,13 @@ public class OfilePortalController
         if (isAbsoluteUrl(path)) {
             path = new URL(path).getPath();
         }
+
+        checkFilePathAttacks(path);
+
         @SuppressWarnings("deprecation")
         // 兼容servlet2.4环境
                 String filePath = request.getRealPath(path);
+
         File file = new File(filePath);
         if (!file.exists()) {
             file = new File(oFileProperties.getStorageRoot() + path);
@@ -204,6 +212,32 @@ public class OfilePortalController
                 file.getPath(),
                 OFileType.with(FilenameUtils.getExtension(file.getName())));
     }
+
+    private void checkFilePathAttacks(String absolutePath) {
+
+        File file = new File(absolutePath);
+        if (!file.isAbsolute()) {
+            throw new BusinessException("请输入文件绝对路径");
+        }
+        if (file.isDirectory()) {
+            throw new BusinessException("不支持文件夹下载");
+        }
+
+        String canonicalPath;
+        String usedAbsolutePath;
+        try {
+            canonicalPath = file.getCanonicalPath();
+            usedAbsolutePath = file.getAbsolutePath();
+        } catch (IOException e) {
+            throw new BusinessException("get Canonical path failed", e);
+        }
+        // 防御路径穿越
+        // attacks, e.g. "1/../2/"
+        if (!canonicalPath.equals(usedAbsolutePath)) {
+            throw new BusinessException("不能输入上级文件夹目录");
+        }
+    }
+
 
     protected Object doDownload(
             HttpServletRequest request,

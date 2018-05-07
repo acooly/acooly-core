@@ -30,13 +30,13 @@ public class JPushOrder {
 
     private JPushNotification notification = new JPushNotification();
 
-    public static void main(String[] args) {
-        JPushOrder context = new JPushOrder();
-        JPushAudience ja = new JPushAudience();
-        ja.appendAlias("zhangpu");
-        context.setAudience(ja);
-        System.out.println(context.toString());
-    }
+//    public static void main(String[] args) {
+//        JPushOrder context = new JPushOrder();
+//        JPushAudience ja = new JPushAudience();
+//        ja.appendAlias("zhangpu");
+//        context.setAudience(ja);
+//        System.out.println(context.toString());
+//    }
 
     public void appendAlias(String alias) {
         getAudience().appendAlias(alias);

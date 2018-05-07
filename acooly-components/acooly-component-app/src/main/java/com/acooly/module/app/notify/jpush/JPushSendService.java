@@ -36,48 +36,48 @@ public class JPushSendService {
     @Autowired
     private AppProperties appProperties;
 
-    public static void main(String[] args) {
-        String title = "测试推送";
-        String content = "您发布的债权交易(急用钱钱，转出部分)已有用户(buyer)发起交易申请,请及时处理.";
-        Map<String, Object> extras = Maps.newHashMap();
-        extras.put("type", "applyTrade");
-        extras.put("tradeId", 1);
-
-        JPushOrder order = new JPushOrder();
-        // 推送用户
-        order.getAudience().setRegistrationId(Lists.newArrayList(new String[]{"buyer"}));
-        // 推送选项参数
-        order.getOptions().setApnsProduction(false);
-        JPushMessage jm = new JPushMessage();
-        jm.setTitle(title);
-        jm.setMsgContent(content);
-        jm.setContentType("text/html");
-        jm.setExtras(extras);
-        order.setMessage(jm);
-
-        JPushNotification jn = new JPushNotification();
-
-        Android android = new Android();
-        android.setTitle(title);
-        android.setAlert(content);
-        android.setExtras(extras);
-        android.setBuilderId(100);
-        IOS ios = new IOS();
-        ios.setAlert(content);
-        ios.setBadge(1);
-        ios.setCategory("category");
-        ios.setContentAvailable("true");
-        ios.setSound("sound");
-        ios.setExtras(extras);
-        jn.setAndroid(android);
-        jn.setIos(ios);
-        order.setNotification(jn);
-        System.out.println(order);
-        // JPushSendService jss = new JPushSendService();
-        // JPushResult result = jss.request(order);
-        // System.out.println(result);
-
-    }
+//    public static void main(String[] args) {
+//        String title = "测试推送";
+//        String content = "您发布的债权交易(急用钱钱，转出部分)已有用户(buyer)发起交易申请,请及时处理.";
+//        Map<String, Object> extras = Maps.newHashMap();
+//        extras.put("type", "applyTrade");
+//        extras.put("tradeId", 1);
+//
+//        JPushOrder order = new JPushOrder();
+//        // 推送用户
+//        order.getAudience().setRegistrationId(Lists.newArrayList(new String[]{"buyer"}));
+//        // 推送选项参数
+//        order.getOptions().setApnsProduction(false);
+//        JPushMessage jm = new JPushMessage();
+//        jm.setTitle(title);
+//        jm.setMsgContent(content);
+//        jm.setContentType("text/html");
+//        jm.setExtras(extras);
+//        order.setMessage(jm);
+//
+//        JPushNotification jn = new JPushNotification();
+//
+//        Android android = new Android();
+//        android.setTitle(title);
+//        android.setAlert(content);
+//        android.setExtras(extras);
+//        android.setBuilderId(100);
+//        IOS ios = new IOS();
+//        ios.setAlert(content);
+//        ios.setBadge(1);
+//        ios.setCategory("category");
+//        ios.setContentAvailable("true");
+//        ios.setSound("sound");
+//        ios.setExtras(extras);
+//        jn.setAndroid(android);
+//        jn.setIos(ios);
+//        order.setNotification(jn);
+//        System.out.println(order);
+//        // JPushSendService jss = new JPushSendService();
+//        // JPushResult result = jss.request(order);
+//        // System.out.println(result);
+//
+//    }
 
     public JPushResult request(JPushOrder order) {
         try {

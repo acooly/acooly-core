@@ -88,6 +88,7 @@ public class EventBusController {
         //同步事件处理器
         @Handler
         public void handleUserCreatedEventEvent(UserCreatedEvent event) {
+            //do what you like
             log.info("同步UserCreatedEvent事件处理器{}",event.toString());
         }
         //异步事件处理器

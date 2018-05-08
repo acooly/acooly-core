@@ -145,7 +145,7 @@ DROP TABLE IF EXISTS `SYS_ORG`;
 CREATE TABLE `SYS_ORG` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `parent_id` bigint(20) NOT NULL COMMENT '父类id',
-  `name` varchar(32) DEFAULT NULL COMMENT '机构名称',
+  `name` varchar(128) DEFAULT NULL COMMENT '机构名称',
   `status` varchar(32) DEFAULT NULL COMMENT '状态{valid:有效,invalid:无效}',
   `province` varchar(64) DEFAULT NULL COMMENT '省',
   `city` varchar(64) DEFAULT NULL COMMENT '市',

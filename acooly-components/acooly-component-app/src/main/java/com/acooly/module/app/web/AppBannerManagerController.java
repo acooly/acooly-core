@@ -1,10 +1,12 @@
 package com.acooly.module.app.web;
 
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.module.app.AppProperties;
 import com.acooly.module.app.domain.AppBanner;
 import com.acooly.module.app.service.AppBannerService;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,6 +45,9 @@ public class AppBannerManagerController
             if (uploadResult != null) {
                 entity.setMediaUrl(getDatabasePath(uploadResult));
             }
+        }
+        if (StringUtils.isEmpty(entity.getMediaUrl())){
+            throw new BusinessException("上传图片不能为空");
         }
         entity.setUpdateTime(new Date());
         return entity;

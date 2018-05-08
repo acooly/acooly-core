@@ -14,6 +14,7 @@ import com.acooly.core.common.facade.PageResult;
 import com.acooly.core.common.facade.SingleOrder;
 import com.acooly.core.common.facade.SingleResult;
 import com.acooly.module.appservice.AppService;
+import com.acooly.module.dubbo.mock.LogFilterIgnoreMethod;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.dubbo.rpc.RpcContext;
@@ -50,6 +51,7 @@ public class DemoFacadeImpl implements DemoFacade {
 
     @AppService(logPrefix = "测试")
     @Override
+    @LogFilterIgnoreMethod
     public SingleResult<String> echo1(SingleOrder<String> msg) {
         return SingleResult.from("a");
     }

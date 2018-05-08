@@ -76,3 +76,17 @@
     }
 
 实现mock接口，并注册到spring容器中。为了避免混淆，mock服务实现类必须已`Mock`为后缀。
+
+
+#### 4.5 忽略Log日志输出
+
+    @Service
+    public class DemoFacadeImpl implements DemoFacade {
+        @Override
+        @LogFilterIgnoreMethod
+        public SingleResult<String> echo1(SingleOrder<String> msg) {
+            return SingleResult.from("a");
+        }
+    }
+
+实现在provider方法上面增加`@LogFilterIgnoreMethod`注解可忽略方法的默认日志输出

@@ -32,6 +32,10 @@ public class ProviderLogFilter implements Filter {
 
     private static Set<String> notNeedLogMethod = Sets.newConcurrentHashSet();
 
+    public static void addIgnoreLogMethod(String methodName) {
+        notNeedLogMethod.add(methodName);
+    }
+
     public static Boolean isDubboProviderLogEnable() {
         RpcContext context = RpcContext.getContext();
         if (context != null) {
@@ -49,15 +53,9 @@ public class ProviderLogFilter implements Filter {
     }
 
     public Result invoke(Invoker<?> invoker, Invocation inv) throws RpcException {
-        String serviceName = invoker.getInterface().getSimpleName();
-        String group = invoker.getUrl().getParameter(Constants.GROUP_KEY);
-        String methodName = inv.getMethodName();
-        String methodString;
-        if (Strings.isNullOrEmpty(group)) {
-            methodString = String.format("%s#%s", serviceName, methodName);
-        } else {
-            methodString = String.format("%s/%s#%s", serviceName, group, methodName);
-        }
+
+        String methodString = formatMethodGroup(invoker, inv);
+
         if (notNeedLogMethod.contains(methodString)) {
             return invoker.invoke(inv);
         } else {
@@ -84,5 +82,23 @@ public class ProviderLogFilter implements Filter {
             logger.info("[DUBBO-{}]响应:{} 耗时:{}ms", id, result, System.currentTimeMillis() - now);
             return result;
         }
+    }
+
+
+    public static String formatMethodGroup(Invoker<?> invoker, Invocation inv) {
+        String serviceName = invoker.getInterface().getName();
+        String group = invoker.getUrl().getParameter(Constants.GROUP_KEY);
+        String methodName = inv.getMethodName();
+        return formatMethodGroup(serviceName, group, methodName);
+    }
+
+    public static String formatMethodGroup(String serviceName, String group, String methodName) {
+        String methodString;
+        if (Strings.isNullOrEmpty(group)) {
+            methodString = String.format("%s#%s", serviceName, methodName);
+        } else {
+            methodString = String.format("%s/%s#%s", serviceName, group, methodName);
+        }
+        return methodString;
     }
 }

@@ -80,13 +80,9 @@
 
 #### 4.5 忽略Log日志输出
 
-    @Service
-    public class DemoFacadeImpl implements DemoFacade {
-        @Override
-        @LogFilterIgnoreMethod
-        public SingleResult<String> echo1(SingleOrder<String> msg) {
-            return SingleResult.from("a");
-        }
+    public interface DemoFacade {
+        @DubboLogIgnore
+        SingleResult<String> echo1(SingleOrder<String> msg);
     }
 
-实现在provider方法上面增加`@LogFilterIgnoreMethod`注解可忽略方法的默认日志输出
+实现在接口方法上面增加`@DubboLogIgnore`注解可忽略consumer和provider的日志输出

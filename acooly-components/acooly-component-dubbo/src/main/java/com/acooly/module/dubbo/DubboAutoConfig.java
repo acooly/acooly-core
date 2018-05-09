@@ -15,7 +15,6 @@ import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.dubbo.DubboFactory;
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.module.dubbo.mock.DubboMockBeanPostProcessor;
-import com.acooly.module.dubbo.mock.LogFilterIgnoreBeanPostProcessor;
 import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ConsumerConfig;
 import com.alibaba.dubbo.config.MonitorConfig;
@@ -184,11 +183,6 @@ public class DubboAutoConfig implements InitializingBean {
         config.setAnnotationPackage(Apps.getBasePackage());
         config.setMockInterfaces(dubboProperties.getConsumer().getMockInterfaces());
         return config;
-    }
-
-    @Bean
-    public static LogFilterIgnoreBeanPostProcessor logFilterIgnoreBeanPostProcessor(){
-        return new LogFilterIgnoreBeanPostProcessor();
     }
 
     @Override

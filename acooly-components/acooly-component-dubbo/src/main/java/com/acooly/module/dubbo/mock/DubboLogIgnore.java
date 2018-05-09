@@ -15,10 +15,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 忽略dubbo日志输出
+ *
  * @author shuijing
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface LogFilterIgnoreMethod {
-    String name() default "";
+public @interface DubboLogIgnore {
 }

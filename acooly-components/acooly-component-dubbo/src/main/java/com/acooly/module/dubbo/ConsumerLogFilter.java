@@ -12,14 +12,12 @@ package com.acooly.module.dubbo;
 import com.acooly.core.utils.ToString;
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.rpc.*;
-import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.acooly.module.dubbo.ProviderLogFilter.formatMethodGroup;
+import static com.acooly.module.dubbo.ProviderLogFilter.isIgnore;
 
 /**
  * @author qiubo@yiji.com
@@ -30,17 +28,9 @@ public class ConsumerLogFilter implements Filter {
 
     private static final AtomicLong requestId = new AtomicLong();
 
-    private static Set<String> notNeedLogMethod = Sets.newConcurrentHashSet();
-
-    public static void addIgnoreLogMethod(String methodName) {
-        notNeedLogMethod.add(methodName);
-    }
-
     public Result invoke(Invoker<?> invoker, Invocation inv) throws RpcException {
 
-        String formatMethod = formatMethodGroup(invoker, inv);
-
-        if (notNeedLogMethod.contains(formatMethod)) {
+        if (isIgnore(invoker, inv)) {
             return invoker.invoke(inv);
         } else {
             long id = requestId.getAndIncrement();

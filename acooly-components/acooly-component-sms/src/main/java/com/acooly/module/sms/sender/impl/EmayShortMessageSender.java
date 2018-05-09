@@ -20,6 +20,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -190,7 +191,8 @@ public class EmayShortMessageSender extends AbstractShortMessageSender {
 
     @Override
     protected String getContent(String content) {
-        return properties.getEmay().getSign() + content + posfix;
+        String signContent = properties.getEmay().getSign() + content;
+        return StringUtils.isEmpty(posfix) ? signContent : signContent + posfix;
     }
 
     @Override

@@ -12,6 +12,7 @@ package com.acooly.core.test.dubbo;
 
 import com.acooly.core.common.facade.SingleOrder;
 import com.acooly.core.common.facade.SingleResult;
+import com.acooly.module.dubbo.mock.DubboLogIgnore;
 
 /**
  * @author qiubo@yiji.com
@@ -19,5 +20,6 @@ import com.acooly.core.common.facade.SingleResult;
 public interface DemoFacade {
     SingleResult<String> echo(SingleOrder<String> msg);
 
+    @DubboLogIgnore
     SingleResult<String> echo1(SingleOrder<String> msg);
 }

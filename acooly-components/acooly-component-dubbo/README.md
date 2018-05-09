@@ -76,3 +76,13 @@
     }
 
 实现mock接口，并注册到spring容器中。为了避免混淆，mock服务实现类必须已`Mock`为后缀。
+
+
+#### 4.5 忽略Log日志输出
+
+    public interface DemoFacade {
+        @DubboLogIgnore
+        SingleResult<String> echo1(SingleOrder<String> msg);
+    }
+
+实现在接口方法上面增加`@DubboLogIgnore`注解可忽略consumer和provider的日志输出

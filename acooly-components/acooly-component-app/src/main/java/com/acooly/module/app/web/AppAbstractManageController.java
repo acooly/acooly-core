@@ -51,6 +51,7 @@ public abstract class AppAbstractManageController<T extends Entityable, M extend
         UploadConfig config = super.getUploadConfig();
         String storageRoot = getStorageRoot();
         config.setStorageRoot(storageRoot);
+        config.setStorageNameSpace(oFileProperties.getStorageNameSpace());
         config.setUseMemery(false);
         config.setAllowExtentions("jpg,gif,png");
         return config;

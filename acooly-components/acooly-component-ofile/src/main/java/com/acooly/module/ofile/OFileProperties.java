@@ -39,6 +39,12 @@ public class OFileProperties implements InitializingBean {
      */
     private String storageRoot = "/data/media/";
 
+    /**
+     * 存储命名空间，默认为空，如果填写，文件存储路径会变为：storageRoot/storageNameSpace，如：/data/media/taodai
+     */
+    private String storageNameSpace;
+
+
     private String allowExtentions = "txt,zip,csv,xls,word,jpg,gif,png";
     private long maxSize = 5242880;
     private int thumbnailSize = 200;

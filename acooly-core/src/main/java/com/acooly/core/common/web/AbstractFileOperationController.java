@@ -582,6 +582,8 @@ public abstract class AbstractFileOperationController<
         if (!Strings.startsWith(filePath, "/")) {
             filePath = "/" + filePath;
         }
+
+
         return filePath;
     }
 
@@ -637,8 +639,18 @@ public abstract class AbstractFileOperationController<
         if (uploadConfig.isNeedRemaneToTimestamp()) {
             fileName = buildUploadFileName() + "." + getFileExtention(fileName);
         }
+
+        //增加上传存储文件命名空间
+        String storagePath;
+        if (StringUtils.isNotBlank(uploadConfig.getStorageNameSpace())) {
+            String storageRoot = uploadConfig.getStorageRoot();
+            storageRoot = storageRoot.endsWith(File.separator) ? storageRoot : storageRoot + File.separator;
+            storagePath = storageRoot + uploadConfig.getStorageNameSpace() + File.separator;
+        } else {
+            storagePath = uploadConfig.getStorageRoot();
+        }
         return buildUploadStoragePath(
-                uploadConfig.getStorageRoot(), uploadConfig.isNeedTimePartPath(), null)
+                storagePath, uploadConfig.isNeedTimePartPath(), null)
                 + File.separator
                 + fileName;
     }
@@ -769,6 +781,7 @@ public abstract class AbstractFileOperationController<
         private long maxSize = 33554432;
         private String allowExtentions = "txt,zip,csv,xls,xlsx,jpg,gif,png";
         private String storageRoot = System.getenv("java.tmp");
+        private String storageNameSpace;
         private boolean useMemery = true;
         private boolean needTimePartPath = true;
         private boolean needRemaneToTimestamp = true;

@@ -321,6 +321,7 @@ public class ContentManagerController
         super.uploadConfig.setUseMemery(false);
         super.uploadConfig.setNeedTimePartPath(false);
         super.uploadConfig.setStorageRoot(getFileStorageRoot());
+        super.uploadConfig.setStorageNameSpace(oFileProperties.getStorageNameSpace());
         return this.uploadConfig;
     }
 

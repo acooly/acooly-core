@@ -198,6 +198,8 @@ public class ContentManagerController
                 continue;
             }
             deleteRelativeFile(content.getCover(), request);
+            deleteRelativeFile(content.getAppcover(), request);
+
             deleteFileWithBody(content.getContentBody().getBody(), request);
         }
     }

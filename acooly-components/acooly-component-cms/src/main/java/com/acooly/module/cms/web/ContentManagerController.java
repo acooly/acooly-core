@@ -248,12 +248,18 @@ public class ContentManagerController
         getEntityService().save(entity);
         entity.setContentBody(new ContentBody()); // IE8 兼容性问题，html 转JSON
 
-        ContentCreatedEvent event = new ContentCreatedEvent();
-        BeanCopier.copy(entity, event);
-
-        eventBus.publishAsync(event);
+        if (isEventNotify(request)) {
+            ContentCreatedEvent event = new ContentCreatedEvent();
+            BeanCopier.copy(entity, event);
+            eventBus.publishAsync(event);
+        }
 
         return entity;
+    }
+
+    private boolean isEventNotify(HttpServletRequest request) {
+        String isEventNotify = request.getParameter("isEventNotify");
+        return StringUtils.isNotBlank(isEventNotify);
     }
 
     @RequestMapping("importJsonReview")

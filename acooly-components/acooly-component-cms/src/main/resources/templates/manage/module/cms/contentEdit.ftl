@@ -80,6 +80,10 @@
                     <td><input type="text" style="width: 300px;" class="text" name="link" size="128" class="easyui-validatebox"
                                class="text" validType="byteLength[1,128]"/></td>
                 </tr>
+                <tr>
+                    <th>是否推送事件通知：</th>
+                    <td><input type="checkbox" name="isEventNotify" value="isEventNotify" /></td>
+                </tr>
             <tr>
                 <td colspan="2">
                     <textarea id="contentId" name="contents" data-options="required:true"
@@ -101,6 +105,7 @@
                 <th>备注：</th>
                 <td><textarea name="comments" rows="2" style="width:300px;"></textarea></td>
             </tr>
+
         </table>
     </@jodd.form>
     </form>

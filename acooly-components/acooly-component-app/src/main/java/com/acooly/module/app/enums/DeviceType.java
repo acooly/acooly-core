@@ -17,6 +17,12 @@ public enum DeviceType implements Messageable {
 
     IPHONE6("IPHONE6", "IPHONE6"),
 
+    IPHONE7("IPHONE7", "IPHONE7"),
+
+    IPHONE8("IPHONE8", "IPHONE8"),
+
+    IPHONEX("IPHONEX", "IPHONEX"),
+
     ANDROID("ANDROID", "ANDROID");
 
     private String code;

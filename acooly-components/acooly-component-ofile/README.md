@@ -5,3 +5,7 @@
 ## 2. 使用
 
 参考showcase:`com.ac.demo.web.CustomerManagerController#uploadTest`
+
+## 3. 配置
+ 
+ 1. `acooly.ofile.storageNameSpace=taodai` 存储命名空间，默认为空，如果填写，文件存储路径会变为：storageRoot/storageNameSpace，如：/data/media/taodai

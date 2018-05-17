@@ -78,6 +78,8 @@ public class OfilePortalController
             getUploadConfig().setMaxSize(oFileProperties.getMaxSize());
             getUploadConfig().setStorageRoot(getStorageRoot());
             getUploadConfig().setUseMemery(false);
+            getUploadConfig().setStorageNameSpace(oFileProperties.getStorageNameSpace());
+
             Map<String, UploadResult> uploadResults = doUpload(request);
             UploadResult uploadResult = null;
             List<OnlineFile> onlineFiles = Lists.newArrayList();

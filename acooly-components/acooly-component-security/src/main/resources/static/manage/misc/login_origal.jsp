@@ -10,7 +10,7 @@
           href="/manage/assert/plugin/jquery-easyui/themes/<c:out value="${cookie.easyuiThemeName.value}" default="default"/>/easyui.css"
           type="text/css"/>
     <link rel="stylesheet" href="/manage/assert/plugin/jquery-easyui/themes/icon.css" type="text/css"/>
-    <script type="text/javascript" src="/manage/assert/plugin/jquery/jquery-1.9.1.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="/manage/assert/plugin/jquery-easyui/jquery.easyui.min.js" charset="utf-8"></script>
     <link rel="stylesheet" type="text/css" href="/manage/assert/style/basic.css">
     <link rel="stylesheet" type="text/css" href="/manage/assert/style/icon.css">

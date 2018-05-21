@@ -52,6 +52,15 @@ public class Captchas {
 
     private DefaultKaptcha kaptcha;
 
+
+    public DefaultKaptcha getKaptcha() {
+        return kaptcha;
+    }
+
+    public void setKaptcha(DefaultKaptcha kaptcha) {
+        this.kaptcha = kaptcha;
+    }
+
     public Captchas(int height, int width, String fontColor, int fontSize, int charCount) {
         this.height = height;
         this.width = width;

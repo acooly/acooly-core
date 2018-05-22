@@ -17,6 +17,11 @@
         <form id="manage_portallet_searchform" onsubmit="return false">
             <table class="tableForm" width="100%">
                 <tr>
+                    <td align="left" style="color: orange">
+                        <input type="button" style="color: orange;font-size: 14px" onclick="window.open('/manage/tableSchema/exportExcel')" name="exportSchema" value="导出数据库表结构"/>
+                    </td>
+                </tr>
+                <tr>
                     <td align="left">
                         所属用户:<input type="text" name="search_LIKE_userName"/>
                         标题:<input type="text" name="search_LIKE_title"/>

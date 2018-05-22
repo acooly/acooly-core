@@ -31,7 +31,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -96,10 +95,6 @@ public class ResourceController extends AbstractJQueryEntityController<Resource,
         }
         temp = Strings.trimToEmpty(temp);
         return temp;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(new Date().getTime());
     }
 
     @Override

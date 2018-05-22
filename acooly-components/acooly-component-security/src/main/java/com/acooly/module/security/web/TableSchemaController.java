@@ -38,7 +38,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.acooly.module.ds.check.DatabaseTableChecker.getMysqlschema;
-import static com.sun.org.apache.xml.internal.security.utils.I18n.getExceptionMessage;
 
 /**
  * @author shuijing
@@ -59,7 +58,7 @@ public class TableSchemaController extends AbstractFileOperationController {
             doExportExcel(request, response);
             return null;
         } catch (Exception e) {
-            log.warn(getExceptionMessage("exportExcel", e), e);
+            log.warn("导出excel失败", e);
         }
         //return "redirect:" + "" + "/index.html";
         return "export success!";

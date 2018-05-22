@@ -113,7 +113,7 @@ public class DatabaseTableChecker
                 });
     }
 
-    private String getMysqlschema(DataSource dataSource) throws SQLException {
+    public static String getMysqlschema(DataSource dataSource) throws SQLException {
         String scheme =
                 StringUtils.substringAfterLast(dataSource.getConnection().getMetaData().getURL(), "/");
         if (StringUtils.contains(scheme, "?")) {

@@ -82,7 +82,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/manage/assert/plugin/jquery/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="/manage/assert/plugin/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 

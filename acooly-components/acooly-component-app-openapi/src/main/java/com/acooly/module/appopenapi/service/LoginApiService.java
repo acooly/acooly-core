@@ -88,11 +88,11 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
                         appCustomer = appCustomerService.updateSecretKey(appCustomer);
                         cacheableAuthInfoRealm.removeCache(appCustomer.getAccessKey());
                     }
-
-                    appCustomer.setDeviceId(request.getDeviceId());
-                    appCustomer.setDeviceType(request.getDeviceType());
-                    appCustomerService.update(appCustomer);
                 }
+                appCustomer.setDeviceId(request.getDeviceId());
+                appCustomer.setDeviceType(request.getDeviceType());
+                appCustomerService.update(appCustomer);
+
                 response.setAccessKey(appCustomer.getAccessKey());
                 response.setSecretKey(appCustomer.getSecretKey());
                 response.setExtJson(dto.getExtJson());

@@ -6,9 +6,19 @@
         }
     </style>
     <script type="text/javascript">
+
+        var pubdate = $("#pubDateStr").val();
+        var today;
+        if (pubdate) {
+            today = pubdate;
+        } else {
+            today = formateDate(new Date());
+        }
+
         $(document).ready(function () {
-            $("#pubDate").val(formateDate(new Date()))
+            $("#pubDate").val(today);
         });
+
 
         function formateDate(dateObject) {
             var d = new Date(dateObject);
@@ -38,6 +48,9 @@
     <@jodd.form bean="content" scope="request">
         <input name="id" type="hidden"/>
         <input type="hidden" name="code" value="${RequestParameters.code}"/>
+        <input type="hidden" name="pubDateStr" id="pubDateStr"/>
+
+
         <table class="tableForm" width="100%">
             <tr>
                 <th width="20%">标题：</th>

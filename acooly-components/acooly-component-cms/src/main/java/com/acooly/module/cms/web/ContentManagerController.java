@@ -186,6 +186,11 @@ public class ContentManagerController
         model.put("allCodes", codes);
     }
 
+    @Override
+    protected void onEdit(
+            HttpServletRequest request, HttpServletResponse response, Model model, Content entity) {
+        entity.setPubDateStr(Dates.format(entity.getPubDate()));
+    }
     /**
      * 删除内容
      * <p>

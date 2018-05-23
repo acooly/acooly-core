@@ -18,10 +18,9 @@ import com.acooly.module.ds.check.loader.TableLoaderProvider;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,11 +55,9 @@ public class TableSchemaController extends AbstractFileOperationController {
         allow(request, response, MappingMethod.exports);
         try {
             doExportExcel(request, response);
-            return null;
         } catch (Exception e) {
             log.warn("导出excel失败", e);
         }
-        //return "redirect:" + "" + "/index.html";
         return "export success!";
     }
 
@@ -77,22 +74,39 @@ public class TableSchemaController extends AbstractFileOperationController {
             workbook = new SXSSFWorkbook(batchSize);
             workbook.setCompressTempFiles(true);
             Sheet sheet = workbook.createSheet();
-            int rowNum = 0;
-            // 写入header
 
-            Map<String, List<Column>> columns = getExcel();
+            for (int i = 0; i < 5; i++) {
+                ((SXSSFSheet) sheet).trackColumnForAutoSizing(i);
+            }
+
+            int rowNum = 0;
+
+            Map<String, List<Column>> columns = getColumns();
 
             for (Map.Entry<String, List<Column>> entry : columns.entrySet()) {
                 Row row = sheet.createRow(rowNum);
 
                 String tableName = entry.getKey();
                 List<Column> cs = entry.getValue();
+
                 //表名
-                row.createCell(0).setCellValue(tableName);
+                getCellCumstomStyle(workbook, row.createCell(1));
+                getCellCumstomStyle(workbook, row.createCell(2));
+                getCellCumstomStyle(workbook, row.createCell(3));
+                getCellCumstomStyle(workbook, row.createCell(4));
+                //合并单元格，但加上后生成excel速度减慢
+//                sheet.addMergedRegion(new CellRangeAddress(
+//                        row.getRowNum(), //first row (0-based)
+//                        row.getRowNum(), //last row  (0-based)
+//                        0, //first column (0-based)
+//                        4  //last column  (0-based)
+//                ));
+                Cell cell0 = getCellCumstomStyle(workbook, row.createCell(0));
+                cell0.setCellValue(tableName);
+
                 //表标题
                 rowNum++;
                 Row rowColumn = sheet.createRow(rowNum);
-                rowColumn.setRowStyle(getCellStyle(workbook));
                 rowColumn.createCell(0).setCellValue("字段名");
                 rowColumn.createCell(1).setCellValue("数据类型");
                 rowColumn.createCell(2).setCellValue("默认值");
@@ -100,6 +114,7 @@ public class TableSchemaController extends AbstractFileOperationController {
                 rowColumn.createCell(4).setCellValue("备注");
                 rowNum++;
 
+                //字段
                 for (int i = 0; i < cs.size(); i++) {
                     Column column = cs.get(i);
                     Row rowColumnV = sheet.createRow(rowNum);
@@ -113,6 +128,10 @@ public class TableSchemaController extends AbstractFileOperationController {
                     rowNum++;
                 }
             }
+            //自动适应内容
+            for (int i = 0; i < 5; i++) {
+                sheet.autoSizeColumn(i);
+            }
             out = response.getOutputStream();
             workbook.write(out);
             out.flush();
@@ -122,21 +141,29 @@ public class TableSchemaController extends AbstractFileOperationController {
         } finally {
             IOUtils.closeQuietly(out);
             IOUtils.closeQuietly(workbook);
-            workbook.dispose();
+            if (workbook != null) {
+                workbook.dispose();
+            }
         }
     }
 
-    private CellStyle getCellStyle(SXSSFWorkbook workbook) {
+    private Cell getCellCumstomStyle(SXSSFWorkbook workbook, Cell cell) {
+
         CellStyle backgroundStyle = workbook.createCellStyle();
-        backgroundStyle.setFillBackgroundColor(IndexedColors.GREY_50_PERCENT.getIndex());
-        backgroundStyle.setBottomBorderColor(IndexedColors.BLACK.getIndex());
-        backgroundStyle.setLeftBorderColor(IndexedColors.BLACK.getIndex());
-        backgroundStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());
-        backgroundStyle.setTopBorderColor(IndexedColors.BLACK.getIndex());
-        return backgroundStyle;
+
+        Font font = workbook.createFont();
+        font.setColor(HSSFColor.RED.index);
+        backgroundStyle.setFont(font);
+
+        backgroundStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        backgroundStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        backgroundStyle.setAlignment(HorizontalAlignment.CENTER);
+
+        cell.setCellStyle(backgroundStyle);
+        return cell;
     }
 
-    public Map<String, List<Column>> getExcel() {
+    public Map<String, List<Column>> getColumns() {
         Map<String, List<Column>> allTables = Maps.newHashMap();
         try {
             TableLoader tableLoader = TableLoaderProvider.getTableLoader(dataSource);

@@ -3,6 +3,7 @@ package com.acooly.module.cms.web;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonResult;
+import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.mapper.BeanCopier;
@@ -143,7 +144,18 @@ public class ContentManagerController
         }
         entity.setContentBody(contentBody);
         contentBody.setContent(entity);
+
+        setPubDate(entity,request);
+
         return entity;
+    }
+
+    private void setPubDate(Content entity, HttpServletRequest request) {
+        String pubDate = request.getParameter("pubDate");
+        if (StringUtils.isNotEmpty(pubDate)) {
+            Date parse = Dates.parse(pubDate, "yyyy-MM-dd HH:mm:ss");
+            entity.setPubDate(parse);
+        }
     }
 
     private String getFileStorageRoot() {

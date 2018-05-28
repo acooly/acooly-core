@@ -57,6 +57,9 @@ public class Content implements Entityable {
      */
     private Date pubDate = new Date();
 
+    @Transient
+    private String pubDateStr;
+
     /**
      * 页面标题(网页的title)
      */

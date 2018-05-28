@@ -68,13 +68,15 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
             // 如果明确是app client， 生成动态安全码
             if (request.isAppClient()) {
                 if (appCustomer == null) {
-                    appCustomer = new AppCustomer();
-                    appCustomer.setUserName(dto.getAccessKey());
-                    appCustomer.setAccessKey(dto.getAccessKey());
-                    appCustomer.setDeviceId(request.getDeviceId());
-                    appCustomer.setDeviceType(request.getDeviceType());
-                    appCustomer.setDeviceModel(request.getDeviceModel());
-                    appCustomer = appCustomerService.createAppCustomer(appCustomer);
+                    if (dto.isLoginSuccess()) {
+                        appCustomer = new AppCustomer();
+                        appCustomer.setUserName(dto.getAccessKey());
+                        appCustomer.setAccessKey(dto.getAccessKey());
+                        appCustomer.setDeviceId(request.getDeviceId());
+                        appCustomer.setDeviceType(request.getDeviceType());
+                        appCustomer.setDeviceModel(request.getDeviceModel());
+                        appCustomer = appCustomerService.createAppCustomer(appCustomer);
+                    }
                 } else {
                     String activeProfile =
                             System.getProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME);
@@ -88,11 +90,11 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
                         appCustomer = appCustomerService.updateSecretKey(appCustomer);
                         cacheableAuthInfoRealm.removeCache(appCustomer.getAccessKey());
                     }
-
-                    appCustomer.setDeviceId(request.getDeviceId());
-                    appCustomer.setDeviceType(request.getDeviceType());
-                    appCustomerService.update(appCustomer);
                 }
+                appCustomer.setDeviceId(request.getDeviceId());
+                appCustomer.setDeviceType(request.getDeviceType());
+                appCustomerService.update(appCustomer);
+
                 response.setAccessKey(appCustomer.getAccessKey());
                 response.setSecretKey(appCustomer.getSecretKey());
                 response.setExtJson(dto.getExtJson());

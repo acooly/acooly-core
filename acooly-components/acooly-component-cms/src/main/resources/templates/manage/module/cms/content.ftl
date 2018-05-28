@@ -77,7 +77,7 @@
                 <th field="keywords">关键字</th>
                 <th field="keycode">编码</th>
                 </#if>
-                <th field="createTime" formatter="dateTimeFormatter">发布时间</th>
+                <th field="pubDate" formatter="dateTimeFormatter">发布时间</th>
                 <th field="rowActions"
                     data-options="formatter:function(value, row, index){return formatAction('manage_content${RequestParameters.code}_action',value,row)}">
                     动作

@@ -102,11 +102,11 @@ public class CsvMapper {
      * @param args
      * @throws Exception
      */
-    public static void main(String[] args) throws Exception {
+    /*public static void main(String[] args) throws Exception {
         String line = "a,b,c,,\"asdfasdf,asdfas\",\"asd\"\"12\"\"123\"";
         System.out.println(line);
         List<String> result = CsvMapper.unmarshal(line);
         System.out.println(result.size() + ": " + result);
         System.out.println(CsvMapper.marshal(result));
-    }
+    }*/
 }

@@ -61,7 +61,7 @@ public class FreeMarkers {
         return cfg;
     }
 
-    public static void main(String[] args) throws Exception {
+    /*public static void main(String[] args) throws Exception {
 
         String path = "file:/D:/workshop/feinno/code-generator";
         URL uri = new URL(path);
@@ -75,5 +75,5 @@ public class FreeMarkers {
         //		String result = renderTemplate(cfg.getTemplate("domain.ftl"), root);
         //		System.out.println(result);
 
-    }
+    }*/
 }

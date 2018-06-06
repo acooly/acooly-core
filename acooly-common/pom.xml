@@ -12,6 +12,11 @@
     <artifactId>acooly-common</artifactId>
     <dependencies>
         <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-common-facade</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
             <version>3.0.1</version>

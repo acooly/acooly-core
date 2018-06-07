@@ -22,6 +22,7 @@ import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,7 @@ public class MailServiceImpl implements MailService {
     @Autowired
     private MailProperties mailProperties;
     @Autowired
+    @Qualifier("commonTaskExecutor")
     private TaskExecutor taskExecutor;
     @Autowired
     private OFileProperties ofileProperties;

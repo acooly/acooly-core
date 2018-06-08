@@ -13,8 +13,6 @@ import com.acooly.core.utils.enums.Messageable;
 import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.core.utils.mapper.BeanCopier;
 
-import java.util.function.Consumer;
-
 /**
  * @author zhangpu
  */
@@ -150,4 +148,10 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
                 ignorePropeties);
         return this;
     }
+
+    //jdk 1.7打包兼容1.8 function interface
+    public interface Consumer<T> {
+        void accept(T t);
+    }
+
 }

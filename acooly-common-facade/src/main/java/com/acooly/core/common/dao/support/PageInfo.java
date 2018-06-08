@@ -160,7 +160,7 @@ public class PageInfo<T> implements Serializable {
             }
             info.setPageResults(list);
         } else {
-            info.setPageResults(Collections.emptyList());
+            info.setPageResults((List<E>) Collections.emptyList());
         }
         return info;
     }

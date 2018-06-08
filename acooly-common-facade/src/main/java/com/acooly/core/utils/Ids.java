@@ -6,9 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.IntStream;
 
 import static com.acooly.core.utils.ObjectId.createProcessIdentifier;
 
@@ -163,7 +163,7 @@ public class Ids {
             }
             StringBuilder sb = new StringBuilder();
             // 当前时间(12位)
-            sb.append(Dates.format(new Date(), "yyMMddHHmmss"));
+            sb.append(format(new Date(), "yyMMddHHmmss"));
             // 随机数字(size-18位)
             sb.append(RandomNumberGenerator.getNewString((size - 18)));
             // 进程id(2位)
@@ -253,14 +253,37 @@ public class Ids {
 
         private static String convertBytesToString(final byte[] random) {
             final char[] output = new char[random.length];
-            IntStream.range(0, random.length)
-                    .forEach(
-                            i -> {
-                                final int index = Math.abs(random[i] % PRINTABLE_CHARACTERS.length);
-                                output[i] = PRINTABLE_CHARACTERS[index];
-                            });
+            //IntStream.range(0, random.length)
+//             .forEach(
+//                    i -> {
+//                        final int index = Math.abs(random[i] % PRINTABLE_CHARACTERS.length);
+//                        output[i] = PRINTABLE_CHARACTERS[index];
+//                    });
+            for (int i = 0; i < random.length; i++) {
+                final int index = Math.abs(random[i] % PRINTABLE_CHARACTERS.length);
+                output[i] = PRINTABLE_CHARACTERS[index];
+            }
 
             return new String(output);
         }
     }
+
+    public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
+    public static String format(Date date, String pattern) {
+        SimpleDateFormat sdf = getSimpleDateFormat(pattern);
+        return sdf.format(date);
+    }
+
+    private static SimpleDateFormat getSimpleDateFormat(String defaultFormat) {
+        if (Strings.isBlank(defaultFormat)) {
+            defaultFormat = DEFAULT_DATE_FORMAT;
+        }
+        return new SimpleDateFormat(defaultFormat);
+    }
+
+    public static String format(Date date) {
+        return format(date, DEFAULT_DATE_FORMAT);
+    }
+
 }

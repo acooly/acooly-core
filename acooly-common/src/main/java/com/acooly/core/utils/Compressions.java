@@ -168,7 +168,7 @@ public class Compressions {
         }
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         // File target = new
         // File("/Users/zhangpu/workspace/temp/pic/frzjf.zip");
         // File source = new
@@ -177,5 +177,5 @@ public class Compressions {
 
         List<File> destFiles = unzip("/Users/zhangpu/temp/messageFactory.zip", null, false);
         System.out.println(destFiles);
-    }
+    }*/
 }

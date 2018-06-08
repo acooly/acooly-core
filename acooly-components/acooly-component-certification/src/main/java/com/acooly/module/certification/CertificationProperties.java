@@ -61,8 +61,8 @@ public class CertificationProperties {
             Assert.hasText(this.realname.getAppCode());
         }
         if (this.bankCertProvider == ALI) {
-            Assert.notNull(this.realname);
-            Assert.hasText(this.realname.getAppCode());
+            Assert.notNull(this.bankcert);
+            Assert.hasText(this.bankcert.getAppCode());
         }
     }
 

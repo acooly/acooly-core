@@ -17,41 +17,41 @@ public class KetamaNodeLocatorTest {
     /**
      * @param args
      */
-    public static void main(String[] args) {
-        KetamaNodeLocatorTest test = new KetamaNodeLocatorTest();
-        Map<KetamaNode, Integer> nodeRecord = new LinkedHashMap<KetamaNode, Integer>();
-        KetamaHashs ketama = KetamaHashs.INSTANCE("order_info");
-
-        List<String> allKeys = test.getAllStrings();
-        for (String key : allKeys) {
-            KetamaNode node = ketama.getLocator().getPrimary(key);
-            Integer times = nodeRecord.get(node);
-            if (times == null) {
-                nodeRecord.put(node, 1);
-            } else {
-                nodeRecord.put(node, times + 1);
-            }
-        }
-        System.out.println(
-                "Nodes count : "
-                        + ketama.getLocator().getNodes()
-                        + ", Keys count : "
-                        + EXE_TIMES
-                        + ", Normal percent : "
-                        + (float) 100 / ketama.getLocator().getNodes()
-                        + "%");
-        System.out.println("-------------------- boundary  ----------------------");
-        for (Map.Entry<KetamaNode, Integer> entry : nodeRecord.entrySet()) {
-            System.out.println(
-                    "Node name :"
-                            + entry.getKey()
-                            + " - Times : "
-                            + entry.getValue()
-                            + " - Percent : "
-                            + (float) entry.getValue() / EXE_TIMES * 100
-                            + "%");
-        }
-    }
+//    public static void main(String[] args) {
+//        KetamaNodeLocatorTest test = new KetamaNodeLocatorTest();
+//        Map<KetamaNode, Integer> nodeRecord = new LinkedHashMap<KetamaNode, Integer>();
+//        KetamaHashs ketama = KetamaHashs.INSTANCE("order_info");
+//
+//        List<String> allKeys = test.getAllStrings();
+//        for (String key : allKeys) {
+//            KetamaNode node = ketama.getLocator().getPrimary(key);
+//            Integer times = nodeRecord.get(node);
+//            if (times == null) {
+//                nodeRecord.put(node, 1);
+//            } else {
+//                nodeRecord.put(node, times + 1);
+//            }
+//        }
+//        System.out.println(
+//                "Nodes count : "
+//                        + ketama.getLocator().getNodes()
+//                        + ", Keys count : "
+//                        + EXE_TIMES
+//                        + ", Normal percent : "
+//                        + (float) 100 / ketama.getLocator().getNodes()
+//                        + "%");
+//        System.out.println("-------------------- boundary  ----------------------");
+//        for (Map.Entry<KetamaNode, Integer> entry : nodeRecord.entrySet()) {
+//            System.out.println(
+//                    "Node name :"
+//                            + entry.getKey()
+//                            + " - Times : "
+//                            + entry.getValue()
+//                            + " - Percent : "
+//                            + (float) entry.getValue() / EXE_TIMES * 100
+//                            + "%");
+//        }
+//    }
 
     public List<KetamaNode> getNodes(int nodeCount) {
         List<KetamaNode> nodes = new ArrayList<KetamaNode>();

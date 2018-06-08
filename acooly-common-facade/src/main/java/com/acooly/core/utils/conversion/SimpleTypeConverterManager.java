@@ -1,8 +1,8 @@
 package com.acooly.core.utils.conversion;
 
+import com.acooly.core.utils.Assert;
 import com.acooly.core.utils.collection.ConcurrentReferenceMap;
 import com.acooly.core.utils.collection.SetFromMap;
-import org.springframework.util.Assert;
 
 import java.util.*;
 import java.util.Map.Entry;

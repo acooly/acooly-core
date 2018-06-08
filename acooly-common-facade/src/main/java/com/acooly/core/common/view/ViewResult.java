@@ -3,9 +3,9 @@ package com.acooly.core.common.view;
 import com.acooly.core.common.facade.DtoAble;
 import com.acooly.core.common.facade.ResultBase;
 import com.acooly.core.common.facade.ResultCode;
+import com.acooly.core.utils.Assert;
 import com.acooly.core.utils.enums.ResultStatus;
 import lombok.Data;
-import org.springframework.util.Assert;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

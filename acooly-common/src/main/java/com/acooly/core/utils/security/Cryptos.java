@@ -2,7 +2,6 @@ package com.acooly.core.utils.security;
 
 import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.Exceptions;
-import org.apache.commons.codec.binary.Hex;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -226,11 +225,11 @@ public class Cryptos {
         return bytes;
     }
 
-    public static void main(String[] args) throws Exception {
+    /*public static void main(String[] args) throws Exception {
         String input = "12321中文312321中文312321中文312321中文312321中文312321中文312321中文3";
         byte[] key = "yijiuAESTOyijifu".getBytes();
         byte[] cript = Cryptos.aesEncrypt(input.getBytes("UTF-8"), key);
         String hexCript = Hex.encodeHexString(cript);
         System.out.println(hexCript);
-    }
+    }*/
 }

@@ -157,7 +157,7 @@ public class Strings extends StringUtils {
         return true;
     }
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         String text = "zhangpu";
         System.out.println("用户名: " + maskReverse(text, 6, 0, '*', 5));
         text = "510221198209476371";
@@ -166,5 +166,5 @@ public class Strings extends StringUtils {
         System.out.println("手机号: " + maskReverse(text, 3, 3, '*'));
         text = "6221880231092323876";
         System.out.println("银行卡: " + maskReverse(text, 4, 3, '*', 3));
-    }
+    }*/
 }

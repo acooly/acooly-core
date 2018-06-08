@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
 import java.lang.reflect.*;
 import java.security.AccessController;
@@ -71,9 +70,9 @@ public class Reflections {
             if (object == null) {
                 result.add(null);
             } else if (object instanceof Date) {
-                result.add(Dates.format((Date) object));
+                result.add(Ids.format((Date) object));
             } else if (object instanceof Calendar) {
-                result.add(Dates.format(((Calendar) object).getTime()));
+                result.add(Ids.format(((Calendar) object).getTime()));
             } else {
                 result.add(object.toString());
             }

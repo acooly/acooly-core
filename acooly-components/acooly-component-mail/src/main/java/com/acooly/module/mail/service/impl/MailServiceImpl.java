@@ -22,6 +22,7 @@ import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,7 @@ public class MailServiceImpl implements MailService {
     @Autowired
     private MailProperties mailProperties;
     @Autowired
+    @Qualifier("commonTaskExecutor")
     private TaskExecutor taskExecutor;
     @Autowired
     private OFileProperties ofileProperties;
@@ -56,7 +58,13 @@ public class MailServiceImpl implements MailService {
     public void sendAsync(MailDto dto) {
         log.info("发送邮件:{}", dto);
         String content = validateAndParse(dto);
-        taskExecutor.execute(() -> send0(dto, content));
+        taskExecutor.execute(() -> {
+            try {
+                send0(dto, content);
+            } catch (BusinessException e) {
+                //ignore
+            }
+        });
     }
 
     public String validateAndParse(MailDto dto) {
@@ -107,6 +115,7 @@ public class MailServiceImpl implements MailService {
             log.info("发送邮件成功,{}", dto.toString());
         } catch (Exception e) {
             log.error("发送邮件失败", e);
+            throw new BusinessException(e);
         }
     }
 

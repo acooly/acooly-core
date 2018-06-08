@@ -28,9 +28,6 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * RAS 非对称加密工具类
@@ -520,7 +517,7 @@ public class RSA {
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    /*public static void main(String[] args) throws Exception {
         Map<String, Object> keys = genKeyPair();
         final PublicKey publicKey = (PublicKey) keys.get("publicKey");
         final PrivateKey privateKey = (PrivateKey) keys.get("privateKey");
@@ -578,5 +575,5 @@ public class RSA {
         pool.shutdown();
         System.out.println("seconds: " + (System.currentTimeMillis() - start));
         System.out.println("count: " + testCount * timesPerThread);
-    }
+    }*/
 }

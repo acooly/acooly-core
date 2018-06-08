@@ -22,6 +22,7 @@
         <module>acooly-archetype</module>
         <module>acooly-core-docs</module>
         <module>acooly-common</module>
+        <module>acooly-common-facade</module>
     </modules>
     <dependencies>
         <dependency>

@@ -85,7 +85,7 @@
                                    style="height:27px;">
                         <option value="">所有</option>
           <#list allRoles as e>
-              <option value="${e.id}">${e.descn}</option></#list>
+              <option value="${e.id}">${e.name}</option></#list>
                     </select>
                         组织机构:<input type="text" id="orgId" name="search_EQ_orgId"
                                     class="easyui-combobox"/>

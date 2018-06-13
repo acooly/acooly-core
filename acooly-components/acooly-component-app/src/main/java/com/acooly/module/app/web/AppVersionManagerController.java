@@ -63,6 +63,8 @@ public class AppVersionManagerController
         getUploadConfig().setNeedRemaneToTimestamp(false);
         getUploadConfig().setNeedTimePartPath(false);
         getUploadConfig().setAllowExtentions("apk,APK,ipa,IPA");
+        //100M
+        getUploadConfig().setMaxSize(104857600);
         try {
             Map<String, UploadResult> uploadResults = doUpload(request);
             String fileName = null;

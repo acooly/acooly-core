@@ -32,7 +32,7 @@ CREATE TABLE `point_account` (
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `memo` varchar(256) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分账户';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='积分账户';
 
 ALTER TABLE `point_account`
   ADD UNIQUE INDEX `acc_username_idx` (`user_name` ASC)  COMMENT '';
@@ -54,7 +54,7 @@ CREATE TABLE `point_grade` (
   `picture` varchar(255) DEFAULT NULL COMMENT ' 图标',
   `memo` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='积分等级';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='积分等级';
 
 -- ----------------------------
 -- Records of point_grade
@@ -81,7 +81,7 @@ CREATE TABLE `point_statistics` (
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `memo` varchar(256) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分统计';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='积分统计';
 
 -- ----------------------------
 -- Records of point_statistics
@@ -108,7 +108,7 @@ CREATE TABLE `point_trade` (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `memo` varchar(256) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='积分交易信息';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='积分交易信息';
 
 
 
@@ -128,6 +128,6 @@ CREATE TABLE `point_clear_config` (
   `update_time` datetime NOT NULL COMMENT '修改时间',
   `memo` varchar(256) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='积分清零设置';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='积分清零设置';
 
 

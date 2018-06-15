@@ -11,7 +11,7 @@ CREATE TABLE `cms_content_type` (
   PRIMARY KEY (`ID`),
   KEY `FK_CONTENTTYPE_REF_CONTENTTYPE` (`PARENTID`) USING BTREE,
   CONSTRAINT `cms_content_type_ibfk_1` FOREIGN KEY (`PARENTID`) REFERENCES `cms_content_type` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COMMENT='内容类型';
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COMMENT='内容类型';
 
 DROP TABLE IF EXISTS `cms_content_body`;
 CREATE TABLE `cms_content_body` (
@@ -20,7 +20,7 @@ CREATE TABLE `cms_content_body` (
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='内容主体';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='内容主体';
 
 DROP TABLE IF EXISTS `cms_content`;
 CREATE TABLE `cms_content` (
@@ -45,7 +45,7 @@ CREATE TABLE `cms_content` (
   KEY `idx_cms_content_type` (`TYPE`),
   CONSTRAINT `pk_cms_content_body_id` FOREIGN KEY (`ID`) REFERENCES `cms_content_body` (`ID`),
   CONSTRAINT `pk_cms_content_type_id` FOREIGN KEY (`TYPE`) REFERENCES `cms_content_type` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='内容主表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='内容主表';
 
 DROP TABLE IF EXISTS `cms_attachment`;
 CREATE TABLE `cms_attachment` (
@@ -60,7 +60,7 @@ CREATE TABLE `cms_attachment` (
   PRIMARY KEY (`ID`),
   KEY `FK2731B5D9D02C81BF` (`CONTENTID`),
   CONSTRAINT `cms_attachment_ibfk_1` FOREIGN KEY (`CONTENTID`) REFERENCES `cms_content` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='内容附件';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='内容附件';
 
 CREATE TABLE `cms_code` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -69,7 +69,7 @@ CREATE TABLE `cms_code` (
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='编码';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='编码';
 
 INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102500', NULL, NULL, 'article', '文章', '');
 INSERT INTO `cms_content_type` (`ID`, `PARENTID`, `PATH`, `CODE`, `NAME`, `COMMENTS`) VALUES ('2015102501', '2015102500', NULL, 'aboutus', '关于我们', '');

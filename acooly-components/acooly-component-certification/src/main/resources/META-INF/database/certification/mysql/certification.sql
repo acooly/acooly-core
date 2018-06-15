@@ -21,7 +21,7 @@ CREATE TABLE `cert_certification_record` (
 )
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
-  DEFAULT CHARSET = utf8
+  DEFAULT CHARSET = utf8mb4
   COMMENT = '实名认证记录表';
 
 
@@ -63,7 +63,7 @@ CREATE TABLE `bank_certification_record` (
 )
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
-  DEFAULT CHARSET = utf8
+  DEFAULT CHARSET = utf8mb4
   COMMENT = '银行卡四要素记录表';
 
 

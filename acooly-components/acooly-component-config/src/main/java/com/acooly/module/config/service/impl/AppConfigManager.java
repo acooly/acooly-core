@@ -89,6 +89,11 @@ public class AppConfigManager implements InitializingBean {
         }
     }
 
+    public void invalidate(String key) {
+        configCache.invalidate(key);
+        redisTemplate.delete(key);
+    }
+
 
     public void afterPropertiesSet() {
 

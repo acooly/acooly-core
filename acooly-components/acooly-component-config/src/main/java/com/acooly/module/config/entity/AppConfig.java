@@ -7,8 +7,8 @@
 package com.acooly.module.config.entity;
 
 
-import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.domain.AbstractEntity;
+import com.acooly.module.config.AppConfigAutoConfig;
 import com.github.benmanes.caffeine.cache.Cache;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +31,6 @@ import java.util.concurrent.TimeUnit;
 @Getter
 @Setter
 public class AppConfig extends AbstractEntity {
-    public static final String CACHE_PREFIX = Apps.getAppName() + ".appConfig.";
 
     /**
      * 配置项名称
@@ -83,6 +82,6 @@ public class AppConfig extends AbstractEntity {
     }
 
     public static String key(String name) {
-        return CACHE_PREFIX +  name;
+        return AppConfigAutoConfig.CACHE_PREFIX +  name;
     }
 }

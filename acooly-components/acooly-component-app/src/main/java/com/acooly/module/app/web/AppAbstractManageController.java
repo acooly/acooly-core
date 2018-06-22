@@ -15,14 +15,18 @@ import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.app.AppProperties;
 import com.acooly.module.ofile.OFileProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 
 /**
  * @author acooly
  */
+@Slf4j
 public abstract class AppAbstractManageController<T extends Entityable, M extends EntityService<T>>
         extends AbstractJQueryEntityController<T, M> {
 
@@ -75,5 +79,20 @@ public abstract class AppAbstractManageController<T extends Entityable, M extend
             relativePath = "/" + relativePath;
         }
         return relativePath;
+    }
+
+    public static String convertCharSet(HttpServletRequest request, String parameter) {
+        String parameterValue = request.getParameter(parameter);
+        try {
+            String ssoEnable = request.getServletContext().getInitParameter("ssoEnable");
+            if (StringUtils.isNotEmpty(ssoEnable) && Boolean.TRUE.toString().equals(ssoEnable)) {
+                byte[] parameterValueBytes = parameterValue.getBytes("iso-8859-1");
+                String tt = new String(parameterValueBytes, "utf-8");
+                parameterValue = tt;
+            }
+        } catch (UnsupportedEncodingException e) {
+            log.error("转字符集失败", e.getMessage());
+        }
+        return parameterValue;
     }
 }

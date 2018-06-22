@@ -79,6 +79,16 @@ public class AppVersionManagerController
         } catch (Exception e) {
             throw new RuntimeException("上传App程序发布失败:", e);
         }
+
+        String appName = convertCharSet(request, "appName");
+        entity.setAppName(appName);
+
+        String subject = convertCharSet(request, "subject");
+        entity.setSubject(subject);
+
+        String comments = convertCharSet(request, "comments");
+        entity.setComments(comments);
+
         return super.onSave(request, response, model, entity, isCreate);
     }
 

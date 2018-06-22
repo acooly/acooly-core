@@ -27,7 +27,7 @@ public class Coder {
         if (StringUtils.isBlank(service.getGenerateConfiguration().getRootPackage())) {
             service.getGenerateConfiguration().setRootPackage(getRootPackage());
         }
-        service.generateTable("point_account");
+        service.generateTable("sys_app_config");
     }
 
     public static String getProjectPath() {
@@ -38,6 +38,6 @@ public class Coder {
     }
 
     public static String getRootPackage() {
-        return "com.acooly.core.test";
+        return "com.acooly.core.test.config";
     }
 }

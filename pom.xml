@@ -11,7 +11,9 @@
     <artifactId>acooly-core-parent</artifactId>
     <version>4.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-
+    <properties>
+        <caffeine.version>2.6.2</caffeine.version>
+    </properties>
     <name>acooly-core-parent</name>
     <description>Acooly Common Basic Framework. Provide unified package for domian, dao, service, cache, webservice, etc.</description>
     <modules>

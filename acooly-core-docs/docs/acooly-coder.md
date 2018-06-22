@@ -69,6 +69,16 @@ acooly框架为了方便开发和设计，以开发经验为基础，对使用ac
 
 * 如果有选项类型的字段，其选项值使用类json格式写入列备注字段，自动生成工具会自动为该列对应的属性和页面生成选项。如：表列为：`user_type` ,备注可以为：`用户类型 {normal:普通,vip:高级}`
 * 特别注意，强烈要求选项类（自动生成枚举类的）字段项目全局唯一名称，否则会生成enum名称相同的枚举相互覆盖。
+* 特别注意，MySQL在5.5.3之后增加了这个utf8mb4的编码，mb4就是most bytes 4的意思，专门用来兼容四字节的unicode,utf8mb4是utf8的超集。强烈建议表的字符集设置为utf8mb4，在MariaDB情况下utf8会出现字符集不兼容，强烈建议字符集设置为utf8mb4，如：
+       
+       
+       CREATE TABLE `cms_content_body` (
+         `ID` bigint(20) NOT NULL COMMENT '主键',
+         `BODY` text NOT NULL COMMENT '内容主体',
+         `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+         `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+         PRIMARY KEY (`ID`)
+       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='内容主体';
 
 ### 代码生成
 
@@ -104,7 +114,7 @@ CREATE TABLE `dm_customer` (
   update_time timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `comments` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 ```
 
 请将上面的表结构DLL在数据库中执行，生成本次演示的数据表。

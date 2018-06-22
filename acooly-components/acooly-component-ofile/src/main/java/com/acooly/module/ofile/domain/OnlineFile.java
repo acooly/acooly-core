@@ -150,7 +150,7 @@ public class OnlineFile extends AbstractEntity {
     @Column(
             name = "original_name",
             nullable = false,
-            length = 64,
+            length = 255,
             columnDefinition = "varchar(64) not null COMMENT '原始文件名'"
     )
     private String originalName;

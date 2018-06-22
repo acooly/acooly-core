@@ -39,6 +39,7 @@ public class AppBannerManagerController
             AppBanner entity,
             boolean isCreate)
             throws Exception {
+        request.setCharacterEncoding("utf-8");
         Map<String, UploadResult> uploadResults = doUpload(request);
         if (uploadResults != null && !uploadResults.isEmpty()) {
             UploadResult uploadResult = uploadResults.get("bannerFile");
@@ -49,6 +50,9 @@ public class AppBannerManagerController
         if (StringUtils.isEmpty(entity.getMediaUrl())){
             throw new BusinessException("上传图片不能为空");
         }
+        String title = convertCharSet(request, "title");
+        entity.setTitle(title);
+
         entity.setUpdateTime(new Date());
         return entity;
     }

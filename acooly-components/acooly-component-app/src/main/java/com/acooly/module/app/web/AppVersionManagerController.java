@@ -63,6 +63,8 @@ public class AppVersionManagerController
         getUploadConfig().setNeedRemaneToTimestamp(false);
         getUploadConfig().setNeedTimePartPath(false);
         getUploadConfig().setAllowExtentions("apk,APK,ipa,IPA");
+        //100M
+        getUploadConfig().setMaxSize(104857600);
         try {
             Map<String, UploadResult> uploadResults = doUpload(request);
             String fileName = null;
@@ -77,6 +79,16 @@ public class AppVersionManagerController
         } catch (Exception e) {
             throw new RuntimeException("上传App程序发布失败:", e);
         }
+
+        String appName = convertCharSet(request, "appName");
+        entity.setAppName(appName);
+
+        String subject = convertCharSet(request, "subject");
+        entity.setSubject(subject);
+
+        String comments = convertCharSet(request, "comments");
+        entity.setComments(comments);
+
         return super.onSave(request, response, model, entity, isCreate);
     }
 

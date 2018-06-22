@@ -58,6 +58,8 @@ public class AppStartGuideManagerController
         if (isCreate) {
             entity.setUpdateTime(entity.getCreateTime());
         }
+        String comments = convertCharSet(request, "comments");
+        entity.setComments(comments);
         return entity;
     }
 

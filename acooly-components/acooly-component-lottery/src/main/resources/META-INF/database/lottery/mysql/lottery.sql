@@ -19,7 +19,7 @@ CREATE TABLE `lottery` (
   `publish_event` varchar(16) NULL COMMENT '发布事件',
   PRIMARY KEY (`id`),
   KEY `uk_lottery_code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 --  Records of `lottery`
@@ -50,7 +50,7 @@ CREATE TABLE `lottery_award` (
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `comments` varchar(256) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 --  Records of `lottery_award`
@@ -76,7 +76,7 @@ CREATE TABLE `lottery_count` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_L_COUNT_UKEY` (`ukey`),
   KEY `IDX_LCOUNT_LID` (`lottery_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 
 -- ----------------------------
@@ -95,7 +95,7 @@ CREATE TABLE `lottery_user_count` (
   `comments` varchar(128) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_LOTTERY_USER_COUNT` (`lottery_id`,`user`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 --  Table structure for `lottery_whitelist`
@@ -110,7 +110,7 @@ CREATE TABLE `lottery_whitelist` (
   `status` varchar(16) DEFAULT NULL COMMENT '状态 {enable:有效,disable:禁用,finish:完成}',
   `comments` varchar(128) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 --  Table structure for `lottery_winner`
@@ -130,6 +130,6 @@ CREATE TABLE `lottery_winner` (
   `status` varchar(16) NOT NULL COMMENT '状态 {winning:中奖,award:已发奖}',
   `comments` varchar(256) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10482 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 

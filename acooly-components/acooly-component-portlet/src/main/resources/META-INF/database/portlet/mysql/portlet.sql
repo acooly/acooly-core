@@ -12,7 +12,7 @@ CREATE TABLE `portlet_feedback` (
   `status` VARCHAR(16) DEFAULT NULL COMMENT '状态',
   `comments` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='客户反馈';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='客户反馈';
 
 
 CREATE TABLE `portlet_site_config` (
@@ -26,7 +26,7 @@ CREATE TABLE `portlet_site_config` (
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_SITE_CONFIG` (`type`,`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `portlet_site_config` (`id`, `type`, `title`, `name`, `value`, `comments`, `create_time`, `update_time`)
 VALUES
@@ -55,7 +55,7 @@ CREATE TABLE `portlet_action_log` (
   `comments` varchar(128) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`),
   KEY `IDX_LOG_TIME` (`create_time`,`action_key`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `portlet_action_mapping` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -65,4 +65,4 @@ CREATE TABLE `portlet_action_mapping` (
   `update_time` datetime NOT NULL,
   `comments` varchar(128) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='访问映射';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='访问映射';

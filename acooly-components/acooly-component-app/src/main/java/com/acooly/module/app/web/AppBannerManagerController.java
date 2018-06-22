@@ -53,6 +53,9 @@ public class AppBannerManagerController
         String title = convertCharSet(request, "title");
         entity.setTitle(title);
 
+        String comments = convertCharSet(request, "comments");
+        entity.setComments(comments);
+
         entity.setUpdateTime(new Date());
         return entity;
     }

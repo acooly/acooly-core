@@ -26,7 +26,7 @@ public class Hashs {
         return toString(i);
     }
 
-    public static String toString(int i) {
+    private static String toString(int i) {
         int radix = chars.length;
         char[] buf = new char[20];
         int charPos = 19;

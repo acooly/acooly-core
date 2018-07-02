@@ -33,7 +33,7 @@ public class WebComponentInitializer implements ComponentInitializer {
         setPropertyIfMissing("server.session.cookie.httpOnly", Boolean.TRUE.toString());
         setPropertyIfMissing("server.session.tracking-modes", "cookie");
         setPropertyIfMissing("server.session.timeout", 7200);
-        if (Apps.isDevMode()) {
+        if (Apps.isDevMode() && Boolean.valueOf(System.getProperty("isInternalRedis"))) {
             setPropertyIfMissing("spring.session.store-type", "HASH_MAP");
         } else {
             setPropertyIfMissing("spring.session.store-type", "REDIS");

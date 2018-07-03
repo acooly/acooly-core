@@ -32,6 +32,7 @@ import static com.acooly.module.certification.CertificationProperties.PREFIX;
 public class CertificationProperties {
     public static final String PREFIX = "acooly.certification";
 
+    private Boolean enable=true;
     /**
      * 实名认证
      */

@@ -1,5 +1,6 @@
 package com.acooly.module.mybatis.typehandler;
 
+import com.acooly.core.common.type.DBMap;
 import com.google.common.base.Strings;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;

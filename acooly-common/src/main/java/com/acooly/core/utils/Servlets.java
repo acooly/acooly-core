@@ -225,6 +225,11 @@ public class Servlets {
         return params;
     }
 
+    public static Map<String, String> getParameters(
+            ServletRequest request) {
+        return getParameters(request, null, true);
+    }
+
     /**
      * 组合Parameters生成Query String的Parameter部分, 并在paramter name上加上prefix.
      *

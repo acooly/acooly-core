@@ -50,6 +50,16 @@ public class OrderCheckException extends IllegalArgumentException implements Mes
     }
 
     /**
+     * 抛出OrderCheckException
+     * @param parameter 校验失败参数
+     * @param format 格式
+     * @param params 参数
+     */
+    public static void throwIt(String parameter, String format,Object... params) {
+        throw new OrderCheckException(parameter, String.format(format,params));
+    }
+
+    /**
      * 当布尔表达式为false时，抛出OrderCheckException
      *
      * @param expression boolean表达式

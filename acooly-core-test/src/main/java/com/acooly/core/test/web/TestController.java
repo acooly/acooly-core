@@ -48,23 +48,23 @@ import java.util.Map;
 @RequestMapping(value = "/test")
 @Slf4j
 public class TestController {
-    @Autowired
+    @Autowired(required = false)
     private SmsService smsService;
-    @Autowired
+    @Autowired(required = false)
     private MailService mailService;
-    @Autowired
+    @Autowired(required = false)
     private DataSource dataSource;
-    @Autowired
+    @Autowired(required = false)
     private AppDao appDao;
     @Autowired
     private City1MybatisDao city1;
-    @Autowired
+    @Autowired(required = false)
     private TransactionExecutor transactionExecutor;
 
     @Value("${prop}")
     private String valueFromProp;
 
-    @Autowired
+    @Autowired(required = false)
     private CertificationService certificationService;
 
     @RequestMapping("ex")

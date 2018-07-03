@@ -18,7 +18,7 @@ import java.util.Map;
 @Controller
 public class PdfServletTest {
 
-    @Autowired
+    @Autowired(required = false)
     private PDFService pdfService;
 
     public static PdfDemoVo getVO() {

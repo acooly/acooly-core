@@ -27,7 +27,7 @@ package com.acooly.core.test.web;
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.test.dao.CityMybatisDao;
 import com.acooly.core.test.domain.City;
-import com.acooly.module.mybatis.typehandler.DBMap;
+import com.acooly.core.common.type.DBMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

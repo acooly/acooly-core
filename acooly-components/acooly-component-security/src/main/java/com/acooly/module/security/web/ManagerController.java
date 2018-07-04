@@ -44,7 +44,7 @@ import static com.acooly.module.security.shiro.realm.ShiroDbRealm.SESSION_USER;
  * @author zhangpu
  */
 @Controller
-@RequestMapping(value = "/manage/")
+@RequestMapping(value = "/manage")
 @ConditionalOnProperty(
         value = SecurityProperties.PREFIX + ".shiro.auth.enable",
         matchIfMissing = true
@@ -53,6 +53,11 @@ import static com.acooly.module.security.shiro.realm.ShiroDbRealm.SESSION_USER;
 public class ManagerController extends AbstractJQueryEntityController<User, UserService> {
 
     private static final Logger logger = LoggerFactory.getLogger(ManagerController.class);
+
+    @RequestMapping("")
+    public String none(HttpServletRequest request, HttpServletResponse response, Model model) {
+        return "redirect:/manage/index.html";
+    }
 
     @Override
     public String index(HttpServletRequest request, HttpServletResponse response, Model model) {

@@ -24,6 +24,7 @@ import static com.acooly.module.lottery.LotteryProperties.PREFIX;
 @Slf4j
 public class LotteryProperties implements InitializingBean {
     public static final String PREFIX = "acooly.lottery";
+    private Boolean enable = true;
 
     @Override
     public void afterPropertiesSet() throws Exception {

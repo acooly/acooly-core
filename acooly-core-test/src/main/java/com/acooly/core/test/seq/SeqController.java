@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/seq")
 public class SeqController {
 
-    @Autowired
+    @Autowired(required = false)
     private SeqService seqService;
 
     @RequestMapping("next")

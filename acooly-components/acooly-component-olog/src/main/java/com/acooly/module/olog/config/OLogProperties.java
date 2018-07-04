@@ -31,6 +31,7 @@ import static com.acooly.module.olog.config.OLogProperties.PREFIX;
 public class OLogProperties implements InitializingBean {
     public static final String PREFIX = "acooly.olog";
 
+    private Boolean enable = true;
     private Storage storage = new Storage();
     private Collector collector = new Collector();
 

@@ -12,6 +12,7 @@ package com.acooly.module.web;
 
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.module.web.filter.HttpsOnlyFilter;
+import com.acooly.module.web.formatter.DBMapFormatter;
 import com.acooly.module.web.formatter.MoneyFormatter;
 import com.acooly.module.web.freemarker.IncludePage;
 import com.acooly.module.web.freemarker.ShiroPrincipalTag;
@@ -122,6 +123,7 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
         if (webProperties.isEnableMoneyDisplayYuan()) {
             registry.addFormatter(new MoneyFormatter());
         }
+        registry.addFormatter(new DBMapFormatter());
     }
 
     /**

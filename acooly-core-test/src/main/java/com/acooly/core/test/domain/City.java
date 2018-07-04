@@ -1,7 +1,7 @@
 package com.acooly.core.test.domain;
 
 import com.acooly.core.common.domain.AbstractEntity;
-import com.acooly.module.mybatis.typehandler.DBMap;
+import com.acooly.core.common.type.DBMap;
 import lombok.Data;
 
 import javax.persistence.Transient;

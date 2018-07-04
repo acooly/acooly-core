@@ -31,7 +31,7 @@ import javax.annotation.Resource;
 @RequestMapping(value = "/event")
 @Slf4j
 public class EventBusController {
-    @Resource
+    @Autowired(required = false)
     private EventBus eventBus;
 
     @Autowired

@@ -22,6 +22,8 @@ import static com.acooly.module.openapi.OpenAPIProperties.PREFIX;
 public class OpenAPIProperties {
     public static final String PREFIX = "acooly.openpai";
 
+    private Boolean enable = true;
+
     /**
      * 查询日志分离到不同的日志文件
      */

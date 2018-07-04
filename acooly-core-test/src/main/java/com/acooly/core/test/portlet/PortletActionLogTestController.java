@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/portal/actionlog")
 public class PortletActionLogTestController {
 
-    @Autowired
+    @Autowired(required = false)
     private ActionLogService actionLogService;
 
     @RequestMapping("log")

@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("appservice")
 public class AppServiceTestContorller {
 
-    @Autowired
+    @Autowired(required = false)
     private AppServiceTestService appServiceTestService;
 
     @RequestMapping("/test")

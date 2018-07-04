@@ -1,6 +1,7 @@
-package com.acooly.module.mybatis.typehandler;
+package com.acooly.core.common.type;
 
 import com.acooly.core.utils.mapper.JsonMapper;
+import com.google.common.base.Strings;
 
 import java.util.HashMap;
 
@@ -16,6 +17,12 @@ public class DBMap<K, V> extends HashMap<K, V> {
     }
 
     public static <K, V> DBMap<K, V> fromJson(String json) {
+        if(json==null){
+            return null;
+        }
+        if(Strings.isNullOrEmpty(json)){
+            return new DBMap<>();
+        }
         return JsonMapper.nonEmptyMapper().fromJson(json, DBMap.class);
     }
 }

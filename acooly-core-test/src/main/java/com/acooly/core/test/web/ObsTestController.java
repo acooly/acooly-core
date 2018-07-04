@@ -23,7 +23,7 @@ import java.util.Date;
 @RequestMapping(value = "/obstest")
 public class ObsTestController {
     final int instreamLength = 128 * 1024;
-    @Autowired
+    @Autowired(required = false)
     private ObsService obsService;
 
     public static InputStream genFixedLengthInputStream(long fixedLength) {

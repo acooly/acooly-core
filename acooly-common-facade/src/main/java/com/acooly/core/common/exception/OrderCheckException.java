@@ -71,6 +71,18 @@ public class OrderCheckException extends IllegalArgumentException implements Mes
             throwIt(parameter, msg);
         }
     }
+    /**
+     * 当布尔表达式为true时，抛出OrderCheckException
+     *
+     * @param expression boolean表达式
+     * @param parameter  校验失败参数
+     * @param msg        校验失败提示信息
+     */
+    public static void throwIf(boolean expression, String parameter, String msg) {
+        if (!expression) {
+            throwIt(parameter, msg);
+        }
+    }
 
     public Map<String, String> getErrorMap() {
         return errorMap;

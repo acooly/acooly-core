@@ -5,6 +5,7 @@ import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
 import com.acooly.module.config.service.impl.AppConfigManager;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -50,7 +51,7 @@ public class AppConfigAutoConfig {
 
     @Bean
     public RedisMessageListenerContainer configRedisMessageListenerContainer(RedisConnectionFactory connectionFactory,
-                                                                             MessageListenerAdapter listenerAdapter, ThreadPoolTaskExecutor commonTaskExecutor) {
+                                                                             @Qualifier("configlistenerAdapter") MessageListenerAdapter listenerAdapter, ThreadPoolTaskExecutor commonTaskExecutor) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         container.setTaskExecutor(commonTaskExecutor);
@@ -59,10 +60,10 @@ public class AppConfigAutoConfig {
     }
 
     @Bean
-    public MessageListenerAdapter configlistenerAdapter(RedisTemplate redisTemplate,AppConfigManager appConfigManager) {
+    public MessageListenerAdapter configlistenerAdapter(RedisTemplate redisTemplate, AppConfigManager appConfigManager) {
         return new MessageListenerAdapter((MessageListener) (message, pattern) -> {
             String key = (String) redisTemplate.getValueSerializer().deserialize(message.getBody());
-            log.info("配置管理[key={}]更新", key.replace(CACHE_PREFIX,""));
+            log.info("配置管理[key={}]更新", key.replace(CACHE_PREFIX, ""));
             appConfigManager.invalidate(key);
         });
     }

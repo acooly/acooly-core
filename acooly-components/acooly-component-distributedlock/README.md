@@ -93,3 +93,5 @@ zookeeper
     //注意,只有加锁的线程才能解锁操作，所谓解铃还须系铃人
 
 ```
+
+## 5. 测试用例见 `com.acooly.core.test.distributedlock.RedisdtLockTest`

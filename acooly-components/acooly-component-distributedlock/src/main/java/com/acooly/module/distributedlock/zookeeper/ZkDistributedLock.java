@@ -1,4 +1,4 @@
-package com.acooly.module.distributedlock.zk.curator;
+package com.acooly.module.distributedlock.zookeeper;
 
 import com.acooly.module.distributedlock.exception.DistributedException;
 import lombok.extern.slf4j.Slf4j;

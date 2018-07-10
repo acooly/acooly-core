@@ -1,6 +1,7 @@
 package com.acooly.module.distributedlock;
 
-import com.acooly.module.distributedlock.zk.curator.DistributedLockFactory;
+import com.acooly.core.common.boot.EnvironmentHolder;
+import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.module.dubbo.DubboProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
@@ -21,22 +22,37 @@ import static com.acooly.module.distributedlock.DistributedLockProperties.PREFIX
 @EnableConfigurationProperties({DistributedLockProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 public class DistributedLockAutoConfig {
+
+    private DubboProperties dubboProperties;
+
     @Bean
-    public CuratorFramework curatorFramework(DistributedLockProperties lockProperties, DubboProperties dubboProperties) {
+    public CuratorFramework curatorFramework(DistributedLockProperties lockProperties) {
+
+        try {
+            if (dubboProperties == null) {
+                DubboProperties properties = new DubboProperties();
+                EnvironmentHolder.buildProperties(properties);
+                properties.afterPropertiesSet();
+                dubboProperties = properties;
+            }
+        } catch (Exception e) {
+            throw new AppConfigException("dubbo配置错误", e);
+        }
+
         CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory.builder()
                 .connectString(dubboProperties.getZkUrl())
                 .retryPolicy(
-                        new RetryNTimes(lockProperties.getRetryTimes(), lockProperties.getSleepMsBetweenRetries()))
-                .connectionTimeoutMs(lockProperties.getConnectionTimeoutMs())
-                .sessionTimeoutMs(lockProperties.getSessionTimeoutMs());
+                        new RetryNTimes(lockProperties.getZookeeper().getRetryTimes(), lockProperties.getZookeeper().getSleepMsBetweenRetries()))
+                .connectionTimeoutMs(lockProperties.getZookeeper().getConnectionTimeoutMs())
+                .sessionTimeoutMs(lockProperties.getZookeeper().getSessionTimeoutMs());
         CuratorFramework curatorFramework = builder.build();
         curatorFramework.start();
         return curatorFramework;
     }
 
     @Bean
-    public DistributedLockFactory distributedLockFactory() {
-        return new DistributedLockFactory();
+    public DistributedLockFactory distributedLockFactory(DistributedLockProperties lockProperties) {
+        return new DistributedLockFactory(lockProperties);
     }
 
 }

@@ -26,8 +26,11 @@ public class DistributedLockAutoConfig {
     private DubboProperties dubboProperties;
 
     @Bean
+    @ConditionalOnProperty(
+            name = {PREFIX + ".mode"},
+            havingValue = "zookeeper"
+    )
     public CuratorFramework curatorFramework(DistributedLockProperties lockProperties) {
-
         try {
             if (dubboProperties == null) {
                 DubboProperties properties = new DubboProperties();

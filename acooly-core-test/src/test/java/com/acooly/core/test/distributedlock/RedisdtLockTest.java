@@ -53,6 +53,69 @@ public class RedisdtLockTest extends TestBase {
     }
 
     @Test
+    public void testLock() {
+
+        Lock lock = factory.newLock("lock4");
+        lock.lock();
+        try {
+            // 执行一些需要加分布式锁的操作
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Test
+    public void testTryLock() {
+        //测试 trylock
+
+        Lock lock = factory.newLock("lock5");
+
+        if (lock.tryLock()) {
+            try {
+                //拿到锁，执行一些需要加分布式锁的操作
+            } finally {
+                lock.unlock();
+            }
+        } else {
+            //执行另外操作
+        }
+    }
+
+    @Test
+    public void testTryLockInTime() throws InterruptedException {
+        long startTime = System.currentTimeMillis();
+
+        Thread t = new Thread(() -> {
+            Lock lock = factory.newLock("lock6");
+            lock.lock();
+            try {
+                Thread.sleep(2000);
+                System.out.println("new thread id:" + Thread.currentThread().getId());
+                lock.unlock();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        t.start();
+
+        Thread.sleep(100);
+
+        Lock lock = factory.newLock("lock6");
+        //在等待时间内得到锁
+        if (lock.tryLock(3, TimeUnit.SECONDS)) {
+            try {
+                assertThat(System.currentTimeMillis() - startTime).isLessThan(3000L);
+                //拿到锁，执行一些需要加分布式锁的操作
+            } finally {
+                lock.unlock();
+            }
+        } else {
+            //执行另外操作
+        }
+    }
+
+    @Test
     public void testLockUnlock() {
         //测试加锁 释放
 

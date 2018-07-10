@@ -16,8 +16,10 @@ public class DistributedLockFactory {
     public static final String LOCK_PATH = "/acooly/distributeLock/";
 
     private DistributedLockProperties properties;
-    @Autowired
+
+    @Autowired(required = false)
     private CuratorFramework curatorFramework;
+
     @Autowired
     private RedisTemplate redisTemplate;
 
@@ -29,9 +31,12 @@ public class DistributedLockFactory {
 
         notNull(lockName, "lockName不能为空");
 
+        //redis模式
         if (properties.getMode() == DistributedLockProperties.Mode.Redis) {
             return new RedisDistributedLock(lockName, redisTemplate, UUID.randomUUID());
         }
+
+        //zookeeper模式
         if (properties.getMode() == DistributedLockProperties.Mode.Zookeeper) {
             String lockPath = LOCK_PATH + lockName;
             InterProcessMutex mutex = new InterProcessMutex(curatorFramework, lockPath);

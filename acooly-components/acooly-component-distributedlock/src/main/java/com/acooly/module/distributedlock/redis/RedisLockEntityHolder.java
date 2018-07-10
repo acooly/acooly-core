@@ -15,6 +15,7 @@ import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.Topic;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,6 +39,11 @@ public class RedisLockEntityHolder {
 
     private final ConcurrentMap<String, RedisMessageListenerContainer> delListeners = newConcurrentHashMap();
 
+    private final ConcurrentMap<String, MessageListener> listeners = newConcurrentHashMap();
+    private final ConcurrentMap<String, Topic> topics = newConcurrentHashMap();
+
+
+    private RedisMessageListenerContainer container;
 
     public static <K, V> ConcurrentMap<K, V> newConcurrentHashMap() {
         return new ConcurrentHashMap<>();
@@ -72,13 +78,16 @@ public class RedisLockEntityHolder {
             return;
         }
 
-        RedisMessageListenerContainer container
-                = new RedisMessageListenerContainer();
-        container.setConnectionFactory(redisTemplate.getConnectionFactory());
+        if (container == null) {
+            container = new RedisMessageListenerContainer();
+            container.setConnectionFactory(redisTemplate.getConnectionFactory());
+            //启动监听
+            container.afterPropertiesSet();
+            container.start();
+        }
 
         //监听事件
-        //todo listener add
-        container.addMessageListener(new MessageListenerAdapter((MessageListener) (message, pattern) -> {
+        MessageListenerAdapter messageListener = new MessageListenerAdapter((MessageListener) (message, pattern) -> {
             byte[] channel = message.getChannel();
             byte[] body = message.getBody();
             String msg = new String(body);
@@ -88,24 +97,26 @@ public class RedisLockEntityHolder {
             if (StringUtils.isNotEmpty(msg)) {
                 redisLockEntry.getLatch().release();
             }
-        }), new ChannelTopic(channelName));
+        });
 
-        //启动监听
-        container.afterPropertiesSet();
-        container.start();
+        ChannelTopic channelTopic = new ChannelTopic(channelName);
+
+        container.addMessageListener(messageListener, channelTopic);
+
+        listeners.putIfAbsent(entryName, messageListener);
+        topics.putIfAbsent(entryName, channelTopic);
 
         log.debug("订阅消息，channelName:{},entryName:{}", channelName, entryName);
-
-        delListeners.putIfAbsent(entryName, container);
     }
 
     //取消订阅
     public void unSubscribeTopic(final String entryName) {
-        RedisMessageListenerContainer listenerContainer = delListeners.remove(entryName);
-        if (listenerContainer != null) {
-            listenerContainer.stop();
+        MessageListener messageListener = listeners.get(entryName);
+        Topic topic = topics.get(entryName);
+        if (messageListener != null && topic != null) {
+            container.removeMessageListener(messageListener, topic);
+            log.debug("停止订阅消息，channelName:{},entryName:{}", topic.toString(), entryName);
         }
-        log.debug("停止订阅消息，channelName:{},entryName:{}" , entryName);
 
     }
 }

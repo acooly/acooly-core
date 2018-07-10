@@ -64,6 +64,7 @@ public class RedisDistributedLock implements Lock {
 
     @Override
     public void lock() {
+        log.info("开始获取分布式锁:{} ...", name);
         try {
             lockInterruptibly();
         } catch (InterruptedException e) {
@@ -81,7 +82,7 @@ public class RedisDistributedLock implements Lock {
 
     @Override
     public boolean tryLock() {
-        log.info("尝试获取分布式锁:{}", name);
+        log.info("尝试获取分布式锁:{} ...", name);
 
         Long aLong = tryAcquireSync(-1, null, Thread.currentThread().getId());
         boolean locked = aLong == null;
@@ -92,7 +93,7 @@ public class RedisDistributedLock implements Lock {
 
     @Override
     public boolean tryLock(long time, TimeUnit unit) throws InterruptedException {
-        log.info("尝试获取分布式锁:{},最大等待时间:{} ms", name, unit.toMillis(time));
+        log.info("尝试获取分布式锁:{} ...,最大等待时间:{} ms", name, unit.toMillis(time));
 
         boolean locked = tryLock(time, -1, unit);
 
@@ -102,16 +103,17 @@ public class RedisDistributedLock implements Lock {
 
     @Override
     public void unlock() {
-        Boolean unlocked = unlockInnerSync(Thread.currentThread().getId());
+        Long unlocked = unlockInnerSync(Thread.currentThread().getId());
         if (unlocked == null) {
-            throw new IllegalMonitorStateException("尝试去释放锁，但是没有被当前线程锁住，节点id: "
+            throw new IllegalMonitorStateException("尝试去释放锁:" + getName() + "，但是没有被当前线程锁住，节点id: "
                     + id + " 线程id: " + Thread.currentThread().getId());
         }
-        if (unlocked) {
+        if (Long.valueOf(1).equals(unlocked)) {
             //取消内部循环
             cancelExpirationRenewal();
+            //完全表示重入几次都释放完成
+            log.info("分布式锁完全释放成功:{}", name);
         }
-        log.info("分布式锁释放成功:{}", name);
     }
 
     @Override
@@ -177,6 +179,7 @@ public class RedisDistributedLock implements Lock {
 
         // lock acquired
         if (ttl == null) {
+            log.debug("locked ok:{},threadId:{}", getLockName(), threadId);
             return;
         }
 
@@ -209,6 +212,7 @@ public class RedisDistributedLock implements Lock {
     }
 
     private Long tryAcquireSync(long leaseTime, TimeUnit unit, final long threadId) {
+
         if (leaseTime != -1) {
             return tryLockInnerSync(leaseTime, unit, threadId);
         }
@@ -216,7 +220,9 @@ public class RedisDistributedLock implements Lock {
         Long ttlRemaining = tryLockInnerSync(lockWatchdogTimeout, TimeUnit.MILLISECONDS, threadId);
         // lock acquired
         if (ttlRemaining == null) {
-            //schedule it 为了防止死锁，如果客户端挂掉，30秒内自动解锁
+            log.debug("locked ok:{},threadId:{}", getLockName(), threadId);
+            //schedule it
+            // 线程不主动释放，无限递归等待释放，为了防止死锁，在客户端挂掉情况下，30秒内自动解锁
             scheduleExpirationRenewal(threadId);
         }
         return ttlRemaining;
@@ -249,8 +255,9 @@ public class RedisDistributedLock implements Lock {
         return ttlRemaining;
     }
 
-    protected Boolean unlockInnerSync(long threadId) {
-        DefaultRedisScript<Boolean> redisScript = new DefaultRedisScript<>();
+    protected Long unlockInnerSync(long threadId) {
+        log.debug("unlock threadId:{}", threadId);
+        DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
 
         //hincrby记录重入次数
         StringBuffer unlockScript = new StringBuffer();
@@ -273,10 +280,10 @@ public class RedisDistributedLock implements Lock {
                 .append("return nil;");
 
         redisScript.setScriptText(unlockScript.toString());
-        redisScript.setResultType(Boolean.class);
+        redisScript.setResultType(Long.class);
         List<String> keys = Lists.newArrayList(getName(), getChannelName());
         String[] args = new String[]{unlockMessage.toString(), lockWatchdogTimeout.toString(), getLockThreadName(threadId)};
-        Boolean unlocked = (Boolean) redisTemplate.execute(redisScript, defaultKeySerializer, defaultKeySerializer, keys, args);
+        Long unlocked = (Long) redisTemplate.execute(redisScript, defaultKeySerializer, defaultKeySerializer, keys, args);
         return unlocked;
 
     }
@@ -332,6 +339,7 @@ public class RedisDistributedLock implements Lock {
         String[] args = new String[]{lockWatchdogTimeout.toString(), getLockThreadName(threadId)};
 
         Boolean pexpire = (Boolean) redisTemplate.execute(redisScript, defaultKeySerializer, defaultKeySerializer, keys, args);
+
         return pexpire;
 
     }

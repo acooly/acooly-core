@@ -35,8 +35,7 @@ public class DistributedLockFactory {
         if (properties.getMode() == DistributedLockProperties.Mode.Zookeeper) {
             String lockPath = LOCK_PATH + lockName;
             InterProcessMutex mutex = new InterProcessMutex(curatorFramework, lockPath);
-            ZkDistributedLock zkDistributedLock = new ZkDistributedLock(mutex, lockPath);
-            return zkDistributedLock;
+            return new ZkDistributedLock(mutex, lockPath);
         }
         return null;
     }

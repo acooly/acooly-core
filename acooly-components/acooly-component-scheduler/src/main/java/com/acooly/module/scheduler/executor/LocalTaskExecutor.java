@@ -37,6 +37,12 @@ public class LocalTaskExecutor implements TaskExecutor {
             Object bean = getBeanByCache(clazz);
             String methodName = schedulerRule.getMethodName();
             Method declaredMethod = clazz.getDeclaredMethod(methodName, null);
+
+            String fullMethodName = declaredMethod.toString();
+            if (!fullMethodName.startsWith("public")) {
+                throw new SchedulerExecuteException("本地执行方法必须为public");
+            }
+
             declaredMethod.setAccessible(true);
             CompletableFuture.runAsync(
                     () -> ReflectionUtils.invokeMethod(declaredMethod, bean), executorService)

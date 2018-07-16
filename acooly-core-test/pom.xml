@@ -75,6 +75,7 @@
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-test</artifactId>
             <version>${project.parent.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>

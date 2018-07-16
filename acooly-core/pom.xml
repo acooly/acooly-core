@@ -123,36 +123,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- JMS begin -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jms</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-core</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.activemq.protobuf</groupId>
-                    <artifactId>activemq-protobuf</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework.osgi</groupId>
-                    <artifactId>spring-osgi-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.osgi</groupId>
-                    <artifactId>org.osgi.core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-            <scope>provided</scope>
-        </dependency>
         <!-- JMS end -->
         <!-- PDF -->
         <dependency>

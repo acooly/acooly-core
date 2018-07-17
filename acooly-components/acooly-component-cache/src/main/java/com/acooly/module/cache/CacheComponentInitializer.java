@@ -9,12 +9,12 @@
  */
 package com.acooly.module.cache;
 
+import ai.grakn.redismock.RedisServer;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.boot.component.ComponentInitializer;
 import com.acooly.core.utils.Ports;
 import com.acooly.core.utils.ShutdownHooks;
-import com.github.zxl0714.redismock.RedisServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -38,7 +38,7 @@ public class CacheComponentInitializer implements ComponentInitializer {
             int port = redisProperties.getPort();
             if (host.equalsIgnoreCase("localhost") || host.equalsIgnoreCase("127.0.0.1")) {
                 if (!Ports.isPortUsing(port)) {
-                    log.info("发现redis服务没有启动，使用内置redis用于开发测试");
+                    log.info("发现redis服务没有启动，使用内置redis用于开发测试，部分redis高级功能使用不了，请注意！");
                     Thread thread = new Thread(
                             () -> {
                                 try {

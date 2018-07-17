@@ -18,9 +18,9 @@
         </dependency>
         <!--for devmode mock redis-->
         <dependency>
-            <groupId>com.github.zxl0714</groupId>
+            <groupId>ai.grakn</groupId>
             <artifactId>redis-mock</artifactId>
-            <version>0.1</version>
+            <version>0.1.6</version>
             <exclusions>
                 <exclusion>
                     <artifactId>jsr305</artifactId>

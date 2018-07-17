@@ -40,7 +40,7 @@ public class LocalTaskExecutor implements TaskExecutor {
 
             String fullMethodName = declaredMethod.toString();
             if (!fullMethodName.startsWith("public")) {
-                throw new SchedulerExecuteException("本地执行方法必须为public");
+                throw new SchedulerExecuteException("本地执行方法必须为public:" + fullMethodName);
             }
 
             declaredMethod.setAccessible(true);

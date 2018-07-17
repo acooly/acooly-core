@@ -1,16 +1,12 @@
 package com.acooly.core.test.openapi;
 
-import com.acooly.core.utils.net.HttpResult;
-import com.acooly.core.utils.net.Https;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.utils.Servlets;
 import com.acooly.openapi.framework.facade.api.OpenApiRemoteService;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
-import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Test;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -83,20 +79,6 @@ public class OpenapiController implements ApplicationContextAware {
         return "success";
     }
 
-    @Test
-    public void testPayApiNotify() throws Exception {
-        Map<String, String> postData = Maps.newHashMap();
-        postData.put("gid", "59365e393d01ea1284f5b5bf");
-        postData.put("partnerId", "test");
-        postData.put("orderNo", "411111111111111111131");
-
-        postData.put("outOrderNo", "41111111111111111113");
-        postData.put("tradeNo", "123456789");
-        postData.put("amount", "111111");
-        HttpResult result =
-                Https.getInstance().post("http://localhost:8081/notify/sender", postData, "utf-8");
-        log.info(result.toString());
-    }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

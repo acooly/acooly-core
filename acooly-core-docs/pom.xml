@@ -16,6 +16,7 @@
             <groupId>com.ruleoftech</groupId>
             <artifactId>markdown-page-generator-plugin</artifactId>
             <version>1.0.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

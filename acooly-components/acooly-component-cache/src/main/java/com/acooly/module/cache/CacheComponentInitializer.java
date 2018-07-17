@@ -38,7 +38,7 @@ public class CacheComponentInitializer implements ComponentInitializer {
             int port = redisProperties.getPort();
             if (host.equalsIgnoreCase("localhost") || host.equalsIgnoreCase("127.0.0.1")) {
                 if (!Ports.isPortUsing(port)) {
-                    log.info("发现redis服务没有启动，使用内置redis用于开发测试，部分redis高级功能使用不了，请注意！");
+                    log.info("发现redis服务没有启动，使用内置redis用于开发测试");
                     Thread thread = new Thread(
                             () -> {
                                 try {

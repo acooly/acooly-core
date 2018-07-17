@@ -20,11 +20,23 @@
         <dependency>
             <groupId>ai.grakn</groupId>
             <artifactId>redis-mock</artifactId>
-            <version>0.1.6</version>
+            <version>0.1.6-bohr</version>
             <exclusions>
                 <exclusion>
                     <artifactId>jsr305</artifactId>
                     <groupId>com.google.code.findbugs</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>guava</artifactId>
+                    <groupId>com.google.guava</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>embedded-redis</artifactId>
+                    <groupId>com.github.kstyrc</groupId>
                 </exclusion>
             </exclusions>
         </dependency>

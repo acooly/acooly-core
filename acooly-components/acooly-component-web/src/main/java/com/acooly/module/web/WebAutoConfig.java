@@ -11,6 +11,7 @@
 package com.acooly.module.web;
 
 import com.acooly.core.common.boot.EnvironmentHolder;
+import com.acooly.module.cache.CacheProperties;
 import com.acooly.module.web.filter.HttpsOnlyFilter;
 import com.acooly.module.web.formatter.DBMapFormatter;
 import com.acooly.module.web.formatter.MoneyFormatter;
@@ -143,7 +144,7 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
         return simpleUrlMappingViewController;
     }
 
-    @ConditionalOnProperty(value = "isInternalRedis")
+    @ConditionalOnProperty(value = CacheProperties.IS_LOCAL_REDIS_ENABLE)
     @Bean
     public static ConfigureRedisAction configureRedisAction() {
         return ConfigureRedisAction.NO_OP;

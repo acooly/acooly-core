@@ -20,7 +20,7 @@
         <dependency>
             <groupId>ai.grakn</groupId>
             <artifactId>redis-mock</artifactId>
-            <version>0.1.6-bohr</version>
+            <version>0.1.7-bohr</version>
             <exclusions>
                 <exclusion>
                     <artifactId>slf4j-api</artifactId>

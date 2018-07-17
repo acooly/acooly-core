@@ -42,6 +42,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
+import org.springframework.session.data.redis.config.ConfigureRedisAction;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.filter.HttpPutFormContentFilter;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -140,6 +141,12 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
         }
         simpleUrlMappingViewController.setViewNameMap(viewNameMap);
         return simpleUrlMappingViewController;
+    }
+
+    @ConditionalOnProperty(value = "isInternalRedis")
+    @Bean
+    public static ConfigureRedisAction configureRedisAction() {
+        return ConfigureRedisAction.NO_OP;
     }
 
     @Bean

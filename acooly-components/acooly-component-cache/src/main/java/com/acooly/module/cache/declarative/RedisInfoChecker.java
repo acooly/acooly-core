@@ -1,9 +1,8 @@
 package com.acooly.module.cache.declarative;
 
-import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.exception.AppConfigException;
+import com.acooly.module.cache.CacheProperties;
 import com.google.common.base.Throwables;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.net.ConnectException;
@@ -21,14 +20,8 @@ public class RedisInfoChecker {
     }
 
     public void checkRedisVersion() {
-        RedisProperties redisProperties = new RedisProperties();
-        EnvironmentHolder.buildProperties(redisProperties);
-        String host = redisProperties.getHost();
-        //内置redis忽略检查
-        if (host.equalsIgnoreCase("localhost") || host.equalsIgnoreCase("127.0.0.1")) {
-            if ("true".equals(System.getProperty("isInternalRedis"))) {
-                return;
-            }
+        if(CacheProperties.isLocalRedisCanEnable()){
+            return;
         }
         Properties info = null;
         try {

@@ -24,7 +24,6 @@ import java.util.Map;
  * @param <M> 实体类的DAO
  * @author zhangpu
  */
-@Transactional
 public abstract class EntityServiceImpl<T, M extends EntityDao<T>>
         implements ApplicationContextAware, EntityService<T> {
 

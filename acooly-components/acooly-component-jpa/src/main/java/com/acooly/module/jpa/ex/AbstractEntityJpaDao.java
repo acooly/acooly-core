@@ -17,8 +17,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -58,25 +56,21 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
         return findOne((ID) id);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void create(T o) throws DataAccessException {
         save(o);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void update(T o) throws DataAccessException {
         save(o);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void saves(List<T> entities) {
         save(entities);
     }
 
-    @Transactional
     @Override
     public <S extends T> S save(S entity) {
         if (entityInformation.isNew(entity)) {
@@ -110,20 +104,17 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void remove(T o) throws DataAccessException {
         delete(o);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
     @SuppressWarnings("unchecked")
     @Override
     public void removeById(Serializable id) throws DataAccessException {
         delete((ID) id);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void removes(Serializable... ids) {
         Iterator<Serializable> iterator = Lists.newArrayList(ids).iterator();

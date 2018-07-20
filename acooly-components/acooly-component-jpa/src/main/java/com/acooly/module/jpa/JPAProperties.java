@@ -44,8 +44,6 @@ public class JPAProperties implements InitializingBean {
 
         entityPackagesToScan.put("components0", COMPONENTS_PACKAGE + ".**.domain");
         entityPackagesToScan.put("components1", COMPONENTS_PACKAGE + ".**.entity");
-        openEntityManagerInViewFilterUrlPatterns.add("*.html");
-        openEntityManagerInViewFilterUrlPatterns.add("*.jsp");
-        openEntityManagerInViewFilterUrlPatterns.add("/services/*");
+        openEntityManagerInViewFilterUrlPatterns.add("/manage/*");
     }
 }

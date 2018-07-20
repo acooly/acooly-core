@@ -188,7 +188,7 @@ public class SecurityAutoConfig {
             registration.setFilter(shiroFilter);
             registration.setOrder(Ordered.LOWEST_PRECEDENCE - 10);
             registration.addUrlPatterns(
-                    Lists.newArrayList("*.html", "*.jsp", "*.json").toArray(new String[0]));
+                    Lists.newArrayList("/manage/*").toArray(new String[0]));
             registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
             registration.setName("shiroFilter");
             return registration;

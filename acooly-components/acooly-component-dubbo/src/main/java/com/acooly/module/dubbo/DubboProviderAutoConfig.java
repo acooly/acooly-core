@@ -36,7 +36,7 @@ public class DubboProviderAutoConfig {
         config.setPort(dubboProperties.getProvider().getPort());
         Apps.exposeInfo("dubbo.port", dubboProperties.getProvider().getPort());
         //配置线程池
-        config.setThreadpool("exDubboThreadPool");
+        config.setThreadpool("eager");
         config.setThreads(dubboProperties.getProvider().getMaxThreads());
         //如果当queue设置为0时,会使用SynchronousQueue,这个东东导致了任务线程执行"不均衡"
         //但是如果queue设置得太小,导致queue成为瓶颈,这个时候线程比较闲还出现请求被拒绝的问题
@@ -56,6 +56,7 @@ public class DubboProviderAutoConfig {
             }
             config.setSerialization(dubboProperties.getProvider().getSerialization());
         }
+        config.setServer("netty4");
         return config;
     }
 
@@ -75,6 +76,8 @@ public class DubboProviderAutoConfig {
         if (!Strings.isNullOrEmpty(providerIp)) {
             config.setHost(providerIp);
         }
+        config.setServer("netty4");
+        config.setCluster("failfast");
         return config;
     }
 }

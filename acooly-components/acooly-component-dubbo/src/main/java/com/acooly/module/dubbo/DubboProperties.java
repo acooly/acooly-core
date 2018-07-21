@@ -13,12 +13,15 @@ package com.acooly.module.dubbo;
 import com.acooly.core.common.boot.Apps;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.google.common.base.Strings;
+import com.google.common.collect.Sets;
 import lombok.Data;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author qiubo@yiji.com
@@ -97,7 +100,7 @@ public class DubboProperties implements InitializingBean {
         /**
          * provider 序列化，使用数据压缩协议
          */
-        private String serialization = "hessian3";
+        private String serialization = "hessian2";
         /**
          * 是否启用服务提供者
          */
@@ -128,6 +131,14 @@ public class DubboProperties implements InitializingBean {
         private boolean register = DEFAULT_REGISTER;
     }
 
+    public Set<String> getPackagesToScan(){
+        Set<String> packages= Sets.newHashSet();
+        packages.add(Apps.getBasePackage());
+        if(!Strings.isNullOrEmpty(cumstomConfigPackage)){
+            packages.add(cumstomConfigPackage);
+        }
+        return packages;
+    }
     @Data
     public static class Consumer {
         private List<String> mockInterfaces;

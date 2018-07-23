@@ -21,9 +21,7 @@ import java.util.UUID;
  */
 public class BLogApiServiceTest extends AbstractApiServieTests {
     {
-        gatewayUrl = "http://localhost:8081/gateway.html";
-        partnerId = "test";
-        secretKey = "06f7aab08aa2431e6dae6a156fc9e0b4";
+        gatewayUrl = "http://localhost:8081/gateway.do";
         notifyUrl = "http://127.0.0.1:8081/notify/receiver";
         version = null;
         signType = null;

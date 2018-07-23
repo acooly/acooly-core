@@ -20,9 +20,7 @@ import java.util.UUID;
  */
 public class AppPayOrderApiServiceTest extends AbstractApiServieTests {
     {
-        gatewayUrl = "http://localhost:8081/gateway.html";
-        secretKey = "6672360f5720437380b89c3a00f5f45d";
-        partnerId = "bohr";
+        gatewayUrl = "http://localhost:8081/gateway.do";
         notifyUrl = "http://127.0.0.1:8081/notify/receiver";
         version = null;
         signType = null;

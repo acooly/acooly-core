@@ -28,8 +28,9 @@ import java.util.UUID;
 @Slf4j
 public class AnonymousAppBannerListApiServiceTest extends AbstractApiServieTests {
     {
-        gatewayUrl = "http://localhost:8081/gateway.html";
+        gatewayUrl = "http://localhost:8081/gateway.do";
         partnerId = "anonymous";
+        accessKey = "anonymous";
         secretKey = "anonymouanonymou";
         notifyUrl = null;
         version = null;
@@ -42,7 +43,7 @@ public class AnonymousAppBannerListApiServiceTest extends AbstractApiServieTests
         BannerListRequest request = new BannerListRequest();
         request.setDeviceId("11111111");
         request.setRequestNo(UUID.randomUUID().toString());
-
+        request.setAppVersion("1.0");
         BannerListResponse bannerListResponse = request(request, BannerListResponse.class);
         log.info("response:{}", bannerListResponse);
     }

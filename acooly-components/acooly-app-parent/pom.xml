@@ -12,7 +12,9 @@
     <artifactId>acooly-app-parent</artifactId>
     <packaging>pom</packaging>
     <description>acooly boot app parent</description>
-
+    <properties>
+        <caffeine.version>2.6.2</caffeine.version>
+    </properties>
     <dependencyManagement>
         <dependencies>
             <dependency>

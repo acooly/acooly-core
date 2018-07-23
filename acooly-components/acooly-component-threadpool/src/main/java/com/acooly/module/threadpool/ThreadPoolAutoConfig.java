@@ -10,13 +10,11 @@
 package com.acooly.module.threadpool;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskDecorator;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -39,13 +37,6 @@ public class ThreadPoolAutoConfig {
         bean.setTaskDecorator(new LogTaskDecorator());
         bean.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
         return bean;
-    }
-
-    @Bean
-    public TransactionExecutor transactionExecutor(
-            @Qualifier("commonTaskExecutor") ThreadPoolTaskExecutor commonTaskExecutor,
-            TransactionTemplate transactionTemplate) {
-        return new TransactionExecutor(commonTaskExecutor, transactionTemplate);
     }
 
     @Slf4j

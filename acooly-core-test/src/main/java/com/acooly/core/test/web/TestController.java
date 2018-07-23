@@ -22,7 +22,6 @@ import com.acooly.module.mail.service.MailService;
 import com.acooly.module.sms.SmsService;
 import com.acooly.module.sms.sender.support.AliyunSmsSendVo;
 import com.acooly.module.sms.sender.support.CloopenSmsSendVo;
-import com.acooly.module.threadpool.TransactionExecutor;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -58,8 +57,6 @@ public class TestController {
     private AppDao appDao;
     @Autowired
     private City1MybatisDao city1;
-    @Autowired(required = false)
-    private TransactionExecutor transactionExecutor;
 
     @Value("${prop}")
     private String valueFromProp;
@@ -163,14 +160,5 @@ public class TestController {
     @RequestMapping("500")
     public void test500() {
         throw new RuntimeException("test 500");
-    }
-
-    @RequestMapping("tsExe")
-    public void testTransactionExecutor() {
-        transactionExecutor.run(
-                () -> {
-                    City1 city1 = this.city1.selectById("1");
-                    log.info(city1.toString());
-                });
     }
 }

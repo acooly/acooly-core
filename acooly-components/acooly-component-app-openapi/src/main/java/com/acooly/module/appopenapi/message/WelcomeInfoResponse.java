@@ -1,10 +1,10 @@
 package com.acooly.module.appopenapi.message;
 
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.google.common.collect.Lists;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -14,7 +14,8 @@ import java.util.List;
  * @author zhangpu
  * @note 包括欢迎页面logo上的广告图和一组轮播欢迎导航图片
  */
-@OpenApiMessage(service = "welcomeInfo", type = ApiMessageType.Response)
+@Getter
+@Setter
 public class WelcomeInfoResponse extends ApiResponse {
 
     @OpenApiField(desc = "启动界面", constraint = "全URL，可直接访问. 返回空着不显示")
@@ -25,21 +26,5 @@ public class WelcomeInfoResponse extends ApiResponse {
 
     public void append(String url) {
         guides.add(url);
-    }
-
-    public List<String> getGuides() {
-        return guides;
-    }
-
-    public void setGuides(List<String> guides) {
-        this.guides = guides;
-    }
-
-    public String getWelcome() {
-        return welcome;
-    }
-
-    public void setWelcome(String welcome) {
-        this.welcome = welcome;
     }
 }

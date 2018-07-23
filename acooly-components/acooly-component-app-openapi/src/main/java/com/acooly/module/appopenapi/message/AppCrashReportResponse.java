@@ -4,9 +4,9 @@
 package com.acooly.module.appopenapi.message;
 
 
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiResponse;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * APP崩溃上报 请求
@@ -14,6 +14,7 @@ import com.acooly.openapi.framework.common.message.ApiResponse;
  * @author zhangpu
  * @date 2015年9月11日
  */
-@OpenApiMessage(service = "appCrashReport", type = ApiMessageType.Response)
+@Getter
+@Setter
 public class AppCrashReportResponse extends ApiResponse {
 }

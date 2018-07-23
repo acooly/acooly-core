@@ -11,9 +11,9 @@ package com.acooly.core.test.openapi;
 
 import com.acooly.core.utils.Money;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiRequest;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
@@ -21,7 +21,8 @@ import javax.validation.constraints.NotNull;
 /**
  * @author qiubo@yiji.com
  */
-@OpenApiMessage(service = "payOrder", type = ApiMessageType.Request)
+@Getter
+@Setter
 public class PayOrderRequest extends ApiRequest {
 
     @NotNull
@@ -31,20 +32,4 @@ public class PayOrderRequest extends ApiRequest {
     @NotEmpty
     @OpenApiField(desc = "买家用户ID")
     private String payerUserId;
-
-    public Money getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Money amount) {
-        this.amount = amount;
-    }
-
-    public String getPayerUserId() {
-        return payerUserId;
-    }
-
-    public void setPayerUserId(String payerUserId) {
-        this.payerUserId = payerUserId;
-    }
 }

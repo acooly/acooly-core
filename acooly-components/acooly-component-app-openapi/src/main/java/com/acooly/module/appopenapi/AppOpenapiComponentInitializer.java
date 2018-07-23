@@ -12,8 +12,6 @@ package com.acooly.module.appopenapi;
 import com.acooly.core.common.boot.component.ComponentInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import static com.acooly.openapi.framework.core.OpenApiConstants.APP_CLIENT_ENABLE;
-
 
 /**
  * @author qiubo@yiji.com
@@ -21,6 +19,5 @@ import static com.acooly.openapi.framework.core.OpenApiConstants.APP_CLIENT_ENAB
 public class AppOpenapiComponentInitializer implements ComponentInitializer {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
-        System.setProperty(APP_CLIENT_ENABLE, Boolean.TRUE.toString());
     }
 }

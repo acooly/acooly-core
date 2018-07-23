@@ -4,15 +4,16 @@
 package com.acooly.module.appopenapi.message;
 
 
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.AppRequest;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 首页 banner 列表
  *
  * @author zhangpu
  */
-@OpenApiMessage(service = "bannerList", type = ApiMessageType.Request)
+@Getter
+@Setter
 public class BannerListRequest extends AppRequest {
 }

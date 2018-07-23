@@ -1,8 +1,6 @@
 package com.acooly.module.appopenapi.message;
 
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -17,7 +15,6 @@ import java.util.Map;
  * @author qiuboboy@qq.com
  * @date 2018-04-25 14:37
  */
-@OpenApiMessage(service = "bLog", type = ApiMessageType.Request)
 @Getter
 @Setter
 public class BusinessLogRequest extends ApiRequest {

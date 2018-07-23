@@ -35,7 +35,6 @@
         <module>acooly-component-event</module>
         <module>acooly-component-lottery</module>
         <module>acooly-component-point</module>
-        <module>acooly-component-openapidoc</module>
         <module>acooly-component-threadpool</module>
         <module>acooly-component-scheduler</module>
         <module>acooly-component-pdf</module>

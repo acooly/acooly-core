@@ -3,9 +3,9 @@
  */
 package com.acooly.module.appopenapi.message;
 
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.PageApiRequest;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 推送消息列表 请求
@@ -13,6 +13,7 @@ import com.acooly.openapi.framework.common.message.PageApiRequest;
  * @author zhangpu
  * @date 2016年2月13日
  */
-@OpenApiMessage(service = "appMessageList", type = ApiMessageType.Request)
+@Getter
+@Setter
 public class AppMessageListRequest extends PageApiRequest {
 }

@@ -43,9 +43,9 @@ public class CustomApiServiceExceptionHander implements ApiServiceExceptionHande
         if (resultMessage != null && resultMessage.contains("connection holder is null")) {
             resultMessage = "网络异常 请稍后重试";
         }
-        apiResponse.setResultCode(ase.getResultCode());
-        apiResponse.setResultMessage(resultMessage);
-        apiResponse.setResultDetail(ase.getDetail());
+        apiResponse.setCode(ase.getResultCode());
+        apiResponse.setMessage(resultMessage);
+        apiResponse.setDetail(ase.getDetail());
     }
 
     /**
@@ -54,7 +54,7 @@ public class CustomApiServiceExceptionHander implements ApiServiceExceptionHande
      * @param apiResponse
      */
     protected void handleInternalException(ApiResponse apiResponse) {
-        apiResponse.setResultCode(ApiServiceResultCode.INTERNAL_ERROR.code());
-        apiResponse.setResultMessage(ApiServiceResultCode.INTERNAL_ERROR.message());
+        apiResponse.setCode(ApiServiceResultCode.INTERNAL_ERROR.code());
+        apiResponse.setMessage(ApiServiceResultCode.INTERNAL_ERROR.message());
     }
 }

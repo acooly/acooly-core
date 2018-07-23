@@ -10,7 +10,6 @@
 package com.acooly.core.test.openapi;
 
 import com.acooly.core.utils.Money;
-import com.acooly.openapi.framework.core.security.sign.SignTypeEnum;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import org.junit.Test;
 
@@ -23,7 +22,7 @@ public class PayOrderApiServiceTest extends AbstractApiServieTests {
     {
         gatewayUrl = "http://localhost:8081/gateway.html";
         partnerId = "test";
-        key = "06f7aab08aa2431e6dae6a156fc9e0b4";
+        secretKey = "06f7aab08aa2431e6dae6a156fc9e0b4";
         notifyUrl = "http://127.0.0.1:8081/notify/receiver";
         version = null;
         signType = null;
@@ -35,12 +34,9 @@ public class PayOrderApiServiceTest extends AbstractApiServieTests {
         Money amount = Money.amout("1000.00");
         PayOrderRequest request = new PayOrderRequest();
         request.setRequestNo(UUID.randomUUID().toString());
-        request.setMerchOrderNo("1234567890=-09876543");
         request.setAmount(amount);
         request.setPayerUserId("09876543211234567890");
-        request.setSignType(SignTypeEnum.MD5.toString());
         request.setContext("这是客户端参数:{userName:1,\"password\":\"12121\"}");
-        request.setNotifyUrl(notifyUrl);
         request(request, PayOrderResponse.class);
     }
 }

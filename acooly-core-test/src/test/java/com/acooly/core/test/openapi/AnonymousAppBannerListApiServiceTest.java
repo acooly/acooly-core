@@ -11,12 +11,12 @@ package com.acooly.core.test.openapi;
 
 import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.security.Cryptos;
-import com.acooly.module.app.enums.DeviceType;
 import com.acooly.module.appopenapi.message.BannerListRequest;
 import com.acooly.module.appopenapi.message.BannerListResponse;
-import com.acooly.module.appopenapi.message.LoginRequest;
-import com.acooly.module.appopenapi.message.LoginResponse;
+import com.acooly.openapi.framework.common.enums.DeviceType;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
+import com.acooly.openapi.framework.domain.LoginRequest;
+import com.acooly.openapi.framework.domain.LoginResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -30,7 +30,7 @@ public class AnonymousAppBannerListApiServiceTest extends AbstractApiServieTests
     {
         gatewayUrl = "http://localhost:8081/gateway.html";
         partnerId = "anonymous";
-        key = "anonymouanonymou";
+        secretKey = "anonymouanonymou";
         notifyUrl = null;
         version = null;
         signType = null;
@@ -40,7 +40,6 @@ public class AnonymousAppBannerListApiServiceTest extends AbstractApiServieTests
     public void testBannerList() throws Exception {
         service = "bannerList";
         BannerListRequest request = new BannerListRequest();
-        request.setAppClient(true);
         request.setDeviceId("11111111");
         request.setRequestNo(UUID.randomUUID().toString());
 
@@ -52,13 +51,12 @@ public class AnonymousAppBannerListApiServiceTest extends AbstractApiServieTests
     public void testLogin() throws Exception {
         service = "login";
         LoginRequest request = new LoginRequest();
-        request.setAppClient(true);
         request.setDeviceId("11111111");
         request.setRequestNo(UUID.randomUUID().toString());
         request.setUsername("bohr");
         String password = "bohr";
         request.setPassword(
-                Encodes.encodeBase64(Cryptos.aesEncrypt(password, Encodes.encodeHex(key.getBytes()))));
+                Encodes.encodeBase64(Cryptos.aesEncrypt(password, Encodes.encodeHex(secretKey.getBytes()))));
         request.setDeviceType(DeviceType.IPHONE6);
         request.setDeviceModel("xxxxx");
         request.setChannel("Web");

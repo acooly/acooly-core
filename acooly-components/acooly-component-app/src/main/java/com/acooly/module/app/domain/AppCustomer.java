@@ -1,8 +1,8 @@
 package com.acooly.module.app.domain;
 
 import com.acooly.core.common.domain.AbstractEntity;
-import com.acooly.module.app.enums.DeviceType;
 import com.acooly.module.app.enums.EntityStatus;
+import com.acooly.openapi.framework.common.enums.DeviceType;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 

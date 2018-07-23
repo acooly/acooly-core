@@ -10,29 +10,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>acooly-component-openapi</artifactId>
-    <properties>
-        <openapi.version>4.1.0-SNAPSHOT</openapi.version>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-core</artifactId>
-            <version>${openapi.version}</version>
+            <artifactId>openapi-framework-service-impl</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-manage</artifactId>
-            <version>${openapi.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-nms</artifactId>
-            <version>${openapi.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-facade-provider</artifactId>
-            <version>${openapi.version}</version>
+            <artifactId>openapi-framework-apidoc</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

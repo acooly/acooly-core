@@ -95,12 +95,6 @@
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-openapidoc</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.acooly</groupId>
             <artifactId>acooly-component-event</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,6 +64,9 @@ public class TestController {
 
     @Autowired(required = false)
     private CertificationService certificationService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @RequestMapping("ex")
     public ViewResult testEx() {
@@ -160,5 +164,10 @@ public class TestController {
     @RequestMapping("500")
     public void test500() {
         throw new RuntimeException("test 500");
+    }
+
+    @RequestMapping("cache")
+    public void testCache() {
+        redisTemplate.opsForValue().get("s");
     }
 }

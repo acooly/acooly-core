@@ -55,6 +55,11 @@ public class CaptchaServiceImpl implements CaptchaService {
     }
 
     @Override
+    public void validateCaptcha(String key, String businessCode, String userAnswer) throws CaptchaValidateException {
+        answerHandler.isValid(new AnswerDto<>(mergeKey(key, businessCode), userAnswer));
+    }
+
+    @Override
     public void validateCaptcha(String captchaId, String userAnswer) throws CaptchaValidateException {
         answerHandler.isValid(new AnswerDto<>(captchaId, userAnswer));
     }

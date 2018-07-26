@@ -50,6 +50,16 @@ public interface CaptchaService {
     /**
      * 验证验校验
      *
+     * @param key          生成Captcha key
+     * @param businessCode 业务编码，用于区分key
+     * @param userAnswer   用户填写的验证码
+     * @throws CaptchaValidateException
+     */
+    void validateCaptcha(String key, String businessCode, String userAnswer) throws CaptchaValidateException;
+
+    /**
+     * 验证验校验
+     *
      * @param captchaId  Captcha#getId(),如果有businessCode，captchaId可以用{@link CaptchaServiceImpl#mergeKey(java.lang.String, java.lang.String)}获取
      * @param userAnswer 用户填写的验证码
      * @throws CaptchaValidateException

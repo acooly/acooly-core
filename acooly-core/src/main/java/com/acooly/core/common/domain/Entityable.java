@@ -25,7 +25,11 @@ public interface Entityable extends Serializable, Persistable<Serializable> {
 
     Date getCreateTime();
 
+    void setCreateTime(Date date);
+
     Date getUpdateTime();
+
+    void setUpdateTime(Date date);
 
     @Transient
     @JsonIgnore

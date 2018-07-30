@@ -9,7 +9,7 @@
  */
 package com.acooly.module.mybatis.interceptor;
 
-import com.acooly.core.common.domain.AbstractEntity;
+import com.acooly.core.common.domain.Entityable;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
@@ -44,12 +44,12 @@ public class DateInterceptor implements Interceptor {
             }
             //更新改变值
             for (Object arg : args) {
-                if (arg instanceof AbstractEntity) {
-                    AbstractEntity abstractEntity = (AbstractEntity) arg;
-                    if (abstractEntity.isNew()) {
-                        abstractEntity.setCreateTime(new Date());
+                if (arg instanceof Entityable) {
+                    Entityable entityable = (Entityable) arg;
+                    if (entityable.isNew()) {
+                        entityable.setCreateTime(new Date());
                     } else {
-                        abstractEntity.setUpdateTime(new Date());
+                        entityable.setUpdateTime(new Date());
                     }
                 }
             }

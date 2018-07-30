@@ -192,6 +192,10 @@ public class Dates {
                 return subms % 1000 / 60 / 60 / 24 == 0
                         ? subms / 1000 / 60 / 60 / 24
                         : subms / 1000 / 60 / 60 / 24 + 1;
+            case Calendar.YEAR:
+                return subms % 1000 / 60 / 60 / 24 / 365 == 0
+                        ? subms / 1000 / 60 / 60 / 24 / 365
+                        : subms / 1000 / 60 / 60 / 24 / 365 + 1;
             default:
                 return subms;
         }

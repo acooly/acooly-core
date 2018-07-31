@@ -1,5 +1,10 @@
 package com.acooly.core.utils;
 
+import com.acooly.core.common.enums.Gender;
+import com.acooly.core.common.enums.Zodiac;
+import com.acooly.core.common.facade.InfoBase;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -3634,9 +3639,12 @@ public class IdCards {
         }
         IdCardInfo info = new IdCardInfo();
         info.setCardNo(cardNo);
-        info.setBirthplace(birthplaces.get(StringUtils.substring(cardNo, 0, 6)));
+        info.setPlace(birthplaces.get(StringUtils.substring(cardNo, 0, 6)));
         info.setBirthday(StringUtils.substring(cardNo, 6, 14));
-        info.setGender(Integer.parseInt(StringUtils.substring(cardNo, 14, 17)) % 2 == 0 ? "F" : "M");
+        info.setGender(Integer.parseInt(StringUtils.substring(cardNo, 14, 17)) % 2 == 0 ? Gender.FEMALE : Gender.MALE);
+        int month=Integer.parseInt(StringUtils.substring(cardNo, 10, 12));
+        int date=Integer.parseInt(StringUtils.substring(cardNo, 12, 14));
+        info.setZodiac(Zodiac.to(month,date));
         return info;
     }
 
@@ -3656,50 +3664,13 @@ public class IdCards {
     }
 
 
-    public static class IdCardInfo {
-
+    @Getter
+    @Setter
+    public static class IdCardInfo extends InfoBase {
         private String cardNo;
-        private String gender;
+        private Gender gender;
         private String birthday;
-        private String birthplace;
-
-        public String getCardNo() {
-            return cardNo;
-        }
-
-        public void setCardNo(String cardNo) {
-            this.cardNo = cardNo;
-        }
-
-        public String getGender() {
-            return gender;
-        }
-
-        public void setGender(String gender) {
-            this.gender = gender;
-        }
-
-        public String getBirthday() {
-            return birthday;
-        }
-
-        public void setBirthday(String birthday) {
-            this.birthday = birthday;
-        }
-
-        public String getBirthplace() {
-            return birthplace;
-        }
-
-        public void setBirthplace(String birthplace) {
-            this.birthplace = birthplace;
-        }
-
-        @Override
-        public String toString() {
-            return String.format(
-                    "IdCardInfo: {cardNo:%s, gender:%s, birthday:%s, birthplace:%s}",
-                    cardNo, gender, birthday, birthplace);
-        }
+        private String place;
+        private Zodiac zodiac;
     }
 }

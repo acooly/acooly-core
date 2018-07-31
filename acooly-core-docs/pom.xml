@@ -36,23 +36,23 @@
                 </executions>
             </plugin>
         </plugins>
-        <!--<resources>-->
-        <!--<resource>-->
-        <!--<filtering>false</filtering>-->
-        <!--<directory>docs</directory>-->
-        <!--<includes>-->
-        <!--<include>**/*</include>-->
-        <!--</includes>-->
-        <!--<targetPath>META-INF/docs</targetPath>-->
-        <!--</resource>-->
-        <!--<resource>-->
-        <!--<filtering>false</filtering>-->
-        <!--<directory>.</directory>-->
-        <!--<includes>-->
-        <!--<include>*.md</include>-->
-        <!--</includes>-->
-        <!--<targetPath>META-INF</targetPath>-->
-        <!--</resource>-->
-        <!--</resources>-->
+        <resources>
+            <resource>
+                <filtering>false</filtering>
+                <directory>docs</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <targetPath>META-INF/docs</targetPath>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>.</directory>
+                <includes>
+                    <include>*.md</include>
+                </includes>
+                <targetPath>META-INF</targetPath>
+            </resource>
+        </resources>
     </build>
 </project>

@@ -3641,7 +3641,7 @@ public class IdCards {
         info.setCardNo(cardNo);
         info.setPlace(birthplaces.get(StringUtils.substring(cardNo, 0, 6)));
         info.setBirthday(StringUtils.substring(cardNo, 6, 14));
-        info.setGender(Integer.parseInt(StringUtils.substring(cardNo, 14, 17)) % 2 == 0 ? Gender.FEMALE : Gender.MALE);
+        info.setGender(Integer.parseInt(StringUtils.substring(cardNo, 14, 17)) % 2 == 0 ? Gender.female : Gender.male);
         int month=Integer.parseInt(StringUtils.substring(cardNo, 10, 12));
         int date=Integer.parseInt(StringUtils.substring(cardNo, 12, 14));
         info.setZodiac(Zodiac.to(month,date));

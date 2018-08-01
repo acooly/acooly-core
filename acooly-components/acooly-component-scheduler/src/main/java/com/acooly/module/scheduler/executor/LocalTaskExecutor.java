@@ -8,6 +8,7 @@ import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -37,12 +38,9 @@ public class LocalTaskExecutor implements TaskExecutor {
             Object bean = getBeanByCache(clazz);
             String methodName = schedulerRule.getMethodName();
             Method declaredMethod = clazz.getDeclaredMethod(methodName, null);
-
-            String fullMethodName = declaredMethod.toString();
-            if (!fullMethodName.startsWith("public")) {
-                throw new SchedulerExecuteException("本地执行方法必须为public:" + fullMethodName);
+            if ( Modifier.isPublic(declaredMethod.getModifiers())) {
+                throw new SchedulerExecuteException("本地执行方法必须为public:" + declaredMethod);
             }
-
             declaredMethod.setAccessible(true);
             CompletableFuture.runAsync(
                     () -> ReflectionUtils.invokeMethod(declaredMethod, bean), executorService)

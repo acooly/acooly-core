@@ -17,7 +17,7 @@ public class DistributedLockProperties {
     /**
      * 默认使用redis模式
      */
-    private Mode mode = Mode.Redis;
+    private Mode mode = Mode.REDIS;
 
     private Zookeeper zookeeper = new Zookeeper();
     private Redis redis = new Redis();
@@ -52,32 +52,17 @@ public class DistributedLockProperties {
     }
 
 
-    public enum Mode implements Messageable {
-
+    public enum Mode {
         /**
          * redis 实现的分布式锁
          */
-        Redis("redis"),
+        REDIS,
 
         /**
          * zookeeper InterProcessMutex分布式锁
          */
-        Zookeeper("zookeeper");
-
-
-        private final String code;
-
-        Mode(String code) {
-            this.code = code;
-        }
-
-        @Override
-        public String code() {
-            return this.code;
-        }
+        ZOOKEEPER;
     }
 
-    public interface Messageable {
-        String code();
-    }
+
 }

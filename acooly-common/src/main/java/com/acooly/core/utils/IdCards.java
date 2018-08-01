@@ -10,8 +10,9 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.*;
+import java.io.InputStream;
 import java.util.Map;
+import java.util.zip.ZipInputStream;
 
 /**
  * 身份证号码工具
@@ -60,19 +61,19 @@ public class IdCards {
 
     static {
         //解析省
-        Map provinceJsons = getJsonMap("META-INF/idcard/province.json");
+        Map provinceJsons = getJsonMap("META-INF/idcard/province.json.zip");
         provinces = praseJsonMap(provinceJsons);
 
         //解析市
-        Map cityJsons = getJsonMap("META-INF/idcard/city.json");
+        Map cityJsons = getJsonMap("META-INF/idcard/city.json.zip");
         citys = praseJsonMap(cityJsons);
 
         //解析区
-        Map areaJsons = getJsonMap("META-INF/idcard/area.json");
+        Map areaJsons = getJsonMap("META-INF/idcard/area.json.zip");
         areas = praseJsonMap(areaJsons);
 
         //解析6位码对应
-        Map govCodeJsons = getJsonMap("META-INF/idcard/govCode.json");
+        Map govCodeJsons = getJsonMap("META-INF/idcard/govCode.json.zip");
         govCodes = praseGovCode(govCodeJsons);
 
     }
@@ -110,7 +111,9 @@ public class IdCards {
     private static Map getJsonMap(String idcardPath) {
         Map map = null;
         try (InputStream inputStream = IdCards.class.getClassLoader().getResourceAsStream(idcardPath)) {
-            map = JSON.parseObject(inputStream, Map.class);
+            ZipInputStream zipInputStream = new ZipInputStream(inputStream);
+            zipInputStream.getNextEntry();
+            map = JSON.parseObject(zipInputStream, Map.class);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

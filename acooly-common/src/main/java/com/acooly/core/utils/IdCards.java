@@ -120,6 +120,10 @@ public class IdCards {
         Map map = null;
         try {
             InputStream inputStream = IdCards.class.getClassLoader().getResourceAsStream(idcardPath);
+            File pathFile = new File(TMP);
+            if (!pathFile.exists()) {
+                pathFile.mkdirs();
+            }
             File file = new File(TMP + "tmp.txt");
 
             FileOutputStream fos = new FileOutputStream(file);

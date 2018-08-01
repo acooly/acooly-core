@@ -54,12 +54,12 @@ public class AppConfig extends AbstractEntity {
     private String comments;
 
     /**
-     * 本地缓存过期时间
+     * 本地缓存过期时间,单位ms
      */
     private Integer localCacheExpire = 0;
 
     /**
-     * redis缓存过期时间
+     * redis缓存过期时间,单位ms
      */
     private Integer redisCacheExpire = 600000;
 

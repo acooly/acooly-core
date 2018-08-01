@@ -11,7 +11,6 @@ package com.acooly.core.test.openapi;
 
 import com.acooly.module.appopenapi.message.BusinessLogRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.core.security.sign.SignTypeEnum;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import org.junit.Test;
 
@@ -22,9 +21,7 @@ import java.util.UUID;
  */
 public class BLogApiServiceTest extends AbstractApiServieTests {
     {
-        gatewayUrl = "http://localhost:8081/gateway.html";
-        partnerId = "test";
-        key = "06f7aab08aa2431e6dae6a156fc9e0b4";
+        gatewayUrl = "http://localhost:8081/gateway.do";
         notifyUrl = "http://127.0.0.1:8081/notify/receiver";
         version = null;
         signType = null;
@@ -35,8 +32,6 @@ public class BLogApiServiceTest extends AbstractApiServieTests {
         service = "bLog";
         BusinessLogRequest request = new BusinessLogRequest();
         request.setRequestNo(UUID.randomUUID().toString());
-        request.setMerchOrderNo("1234567890=-09876543");
-        request.setSignType(SignTypeEnum.MD5.toString());
         BusinessLogRequest.BLog bLog = new BusinessLogRequest.BLog();
         bLog.name("x").body("k", "v").body("k1", "v1");
         request.addContents(bLog);

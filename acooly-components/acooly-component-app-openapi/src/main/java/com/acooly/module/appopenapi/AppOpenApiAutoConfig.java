@@ -9,40 +9,15 @@
  */
 package com.acooly.module.appopenapi;
 
-import com.acooly.module.appopenapi.support.AppApiLoginService;
-import com.acooly.module.appopenapi.support.login.AnonymousAppApiLoginService;
-import com.acooly.openapi.framework.core.notify.impl.DefaultApiNotifySender;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-
-import static com.acooly.module.appopenapi.AppOpenapiProperties.PREFIX;
 
 /**
  * @author qiubo@yiji.com
  */
 @Configuration
-@EnableConfigurationProperties({AppOpenapiProperties.class})
-@ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.module.appopenapi")
 @Slf4j
 public class AppOpenApiAutoConfig {
-
-    @ConditionalOnMissingBean(AppApiLoginService.class)
-    @Bean
-    public AppApiLoginService appApiLoginService() {
-        return new AnonymousAppApiLoginService();
-    }
-
-    @Bean
-    public DefaultApiNotifySender defaultApiNotifySender(AppOpenapiProperties appOpenapiProperties) {
-        DefaultApiNotifySender sender = new DefaultApiNotifySender();
-        sender.setConnectionTimeout(appOpenapiProperties.getNotifysender().getConnectionTimeout());
-        sender.setSocketTimeout(appOpenapiProperties.getNotifysender().getSocketTimeout());
-        return sender;
-    }
 }

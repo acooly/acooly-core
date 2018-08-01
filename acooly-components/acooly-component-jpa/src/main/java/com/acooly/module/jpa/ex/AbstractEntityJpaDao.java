@@ -2,6 +2,7 @@ package com.acooly.module.jpa.ex;
 
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.dao.support.SearchFilter;
+import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.utils.BeanUtils;
 import com.acooly.module.jpa.EntityJpaDao;
 import com.google.common.collect.Lists;
@@ -17,7 +18,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -58,19 +58,19 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
         return findOne((ID) id);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
     @Override
     public void create(T o) throws DataAccessException {
         save(o);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
     @Override
     public void update(T o) throws DataAccessException {
         save(o);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
     @Override
     public void saves(List<T> entities) {
         save(entities);
@@ -91,39 +91,47 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
     }
 
     private void onCreate(T entity) {
-        try {
-            Field f = BeanUtils.getDeclaredField(entity, CREATE_TIME_P_NAME);
-            if (f != null && f.getType().isAssignableFrom(Date.class)) {
-                BeanUtils.setDeclaredProperty(entity, f, new Date());
+        if (entity instanceof Entityable) {
+            ((Entityable) entity).setCreateTime(new Date());
+        } else {
+            try {
+                Field f = BeanUtils.getDeclaredField(entity, CREATE_TIME_P_NAME);
+                if (f != null && f.getType().isAssignableFrom(Date.class)) {
+                    BeanUtils.setDeclaredProperty(entity, f, new Date());
+                }
+            } catch (Exception e) {
             }
-        } catch (Exception e) {
         }
     }
 
     private void onUpdate(T entity) {
-        try {
-            Field f = BeanUtils.getDeclaredField(entity, UPDATE_TIME_P_NAME);
-            if (f != null && f.getType().isAssignableFrom(Date.class)) {
-                BeanUtils.setDeclaredProperty(entity, f, new Date());
+        if (entity instanceof Entityable) {
+            ((Entityable) entity).setUpdateTime(new Date());
+        } else {
+            try {
+                Field f = BeanUtils.getDeclaredField(entity, UPDATE_TIME_P_NAME);
+                if (f != null && f.getType().isAssignableFrom(Date.class)) {
+                    BeanUtils.setDeclaredProperty(entity, f, new Date());
+                }
+            } catch (Exception e) {
             }
-        } catch (Exception e) {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
     @Override
     public void remove(T o) throws DataAccessException {
         delete(o);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
     @SuppressWarnings("unchecked")
     @Override
     public void removeById(Serializable id) throws DataAccessException {
         delete((ID) id);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
     @Override
     public void removes(Serializable... ids) {
         Iterator<Serializable> iterator = Lists.newArrayList(ids).iterator();

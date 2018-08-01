@@ -9,10 +9,11 @@
  */
 package com.acooly.module.appopenapi;
 
+import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.component.ComponentInitializer;
+import com.acooly.openapi.framework.core.OpenAPIProperties;
+import com.google.common.base.Joiner;
 import org.springframework.context.ConfigurableApplicationContext;
-
-import static com.acooly.openapi.framework.core.OpenApiConstants.APP_CLIENT_ENABLE;
 
 
 /**
@@ -21,6 +22,9 @@ import static com.acooly.openapi.framework.core.OpenApiConstants.APP_CLIENT_ENAB
 public class AppOpenapiComponentInitializer implements ComponentInitializer {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
-        System.setProperty(APP_CLIENT_ENABLE, Boolean.TRUE.toString());
+        OpenAPIProperties openAPIProperties = Apps.buildProperties(OpenAPIProperties.class);
+        if (openAPIProperties.getAnonymous().isEnable()) {
+            setPropertyIfMissing("acooly.openapi.anonymous.permissions", "*:bannerList,*:appLatestVersion,*:appCrashReport,*:welcomeInfo" + Joiner.on(",").join(openAPIProperties.getAnonymous().getPermissions()));
+        }
     }
 }

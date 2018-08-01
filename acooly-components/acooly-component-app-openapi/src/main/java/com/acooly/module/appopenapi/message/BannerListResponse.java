@@ -5,10 +5,10 @@ package com.acooly.module.appopenapi.message;
 
 import com.acooly.module.appopenapi.dto.MediaInfo;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.google.common.collect.Lists;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -17,7 +17,8 @@ import java.util.List;
  *
  * @author zhangpu
  */
-@OpenApiMessage(service = "bannerList", type = ApiMessageType.Response)
+@Getter
+@Setter
 public class BannerListResponse extends ApiResponse {
 
     @OpenApiField(desc = "媒体列表")
@@ -25,13 +26,5 @@ public class BannerListResponse extends ApiResponse {
 
     public void append(MediaInfo dto) {
         banners.add(dto);
-    }
-
-    public List<MediaInfo> getBanners() {
-        return banners;
-    }
-
-    public void setBanners(List<MediaInfo> banners) {
-        this.banners = banners;
     }
 }

@@ -3,6 +3,7 @@
  */
 package com.acooly.module.app.enums;
 
+import com.acooly.core.utils.enums.Messageable;
 import com.google.common.collect.Maps;
 
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
  * @author zhangpu
  * @date 2015年11月4日
  */
-public enum AppMessageType {
+public enum AppMessageType implements Messageable {
     broadcast("broadcast", "广播"),
 
     group("group", "群发");
@@ -45,5 +46,15 @@ public enum AppMessageType {
     @Override
     public String toString() {
         return this.code + " : " + this.message;
+    }
+
+    @Override
+    public String code() {
+        return code;
+    }
+
+    @Override
+    public String message() {
+        return message;
     }
 }

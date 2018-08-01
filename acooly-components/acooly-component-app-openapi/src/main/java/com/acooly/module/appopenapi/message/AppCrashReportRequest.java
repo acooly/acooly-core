@@ -5,9 +5,9 @@ package com.acooly.module.appopenapi.message;
 
 
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiRequest;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.Size;
 
@@ -17,7 +17,8 @@ import javax.validation.constraints.Size;
  * @author zhangpu
  * @date 2015年9月11日
  */
-@OpenApiMessage(service = "appCrashReport", type = ApiMessageType.Request)
+@Getter
+@Setter
 public class AppCrashReportRequest extends ApiRequest {
 
     @Size(min = 0, max = 32)
@@ -66,100 +67,4 @@ public class AppCrashReportRequest extends ApiRequest {
 
     @OpenApiField(desc = "崩溃的堆栈信息", constraint = "数据格式要求先做base64")
     private String stackTrace;
-
-    public String getAppName() {
-        return appName;
-    }
-
-    public void setAppName(String appName) {
-        this.appName = appName;
-    }
-
-    public String getPlatformId() {
-        return platformId;
-    }
-
-    public void setPlatformId(String platformId) {
-        this.platformId = platformId;
-    }
-
-    public String getAndroidVersion() {
-        return androidVersion;
-    }
-
-    public void setAndroidVersion(String androidVersion) {
-        this.androidVersion = androidVersion;
-    }
-
-    public String getAppVersionCode() {
-        return appVersionCode;
-    }
-
-    public void setAppVersionCode(String appVersionCode) {
-        this.appVersionCode = appVersionCode;
-    }
-
-    public String getAppVersionName() {
-        return appVersionName;
-    }
-
-    public void setAppVersionName(String appVersionName) {
-        this.appVersionName = appVersionName;
-    }
-
-    public String getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
-    public String getProduct() {
-        return product;
-    }
-
-    public void setProduct(String product) {
-        this.product = product;
-    }
-
-    public String getPackageName() {
-        return packageName;
-    }
-
-    public void setPackageName(String packageName) {
-        this.packageName = packageName;
-    }
-
-    public String getStackTrace() {
-        return stackTrace;
-    }
-
-    public void setStackTrace(String stackTrace) {
-        this.stackTrace = stackTrace;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 }

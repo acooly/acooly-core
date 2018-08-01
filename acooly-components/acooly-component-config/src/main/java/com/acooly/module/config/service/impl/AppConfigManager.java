@@ -36,24 +36,33 @@ public class AppConfigManager implements InitializingBean {
 
 
     public String get(String name) {
+        AppConfig appConfig = getAppConfig(name);
+        if (appConfig != null) {
+            return appConfig.getConfigValue();
+        } else {
+            return null;
+        }
+    }
+
+    public AppConfig getAppConfig(String name) {
         String key = key(name);
         //1. get from local cache
         AppConfig appConfig = configCache.getIfPresent(key);
         if (appConfig != null) {
-            return appConfig.getConfigValue();
+            return appConfig;
         } else {
             //2. get from redis
             appConfig = redisTemplate.opsForValue().get(key);
             if (appConfig != null) {
                 appConfig.initLocalCache(configCache);
-                return appConfig.getConfigValue();
+                return appConfig;
             } else {
                 //3. get from database
                 appConfig = appConfigDao.findAppConfigByName(name);
                 if (appConfig != null) {
                     appConfig.initLocalCache(configCache);
                     appConfig.initRedisCache(redisTemplate);
-                    return appConfig.getConfigValue();
+                    return appConfig;
                 } else {
                     log.warn("配置项[{}]不存在", name);
                     return null;

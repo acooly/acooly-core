@@ -33,7 +33,15 @@ public class JPAProperties implements InitializingBean {
     public static final String PREFIX = "acooly.jpa";
     public static final String ENABLE_KEY = PREFIX + ".enable";
     private boolean enable = true;
+    /**
+     * 是否启用openEntityManagerInViewFilter
+     */
     private boolean openEntityManagerInViewFilterEnable = true;
+    /**
+     * 默认对/manage/*路径启用openEntityManagerInViewFilter，如下添加其他路径，使用此配置，例如：
+     *
+     * acooly.jpa.openEntityManagerInViewFilterUrlPatterns[0]=*.xx
+     */
     private List<String> openEntityManagerInViewFilterUrlPatterns = Lists.newArrayList();
     private Map<String, String> entityPackagesToScan = Maps.newHashMap();
 
@@ -44,8 +52,6 @@ public class JPAProperties implements InitializingBean {
 
         entityPackagesToScan.put("components0", COMPONENTS_PACKAGE + ".**.domain");
         entityPackagesToScan.put("components1", COMPONENTS_PACKAGE + ".**.entity");
-        openEntityManagerInViewFilterUrlPatterns.add("*.html");
-        openEntityManagerInViewFilterUrlPatterns.add("*.jsp");
-        openEntityManagerInViewFilterUrlPatterns.add("/services/*");
+        openEntityManagerInViewFilterUrlPatterns.add("/manage/*");
     }
 }

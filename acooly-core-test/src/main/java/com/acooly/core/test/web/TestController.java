@@ -22,12 +22,12 @@ import com.acooly.module.mail.service.MailService;
 import com.acooly.module.sms.SmsService;
 import com.acooly.module.sms.sender.support.AliyunSmsSendVo;
 import com.acooly.module.sms.sender.support.CloopenSmsSendVo;
-import com.acooly.module.threadpool.TransactionExecutor;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,14 +58,15 @@ public class TestController {
     private AppDao appDao;
     @Autowired
     private City1MybatisDao city1;
-    @Autowired(required = false)
-    private TransactionExecutor transactionExecutor;
 
     @Value("${prop}")
     private String valueFromProp;
 
     @Autowired(required = false)
     private CertificationService certificationService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @RequestMapping("ex")
     public ViewResult testEx() {
@@ -165,12 +166,8 @@ public class TestController {
         throw new RuntimeException("test 500");
     }
 
-    @RequestMapping("tsExe")
-    public void testTransactionExecutor() {
-        transactionExecutor.run(
-                () -> {
-                    City1 city1 = this.city1.selectById("1");
-                    log.info(city1.toString());
-                });
+    @RequestMapping("cache")
+    public void testCache() {
+        redisTemplate.opsForValue().get("s");
     }
 }

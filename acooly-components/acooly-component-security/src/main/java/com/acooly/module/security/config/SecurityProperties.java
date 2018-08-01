@@ -131,6 +131,8 @@ public class SecurityProperties {
             addUrlFilter("/manage/assert/**", "anon");
             addUrlFilter("/manage/*.html", "anon");
             addUrlFilter("/manage/*.jsp", "user");
+            addUrlFilter("/manage/*.css", "anon");
+            addUrlFilter("/manage/*.js", "anon");
             addUrlFilter("/manage/layout/*", "user");
             addUrlFilter("/manage/system/*", "user");
             addUrlFilter("/manage/druid/**", "user");

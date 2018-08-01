@@ -10,13 +10,14 @@
 package com.acooly.core.test.openapi;
 
 
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiResponse;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author qiubo@yiji.com
  */
-@OpenApiMessage(service = "payOrder", type = ApiMessageType.Response)
+@Getter
+@Setter
 public class PayOrderResponse extends ApiResponse {
 }

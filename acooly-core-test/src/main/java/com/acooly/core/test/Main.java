@@ -11,6 +11,7 @@ package com.acooly.core.test;
 
 import com.acooly.core.common.BootApp;
 import com.acooly.core.common.boot.Apps;
+import com.alibaba.dubbo.config.spring.context.annotation.DubboComponentScan;
 import org.springframework.boot.SpringApplication;
 
 /**

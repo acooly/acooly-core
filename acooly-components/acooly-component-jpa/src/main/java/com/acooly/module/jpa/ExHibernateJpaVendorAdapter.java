@@ -49,7 +49,6 @@ public class ExHibernateJpaVendorAdapter extends HibernateJpaVendorAdapter {
                             dbType,
                             Lists.newArrayList(
                                     "classpath:META-INF/database/" + dbType + "/" + "ddl.sql",
-                                    dbType,
                                     "classpath:META-INF/database/" + dbType + "/" + "ddl_*.sql"));
 
                     exeScripts(

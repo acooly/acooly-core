@@ -19,7 +19,6 @@ import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ConsumerConfig;
 import com.alibaba.dubbo.config.MonitorConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
-import com.alibaba.dubbo.config.spring.AnnotationBean;
 import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
@@ -30,6 +29,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;
 
 /**
@@ -37,6 +37,7 @@ import org.springframework.core.Ordered;
  */
 @Configuration
 @EnableConfigurationProperties({DubboProperties.class})
+@Import(DubboImportBeanDefinitionRegistrar.class)
 @AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
 @ConditionalOnProperty(value = "acooly.dubbo.enable", matchIfMissing = true)
 public class DubboAutoConfig implements InitializingBean {
@@ -84,6 +85,8 @@ public class DubboAutoConfig implements InitializingBean {
         if (!Apps.isRunInTest()) {
             config.setFile(Apps.getAppDataPath() + "/dubbo/dubbo.cache");
         }
+        config.setClient("zkclient");
+        config.setCluster("failfast");
         return config;
     }
 
@@ -147,6 +150,8 @@ public class DubboAutoConfig implements InitializingBean {
         if (dubboProperties.isConsumerLog()) {
             config.setFilter("consumerLogFilter");
         }
+        config.setClient("netty4");
+        config.setCluster("failfast");
         return config;
     }
 
@@ -160,19 +165,6 @@ public class DubboAutoConfig implements InitializingBean {
     public static MonitorConfig monitorConfig() {
         MonitorConfig config = new MonitorConfig();
         config.setProtocol("registry");
-        return config;
-    }
-
-    @Bean
-    public static AnnotationBean annotationBean() {
-        AnnotationBean config = new AnnotationBean();
-        initDubboProperties();
-        String cumstomConfigPackage = dubboProperties.getCumstomConfigPackage();
-        String basePackage =
-                cumstomConfigPackage == null
-                        ? Apps.getBasePackage()
-                        : Apps.getBasePackage() + "," + cumstomConfigPackage;
-        config.setPackage(basePackage);
         return config;
     }
 

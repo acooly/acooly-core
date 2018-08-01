@@ -2,9 +2,9 @@ package com.acooly.module.appopenapi.message;
 
 
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiResponse;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
@@ -15,7 +15,8 @@ import java.util.Date;
  *
  * @author zhangpu
  */
-@OpenApiMessage(service = "appLatestVersion", type = ApiMessageType.Response)
+@Getter
+@Setter
 public class AppLatestVersionResponse extends ApiResponse {
     @OpenApiField(desc = "应用编码")
     private String appCode;
@@ -50,67 +51,4 @@ public class AppLatestVersionResponse extends ApiResponse {
     @NotNull
     @OpenApiField(desc = "是否强制更新", constraint = "可选值:0:否，1:是")
     private int forceUpdate;
-
-    public String getDeviceType() {
-        return deviceType;
-    }
-
-    public void setDeviceType(String deviceType) {
-        this.deviceType = deviceType;
-    }
-
-    public int getVersionCode() {
-        return versionCode;
-    }
-
-    public void setVersionCode(int versionCode) {
-        this.versionCode = versionCode;
-    }
-
-    public String getVersionName() {
-        return versionName;
-    }
-
-    public void setVersionName(String versionName) {
-        this.versionName = versionName;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public Date getPubTime() {
-        return pubTime;
-    }
-
-    public void setPubTime(Date pubTime) {
-        this.pubTime = pubTime;
-    }
-
-    public int getForceUpdate() {
-        return forceUpdate;
-    }
-
-    public void setForceUpdate(int forceUpdate) {
-        this.forceUpdate = forceUpdate;
-    }
-
-    @Override
-    public String toString() {
-        return String.format(
-                "AppLatestVersionResponse: {appCode:%s, appName:%s, deviceType:%s, versionCode:%s, versionName:%s, subject:%s, url:%s, pubTime:%s, forceUpdate:%s}",
-                appCode, appName, deviceType, versionCode, versionName, subject, url, pubTime, forceUpdate);
-    }
 }

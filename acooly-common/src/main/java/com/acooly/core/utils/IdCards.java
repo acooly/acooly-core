@@ -3,19 +3,15 @@ package com.acooly.core.utils;
 import com.acooly.core.common.enums.Gender;
 import com.acooly.core.common.enums.Zodiac;
 import com.acooly.core.common.facade.InfoBase;
-import com.acooly.core.utils.mapper.JsonMapper;
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 身份证号码工具
@@ -25,9 +21,6 @@ import java.util.Set;
  */
 @Slf4j
 public class IdCards {
-    public static final String TMP =
-            System.getProperty("user.home") + File.separator + "tmp" + File.separator;
-
     /**
      * 省
      */
@@ -85,21 +78,19 @@ public class IdCards {
     }
 
     private static Map<String, String> praseJsonMap(Map jsonMap) {
-        Map<String, String> jprovinces = Maps.newHashMap();
-        Set<String> set = jsonMap.keySet();
-        set.forEach(v -> {
-            LinkedHashMap lm = (LinkedHashMap) jsonMap.get(v);
+        Map<String, String> jprovinces = Maps.newHashMapWithExpectedSize(jsonMap.size());
+        jsonMap.keySet().forEach(v -> {
+            Map lm = (Map) jsonMap.get(v);
             String code = (String) lm.get("text");
-            jprovinces.put(v, code);
+            jprovinces.put(v.toString(), code);
         });
         return jprovinces;
     }
 
     private static Map<String, Map<String, String>> praseGovCode(Map jsonMap) {
         Map<String, Map<String, String>> jgovCode = Maps.newHashMap();
-        Set<String> set = jsonMap.keySet();
-        set.forEach(v -> {
-            LinkedHashMap lm = (LinkedHashMap) jsonMap.get(v);
+        jsonMap.keySet().forEach(v -> {
+            Map lm = (Map) jsonMap.get(v);
 
             String code = (String) lm.get("code");
             String provinceCode = (String) lm.get(PROVINCE_CODE);
@@ -118,44 +109,13 @@ public class IdCards {
 
     private static Map getJsonMap(String idcardPath) {
         Map map = null;
-        try {
-            InputStream inputStream = IdCards.class.getClassLoader().getResourceAsStream(idcardPath);
-            File pathFile = new File(TMP);
-            if (!pathFile.exists()) {
-                pathFile.mkdirs();
-            }
-            File file = new File(TMP + "tmp.txt");
-
-            FileOutputStream fos = new FileOutputStream(file);
-            copyBytes(inputStream, fos);
-            List<String> strings = FileUtils.readLines(file, "utf-8");
-            StringBuffer json = new StringBuffer(1024);
-            strings.forEach(s -> json.append(s));
-            map = JsonMapper.nonDefaultMapper().fromJson(json.toString(), Map.class);
+        try (InputStream inputStream = IdCards.class.getClassLoader().getResourceAsStream(idcardPath)) {
+            map = JSON.parseObject(inputStream, Map.class);
         } catch (Exception e) {
-            log.error("读取json文件异常", e);
+            throw new RuntimeException(e);
         }
         return map;
     }
-
-    private static void copyBytes(InputStream in, OutputStream out) throws IOException {
-        copyBytes(in, out, 2048);
-    }
-
-    private static void copyBytes(InputStream in, OutputStream out, int buffSize) throws IOException {
-        PrintStream ps = out instanceof PrintStream ? (PrintStream) out : null;
-        byte buf[] = new byte[buffSize];
-        int bytesRead = in.read(buf);
-        while (bytesRead >= 0) {
-            out.write(buf, 0, bytesRead);
-            if ((ps != null) && ps.checkError()) {
-                throw new IOException("Unable to write to output stream..");
-            }
-            bytesRead = in.read(buf);
-        }
-        out.flush();
-    }
-
     /**
      * 升级
      * <p>

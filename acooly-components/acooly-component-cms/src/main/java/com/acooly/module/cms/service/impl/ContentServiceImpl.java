@@ -127,7 +127,6 @@ public class ContentServiceImpl extends EntityServiceImpl<Content, ContentDao>
                         + "left join cms_content_type t on t.id = c.type "
                         + "where c.status="
                         + status
-                        + " and t.code = '1006' "
                         + " and (c.keywords like '%"
                         + q
                         + "%' or c.title like '%"

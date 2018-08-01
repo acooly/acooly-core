@@ -69,7 +69,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * <h3>Perf Test</h3>
  *
  * <pre class="code">{@code
- * //com.yjf.common.util.ToString
+ * //com.acooly.core.utils.ToString
  * ToStringPerfTest.testToString: [measured 1000000 out of 1010000 rounds, threads: 4 (all cores)]
  * round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 44, GC.time: 2.59, time.total: 11.55, time.warmup: 2.63, time.bench: 8.92
  * //org.apache.commons.lang.builder.ToStringBuilder
@@ -882,7 +882,7 @@ public class ToString {
         private String maskKeyField(List<String> params) {
             StringBuilder sb = new StringBuilder();
             String fieldName = "maskKeys" + index.incrementAndGet();
-            sb.append("private java.util.List " + fieldName + "=com.yjf.common.util.ToString.newList(");
+            sb.append("private java.util.List " + fieldName + "=com.acooly.core.utils.ToString.newList(");
             if (params != null && params.size() != 0) {
                 sb.append("new String[]{");
                 for (String s : params) {

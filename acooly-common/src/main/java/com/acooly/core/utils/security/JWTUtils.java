@@ -1,6 +1,6 @@
 package com.acooly.core.utils.security;
 
-import com.acooly.core.utils.net.ServletUtil;
+import com.acooly.core.utils.Servlets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.impl.DefaultClaims;
@@ -165,7 +165,7 @@ public class JWTUtils {
                         .compact();
         //更新jwt
         JWTUtils.removeCookie(JWTUtils.TYPE_JWT, JWTUtils.getDomainName());
-        JWTUtils.addJwtCookie(ServletUtil.getResponse(), newJws, JWTUtils.getDomainName());
+        JWTUtils.addJwtCookie(Servlets.getResponse(), newJws, JWTUtils.getDomainName());
         return newJws;
     }
 
@@ -316,20 +316,20 @@ public class JWTUtils {
     }
 
     public static void removeCookie(String key, String domain) {
-        Cookie[] cookies = ServletUtil.getRequest().getCookies();
+        Cookie[] cookies = Servlets.getRequest().getCookies();
         for (Cookie cookie : cookies) {
             if (StringUtils.equals(cookie.getName(), key)) {
                 cookie.setHttpOnly(Boolean.TRUE);
                 cookie.setPath("/");
                 cookie.setDomain(domain);
                 cookie.setMaxAge(0);
-                ServletUtil.getResponse().addCookie(cookie);
+                Servlets.getResponse().addCookie(cookie);
             }
         }
     }
 
     public static String getDomainName() {
-        return ServletUtil.getRequest().getServerName().replaceAll(".*\\.(?=.*\\.)", "");
+        return Servlets.getRequest().getServerName().replaceAll(".*\\.(?=.*\\.)", "");
     }
 
     private static class JwtSigningKeyResolver extends SigningKeyResolverAdapter {

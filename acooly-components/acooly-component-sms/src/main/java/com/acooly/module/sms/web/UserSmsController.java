@@ -1,7 +1,7 @@
 package com.acooly.module.sms.web;
 
 import com.acooly.core.common.web.support.JsonResult;
-import com.acooly.core.utils.net.ServletUtil;
+import com.acooly.core.utils.Servlets;
 import com.acooly.module.security.config.FrameworkPropertiesHolder;
 import com.acooly.module.security.config.SecurityProperties;
 import com.acooly.module.security.domain.User;
@@ -75,7 +75,7 @@ public class UserSmsController {
                 result.setSuccess(false);
                 return result;
             }
-            Long lastCurrentTime = (Long) ServletUtil.getSessionAttribute(SMS_VERIFY_CODE_KEY_ST);
+            Long lastCurrentTime = (Long) Servlets.getSessionAttribute(SMS_VERIFY_CODE_KEY_ST);
             if (lastCurrentTime != null) {
                 long sec = (System.currentTimeMillis() - lastCurrentTime);
                 int smsSendInterval = FrameworkPropertiesHolder.get().getSmsSendInterval();
@@ -90,8 +90,8 @@ public class UserSmsController {
             sendProxy(mobileNo, code, user);
 
             log.info("用户:{},登录验证码已发送:{}", user.getUsername(), code);
-            ServletUtil.setSessionAttribute(SMS_VERIFY_CODE_KEY, code);
-            ServletUtil.setSessionAttribute(SMS_VERIFY_CODE_KEY_ST, System.currentTimeMillis());
+            Servlets.setSessionAttribute(SMS_VERIFY_CODE_KEY, code);
+            Servlets.setSessionAttribute(SMS_VERIFY_CODE_KEY_ST, System.currentTimeMillis());
 
             result.setSuccess(true);
             result.setMessage("发送短信验证码成功!");

@@ -60,7 +60,7 @@ public class MailDto implements Serializable {
         return this;
     }
 
-    public MailDto param(String key, String value) {
+    public MailDto param(String key, Object value) {
         this.params.put(key, value);
         return this;
     }

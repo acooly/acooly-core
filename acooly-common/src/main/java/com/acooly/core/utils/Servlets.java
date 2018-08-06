@@ -384,7 +384,11 @@ public class Servlets {
     }
 
     public static HttpServletRequest getRequest() {
-        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        if(requestAttributes==null){
+            return null;
+        }
+        return ((ServletRequestAttributes) requestAttributes).getRequest();
     }
 
     public static void setRequestAttribute(String name, Object value) {

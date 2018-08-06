@@ -32,7 +32,7 @@ public class MailDto implements Serializable {
     @NotNull
     private String subject;
 
-    private Map<String, String> params = Maps.newHashMap();
+    private Map<String, Object> params = Maps.newHashMap();
 
     @NotEmpty
     private String templateName;

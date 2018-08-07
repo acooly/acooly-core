@@ -3,8 +3,8 @@ package com.acooly.module.security.shiro.filter;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Encodes;
+import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
-import com.acooly.core.utils.net.ServletUtil;
 import com.acooly.core.utils.security.JWTUtils;
 import com.acooly.module.security.captche.Captchas;
 import com.acooly.module.security.config.FrameworkPropertiesHolder;
@@ -165,10 +165,10 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
      * @return
      */
     private String setTargetUrlToSession() {
-        String targetUrl = ServletUtil.getRequestParameter(JWTUtils.KEY_TARGETURL);
+        String targetUrl = Servlets.getRequestParameter(JWTUtils.KEY_TARGETURL);
         targetUrl = Encodes.urlDecode(targetUrl);
         if (StringUtils.isNotBlank(targetUrl)) {
-            ServletUtil.setSessionAttribute(JWTUtils.KEY_TARGETURL, targetUrl);
+            Servlets.setSessionAttribute(JWTUtils.KEY_TARGETURL, targetUrl);
         }
         return targetUrl;
     }
@@ -196,8 +196,8 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
      * 验证短信验证码
      */
     protected boolean checkSmsCaptcha() {
-        String captchaInputName = ServletUtil.getRequestParameter(this.captchaInputName);
-        String code = (String) ServletUtil.getSessionAttribute(SMS_VERIFY_CODE_KEY);
+        String captchaInputName = Servlets.getRequestParameter(this.captchaInputName);
+        String code = (String) Servlets.getSessionAttribute(SMS_VERIFY_CODE_KEY);
         if (StringUtils.isEmpty(code)) {
             return false;
         }

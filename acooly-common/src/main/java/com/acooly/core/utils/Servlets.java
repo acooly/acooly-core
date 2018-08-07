@@ -10,10 +10,15 @@ import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -361,5 +366,54 @@ public class Servlets {
      */
     public static UserAgent getUserAgent(HttpServletRequest request) {
         return UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
+    }
+    public static UserAgent getUserAgent() {
+        return UserAgent.parseUserAgentString(getRequest().getHeader("User-Agent"));
+    }
+    public static Object getRequestAttribute(String name) {
+        ServletRequestAttributes sra =
+                (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        return sra.getAttribute(name, ServletWebRequest.SCOPE_REQUEST);
+    }
+
+
+    public static String getRequestParameter(String name) {
+        HttpServletRequest request =
+                ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        return request.getParameter(name);
+    }
+
+    public static HttpServletRequest getRequest() {
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        if(requestAttributes==null){
+            return null;
+        }
+        return ((ServletRequestAttributes) requestAttributes).getRequest();
+    }
+
+    public static void setRequestAttribute(String name, Object value) {
+        ServletRequestAttributes sra =
+                (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        sra.setAttribute(name, value, ServletWebRequest.SCOPE_REQUEST);
+    }
+
+    public static HttpServletResponse getResponse() {
+        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+    }
+
+    public static HttpSession getSession() {
+        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest()
+                .getSession(true);
+    }
+
+    public static Object getSessionAttribute(String sessionKey) {
+        return RequestContextHolder.currentRequestAttributes()
+                .getAttribute(sessionKey, RequestAttributes.SCOPE_SESSION);
+    }
+
+    public static void setSessionAttribute(String sessionKey, Object value) {
+        RequestContextHolder.currentRequestAttributes()
+                .setAttribute(sessionKey, value, RequestAttributes.SCOPE_SESSION);
     }
 }

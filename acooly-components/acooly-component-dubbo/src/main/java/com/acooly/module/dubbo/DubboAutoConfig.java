@@ -69,6 +69,7 @@ public class DubboAutoConfig implements InitializingBean {
         if (!Strings.isNullOrEmpty(dubboProperties.getVersion())) {
             config.setVersion(dubboProperties.getVersion());
         }
+        config.setQosEnable(false);
         return config;
     }
 

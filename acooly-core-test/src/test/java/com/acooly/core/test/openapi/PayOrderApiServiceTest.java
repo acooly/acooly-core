@@ -22,7 +22,6 @@ public class PayOrderApiServiceTest extends AbstractApiServieTests {
     {
         gatewayUrl = "http://localhost:8081/gateway.do";
         notifyUrl = "http://127.0.0.1:8081/notify/receiver";
-        version = null;
         signType = null;
     }
 

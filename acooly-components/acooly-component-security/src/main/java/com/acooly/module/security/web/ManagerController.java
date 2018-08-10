@@ -5,7 +5,6 @@ import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.mapper.JsonMapper;
-import com.acooly.core.utils.net.ServletUtil;
 import com.acooly.core.utils.security.JWTUtils;
 import com.acooly.module.security.config.FrameworkProperties;
 import com.acooly.module.security.config.FrameworkPropertiesHolder;
@@ -84,7 +83,7 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()) {
             /** 如果已经登录的情况，其他系统集成sso则重定向目标地址，否则直接跳主页 */
-            String targetUrl = ServletUtil.getRequestParameter(JWTUtils.KEY_TARGETURL);
+            String targetUrl = Servlets.getRequestParameter(JWTUtils.KEY_TARGETURL);
             // targetUrl = (String) ServletUtil.getSessionAttribute(JWTUtils.KEY_TARGETURL);
             if (StringUtils.isNotBlank(targetUrl)) {
                 String jwt = JWTUtils.getJwtFromCookie(request.getCookies());
@@ -106,7 +105,7 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
                     User user = (User) subject.getPrincipal();
                     if (user != null) {
                         String newJwt = genarateJwt(user);
-                        JWTUtils.addJwtCookie(ServletUtil.getResponse(), newJwt, JWTUtils.getDomainName());
+                        JWTUtils.addJwtCookie(Servlets.getResponse(), newJwt, JWTUtils.getDomainName());
                         return "redirect:" + fomartRederectUrl(targetUrl, newJwt);
                     }
                 }
@@ -129,10 +128,10 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
         User user = (User) SecurityUtils.getSubject().getSession().getAttribute(SESSION_USER);
         if (user != null) {
             String jwt = genarateJwt(user);
-            JWTUtils.addJwtCookie(ServletUtil.getResponse(), jwt, JWTUtils.getDomainName());
+            JWTUtils.addJwtCookie(Servlets.getResponse(), jwt, JWTUtils.getDomainName());
 
             HashMap<Object, Object> resmap = Maps.newHashMap();
-            String targetUrl = (String) ServletUtil.getSessionAttribute(JWTUtils.KEY_TARGETURL);
+            String targetUrl = (String) Servlets.getSessionAttribute(JWTUtils.KEY_TARGETURL);
             if (StringUtils.isNotBlank(targetUrl)) {
                 resmap.put("isRedirect", true);
                 resmap.put(JWTUtils.KEY_TARGETURL, fomartRederectUrl(targetUrl, jwt));

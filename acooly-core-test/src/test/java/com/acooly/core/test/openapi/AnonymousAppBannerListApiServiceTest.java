@@ -33,7 +33,6 @@ public class AnonymousAppBannerListApiServiceTest extends AbstractApiServieTests
         accessKey = "anonymous";
         secretKey = "anonymouanonymou";
         notifyUrl = null;
-        version = null;
         signType = null;
     }
 

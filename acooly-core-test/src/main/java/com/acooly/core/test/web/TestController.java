@@ -40,6 +40,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * @author qiubo@yiji.com
@@ -182,10 +183,15 @@ public class TestController {
         if (maxRequests == null) {
             maxRequests = 100L;
         }
+        try {
+            Thread.sleep(new Random().nextInt(100)+1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         boolean success = rateChecker.check("key", interval, maxRequests);
         log.info("testRateChecker:{}",success);
         try {
-            Thread.sleep(500);
+            Thread.sleep(400);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

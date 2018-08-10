@@ -15,7 +15,7 @@ import com.acooly.core.test.dao.AppDao;
 import com.acooly.core.test.dao.City1MybatisDao;
 import com.acooly.core.test.domain.App;
 import com.acooly.core.test.domain.City;
-import com.acooly.core.test.domain.City1;
+import com.acooly.module.cache.limit.RateChecker;
 import com.acooly.module.certification.CertificationService;
 import com.acooly.module.mail.MailDto;
 import com.acooly.module.mail.service.MailService;
@@ -64,6 +64,9 @@ public class TestController {
 
     @Autowired(required = false)
     private CertificationService certificationService;
+
+    @Autowired
+    private RateChecker rateChecker;
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -169,5 +172,22 @@ public class TestController {
     @RequestMapping("cache")
     public void testCache() {
         redisTemplate.opsForValue().get("s");
+    }
+
+    @RequestMapping("testRateChecker")
+    public void testRateChecker(Integer interval, Long maxRequests) {
+        if (interval == null) {
+            interval = 1000;
+        }
+        if (maxRequests == null) {
+            maxRequests = 100L;
+        }
+        boolean success = rateChecker.check("key", interval, maxRequests);
+        log.info("testRateChecker:{}",success);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

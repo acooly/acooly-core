@@ -17,21 +17,6 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
         <!--for devmode mock redis-->
-        <!--<dependency>-->
-            <!--<groupId>ai.grakn</groupId>-->
-            <!--<artifactId>redis-mock</artifactId>-->
-            <!--<version>0.1.7-bohr</version>-->
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<artifactId>slf4j-api</artifactId>-->
-                    <!--<groupId>org.slf4j</groupId>-->
-                <!--</exclusion>-->
-                <!--<exclusion>-->
-                    <!--<artifactId>guava</artifactId>-->
-                    <!--<groupId>com.google.guava</groupId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>com.github.kstyrc</groupId>
             <artifactId>embedded-redis</artifactId>

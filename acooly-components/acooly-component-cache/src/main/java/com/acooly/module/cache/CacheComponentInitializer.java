@@ -16,8 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ConfigurableApplicationContext;
 import redis.embedded.RedisServer;
 
-import java.io.IOException;
-
 /**
  * @author qiubo
  */
@@ -33,15 +31,12 @@ public class CacheComponentInitializer implements ComponentInitializer {
             Thread thread = new Thread(
                     () -> {
                         try {
-//                            RedisServer server =
-//                                    RedisServer.newRedisServer(6379);
-//                            server.start();
-//                            ShutdownHooks.addShutdownHook(server::stop, "内置redis关闭");
                             log.info("内置redis启动成功");
-                            RedisServer redisServer = new RedisServer(6379);
+                            RedisServer redisServer = RedisServer.builder()
+                                    .port(6379).setting("maxheap 128M").build();
                             redisServer.start();
                             ShutdownHooks.addShutdownHook(redisServer::stop, "内置redis关闭");
-                        } catch (IOException e) {
+                        } catch (Exception e) {
                             log.warn("启动内置redis失败", e);
                         }
                     });

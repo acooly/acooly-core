@@ -11,7 +11,6 @@ package com.acooly.core.test;
 
 import com.acooly.core.common.BootApp;
 import com.acooly.core.common.boot.Apps;
-import com.alibaba.dubbo.config.spring.context.annotation.DubboComponentScan;
 import org.springframework.boot.SpringApplication;
 
 /**
@@ -20,7 +19,7 @@ import org.springframework.boot.SpringApplication;
 @BootApp(sysName = "acooly-test", httpPort = 8081)
 public class Main {
     public static void main(String[] args) {
-        Apps.setProfileIfNotExists("sdev");
+        Apps.setProfileIfNotExists("qiubo");
         SpringApplication.run(Main.class, args);
     }
 }

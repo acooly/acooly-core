@@ -10,6 +10,7 @@
  */
 package com.acooly.module.ds;
 
+import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.exception.AppConfigException;
@@ -18,15 +19,22 @@ import com.acooly.core.utils.ToString;
 import com.acooly.module.ds.check.DBPatch;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.vendor.OracleValidConnectionChecker;
+import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.jdbc.datasource.init.ScriptException;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +46,7 @@ import java.util.Properties;
 @ConfigurationProperties(prefix = DruidProperties.PREFIX)
 @Getter
 @Setter
+@Slf4j
 public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
 
     public static final String PREFIX = "acooly.ds";
@@ -221,9 +230,38 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
             dataSource.setFilters("stat");
             dataSource.init();
         } catch (SQLException e) {
+            if (Apps.isDevMode() && mysql()) {
+                if (e instanceof MySQLSyntaxErrorException) {
+                    if (e.getMessage().contains("Unknown database")) {
+                        try {
+                            DruidDataSource xdataSource = new DruidDataSource();
+                            String url = this.url.substring(0, this.url.lastIndexOf("/")) + "/test?useSSL=false";
+                            xdataSource.setUrl(url);
+                            String dataBase = this.url.substring(this.url.lastIndexOf("/") + 1);
+                            log.warn("配置文件中指定的数据库[{}]不存在，尝试创建数据库", dataBase);
+                            String createDataBaseSql = "CREATE SCHEMA `" + dataBase + "` DEFAULT CHARACTER SET utf8mb4 ;";
+                            xdataSource.setUsername(this.getUsername());
+                            xdataSource.setPassword(this.getPassword());
+                            xdataSource.init();
+                            try (Connection connection = xdataSource.getConnection()) {
+                                try {
+                                    ScriptUtils.executeSqlScript(
+                                            connection, new ByteArrayResource(createDataBaseSql.getBytes(Charsets.UTF_8)));
+                                    log.warn("创建数据库[{}]成功", dataBase);
+                                } catch (ScriptException e1) {
+                                    throw new AppConfigException("druid连接池初始化失败", e);
+                                }
+                            }
+                            xdataSource.close();
+                        } catch (SQLException e1) {
+                            throw new AppConfigException("druid连接池初始化失败", e);
+                        }
+                        return dataSource;
+                    }
+                }
+            }
             throw new AppConfigException("druid连接池初始化失败", e);
         }
-
         return dataSource;
     }
 

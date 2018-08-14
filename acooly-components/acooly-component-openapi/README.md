@@ -1,14 +1,46 @@
-###  1. openapi访问路径
+### openapi访问路径
 
 openapi访问路径请使用`http://ip:port/gateway.do`（此路径不会过一些无用的filter）
 
-###  2. 测试帐号
+### 测试帐号
 
     partnerId=test
     key=06f7aab08aa2431e6dae6a156fc9e0b4
 
+### 限流配置
 
-### 3. 如果自定义异常处理
+1. 配置所有请求1秒内请求不能超过100笔
+
+        acooly.openapi.rates[0].partnerId=*
+        acooly.openapi.rates[0].method=*
+        acooly.openapi.rates[0].interval=1000
+        acooly.openapi.rates[0].maxRequests=100
+
+2. 配置partnerId=baidu请求1秒内请求不能超过100笔
+
+        acooly.openapi.rates[0].partnerId=baidu
+        acooly.openapi.rates[0].method=*
+        acooly.openapi.rates[0].interval=1000
+        acooly.openapi.rates[0].maxRequests=100
+
+3. 配置partnerId=baidu，服务名=queryUserInfo请求1秒内请求不能超过100笔    
+
+        acooly.openapi.rates[0].partnerId=baidu
+        acooly.openapi.rates[0].method=queryUserInfo
+        acooly.openapi.rates[0].interval=1000
+        acooly.openapi.rates[0].maxRequests=100
+
+### openapi mock
+
+为了方便openapi使用方快速调试，openapi组件提供mock功能。
+
+1. 请求访问路径为`/gateway.mock`
+2. 在后台菜单`OpenAPI`中的`服务mock`菜单中添加期望和返回
+3. 当服务有多个期望时，按照期望参数的最大匹配度响应。
+
+    比如服务设置期望=`{ "requestNo": "1"}`和期望=`{"requestNo": "1","email":"bohrqiu@qq.com"}`两条记录，当请求参数包含两个匹配的参数时，响应返回第二条。
+
+### 如果自定义异常处理
 
 有些场景，我们需要对特殊的异常返回比较友好的响应报文，可以扩展默认的api异常处理器。
 
@@ -58,19 +90,19 @@ openapi访问路径请使用`http://ip:port/gateway.do`（此路径不会过一�
 
 
 
-## openapi层一些通用处理模式
+### openapi层一些通用处理模式
 
-### 1. `ApiRequest` -> `OrderBase`
+#### `ApiRequest` -> `OrderBase`
 
 openapi收到外部请求后，需要转换为内部请求对象调用业务系统。
 
-#### 1.1. ApiRequest#toOrder
+##### ApiRequest#toOrder
 
 把`ApiRequest` 转换为 `OrderBase`，并设置`gid`。
 
 如果是`BizOrderBase`，会新创建bizOrderNo。
 
-#### 1.2. PageApiRequest#toOrder
+##### PageApiRequest#toOrder
 
 如果内部请求对象为`PageOrder`，会设置`PageInfo`.
 
@@ -81,9 +113,9 @@ openapi收到外部请求后，需要转换为内部请求对象调用业务系�
 	OfflinePayOrder order = request.toOrder(OfflinePayOrder.class);
 
 
-### 2. `ResultBase` -> `ApiResponse`
+#### `ResultBase` -> `ApiResponse`
 
-#### 2.1 异常处理
+##### 异常处理
 
 对于同步服务，下层服务返回非成功时，直接抛出异常，由api框架处理响应码。
 
@@ -93,7 +125,7 @@ openapi收到外部请求后，需要转换为内部请求对象调用业务系�
 
 	result.throwIfFailure()
 
-#### 2.1 查询
+##### 查询
 
 分页查询时，需要把`PageResult`转换为`PageApiResponse`。
 
@@ -122,9 +154,9 @@ openapi收到外部请求后，需要转换为内部请求对象调用业务系�
     response.setPageResult(
         result, (fundDto, fundInfo) -> fundInfo.setBankImage(getAccessUrl(fundDto.getBankImage())));
 
-#### 2.2 命令
+##### 命令
 
-####  2.2.1. 同步命令
+###### 同步命令
 
 同步命令请求响应流程如下：
 
@@ -140,7 +172,7 @@ openapi收到外部请求后，需要转换为内部请求对象调用业务系�
 	        .throwIfNotSuccess() //当请求不成功时，抛出异常，由api框架处理
 	        .copyTo(response); //dubbo响应拷贝为api响应
 
-####  2.2.1. 异步命令
+##### 异步命令
 
 同步命令请求响应流程如下：
 

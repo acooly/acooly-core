@@ -22,6 +22,16 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-mock</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-extensions</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>

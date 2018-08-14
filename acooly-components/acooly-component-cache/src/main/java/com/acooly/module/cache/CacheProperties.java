@@ -24,7 +24,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 public class CacheProperties {
 
-    public static final String IS_LOCAL_REDIS_ENABLE = "IS_LOCAL_REDIS_ENABLE";
+    private static final String IS_LOCAL_REDIS_ENABLE = "IS_LOCAL_REDIS_ENABLE";
 
     /**
      * 可选：基于注解的Spring CacheManager，设置缓存的过期时间。默认为0，即不会过期

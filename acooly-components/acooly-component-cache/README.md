@@ -13,7 +13,7 @@
 
 ## 2. 使用 (参考测试用例)
          
-1) 基于spring注解使用缓存能力
+### 2.1 基于spring注解使用缓存能力
 
     // 先从缓存取 user 
     @Cacheable(value = "cacheName",key = "#id")   
@@ -33,7 +33,7 @@
       return ;   
     }
 
-2) 基于redisTemplate使用底层缓存存取    
+### 2.2 基于redisTemplate使用底层缓存存取    
 
     // 获取redisTemplate bean实例 
     @Autowired
@@ -50,3 +50,11 @@
     // 对集合操作的封装 
     SetOperations set = redisTemplate.opsForSet() 
 
+### 2.3 使用redis限速服务
+
+     @Autowired
+     private RateChecker rateChecker;
+     
+     Integer interval=1000;//一秒
+     Long maxRequests=100L;//最大请求数100
+     rateChecker.check("key",1000,100);

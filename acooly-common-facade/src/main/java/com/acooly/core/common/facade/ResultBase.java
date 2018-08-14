@@ -71,7 +71,7 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
         return status == ResultStatus.processing;
     }
 
-    public boolean fail(){
+    public boolean failure() {
         return status == ResultStatus.failure;
     }
 
@@ -90,15 +90,6 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
         return detail;
     }
 
-    /**
-     * 当status != ResultStatus.success抛出业务异常
-     */
-    public ResultBase throwExceptionIfNotSuccess() {
-        if (!success()) {
-            throw new BusinessException(this.getDetail(), this.getCode());
-        }
-        return this;
-    }
 
     /**
      * 当status != ResultStatus.success抛出业务异常
@@ -110,15 +101,6 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
         return this;
     }
 
-    /**
-     * 当status == ResultStatus.failure抛出业务异常
-     */
-    public ResultBase throwExceptionIfFailure() {
-        if (status == ResultStatus.failure) {
-            throw new BusinessException(this.getDetail(), this.getCode());
-        }
-        return this;
-    }
 
     /**
      * 当status == ResultStatus.failure抛出业务异常

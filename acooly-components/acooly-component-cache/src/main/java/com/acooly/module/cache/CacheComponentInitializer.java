@@ -9,14 +9,12 @@
  */
 package com.acooly.module.cache;
 
-import ai.grakn.redismock.RedisServer;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.component.ComponentInitializer;
 import com.acooly.core.utils.ShutdownHooks;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ConfigurableApplicationContext;
-
-import java.io.IOException;
+import redis.embedded.RedisServer;
 
 /**
  * @author qiubo
@@ -33,12 +31,12 @@ public class CacheComponentInitializer implements ComponentInitializer {
             Thread thread = new Thread(
                     () -> {
                         try {
-                            RedisServer server =
-                                    RedisServer.newRedisServer(6379);
-                            server.start();
-                            ShutdownHooks.addShutdownHook(server::stop, "内置redis关闭");
                             log.info("内置redis启动成功");
-                        } catch (IOException e) {
+                            RedisServer redisServer = RedisServer.builder()
+                                    .port(6379).setting("maxheap 128M").build();
+                            redisServer.start();
+                            ShutdownHooks.addShutdownHook(redisServer::stop, "内置redis关闭");
+                        } catch (Exception e) {
                             log.warn("启动内置redis失败", e);
                         }
                     });

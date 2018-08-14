@@ -30,6 +30,16 @@ openapi访问路径请使用`http://ip:port/gateway.do`（此路径不会过一�
         acooly.openapi.rates[0].interval=1000
         acooly.openapi.rates[0].maxRequests=100
 
+### openapi mock
+
+为了方便openapi使用方快速调试，openapi组件提供mock功能。
+
+1. 请求访问路径为`/gateway.mock`
+2. 在后台菜单`OpenAPI`中的`服务mock`菜单中添加期望和返回
+3. 当服务有多个期望时，按照期望参数的最大匹配度响应。
+
+    比如服务设置期望=`{ "requestNo": "1"}`和期望=`{"requestNo": "1","email":"bohrqiu@qq.com"}`两条记录，当请求参数包含两个匹配的参数时，响应返回第二条。
+
 ### 如果自定义异常处理
 
 有些场景，我们需要对特殊的异常返回比较友好的响应报文，可以扩展默认的api异常处理器。

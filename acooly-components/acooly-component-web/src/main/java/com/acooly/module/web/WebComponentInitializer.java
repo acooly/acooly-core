@@ -11,7 +11,6 @@ package com.acooly.module.web;
 
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.component.ComponentInitializer;
-import com.acooly.module.cache.CacheProperties;
 import org.springframework.context.ConfigurableApplicationContext;
 
 /**
@@ -34,11 +33,7 @@ public class WebComponentInitializer implements ComponentInitializer {
         setPropertyIfMissing("server.session.cookie.httpOnly", Boolean.TRUE.toString());
         setPropertyIfMissing("server.session.tracking-modes", "cookie");
         setPropertyIfMissing("server.session.timeout", 7200);
-        if (CacheProperties.isLocalRedisCanEnable()) {
-            setPropertyIfMissing("spring.session.store-type", "HASH_MAP");
-        } else {
-            setPropertyIfMissing("spring.session.store-type", "REDIS");
-        }
+        setPropertyIfMissing("spring.session.store-type", "REDIS");
         setPropertyIfMissing("spring.redis.pool.max-active", 100);
         // 静态文件缓存
         if (!Apps.isDevMode()) {

@@ -17,7 +17,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import redis.embedded.RedisServer;
 import redis.embedded.util.OsArchitecture;
 
-import static redis.embedded.util.OS.MAC_OS_X;
+import static redis.embedded.util.OS.WINDOWS;
 
 /**
  * @author qiubo
@@ -36,12 +36,12 @@ public class CacheComponentInitializer implements ComponentInitializer {
                         try {
                             log.info("内置redis启动成功");
                             RedisServer redisServer;
-                            if (OsArchitecture.detect().os() == MAC_OS_X) {
-                                redisServer = RedisServer.builder()
-                                        .port(6379).setting("maxmemory " + 128 * 1024 * 1024).build();
-                            } else {
+                            if (OsArchitecture.detect().os() == WINDOWS) {
                                 redisServer = RedisServer.builder()
                                         .port(6379).setting("maxheap 128M").build();
+                            } else {
+                                redisServer = RedisServer.builder()
+                                        .port(6379).setting("maxmemory " + 128 * 1024 * 1024).build();
                             }
                             redisServer.start();
                             ShutdownHooks.addShutdownHook(redisServer::stop, "内置redis关闭");

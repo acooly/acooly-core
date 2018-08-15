@@ -41,5 +41,6 @@ public class JPAComponentInitializer implements ComponentInitializer {
         System.setProperty("spring.jpa.open-in-view", "false");
         //关闭jpa校验
         System.setProperty("spring.jpa.properties.javax.persistence.validation.mode", "none");
+        setPropertyIfMissing("spring.data.redis.repositories.enabled","false");
     }
 }

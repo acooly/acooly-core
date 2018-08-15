@@ -12,7 +12,6 @@ package com.acooly.module.appopenapi;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.component.ComponentInitializer;
 import com.acooly.openapi.framework.core.OpenAPIProperties;
-import com.google.common.base.Joiner;
 import org.springframework.context.ConfigurableApplicationContext;
 
 
@@ -24,7 +23,7 @@ public class AppOpenapiComponentInitializer implements ComponentInitializer {
     public void initialize(ConfigurableApplicationContext applicationContext) {
         OpenAPIProperties openAPIProperties = Apps.buildProperties(OpenAPIProperties.class);
         if (openAPIProperties.getAnonymous().isEnable()) {
-            setPropertyIfMissing("acooly.openapi.anonymous.permissions", "*:bannerList,*:appLatestVersion,*:appCrashReport,*:welcomeInfo" + Joiner.on(",").join(openAPIProperties.getAnonymous().getPermissions()));
+            setPropertyIfMissing("acooly.openapi.anonymous.permissions.appopenapi", "*:bannerList,*:appLatestVersion,*:appCrashReport,*:welcomeInfo");
         }
     }
 }

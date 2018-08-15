@@ -12,7 +12,6 @@ package com.acooly.module.tomcat;
 
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.component.ComponentInitializer;
-import org.apache.tomcat.util.scan.Constants;
 import org.springframework.context.ConfigurableApplicationContext;
 
 /**
@@ -26,7 +25,7 @@ public class TomcatComponentInitializer implements ComponentInitializer {
         setPropertyIfMissing("server.tomcat.remoteIpHeader", "x-forwarded-for");
         setPropertyIfMissing("server.tomcat.protocolHeader", "x-forwarded-proto");
         setPropertyIfMissing("server.tomcat.portHeader", "x-forwarded-port");
-        setPropertyIfMissing(Constants.SCAN_JARS_PROPERTY,"acooly-core*.jar,acooly-taglibs-*.jar,jstl-*.jar,shiro-web-*.jar");
+//        setPropertyIfMissing(Constants.SCAN_JARS_PROPERTY,"acooly-core*.jar,acooly-taglibs-*.jar,jstl-*.jar,shiro-web-*.jar");
         if (applicationContext.getEnvironment().getProperty("acooly.tomcat.port") != null) {
             System.setProperty(
                     Apps.HTTP_PORT, applicationContext.getEnvironment().getProperty("acooly.tomcat.port"));

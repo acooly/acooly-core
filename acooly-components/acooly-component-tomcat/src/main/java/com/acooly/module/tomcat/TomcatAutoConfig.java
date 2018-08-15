@@ -129,8 +129,8 @@ public class TomcatAutoConfig {
                                 }
                             });
                 }
-                ((TomcatEmbeddedServletContainerFactory) container).getTldSkipPatterns().clear();
-                ((TomcatEmbeddedServletContainerFactory) container).getTldSkipPatterns().add("*");
+//                ((TomcatEmbeddedServletContainerFactory) container).getTldSkipPatterns().clear();
+//                ((TomcatEmbeddedServletContainerFactory) container).getTldSkipPatterns().add("*");
             }
         };
     }

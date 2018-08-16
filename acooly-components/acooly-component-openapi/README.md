@@ -6,6 +6,21 @@ openapi访问路径请使用`http://ip:port/gateway.do`（此路径不会过一�
 
     partnerId=test
     key=06f7aab08aa2431e6dae6a156fc9e0b4
+    
+### 匿名访问
+
+默认匿名访问信息为：
+
+    accessKey=anonymous
+    secretKey=anonymouanonymou
+
+新增匿名访问权限：
+
+    acooly.openapi.anonymous.permissions.${moduleName}=*:bannerList,*:appLatestVersion
+    
+`${moduleName}`为模块名称，应用开发填写应用名，多个权限字符串用逗号隔开，权限字符串包括两部分，partnerId:servicName,可以用*表示所有，
+比如`*:*`表示所有服务都可以使用匿名帐号访问。
+
 
 ### 限流配置
 

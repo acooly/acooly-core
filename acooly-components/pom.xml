@@ -48,6 +48,7 @@
         <module>acooly-component-olog</module>
         <module>acooly-component-config</module>
         <module>acooly-component-distributedlock</module>
+        <module>acooly-component-eav</module>
     </modules>
 
     <dependencies>

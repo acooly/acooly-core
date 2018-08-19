@@ -103,6 +103,11 @@ public class AppConfigManager implements InitializingBean {
         redisTemplate.delete(key);
     }
 
+    public void delete(String key){
+        appConfigDao.deleteByName(key);
+        invalidate(key);
+    }
+
 
     public void afterPropertiesSet() {
 

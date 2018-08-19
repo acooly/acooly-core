@@ -10,6 +10,8 @@ import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -35,6 +37,7 @@ import java.util.Map.Entry;
  */
 public class Servlets {
 
+    private static final ConversionService CONVERSION_SERVICE = new DefaultConversionService();
     // -- 常用数值定义 --//
     public static final long ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
 
@@ -235,6 +238,48 @@ public class Servlets {
         return getParameters(request, null, true);
     }
 
+
+    public static <T> T getParameter(ServletRequest request, String name, Class<T> clazz) {
+        String value = request.getParameter(name);
+        if (Strings.isBlank(value)) {
+            return null;
+        }
+        return CONVERSION_SERVICE.convert(value, clazz);
+    }
+
+    public static <T> T getParameter(String name, Class<T> clazz) {
+        String value = Servlets.getRequest().getParameter(name);
+        if (Strings.isBlank(value)) {
+            return null;
+        }
+        return CONVERSION_SERVICE.convert(value, clazz);
+    }
+
+    public static String getParameter(String name) {
+        return Servlets.getRequest().getParameter(name);
+    }
+
+    public static String getParameter(ServletRequest request, String name) {
+        return request.getParameter(name);
+    }
+
+    public static Integer getIntParameter(String name) {
+        return getParameter(name, Integer.class);
+    }
+
+    public static Integer getIntParameter(ServletRequest request, String name) {
+        return getParameter(request, name, Integer.class);
+    }
+
+    public static Long getLongParameter(String name) {
+        return getParameter(name, Long.class);
+    }
+
+    public static Long getLongParameter(ServletRequest request, String name) {
+        return getParameter(request, name, Long.class);
+    }
+
+
     /**
      * 组合Parameters生成Query String的Parameter部分, 并在paramter name上加上prefix.
      *
@@ -367,9 +412,11 @@ public class Servlets {
     public static UserAgent getUserAgent(HttpServletRequest request) {
         return UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
     }
+
     public static UserAgent getUserAgent() {
         return UserAgent.parseUserAgentString(getRequest().getHeader("User-Agent"));
     }
+
     public static Object getRequestAttribute(String name) {
         ServletRequestAttributes sra =
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -385,7 +432,7 @@ public class Servlets {
 
     public static HttpServletRequest getRequest() {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        if(requestAttributes==null){
+        if (requestAttributes == null) {
             return null;
         }
         return ((ServletRequestAttributes) requestAttributes).getRequest();

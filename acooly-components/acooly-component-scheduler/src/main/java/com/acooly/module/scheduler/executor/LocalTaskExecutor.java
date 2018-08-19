@@ -38,7 +38,7 @@ public class LocalTaskExecutor implements TaskExecutor {
             Object bean = getBeanByCache(clazz);
             String methodName = schedulerRule.getMethodName();
             Method declaredMethod = clazz.getDeclaredMethod(methodName, null);
-            if ( Modifier.isPublic(declaredMethod.getModifiers())) {
+            if (!Modifier.isPublic(declaredMethod.getModifiers())) {
                 throw new SchedulerExecuteException("本地执行方法必须为public:" + declaredMethod);
             }
             declaredMethod.setAccessible(true);

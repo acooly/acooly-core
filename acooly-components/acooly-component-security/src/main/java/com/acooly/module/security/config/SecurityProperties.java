@@ -129,6 +129,8 @@ public class SecurityProperties {
             addUrlFilter("/manage/logout.html", "logout");
             addUrlFilter("/manage/error/**", "anon");
             addUrlFilter("/manage/assert/**", "anon");
+            addUrlFilter("/manage/asset/**", "anon");
+
             addUrlFilter("/manage/*.html", "anon");
             addUrlFilter("/manage/*.jsp", "user");
             addUrlFilter("/manage/*.css", "anon");

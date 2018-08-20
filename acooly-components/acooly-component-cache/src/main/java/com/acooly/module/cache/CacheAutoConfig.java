@@ -11,6 +11,8 @@ package com.acooly.module.cache;
 
 import com.acooly.module.cache.declarative.DefaultCachingConfigurer;
 import com.acooly.module.cache.declarative.RedisInfoChecker;
+import com.acooly.module.cache.limit.RateChecker;
+import com.acooly.module.cache.limit.RedisRateChecker;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -54,6 +56,10 @@ public class CacheAutoConfig {
     public CachingConfigurer cachingConfigurer(
             RedisTemplate redisTemplate, CacheProperties cacheProperties) {
         return new DefaultCachingConfigurer(redisTemplate, cacheProperties.getExpireTime());
+    }
+    @Bean
+    public RateChecker redisRateChecker(){
+        return new RedisRateChecker();
     }
 
     @Bean

@@ -1,7 +1,7 @@
 package com.acooly.module.cache.declarative;
 
+import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.exception.AppConfigException;
-import com.acooly.module.cache.CacheProperties;
 import com.google.common.base.Throwables;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -20,7 +20,7 @@ public class RedisInfoChecker {
     }
 
     public void checkRedisVersion() {
-        if(CacheProperties.isLocalRedisCanEnable()){
+        if(Apps.isDevMode()){
             return;
         }
         Properties info = null;

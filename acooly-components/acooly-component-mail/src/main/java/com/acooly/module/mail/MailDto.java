@@ -32,7 +32,7 @@ public class MailDto implements Serializable {
     @NotNull
     private String subject;
 
-    private Map<String, String> params = Maps.newHashMap();
+    private Map<String, Object> params = Maps.newHashMap();
 
     @NotEmpty
     private String templateName;
@@ -60,7 +60,7 @@ public class MailDto implements Serializable {
         return this;
     }
 
-    public MailDto param(String key, String value) {
+    public MailDto param(String key, Object value) {
         this.params.put(key, value);
         return this;
     }

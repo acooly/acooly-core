@@ -1,7 +1,6 @@
 package com.acooly.module.cms.domain;
 
 import com.acooly.core.common.domain.Entityable;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -22,7 +21,6 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "CMS_CONTENT")
-@JsonIgnoreProperties({"contentType", "contentBody", "attachments", "hibernateLazyInitializer"})
 public class Content implements Entityable {
 
     public static final int STATUS_ENABLED = 1; // 1:正常

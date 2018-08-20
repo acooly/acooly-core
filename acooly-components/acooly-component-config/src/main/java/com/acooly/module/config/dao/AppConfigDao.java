@@ -25,4 +25,6 @@ public interface AppConfigDao extends EntityMybatisDao<AppConfig> {
     AppConfig findAppConfigByName( @Param("name") String name);
     @Select("select * from sys_app_config")
     List<AppConfig> findAll();
+    @Select("DELETE FROM sys_app_config WHERE config_name = #{name} ")
+    void deleteByName( @Param("name") String name);
 }

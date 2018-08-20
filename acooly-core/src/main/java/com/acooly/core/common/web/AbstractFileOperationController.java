@@ -4,10 +4,7 @@ import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityService;
-import com.acooly.core.utils.Dates;
-import com.acooly.core.utils.Images;
-import com.acooly.core.utils.Reflections;
-import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.*;
 import com.acooly.core.utils.mapper.CsvMapper;
 import lombok.Getter;
 import lombok.Setter;
@@ -341,7 +338,7 @@ public abstract class AbstractFileOperationController<
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "attachment");
         response.setHeader(
-                "Content-Disposition", "filename=\"" + fileName + ".xlsx\"");
+                "Content-Disposition", "filename=\"" + Encodes.urlEncode(fileName) + ".xlsx\"");
     }
 
     /**
@@ -439,7 +436,7 @@ public abstract class AbstractFileOperationController<
         String fileName = getExportFileName(request);
         response.setContentType("application/octet-stream");
         response.setHeader(
-                "Content-Disposition", "attachment;filename=\"" + fileName + ".csv\"");
+                "Content-Disposition", "attachment;filename=\"" + Encodes.urlEncode(fileName) + ".csv\"");
     }
 
     /**

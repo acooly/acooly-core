@@ -192,3 +192,21 @@
 日志输出文件：/var/log/webapps/${appName}/busi，输出内容如下:
 
     {"appName":"acooly-test","body":{"a":123,"b":"dfdf"},"env":"sdev","hostName":"192.168.49.25","logType":"1.1","timestamp":"2018-04-12 14:43:35"}
+    
+### 2.5.6 freemarker内置变量
+
+    <#if Application.xxx?exists>
+        ${Application.xxx}
+    </#if>
+    
+    <h1>${message},${name}</h1>
+    
+    <h2>requestUri:${rc.requestUri}</h2>
+    
+    <h2>queryString:${rc.queryString}</h2>
+    
+    <h2>session attribute:${Session.valueInSession}</h2>
+    
+    <h2>request parameter:${RequestParameters.key}</h2>
+    
+    <h2>request atrribute:${valueInRequest}</h2>

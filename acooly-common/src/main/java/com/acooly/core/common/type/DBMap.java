@@ -4,6 +4,7 @@ import com.acooly.core.utils.mapper.JsonMapper;
 import com.google.common.base.Strings;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 数据库中存储json的map
@@ -11,6 +12,12 @@ import java.util.HashMap;
  * @date 2018-04-19 11:33
  */
 public class DBMap<K, V> extends HashMap<K, V> {
+    public DBMap() {
+    }
+
+    public DBMap(Map<? extends K, ? extends V> m) {
+        super(m);
+    }
 
     public String toJson() {
         return JsonMapper.nonEmptyMapper().toJson(this);

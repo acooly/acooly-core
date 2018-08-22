@@ -290,8 +290,16 @@ public class Servlets {
         return getParameter(request, name, Money.class);
     }
 
+    public static Money getMoneyParameter(String name) {
+        return getParameter(name, Money.class);
+    }
+
     public static Date getDateParameter(ServletRequest request, String name) {
         return getParameter(request, name, Date.class);
+    }
+
+    public static Date getDateParameter(String name) {
+        return getParameter(name, Date.class);
     }
 
     /**

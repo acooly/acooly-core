@@ -20,7 +20,7 @@ import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.type.AnnotationMetadata;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -45,7 +45,7 @@ public class MapperScannerRegistrar
                 }
                 scanner.setMarkerInterface(EntityMybatisDao.class);
                 scanner.registerFilters();
-                List<String> daoScanPackages = mybatisProperties.getDaoScanPackages();
+                Collection<String> daoScanPackages = mybatisProperties.getDaoScanPackages().values();
                 scanner.doScan(daoScanPackages.toArray(new String[daoScanPackages.size()]));
             } catch (IllegalStateException ex) {
             }

@@ -12,7 +12,6 @@ package com.acooly.module.mybatis;
 
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.exception.AppConfigException;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.Data;
 import org.apache.ibatis.session.LocalCacheScope;
@@ -24,7 +23,6 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 import static com.acooly.core.common.boot.listener.ExApplicationRunListener.COMPONENTS_PACKAGE;
@@ -61,7 +59,7 @@ public class MybatisProperties implements InitializingBean {
     /**
      * 扩展dao扫描包
      */
-    private List<String> daoScanPackages = Lists.newArrayList();
+    private Map<String, String> daoScanPackages = Maps.newHashMap();
 
     private boolean supportMultiDataSource;
     private Map<String, Multi> multi = Maps.newHashMap();
@@ -82,8 +80,8 @@ public class MybatisProperties implements InitializingBean {
         }
         typeAliasesPackage.put("app", Apps.getBasePackage());
         typeAliasesPackage.put("components", COMPONENTS_PACKAGE);
-        daoScanPackages.add(COMPONENTS_PACKAGE + ".**.dao");
-        daoScanPackages.add(Apps.getBasePackage());
+        daoScanPackages.put("components",COMPONENTS_PACKAGE + ".**.dao");
+        daoScanPackages.put("app",Apps.getBasePackage());
         if (supportMultiDataSource) {
             Assert.notEmpty(multi, "启用多数据源时，必须配置数据源信息");
             int primaryCount = 0;

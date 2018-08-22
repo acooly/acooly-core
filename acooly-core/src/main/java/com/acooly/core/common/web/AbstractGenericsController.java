@@ -72,6 +72,14 @@ public abstract class AbstractGenericsController<T extends Entityable, M extends
         binder.closeNoCatch();
     }
 
+
+    protected void bindNotValidator(HttpServletRequest request, Object command) throws Exception {
+        ServletRequestDataBinder binder = createBinder(request, command);
+        binder.setConversionService(conversionService);
+        binder.bind(request);
+        binder.closeNoCatch();
+    }
+
     protected ServletRequestDataBinder createBinder(HttpServletRequest request, Object command)
             throws Exception {
         ServletRequestDataBinder binder = new ServletRequestDataBinder(command, "command");

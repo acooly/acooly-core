@@ -53,6 +53,9 @@ public abstract class AbstractJQueryEntityController<
             PageInfo<T> pageInfo = doList(request, response);
             result.setTotal(pageInfo.getTotalCount());
             result.setRows(pageInfo.getPageResults());
+            result.setHasNext(pageInfo.hasNext());
+            result.setPageNo(pageInfo.getCurrentPage());
+            result.setPageSize(pageInfo.getCountOfCurrentPage());
         } catch (Exception e) {
             handleException(result, "分页查询", e);
         }

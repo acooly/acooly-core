@@ -1,6 +1,8 @@
 package com.acooly.core.utils;
 
 import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.utils.conversion.StringToDateConverter;
+import com.acooly.core.utils.conversion.StringYuanToMoneyConverter;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -10,6 +12,7 @@ import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -37,6 +40,12 @@ public class Servlets {
 
     // -- 常用数值定义 --//
     public static final long ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
+    private static final DefaultConversionService CONVERSION_SERVICE = new DefaultConversionService();
+
+    static {
+        CONVERSION_SERVICE.addConverter(new StringYuanToMoneyConverter());
+        CONVERSION_SERVICE.addConverter(new StringToDateConverter());
+    }
 
     public static void writeResponse(HttpServletResponse response, String data) {
         writeResponse(response, data, MediaType.JSON_UTF_8.toString());
@@ -235,6 +244,64 @@ public class Servlets {
         return getParameters(request, null, true);
     }
 
+
+    public static <T> T getParameter(ServletRequest request, String name, Class<T> clazz) {
+        String value = request.getParameter(name);
+        if (Strings.isBlank(value)) {
+            return null;
+        }
+
+        return CONVERSION_SERVICE.convert(value, clazz);
+    }
+
+    public static <T> T getParameter(String name, Class<T> clazz) {
+        String value = Servlets.getRequest().getParameter(name);
+        if (Strings.isBlank(value)) {
+            return null;
+        }
+        return CONVERSION_SERVICE.convert(value, clazz);
+    }
+
+    public static String getParameter(String name) {
+        return Servlets.getRequest().getParameter(name);
+    }
+
+    public static String getParameter(ServletRequest request, String name) {
+        return request.getParameter(name);
+    }
+
+    public static Integer getIntParameter(String name) {
+        return getParameter(name, Integer.class);
+    }
+
+    public static Integer getIntParameter(ServletRequest request, String name) {
+        return getParameter(request, name, Integer.class);
+    }
+
+    public static Long getLongParameter(String name) {
+        return getParameter(name, Long.class);
+    }
+
+    public static Long getLongParameter(ServletRequest request, String name) {
+        return getParameter(request, name, Long.class);
+    }
+
+    public static Money getMoneyParameter(ServletRequest request, String name) {
+        return getParameter(request, name, Money.class);
+    }
+
+    public static Money getMoneyParameter(String name) {
+        return getParameter(name, Money.class);
+    }
+
+    public static Date getDateParameter(ServletRequest request, String name) {
+        return getParameter(request, name, Date.class);
+    }
+
+    public static Date getDateParameter(String name) {
+        return getParameter(name, Date.class);
+    }
+
     /**
      * 组合Parameters生成Query String的Parameter部分, 并在paramter name上加上prefix.
      *
@@ -367,9 +434,11 @@ public class Servlets {
     public static UserAgent getUserAgent(HttpServletRequest request) {
         return UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
     }
+
     public static UserAgent getUserAgent() {
         return UserAgent.parseUserAgentString(getRequest().getHeader("User-Agent"));
     }
+
     public static Object getRequestAttribute(String name) {
         ServletRequestAttributes sra =
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -385,7 +454,7 @@ public class Servlets {
 
     public static HttpServletRequest getRequest() {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        if(requestAttributes==null){
+        if (requestAttributes == null) {
             return null;
         }
         return ((ServletRequestAttributes) requestAttributes).getRequest();
@@ -416,4 +485,5 @@ public class Servlets {
         RequestContextHolder.currentRequestAttributes()
                 .setAttribute(sessionKey, value, RequestAttributes.SCOPE_SESSION);
     }
+
 }

@@ -20,14 +20,14 @@ public class Coder {
         DefaultCodeGenerateService service = (DefaultCodeGenerateService) Generator.getGenerator();
         //set workspace if possible
         if (StringUtils.isBlank(service.getGenerateConfiguration().getWorkspace())) {
-            String workspace = getProjectPath() + "acooly-core-test";
+            String workspace = getProjectPath() + "/acooly-components/acooly-component-eav";
             service.getGenerateConfiguration().setWorkspace(workspace);
         }
         //set root pacakge if possible
         if (StringUtils.isBlank(service.getGenerateConfiguration().getRootPackage())) {
             service.getGenerateConfiguration().setRootPackage(getRootPackage());
         }
-        service.generateTable("sys_app_config");
+        service.generateTable("eav_attribute");
     }
 
     public static String getProjectPath() {
@@ -38,6 +38,6 @@ public class Coder {
     }
 
     public static String getRootPackage() {
-        return "com.acooly.core.test.config";
+        return "com.acooly.module.eav.newv";
     }
 }

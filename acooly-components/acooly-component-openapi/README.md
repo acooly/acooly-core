@@ -6,6 +6,21 @@ openapi访问路径请使用`http://ip:port/gateway.do`（此路径不会过一�
 
     partnerId=test
     key=06f7aab08aa2431e6dae6a156fc9e0b4
+    
+### 匿名访问
+
+默认匿名访问信息为：
+
+    accessKey=anonymous
+    secretKey=anonymouanonymou
+
+新增匿名访问权限：
+
+    acooly.openapi.anonymous.permissions.${moduleName}=*:bannerList,*:appLatestVersion
+    
+`${moduleName}`为模块名称，应用开发填写应用名，多个权限字符串用逗号隔开，权限字符串包括两部分，partnerId:servicName,可以用*表示所有，
+比如`*:*`表示所有服务都可以使用匿名帐号访问。
+
 
 ### 限流配置
 
@@ -29,6 +44,16 @@ openapi访问路径请使用`http://ip:port/gateway.do`（此路径不会过一�
         acooly.openapi.rates[0].method=queryUserInfo
         acooly.openapi.rates[0].interval=1000
         acooly.openapi.rates[0].maxRequests=100
+
+### openapi mock
+
+为了方便openapi使用方快速调试，openapi组件提供mock功能。
+
+1. 请求访问路径为`/gateway.mock`
+2. 在后台菜单`OpenAPI`中的`服务mock`菜单中添加期望和返回
+3. 当服务有多个期望时，按照期望参数的最大匹配度响应。
+
+    比如服务设置期望=`{ "requestNo": "1"}`和期望=`{"requestNo": "1","email":"bohrqiu@qq.com"}`两条记录，当请求参数包含两个匹配的参数时，响应返回第二条。
 
 ### 如果自定义异常处理
 

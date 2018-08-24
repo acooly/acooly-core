@@ -11,7 +11,7 @@
 			</tr>					
 			<tr>
 				<th>配置值：</th>
-				<td><textarea rows="3" cols="40" placeholder="请输入配置值..." style="width:300px;" name="configValue" class="easyui-validatebox" data-options="validType:['length[1,255]'],required:true"></textarea></td>
+				<td><textarea rows="3" cols="40" placeholder="请输入配置值..." style="width:300px;" name="configValue" class="easyui-validatebox" data-options="validType:['length[1,2048]'],required:true"></textarea></td>
 			</tr>					
 			<tr>
 				<th>配置描述：</th>

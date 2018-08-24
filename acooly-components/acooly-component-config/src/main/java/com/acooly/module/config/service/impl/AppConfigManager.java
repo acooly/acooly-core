@@ -98,9 +98,15 @@ public class AppConfigManager implements InitializingBean {
         }
     }
 
-    public void invalidate(String key) {
+    public void invalidate(String name) {
+        String key = key(name);
         configCache.invalidate(key);
         redisTemplate.delete(key);
+    }
+
+    public void delete(String name){
+        appConfigDao.deleteByName(name);
+        invalidate(name);
     }
 
 

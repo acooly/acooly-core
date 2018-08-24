@@ -9,8 +9,6 @@
  */
 package com.acooly.core.test.openapi;
 
-import com.acooly.core.utils.Encodes;
-import com.acooly.core.utils.security.Cryptos;
 import com.acooly.module.appopenapi.message.BannerListRequest;
 import com.acooly.module.appopenapi.message.BannerListResponse;
 import com.acooly.openapi.framework.common.enums.DeviceType;
@@ -55,8 +53,7 @@ public class AnonymousAppBannerListApiServiceTest extends AbstractApiServieTests
         request.setRequestNo(UUID.randomUUID().toString());
         request.setUsername("bohr");
         String password = "bohr";
-        request.setPassword(
-                Encodes.encodeBase64(Cryptos.aesEncrypt(password, Encodes.encodeHex(secretKey.getBytes()))));
+        request.setPassword(password);
         request.setDeviceType(DeviceType.IPHONE6);
         request.setDeviceModel("xxxxx");
         request.setChannel("Web");

@@ -11,7 +11,6 @@
 package com.acooly.module.web;
 
 import com.acooly.core.common.boot.EnvironmentHolder;
-import com.acooly.module.cache.CacheProperties;
 import com.acooly.module.web.filter.HttpsOnlyFilter;
 import com.acooly.module.web.formatter.DBMapFormatter;
 import com.acooly.module.web.formatter.MoneyFormatter;
@@ -43,7 +42,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
-import org.springframework.session.data.redis.config.ConfigureRedisAction;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.filter.HttpPutFormContentFilter;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -142,12 +140,6 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
         }
         simpleUrlMappingViewController.setViewNameMap(viewNameMap);
         return simpleUrlMappingViewController;
-    }
-
-    @ConditionalOnProperty(value = CacheProperties.IS_LOCAL_REDIS_ENABLE)
-    @Bean
-    public static ConfigureRedisAction configureRedisAction() {
-        return ConfigureRedisAction.NO_OP;
     }
 
     @Bean

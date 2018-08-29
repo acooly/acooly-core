@@ -54,6 +54,19 @@ public class OFileProperties implements InitializingBean {
     private boolean checkReferer = true;
     private boolean enableLocalMapping = true;
 
+    /**
+     * 可配置的内置文件上传签名认证器
+     */
+    private boolean configuredSignAuthEnable = false;
+    /**
+     * 可配置的内置文件上传签名认证器: 访问吗
+     */
+    private String configuredSignAuthAccessKey = "configuredSignAuthAccessKey";
+    /**
+     * 可配置的内置文件上传签名认证器: 安全码（秘钥）
+     */
+    private String configuredSignAuthSecretKey = "configuredSignAuthSecretKey";
+
     public String getStorageRoot() {
         return storageRoot;
     }

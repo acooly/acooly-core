@@ -1,6 +1,8 @@
 package com.acooly.core.utils;
 
 import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.utils.conversion.StringToDateConverter;
+import com.acooly.core.utils.conversion.StringYuanToMoneyConverter;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -10,7 +12,6 @@ import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -37,9 +38,14 @@ import java.util.Map.Entry;
  */
 public class Servlets {
 
-    private static final ConversionService CONVERSION_SERVICE = new DefaultConversionService();
     // -- 常用数值定义 --//
     public static final long ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
+    private static final DefaultConversionService CONVERSION_SERVICE = new DefaultConversionService();
+
+    static {
+        CONVERSION_SERVICE.addConverter(new StringYuanToMoneyConverter());
+        CONVERSION_SERVICE.addConverter(new StringToDateConverter());
+    }
 
     public static void writeResponse(HttpServletResponse response, String data) {
         writeResponse(response, data, MediaType.JSON_UTF_8.toString());
@@ -244,6 +250,7 @@ public class Servlets {
         if (Strings.isBlank(value)) {
             return null;
         }
+
         return CONVERSION_SERVICE.convert(value, clazz);
     }
 
@@ -279,6 +286,21 @@ public class Servlets {
         return getParameter(request, name, Long.class);
     }
 
+    public static Money getMoneyParameter(ServletRequest request, String name) {
+        return getParameter(request, name, Money.class);
+    }
+
+    public static Money getMoneyParameter(String name) {
+        return getParameter(name, Money.class);
+    }
+
+    public static Date getDateParameter(ServletRequest request, String name) {
+        return getParameter(request, name, Date.class);
+    }
+
+    public static Date getDateParameter(String name) {
+        return getParameter(name, Date.class);
+    }
 
     /**
      * 组合Parameters生成Query String的Parameter部分, 并在paramter name上加上prefix.
@@ -463,4 +485,5 @@ public class Servlets {
         RequestContextHolder.currentRequestAttributes()
                 .setAttribute(sessionKey, value, RequestAttributes.SCOPE_SESSION);
     }
+
 }

@@ -15,6 +15,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -45,10 +46,10 @@ public abstract class AbstractFileOperationController<
 
     /**
      * 批量导入保存模板数据基础实现
-     *
+     * <p>
      * <p>该方法用于子类实际的导入Action方法实现完整的数据导入框架功能，子类需要补充：错误处理，消息处理，选择返回视图模式（Json还是页面跳转）
      * 最简使用方法：子类中实现每行的反序列化：unmarshal(List<String[]> lines)<br>
-     *
+     * <p>
      * <p>功能:
      * <li>自动完成文件上传，参考：doUpload(HttpServletRequest request)
      * <li>根据上次文件的类型，实现文件（行）数据到普通数组的转换（一行文件数据对应一个数组，每列对应数组中一个成员）,参考： doImportLoadXls和doImportLoadCsv
@@ -267,7 +268,7 @@ public abstract class AbstractFileOperationController<
 
     /**
      * 导入实体
-     *
+     * <p>
      * <p>导入操作的核心程序员方法, 需要程序员在具体子类复写该方法。根据具体的实体和逻辑,转换读取的一行数据为对应的实体对象
      *
      * @param fields
@@ -304,7 +305,7 @@ public abstract class AbstractFileOperationController<
 
     /**
      * 导出Excel模板方法
-     *
+     * <p>
      * <p>本模板方法提供EXCEL导出的程序框架，子类需要实现doExportXls：根据业务要求，编码选择输出操作内容和方式。
      *
      * @param request
@@ -490,7 +491,7 @@ public abstract class AbstractFileOperationController<
 
     /**
      * 编列实体对象为List<String>待输出格式
-     *
+     * <p>
      * <p>这里为简化操作，要求改方法内完成属性的类型转换为输出String类型。如果需要对字段类型进行精确控制，可以考虑复写doExportXls方法实现
      *
      * @param entity
@@ -531,44 +532,54 @@ public abstract class AbstractFileOperationController<
      * @return key --> 请求的表单参数名称, value ---> 上传结果
      */
     protected Map<String, UploadResult> doUpload(HttpServletRequest request) throws Exception {
-        UploadConfig uploadConfig = getUploadConfig();
         Map<String, UploadResult> uploadResults = new HashMap<String, UploadResult>();
         MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
-        Map<String, MultipartFile> multipartFiles = multiRequest.getFileMap();
-        UploadResult result = null;
-        for (Map.Entry<String, MultipartFile> entry : multipartFiles.entrySet()) {
-            MultipartFile mfile = entry.getValue();
-            if (mfile == null || mfile.getSize() <= 0) {
-                continue;
-            }
-            String filename = mfile.getOriginalFilename();
-            if (mfile.getSize() > uploadConfig.getMaxSize()) {
-                throw new BusinessException(
-                        "文件[" + filename + "]大小操作限制，最大限制:" + uploadConfig.getMaxSize() / 1024 / 1024 + "M");
-            }
-            String fileExtention = getFileExtention(filename);
-            if (!StringUtils.containsIgnoreCase(uploadConfig.getAllowExtentions(), fileExtention)) {
-                throw new BusinessException(
-                        "文件[" + filename + "]类型不支持，支持类型:" + uploadConfig.getAllowExtentions());
-            }
-
-            if (uploadConfig.isUseMemery()) {
-                // 内存方式，不转存到服务器存储，直接返回流给调用端
-                result =
-                        new UploadResult(entry.getKey(), filename, mfile.getSize(), mfile.getInputStream());
-            } else {
-                File destFile = doTransfer(mfile, request);
-                File thumFile = doThumbnail(destFile, request);
-                result = new UploadResult(entry.getKey(), filename, mfile.getSize(), destFile);
-                result.setRelativeFile(getRelativePath(destFile, request));
-                result.setThumb(thumFile);
-                if (thumFile != null) {
-                    result.setRelativeThumb(getRelativePath(thumFile, request));
+        MultiValueMap<String, MultipartFile> multipartFiles = multiRequest.getMultiFileMap();
+        for (Map.Entry<String, List<MultipartFile>> entry : multipartFiles.entrySet()) {
+            List<MultipartFile> listFile = entry.getValue();
+            String key = entry.getKey();
+            for (int i = 0, j = listFile.size(); i < j; i++) {
+                if (listFile.size() > 1) {
+                    key = entry.getKey() + i;
                 }
+                loadUploadResult(request, key, listFile.get(i), uploadResults);
             }
-            uploadResults.put(entry.getKey(), result);
         }
         return uploadResults;
+    }
+
+    protected void loadUploadResult(HttpServletRequest request, String key, MultipartFile mfile, Map<String, UploadResult> uploadResults) throws Exception {
+        UploadResult result = null;
+        if (mfile == null || mfile.getSize() <= 0) {
+            return;
+        }
+        UploadConfig uploadConfig = getUploadConfig();
+        String filename = mfile.getOriginalFilename();
+        if (mfile.getSize() > uploadConfig.getMaxSize()) {
+            throw new BusinessException(
+                    "文件[" + filename + "]大小操作限制，最大限制:" + uploadConfig.getMaxSize() / 1024 / 1024 + "M");
+        }
+        String fileExtention = getFileExtention(filename);
+        if (!StringUtils.containsIgnoreCase(uploadConfig.getAllowExtentions(), fileExtention)) {
+            throw new BusinessException(
+                    "文件[" + filename + "]类型不支持，支持类型:" + uploadConfig.getAllowExtentions());
+        }
+
+        if (uploadConfig.isUseMemery()) {
+            // 内存方式，不转存到服务器存储，直接返回流给调用端
+            result =
+                    new UploadResult(key, filename, mfile.getSize(), mfile.getInputStream());
+        } else {
+            File destFile = doTransfer(mfile, request);
+            File thumFile = doThumbnail(destFile, request);
+            result = new UploadResult(key, filename, mfile.getSize(), destFile);
+            result.setRelativeFile(getRelativePath(destFile, request));
+            result.setThumb(thumFile);
+            if (thumFile != null) {
+                result.setRelativeThumb(getRelativePath(thumFile, request));
+            }
+        }
+        uploadResults.put(key, result);
     }
 
 

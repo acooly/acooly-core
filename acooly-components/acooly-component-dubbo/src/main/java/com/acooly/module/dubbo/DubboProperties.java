@@ -13,7 +13,7 @@ package com.acooly.module.dubbo;
 import com.acooly.core.common.boot.Apps;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
-import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import lombok.Data;
 import org.springframework.beans.factory.InitializingBean;
@@ -21,6 +21,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -79,7 +80,7 @@ public class DubboProperties implements InitializingBean {
      * dubbo 可自定义增加注解扫描路径，用,分割，此路径下会扫描{@link Reference}，{@link Service}这两个注解，默认会扫描{@link
      * Apps#getBasePackage()}路径
      */
-    private String cumstomConfigPackage;
+    private Map<String,String> packagesToScan= Maps.newHashMap();
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -134,8 +135,8 @@ public class DubboProperties implements InitializingBean {
     public Set<String> getPackagesToScan(){
         Set<String> packages= Sets.newHashSet();
         packages.add(Apps.getBasePackage());
-        if(!Strings.isNullOrEmpty(cumstomConfigPackage)){
-            packages.add(cumstomConfigPackage);
+        if(!packagesToScan.isEmpty()){
+            packages.addAll(packagesToScan.values());
         }
         return packages;
     }

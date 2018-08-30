@@ -58,12 +58,12 @@ public class CertificationProperties {
     @PostConstruct
     public void init() {
         if (this.provider == Provider.ALI) {
-            Assert.notNull(this.realname);
-            Assert.hasText(this.realname.getAppCode());
+            Assert.notNull(realname,"实名认证渠道配置不能为空");
+            Assert.hasText(realname.getAppCode(),"实名认证渠道配置不能为空");
         }
         if (this.bankCertProvider == ALI) {
-            Assert.notNull(this.bankcert);
-            Assert.hasText(this.bankcert.getAppCode());
+            Assert.notNull(bankcert,"银行卡认证渠道配置不能为空");
+            Assert.hasText(bankcert.getAppCode(),"银行卡认证渠道配置不能为空");
         }
     }
 

@@ -177,6 +177,11 @@ public class SmsProperties {
          * 容联.云通讯
          */
         Cloopen("cloopenMessageSender", "容联.云通讯"),
+
+        /**
+         * 云信留客 2分一条 短信内容可以自定义  2018-08-30
+         */
+        Winnerlook("winnerlookMessageSender", "云信留客"),
         /**
          * 测试
          */

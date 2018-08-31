@@ -55,7 +55,7 @@ public class OFileUploadAuthenticateSpringProxy
         Map<String, OFileUploadAuthenticate> services =
                 applicationContext.getBeansOfType(OFileUploadAuthenticate.class);
         for (Map.Entry<String, OFileUploadAuthenticate> entry : services.entrySet()) {
-            if (entry.getValue() == this) {
+            if (entry.getValue() == this || !entry.getValue().isEnable()) {
                 continue;
             }
             servicesMap.put(entry.getKey(), entry.getValue());

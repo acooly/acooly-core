@@ -10,18 +10,12 @@
 
 ### 2.2 如何配置短信模板
 
-1. 新增短信模板配置文件
+```
+acooly.sms.template.key1=value1
+acooly.sms.template.key2=value2
+```
 
-    `src/main/resources/smstemplate.properties`：
-
-        ##短信模板配置文件，如下面的例子，模板名为register_success，值为freemarker表达式
-        acooly.sms.template.register_success=${name}恭喜您注册成功。
-
-2. 加载短信模板配置文件
-
-   `@PropertySource("classpath:/smstemplate.properties")`
-
-    把此注解加到配置类(标注了@Configuration注解的类)。
+key为模版名，value为模版的值，`com.acooly.module.sms.SmsService.sendByTemplate`接口传入key即为配置的key
     
 ### 2.3 各个渠道配置说明
 

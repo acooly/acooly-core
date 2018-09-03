@@ -43,7 +43,7 @@ public class OFileUploadSessionAuthenticate implements OFileUploadAuthenticate {
 
     @Override
     public boolean isEnable() {
-        return oFileProperties.isCheckSession() && Strings.isBlank(oFileProperties.getCheckSessionKey());
+        return oFileProperties.isCheckSession() && Strings.isNotBlank(oFileProperties.getCheckSessionKey());
     }
 
 }

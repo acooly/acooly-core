@@ -42,6 +42,7 @@ acooly.ofile.configuredSignAuthAccessKey=YOUR_ACCESSKEY
 acooly.ofile.configuredSignAuthSecretKey=YOUR_SECRETKEY
 ```
 
+
 #### 自定义签名认证
 
 在你的系统内实现OFileUploadAuthenticate接口，加入到spring容器即可。

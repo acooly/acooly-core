@@ -35,4 +35,9 @@ public class ConfiguredSignatureOFileUploadAuthenticate extends AbstractSignatur
         }
         throw new IllegalArgumentException("accessKey非法");
     }
+
+    @Override
+    public boolean isEnable() {
+        return oFileProperties.isConfiguredSignAuthEnable();
+    }
 }

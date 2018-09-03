@@ -14,5 +14,31 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface OFileUploadAuthenticate {
 
+    /**
+     * 认证
+     *
+     * @param request
+     */
     void authenticate(HttpServletRequest request);
+
+    /**
+     * 是否可用
+     *
+     * @return
+     */
+    default boolean isEnable() {
+        return true;
+    }
+
+    /**
+     * 优先级顺序
+     * <p>
+     * 越大越先执行
+     *
+     * @return
+     */
+    default int order() {
+        return Integer.MAX_VALUE;
+    }
+
 }

@@ -39,4 +39,11 @@ public class OFileUploadSessionAuthenticate implements OFileUploadAuthenticate {
         }
         throw new HttpServerErrorException(HttpStatus.UNAUTHORIZED, "Session认证未通过");
     }
+
+
+    @Override
+    public boolean isEnable() {
+        return oFileProperties.isCheckSession() && Strings.isBlank(oFileProperties.getCheckSessionKey());
+    }
+
 }

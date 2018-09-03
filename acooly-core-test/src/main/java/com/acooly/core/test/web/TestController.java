@@ -15,6 +15,7 @@ import com.acooly.core.test.dao.AppDao;
 import com.acooly.core.test.dao.City1MybatisDao;
 import com.acooly.core.test.domain.App;
 import com.acooly.core.test.domain.City;
+import com.acooly.core.test.mock.XService;
 import com.acooly.module.cache.limit.RateChecker;
 import com.acooly.module.certification.CertificationService;
 import com.acooly.module.mail.MailDto;
@@ -71,6 +72,8 @@ public class TestController {
 
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private XService xService;
 
     @RequestMapping("ex")
     public ViewResult testEx() {
@@ -195,5 +198,9 @@ public class TestController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+    @RequestMapping("testX")
+    public void testX() {
+        xService.echo("x");
     }
 }

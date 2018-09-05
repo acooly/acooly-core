@@ -13,6 +13,17 @@
 * [阿里巴巴JAVA开发手册](https://github.com/alibaba/p3c/blob/master/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4Java%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%EF%BC%88%E8%AF%A6%E5%B0%BD%E7%89%88%EF%BC%89.pdf)
 * [IDEA插件使用文档](https://github.com/alibaba/p3c/wiki/IDEA%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3)
 
+### 代码模板
+
+框架提供了IDEA代码模板[settings.jar](ide/idea/settings.jar),包括如下内容：
+
+* 新建java类标注引入`@Slf4j`
+* 新建java枚举，实现`Messageable`接口
+* 新建java测试类，引入`Assertions`
+* try-cache打印日志并包裹异常
+
+注意: 修改作者为自己。
+
 ### 请求对象
 
 对于参数比较多的情况，建议自定义OrderBase子类

@@ -14,14 +14,8 @@
         <fileSet encoding="UTF-8">
             <directory></directory>
             <includes>
-                <include>readme.txt</include>
+                <include>README.md</include>
                 <include>.gitignore</include>
-            </includes>
-        </fileSet>
-        <fileSet filtered="true" encoding="UTF-8">
-            <directory></directory>
-            <includes>
-                <include>tomcat.sh</include>
             </includes>
         </fileSet>
     </fileSets>
@@ -64,6 +58,7 @@
                     <directory>src/main/resources</directory>
                     <includes>
                         <include>**/*.properties</include>
+                        <include>**/*.sql</include>
                     </includes>
                 </fileSet>
                 <fileSet filtered="true" packaged="true" encoding="UTF-8">

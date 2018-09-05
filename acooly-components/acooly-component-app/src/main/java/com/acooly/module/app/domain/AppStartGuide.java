@@ -29,7 +29,7 @@ public class AppStartGuide extends AbstractEntity {
             nullable = false,
             columnDefinition = "bigint not null COMMENT '排序（大小顺序）'"
     )
-    private long sortOrder = 1l;
+    private long sortOrder = 1L;
     /**
      * 默认图片
      */

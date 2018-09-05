@@ -49,19 +49,19 @@ public class PointTrade extends AbstractEntity {
     /**
      * 交易积分
      */
-    private Long amount = 0l;
+    private Long amount = 0L;
     /**
      * 交易后冻结积分
      */
-    private Long endFreeze = 0l;
+    private Long endFreeze = 0L;
     /**
      * 交易后积分
      */
-    private Long endBalance = 0l;
+    private Long endBalance = 0L;
     /**
      * 交易后有效积分
      */
-    private Long endAvailable = 0l;
+    private Long endAvailable = 0L;
 
     /**
      * 相关业务Id *

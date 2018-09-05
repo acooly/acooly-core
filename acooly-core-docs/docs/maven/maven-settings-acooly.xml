@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <!-- localRepository,Default: ${user.home}/.m2/repository -->
+    <!--
+    <localRepository>/path/to/local/repo</localRepository>
+    -->
+
+    <pluginGroups>
+    </pluginGroups>
+    <proxies></proxies>
+
+    <!-- 发布包到nexus的认证 -->
+    <!--
+    <servers>
+        <server>
+            <id>acooly-releases</id>
+            <username>${nexus.deployment.username}</username>
+            <password>${nexus.deployment.password}</password>
+        </server>
+        <server>
+            <id>acooly-snapshots</id>
+            <username>${nexus.deployment.username}</username>
+            <password>${nexus.deployment.password}</password>
+        </server>
+    </servers>
+    -->
+
+    <mirrors>
+        <mirror>
+            <id>acooly-mirror</id>
+            <mirrorOf>central</mirrorOf>
+            <name>nexue repository mirror for acooly.</name>
+            <url>http://acooly.cn/nexus/content/groups/public</url>
+            <!-- 如果nexus服务要求密码认证才能访问或拉取源代码包（*-sources.jar）,则需要配置URL认证 -->
+            <!--
+            <url>http://${nexus.deployment.username}:${nexus.deployment.password}@acooly.cn/nexus/content/groups/public</url>
+            -->
+        </mirror>
+    </mirrors>
+
+
+    <profiles>
+        <profile>
+            <id>acooly</id>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>acooly-maven-plugin-repos</id>
+                    <name>Maven acooly Mirror</name>
+                    <url>http://acooly.cn/nexus/content/groups/public</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                        <!--snapshots 总是检查是否有新版本 -->
+                        <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+            <repositories>
+                <repository>
+                    <id>acooly-maven-dep-repos</id>
+                    <name>Maven acooly Mirror</name>
+                    <url>http://acooly.cn/nexus/content/groups/public</url>
+                    <releases>
+                        <enabled>true</enabled>
+                        <updatePolicy>always</updatePolicy>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                        <!--snapshots 总是检查是否有新版本 -->
+                        <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                    <layout>default</layout>
+                </repository>
+            </repositories>
+        </profile>
+
+        <!-- 你的本地nexus服务配置 profiles, 一般分dev,online等 -->
+
+    </profiles>
+
+    <!-- activeProfiles | List of profiles that are active for all builds. | -->
+    <activeProfiles>
+        <activeProfile>acooly</activeProfile>
+    </activeProfiles>
+
+</settings>

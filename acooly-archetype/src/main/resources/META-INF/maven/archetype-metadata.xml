@@ -54,7 +54,7 @@
         </module>
         <module id="${rootArtifactId}-assemble" dir="__rootArtifactId__-assemble" name="${rootArtifactId}-assemble">
             <fileSets>
-                <fileSet filtered="false" encoding="UTF-8">
+                <fileSet filtered="true" encoding="UTF-8">
                     <directory>src/main/resources</directory>
                     <includes>
                         <include>**/*.properties</include>

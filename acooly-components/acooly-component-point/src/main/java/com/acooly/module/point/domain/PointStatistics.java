@@ -43,12 +43,12 @@ public class PointStatistics extends AbstractEntity {
     /**
      * 统计积分
      */
-    private Long point = 0l;
+    private Long point = 0L;
 
     /**
      * 真实处理积分
      */
-    private Long actualPoint = 0l;
+    private Long actualPoint = 0L;
 
     /**
      * 开始时间

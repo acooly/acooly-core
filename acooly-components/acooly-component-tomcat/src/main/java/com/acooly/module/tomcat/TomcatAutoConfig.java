@@ -125,7 +125,7 @@ public class TomcatAutoConfig {
                                 if (event.getType().equals(Lifecycle.CONFIGURE_START_EVENT)) {
                                     ((StandardContext) event.getLifecycle())
                                             .getResources()
-                                            .setCacheTtl(100l * 24 * 60 * 60 * 1000);
+                                            .setCacheTtl(100L * 24 * 60 * 60 * 1000);
                                 }
                             });
                 }

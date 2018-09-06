@@ -89,7 +89,7 @@ public class OlogHandleInterceptor extends HandlerInterceptorAdapter {
     protected long getExecuteTimes(HttpServletRequest request) {
         Long startTime = (Long) request.getAttribute(EXECUTE_START_KEY);
         if (startTime == null) {
-            return 0l;
+            return 0L;
         } else {
             request.removeAttribute(EXECUTE_START_KEY);
             return System.currentTimeMillis() - startTime;

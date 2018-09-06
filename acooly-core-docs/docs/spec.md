@@ -2,28 +2,44 @@
 
 根据开发指南要求开发代码，并参考如下规范
 
-### 1. code format
+###  代码格式
 
-统一使用google-java-format
+统一使用idea内置`code style`
 
-https://github.com/google/google-java-format
+### 代码规范
 
-### 2. 请求对象
+采用阿里巴巴代码规范，相关资源如下: 
+
+* [阿里巴巴JAVA开发手册](https://github.com/alibaba/p3c/blob/master/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4Java%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%EF%BC%88%E8%AF%A6%E5%B0%BD%E7%89%88%EF%BC%89.pdf)
+* [IDEA插件使用文档](https://github.com/alibaba/p3c/wiki/IDEA%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3)
+
+### 代码模板
+
+框架提供了IDEA代码模板[settings.jar](ide/idea/settings.jar),包括如下内容：
+
+* 新建java类标注引入`@Slf4j`
+* 新建java枚举，实现`Messageable`接口
+* 新建java测试类，引入`Assertions`
+* try-cache打印日志并包裹异常
+
+注意: 修改作者为自己。
+
+### 请求对象
 
 对于参数比较多的情况，建议自定义OrderBase子类
 
 * 查询类请求继承OrderBase
 * 命令类请求继承BizOrderBase
 
-### 3. 关于响应对象的使用规范
+### 关于响应对象的使用规范
 
 1. 	`ResultBase`中已经定义了`status`、`code`、`detail`。所有子类去掉其他`code`和`message`.
 2. 查询类请求，如果查询对象不存在，返回`status== success`，业务调用方需判断dto是否为空.
 3. 命令类请求，且为异步场景。当业务完全执行完毕后`status==success`。任何中间状态都为`status==processing`.
 
-### 4. 枚举继承`Messageable`
+### 枚举继承`Messageable`
 
-### 5 关于响应码`ResultCode`
+### 关于响应码`ResultCode`
 
 
 openapi对外提供服务，对于异常的情况，我们需要返回明确的`ResultCode`。响应码应该为枚举类型，并且实现`Messageable`接口
@@ -52,10 +68,3 @@ openapi对外提供服务，对于异常的情况，我们需要返回明确的`
 	 SUCCESS("SUCCESS", "成功"),
 	 INTERNAL_ERROR("INTERNAL_ERROR", "内部错误"),
 
-
-
-### 参考更多
-
-* [**易极付代码开发规范**](http://gitlab.yiji/peigen/tech-manage-doc/blob/master/人员管理/制度规范/技术中心/开发规范/易极付代码开发规范.md)
-
-* [**阿里巴巴JAVA开发手册**](http://gitlab.yiji/fintech/fintech-docs/blob/master/spec/阿里巴巴%20JAVA%20开发手册.pdf)

@@ -13,6 +13,7 @@ acooly框架主要设计目的为快速，规范的构建业务层系统和平�
 4. 通过框架提供类金融行业的应用级安全统一处理。
 
 ## 文档
+
 * [初始化环境](docs/env.md)
 * [快速开始](docs/quick-start.md)
 * [规范](docs/spec.md)
@@ -20,25 +21,6 @@ acooly框架主要设计目的为快速，规范的构建业务层系统和平�
 * [框架组件介绍](docs/components.md)
 * [Acooly框架开发指南](docs/acooly-guide.md)
 * [视图层开发指南](docs/acooly-guide-boss.md)
-
-## 版本
-
-### v4.x
-
-* 基于jdk8、spring4、spring-boot重构框架
-* 提供统一的jpa、mybatis支持
-* 提供分布式session、分布式cache能力
-* 引入dubbo组件支持
-* 引入开发者模式，提供开发效率
-
-### v3.x
-基于spring3.x+jdk1.6/1.7, 采用spring import和package scan结合方案；持久化方案支持：jpa，mybatis和jdbc；视图层支持jstl和freemarker，boss采用easyui。
-
-封装时间：2012年
-
-### v2.x
-基于spring2.5+jdk1.5/1.6，采用纯spring xml方式配置。
-
-时间：2009年
-
-### v1.x
+* [工具集](https://gitlab.acooly.cn/acoolys/acooly-script/)
+* [showcase](https://gitlab.acooly.cn/acoolys/acooly-showcase/)
+* [版本说明](docs/versions.md)

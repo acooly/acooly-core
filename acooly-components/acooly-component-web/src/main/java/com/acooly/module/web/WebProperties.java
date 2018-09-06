@@ -67,7 +67,7 @@ public class WebProperties {
     /**
      * 是否启用全局异常处理器 {@link GlobalExceptionHandler}
      */
-    private boolean enableMVCGlobalExceptionHandler = false;
+    private boolean enableMVCGlobalExceptionHandler = true;
 
     /**
      * 是否启用数据收集

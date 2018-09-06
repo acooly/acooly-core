@@ -17,7 +17,7 @@
 
 在命令行中执行如下命令：
 
- 	mvn archetype:generate  -DarchetypeGroupId=com.acooly  -DarchetypeArtifactId=acooly-archetype -DarchetypeVersion=4.2.0-SNAPSHOT -DarchetypeRepository=http://acooly.cn/nexus/content/groups/public/ -DgroupId=com.acooly.demo -DartifactId=acooly-demo -Dversion=1.0 -Dwebport=8080
+ 	mvn archetype:generate  -DarchetypeGroupId=com.acooly  -DarchetypeArtifactId=acooly-archetype -DarchetypeVersion=4.1.0-SNAPSHOT -DarchetypeRepository=http://acooly.cn/nexus/content/groups/public/ -DgroupId=com.acooly.demo -DartifactId=acooly-demo -Dversion=1.0 -Dwebport=8080
  	
 > 如果命令行在："Generating project in Interactive mode"卡住，请加入：-DarchetypeCatalog=local
 

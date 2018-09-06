@@ -12,20 +12,14 @@
 
 ### 3. nexus
 
-* 开发环境统一使用nexus地址为：`http://192.168.45.35:8081/nexus`
-* 驻场开发时，使用nexus地址为: `http://nexus.yijifu.net/nexus/`,此nexus不对外提供源代码访问。
+* 开发环境统一使用nexus地址为：`http://acooly.cn/nexus/index.html`
 
-请使用[maven setting](maven/settings.xml)替换`maven`默认setting文件
+请使用[maven setting](maven/maven-settings-acooly.xml)替换`maven`默认setting文件
 
 ### 4. IDE
 
-推荐使用`IDEA`、[sts](https://spring.io/tools/sts)
+推荐使用`IDEA`，安装lombok插件，并导入配置[settings.jar](ide/idea/settings.jar)
 
-配置[codetemplates](ide/acooly-eclipse-codetemplates.xml),[formatter](ide/acooly-eclipse-formatter.xml).
-
-不要使用eclipse！！！
-
-code format 请使用 [google-java-format](https://github.com/google/google-java-format)
 
 ### 5. lombok
 
@@ -34,25 +28,6 @@ code format 请使用 [google-java-format](https://github.com/google/google-java
 ### 6. 数据库
 
 使用mysql 5.7最新版本
-
-### 7. jenkins
-
-192.168.46.18:8888
-
-账号:admin 密码:admin123
-
-
-### 8. sonar
-
-192.168.46.18:9000
-
-### 9. ftp
-
-ftp://192.168.46.99/software
-
-user: cqyjf
-passwd: cqyjf123
-
 
 
 ## 资源清单

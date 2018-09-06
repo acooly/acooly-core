@@ -33,8 +33,15 @@ cd acooly-script-4.2.0
 
 工具包为你直接提供了quickstart的命令工具，你可以免去groupid等参数的设置，直接创建默认quickstart工程，快速体验acooly框架。
 
+假设你的worksapce为：d:\workspace, 你已完成上面第2部的工具包的安装和配置（环境变量），请启动cmd进行操作：
 
+```bat
+d:
+cd d:\workspace
+quickstart.bat
+```
 
+如果你已安装了JDK1.8,MAVEN3.X和mysql，根据提示完成操作后，基于SpringBoot的项目会成功启动，请在浏览器输入：http://localhost:8080 访问
 
 
 ### 4. 手动体验

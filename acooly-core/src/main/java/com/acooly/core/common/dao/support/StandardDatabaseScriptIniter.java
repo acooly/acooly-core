@@ -10,8 +10,6 @@
 package com.acooly.core.common.dao.support;
 
 import com.acooly.core.common.boot.ApplicationContextHolder;
-import com.acooly.core.common.boot.Apps;
-import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.dao.dialect.DatabaseDialectManager;
 import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.exception.AppConfigException;
@@ -49,11 +47,6 @@ public abstract class StandardDatabaseScriptIniter
 
     @Override
     public void onApplicationEvent(DataSourceReadyEvent event) {
-        if (Env.isOnline()
-                || !Apps.getEnvironment()
-                .getProperty("acooly.ds.autoCreateTable", Boolean.class, Boolean.TRUE)) {
-            return;
-        }
         DataSource dataSource = (DataSource) event.getSource();
         try {
             DatabaseType databaseType =

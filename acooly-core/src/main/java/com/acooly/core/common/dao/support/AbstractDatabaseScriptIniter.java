@@ -43,11 +43,6 @@ public abstract class AbstractDatabaseScriptIniter
 
     @Override
     public void onApplicationEvent(DataSourceReadyEvent event) {
-        if (Env.isOnline()
-                || !Apps.getEnvironment()
-                .getProperty("acooly.ds.autoCreateTable", Boolean.class, Boolean.TRUE)) {
-            return;
-        }
         DataSource dataSource = (DataSource) event.getSource();
         try {
             DatabaseType databaseType;

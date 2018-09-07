@@ -55,7 +55,7 @@ import java.util.Date;
  *
  * @author qiubo@yiji.com
  */
-@ConditionalOnProperty("acooly.web.enableMVCGlobalExceptionHandler")
+@ConditionalOnProperty(value = "acooly.web.enableMVCGlobalExceptionHandler",matchIfMissing = true)
 @ControllerAdvice
 public class GlobalExceptionHandler {
     public static final int DEFAULT_STATUS_CODE = HttpStatus.INTERNAL_SERVER_ERROR.value();

@@ -18,13 +18,20 @@
             <artifactId>${rootArtifactId}-facade</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <!-- 组件：数据库连接池 -->
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-ds</artifactId>
         </dependency>
+        <!-- 组件：web及springMvc封装组件 -->
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-web</artifactId>
+        </dependency>
+        <!-- 组件：基于角色的权限管理后台框架 -->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-security</artifactId>
         </dependency>
     </dependencies>
 </project>

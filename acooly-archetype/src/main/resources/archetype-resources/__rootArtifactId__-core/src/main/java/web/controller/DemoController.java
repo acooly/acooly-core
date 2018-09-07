@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class DemoController {
-    @RequestMapping("/hello")
-    @ResponseBody
+    @RequestMapping("/index")
     public String demo() {
-        return "hello world";
+        return "index";
     }
 }

@@ -57,7 +57,9 @@ public class JDBCAutoConfig {
             } else {
                 dataSource = druidProperties.build();
             }
-            ApplicationContextHolder.get().publishEvent(new DataSourceReadyEvent(dataSource));
+            if (druidProperties.isAutoCreateTable()) {
+                ApplicationContextHolder.get().publishEvent(new DataSourceReadyEvent(dataSource));
+            }
             new DBPatchChecker(druidProperties).check(dataSource);
             return dataSource;
         } catch (Exception e) {

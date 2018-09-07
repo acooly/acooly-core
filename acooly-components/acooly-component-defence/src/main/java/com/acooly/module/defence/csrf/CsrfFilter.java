@@ -119,7 +119,7 @@ public final class CsrfFilter extends OncePerRequestFilter {
 
     @SuppressWarnings("serial")
     private static final class SaveOnAccessCsrfToken implements CsrfToken {
-        private static final long serialVersionUID = 1l;
+        private static final long serialVersionUID = 1L;
         private final CsrfToken delegate;
         private transient CsrfTokenRepository tokenRepository;
         private transient HttpServletRequest request;

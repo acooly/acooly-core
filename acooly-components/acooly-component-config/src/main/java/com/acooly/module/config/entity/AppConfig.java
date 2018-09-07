@@ -43,7 +43,7 @@ public class AppConfig extends AbstractEntity {
      * 配置值
      */
     @NotEmpty
-    @Size(max = 255)
+    @Size(max = 2048)
     private String configValue;
 
     /**

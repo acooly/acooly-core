@@ -16,7 +16,7 @@ import org.springframework.boot.SpringApplication;
 @BootApp(sysName = "${rootArtifactId}", httpPort = ${webport})
 public class Main {
     public static void main(String[] args) {
-        Apps.setProfileIfNotExists("sdev");
+        Apps.setProfileIfNotExists("dev");
         new SpringApplication(Main.class).run(args);
     }
 }

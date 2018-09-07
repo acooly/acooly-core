@@ -37,7 +37,7 @@ public class PointClearConfigServiceImpl extends EntityServiceImpl<PointClearCon
         String tradeTimeStr = Dates.format(tradeTime, Dates.CHINESE_DATETIME_FORMAT_LINE);
         PointClearConfig pointClearConfig = getEntityDao().getOneClearConfigByTradeTime(tradeTimeStr);
         if (pointClearConfig == null) {
-            return 0l;
+            return 0L;
         }
         String startClearTime = Dates.format(pointClearConfig.getStartClearTime(), Dates.CHINESE_DATETIME_FORMAT_LINE);
         String endClearTime = Dates.format(pointClearConfig.getEndClearTime(), Dates.CHINESE_DATETIME_FORMAT_LINE);
@@ -46,6 +46,6 @@ public class PointClearConfigServiceImpl extends EntityServiceImpl<PointClearCon
         long producePoint = pointTradeService.getProducePoint(userName, startClearTime, endClearTime);
         long expensePoint = pointTradeService.getExpensePoint(userName, startClearTime, clearTime);
         long clearPoint = producePoint - expensePoint;
-        return (clearPoint) > 0 ? clearPoint : 0l;
+        return (clearPoint) > 0 ? clearPoint : 0L;
     }
 }

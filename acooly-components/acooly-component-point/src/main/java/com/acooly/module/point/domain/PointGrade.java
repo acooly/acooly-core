@@ -37,11 +37,11 @@ public class PointGrade extends AbstractEntity {
     /**
      * 积分区间_开始
      */
-    private Long startPoint = 0l;
+    private Long startPoint = 0L;
     /**
      * 积分区间_结束
      */
-    private Long endPoint = 0l;
+    private Long endPoint = 0L;
     /**
      * 图标
      */

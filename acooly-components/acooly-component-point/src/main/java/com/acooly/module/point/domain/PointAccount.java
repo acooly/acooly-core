@@ -33,24 +33,24 @@ public class PointAccount extends AbstractEntity {
     /**
      * 积分余额
      */
-    private Long balance = 0l;
+    private Long balance = 0L;
     /**
      * 冻结
      */
-    private Long freeze = 0l;
+    private Long freeze = 0L;
     /**
      * 可用余额
      */
     @Transient
-    private Long available = 0l;
+    private Long available = 0L;
     /**
      * 总消费积分 *
      */
-    private Long totalExpensePoint = 0l;
+    private Long totalExpensePoint = 0L;
     /**
      * 总产生积分 *
      */
-    private Long totalProducePoint = 0l;
+    private Long totalProducePoint = 0L;
     /**
      * 状态
      */

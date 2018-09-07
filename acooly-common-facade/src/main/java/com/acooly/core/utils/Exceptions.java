@@ -53,6 +53,15 @@ public class Exceptions {
             throw new BusinessException(throwable.getMessage());
         }
     }
+    public static BusinessException rethrowBusinessException(Throwable throwable,String msg) {
+        if (throwable instanceof BusinessException) {
+            throw (BusinessException) throwable;
+        } else if (throwable instanceof Error) {
+            throw (Error) throwable;
+        } else {
+            throw new BusinessException(msg,throwable.getMessage());
+        }
+    }
 
     /**
      * 将CheckedException转换为UncheckedException.

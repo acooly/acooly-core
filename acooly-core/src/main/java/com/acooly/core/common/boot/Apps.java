@@ -167,7 +167,7 @@ public class Apps {
     public static void mdc(String gid) {
         MDC.put(LogAutoConfig.LogProperties.GID_KEY, gid);
     }
-    public static void mdcClear(String gid) {
+    public static void mdcClear() {
         MDC.clear();
     }
 }

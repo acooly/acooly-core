@@ -16,6 +16,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.util.StringUtils;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 
@@ -163,10 +164,10 @@ public class Apps {
         }
         return isTest;
     }
-    public static void putMDC(String gid){
-        MDC.put(LogAutoConfig.LogProperties.GID_KEY,gid);
+
+    public static Closeable mdc(String gid) {
+        MDC.put(LogAutoConfig.LogProperties.GID_KEY, gid);
+        return () -> MDC.clear();
     }
-    public static void clearMDC(){
-        MDC.clear();
-    }
+
 }

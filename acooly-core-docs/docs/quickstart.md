@@ -51,11 +51,16 @@ quickstart.bat
 #### 4.1 创建工程
 
 框架提供了`maven archtype`快速生成项目工程。在生成项目之前，我们需要确认如下参数：
-````
+
+     mvn archetype:generate  -DarchetypeGroupId=com.acooly  -DarchetypeArtifactId=acooly-archetype -DarchetypeVersion=4.2.0-SNAPSHOT -DarchetypeRepository=http://acooly.cn/nexus/content/groups/public/ -DgroupId=com.acooly.demo -DartifactId=acooly-demo -Dversion=1.0 -Dwebport=8080 -DmysqlHost=127.0.0.1 -DmysqUserName=root -DmysqlPassword=123456
+    
 * 项目groupId
 * 项目artifactId
 * 项目version
-* web端口
+* web端口 (webport参数)
+* mysql数据库host (mysqlHost参数)
+* mysql用户名 (mysqUserName参数)
+* mysql密码 (mysqlPassword参数)
 
 为兼容不同IDE（IDEA和Eclipse），我们提供独立的cli脚本方式创建新工程。在前面我们下载了工具包。我们可以直接使用脚本工具mvna构建工程。
 

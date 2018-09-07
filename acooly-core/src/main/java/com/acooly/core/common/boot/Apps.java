@@ -164,10 +164,7 @@ public class Apps {
         return isTest;
     }
 
-    public static void mdc(String gid) {
-        MDC.put(LogAutoConfig.LogProperties.GID_KEY, gid);
-    }
-    public static void mdcClear() {
-        MDC.clear();
+    public static MDC.MDCCloseable mdc(String gid) {
+       return MDC.putCloseable(LogAutoConfig.LogProperties.GID_KEY, gid);
     }
 }

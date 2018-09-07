@@ -5,9 +5,11 @@
 package com.acooly.core.common.boot;
 
 import com.acooly.core.common.boot.listener.ExApplicationRunListener;
+import com.acooly.core.common.boot.log.LogAutoConfig;
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.utils.Strings;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.MDC;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
@@ -160,5 +162,11 @@ public class Apps {
             isTest = propertySources.contains("Inlined Test Properties");
         }
         return isTest;
+    }
+    public static void putMDC(String gid){
+        MDC.put(LogAutoConfig.LogProperties.GID_KEY,gid);
+    }
+    public static void clearMDC(){
+        MDC.clear();
     }
 }

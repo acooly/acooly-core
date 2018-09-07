@@ -8,6 +8,15 @@
         <requiredProperty key="webport">
             <defaultValue>8080</defaultValue>
         </requiredProperty>
+        <requiredProperty key="mysqlHost">
+            <defaultValue>127.0.0.1</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="mysqUserName">
+            <defaultValue>root</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="mysqlPassword">
+            <defaultValue>123456</defaultValue>
+        </requiredProperty>
     </requiredProperties>
 
     <fileSets>

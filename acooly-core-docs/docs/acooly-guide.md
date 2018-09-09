@@ -14,17 +14,33 @@ Acooly框架是基于目前业界最常用的J2EE开发基础技术栈开发的�
 5. 在工程中根据业务需求，调整生成的代码，添加新的功能
 6. run，运行测试验证~
 
-![](res/top_arche.png)
 
 # 技术架构
+
+## 核心架构
 
 ![](res/dev_arche.png)
 
 上图是acooly框架的主线架构，采用开源的轻量级J2EE解决方案。
 
-* 主线技术栈：JDK8/spring boot/JPA/Mybatis/Spring4/jsp/freemarker
+* 主线技术栈：JDK8/Spring-boot/JPA/Mybatis/jsp/freemarker
 
 * 服务采用：Dubbo（RPC）方案/CXF(SOAP)/HTTP-OpenApi开放平台解决方案
+
+## 应用（系统）架构
+
+应用/系统架构主要描述的是单个应用（子系统工程）的架构设计和开发模式。图中蓝色部分为acooly框架提供能力和服务支持，绿色部分是业务开发工程师只需关注业务的逻辑开发。
+
+
+![](res/app_arche.png)
+
+
+## 平台架构
+
+平台架构描述的是基于SOA的平台的总体架构设计和开发模式。
+
+![](res/platform_arche.png)
+
 
 # 设计规范和约定
 
@@ -394,4 +410,5 @@ JSTL参考：http://docs.oracle.com/javaee/5/jstl/1.1/docs/tlddocs/
 
 ### 视图开发
 
-视图开发请参见：Acooly框架视图开发指南
+* [管理后台开发指南](docs/acooly-guide-boss.md)
+* [业务前台开发指南](docs/acooly-guide-portal.md)

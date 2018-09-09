@@ -1,12 +1,12 @@
 acooly coder自动代码生成工具
 ====
 
-## 简介
+## 1 简介
 acooly coder是为acooly框架配套的专用代码生成工具，设计目的为跟进acooly框架封装的最佳代码实践，快速生成业务程序的骨架代码和基本功能，最大程度的减少程序员的重复劳动及规范统一代码风格和规范~
 
-## 工具获取
+## 2 工具获取
 
-### cli工具
+### 2.1 cli工具
 
 acooly coder的发布包采用maven方式发布，目前只提供cli工具。
 仓库地址：http://${host}/nexus/content/repositories/releases/
@@ -25,6 +25,8 @@ v1.x坐标：
 
 >>使用说明：拉取发布包后直接解压，application.properties为配置文件，请跟进生成的需求配置，然后运行start.sh/start.bat生成代码。
 
+### 2.2 工程内集成工具
+
 v4.x坐标：
 
 		<dependency>
@@ -33,31 +35,28 @@ v4.x坐标：
 	  		<version>4.1.0-SNAPSHOT</version>
 		</dependency>
 
->>使用说明：v4版本已经集成到项目中。
+>>使用说明：v4版本已经集成到项目的test中（Acoolycoder.java），可直接main方式运行。
 
-## 使用手册
+## 3 使用手册
 
-### 框架约定
+### 3.1 框架约定
 
 acooly框架为了方便开发和设计，以开发经验为基础，对使用acooly进行了部分设计上的约定，通过约定降低设计和开发难度，提高效率。当然，这也符合流行的约定大于配置的设计理念。
 
-#### 程序结构约定
+**程序结构约定**
 
 工程结构完全按maven j2ee工程骨架，这个可以通过acooly-archetype生成后就可以清楚展现，程序模块的设计开发有一下基本约定。
 
 * 实体类（entity）必须继承AbstractEntity,并提供一个名称为id的属性作为实体的唯一标识，同时也映射到数据库的物理主键。
 * 每个模块的程序分为domian（entity和领域domain合并），dao，service和controller四层。命名规则依次为:EntityDao,EntityService,EntityManageController(后台)和EntityPortalController
+* 视图层命名约定为：${entityName/domainName}[List].ftl/jsp为列表或主界面, ${entityName/domainName}[Show].ftl/jsp为查看视图，${entityName/domainName}[Edit].ftl/jsp为创建和编辑公用视图。
 
-### 数据库设计
+**数据库设计**
 
 为了方便自动生成结构性代码，对数据库表结构设计进行部分约定，但都符合常规习惯。
 
 * 表名全部小写，不能以数字开头，必须添加备注，表名应该以模块或组件为前缀
-* 每个表必须有以id命名的物理主键，且为数字类型，
-
-
-	如：mysql为`id  bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID'`, oracle为number。
-
+* 每个表必须有以id命名的物理主键，且为数字类型，如：mysql为 `id  bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID'`, oracle为number。
 * 列名称全部小写，不能以数字开头；如果存在多个自然单词的组合，使用下划线分隔(\_)。如："user\_type"
 * 列定义必须添加备注 （这个备注则为生成的页面及表单的label）
 * 每个表必须添加`create_time`和`update_time`两个日期时间类型的字段
@@ -71,16 +70,18 @@ acooly框架为了方便开发和设计，以开发经验为基础，对使用ac
 * 特别注意，强烈要求选项类（自动生成枚举类的）字段项目全局唯一名称，否则会生成enum名称相同的枚举相互覆盖。
 * 特别注意，MySQL在5.5.3之后增加了这个utf8mb4的编码，mb4就是most bytes 4的意思，专门用来兼容四字节的unicode,utf8mb4是utf8的超集。强烈建议表的字符集设置为utf8mb4，在MariaDB情况下utf8会出现字符集不兼容，强烈建议字符集设置为utf8mb4，如：
        
-       
-       CREATE TABLE `cms_content_body` (
-         `ID` bigint(20) NOT NULL COMMENT '主键',
-         `BODY` text NOT NULL COMMENT '内容主体',
-         `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-         `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-         PRIMARY KEY (`ID`)
-       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='内容主体';
+	```sql
+	CREATE TABLE `cms_content_body` (
+	  `id` bigint(20) NOT NULL COMMENT '主键',
+	  `body` text NOT NULL COMMENT '内容主体',
+	  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+	  PRIMARY KEY (`id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='内容主体';
+	```
 
-### 代码生成
+
+### 3.2 代码生成
 
 自动代码生成的方案与目前流行的方式设计上是基本一致的。主要核心设计为：
 
@@ -92,7 +93,7 @@ acooly框架为了方便开发和设计，以开发经验为基础，对使用ac
 
 下面以一个案例来简单说明这个开发过程。
 
-#### 设计表
+#### 3.2.1 设计表
 
 本案例中，我们以mysql为案例设计一个客户信息表，名称为:dm_customer, 表结构如下：
 
@@ -121,7 +122,7 @@ CREATE TABLE `dm_customer` (
 
 > 本案例基于本系列的第一篇文章《acooly框架一:archetype》，假设你已生成了工程，名称为acooly-demo，并建立数据库acooly，然后成功运行的基础上.
 
-#### 配置
+#### 3.2.2 配置
 
 打开工具包后，你会看到根目录下有`acoolycoder.properties`文件，请打开进行配置。
 
@@ -159,9 +160,55 @@ generator.code.copyright=acooly.cn
 
 完成配置后，请保持退出，准备运行工具生成代码
 
-#### 生成代码
+#### 3.2.3 生成代码
 
 运行环境基础要求JDK1.8，本工具支持同时生成多张表到同一个模块。
+
+**工程内集成方式**
+
+如果你是通过acooly-archetype或mvna命令方式创建的新工程，在你的工程test模块下有对应的AcoolyCoder.java或acoolycode.properties文件，你可以直接按上面的配置说明调整配置后，Main方式运行AcoolyCoder.java生成代码。
+
+>注意：AcoolyCode.java中代码设置的参数会覆盖acoolycode.properties的配置。
+
+
+```java
+/**
+ * 代码生成工具
+ */
+public class AcoolyCoder {
+    public static void main(String[] args) {
+        DefaultCodeGenerateService service = (DefaultCodeGenerateService) Generator.getGenerator();
+        // 设置生成代码的工程或模块路径
+        if (StringUtils.isBlank(service.getGenerateConfiguration().getWorkspace())) {
+            String workspace = getProjectPath() + "your-project-module-name";
+            service.getGenerateConfiguration().setWorkspace(workspace);
+        }
+        // 设置生成的代码的包路径
+        if (StringUtils.isBlank(service.getGenerateConfiguration().getRootPackage())) {
+            service.getGenerateConfiguration().setRootPackage(getRootPackage());
+        }
+        // 这里设置需要一次性生成到一个包下面的表名，可以参数数组。
+        service.generateTable("dm_customer");
+    }
+
+    public static String getProjectPath() {
+        String file = AcoolyCoder.class.getClassLoader().getResource(".").getFile();
+        String testModulePath = file.substring(0, file.indexOf("/target/"));
+        String projectPath = testModulePath.substring(0, testModulePath.lastIndexOf("/"));
+        return projectPath + "/";
+    }
+
+	 // 返回本次代码生成的目标包路径
+    private static String getRootPackage() {
+        return "com.qiudot.dassets.portal";
+    }
+}
+
+```
+
+
+
+**命令行方式**
 
 解压开自动生成工具，根目录下存在start.bat,start.sh等启动文件，如果你的windows，则可以直接cmd进入到当前目录，运行start.bat，根据提示输入需要自动生成的表名称，回车即可。
 
@@ -186,136 +233,21 @@ com.acooly.module.coder.generate.GenerateConfiguration@38294acb[
 
 生成成功后，一般情况，只需重新启动服务器，从controller中找到访问的URL，配置到权限管理系统则可以直接访问，完成开发的第一步。
 
-### 运行查看效果
+#### 3.2.4 运行查看效果
 
-OK，如果上步成功，请回到你的IDE，刷新工程，你应该看到在原来空的 src/main/java目录下存在了新生成的代码，并编译通过。同时在src/main/resources/META-INF/resource/jsp/manage/demo下存在了该模块的管理界面。工程如图：
-
-![](https://github.com/acooly/acooly.github.io/blob/master/_posts/resource/images/acooly/coder_module.png?raw=true)
-
-#### 添加资源及菜单
-
-下面我们打开 `CustomerManageController.java`文件，如下：
-
-```java
-@Controller
-@RequestMapping(value = "/manage/demo/customer")
-public class CustomerManagerController extends AbstractJQueryEntityController<Customer, CustomerService> {
-	//....
-}
-```
-
-记录下该类的@RequestMapping的值: /manage/demo/customer ，用户在权限管理中配置资源和菜单。
-
-下面我们调试启动服务器，并登录进入系统。访问系统管理中的资源管理，配置权限资源和菜单。
-
-![](https://github.com/acooly/acooly.github.io/blob/master/_posts/resource/images/acooly/resource.png?raw=true)
-
->注意：如上图所示，资源的URL应该为前面记录的contoller的mapping值后加上/index.html,这个约定是为了简化资源，菜单和权限配置，资源默认的index.html则约定为入口菜单。
-
-#### 设置角色权限
-
-demo中，我们采用的是admin登录，默认为系统管理员权限，所以，在完成资源添加后，只需进入角色管理中为系统管理员勾选新设置的资源的访问权限即可。 系统管理 -> 角色管理 -> 系统管理员行后面的标记图标按钮。点击后如图：
-
-![](https://github.com/acooly/acooly.github.io/blob/master/_posts/resource/images/acooly/role_setting.png?raw=true)
-
-OK，设置完成后，请刷新菜单（在做不菜单栏的标题栏右边有个刷新图标），你会看到新的菜单出来了~~，当然如果找不到刷新图标，请直接刷新浏览器，一样样的~，不用重启哦~
-
-点击 “业务管理” --> "客户信息管理" 菜单，相信你会看到有一个查询列表显示出来，并且在表格的头上有一些操作按钮，如：添加，批量删除，导入导出等，请先不要管是否美观，排列是否合理，点击下添加，根据界面表单的非空提示，填入必选数据项，保存。是否成功添加了一条记录！？你可以点击新增的一行数据后面的修改和删除，尝试操作体验下~~ ，当然你可以导出~~，
-
-![](https://github.com/acooly/acooly.github.io/blob/master/_posts/resource/images/acooly/def_list.png?raw=true)
-
-OK,acooly声称的70%的工作已完成，下面就要靠程序员来完成该功能的调整了~
-
-### 程序员定制
-
-调整定制前，先不要shutdown服务器，我们首先要调整的是界面，回到IDE，进入`src/main/resources/META-INF/resources/WEB-INF/jsp/manage/demo`目录，我们主要调整的是列表界面和编辑界面（添加和修改界面合一）。
-
-#### 视图界面
-
-主要调整列表界面的查询条件和显示列，其他视图的定制，请参考后续文档~。
-
-**查询条件**
-
-默认情况下，自动代码生成工具不知道你这个模块需要什么查询条件，所有它把所有的列都生成了查询项，那么，我们程序就根据实际的业务场景，只需使用delete键，删除你觉得多余的查询条件即可，当然你可以调整查询条件的顺序和长度，他们都是基础的html表单。列表页面为：customer.jsp,如下：
-
-```html
-用户名:<input type="text" size="15" name="search_LIKE_username" />
-手机号码:<input type="text" size="15" name="search_LIKE_mobileNo" />
-姓名:<input type="text" size="15" name="search_LIKE_realName"/>
-状态:<select style="width:80px;" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allStatuss}"><option value="${e.key}" ${param.search_EQ_status == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-创建时间:<input size="15" id="search_GTE_createTime" name="search_GTE_createTime" size="15" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
-至<input size="15" id="search_LTE_createTime" name="search_LTE_createTime" size="15" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
-```
-OK, 调整为以上查询条件，保留：用户名，手机，姓名，状态和创建时间作为查询条件。保持页面代码后，请切换到浏览器，刷新该tab（注意，不用整页刷新，框架页面右边有个刷新图标，只刷新当前tab）
-
-**显示的列**
-
-与查询条件一样，根据你的需要调整显示的列名，位置和格式（格式的话，稍微需要点javascript或easyui的基础哈）。我们调整如下：
-
-```html
-<th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
-<th field="id">ID</th>
-<th field="username">用户名</th>
-<th field="realName">姓名</th>
-<th field="age">年龄</th>
-<th field="birthday" formatter="formatDate">生日</th>
-<th field="gender" data-options="formatter:function(value){ return formatRefrence('manage_customer_datagrid','allGenders',value);} ">性别</th>
-<th field="idcardNo">身份证号码</th>
-<th field="mail">邮件</th>
-<th field="mobileNo">手机号码</th>
-<th field="status" data-options="formatter:function(value){ return formatRefrence('manage_customer_datagrid','allStatuss',value);} ">状态</th>
-<th field="createTime" formatter="formatDate">创建时间</th>
-<th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_customer_action',value,row)}">动作</th>
-```
-
-**编辑界面**
-
-编辑界面的名称为 customerEdit.jsp, 里面就是一个标准的form表单，请程序员根据需求进行布局调整，包括位置，表单大小，宽度等。
-
-> 一般情况，自动代码生成工具会把创建时间，修改时间也生成对应的表单，需要程序删除下，因为框架会自动管理这两个数据。其他非必填字段，也可以直接删除掉，关于非空和格式的check方案，我们直接使用easyui的官方标准方案并进行部分扩展，请参考easyui官方文档或后续acooly框架文档。
-
-OK，界面调整完成，我们刷新界面，新的界面就要人性化多了（这部分工作acooly觉得必须由程序员来做，我们不是神，做全自动，可能配置的时间比程序员调整的时间和成本还高~），可以给测试或用户使用啦~  
-
-![](https://github.com/acooly/acooly.github.io/blob/master/_posts/resource/images/acooly/mod_list.png?raw=true)
-
-### 进阶
-
-以上完成了一个acooly框架基础开发的案例，基本展示了acooly框架开发的模式。但在实际业务开发中这些远还不够，程序员根据实际业务的需求，还需要做很多工作，包括：多实体关联关系配置，业务逻辑服务编写和调用，页面的特殊定制等，但这些本应是程序员的职责，acooly框架提供的是把大量重复的工作自动化和工具化~，后续将逐步发布各种业务开发场景在前端和服务器端的开发说明，大量的组件能力说明~
+OK，如果上步成功，请回到你的IDE及对应的模块，你应该看到在原来空的 src/main/java目录下存在了新生成的代码，并编译通过。同时在src/main/resources/META-INF/resource/jsp/manage/demo（jsp模式）或src/main/resources/templates（freemarker）下存在了该模块的管理界面。
 
 
-## 版本说明
+### 3.3 进阶
 
-### 4.0.0-SNAPSHOT
+以上完成了一个acooly框架基础开发的案例，基本展示了acooly半自动代码生产开发模式。但在实际业务开发中这些远还不够，程序员根据实际业务的需求，还需要做很多工作，包括：多实体关联关系配置，业务逻辑服务编写和调用，页面的特殊定制等，但这些本应是程序员的职责，acooly框架提供的是把大量重复的工作自动化和工具化~，后续将逐步发布各种业务开发场景在前端和服务器端的开发说明，大量的组件能力说明~
 
-升级支持acooly4.x版本支持，增加mybatis的自动代码生成功能。
+具体对功能和界面的调整，请参考：
 
-### v1.2.3
-
-* 2016-09-23 - 提交mysql和oracle的测试表dm_customer的ddl,增加主配置文件oracle的配置 - [zhangpu] f988688
-* 2016-09-23 - 新增ORACLE自动代码生成支持 - [zhangpu] bb2bf4a
-* 2016-09-21 - 添加oracle的驱动依赖 - [zhangpu] 9b73dca
+* [开发指南](docs/acooly-guide.md)
+* [管理后台开发指南](docs/acooly-guide-boss.md)
+* [业务前台开发指南](docs/acooly-guide-portal.md)
 
 
-### v1.2.2
-
-* 2016-08-15 16:54:29  cuifuq  [add] 列表页面更新：bigint 类型数据自动添加统计求和功能，使用方式 sum="true"   
-* 统计功能：sum:求和；avg:平均；max：最大值；min：最小值
-
-> 使用统计功能需acooly-module-security版本升级为3.4.4以上
-
-
-### v1.2.1
-
-* 2016-07-10 20:37:29  zhangpu  [add] 更新图标和样式为最新的acooly样式,同时支持awesom-font图标和easyui图标，默认采用橙色的awesome-font图标。（需acooly-module-security-3.4.6支持）
-* 2016-07-08 02:47:32  zhangpu  [fix] 一系列的试图层模板优化，生成的代码更准确和人性化
-* 2016-07-08 01:09:40  zhangpu  [add] 增强选项类型的自动生成规则，同时支持基于枚举(key为字符串)和静态常量(key为数字)的选项数据生成。
-* 2016-07-08 01:09:40  zhangpu  [add] 重构数据类型映射，支持配置方式增加数据库与JAVA类型的映射,不如，你想让数据库的decimal类型生成为Money或BigDecimal。
-* 2016-07-03 16:13:41  zhangpu  [del] 暂时删除UI(swt)界面,计划后面开发插件。
-* 2016-07-03 16:13:41  zhangpu  [add] 精简工具依赖（只依赖freemarker,mysql-jdbc驱动和apache-commons-lang），整理新的发布包,通过nexus发布，完成工具和文档整理。
-
-> 建议使用新版生成器后，升级acooly-module-security版本为3.4.6为最佳效果（向下兼容）
-
-### v1.2.1之前
-请按原有的发布包继续使用！~
 
 

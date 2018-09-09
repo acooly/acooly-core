@@ -14,13 +14,14 @@ acooly框架主要设计目的为快速，规范的构建业务层系统和平�
 
 ## 文档
 
-* [初始化环境](docs/env.md)
-* [快速开始](docs/quickstart.md)
-* [规范](docs/spec.md)
-* [代码生成指南](docs/acooly-coder.md)
-* [框架组件介绍](docs/components.md)
-* [Acooly框架开发指南](docs/acooly-guide.md)
-* [视图层开发指南](docs/acooly-guide-boss.md)
+* [开发环境](docs/env.md)
+* [quickstart](docs/quickstart.md)
+* [开发规范](docs/spec.md)
+* [代码生成](docs/acooly-coder.md)
+* [框架组件](docs/components.md)
+* [开发指南](docs/acooly-guide.md)
+* [管理后台开发指南](docs/acooly-guide-boss.md)
+* [业务前台开发指南](docs/acooly-portal-boss.md)
 * [工具集](https://gitlab.acooly.cn/acoolys/acooly-script/)
 * [showcase](https://gitlab.acooly.cn/acoolys/acooly-showcase/)
 * [版本说明](docs/versions.md)

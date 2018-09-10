@@ -28,3 +28,7 @@ acooly框架主要设计目的为快速，规范的构建业务层系统和平�
 ## 发布文档
 
      mvn site:deploy
+
+## 在线地址
+
+    http://acooly.cn/acooly-docs/

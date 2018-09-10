@@ -145,7 +145,7 @@ mvna
 		
 测试工程中有`AcoolyCoder`，它读取`acoolycoder.properties`配置文件，生成代码。
 
->请参考：[acooly coder自动代码生成工具](acooly-coder.md)
+>请参考：[acooly coder自动代码生成工具](acooly-coder.html)
 
 ### 4.6 配置和资源文件
 

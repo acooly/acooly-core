@@ -9,21 +9,9 @@ acooly coder是为acooly框架配套的专用代码生成工具，设计目的�
 ### 2.1 cli工具
 
 acooly coder的发布包采用maven方式发布，目前只提供cli工具。
-仓库地址：http://${host}/nexus/content/repositories/releases/
+仓库地址：http://acooly.cn/nexus/content/repositories/releases/
 
-工具包maven坐标（请根据需要更新对应的版本,当前版本：4.1.0-SNAPSHOT）：
-
-v1.x坐标：
-
-		<dependency>
-  			<groupId>com.acooly</groupId>
-  			<artifactId>acooly-module-coder</artifactId>
-  			<version>${acooly.coder.version}</version>
-  			<classifier>distribution</classifier>
-  			<type>zip</type>
-		</dependency>
-
->>使用说明：拉取发布包后直接解压，application.properties为配置文件，请跟进生成的需求配置，然后运行start.sh/start.bat生成代码。
+工具包maven坐标（请根据需要更新对应的版本,当前版本：4.2.0-SNAPSHOT)
 
 ### 2.2 工程内集成工具
 
@@ -32,10 +20,11 @@ v4.x坐标：
 		<dependency>
 	  		<groupId>com.acooly</groupId>
 	  		<artifactId>acooly-coder</artifactId>
-	  		<version>4.1.0-SNAPSHOT</version>
+	  		<version>4.2.0-SNAPSHOT</version>
 		</dependency>
 
->>使用说明：v4版本已经集成到项目的test中（Acoolycoder.java），可直接main方式运行。
+
+使用说明：v4版本已经集成到项目的test中（Acoolycoder.java），可直接main方式运行。
 
 ## 3 使用手册
 
@@ -244,9 +233,9 @@ OK，如果上步成功，请回到你的IDE及对应的模块，你应该看到
 
 具体对功能和界面的调整，请参考：
 
-* [开发指南](docs/acooly-guide.md)
-* [管理后台开发指南](docs/acooly-guide-boss.md)
-* [业务前台开发指南](docs/acooly-guide-portal.md)
+* [开发指南](acooly-guide.html)
+* [管理后台开发指南](acooly-guide-boss.html)
+* [业务前台开发指南](acooly-guide-portal.html)
 
 
 

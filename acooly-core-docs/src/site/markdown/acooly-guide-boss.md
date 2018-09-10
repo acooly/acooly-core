@@ -332,7 +332,7 @@ $.acooly.framework.reloadGrid(gridId)
 
 EasyUI的DataGrid组件是BOSS后台最常用的组件，没有之一，就是最常用的。数据查询，数据管理首页等。本节主要针对acooly框架对DataGrid的使用和扩展进行说明，DataGrid本身的大量功能和特性请参考EASYUI官方文档和Demo。
 
->EasyUI的DataGrid：<a href="http://www.jeasyui.com/documentation/index.php" target="_blank">文档</a>和<a href="http://www.jeasyui.com/demo/main/index.php?plugin=DataGrid&theme=default&dir=ltr&pitem=" target="_blank">Demo</a>
+EasyUI的DataGrid：[文档](http://www.jeasyui.com/documentation/index.php)和[Demo](http://www.jeasyui.com/demo/main/index.php?plugin=DataGrid&theme=default&dir=ltr&pitem=)
 
 
 建议代码如下：

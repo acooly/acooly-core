@@ -11,16 +11,3 @@ acooly框架主要设计目的为快速，规范的构建业务层系统和平�
 2. 核心最佳代码实践封装+组件能力扩展模式，在规范统一的同时，也为开发人员提供学习进阶的参考。
 3. 自动代码生成，规范，快速，解放重复劳动，提高业务开发效率70%
 4. 通过框架提供类金融行业的应用级安全统一处理。
-
-## 文档
-
-* [开发环境](src/site/markdown/env.md)
-* [快速开始](src/site/markdown/quickstart.md)
-* [开发规范](src/site/markdown/spec.md)
-* [代码生成](src/site/markdown/acooly-coder.md)
-* [框架组件及组件库](src/site/markdown/components.md)
-* [开发指南](src/site/markdown/acooly-guide.md)
-* [管理后台开发指南](src/site/markdown/acooly-guide-boss.md)
-* [业务前台开发指南](src/site/markdown/acooly-guide-portal.md)
-* [工具集](https://gitlab.acooly.cn/acoolys/acooly-script/)
-* [showcase](https://gitlab.acooly.cn/acoolys/acooly-showcase/)

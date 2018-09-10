@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/DECORATION/1.8.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 http://maven.apache.org/xsd/decoration-1.8.0.xsd"
+         name="acooly framework"
+>
+    <bannerLeft>
+        <name>Acooly Framework</name>
+        <src>https://www.qiudot.com/assets/images/logo.png</src>
+        <href>https://www.qiudot.com</href>
+    </bannerLeft>
+    <body>
+        <menu name="Overview">
+            <item name="home" href="index.html"/>
+            <item name="env" href="env.html"/>
+            <item name="quickstart" href="quickstart.html"/>
+            <item name="acooly-coder" href="acooly-coder.html"/>
+            <item name="acooly-guide" href="acooly-guide.html"/>
+            <item name="acooly-guide-boss" href="acooly-guide-boss.html"/>
+            <item name="components" href="components.html"/>
+            <item name="acooly-script" href="https://gitlab.acooly.cn/acoolys/acooly-script/"/>
+            <item name="showcase" href="https://gitlab.acooly.cn/acoolys/acooly-showcase/"/>
+        </menu>
+        <footer><![CDATA[Copyright@<a href="https://www.qiudot.com/">qiuduo</a>. All rights reserved.]]></footer>
+    </body>
+</project>

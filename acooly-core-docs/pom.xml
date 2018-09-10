@@ -23,42 +23,14 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>com.ruleoftech</groupId>
-                <artifactId>markdown-page-generator-plugin</artifactId>
-                <version>2.1.0</version>
-                <executions>
-                    <execution>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
                 <configuration>
-                    <inputDirectory>${basedir}/docs</inputDirectory>
-                    <outputDirectory>${basedir}/target/classes/static/docs</outputDirectory>
-                    <inputEncoding>UTF-8</inputEncoding>
-                    <outputEncoding>UTF-8</outputEncoding>
+                    <port>9000</port>
+                    <tempWebappDirectory>${basedir}/target/site/tempdir</tempWebappDirectory>
                 </configuration>
             </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <filtering>false</filtering>
-                <directory>docs</directory>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-                <targetPath>META-INF/docs</targetPath>
-            </resource>
-            <resource>
-                <filtering>false</filtering>
-                <directory>.</directory>
-                <includes>
-                    <include>*.md</include>
-                </includes>
-                <targetPath>META-INF</targetPath>
-            </resource>
-        </resources>
     </build>
 </project>

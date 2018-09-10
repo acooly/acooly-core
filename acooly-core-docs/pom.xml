@@ -19,13 +19,25 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
+    <distributionManagement>
+        <site>
+            <id>acooly.doc.website</id>
+            <url>scp://docs:123456@121.40.229.27:22/opt/www/acooly-docs</url>
+        </site>
+    </distributionManagement>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.7.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.wagon</groupId>
+                        <artifactId>wagon-ssh</artifactId>
+                        <version>2.0</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
                     <port>9000</port>
                     <tempWebappDirectory>${basedir}/target/site/tempdir</tempWebappDirectory>

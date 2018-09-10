@@ -24,3 +24,7 @@ acooly框架主要设计目的为快速，规范的构建业务层系统和平�
 * [业务前台开发指南](src/site/markdown/acooly-guide-portal.md)
 * [工具集](https://gitlab.acooly.cn/acoolys/acooly-script/)
 * [showcase](https://gitlab.acooly.cn/acoolys/acooly-showcase/)
+
+## 发布文档
+
+     mvn site:deploy

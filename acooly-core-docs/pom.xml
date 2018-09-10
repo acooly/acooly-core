@@ -10,7 +10,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>acooly-core-docs</artifactId>
-
+    <reporting>
+    </reporting>
     <dependencies>
         <dependency>
             <groupId>com.ruleoftech</groupId>
@@ -39,6 +40,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
+                    <outputEncoding>UTF-8</outputEncoding>
                     <port>9000</port>
                     <tempWebappDirectory>${basedir}/target/site/tempdir</tempWebappDirectory>
                 </configuration>

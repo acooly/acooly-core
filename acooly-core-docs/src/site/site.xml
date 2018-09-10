@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/DECORATION/1.8.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 http://maven.apache.org/xsd/decoration-1.8.0.xsd"
          name="acooly framework"
@@ -7,17 +8,22 @@
         <src>https://www.qiudot.com/assets/images/logo.png</src>
         <href>https://www.qiudot.com</href>
     </bannerLeft>
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.7</version>
+    </skin>
     <body>
         <menu name="Overview">
-            <item name="home" href="index.html"/>
-            <item name="env" href="env.html"/>
-            <item name="quickstart" href="quickstart.html"/>
-            <item name="spec" href="spec.html"/>
-            <item name="acooly-coder" href="acooly-coder.html"/>
-            <item name="acooly-guide" href="acooly-guide.html"/>
-            <item name="acooly-guide-boss" href="acooly-guide-boss.html"/>
-            <item name="acooly-guide-portal" href="acooly-guide-portal.html"/>
-            <item name="components" href="components.html"/>
+            <item name="&amp;#x9996&amp;#x9875" href="index.html"/>
+            <item name="&amp;#x5f00&amp;#x53d1&amp;#x73af&amp;#x5883" href="env.html"/>
+            <item name="&amp;#x5feb&amp;#x901f&amp;#x5f00&amp;#x59cb" href="quickstart.html"/>
+            <item name="&amp;#x89c4&amp;#x8303" href="spec.html"/>
+            <item name="&amp;#x4ee3&amp;#x7801&amp;#x751f&amp;#x6210&amp;#x5668" href="acooly-coder.html"/>
+            <item name="Acooly&amp;#x6846&amp;#x67b6&amp;#x5f00&amp;#x53d1&amp;#x6307&amp;#x5357" href="acooly-guide.html"/>
+            <item name="boss&amp;#x5f00&amp;#x53d1&amp;#x6307&amp;#x5357" href="acooly-guide-boss.html"/>
+            <item name="&amp;#x524d&amp;#x7aef&amp;#x5f00&amp;#x53d1&amp;#x6307&amp;#x5357" href="acooly-guide-portal.html"/>
+            <item name="&amp;#x7ec4&amp;#x4ef6&amp;#x4ecb&amp;#x7ecd" href="components.html"/>
             <item name="acooly-script" href="https://gitlab.acooly.cn/acoolys/acooly-script/"/>
             <item name="showcase" href="https://gitlab.acooly.cn/acoolys/acooly-showcase/"/>
         </menu>

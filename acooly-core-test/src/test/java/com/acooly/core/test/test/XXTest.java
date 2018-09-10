@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Date;
+
 @RunWith(JUnitParamsRunner.class)
 @Slf4j
 public class XXTest {
@@ -17,8 +19,8 @@ public class XXTest {
     //读取csv文件，csv文件第一行为头信息
     @CsvParameter(value = "test.csv")
     @TestCaseName("id={0}")
-    public void test1(int id, int age, String name, Money m) {
-        log.info("id={},age={},name={},money={}", id, age, name, m);
+    public void test1(int id, int age, String name, Money m,Date date) {
+        log.info("id={},age={},name={},money={},date={}", id, age, name, m,date);
     }
 
     @Test
@@ -51,5 +53,6 @@ public class XXTest {
         private int age;
         private String name;
         private Money m;
+        private Date date;
     }
 }

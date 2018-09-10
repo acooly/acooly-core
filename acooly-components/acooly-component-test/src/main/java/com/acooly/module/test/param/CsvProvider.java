@@ -30,6 +30,7 @@ import org.springframework.util.ClassUtils;
 import java.beans.PropertyEditorManager;
 import java.io.*;
 import java.lang.reflect.Parameter;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,6 +41,8 @@ import java.util.List;
 public class CsvProvider implements ParametersProvider<CsvParameter> {
     static {
         PropertyEditorManager.registerEditor(Money.class, MoneyEditor.class);
+        PropertyEditorManager.registerEditor(Date.class, DateEditor.class);
+
     }
 
     private CsvParameter parameter;

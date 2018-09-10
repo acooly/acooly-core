@@ -119,6 +119,7 @@ public class IdCards {
         }
         return map;
     }
+
     /**
      * 升级
      * <p>
@@ -128,15 +129,15 @@ public class IdCards {
      * @return
      */
     public static String upgrade(String oldCardNo) {
-        String cardNo = null;
         if (Strings.isNotBlank(oldCardNo) && Strings.length(oldCardNo) == 15) {
             oldCardNo = oldCardNo.trim();
             StringBuffer sb = new StringBuffer(oldCardNo);
             sb.insert(6, "19");
             sb.append(calcCheckBit(sb.toString()));
-            cardNo = sb.toString();
+            return sb.toString();
+        } else {
+            return oldCardNo;
         }
-        return cardNo;
     }
 
     /**

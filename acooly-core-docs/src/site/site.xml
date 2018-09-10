@@ -15,6 +15,7 @@
     </skin>
     <body>
         <menu name="Overview">
+            <!--中文转uncode，然后加上&amp;#x-->
             <item name="&amp;#x9996&amp;#x9875" href="index.html"/>
             <item name="&amp;#x5f00&amp;#x53d1&amp;#x73af&amp;#x5883" href="env.html"/>
             <item name="&amp;#x5feb&amp;#x901f&amp;#x5f00&amp;#x59cb" href="quickstart.html"/>

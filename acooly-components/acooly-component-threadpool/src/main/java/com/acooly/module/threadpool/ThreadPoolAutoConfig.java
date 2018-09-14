@@ -49,13 +49,17 @@ public class ThreadPoolAutoConfig {
             Map<String, String> copyOfContextMap = MDC.getCopyOfContextMap();
             Runnable newR =
                     () -> {
-                        MDC.setContextMap(copyOfContextMap);
+                        if (copyOfContextMap != null) {
+                            MDC.setContextMap(copyOfContextMap);
+                        }
                         try {
                             runnable.run();
                         } catch (Exception e) {
                             log.error("线程池任务处理异常", e);
-                        }finally {
-                            MDC.clear();
+                        } finally {
+                            if (copyOfContextMap != null) {
+                                MDC.clear();
+                            }
                         }
                     };
             return newR;

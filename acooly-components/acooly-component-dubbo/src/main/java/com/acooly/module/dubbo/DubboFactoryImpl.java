@@ -4,12 +4,13 @@ import com.acooly.core.common.dubbo.DubboFactory;
 import com.acooly.core.utils.Assert;
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.utils.ReferenceConfigCache;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
  * @author qiubo@yiji.com
  */
-public class DubboFactoryImpl implements DubboFactory, InitializingBean {
+public class DubboFactoryImpl implements DubboFactory, InitializingBean, DisposableBean {
     private ReferenceConfigCache referenceConfigCache;
 
     @Override
@@ -43,5 +44,12 @@ public class DubboFactoryImpl implements DubboFactory, InitializingBean {
     @Override
     public void afterPropertiesSet() {
         referenceConfigCache = ReferenceConfigCache.getCache();
+    }
+
+    @Override
+    public void destroy() {
+        if (referenceConfigCache != null) {
+            referenceConfigCache.destroyAll();
+        }
     }
 }

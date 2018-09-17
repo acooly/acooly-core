@@ -1,3 +1,9 @@
+---
+title: dubbo组件
+type: infrastructure
+author: qiubo
+---
+
 ## 1. 组件介绍
 
 此组件给应用dubbo能力

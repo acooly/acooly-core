@@ -1,3 +1,8 @@
+---
+title: 序列号生成器组件
+type: infrastructure
+author: qiubo
+---
 自增序号生成器，类似于oracle中的seq。
 
 每次会从数据库中读取一批id，当这一批用完后，在从数据库中获取。

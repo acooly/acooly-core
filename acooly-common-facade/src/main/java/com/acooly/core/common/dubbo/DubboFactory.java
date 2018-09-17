@@ -4,7 +4,7 @@ package com.acooly.core.common.dubbo;
  * @author qiubo@yiji.com
  */
 public interface DubboFactory {
-    int DEFAUTL_TIMEOUT = 10000;
+    int DEFAUTL_TIMEOUT = 60000;
     String DEFAULT_VERSION = "1.0";
 
     /**

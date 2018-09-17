@@ -2,20 +2,18 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>acooly-core-parent</artifactId>
-        <groupId>com.acooly</groupId>
-        <version>4.2.0-SNAPSHOT</version>
-    </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.acooly</groupId>
     <artifactId>acooly-archetype</artifactId>
+    <version>4.2.0-SNAPSHOT</version>
+
     <build>
         <extensions>
             <extension>
                 <groupId>org.apache.maven.archetype</groupId>
                 <artifactId>archetype-packaging</artifactId>
-                <version>2.2</version>
+                <version>3.0.1</version>
             </extension>
         </extensions>
         <plugins>
@@ -23,22 +21,21 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <addDefaultExcludes>false</addDefaultExcludes>
+                </configuration>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-archetype-plugin</artifactId>
-                    <version>2.4</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.0.2</version>
-                    <configuration>
-                        <!-- Required so that .gitignore gets included in archetypes -->
-                        <!-- see https://issues.apache.org/jira/browse/MRESOURCES-190 -->
-                        <addDefaultExcludes>false</addDefaultExcludes>
-                    </configuration>
+                    <version>3.0.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -48,5 +45,20 @@
             </plugins>
         </pluginManagement>
     </build>
-
+    <distributionManagement>
+        <repository>
+            <id>acooly-releases</id>
+            <name>acooly Internal Releases</name>
+            <url>
+                http://acooly.cn/nexus/content/repositories/releases/
+            </url>
+        </repository>
+        <snapshotRepository>
+            <id>acooly-snapshots</id>
+            <name>acooly Internal snapshot</name>
+            <url>
+                http://acooly.cn/nexus/content/repositories/snapshots/
+            </url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

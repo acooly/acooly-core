@@ -182,14 +182,10 @@ public class DubboAutoConfig implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
     }
 
-    @Bean
-    public DubboRemoteProxyFacotry dubboRemoteProxyFacotry() {
-        return new DubboRemoteProxyFacotry();
-    }
 
     @Bean
-    public DubboFactory dubboFactory(DubboRemoteProxyFacotry dubboRemoteProxyFacotry) {
-        return new DubboFactoryImpl(dubboRemoteProxyFacotry);
+    public DubboFactory dubboFactory() {
+        return new DubboFactoryImpl();
     }
 
     @Bean

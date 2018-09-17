@@ -34,21 +34,16 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.alibaba.spring.boot</groupId>-->
-            <!--<artifactId>dubbo-spring-boot-starter</artifactId>-->
-            <!--<version>2.0.0</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>dubbo</artifactId>
             <version>2.6.2</version>
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<artifactId>netty</artifactId>-->
-                    <!--<groupId>org.jboss.netty</groupId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
+            <exclusions>
+                <exclusion>
+                    <artifactId>netty</artifactId>
+                    <groupId>org.jboss.netty</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>

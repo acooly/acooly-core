@@ -27,6 +27,16 @@
         </site>
     </distributionManagement>
     <build>
+        <resources>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/site</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <targetPath>site</targetPath>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

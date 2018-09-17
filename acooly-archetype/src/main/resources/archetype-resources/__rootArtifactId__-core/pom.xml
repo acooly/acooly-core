@@ -33,5 +33,10 @@
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-security</artifactId>
         </dependency>
+        <!-- 组件：mybatis -->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-mybatis</artifactId>
+        </dependency>
     </dependencies>
 </project>

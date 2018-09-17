@@ -80,7 +80,7 @@ public class DubboProperties implements InitializingBean {
      * dubbo 可自定义增加注解扫描路径，用,分割，此路径下会扫描{@link Reference}，{@link Service}这两个注解，默认会扫描{@link
      * Apps#getBasePackage()}路径
      */
-    private Map<String,String> packagesToScan= Maps.newHashMap();
+    private Map<String,String> customPackagesToScan= Maps.newHashMap();
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -135,8 +135,8 @@ public class DubboProperties implements InitializingBean {
     public Set<String> getPackagesToScan(){
         Set<String> packages= Sets.newHashSet();
         packages.add(Apps.getBasePackage());
-        if(!packagesToScan.isEmpty()){
-            packages.addAll(packagesToScan.values());
+        if(!customPackagesToScan.isEmpty()){
+            packages.addAll(customPackagesToScan.values());
         }
         return packages;
     }

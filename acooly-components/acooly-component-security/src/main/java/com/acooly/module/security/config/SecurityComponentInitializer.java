@@ -11,14 +11,13 @@ package com.acooly.module.security.config;
 
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.boot.component.ComponentInitializer;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * @author qiubo@yiji.com
  */
 public class SecurityComponentInitializer implements ComponentInitializer {
-    public static final String DUBBO_CUMSTOM_CONFIG_PACKAGE = "acooly.dubbo.cumstomConfigPackage";
+    public static final String DUBBO_CUMSTOM_CONFIG_PACKAGE = "acooly.dubbo.customPackagesToScan.sso";
 
     public static final String DUBBO_SSO_CONFIG_PACKAGE = "com.acooly.module.security.service";
 
@@ -29,13 +28,7 @@ public class SecurityComponentInitializer implements ComponentInitializer {
         SecurityProperties securityProperties = new SecurityProperties();
         EnvironmentHolder.buildProperties(securityProperties);
         if (securityProperties.isEnableSSOAuthzService()) {
-            String dubboConfigPackage = EnvironmentHolder.get().getProperty(DUBBO_CUMSTOM_CONFIG_PACKAGE);
-            if (StringUtils.isEmpty(dubboConfigPackage)) {
-                System.setProperty(DUBBO_CUMSTOM_CONFIG_PACKAGE, DUBBO_SSO_CONFIG_PACKAGE);
-            } else {
-                System.setProperty(
-                        DUBBO_CUMSTOM_CONFIG_PACKAGE, dubboConfigPackage + "," + DUBBO_SSO_CONFIG_PACKAGE);
-            }
+            System.setProperty(DUBBO_CUMSTOM_CONFIG_PACKAGE, DUBBO_SSO_CONFIG_PACKAGE);
             setPropertyIfMissing("acooly.olog.storage.enable", "false");
         }
     }

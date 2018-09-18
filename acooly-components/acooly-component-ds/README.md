@@ -9,16 +9,28 @@
 * 检查数据库规范执行
 * 在开发者模式时，如果发现mysql数据库不存在，自动创建数据库
 * 自动创建表
-	
-## 2. FAQ
 
-### 2.1 如何关闭自动创建表
+## 2. 使用说明
+
+maven坐标：
+
+     <dependency>
+        <groupId>com.acooly</groupId>
+        <artifactId>acooly-component-ds</artifactId>
+        <version>${acooly-latest-version}</version>
+      </dependency>
+
+`${acooly-latest-version}`为框架最新版本或者购买的版本。
+	
+## 3. FAQ
+
+### 3.1 如何关闭自动创建表
 
 自动创建表特性默认开启，如果线上环境需要关闭，请配置
 
     acooly.ds.autoCreateTable=false
 
-### 2.1 如何创建多个数据源
+### 3.1 如何创建多个数据源
 
 此组件会创建一个数据源(使用配置前缀为`acooly.ds`)，我们的应用程序有使用到多个数据源的情况，可以通过此组件创建一个数据源，然后在通过如下的代码创建其他数据源：
 
@@ -33,7 +45,7 @@
             return DruidProperties.buildFromEnv("yiji.ds2");
          }
 
-### 2.2 组件升级数据库怎么办？
+### 3.2 组件升级数据库怎么办？
 
 组件在积累的过程中，避免不了修改数据库schema。首先，我们禁止组件删除数据库字段和修改数据库字段名称、类型。组件升级只能新增数据库字段。
 

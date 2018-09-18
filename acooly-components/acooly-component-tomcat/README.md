@@ -2,9 +2,20 @@
 <!-- type: infrastructure -->
 <!-- author: qiubo -->
 ## 1. 组件介绍
+
    定制tomcat，配置线程、日志、自定义错误页等
    
 ## 2. 使用说明
+
+maven坐标：
+
+     <dependency>
+        <groupId>com.acooly</groupId>
+        <artifactId>acooly-component-tomcat</artifactId>
+        <version>${acooly-latest-version}</version>
+      </dependency>
+
+`${acooly-latest-version}`为框架最新版本或者购买的版本。
 
 配置组件参数,如下：
 

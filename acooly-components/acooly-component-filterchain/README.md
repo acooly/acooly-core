@@ -5,23 +5,19 @@
 
 此组件提供FilterChain,应用可以此组建快速组装FilterChain。
 
-## 2. 配置
+## 2. 使用说明
 
-1) 增加组件依赖
+maven坐标：
 
-    <dependency>
+     <dependency>
         <groupId>com.acooly</groupId>
         <artifactId>acooly-component-filterchain</artifactId>
-    </dependency>
+        <version>${acooly-latest-version}</version>
+      </dependency>
 
-2) 配置组件参数    
+`${acooly-latest-version}`为框架最新版本或者购买的版本。
 
-必配参数: 无
-
-
-
-
-## 3. 使用 (参考测试用例)
+### 2.1 使用 (参考测试用例)
          
 1) 定义Context
 
@@ -57,17 +53,17 @@
 	TestContext testContext = new TestContext();
 	filter.doFilter(testContext);
 
-## 4. FAQ
+## 3. FAQ
 
-### 4.1. 如何配置这些组件？
+### 3.1. 如何配置这些组件？
 
 不需要使用者配置组件，装配组件。filterchain会扫描`acooly.filterchain.scanPackage`定义的包，`Filter`和`FilterChain`会注册到spring容器。
 
-### 4.2. 如何定义filter顺序
+### 3.2. 如何定义filter顺序
 
 filter可以重写`com.acooly.module.filterchain.Filter#getOrder`方法
 
-### 4.3. 如何实现filter重入
+### 3.3. 如何实现filter重入
 
 	TestContext testContext = new TestContex();
 	//调用filter链

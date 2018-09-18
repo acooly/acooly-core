@@ -14,7 +14,17 @@
 
 配置命名空间`spring.redis`
 
-## 2. 使用 (参考测试用例)
+## 2. 使用
+
+maven坐标：
+
+     <dependency>
+        <groupId>com.acooly</groupId>
+        <artifactId>acooly-component-cache</artifactId>
+        <version>${acooly-latest-version}</version>
+      </dependency>
+
+`${acooly-latest-version}`为框架最新版本或者购买的版本。
          
 ### 2.1 基于spring注解使用缓存能力
 

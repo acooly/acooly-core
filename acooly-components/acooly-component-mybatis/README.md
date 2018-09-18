@@ -1,11 +1,26 @@
+<!-- title: mybatis组件  -->
+<!-- type: infrastructure -->
+<!-- author: qiubo -->
 ## 1. 组件介绍
 
 此组件提供mybatis的sqlSessionFactory，sqlSessionTemplate, mapperScannerConfigurer定义，启用了[mybatis分页插件](https://github.com/abel533/Mapper)
 
 
-## 2. FAQ
+## 2. 使用说明
 
-### 2.1 关于mybatis的缓存
+maven坐标：
+
+     <dependency>
+        <groupId>com.acooly</groupId>
+        <artifactId>acooly-component-mybatis</artifactId>
+        <version>${acooly-latest-version}</version>
+      </dependency>
+
+`${acooly-latest-version}`为框架最新版本或者购买的版本。
+
+## 3. FAQ
+
+### 3.1 关于mybatis的缓存
 
 mybatis中有一级缓存和二级缓存，一级缓存默认打开(sqlSession中的缓存)，二级缓存默认关闭(应用单独配置，比如用分布式缓存)。
 
@@ -16,7 +31,7 @@ mybatis中有一级缓存和二级缓存，一级缓存默认打开(sqlSession�
 	acooly.mybatis.settings.localCacheScope=SESSION
 
 
-### 2.2 使用 Mybatis Common Mapper
+### 3.2 使用 Mybatis Common Mapper
  
 Mybatis增加单表增删改查通用能力，不用写一行sql语句，单表的操作能力全覆盖。
 
@@ -26,7 +41,7 @@ Mybatis增加单表增删改查通用能力，不用写一行sql语句，单表�
 
 使用例子如下：
 
-#### 2.2.1. 定义DO
+#### 3.2.1. 定义DO
 
 	@Getter
 	@Setter
@@ -40,14 +55,14 @@ Mybatis增加单表增删改查通用能力，不用写一行sql语句，单表�
 上面使用到了jpa annotation添加元数据。非数据库字段请添加`transient`关键字。
 
 
-#### 2.2.2. 定义Mapper接口
+#### 3.2.2. 定义Mapper接口
 
 	public interface CityMapper extends EntityMybatisDao<City> {
 	}
 
 注意：Mapper接口需要继承`EntityMybatisDao`
 
-#### 2.2.2. 使用mapper
+#### 3.2.2. 使用mapper
 
 `EntityMybatisDao`继承`EntityDao`,除了提供`EntityDao`的能力外，他还可以做更多，单表操作告别sql。
 
@@ -95,12 +110,12 @@ Mybatis增加单表增删改查通用能力，不用写一行sql语句，单表�
 	
 更多能力参考`com.acooly.module.mybatis.EntityMybatisDao`接口。
 
-#### 2.2.4 More
+#### 3.2.4 More
 
  相关使用文档参考:https://github.com/abel533/Mapper
 
  
-### 2.3 扩展接口
+### 3.3 扩展接口
 
 参考showcase
 
@@ -137,9 +152,9 @@ Mybatis增加单表增删改查通用能力，不用写一行sql语句，单表�
         }
 
 
-## 2.3 使用多个数据源
+### 3.4 使用多个数据源
 
-### 2.3.1 配置
+### 3.4.1 配置
 
     #配置第一个数据源accout
     accout.ds.url=jdbc:mysql://127.0.0.1:3306/accout
@@ -166,7 +181,7 @@ Mybatis增加单表增删改查通用能力，不用写一行sql语句，单表�
     # dao包路径，位于此包下的dao会使用trade数据库
     acooly.mybatis.multi.trade.scanPackage=com.fintech.it.trade
 
-### 2.3.2 使用注意
+### 3.4.2 使用注意
 
 1. 主数据源提供的相关beanName为:dataSource、jdbcTemplate、pagedJdbcTemplate、sqlSessionFactory
 2. 非主数据源提供的相关beanName为(以上面为例):tradeDataSource、tradeJdbcTemplate、tradePagedJdbcTemplate、tradeSqlSessionFactory

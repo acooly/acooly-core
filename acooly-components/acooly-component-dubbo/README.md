@@ -8,6 +8,16 @@
 
 ## 2. 使用说明
 
+maven坐标：
+
+     <dependency>
+        <groupId>com.acooly</groupId>
+        <artifactId>acooly-component-dubbo</artifactId>
+        <version>${acooly-latest-version}</version>
+      </dependency>
+
+`${acooly-latest-version}`为框架最新版本或者购买的版本。
+
 此组件已经初始化了dubbo基本配置，如果要配置provider或者consumer，可以通过xml或者java config来配置：
     
 ### 3.1 java config配置

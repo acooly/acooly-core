@@ -1,3 +1,22 @@
+<!-- title: 后台管理组件   -->
+<!-- type: infrastructure -->
+<!-- author: kule,qiubo,shuijing -->
+## 1. 组件介绍
+
+此组件提供文件上传(图片压缩)、下载、访问的能力
+
+## 2. 使用说明
+
+maven坐标：
+
+     <dependency>
+        <groupId>com.acooly</groupId>
+        <artifactId>acooly-component-security</artifactId>
+        <version>${acooly-latest-version}</version>
+      </dependency>
+
+`${acooly-latest-version}`为框架最新版本或者购买的版本。
+
 ### 1. 怎么配置csrf排除路径
 
     acooly.security.csrf.exclusions.ofile[0]=/ofile/gateway/**

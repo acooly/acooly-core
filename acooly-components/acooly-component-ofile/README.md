@@ -1,10 +1,21 @@
+<!-- title: 文件上传组件   -->
+<!-- type: infrastructure -->
+<!-- author: kule,qiubo -->
 ## 1. 组件介绍
 
 此组件提供文件上传(图片压缩)、下载、访问的能力
 
-## 2. 使用
+## 2. 使用说明
 
-参考showcase:`com.ac.demo.web.CustomerManagerController#uploadTest`
+maven坐标：
+
+     <dependency>
+        <groupId>com.acooly</groupId>
+        <artifactId>acooly-component-ofile</artifactId>
+        <version>${acooly-latest-version}</version>
+      </dependency>
+
+`${acooly-latest-version}`为框架最新版本或者购买的版本。
 
 ## 3. 配置
  

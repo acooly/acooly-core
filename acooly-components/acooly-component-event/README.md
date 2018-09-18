@@ -14,7 +14,17 @@ EventBus提供jvm内事件处理发布、处理机制，相对于spring提供的
     com.acooly.module.event.EventBus
     com.acooly.module.event.EventHandler
     
-## 2. 使用
+## 2. 使用说明
+
+maven坐标：
+
+     <dependency>
+        <groupId>com.acooly</groupId>
+        <artifactId>acooly-component-event</artifactId>
+        <version>${acooly-latest-version}</version>
+      </dependency>
+
+`${acooly-latest-version}`为框架最新版本或者购买的版本。
 
 ### 2.1 定义事件对象
 

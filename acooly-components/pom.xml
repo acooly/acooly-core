@@ -19,41 +19,26 @@
         <module>acooly-component-ds</module>
         <module>acooly-component-tomcat</module>
         <module>acooly-component-web</module>
-        <module>acooly-component-test</module>
         <module>acooly-app-parent</module>
         <module>acooly-component-filterchain</module>
-        <module>acooly-component-appservice</module>
         <module>acooly-component-ofile</module>
-        <module>acooly-component-cms</module>
         <module>acooly-component-openapi</module>
-        <module>acooly-component-portlet</module>
-        <module>acooly-component-app</module>
-        <module>acooly-component-sms</module>
-        <module>acooly-component-sso</module>
-        <module>acooly-component-mail</module>
-        <module>acooly-component-app-openapi</module>
         <module>acooly-component-event</module>
         <module>acooly-component-threadpool</module>
-        <module>acooly-component-scheduler</module>
-        <module>acooly-component-pdf</module>
-        <module>acooly-component-certification</module>
-        <module>acooly-component-seq</module>
         <module>acooly-component-obs</module>
-        <module>acooly-component-captcha</module>
         <module>acooly-component-defence</module>
-        <module>acooly-component-rocketmq</module>
         <module>acooly-component-store</module>
-        <module>acooly-component-safety</module>
-        <module>acooly-component-olog</module>
-        <module>acooly-component-config</module>
-        <module>acooly-component-distributedlock</module>
-        <module>acooly-component-eav</module>
     </modules>
 
     <dependencies>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-core-docs</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

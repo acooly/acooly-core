@@ -10,51 +10,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>acooly-core-docs</artifactId>
-    <reporting>
-    </reporting>
-    <dependencies>
-        <dependency>
-            <groupId>com.ruleoftech</groupId>
-            <artifactId>markdown-page-generator-plugin</artifactId>
-            <version>1.0.0</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <distributionManagement>
-        <site>
-            <id>acooly.doc.website</id>
-            <url>scp://docs:123456@121.40.229.27:22/opt/www/acooly-docs</url>
-        </site>
-    </distributionManagement>
     <build>
         <resources>
             <resource>
                 <filtering>false</filtering>
-                <directory>src/site</directory>
+                <directory>docs</directory>
                 <includes>
                     <include>**/*</include>
                 </includes>
-                <targetPath>site</targetPath>
+                <targetPath>docs</targetPath>
             </resource>
         </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.7.1</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.wagon</groupId>
-                        <artifactId>wagon-ssh</artifactId>
-                        <version>2.0</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <outputEncoding>UTF-8</outputEncoding>
-                    <port>9000</port>
-                    <tempWebappDirectory>${basedir}/target/site/tempdir</tempWebappDirectory>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
 </project>

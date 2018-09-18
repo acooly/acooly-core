@@ -1,3 +1,23 @@
+<!-- title: 防御组件 -->
+<!-- type: infrastructure -->
+<!-- author: qiubo -->
+
+## 1. 组件介绍
+
+提供应用常用的安全防御组件。
+
+## 2. 使用说明
+
+maven坐标：
+
+     <dependency>
+        <groupId>com.acooly</groupId>
+        <artifactId>acooly-component-defence</artifactId>
+        <version>${acooly-latest-version}</version>
+      </dependency>
+
+`${acooly-latest-version}`为框架最新版本或者购买的版本。
+
 ### 1. 怎么配置csrf排除路径
 
     acooly.security.csrf.exclusions.ofile[0]=/ofile/gateway/**

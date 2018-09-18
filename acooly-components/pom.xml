@@ -35,7 +35,6 @@
         <module>acooly-component-obs</module>
         <module>acooly-component-defence</module>
         <module>acooly-component-store</module>
-        <module>acooly-component-safety</module>
     </modules>
 
     <dependencies>

@@ -1,3 +1,6 @@
+<!-- title: 短信发送组件  -->
+<!-- type: infrastructure -->
+<!-- author: kule,shuijing,qiubo -->
 ## 1. 组件介绍
 
 此组件给应用短信服务能力

@@ -1,3 +1,6 @@
+<!-- title: appservice组件 -->
+<!-- type: app -->
+<!-- author: qiubo -->
 ## 1. 组件介绍
 
 ### 1.1 提供主要能力

@@ -1,3 +1,6 @@
+<!-- title: pdf组件 -->
+<!-- type: app -->
+<!-- author: shuijing -->
 ## 1. 组件介绍
 
 此组件提供html转换pdf能力

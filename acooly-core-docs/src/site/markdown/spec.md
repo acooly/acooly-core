@@ -44,7 +44,7 @@
 
 openapi对外提供服务，对于异常的情况，我们需要返回明确的`ResultCode`。响应码应该为枚举类型，并且实现`Messageable`接口
 
-#### 5.1. 异常处理
+#### 异常处理
 
 在抛出异常时，需要设置`ResultCode`,`BusinessException`构造器支持下面几种方式设置`ResultCode`：
 
@@ -52,11 +52,11 @@ openapi对外提供服务，对于异常的情况，我们需要返回明确的`
 	BusinessException#BusinessException(Messageable, String)
 	BusinessException#BusinessException(Messageable, Throwable)
 
-#### 5.2. 公共响应码
+####  公共响应码
 
 框架提供了常用的响应码`com.acooly.core.common.facade.ResultCode`,没有特殊需求时，可以使用公共响应码。
 
-#### 5.3. 应用响应码
+#### 应用响应码
 
 应用响应码放在`facade`模块中，名字为`应用名+ResultCode`，比如会员系统为`CustomerResultCode`，交易系统为`TradeResultCode`.响应码枚举类型不需要加应用名前缀，根据业务实际情况定义。
 

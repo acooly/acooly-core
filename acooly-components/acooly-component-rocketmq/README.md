@@ -1,8 +1,9 @@
+<!-- title: 分布式消息组件 -->
+<!-- type: app -->
+<!-- author: qiubo -->
 ## 1. 组件介绍
 
-此组件提供rocketmq消息功能
-
-
+此组件提供rocketmq消息集成功能
 
 ## 2. 使用说明
 

@@ -1,3 +1,6 @@
+<!-- title: 过滤器组件   -->
+<!-- type: infrastructure -->
+<!-- author: qiubo -->
 ## 1. 组件介绍
 
 此组件提供FilterChain,应用可以此组建快速组装FilterChain。

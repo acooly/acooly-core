@@ -1,3 +1,7 @@
+<!-- title: 加解密组件 -->
+<!-- type: app -->
+<!-- author: zhangpu -->
+
 safety 安全组件
 ===========
 

@@ -1,3 +1,7 @@
+<!-- title: 动态表单组件 -->
+<!-- type: app -->
+<!-- author: qiubo -->
+
 ## 1. 组件介绍
 
 此组件提供[EAV](https://en.wikipedia.org/wiki/Entity%E2%80%93attribute%E2%80%93value_model)模式。

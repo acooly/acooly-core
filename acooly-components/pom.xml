@@ -19,7 +19,6 @@
         <module>acooly-component-ds</module>
         <module>acooly-component-tomcat</module>
         <module>acooly-component-web</module>
-        <module>acooly-component-test</module>
         <module>acooly-app-parent</module>
         <module>acooly-component-filterchain</module>
         <module>acooly-component-ofile</module>

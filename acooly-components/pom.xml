@@ -38,6 +38,11 @@
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
+            <artifactId>acooly-core-docs</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
             <artifactId>acooly-configuration-processor</artifactId>
             <version>${project.version}</version>
             <optional>true</optional>

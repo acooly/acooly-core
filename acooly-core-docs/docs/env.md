@@ -14,11 +14,11 @@
 
 * 开发环境统一使用nexus地址为：`http://acooly.cn/nexus/index.html`
 
-请使用[maven setting](maven/maven-settings-acooly.xml)替换`maven`默认setting文件
+请使用[maven setting](res/maven/maven-settings-acooly.xml)替换`maven`默认setting文件
 
 ### 4. IDE
 
-推荐使用`IDEA`，安装lombok插件，并导入配置[settings.jar](ide/idea/settings.jar)
+推荐使用`IDEA`，安装lombok插件，并导入配置[settings.jar](res/ide/idea/settings.jar)
 
 ### 5. lombok
 

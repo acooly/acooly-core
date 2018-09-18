@@ -14,22 +14,18 @@ acooly框架主要设计目的为快速，规范的构建业务层系统和平�
 
 ## 文档
 
-* [开发环境](src/site/markdown/env.md)
-* [快速开始](src/site/markdown/quickstart.md)
-* [开发规范](src/site/markdown/spec.md)
-* [代码生成](src/site/markdown/acooly-coder.md)
-* [框架组件及组件库](src/site/markdown/components.md)
-* [开发指南](src/site/markdown/acooly-guide.md)
-* [管理后台开发指南](src/site/markdown/acooly-guide-boss.md)
-* [业务前台开发指南](src/site/markdown/acooly-guide-portal.md)
+* [开发环境](docs/env.md)
+* [快速开始](docs/quickstart.md)
+* [开发规范](docs/spec.md)
+* [代码生成](docs/acooly-coder.md)
+* [框架组件及组件库](docs/components.md)
+* [开发指南](docs/acooly-guide.md)
+* [管理后台开发指南](docs/acooly-guide-boss.md)
+* [业务前台开发指南](docs/acooly-guide-portal.md)
 * [工具集](https://gitlab.acooly.cn/acoolys/acooly-script/)
 * [showcase](https://gitlab.acooly.cn/acoolys/acooly-showcase/)
 
-## 发布文档
+## 文档编写说明
 
-    mvn clean site:site
-    mvn site:deploy
-
-## 在线地址
-
-    http://acooly.cn/acooly-docs/
+1. 文档放在`docs`路径下，只支持markdwon
+2. 其他资源文件必须放在`docs\res`路径下

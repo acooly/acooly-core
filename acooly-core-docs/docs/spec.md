@@ -15,7 +15,7 @@
 
 ### 代码模板
 
-框架提供了IDEA代码模板[settings.jar](ide/idea/settings.jar),包括如下内容：
+框架提供了IDEA代码模板[settings.jar](res/ide/idea/settings.jar),包括如下内容：
 
 * 新建java类标注引入`@Slf4j`
 * 新建java枚举，实现`Messageable`接口

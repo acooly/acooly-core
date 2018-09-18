@@ -19,7 +19,7 @@ Acooly框架是基于目前业界最常用的J2EE开发基础技术栈开发的�
 
 ## 核心架构
 
-![](res/dev_arche.png)
+![](res/pic/dev_arche.png)
 
 上图是acooly框架的主线架构，采用开源的轻量级J2EE解决方案。
 
@@ -32,14 +32,14 @@ Acooly框架是基于目前业界最常用的J2EE开发基础技术栈开发的�
 应用/系统架构主要描述的是单个应用（子系统工程）的架构设计和开发模式。图中蓝色部分为acooly框架提供能力和服务支持，绿色部分是业务开发工程师只需关注业务的逻辑开发。
 
 
-![](res/app_arche.png)
+![](res/pic/app_arche.png)
 
 
 ## 平台架构
 
 平台架构描述的是基于SOA的平台的总体架构设计和开发模式。
 
-![](res/platform_arche.png)
+![](res/pic/platform_arche.png)
 
 
 # 设计规范和约定
@@ -356,7 +356,7 @@ Jdbc的Dao实现主要是使用JdbcTemplate的Acooly扩展实现AbstractJdbcTemp
 #### 继承体系
 
 
-![](res/controller-arche.png)
+![](res/pic/controller-arche.png)
 
 针对我们的目的，我们总体封装的思路包括以下几点：
 
@@ -375,7 +375,7 @@ Jdbc的Dao实现主要是使用JdbcTemplate的Acooly扩展实现AbstractJdbcTemp
 
 #### AJAX处理流程
 
-![](res/views_Interactive_mode.png)
+![](res/pic/views_Interactive_mode.png)
 
 视图与控制层的交易模式，如果采用AJAX方式，上图是框架中推荐的交互模式。
 
@@ -407,8 +407,3 @@ JSTL参考：http://docs.oracle.com/javaee/5/jstl/1.1/docs/tlddocs/
 #### 静态资源
 
 静态资源放到如下路径：`src/main/resources/static`
-
-### 视图开发
-
-* [管理后台开发指南](docs/acooly-guide-boss.md)
-* [业务前台开发指南](docs/acooly-guide-portal.md)

@@ -3,6 +3,7 @@ package com.acooly.module.dubbo;
 import com.acooly.core.common.dubbo.DubboFactory;
 import com.acooly.core.utils.Assert;
 import com.alibaba.dubbo.config.ApplicationConfig;
+import com.alibaba.dubbo.config.ConsumerConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.config.utils.ReferenceConfigCache;
@@ -22,7 +23,13 @@ public class DubboFactoryImpl implements DubboFactory, InitializingBean, Disposa
     private ReferenceConfigCache referenceConfigCache;
 
 
+    public DubboFactoryImpl(ConsumerConfig consumerConfig) {
+        this.consumerConfig = consumerConfig;
+    }
+
     private ApplicationContext applicationContext;
+
+    private ConsumerConfig consumerConfig;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -47,6 +54,7 @@ public class DubboFactoryImpl implements DubboFactory, InitializingBean, Disposa
         reference.setInterface(clazz);
         reference.setVersion(version);
         reference.setGroup(group);
+        reference.setConsumer(consumerConfig);
         return (T) clazz.cast(referenceConfigCache.get(reference));
     }
 

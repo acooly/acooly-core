@@ -184,8 +184,8 @@ public class DubboAutoConfig implements InitializingBean {
 
 
     @Bean
-    public DubboFactory dubboFactory() {
-        return new DubboFactoryImpl();
+    public DubboFactory dubboFactory(ConsumerConfig consumerConfig) {
+        return new DubboFactoryImpl(consumerConfig);
     }
 
     @Bean

@@ -33,7 +33,6 @@
         <module>acooly-component-mail</module>
         <module>acooly-component-app-openapi</module>
         <module>acooly-component-event</module>
-        <module>acooly-component-point</module>
         <module>acooly-component-threadpool</module>
         <module>acooly-component-scheduler</module>
         <module>acooly-component-pdf</module>

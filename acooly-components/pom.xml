@@ -40,7 +40,6 @@
         <module>acooly-component-store</module>
         <module>acooly-component-safety</module>
         <module>acooly-component-olog</module>
-        <module>acooly-component-distributedlock</module>
         <module>acooly-component-eav</module>
     </modules>
 

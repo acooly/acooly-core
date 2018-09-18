@@ -28,7 +28,6 @@
         <module>acooly-component-portlet</module>
         <module>acooly-component-app</module>
         <module>acooly-component-sso</module>
-        <module>acooly-component-mail</module>
         <module>acooly-component-app-openapi</module>
         <module>acooly-component-event</module>
         <module>acooly-component-threadpool</module>

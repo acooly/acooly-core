@@ -239,7 +239,7 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
                             xdataSource.setUrl(url);
                             String dataBase = this.url.substring(this.url.lastIndexOf("/") + 1);
                             log.warn("配置文件中指定的数据库[{}]不存在，尝试创建数据库", dataBase);
-                            String createDataBaseSql = "CREATE SCHEMA `" + dataBase + "` DEFAULT CHARACTER SET utf8mb4 ;";
+                            String createDataBaseSql = "CREATE SCHEMA `" + dataBase + "` DEFAULT CHARACTER SET utf8mb4 collate utf8mb4_unicode_ci;";
                             xdataSource.setUsername(this.getUsername());
                             xdataSource.setPassword(this.getPassword());
                             xdataSource.init();

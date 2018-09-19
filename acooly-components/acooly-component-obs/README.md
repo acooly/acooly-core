@@ -23,15 +23,20 @@ maven坐标：
 
 [OSS简介](https://help.aliyun.com/product/31815.html?spm=5176.doc31817.6.55.hkKLeQ)
 
-* 2.1.1 配置： 
-`acooly.obs.provider=aliyun
- acooly.obs.aliyun.accessKeyId=LTAIKG****xZdYJQ
- acooly.obs.aliyun.accessKeySecret=WVQ1t6yxlL*********um86
- acooly.obs.aliyun.endpoint=http://oss-cn-hangzhou.aliyuncs.com
-` 
+#### 2.1.1 配置： 
 
-* 2.1.2 接口：`com.acooly.module.obs.ObsService`
+    acooly.obs.provider=aliyun
+    acooly.obs.aliyun.accessKeyId=LTAIKG****xZdYJQ
+    acooly.obs.aliyun.accessKeySecret=WVQ1t6yxlL*********um86
+    acooly.obs.aliyun.endpoint=http://oss-cn-hangzhou.aliyuncs.com
+ 
 
-* 2.1.3 测试用例：`com.acooly.core.test.web.ObsTestController`
+####  2.1.2 接口：
+
+    com.acooly.module.obs.ObsService
+
+#### 2.1.3 测试用例：
+
+    com.acooly.core.test.web.ObsTestController
 
    

@@ -20,9 +20,9 @@ maven坐标：
 
 此组件已经初始化了dubbo基本配置，如果要配置provider或者consumer，可以通过xml或者java config来配置：
     
-### 3.1 java config配置
+### 2.1. java config配置
 
-#### 3.1.1 provider
+#### provider
 
 下面的代码暴露了DemoService服务，版本为1.5
 
@@ -39,7 +39,7 @@ maven坐标：
 	}
 
 
-#### 3.1.2 consumer：
+#### consumer：
 
 下面的代码使用了UserService服务，版本为1.5
 
@@ -47,9 +47,9 @@ maven坐标：
 	private UserService userService;
 
 
-### 4. FAQ
+## 3. FAQ
 
-#### 4.1 获取请求上下文信息
+### 3.1 获取请求上下文信息
 
 参考`com.acooly.module.dubbo.DubboRequestContext`
 
@@ -59,18 +59,18 @@ maven坐标：
 
 如果dubbo服务A的请求对象为`BizOrderBase`及其子类,`merchOrderNo`和`bizOrderNo`也会自动传递。
 
-#### 4.2 如何设置provider暴露ip
+### 3.2 如何设置provider暴露ip
 
 设置启动变量`-Ddubbo.provider.ip=xxx`或设置配置文件。
 
-#### 4.3 如何增加自定义扫描服务(@Service @Reference)的路径
+### 3.3 如何增加自定义扫描服务(@Service @Reference)的路径
 
 添加配置`acooly.dubbo.cumstomConfigPackage=com.acooly.module.security.service`
 可自定义增加注解扫描路径，多个路径用用,分割，此路径下会扫描{@link Reference}，{@link Service}这两个注解，默认会扫描{@link Apps#getBasePackage()}路径
 
-#### 4.4 如何mock dubbo服务
+### 3.4 如何mock dubbo服务
 
-##### 4.4.1. 配置需要被mock的dubbo服务接口
+#### 配置需要被mock的dubbo服务接口
 
     acooly.dubbo.consumer.mockInterfaces[0]=com.acooly.core.test.dubbo.mock.XXFacade
 
@@ -79,7 +79,7 @@ maven坐标：
       @Reference(version = "1.0")
       private XXFacade xxFacade;
 
-##### 4.4.2. 增加mock实现
+#### 增加mock实现
 
     @Service
     public class XXFacadeMock implements XXFacade {
@@ -92,7 +92,7 @@ maven坐标：
 实现mock接口，并注册到spring容器中。为了避免混淆，mock服务实现类必须已`Mock`为后缀。
 
 
-#### 4.5 忽略Log日志输出
+### 3.4 忽略Log日志输出
 
     public interface DemoFacade {
         @DubboLogIgnore

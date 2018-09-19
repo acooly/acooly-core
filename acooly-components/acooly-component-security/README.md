@@ -17,12 +17,9 @@ maven坐标：
 
 `${acooly-latest-version}`为框架最新版本或者购买的版本。
 
-### 1. 怎么配置csrf排除路径
+## 3. FAQ
 
-    acooly.security.csrf.exclusions.ofile[0]=/ofile/gateway/**
-    acooly.security.csrf.exclusions.ofile[1]=/ofile/cs/**
-    
-### 2. 怎么开启登录短信验证码
+### 3.1 怎么开启登录短信验证码
 
 * 配置开启短信验证
     `acooly.security.loginSmsEnable=true
@@ -43,7 +40,7 @@ maven坐标：
 * 开启短信验证码功能后，在新增user的时候，填写手机号码
 
 
-### 3. 怎么设置不需要需登录(授权、认证)访问所有boss页面
+### 3.2 怎么设置不需要需登录(授权、认证)访问所有boss页面
 
 只需要添加配置：
 `acooly.security.shiroFilterAnon=true
@@ -51,14 +48,14 @@ maven坐标：
 
 开启后shiro filter链都会设为不拦截，可在系统不需要任何授权、认证时开启（慎用）
 
-### 4. 设置单点登录启用dubbo权限校验服务
+### 3.3 设置单点登录启用dubbo权限校验服务
 
 在使用单点登录的时候，主boss作为权限的主配置提供者，默认提供http接口校验权限`{@link com.acooly.module.security.web.RoleFacadeController.isPermitted}`
 当使用dubbo作为权限校验时候，主boss应用必须开启服务提供者：
 `acooly.security.enableSSOAuthzService=true
 `
 
-### 5. 新增用户后，需要做其他业务操作，如何扩展？
+### 3.4 新增用户后，需要做其他业务操作，如何扩展？
        
                //异步事件处理器
                @Handler(delivery = Invoke.Asynchronously)

@@ -18,12 +18,12 @@ maven坐标：
 
 `${acooly-latest-version}`为框架最新版本或者购买的版本。
 
-### 1. 怎么配置csrf排除路径
+### 2.1. 怎么配置csrf排除路径
 
     acooly.security.csrf.exclusions.ofile[0]=/ofile/gateway/**
     acooly.security.csrf.exclusions.ofile[1]=/ofile/cs/**
     
-### 2. url加解密
+### 2.2. url加解密
 
        /**
         * 请求：http://127.0.0.1:8081/url/param?id=58bb0e40e63678e780590e5986cbd804be7b5a11379de9f4f6a6238287bd5779&name=a

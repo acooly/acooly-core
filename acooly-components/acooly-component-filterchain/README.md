@@ -17,17 +17,17 @@ maven坐标：
 
 `${acooly-latest-version}`为框架最新版本或者购买的版本。
 
-### 2.1 使用 (参考测试用例)
+### 2.1 例子
          
-1) 定义Context
+#### 定义Context
 
 	public class TestContext extends Context {}
 
-2）定义FilterChain
+#### 定义FilterChain
 
 	public class TestFilterChain extends FilterChainBase<TestContext> {}
 
-3）定义Filter
+#### 定义Filter
 
 	public class TestFilter implements Filter<TestContext> {
 		private static final Logger logger = LoggerFactory.getLogger(TestFilter.class);
@@ -45,7 +45,7 @@ maven坐标：
 		}
 	}
 
-4) 使用
+#### 使用
 
 	@Resource(name = "testFilterChain")
 	private FilterChain<TestContext> filter;

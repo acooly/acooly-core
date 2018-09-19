@@ -17,6 +17,8 @@ maven坐标：
 
 `${acooly-latest-version}`为框架最新版本或者购买的版本。
 
+### 2.1 参数配置
+
 配置组件参数,如下：
 
    * `acooly.tomcat.port=1234` 可选，通过配置文件自定义端口号

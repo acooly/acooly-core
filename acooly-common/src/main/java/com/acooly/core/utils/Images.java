@@ -8,9 +8,7 @@ import org.slf4j.LoggerFactory;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 public class Images {
 
@@ -89,23 +87,21 @@ public class Images {
     }
 
     /**
-     * @param inputStream 水印图片
-     * @param targetImg
-     * @param x
-     * @param y
+     * @param markImageStream 水印
+     * @param targetImgFile   需要加水印的图片
+     * @param x               x轴坐标
+     * @param y               y轴坐标
      */
-    public static final void pressImage(InputStream inputStream, String targetImg, int x, int y) {
+    public static final void pressImageFile(InputStream markImageStream, File targetImgFile, int x, int y) {
         try {
-            File _file = new File(targetImg);
-            Image src = ImageIO.read(_file);
+            Image src = ImageIO.read(targetImgFile);
             int wideth = src.getWidth(null);
             int height = src.getHeight(null);
             BufferedImage image = new BufferedImage(wideth, height, BufferedImage.TYPE_INT_RGB);
             Graphics g = image.createGraphics();
             g.drawImage(src, 0, 0, wideth, height, null);
 
-            // 水印文件
-            Image src_biao = ImageIO.read(inputStream);
+            Image src_biao = ImageIO.read(markImageStream);
             int wideth_biao = src_biao.getWidth(null);
             int height_biao = src_biao.getHeight(null);
             g.drawImage(
@@ -116,11 +112,21 @@ public class Images {
                     height_biao,
                     null);
             g.dispose();
-            ImageIO.write(image, getImageFormat(targetImg), _file);
+            ImageIO.write(image, getImageFormat(targetImgFile.getName()), targetImgFile);
         } catch (Exception e) {
             logger.warn("添加图片水印失败", e);
-            throw new RuntimeException("添加图片水印失败");
+            throw new RuntimeException("添加图片水印失败" + e.getMessage());
         }
+    }
+
+    /**
+     * @param markImageStream 水印
+     * @param targetImgPath   需要加水印的图片
+     * @param x               x轴坐标
+     * @param y               y轴坐标
+     */
+    public static final void pressImage(InputStream markImageStream, String targetImgPath, int x, int y) {
+        pressImageFile(markImageStream, new File(targetImgPath), x, y);
     }
 
     /**
@@ -135,7 +141,7 @@ public class Images {
      * @param x         修正值
      * @param y         修正值
      * @param alpha     透明度 0-1
-     * @param alpha     角度 0-360
+     * @param degree    角度 0-360
      */
     public static void pressText(
             String pressText,
@@ -174,10 +180,10 @@ public class Images {
             g.drawString(
                     pressText, (width - (getLength(pressText) * fontSize)) / 2 + x, (height - fontSize + y));
             g.dispose();
-            ImageIO.write((BufferedImage) image, getImageFormat(targetImg), img);
+            ImageIO.write(image, getImageFormat(targetImg), img);
         } catch (Exception e) {
             logger.warn("生成文字水印失败", e);
-            throw new RuntimeException("生成文字水印失败");
+            throw new RuntimeException("生成文字水印失败:" + e.getMessage());
         }
     }
 
@@ -214,4 +220,5 @@ public class Images {
             return extention;
         }
     }
+
 }

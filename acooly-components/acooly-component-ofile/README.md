@@ -60,3 +60,46 @@ acooly.ofile.configuredSignAuthSecretKey=YOUR_SECRETKEY
 
 *特别的需要说明，如果你需要与OpenAPI集成统一的认证秘钥体系，你可以继承com.acooly.module.ofile.auth.AbstractSignatureOFileUploadAuthenticate抽象类，实现getSecretKey(String accessKey)方法即可（注入AuthInfoRealm获取accessKey对应的secretKey）。*
 
+#### 3.1.4 上传图片自动加水印图片、文字
+
+应于很多场景，图片上传完的时候是需要加水印的，一种是水印图片，一种是水印文字
+
+* 水印图片 上传请求参数需要传入 watermarkImage = true，会自动给图片加上图片水印，配置如下
+
+```
+#开启水印图片，默认ture
+acooly.ofile.watermarkimage.enable=true
+
+#水印图片路径
+acooly.ofile.watermarkimage.markImageFilePath=/Users/aalin/downloads/about-1.png
+
+#位置x轴
+acooly.ofile.watermarkimage.x=30
+
+#位置y轴
+acooly.ofile.watermarkimage.y=30
+```
+
+* 水印文字 上传请求参数需要传入 watermarkText = true，会自动给图片加上水文字水印，配置如下
+
+```
+#开启后，上传的图片自动加水印文字，上传请求参数需要传入 watermarkText = true
+acooly.ofile.watermarktext.enable=true
+
+#水印文字
+acooly.ofile.watermarktext.markText=\u8fd9\u662f\u6c34\u5370\u6587\u5b57
+
+#字体大小
+acooly.ofile.watermarktext.fontSize=16
+
+#透明度 0-1
+acooly.ofile.watermarktext.alpha=1
+
+#位置x轴
+acooly.ofile.watermarktext.x=10
+
+#位置y轴
+acooly.ofile.watermarktext.y=10
+```
+
+请求路径示例：`http://127.0.0.1:8081/ofile/upload?watermarkImage=true&watermarkText=true`

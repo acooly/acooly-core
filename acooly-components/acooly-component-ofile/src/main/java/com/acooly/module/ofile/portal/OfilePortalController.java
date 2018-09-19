@@ -3,10 +3,12 @@
  */
 package com.acooly.module.ofile.portal;
 
+import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.common.web.support.JsonResult;
+import com.acooly.core.utils.Assert;
 import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Images;
 import com.acooly.core.utils.Strings;
@@ -35,10 +37,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.awt.*;
+import java.io.*;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +54,9 @@ public class OfilePortalController
         extends AbstractJQueryEntityController<OnlineFile, OnlineFileService> {
     private static final Logger logger = LoggerFactory.getLogger(OfilePortalController.class);
     private static final Pattern ABSOLUTE_URL = Pattern.compile("\\A[a-z0-9.+-]+://.*", 2);
+    public static final String WATERMARK_TEXT = "watermarkText";
+    public static final String WATERMARK_IMAGE = "watermarkImage";
+
     @Resource
     private OnlineFileService onlineFileService;
     @Autowired
@@ -301,7 +304,53 @@ public class OfilePortalController
             }
             onlineFile.setThumbnail(getFilePath(thumbnailFilePath));
         }
+
+        if (onlineFile.getFileType() == OFileType.picture) {
+            //水印图片
+            if (oFileProperties.getWatermarkimage().isEnable()) {
+                String watermarkImage = request.getParameter(WATERMARK_IMAGE);
+                if (StringUtils.isNotEmpty(watermarkImage) && watermarkImage.equals("true")) {
+                    addWaterMarkImage(onlineFile);
+                    logger.info("添加水印图片成功，路径：{}", onlineFile.getAbsolutePath());
+                }
+            }
+            //水印文字
+            if (oFileProperties.getWatermarktext().isEnable()) {
+                try {
+                    String watermarkText = request.getParameter(WATERMARK_TEXT);
+                    if (StringUtils.isNotEmpty(watermarkText) && watermarkText.equals("true")) {
+                        addWaterMarkText(onlineFile);
+                        logger.info("添加水印文字成功，路径：{}", onlineFile.getAbsolutePath());
+                    }
+                } catch (Exception e) {
+                    logger.error("添加水印文字失败，文件名：{},路径：{}", onlineFile.getFileName(), onlineFile.getAbsolutePath(), e);
+                }
+            }
+        }
         return onlineFile;
+    }
+
+    protected void addWaterMarkImage(OnlineFile onlineFile) {
+        String originfilePath = onlineFile.getAbsolutePath();
+
+        OFileProperties.Watermarkimage watermarkImage = oFileProperties.getWatermarkimage();
+        String markImageFilePath = watermarkImage.getMarkImageFilePath();
+        Assert.notNull(markImageFilePath, "水印图片路径不能为空");
+        File imageFile = new File(markImageFilePath);
+        if (!imageFile.exists()) {
+            throw new AppConfigException("水印图片不存在，路径：" + markImageFilePath);
+        }
+        try {
+            Images.pressImageFile(new FileInputStream(new File(markImageFilePath)), new File(originfilePath), watermarkImage.getX(), watermarkImage.getY());
+        } catch (FileNotFoundException e) {
+            logger.error("添加水印图片失败，文件名：{},路径：{}", onlineFile.getFileName(), originfilePath, e);
+        }
+    }
+
+    protected void addWaterMarkText(OnlineFile onlineFile) {
+        OFileProperties.Watermarktext watermarkText = oFileProperties.getWatermarktext();
+        Assert.notNull(watermarkText.getMarkText(), "水印图片文字不能为空");
+        Images.pressText(watermarkText.getMarkText(), onlineFile.getAbsolutePath(), null, Font.ITALIC, Color.BLACK, watermarkText.getFontSize(), watermarkText.getX(), watermarkText.getY(), watermarkText.getAlpha(), null);
     }
 
     /**

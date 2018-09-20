@@ -18,6 +18,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.Assert;
 
+import java.awt.*;
 import java.io.File;
 
 import static com.acooly.module.ofile.OFileProperties.PREFIX;
@@ -66,6 +67,16 @@ public class OFileProperties implements InitializingBean {
      * 可配置的内置文件上传签名认证器: 安全码（秘钥）
      */
     private String configuredSignAuthSecretKey = "configuredSignAuthSecretKey";
+
+    /**
+     * 开启后，上传的图片自动加水印图片，上传请求参数需要传入 watermarkImage = true
+     */
+    private Watermarkimage watermarkimage = new Watermarkimage();
+
+    /**
+     * 开启后，上传的图片自动加水印文字，上传请求参数需要传入 watermarkText = true
+     */
+    private Watermarktext watermarktext = new Watermarktext();
 
     public String getStorageRoot() {
         return storageRoot;
@@ -127,5 +138,53 @@ public class OFileProperties implements InitializingBean {
                 storageRoot += "/";
             }
         }
+    }
+
+    @Data
+    public static class Watermarkimage {
+        /**
+         * 开启后，上传的图片自动加水印图片，上传请求参数需要传入 watermarkImage = true
+         */
+        private boolean enable = true;
+        /**
+         * 水印图片
+         */
+        private String markImageFilePath;
+        /**
+         * 位置x轴
+         */
+        private int x = 0;
+        /**
+         * 位置y轴
+         */
+        private int y = 0;
+    }
+
+    @Data
+    public static class Watermarktext {
+        /**
+         * 开启后，上传的图片自动加水印文字，上传请求参数需要传入 watermarkText = true
+         */
+        private boolean enable = true;
+        /**
+         * 水印文字
+         */
+        private String markText;
+        /**
+         * 位置x轴
+         */
+        private int x = 10;
+        /**
+         * 位置y轴
+         */
+        private int y = 10;
+        /**
+         * 字体大小
+         */
+        private int fontSize = 16;
+        /**
+         * 透明度 0-1
+         */
+        private float alpha = 1F;
     }
 }

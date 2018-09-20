@@ -7,6 +7,7 @@
  */
 package com.acooly.core.utils.validate.predicate;
 
+import com.acooly.core.utils.Strings;
 import com.google.common.base.Predicate;
 
 import java.util.HashMap;
@@ -134,7 +135,7 @@ public class CertNoPredicate implements Predicate<String> {
 
                 // 判断校验位
                 char verifyCode = VERIFY_CODES.charAt(index);
-                if (verifyCode != certNoArr[17]) {
+                if (!Strings.equalsIgnoreCase(String.valueOf(verifyCode), String.valueOf(certNoArr[17]))) {
                     return false;
                 }
                 break;

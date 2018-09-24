@@ -63,3 +63,25 @@ maven坐标：
                    //do what you like
                    log.info("异步用户保存事件处理器{}",user.toString());
                }
+               
+               
+## 4.附录
+
+### 开发资源
+
+1. **图标库**：
+    boss后台的开发可以使用：fontawesome字体图标库，已引入到框架中。
+    图标地址：http://www.fontawesome.com.cn/faicons/
+    案例：
+    ```html
+    <i class="fa fa-flask fa-fw fa-lg fa-col" aria-hidden="true"></i>
+    ```
+2. layui库：已经引入，可以直接使用其组件。
+
+### 风格
+
+* acooly：v3标准/easyui标准风格
+* acooly4：layui风格
+
+
+             

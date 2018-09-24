@@ -122,8 +122,8 @@ website:	http://code.google.com/p/jquerytree/
 }
 
 .ztree li span.button.chk {
-    width: 13px;
-    height: 13px;
+    width: 11px;
+    height: 11px;
     margin: 0 3px 0 0;
     cursor: auto
 }

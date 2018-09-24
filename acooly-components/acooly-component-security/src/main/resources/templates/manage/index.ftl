@@ -11,7 +11,11 @@
     <meta name="X-CSRF-TOKEN" content="${Request['org.springframework.security.web.csrf.CsrfToken'].token}"/>
     <!-- easyui控件 -->
     <link id="easyuiTheme" rel="stylesheet" href="/manage/assert/plugin/jquery-easyui/themes/acooly/easyui.css" type="text/css"/>
+    <link rel="stylesheet" href="/manage/assert/plugin/layui/css/layui.css">
+    <link id="easyuiThemeBasic" rel="stylesheet"  href="/manage/assert/plugin/jquery-easyui/themes/acooly/basic.css">
+    <link rel="stylesheet" type="text/css" href="/manage/assert/style/icon.css">
     <link rel="stylesheet" href="/manage/assert/plugin/jquery-easyui/themes/icon.css" type="text/css"/>
+
     <script type="text/javascript" src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="//cdn.staticfile.org/jquery-migrate/1.1.0/jquery-migrate-1.1.0.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="/manage/assert/plugin/jquery-easyui/jquery.easyui.min.js" charset="utf-8"></script>
@@ -25,6 +29,8 @@
     <script type="text/javascript" src="//cdn.bootcss.com/jquery.form/3.32.0-2013.04.09/jquery.form.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="/manage/assert/plugin/jquery-easyui/plugins/easyui.statistics.js" charset="utf-8"></script>
 
+    <script type="text/javascript" src="/manage/assert/plugin/layui/layui.all.js"></script>
+
     <!-- 自己定义的样式和JS扩展 -->
     <script type="text/javascript" src="/manage/assert/script/acooly.framework.js" charset="utf-8"></script>
     <script type="text/javascript" src="/manage/assert/script/acooly.format.js" charset="utf-8"></script>
@@ -33,8 +39,6 @@
     <script type="text/javascript" src="/manage/assert/script/acooly.layout.js" charset="utf-8"></script>
     <script type="text/javascript" src="/manage/assert/script/acooly.system.js" charset="utf-8"></script>
     <script type="text/javascript" src="/manage/assert/script/acooly.portal.js" charset="utf-8"></script>
-    <link rel="stylesheet" type="text/css" href="/manage/assert/style/icon.css">
-    <link rel="stylesheet" type="text/css" href="/manage/assert/style/basic.css">
 
     <!-- my97日期控件 -->
     <script type="text/javascript" src="/manage/assert/plugin/My97DatePicker/WdatePicker.js" charset="utf-8"></script>
@@ -72,6 +76,6 @@
 <div id="mainWestLayout" title="功能菜单"
      data-options="headerCls:'westHeader',tools: [{ iconCls:'icon-refresh',handler:function(){$.acooly.layout.reloadMenu();}}],region:'west',href:'/manage/layout/west.html',onLoad:function(){$.acooly.layout.loadTree();}"
      style="width: 210px; overflow: hidden;"></div>
-<div data-options="region:'center',href:'/manage/layout/center.html'" style="overflow: hidden;"></div>
+<div data-options="region:'center',href:'/manage/layout/center.html'" class="centerHeader" style="overflow: hidden;"></div>
 </body>
 </html>

@@ -69,8 +69,8 @@
                 </tr>
                 <tr>
                     <th>类型</th>
-                    <td><select name="userType" <#if (allUserTypes?size<=10)>panelHeight="auto"</#if>
-                                class="easyui-combobox easyui-combobox-ext" style="height: 30px;">
+                    <td><select id="userTypeTest" name="userType" <#if (allUserTypes?size<=10)>panelHeight="auto"</#if>
+                                class="easyui-combobox" style="width:280px;">
 						<#list allUserTypes as k,v>
                             <option value="${k}">${v}</option></#list>
                     </select></td>
@@ -108,4 +108,14 @@
             </table>
         </@jodd.form>
     </form>
+    <script>
+
+        $(function(){
+            $('.combo-text .validatebox-text').attr("style","111");
+            console.info("init ok");
+        });
+
+
+
+    </script>
 </div>

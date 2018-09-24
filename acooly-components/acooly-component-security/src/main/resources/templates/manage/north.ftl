@@ -11,20 +11,17 @@
                 <div class="userinfo">
                     <@shiroPrincipal/>
                 </div>
-                <div style="float: right;">
-                    <a href="javascript:;" onclick="$.acooly.framework.changePassword();" class="easyui-linkbutton"
-                       style="width: 80px; height: 24px;" data-options="iconCls:'icon-password'">修改密码</a> <a href="javascript:;"
-                                                                                                             onclick="$.acooly.framework.logout();"
-                                                                                                             class="easyui-linkbutton"
-                                                                                                             style="width: 60px; height: 24px;"
-                                                                                                             data-options="iconCls:'icon-logout',width:'80'">注销</a>
+                <div style="float: right;padding-right: 10px;">
+                    <button class="layui-btn layui-btn-danger layui-btn-xs" onclick="$.acooly.framework.changePassword();"><i class="fa fa-key fa-fw fa-lg" aria-hidden="true"></i>修改密码</button>
+                    <button class="layui-btn layui-btn-danger layui-btn-xs" onclick="$.acooly.framework.logout();"><i class="fa fa-sign-out fa-fw
+                            fa-lg" aria-hidden="true"></i>注销</button>
                 </div>
             </div>
         </div>
         <div id="mainMenu" class="nav"></div>
-        <div style="position: absolute; right: 0px; bottom: 0px;">
-            <a href="javascript:void(0);" class="easyui-menubutton" data-options="menu:'#layout_menu_theme',iconCls:'icon-theme'"
-               style="color: #fefefe;">主题 (theme)</a>
+        <div class="top-menu" style="position: absolute; right: 0px; bottom: 0px;">
+            <a href="javascript:void(0);" class="easyui-menubutton" data-options="menu:'#layout_menu_theme'">
+                <i class="fa fa-laptop fa-fw fa-lg fa-col" aria-hidden="true"></i>主题</a>
         </div>
         <div id="layout_menu_theme" style="width: 100px; display: none;">
             <div id="theme_acooly" onclick="changeTheme('acooly');">acooly</div>

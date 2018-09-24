@@ -686,7 +686,7 @@
                 $('<div/>').dialog({
                     href: contextPath + '/manage/system/changePasswordView.html',
                     width: 400,
-                    height: 230,
+                    height: 300,
                     modal: true,
                     title: '修改密码',
                     buttons: [{

@@ -27,7 +27,7 @@
                   <th>内容类型：</th>
                   <td>
                       <select name="loadMode" id="manage_portallet_edit_loadMode" editable="false" panelHeight="auto"
-                              class="easyui-combobox" data-options="required:true">
+                              class="easyui-combobox" data-options="required:true,height:40">
 					<#list allLoadModes as k,v>
                         <option value="${k}">${v}</option></#list>
                       </select>

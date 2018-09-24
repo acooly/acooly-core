@@ -69,29 +69,20 @@
                     <td align="left">
                         登录名: <input type="text" class="text" size="10" name="search_LIKE_username"/>
                         姓名: <input type="text" class="text" size="10" name="search_LIKE_realName"/>
-                        状态: <select id="search_EQ_status" name="search_EQ_status" editable="false" panelHeight="auto"
-                                    class="easyui-combobox" style="height:27px;">
+                        状态: <select id="search_EQ_status" name="search_EQ_status" editable="false" panelHeight="auto" class="easyui-combobox" style="width:100px;">
+                            <option value="">所有</option><#list allStatus as k,v><option value="${k}">${v}</option></#list></select>
+                        类型:<select id="search_EQ_userType" name="search_EQ_userType" panelHeight="auto" editable="false" class="easyui-combobox" style="width:150px;">
                         <option value="">所有</option>
-                <#list allStatus as k,v>
-                    <option value="${k}">${v}</option></#list>
-                    </select>
-                        类型:<select id="search_EQ_userType" name="search_EQ_userType" panelHeight="auto" editable="false"
-                                   class="easyui-combobox" style="height:27px;">
+                        <#list allUserTypes as k,v><option value="${k}">${v}</option></#list></select>
+                        角色:<select id="search_EQ_role" name="search_EQ_role" panelHeight="auto" editable="false" class="easyui-combobox">
                         <option value="">所有</option>
-              <#list allUserTypes as k,v>
-                  <option value="${k}">${v}</option></#list>
+                        <#list allRoles as e><option value="${e.id}">${e.name}</option></#list>
                     </select>
-                        角色:<select id="search_EQ_role" name="search_EQ_role" panelHeight="auto" editable="false" class="easyui-combobox"
-                                   style="height:27px;">
-                        <option value="">所有</option>
-          <#list allRoles as e>
-              <option value="${e.id}">${e.name}</option></#list>
-                    </select>
-                        组织机构:<input type="text" id="orgId" name="search_EQ_orgId"
-                                    class="easyui-combobox"/>
+
+                        组织机构: <input type="text" id="orgId" class="easyui-combobox" name="search_EQ_orgId"/>
+
                         <a href="javascript:void(0);" style="width:70px;" class="easyui-linkbutton" data-options="plain:false"
-                           onclick="$.acooly.framework.search('manage_user_searchform','manage_user_datagrid');"><i
-                                class="fa fa-search fa-lg fa-fw fa-col"></i> 查询</a>
+                           onclick="$.acooly.framework.search('manage_user_searchform','manage_user_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i> 查询</a>
                     </td>
                 </tr>
             </table>

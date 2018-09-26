@@ -562,7 +562,7 @@ body {
 }
 .dialog-button {
     position: relative;
-    top: -1px;
+    top: 5px;
     padding: 5px;
     text-align: right;
 }

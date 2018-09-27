@@ -188,9 +188,9 @@ Mybatis增加单表增删改查通用能力，不用写一行sql语句，单表�
 3. 目前不支持进程内的多数据源分布式事务！
 
 
-### 3.5 关联查询
+### 3.5 关联分页查询
 
-这里举个一对一的列子
+这里举个一对一的列子,`Config`一对一`Customer`
 
 #### 3.5.1 实体类
 
@@ -243,3 +243,112 @@ Mybatis增加单表增删改查通用能力，不用写一行sql语句，单表�
     }
     
  #### 3.5.2 dao
+
+    package dao.CustomerDao;
+    public interface ConfigDao extends EntityMybatisDao<Config> {
+        //关联查询方法
+        PageInfo<Config> queryPage(PageInfo pageInfo, Map<String, Object> map, Map<String, Boolean> sortMap);
+    }
+    
+ #### 3.5.3 mapper
+ 
+ CustomerMapper.xml
+ 
+    <mapper namespace="dao.CustomerDao">
+        <!--coder自动生成语句-->
+        <resultMap id="customerResultMap" type="entity.Customer">
+            <id property="id" column="customer_id"/>
+            <result property="name" column="customer_name"/>
+            <result property="age" column="customer_age"/>
+            <result property="address" column="customer_address"/>
+            <result property="createTime" column="customer_create_time"/>
+            <result property="updateTime" column="customer_update_time"/>
+        </resultMap>
+        <!--coder自动生成语句-->
+        <sql id="customerSqlSelect">
+            customer.id as customer_id,
+            customer.name as customer_name,
+            customer.age as customer_age,
+            customer.address as customer_address,
+            customer.create_time as customer_create_time,
+            customer.update_time as customer_update_time
+        </sql>
+    
+    </mapper>
+
+ConfigMapper.xml
+
+    <mapper namespace="dao.ConfigDao">
+        <!--coder自动生成语句-->
+        <resultMap id="configResultMap" type="entity.Config">
+            <id property="id" column="config_id"/>
+            <result property="configName" column="config_config_name"/>
+            <result property="configValue" column="config_config_value"/>
+            <result property="comments" column="config_comments"/>
+            <result property="localCacheExpire" column="config_local_cache_expire"/>
+            <result property="redisCacheExpire" column="config_redis_cache_expire"/>
+            <result property="createTime" column="config_create_time"/>
+            <result property="updateTime" column="config_update_time"/>
+            <result property="customerId" column="config_customer_id"/>
+            <!--增加关联隐射-->
+            <association property="customer"
+                         resultMap="dao.CustomerDao.customerResultMap"/>
+        </resultMap>
+    
+        <!--coder自动生成语句-->
+        <sql id="configSqlSelect">
+            config.id as config_id,
+            config.config_name as config_config_name,
+            config.config_value as config_config_value,
+            config.comments as config_comments,
+            config.local_cache_expire as config_local_cache_expire,
+            config.redis_cache_expire as config_redis_cache_expire,
+            config.create_time as config_create_time,
+            config.update_time as config_update_time,
+            config.customer_id as config_customer_id
+        </sql>
+    
+         <!--此sql为自动增加查询条件-->
+        <select id="queryPage" resultMap="configResultMap">
+            select
+            <include refid="dao.ConfigDao.configSqlSelect"/>,
+            <include refid="dao.CustomerDao.customerSqlSelect"/>
+            FROM config
+            LEFT JOIN customer ON config.customer_id=customer.id
+        </select>
+    </mapper>
+    
+#### 3.5.4 使用
+
+     PageInfo pageInfo = new PageInfo();
+     Map<String, Object> map = Maps.newHashMap();
+     map.put("EQ_configName", "qiu");
+     map.put("EQ_customer.name", "bo");
+     Map<String, Boolean> sortMap = Maps.newHashMap();
+     sortMap.put("configName", true);
+     sortMap.put("customer.name", false);
+     PageInfo<Config> configs = configDao.queryPage(pageInfo, map, sortMap);
+     
+#### 3.5.5 生成sql语句
+
+    select
+            config.id as config_id,
+            config.config_name as config_config_name,
+            config.config_value as config_config_value,
+            config.comments as config_comments,
+            config.local_cache_expire as config_local_cache_expire,
+            config.redis_cache_expire as config_redis_cache_expire,
+            config.create_time as config_create_time,
+            config.update_time as config_update_time,
+            config.customer_id as config_customer_id
+         ,
+            customer.id as customer_id,
+            customer.name as customer_name,
+            customer.age as customer_age,
+            customer.address as customer_address,
+            customer.create_time as customer_create_time,
+            customer.update_time as customer_update_time
+         
+            FROM config
+            LEFT JOIN customer ON config.customer_id=customer.id WHERE  config_name  = 'qiu' AND  customer.name  = 'bo'  order by config_name  ASC,customer.name  DESC limit 0,10[]
+

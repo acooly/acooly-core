@@ -186,3 +186,60 @@ Mybatis增加单表增删改查通用能力，不用写一行sql语句，单表�
 1. 主数据源提供的相关beanName为:dataSource、jdbcTemplate、pagedJdbcTemplate、sqlSessionFactory
 2. 非主数据源提供的相关beanName为(以上面为例):tradeDataSource、tradeJdbcTemplate、tradePagedJdbcTemplate、tradeSqlSessionFactory
 3. 目前不支持进程内的多数据源分布式事务！
+
+
+### 3.5 关联查询
+
+这里举个一对一的列子
+
+#### 3.5.1 实体类
+
+    package entity;
+    @Entity
+    @Table(name = "config")
+    @Getter
+    @Setter
+    public class Config extends AbstractEntity {
+    	/** 配置项名称 */
+    	@NotEmpty
+    	@Size(max=128)
+        private String configName = "";
+    	/** 配置值 */
+    	@NotEmpty
+    	@Size(max=2048)
+        private String configValue;
+    	/** 配置描述 */
+    	@NotEmpty
+    	@Size(max=255)
+        private String comments;
+    	/** 本地缓存过期时间 */
+        private Integer localCacheExpire = 0;
+    	/** redis缓存过期时间 */
+        private Integer redisCacheExpire = 600000;
+    	/** customer_id */
+        private Long customerId;
+        //一对一关系
+        @Transient
+        private Customer customer;
+    }
+    
+    package entity;
+    @Entity
+    @Table(name = "customer")
+    @Getter
+    @Setter
+    public class Customer extends AbstractEntity {
+    	/** 名称 */
+    	@NotEmpty
+    	@Size(max=128)
+        private String name = "";
+    	/** 年龄 */
+    	@NotNull
+        private Integer age;
+    	/** 地址 */
+    	@NotEmpty
+    	@Size(max=255)
+        private String address;
+    }
+    
+ #### 3.5.2 dao

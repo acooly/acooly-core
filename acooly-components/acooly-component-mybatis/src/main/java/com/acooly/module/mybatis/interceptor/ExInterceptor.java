@@ -54,6 +54,9 @@ public class ExInterceptor extends AbstractInterceptor implements Interceptor {
         BoundSql boundSql = mappedStatement.getBoundSql(invocation.getArgs()[1]);
         // 待参数的原始SQL
         String originalSql = boundSql.getSql().trim();
+        if(originalSql.toLowerCase().contains(" where ")){
+            return invocation.proceed();
+        }
         MapperMethod.ParamMap parameterObject = (MapperMethod.ParamMap) boundSql.getParameterObject();
         Map<String, Object> map = (Map<String, Object>) parameterObject.get("param2");
         if (map == null || map.isEmpty()) {

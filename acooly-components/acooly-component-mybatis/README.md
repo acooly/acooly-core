@@ -242,7 +242,7 @@ Mybatis增加单表增删改查通用能力，不用写一行sql语句，单表�
         private String address;
     }
     
- #### 3.5.2 dao
+#### 3.5.2 dao
 
     package dao.CustomerDao;
     public interface ConfigDao extends EntityMybatisDao<Config> {
@@ -250,7 +250,7 @@ Mybatis增加单表增删改查通用能力，不用写一行sql语句，单表�
         PageInfo<Config> queryPage(PageInfo pageInfo, Map<String, Object> map, Map<String, Boolean> sortMap);
     }
     
- #### 3.5.3 mapper
+#### 3.5.3 mapper
  
  CustomerMapper.xml
  

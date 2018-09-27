@@ -130,7 +130,7 @@ public class MybatisAutoConfig {
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(PageExecutorInterceptor.class)
     public PageExecutorInterceptor pageExecutorInterceptor() {
         return new PageExecutorInterceptor();
     }

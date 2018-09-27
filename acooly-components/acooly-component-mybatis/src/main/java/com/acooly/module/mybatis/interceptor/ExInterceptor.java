@@ -1,5 +1,6 @@
 package com.acooly.module.mybatis.interceptor;
 
+import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.dao.support.SearchFilter;
 import com.acooly.core.utils.Exceptions;
 import com.acooly.core.utils.Strings;
@@ -10,7 +11,6 @@ import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
@@ -27,6 +27,7 @@ import java.util.Properties;
 
 /**
  * 关联查询生成where语句
+ *
  * @author qiuboboy@qq.com
  * @date 2018-09-27 16:23
  */
@@ -39,19 +40,25 @@ import java.util.Properties;
 })
 @Slf4j
 @Order(Ordered.LOWEST_PRECEDENCE)
-public class ExInterceptor implements Interceptor {
+public class ExInterceptor extends AbstractInterceptor implements Interceptor {
     private Map<String, Class> domanClassCache = Maps.newConcurrentMap();
     private Map<String, Class> fieldTypeCache = Maps.newConcurrentMap();
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
+        PageInfo pageInfo = havePageInfoArg(invocation);
+        if (pageInfo == null) {
+            return invocation.proceed();
+        }
         MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
-        Object parameter = invocation.getArgs()[1];
-        BoundSql boundSql = mappedStatement.getBoundSql(parameter);
+        BoundSql boundSql = mappedStatement.getBoundSql(invocation.getArgs()[1]);
         // 待参数的原始SQL
         String originalSql = boundSql.getSql().trim();
         MapperMethod.ParamMap parameterObject = (MapperMethod.ParamMap) boundSql.getParameterObject();
         Map<String, Object> map = (Map<String, Object>) parameterObject.get("param2");
+        if (map == null || map.isEmpty()) {
+            return invocation.proceed();
+        }
         Map<String, Boolean> sortMap = (Map<String, Boolean>) parameterObject.get("param3");
         String id = mappedStatement.getId();
         String daoClassName = Strings.substringBeforeLast(id, ".");
@@ -82,10 +89,7 @@ public class ExInterceptor implements Interceptor {
             }
             sqlResult.deleteCharAt(sqlResult.length() - 1);
         }
-
-        BoundSql newBoundSql = copyFromBoundSql(mappedStatement, boundSql, sqlResult.toString());
-        MappedStatement newMapperStmt = copyFromMappedStatement(mappedStatement, newBoundSql);
-        invocation.getArgs()[0] = newMapperStmt;
+        invocation.getArgs()[0] = createNewMappedStatement(mappedStatement, boundSql, sqlResult.toString());
         return invocation.proceed();
     }
 
@@ -104,42 +108,6 @@ public class ExInterceptor implements Interceptor {
         return fieldType;
     }
 
-    private BoundSql copyFromBoundSql(MappedStatement ms, BoundSql boundSql, String sql) {
-        BoundSql newBoundSql =
-                new BoundSql(
-                        ms.getConfiguration(),
-                        sql,
-                        boundSql.getParameterMappings(),
-                        boundSql.getParameterObject());
-        for (ParameterMapping mapping : boundSql.getParameterMappings()) {
-            String prop = mapping.getProperty();
-            if (boundSql.hasAdditionalParameter(prop)) {
-                newBoundSql.setAdditionalParameter(prop, boundSql.getAdditionalParameter(prop));
-            }
-        }
-        return newBoundSql;
-    }
-
-    private MappedStatement copyFromMappedStatement(MappedStatement ms, final BoundSql newBoundSql) {
-        MappedStatement.Builder builder =
-                new MappedStatement.Builder(
-                        ms.getConfiguration(),
-                        ms.getId(),
-                        parameterObject -> newBoundSql,
-                        ms.getSqlCommandType());
-        builder.resource(ms.getResource());
-        builder.fetchSize(ms.getFetchSize());
-        builder.statementType(ms.getStatementType());
-        builder.keyGenerator(ms.getKeyGenerator());
-        builder.timeout(ms.getTimeout());
-        builder.parameterMap(ms.getParameterMap());
-        builder.resultMaps(ms.getResultMaps());
-        builder.resultSetType(ms.getResultSetType());
-        builder.cache(ms.getCache());
-        builder.flushCacheRequired(ms.isFlushCacheRequired());
-        builder.useCache(ms.isUseCache());
-        return builder.build();
-    }
 
     private Class getDomainType(String daoClassName) {
         Class domanClass = domanClassCache.get(daoClassName);
@@ -169,4 +137,6 @@ public class ExInterceptor implements Interceptor {
     public void setProperties(Properties properties) {
 
     }
+
+
 }

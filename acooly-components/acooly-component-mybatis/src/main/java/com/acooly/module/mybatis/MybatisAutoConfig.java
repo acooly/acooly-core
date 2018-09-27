@@ -9,10 +9,12 @@
  */
 package com.acooly.module.mybatis;
 
+import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.module.ds.JDBCAutoConfig;
 import com.acooly.module.mybatis.interceptor.DateInterceptor;
+import com.acooly.module.mybatis.interceptor.ExInterceptor;
 import com.acooly.module.mybatis.interceptor.PageExecutorInterceptor;
 import com.acooly.module.mybatis.page.PageObjectFactory;
 import com.acooly.module.mybatis.page.PageObjectWrapperFactory;
@@ -25,17 +27,18 @@ import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
+import java.util.Map;
 
 import static com.acooly.module.mybatis.MybatisProperties.PREFIX;
 
@@ -49,8 +52,6 @@ import static com.acooly.module.mybatis.MybatisProperties.PREFIX;
 @AutoConfigureAfter(JDBCAutoConfig.class)
 public class MybatisAutoConfig {
 
-    @Autowired(required = false)
-    private Interceptor[] interceptors;
 
     @Autowired(required = false)
     private DatabaseIdProvider databaseIdProvider;
@@ -66,8 +67,11 @@ public class MybatisAutoConfig {
         if (StringUtils.hasText(properties.getConfigLocation())) {
             factory.setConfigLocation(this.resourceLoader.getResource(properties.getConfigLocation()));
         }
-        if (!ObjectUtils.isEmpty(this.interceptors)) {
-            factory.setPlugins(this.interceptors);
+        Map<String, Interceptor> beansOfType = Apps.getApplicationContext().getBeansOfType(Interceptor.class);
+        if (!ObjectUtils.isEmpty(beansOfType)) {
+            Interceptor[] interceptors = beansOfType.values().toArray(new Interceptor[0]);
+            AnnotationAwareOrderComparator.sort(interceptors);
+            factory.setPlugins(interceptors);
         }
         if (this.databaseIdProvider != null) {
             factory.setDatabaseIdProvider(this.databaseIdProvider);
@@ -105,13 +109,6 @@ public class MybatisAutoConfig {
         configuration.setObjectWrapperFactory(new PageObjectWrapperFactory());
     }
 
-    public Interceptor[] getInterceptors() {
-        return interceptors;
-    }
-
-    public void setInterceptors(Interceptor[] interceptors) {
-        this.interceptors = interceptors;
-    }
 
     public DatabaseIdProvider getDatabaseIdProvider() {
         return databaseIdProvider;
@@ -130,14 +127,16 @@ public class MybatisAutoConfig {
     }
 
     @Bean
-    @ConditionalOnMissingBean(PageExecutorInterceptor.class)
     public PageExecutorInterceptor pageExecutorInterceptor() {
         return new PageExecutorInterceptor();
     }
 
     @Bean
-    @ConditionalOnMissingBean
     public DateInterceptor updateInterceptor() {
         return new DateInterceptor();
+    }
+    @Bean
+    public ExInterceptor exInterceptor(){
+        return new ExInterceptor();
     }
 }

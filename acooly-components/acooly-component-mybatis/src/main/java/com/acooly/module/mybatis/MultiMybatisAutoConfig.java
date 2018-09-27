@@ -18,7 +18,6 @@ import com.acooly.module.mybatis.interceptor.PageExecutorInterceptor;
 import com.alibaba.druid.pool.DruidDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
-import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -68,10 +67,7 @@ public class MultiMybatisAutoConfig {
         } catch (BeansException e) {
             resourceLoader = new DefaultResourceLoader();
         }
-        Interceptor[] interceptors =
-                factory.getBeansOfType(Interceptor.class).values().toArray(new Interceptor[0]);
         mybatisAutoConfig.setDatabaseIdProvider(databaseIdProvider);
-        mybatisAutoConfig.setInterceptors(interceptors);
         mybatisAutoConfig.setResourceLoader(resourceLoader);
         return mybatisAutoConfig;
     }

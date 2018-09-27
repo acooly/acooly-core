@@ -16,6 +16,7 @@ import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.core.annotation.Order;
 
 import java.lang.reflect.Method;
 import java.sql.Connection;
@@ -33,6 +34,7 @@ import java.util.Properties;
                 args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}
         )
 })
+@Order(0)
 public class PageExecutorInterceptor implements Interceptor {
 
     private static Map<String, String> countSqlMap = Maps.newConcurrentMap();

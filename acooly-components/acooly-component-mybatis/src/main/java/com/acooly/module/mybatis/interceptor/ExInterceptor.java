@@ -52,12 +52,16 @@ public class ExInterceptor extends AbstractInterceptor implements Interceptor {
         }
         MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
         BoundSql boundSql = mappedStatement.getBoundSql(invocation.getArgs()[1]);
-        // 待参数的原始SQL
-        String originalSql = boundSql.getSql().trim();
-        if(originalSql.toLowerCase().contains(" where ")){
+        MapperMethod.ParamMap parameterObject = (MapperMethod.ParamMap) boundSql.getParameterObject();
+        if (parameterObject.containsKey("com.acooly.module.mybatis.ex.ListMapper.ListSqlSource")) {
             return invocation.proceed();
         }
-        MapperMethod.ParamMap parameterObject = (MapperMethod.ParamMap) boundSql.getParameterObject();
+        // 待参数的原始SQL
+        String originalSql = boundSql.getSql().trim();
+        if ( originalSql.toLowerCase().contains(" where ")) {
+            return invocation.proceed();
+        }
+
         Map<String, Object> map = (Map<String, Object>) parameterObject.get("param2");
         if (map == null || map.isEmpty()) {
             return invocation.proceed();

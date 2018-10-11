@@ -402,39 +402,26 @@
              * show
              */
             show: function (url, width, height) {
-                $('<div/>').dialog({
-                    href: contextPath + url,
-                    width: width,
-                    height: height,
-                    modal: true,
-                    title: '查看',
-                    buttons: [{
-                        text: '关闭',
-                        iconCls: 'icon-cancel',
-                        handler: function () {
-                            var d = $(this).closest('.window-body');
-                            d.dialog('close');
-                        }
-                    }],
-                    onClose: function () {
-                        $(this).dialog('destroy');
-                    }
+                return this.get({
+                   url:url,
+                   width:width,
+                   height:height
                 });
             },
             get: function (opts) {
                 var url = opts.url;
                 var width = opts.width != null ? opts.width : 400;
                 var height = opts.height != null ? opts.height : 300;
-                var title = opts.title != null ? opts.title : '查看'
-                $('<div/>').dialog({
+                var title = opts.title != null ? opts.title : '<i class="fa fa-file-o fa-lg fa-fw fa-col"></i>查看'
+                var buttonLable = opts.buttonLable != null ? opts.buttonLable : '关闭';
+                return $('<div/>').dialog({
                     href: contextPath + url,
                     width: width,
                     height: height,
                     modal: true,
                     title: title,
                     buttons: [{
-                        text: '关闭',
-                        iconCls: 'icon-cancel',
+                        text: '<i class="fa fa-times-circle fa-lg fa-fw fa-col" ></i>关闭',
                         handler: function () {
                             var d = $(this).closest('.window-body');
                             d.dialog('close');

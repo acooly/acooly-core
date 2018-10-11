@@ -9,6 +9,8 @@ import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,6 +43,11 @@ public class FrameworkProperties implements Serializable {
     private String subtitle = "专注于业务开发，规范最佳实践，自动代码生成，提高70%效率！";
     private String logo = "/manage/assert/image/logo.png";
     private String copyright = "Copyright © 2016 acooly. All rights reserved";
+    /** 外部扩展css */
+    private List<String> styles = new ArrayList<>();
+    /** 外部扩展js */
+    private List<String> scripts = new ArrayList<>();
+
     /**
      * 是否开启同名用户登录互斥 开关 [未实现]
      */

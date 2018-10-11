@@ -3,6 +3,7 @@ package com.acooly.module.security.web;
 import com.acooly.core.common.olog.annotation.Olog;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonResult;
+import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.mapper.JsonMapper;
 import com.acooly.core.utils.security.JWTUtils;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.acooly.core.utils.security.JWTUtils.SIGN_KEY;
 import static com.acooly.module.security.shiro.realm.ShiroDbRealm.SESSION_USER;
@@ -63,6 +65,7 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()) {
             // 如果已经登录的情况，直接回到主框架界面
+            doExtendResources(request,model);
             return "/manage/index";
         } else {
             // 如果没有登录的首次进入登录界面，直接返回到登录界面。
@@ -207,4 +210,25 @@ public class ManagerController extends AbstractJQueryEntityController<User, User
     public String north(HttpServletRequest request) {
         return "/manage/north";
     }
+
+
+    private void doExtendResources(HttpServletRequest request,Model model) {
+        List<String> scripts = FrameworkPropertiesHolder.get().getScripts();
+        if(Collections3.isNotEmpty(scripts)){
+            StringBuilder sb = new StringBuilder();
+            for(String script:scripts){
+                sb.append("<script type=\"text/javascript\" src=\""+script+"\" charset=\"utf-8\"></script>\n");
+            }
+            model.addAttribute("extendScripts",sb.toString());
+        }
+        List<String> styles = FrameworkPropertiesHolder.get().getStyles();
+        if(Collections3.isNotEmpty(styles)){
+            StringBuilder sb = new StringBuilder();
+            for(String style:styles){
+                sb.append("<link rel=\"stylesheet\" href=\""+style+"\">\n");
+            }
+            model.addAttribute("extendStyles",sb.toString());
+        }
+    }
+
 }

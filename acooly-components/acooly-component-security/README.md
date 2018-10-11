@@ -63,12 +63,25 @@ maven坐标：
                    //do what you like
                    log.info("异步用户保存事件处理器{}",user.toString());
                }
-               
+ 
+### 3.5 增加扩展资源（js和css库）
+配置参数：
+
+```ini
+acooly.framework.styles[0]=/manage/assert/plugin/layui/css/layui.css
+acooly.framework.styles[1]=/manage/assert/plugin/layui/css/layui.css
+
+acooly.framework.scripts[0]=/manage/assert/script/acooly.ui.layer.js
+acooly.framework.scripts[1]=/manage/assert/script/acooly.portal.js
+```            
+>注意：扩展加入自定义的js和css引用后，会在扩展主界面（基础）加载，扩展内全局可用，请注意不要与现有扩展内资源冲突。
+   
                
 ## 4.附录
 
 ### 开发资源
 
+1. **easyui文档**：http://www.jeasyui.com/
 1. **图标库**：
     boss后台的开发可以使用：fontawesome字体图标库，已引入到框架中。
     图标地址：http://www.fontawesome.com.cn/faicons/
@@ -76,7 +89,7 @@ maven坐标：
     ```html
     <i class="fa fa-flask fa-fw fa-lg fa-col" aria-hidden="true"></i>
     ```
-2. layui库：已经引入，可以直接使用其组件。
+2. **layui库**：已经引入，可以直接使用其组件。文档：https://www.layui.com/
 
 ### 风格
 

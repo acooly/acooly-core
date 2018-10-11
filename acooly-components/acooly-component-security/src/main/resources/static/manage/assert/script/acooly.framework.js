@@ -93,19 +93,18 @@
                                 }
                             }
                             if (result.message) {
-                                $.messager.show({
-                                    title: '提示',
-                                    msg: result.message
-                                });
+                                $.acooly.msgrb(result.message,result.success)
                             }
                         } catch (e) {
-                            $.messager.alert('提示', e);
+                            $.acooly.alert('错误',e);
+                            // $.messager.alert('提示', e);
                         }
 
                     },
                     error: function (XmlHttpRequest, textStatus, errorThrown) {
                         $(thisObject).linkbutton('enable');
-                        $.messager.alert('提示', errorThrown);
+                        $.acooly.alert('错误',errorThrown);
+                        // $.messager.alert('提示', errorThrown);
                     }
                 });
             },
@@ -245,7 +244,7 @@
                 }
                 // changelog-end
                 if (!id || id == '') {
-                    $.messager.alert('提示', '请选择需要编辑的数据');
+                    $.acooly.alert('提示', '请选择需要编辑的数据');
                     return;
                 }
                 var href = $.acooly.framework.getCanonicalUrl(url, id);
@@ -689,7 +688,7 @@
                                     }
                                     // 自定义检查合法性
                                     if ($('#system_newPassword').val() != $('#system_confirmNewPassword').val()) {
-                                        $.messager.alert('提示', '两次密码输入不一致');
+                                        $.acooly.alert('提示', '两次密码输入不一致');
                                         return false;
                                     }
                                     return true;
@@ -707,7 +706,7 @@
                                             });
                                         }
                                     } catch (e) {
-                                        $.messager.alert('提示', result);
+                                        $.acooly.alert('提示', result);
                                     }
                                 }
                             });

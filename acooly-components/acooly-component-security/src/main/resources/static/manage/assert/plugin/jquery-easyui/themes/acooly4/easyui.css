@@ -2947,9 +2947,15 @@ body {
     cursor: default;
 }
 .messager-body {
-    padding: 10px 10px 30px 10px;
+    padding: 10px;
     overflow: auto;
 }
+
+.messager-body > .messager-button {
+    text-align: center;
+    padding-top: 10px;
+}
+
 .messager-button {
     text-align: center;
     padding: 5px;

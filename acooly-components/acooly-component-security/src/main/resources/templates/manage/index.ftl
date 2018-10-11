@@ -57,7 +57,7 @@
     <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.js"></script>
     <link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"/>
 
-    <link rel="stylesheet" href="/manage/assert/plugin/awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/manage/assert/plugin/awesome/4.7.0/css/font-awesome.min.css">
 
 
     <script type="text/javascript">

@@ -39,6 +39,7 @@
     <script type="text/javascript" src="/manage/assert/script/acooly.layout.js" charset="utf-8"></script>
     <script type="text/javascript" src="/manage/assert/script/acooly.system.js" charset="utf-8"></script>
     <script type="text/javascript" src="/manage/assert/script/acooly.portal.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/manage/assert/script/acooly.ui.layer.js" charset="utf-8"></script>
 
     <!-- my97日期控件 -->
     <script type="text/javascript" src="/manage/assert/plugin/My97DatePicker/WdatePicker.js" charset="utf-8"></script>

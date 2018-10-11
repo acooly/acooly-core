@@ -3163,8 +3163,7 @@ body {
     padding: 0;
 }
 .validatebox-invalid {
-    border-color: #FF5722;
-    background-color: none;
+    border: 1px solid #FF5722;
     color: #666666;
 }
 .tooltip {

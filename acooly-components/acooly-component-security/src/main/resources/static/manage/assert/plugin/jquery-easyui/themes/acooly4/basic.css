@@ -193,6 +193,11 @@ input[type='text'],input[type='password'] {
     margin: 5px 0;
 }
 
+.tooltip-f {
+    border: 1px solid #FF5722;
+    color: #666666;
+}
+
 .combo input[type='text'] {
     padding-right: 30px;
     height: 30px;

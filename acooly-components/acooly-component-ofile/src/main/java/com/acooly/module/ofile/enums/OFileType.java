@@ -12,7 +12,7 @@ import java.util.Map;
  * @author zhangpu
  */
 public enum OFileType {
-    picture("picture", "图片", "jpg,png,gif"),
+    picture("picture", "图片", "jpg,jpeg,png,gif"),
 
     app("app", "程序", "apk,ipa"),
 

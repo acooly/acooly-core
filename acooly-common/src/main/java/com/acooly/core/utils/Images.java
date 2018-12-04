@@ -12,7 +12,7 @@ import java.io.*;
 
 public class Images {
 
-    private static final String IMAGE_EXTS = "JPG,PNG,GIF,BMP";
+    private static final String IMAGE_EXTS = "JPG,JPEG,PNG,GIF,BMP";
     private static Logger logger = LoggerFactory.getLogger(Images.class);
 
     /**

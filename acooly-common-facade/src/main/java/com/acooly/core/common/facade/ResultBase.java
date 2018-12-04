@@ -8,6 +8,7 @@
 package com.acooly.core.common.facade;
 
 import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.core.utils.enums.ResultStatus;
@@ -33,20 +34,23 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
 
     private String detail = ResultCode.SUCCESS.getMessage();
 
-    public Messageable getStatus() {
-        return status;
-    }
 
     public void setStatus(Messageable status) {
         this.status = status;
     }
 
     public void markProcessing() {
-        this.status = ResultStatus.processing;
-        this.code = ResultStatus.processing.code();
-        this.detail = ResultStatus.processing.message();
+        this.status = ResultCode.PROCESSING;
+        this.code = ResultCode.PROCESSING.code();
+        this.detail = ResultCode.PROCESSING.message();
     }
 
+    @Override
+    public Messageable getStatus() {
+        return status;
+    }
+
+    @Override
     public String getDetail() {
         return detail;
     }
@@ -64,15 +68,15 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
     }
 
     public boolean success() {
-        return status == ResultStatus.success;
+        return status == ResultStatus.success || Strings.equalsIgnoreCase(status.code(), ResultCode.SUCCESS.code());
     }
 
     public boolean processing() {
-        return status == ResultStatus.processing;
+        return status == ResultStatus.processing || Strings.equalsIgnoreCase(status.code(), ResultCode.PROCESSING.code());
     }
 
     public boolean failure() {
-        return status == ResultStatus.failure;
+        return status == ResultStatus.failure || Strings.equalsIgnoreCase(status.code(), ResultCode.FAILURE.code());
     }
 
     @Override

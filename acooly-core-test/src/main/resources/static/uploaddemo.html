@@ -6,10 +6,13 @@
 </head>
 <body>
 <h2>upload_demo</h2>
-<form action="/ofile/upload?watermarkImage=true&watermarkText=true" method="post" enctype="multipart/form-data">
-    <p>First name: <input type="text" name="fname" /></p>
-    <p>Last name: <input type="file" name="lname" /></p>
-    <input type="submit" value="Submit" />
+<div>注意：需要先登录后台BOSS获取session，才能开始测试</div>
+<!--?watermarkImage=true&watermarkText=true-->
+<form action="/ofile/upload.html" method="post" enctype="multipart/form-data">
+    <p>一般的表单: <input type="text" name="fname"/></p>
+    <p>选择上传文件: <input type="file" name="lname"/></p>
+    <p>存储相对子路径: <input type="text" name="storageSubPath"/> 参数：OfilePortalController.STORAGE_SUB_PATH</p>
+    <input type="submit" value="Submit"/>
 </form>
 </body>
 </html>

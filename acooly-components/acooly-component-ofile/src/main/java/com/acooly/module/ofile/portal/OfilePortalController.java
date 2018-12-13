@@ -8,10 +8,7 @@ import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.common.web.support.JsonResult;
-import com.acooly.core.utils.Assert;
-import com.acooly.core.utils.Collections3;
-import com.acooly.core.utils.Images;
-import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.*;
 import com.acooly.module.ofile.OFileProperties;
 import com.acooly.module.ofile.auth.OFileUploadAuthenticate;
 import com.acooly.module.ofile.domain.OnlineFile;
@@ -40,6 +37,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.io.*;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -56,6 +54,11 @@ public class OfilePortalController
     private static final Pattern ABSOLUTE_URL = Pattern.compile("\\A[a-z0-9.+-]+://.*", 2);
     public static final String WATERMARK_TEXT = "watermarkText";
     public static final String WATERMARK_IMAGE = "watermarkImage";
+
+    /**
+     * 单次上传时，动态指定的存储子路径（相对storageRoot的子路径）参数，请求方可动态传入，默认为空
+     */
+    public static final String STORAGE_SUB_PATH = "storageSubPath";
 
     @Resource
     private OnlineFileService onlineFileService;
@@ -79,7 +82,7 @@ public class OfilePortalController
             // 上传文件格式
             getUploadConfig().setAllowExtentions(oFileProperties.getAllowExtentions());
             getUploadConfig().setMaxSize(oFileProperties.getMaxSize());
-            getUploadConfig().setStorageRoot(getStorageRoot());
+            getUploadConfig().setStorageRoot(getStoragePath(request));
             getUploadConfig().setUseMemery(false);
             getUploadConfig().setStorageNameSpace(oFileProperties.getStorageNameSpace());
 
@@ -441,4 +444,29 @@ public class OfilePortalController
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    /**
+     * 获取本次上传存储物理路径
+     *
+     * @param request
+     */
+    protected String getStoragePath(HttpServletRequest request) {
+        String storageSubPath = Servlets.getParameter(STORAGE_SUB_PATH);
+        if (Strings.isNotBlank(storageSubPath)) {
+            storageSubPath = storageSubPath.replaceAll("\\\\", "/");
+            storageSubPath = Paths.get(getStorageRoot(), storageSubPath).toString();
+            try {
+                FileUtils.forceMkdir(new File(storageSubPath));
+            } catch (Exception e) {
+                logger.warn("创建上传存储文件夹失败。路径：{},原因:{)", storageSubPath, e.getMessage());
+            }
+            return storageSubPath;
+        }
+        return getStorageRoot();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Paths.get("d:/data/", ""));
+    }
+
 }

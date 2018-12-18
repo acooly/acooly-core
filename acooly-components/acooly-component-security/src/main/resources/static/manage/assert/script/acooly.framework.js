@@ -93,17 +93,17 @@
                                 }
                             }
                             if (result.message) {
-                                $.acooly.msgrb(result.message,result.success)
+                                $.acooly.msgrb(result.message, result.success)
                             }
                         } catch (e) {
-                            $.acooly.alert('错误',e);
+                            $.acooly.alert('错误', e);
                             // $.messager.alert('提示', e);
                         }
 
                     },
                     error: function (XmlHttpRequest, textStatus, errorThrown) {
                         $(thisObject).linkbutton('enable');
-                        $.acooly.alert('错误',errorThrown);
+                        $.acooly.alert('错误', errorThrown);
                         // $.messager.alert('提示', errorThrown);
                     }
                 });
@@ -402,9 +402,9 @@
              */
             show: function (url, width, height) {
                 return this.get({
-                   url:url,
-                   width:width,
-                   height:height
+                    url: url,
+                    width: width,
+                    height: height
                 });
             },
             get: function (opts) {
@@ -438,7 +438,8 @@
             createUploadify: function (options) {
                 // console.info(contextPath +
                 // options.url+";jsessionid="+options.jsessionid)
-                $('#' + options.uploader).uploadify({
+
+                var defaultOpts = {
                     'buttonText': '<span style="font-size: 12px;font-weight: normal;">选择文件</span>',
                     'height': 22,
                     'width': 80,
@@ -474,7 +475,9 @@
                         }
 
                     }
-                });
+                }
+                var uploadifyOptions = $.extend(defaultOpts, options);
+                $('#' + options.uploader).uploadify(uploadifyOptions);
             },
             imports_dialog: '',
             imports: function (opts) {

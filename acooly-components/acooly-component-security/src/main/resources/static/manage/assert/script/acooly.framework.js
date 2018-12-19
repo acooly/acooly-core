@@ -438,17 +438,19 @@
             createUploadify: function (options) {
                 // console.info(contextPath +
                 // options.url+";jsessionid="+options.jsessionid)
-
-                var defaultOpts = {
+                var fileTypeExts = options.fileTypeExts || '*.xls;*.xlsx;*.csv';
+                var fileTypeDesc = options.fileTypeDesc || '支持格式:Excel和CSV';
+                var fileSizeLimit = options.fileSizeLimit || '200MB';
+                var uploadifyOptions = {
                     'buttonText': '<span style="font-size: 12px;font-weight: normal;">选择文件</span>',
                     'height': 22,
                     'width': 80,
                     'auto': false,
                     'multi': false,
                     'queueSizeLimit': 1,
-                    'fileTypeDesc': '支持格式:Excel2000和CSV',
-                    'fileTypeExts': '*.xls;*.xlsx;*.csv',
-                    'fileSizeLimit': '200MB',
+                    'fileTypeDesc': fileTypeDesc,
+                    'fileTypeExts': fileTypeExts,
+                    'fileSizeLimit': fileSizeLimit,
                     'swf': '/manage/assert/plugin/jquery-uploadify/uploadify.swf',
                     'uploader': contextPath + options.url + "&k=v;jsessionid=" + options.jsessionid,
                     'cancelImg': '/manage/assert/plugin/jquery-uploadify/uploadify-cancel.png',
@@ -476,7 +478,6 @@
 
                     }
                 }
-                var uploadifyOptions = $.extend(defaultOpts, options);
                 $('#' + options.uploader).uploadify(uploadifyOptions);
             },
             imports_dialog: '',

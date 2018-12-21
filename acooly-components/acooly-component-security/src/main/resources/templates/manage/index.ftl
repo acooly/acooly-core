@@ -10,9 +10,9 @@
     <meta http-equiv="description" content="spring+jpa+hibernate+easyui+springmvc+jstl/freemarker">
     <meta name="X-CSRF-TOKEN" content="${Request['org.springframework.security.web.csrf.CsrfToken'].token}"/>
     <!-- easyui控件 -->
-    <link id="easyuiTheme" rel="stylesheet" href="/manage/assert/plugin/jquery-easyui/themes/acooly/easyui.css" type="text/css"/>
+    <link id="easyuiTheme" rel="stylesheet" href="/manage/assert/plugin/jquery-easyui/themes/acooly4/easyui.css" type="text/css"/>
     <link rel="stylesheet" href="/manage/assert/plugin/layui/css/layui.css">
-    <link id="easyuiThemeBasic" rel="stylesheet"  href="/manage/assert/plugin/jquery-easyui/themes/acooly/basic.css">
+    <link id="easyuiThemeBasic" rel="stylesheet"  href="/manage/assert/plugin/jquery-easyui/themes/acooly4/basic.css">
     <link rel="stylesheet" type="text/css" href="/manage/assert/style/icon.css">
     <link rel="stylesheet" href="/manage/assert/plugin/jquery-easyui/themes/icon.css" type="text/css"/>
     <!-- 扩展css -->
@@ -49,8 +49,10 @@
     <!-- my97日期控件 -->
     <script type="text/javascript" src="/manage/assert/plugin/My97DatePicker/WdatePicker.js" charset="utf-8"></script>
     <!-- uploadify -->
-    <script type="text/javascript" src="/manage/assert/plugin/jquery-uploadify/jquery.uploadify.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/manage/assert/plugin/jquery-uploadify/uploadify.css"/>
+    <#--<script type="text/javascript" src="/manage/assert/plugin/jquery-uploadify/jquery.uploadify.min.js"></script>-->
+    <#--<link rel="stylesheet" type="text/css" href="/manage/assert/plugin/jquery-uploadify/uploadify.css"/>-->
+<script type="text/javascript" src="/manage/assert/plugin/uploadifive/jquery.uploadifive.js"></script>
+<link rel="stylesheet" type="text/css" href="/manage/assert/plugin/uploadifive/uploadifive.css"/>
     <!-- ztree -->
     <script type="text/javascript" src="/manage/assert/plugin/jquery-ztree/js/jquery.ztree.core-3.5.js"></script>
     <link rel="stylesheet" type="text/css" href="/manage/assert/plugin/jquery-ztree/css/zTreeStyle/zTreeStyle.css"/>

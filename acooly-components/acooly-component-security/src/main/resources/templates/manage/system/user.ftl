@@ -130,9 +130,9 @@
         </div>
 
         <div id="manage_user_toolbar">
-            <a href="#" class="easyui-linkbutton" data-options="size:'small'" plain="true"
-               onclick="$.acooly.framework.create({url:'/manage/system/user/create.html',entity:'user',height:510})"><i
-                    class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
+            <a href="#" class="easyui-linkbutton" data-options="size:'small'" plain="true" onclick="$.acooly.framework.create({url:'/manage/system/user/create.html',entity:'user',height:510})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
+            <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.imports({url:'/manage/system/user/importView.html',
+            uploader:'manage_user_import_uploader_file'});"><i class="fa fa-arrow-circle-o-up fa-lg fa-fw fa-col"></i>批量导入</a>
         </div>
     </div>
 

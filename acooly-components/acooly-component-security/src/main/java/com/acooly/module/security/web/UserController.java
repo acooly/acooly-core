@@ -66,9 +66,7 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
         allow(request, response, MappingMethod.list);
         try {
             result.appendData(referenceData(request));
-            PageInfo<UserDto> pageInfo =
-                    getEntityService()
-                            .queryDto(getPageInfo(request), getSearchParams(request), getSortMap(request));
+            PageInfo<UserDto> pageInfo = getEntityService().queryDto(getPageInfo(request), getSearchParams(request), getSortMap(request));
             result.setTotal(pageInfo.getTotalCount());
             result.setRows(pageInfo.getPageResults());
         } catch (Exception e) {
@@ -77,6 +75,7 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
         return result;
     }
 
+    @Override
     @RequestMapping(value = "saveJson")
     @ResponseBody
     public JsonEntityResult<User> saveJson(HttpServletRequest request, HttpServletResponse response) {
@@ -90,18 +89,16 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
             entity.setRoleName(getRoleNames(entity.getId()));
             result.setEntity(entity);
             result.setMessage("保存成功！");
-
             UserCreatedEvent userCreatedEvent = new UserCreatedEvent();
             BeanCopier.copy(entity, userCreatedEvent);
-
             eventBus.publishAsync(userCreatedEvent);
-
         } catch (Exception e) {
             handleException(result, "保存账户", e);
         }
         return result;
     }
 
+    @Override
     @RequestMapping(value = "updateJson")
     @ResponseBody
     public JsonEntityResult<User> updateJson(
@@ -208,9 +205,7 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
     }
 
     @Override
-    protected User doSave(
-            HttpServletRequest request, HttpServletResponse response, Model model, boolean isCreate)
-            throws Exception {
+    protected User doSave(HttpServletRequest request, HttpServletResponse response, Model model, boolean isCreate) throws Exception {
         User entity = loadEntity(request);
         if (entity == null) {
             entity = getEntityClass().newInstance();
@@ -227,13 +222,7 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
     }
 
     @Override
-    protected User onSave(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            Model model,
-            User entity,
-            boolean isCreate)
-            throws Exception {
+    protected User onSave(HttpServletRequest request, HttpServletResponse response, Model model, User entity, boolean isCreate) throws Exception {
         entity.setRoles(loadRoleFormRequest(request));
         entity.setLastModifyTime(new Date());
         if (entity.getOrgId() != null) {
@@ -279,4 +268,35 @@ public class UserController extends AbstractJQueryEntityController<User, UserSer
         binder.setDisallowedFields("roles");
         super.initBinder(binder);
     }
+
+    @Override
+    protected User doImportEntity(List<String> fields) {
+        User user = new User();
+        user.setUsername(fields.get(0));
+        user.setPassword(fields.get(1));
+        user.setRealName(fields.get(2));
+        user.setMobileNo(fields.get(3));
+        user.setEmail(fields.get(4));
+        user.setUserType(2);
+        return user;
+    }
+
+    @Override
+    protected List<User> doImport(HttpServletRequest request, HttpServletResponse response, FileType fileType) throws Exception {
+        Map<String, UploadResult> uploadResults = doUpload(request);
+        List<List<String>> lines = loadImportFile(uploadResults, fileType, "utf-8");
+        beforeUnmarshal(lines);
+        List<User> entities = unmarshal(lines, request);
+        afterUnmarshal(entities);
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleService.get(1L));
+        for (User user : entities) {
+            user.setRoles(roles);
+            getEntityService().createUser(user);
+        }
+        return entities;
+    }
+
+
 }

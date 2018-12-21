@@ -436,49 +436,70 @@
              * 创建uploadify上传组件
              */
             createUploadify: function (options) {
-                // console.info(contextPath +
-                // options.url+";jsessionid="+options.jsessionid)
-                var fileTypeExts = options.fileTypeExts || '*.xls;*.xlsx;*.csv';
-                var fileTypeDesc = options.fileTypeDesc || '支持格式:Excel和CSV';
-                var fileSizeLimit = options.fileSizeLimit || '200MB';
-                var uploadifyOptions = {
-                    'buttonText': '<span style="font-size: 12px;font-weight: normal;">选择文件</span>',
-                    'height': 22,
-                    'width': 80,
+                var uploadOptions = {
                     'auto': false,
-                    'multi': false,
-                    'queueSizeLimit': 1,
-                    'fileTypeDesc': fileTypeDesc,
-                    'fileTypeExts': fileTypeExts,
-                    'fileSizeLimit': fileSizeLimit,
-                    'swf': '/manage/assert/plugin/jquery-uploadify/uploadify.swf',
-                    'uploader': contextPath + options.url + "&k=v;jsessionid=" + options.jsessionid,
-                    'cancelImg': '/manage/assert/plugin/jquery-uploadify/uploadify-cancel.png',
-                    'successTimeout': 600,
+                    'buttonClass': 'btn',
+                    'buttonText': '选择文件',
+                    'fileSizeLimit': 10240,
+                    'fileType': false,
+                    'height': 25,
+                    'whith': 120,
+                    'uploadLimit': 20,
+                    'queueSizeLimit': 20,
+                    // 'queueID': 'queue',
+                    'dnd' : true,
+                    'uploadScript': contextPath + options.url + "&k=v;jsessionid=" + options.jsessionid,
                     'formData': options.formData,
-                    'onUploadSuccess': function (file, data, response) {
+                    onUploadComplete: function (file, data) {
                         var result = $.parseJSON(data);
                         if (result.success) {
                             $('#' + options.messager).html(result.message);
                         } else {
                             $('#' + options.messager).html('导入失败:' + result.message);
                         }
-                        $('#' + options.uploader).uploadify('cancel');
+                        // $('#' + options.uploader).uploadify('cancel');
                     },
-                    'onUploadError': function (file, errorCode, errorMsg, errorString) {
-                        $('#' + options.messager).html('导入失败 - [' + errorString + ']');
-                        $('#' + options.uploader).uploadify('cancel');
-                    },
-                    'onUploadProgress': function (file, bytesUploaded, bytesTotal, totalBytesUploaded, totalBytesTotal) {
-                        if (totalBytesUploaded < totalBytesTotal) {
-                            $('#' + options.messager).html("正在上传文件: [" + totalBytesUploaded / 1024 + "K/" + totalBytesTotal / 1024 + "K]");
-                        } else {
+                    onProgress   : function(file, e) {
+                        if (e.lengthComputable) {
+                            var percent = Math.round((e.loaded / e.total) * 100);
+                            $('#' + options.messager).html("正在上传文件: [" + e.loaded / 1024 + "K/" + e.total / 1024 + "K]");
+                        }else {
                             $('#' + options.messager).html("正在保存上传数据...");
                         }
-
+                    },
+                    onAddQueueItem: function (file) {
+                        $('#' + options.messager).html(file.name);
+                    },
+                    onCancel: function (file) {
+                        $('#' + options.uploader).val("");
+                        /* 注意：取消后应重新设置uploadLimit */
+                        var $data = $(this).data('uploadifive');
+                        var settings = $data.settings;
+                        settings.uploadLimit++;
+                    },
+                    onFallback: function () {
+                        $('#' + options.messager).html("该浏览器无法使用!");
+                    },
+                    onError: function (errorType) {
+                        var msg = errorType;
+                        var $data = $(this).data('uploadifive');
+                        var settings = $data.settings;
+                        if (errorType == 'QUEUE_LIMIT_EXCEEDED') {
+                            msg = "最多只能选择"+settings.uploadLimit+"个文件！";
+                        } else if (errorType == "FILE_SIZE_LIMIT_EXCEEDED") {
+                            msg = "视频最大不允许超过:"+settings.fileSizeLimit/1024/1024+"MB！";
+                        }
+                        $('#' + options.messager).html(msg);
                     }
                 }
-                $('#' + options.uploader).uploadify(uploadifyOptions);
+
+                var uploadfiveOptions = $.extend(uploadOptions,options);
+
+                if(!uploadfiveOptions.queueID){
+                    uploadfiveOptions.queueID = false;
+                }
+
+                $('#' + options.uploader).uploadifive(uploadfiveOptions);
             },
             imports_dialog: '',
             imports: function (opts) {
@@ -496,7 +517,7 @@
                         text: '上传导入',
                         iconCls: 'icon-import',
                         handler: function () {
-                            $('#' + opts.uploader).uploadify('upload', '*');
+                            $('#' + opts.uploader).uploadifive('upload');
                         }
                     }, {
                         text: '关闭',
@@ -507,7 +528,7 @@
                         }
                     }],
                     onClose: function () {
-                        $('#' + opts.uploader).uploadify('destroy');
+                        $('#' + opts.uploader).uploadifive('destroy');
                         $(this).dialog('destroy');
                     }
                 });

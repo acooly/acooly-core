@@ -708,7 +708,7 @@ public abstract class AbstractFileOperationController<
         return StringUtils.substringAfterLast(filePath, ".");
     }
 
-    private String getCharsetName(HttpServletRequest request) {
+    protected String getCharsetName(HttpServletRequest request) {
         String charset = "UTF-8";
         String requestCharset = StringUtils.trimToEmpty(request.getParameter("charset"));
         if (Strings.isBlank(requestCharset)) {

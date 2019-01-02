@@ -1,11 +1,23 @@
 package com.acooly.core.utils;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.UrlValidator;
 
 import java.util.regex.Pattern;
 
 public class Strings extends StringUtils {
     private static final char UNDERLINE = '_';
+    private static UrlValidator httpUrlValidator = new UrlValidator(new String[]{"http", "https"});
+
+    /**
+     * 判断是否HTTP的URL
+     *
+     * @param url
+     * @return
+     */
+    public static boolean isHttpUrl(String url) {
+        return httpUrlValidator.isValid(url);
+    }
 
     public static String camelToUnderline(String param) {
         if (param == null || "".equals(param.trim())) {

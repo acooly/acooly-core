@@ -11,6 +11,7 @@ package com.acooly.module.ofile;
 
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.exception.AppConfigException;
+import com.acooly.core.utils.Strings;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SystemUtils;
@@ -18,7 +19,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.Assert;
 
-import java.awt.*;
 import java.io.File;
 
 import static com.acooly.module.ofile.OFileProperties.PREFIX;
@@ -84,6 +84,28 @@ public class OFileProperties implements InitializingBean {
 
     public String getServerRoot() {
         return serverRoot;
+    }
+
+
+    /**
+     * 获取可访问的全URL
+     *
+     * @param fileStoragePath 存在在数据库中的相对路径
+     * @return
+     */
+    public String getAccessableUrl(String fileStoragePath) {
+        if (Strings.isBlank(fileStoragePath)) {
+            return fileStoragePath;
+        }
+        String relativePath = Strings.replaceAll(fileStoragePath, "\\\\", "/");
+        if (Strings.isHttpUrl(relativePath)) {
+            return relativePath;
+        }
+        String fullUrl = getServerRoot();
+        if (!Strings.endsWith(fullUrl, "/")) {
+            fullUrl = fullUrl + "/";
+        }
+        return fullUrl + Strings.removeStart(relativePath, "/");
     }
 
     String getServerRootMappingPath() {
@@ -187,4 +209,5 @@ public class OFileProperties implements InitializingBean {
          */
         private float alpha = 1F;
     }
+
 }

@@ -35,6 +35,12 @@ public class OFileUploadAuthenticateSpringProxy
 
     @Override
     public void authenticate(HttpServletRequest request) {
+
+        if (servicesMap.isEmpty()) {
+            logger.info("没有一个认证实现通过，不进行上传认证");
+            return;
+        }
+
         List<String> messages = Lists.newArrayList();
         for (Map.Entry<String, OFileUploadAuthenticate> entry : servicesMap.entrySet()) {
             try {
@@ -45,8 +51,6 @@ public class OFileUploadAuthenticateSpringProxy
                 logger.debug("认证器（" + entry.getValue().getClass() + "）认证失败.");
             }
         }
-        logger.info("没有一个认证实现通过，判断本次上传认证失败");
-        throw new RuntimeException("认证未通过:" + messages);
     }
 
     @Override

@@ -25,6 +25,10 @@ public enum CommonErrorCodes implements Messageable {
 
     OBJECT_NOT_UNIQUE("OBJECT_NOT_UNIQUE", "对象不存在"),
 
+    UNAUTHENTICATED_ERROR("UNAUTHENTICATED_ERROR", "认证(签名)错误"),
+
+    UNAUTHORIZED_ERROR("UNAUTHORIZED_ERROR", "未授权的访问"),
+    
     PARAMETER_ERROR("PARAMETER_ERROR", "参数错误");
     private final String code;
     private final String message;

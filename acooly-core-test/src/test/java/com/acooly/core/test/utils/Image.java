@@ -615,13 +615,13 @@ public class Image {
 
     public static void main(String[] args) {
         String distPath = "/Users/zhangpu/workspace/acooly/acooly4/acooly-core/acooly-core-test/src/test/resources/image/test/";
-        String sourceFilePath = "/Users/zhangpu/workspace/acooly/acooly4/acooly-core/acooly-core-test/src/test/resources/image/sourceImage.jpg";
-        String sourceFilePath1 = "/Users/zhangpu/workspace/acooly/acooly4/acooly-core/acooly-core-test/src/test/resources/image/sourceImage1.jpg";
+        String sourceFilePath = "/Users/zhangpu/workspace/acooly/acooly4/acooly-core/acooly-core-test/src/test/resources/image/sourceImage.batch";
+        String sourceFilePath1 = "/Users/zhangpu/workspace/acooly/acooly4/acooly-core/acooly-core-test/src/test/resources/image/sourceImage1.batch";
 //
 //        Image image = new Image(sourceFilePath);
 //        image.resize(10);
 //        image.multiply(5, 5, 11111);
-//        image.saveAs(distPath + "multiply+color.jpg");
+//        image.saveAs(distPath + "multiply+color.batch");
 //
 
 
@@ -632,32 +632,32 @@ public class Image {
 ////        image.affineTransform(0, 0.3);
 ////        image2.affineTransform(0, -0.3);
 //        image.combineWithPicture(image2);
-//        image.saveAs(distPath + "affineTransformAndCombine2.jpg");
+//        image.saveAs(distPath + "affineTransformAndCombine2.batch");
 
 
 //        Image image  = new Image(sourceFilePath);
 //        image.resize(50);
 //        image.affineTransform(0.3, 0.5);
-//        image.saveAs(distPath + "affineTransform.jpg");
+//        image.saveAs(distPath + "affineTransform.batch");
 
 
 //        Image image = new Image(sourceFilePath);
 //        image.multiply(20, 20);
-//        image.saveAs(distPath + "multiply.jpg");
+//        image.saveAs(distPath + "multiply.batch");
         Image image2 = new Image(sourceFilePath1);
         image2.convertToBlackAndWhite();
 //        image2.crop(0, 0, 1000, 300);
 //        image2.resize(50);
 //        image2.combineWithPicture(image, 3, Color.white);
-        image2.saveAs(distPath + "crop.jpg");
+        image2.saveAs(distPath + "crop.batch");
 
 
 //        image.resize(5);
 //        image.multiply(20, 20);
-//        image.combineWithPicture("c:/p2.jpg");
+//        image.combineWithPicture("c:/p2.batch");
         //image.addColorToImage(Color.yellow, 3);
         //image.addColorToImage(Color.red, 5);
-        //image.combineWithPicture("c:/p2.jpg",3);
+        //image.combineWithPicture("c:/p2.batch",3);
 
 
 
@@ -670,13 +670,13 @@ public class Image {
 //
 //            image.emphasize(x, y, width - 1 - x, height - 1 - y, Color.BLACK, 12 - c / 4);
 //        }
-//        image.saveAs(distPath + "emphesizeTrick.jpg");
+//        image.saveAs(distPath + "emphesizeTrick.batch");
         //  */
-        // image.saveAs("c:/xxx.jpg");
+        // image.saveAs("c:/xxx.batch");
         /*
-        Image image  = new Image("c:/pics/p1.jpg");
+        Image image  = new Image("c:/pics/p1.batch");
         image.addColorToImage(Color.red, 5);
-        image.saveAs("c:/pics/addColorToImage.jpg");
+        image.saveAs("c:/pics/addColorToImage.batch");
         */
     }
 }

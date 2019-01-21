@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Position;
+import net.coobird.thumbnailator.name.Rename;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ResourceUtils;
 import sun.font.FontDesignMetrics;
@@ -184,7 +185,6 @@ public class Images {
                                  @Nullable ImageSize watermarkImageSize, @Nullable List<Position> positions) {
         try {
             Assert.hasLength(sourcePath);
-            Assert.notNull(watermarkImage);
             BufferedImage watermaskImage = doResize(watermarkImage, watermarkImageSize, watermarkAngle);
             if (watermarkOpacity == null) {
                 watermarkOpacity = 1.0f;
@@ -192,6 +192,7 @@ public class Images {
             if (Collections3.isEmpty(positions)) {
                 positions = Lists.newArrayList(ImagePositions.BOTTOM_RIGHT);
             }
+
             Thumbnails.Builder<File> builder = Thumbnails.of(sourcePath).scale(1.0f);
             for (Position position : positions) {
                 builder.watermark(position, watermaskImage, watermarkOpacity);
@@ -208,6 +209,94 @@ public class Images {
             throw Exceptions.runtimeException("图片水印失败", e);
         }
     }
+
+    /**
+     * 批量图片水印
+     *
+     * @param sourceFilePath     需要生成文件列表
+     * @param distPath           目标存放目录（为空着在原目录替换）
+     * @param watermarkImage
+     * @param watermarkAngle
+     * @param watermarkOpacity
+     * @param watermarkImageSize
+     * @param positions
+     */
+    public static void watermarkBatch(@NotNull String[] sourceFilePath, @Nullable String distPath,
+                                      @NotNull BufferedImage watermarkImage, @Nullable Double watermarkAngle, @Nullable Float watermarkOpacity,
+                                      @Nullable ImageSize watermarkImageSize, @Nullable List<Position> positions) {
+        try {
+            Assert.notEmpty(sourceFilePath);
+            BufferedImage watermaskImage = doResize(watermarkImage, watermarkImageSize, watermarkAngle);
+            if (watermarkOpacity == null) {
+                watermarkOpacity = 1.0f;
+            }
+            if (Collections3.isEmpty(positions)) {
+                positions = Lists.newArrayList(ImagePositions.BOTTOM_RIGHT);
+            }
+
+            Thumbnails.Builder<File> builder = Thumbnails.of(sourceFilePath).scale(1.0f);
+            for (Position position : positions) {
+                builder.watermark(position, watermaskImage, watermarkOpacity);
+            }
+            if (Strings.isBlank(distPath)) {
+                builder.toFiles(Rename.NO_CHANGE);
+            } else {
+                File file = new File(distPath);
+                if (!file.exists()) {
+                    file.mkdirs();
+                }
+                builder.toFiles(file, Rename.NO_CHANGE);
+            }
+        } catch (Exception e) {
+            throw Exceptions.runtimeException("图片水印失败", e);
+        }
+    }
+
+
+    /**
+     * 批量添加水印
+     *
+     * @param sourceFilePath     需要生成文件列表
+     * @param distPath           目标存放目录（为空着在原目录替换）
+     * @param watermarkPath
+     * @param watermarkAngle
+     * @param watermarkOpacity
+     * @param watermarkImageSize
+     * @param positions
+     */
+    public static void watermarkBatch(@NotNull String[] sourceFilePath, @Nullable String distPath,
+                                      @NotNull String watermarkPath, @Nullable Double watermarkAngle, @Nullable Float watermarkOpacity,
+                                      @Nullable ImageSize watermarkImageSize, @Nullable List<Position> positions) {
+        BufferedImage watermaskImage = null;
+        try {
+            Assert.hasLength(watermarkPath);
+            watermaskImage = ImageIO.read(new File(watermarkPath));
+        } catch (Exception e) {
+            throw Exceptions.runtimeException("图片水印:加载水印图片错误", e);
+        }
+        watermarkBatch(sourceFilePath, distPath, watermaskImage, watermarkAngle, watermarkOpacity, watermarkImageSize, positions);
+    }
+
+
+//    public static void watermarkBatch(@NotNull String sourcePath, @Nullable String distPath,
+//                                      @NotNull String watermarkPath, @Nullable Double watermarkAngle, @Nullable Float watermarkOpacity,
+//                                      @Nullable ImageSize watermarkImageSize, @Nullable List<Position> positions) {
+//        BufferedImage watermaskImage = null;
+//        List<String> sourceFilePath = Lists.newArrayList();
+//        try {
+//            Assert.hasLength(watermarkPath);
+//            watermaskImage = ImageIO.read(new File(watermarkPath));
+//            Collection<File> files = FileUtils.listFiles(new File(sourcePath), Strings.split(IMAGE_EXTS, ","), true);
+//            if (Collections3.isEmpty(files)) {
+//                log.warn("图片批量水印：源目录没有有效图片文件. sourcePath:{}", sourcePath);
+//                throw new RuntimeException("图片批量水印：源目录没有有效图片文件");
+//            }
+//
+//        } catch (Exception e) {
+//            throw Exceptions.runtimeException("图片水印:加载水印图片错误", e);
+//        }
+//        watermarkBatch(sourceFilePath, distPath, watermaskImage, watermarkAngle, watermarkOpacity, watermarkImageSize, positions);
+//    }
 
 
     /**
@@ -276,6 +365,7 @@ public class Images {
     public static void watermark(@NotNull String sourcePath, @NotNull String watermarkPath, @Nullable List<Position> positions) {
         watermark(sourcePath, sourcePath, watermarkPath, null, null, null, positions);
     }
+
 
     /**
      * 添加水印
@@ -554,7 +644,7 @@ public class Images {
     private static String getImageFormat(String targetImg) {
         String extention = StringUtils.substringAfterLast(targetImg, ".");
         if (extention.isEmpty()) {
-            return "jpg";
+            return "batch";
         } else {
             return extention;
         }
@@ -564,7 +654,6 @@ public class Images {
     public static BufferedImage doResize(@NotNull BufferedImage bufferedImage, @NotNull ImageSize imageSize, @Nullable Double angle) throws
             Exception {
         Assert.notNull(bufferedImage);
-        Assert.notNull(imageSize);
         Thumbnails.Builder<BufferedImage> watermarkBuilder = Thumbnails.of(bufferedImage);
         if (imageSize == null) {
             imageSize = new ImageSize(1.0f);

@@ -27,58 +27,62 @@ import java.util.List;
 public class ImagesTest {
 
     String sourcePath = null;
+    String[] sourceFilePath = null;
     String watermarkPath = null;
 
 
     @Before
     public void setup() {
-        sourcePath = getImagePath() + "sourceImage.jpg";
-        watermarkPath = getImagePath() + "acooly.png";
+        sourcePath = getImagePath() + "source/sourceImage2.jpg";
+        sourceFilePath = new String[]{getImagePath() + "source/sourceImage.jpg",
+                getImagePath() + "source/sourceImage1.jpg",
+                getImagePath() + "source/sourceImage2.jpg"};
+        watermarkPath = getImagePath() + "ihunlizhe.png";
     }
 
 
     @Test
     public void testGray() {
-        String distPath = getImagePath() + "/dist/gray.jpg";
+        String distPath = getImagePath() + "/dist/gray.batch";
         Images.gray(sourcePath, distPath);
     }
 
     @Test
     public void testClip() {
-        String distPath = getImagePath() + "/dist/resize_clip1.jpg";
+        String distPath = getImagePath() + "/dist/resize_clip1.batch";
         Images.clip(sourcePath, distPath, 0, 0, 380, 210);
-        distPath = getImagePath() + "/dist/resize_clip2.jpg";
+        distPath = getImagePath() + "/dist/resize_clip2.batch";
         Images.clip(sourcePath, distPath, 0, 0, null, 300);
     }
 
 
     @Test
     public void testResizeWithScale() {
-        String distPath = getImagePath() + "/dist/resize_scale.jpg";
+        String distPath = getImagePath() + "/dist/resize_scale.batch";
         Images.resize(sourcePath, distPath, new Images.ImageSize(0.2f));
     }
 
     @Test
     public void testResizeWithWidth() {
-        String distPath = getImagePath() + "/dist/resize_width.jpg";
+        String distPath = getImagePath() + "/dist/resize_width.batch";
         Images.resize(sourcePath, distPath, new Images.ImageSize(380));
     }
 
     @Test
     public void testResizeWithWidthAndHeight() {
-        String distPath = getImagePath() + "/dist/resize_width_height.jpg";
+        String distPath = getImagePath() + "/dist/resize_width_height.batch";
         Images.resize(sourcePath, distPath, new Images.ImageSize(380, 80));
     }
 
     @Test
     public void testWatermarkSigle() {
-        String distPath = getImagePath() + "/dist/watermark_sigle.jpg";
+        String distPath = getImagePath() + "/dist/watermark_sigle.batch";
         doWatermark(sourcePath, distPath, watermarkPath, 330d, 0.4f, null, Lists.newArrayList(Positions.BOTTOM_RIGHT));
     }
 
     @Test
     public void testWatermarkFullStandard() {
-        String distPath = getImagePath() + "/dist/watermark_full.jpg";
+        String distPath = getImagePath() + "/dist/watermark_full.batch";
         List<Position> positions = Lists.newArrayList(ImagePositions.values());
         doWatermark(sourcePath, distPath, watermarkPath, null, 0.4f, new Images.ImageSize(100), positions);
         log.info("testWatermarkFullStandard distFilePath: \n{}", distPath);
@@ -87,7 +91,8 @@ public class ImagesTest {
 
     @Test
     public void testWatermarkMulti() {
-        String distPath = getImagePath() + "/dist/watermark_multi.jpg";
+        long start = System.currentTimeMillis();
+        String distPath = getImagePath() + "/dist/watermark_multi.batch";
         List<Position> positions = Lists.newArrayList(
                 ImagePositions.TOP_LEFT, ImagePositions.TOP_CENTER, ImagePositions.TOP_RIGHT,
                 ImagePositions.ONE_QUARTER_ONE_QUARTER, ImagePositions.ONE_QUARTER_THREE_QUARTER,
@@ -95,14 +100,29 @@ public class ImagesTest {
                 ImagePositions.THREE_QUARTER_ONE_QUARTER, ImagePositions.THREE_QUARTER_THREE_QUARTER,
                 ImagePositions.BOTTOM_LEFT, ImagePositions.BOTTOM_CENTER, ImagePositions.BOTTOM_RIGHT
         );
-        doWatermark(sourcePath, distPath, watermarkPath, 330d, 0.4f, null, positions);
-        log.info("testWatermarkFullStandard distFilePath: \n{}", distPath);
+        Images.watermark(sourcePath, distPath, watermarkPath, 330d, null, null, positions);
+        log.info("testWatermarkMulti times: {}", System.currentTimeMillis() - start);
+    }
+
+    @Test
+    public void testBatchWatermarkMulti() {
+        long start = System.currentTimeMillis();
+        String distPath = getImagePath() + "/dist/batch";
+        List<Position> positions = Lists.newArrayList(
+                ImagePositions.TOP_LEFT, ImagePositions.TOP_CENTER, ImagePositions.TOP_RIGHT,
+                ImagePositions.ONE_QUARTER_ONE_QUARTER, ImagePositions.ONE_QUARTER_THREE_QUARTER,
+                ImagePositions.CENTER_LEFT, ImagePositions.CENTER, ImagePositions.CENTER_RIGHT,
+                ImagePositions.THREE_QUARTER_ONE_QUARTER, ImagePositions.THREE_QUARTER_THREE_QUARTER,
+                ImagePositions.BOTTOM_LEFT, ImagePositions.BOTTOM_CENTER, ImagePositions.BOTTOM_RIGHT
+        );
+        Images.watermarkBatch(sourceFilePath, null, watermarkPath, 330d, null, null, positions);
+        log.info("testBatchWatermarkMulti times: {}", System.currentTimeMillis() - start);
     }
 
 
     @Test
     public void testWatermarkCustom() {
-        String distPath = getImagePath() + "/dist/watermark_custom.jpg";
+        String distPath = getImagePath() + "/dist/watermark_custom.batch";
 
         int padding = 10;
         List<Position> positions = Lists.newArrayList();
@@ -133,7 +153,7 @@ public class ImagesTest {
 
     @Test
     public void testTextWatermarkFull() {
-        String distPath = getImagePath() + "/dist/watermark_text_full.jpg";
+        String distPath = getImagePath() + "/dist/watermark_text_full.batch";
         List<Position> positions = Lists.newArrayList(ImagePositions.values());
         String watermarkText = "Accoly框架";
         Font font = new Font("微软雅黑", Font.BOLD, 20);
@@ -209,12 +229,12 @@ public class ImagesTest {
     @Test
     public void testGrayWithColorConvertO() throws Exception {
         long start = System.currentTimeMillis();
-        String distPath = getImagePath() + "dist/gray_ColorConvertOp.jpg";
+        String distPath = getImagePath() + "dist/gray_ColorConvertOp.batch";
         BufferedImage source = ImageIO.read(new File(sourcePath));
         ColorSpace gray_space = ColorSpace.getInstance(ColorSpace.CS_GRAY);
         ColorConvertOp convert_to_gray_op = new ColorConvertOp(gray_space, null);
         convert_to_gray_op.filter(source, source);
-        ImageIO.write(source, "jpg", new File(distPath));
+        ImageIO.write(source, "batch", new File(distPath));
         log.info("handle times: {}", (System.currentTimeMillis() - start));
     }
 

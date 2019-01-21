@@ -23,6 +23,12 @@ import java.util.List;
 
 /**
  * 常用图片处理
+ * <p>
+ * 提供j简单通用的图片常用处理工具集。主要包括：
+ * 1、缩放(缩略图)
+ * 2、水印
+ * 3、裁剪
+ * 4、灰度
  *
  * @author zhangpu
  */
@@ -57,8 +63,8 @@ public class Images {
     /**
      * 灰度处理
      *
-     * @param filePath
-     * @param distPath
+     * @param filePath 源文件路径
+     * @param distPath 输出文件路径
      */
     public static void gray(String filePath, String distPath) {
         try {
@@ -72,12 +78,13 @@ public class Images {
         }
     }
 
+
     /**
      * 灰度处理
      * <p>
      * 覆盖filePath
      *
-     * @param filePath
+     * @param filePath 源文件路径
      */
     public static void gray(String filePath) {
         gray(filePath, filePath);
@@ -170,15 +177,15 @@ public class Images {
 
     /**
      * 添加水印
-     * （基础方法）参数说明请参考其他重载方法
+     * 图片输入输出片参数都为图片的全路径，水印图片为bufferedImage
      *
-     * @param sourcePath
-     * @param distPath
+     * @param sourcePath         源文件全路径
+     * @param distPath           输出文件全路径
      * @param watermarkImage     BufferedImage格式，以便兼容支持文字生成的缩略图
-     * @param watermarkAngle
-     * @param watermarkOpacity
-     * @param watermarkImageSize
-     * @param positions
+     * @param watermarkAngle     水印旋转角度（0-360）
+     * @param watermarkOpacity   水印透明度（0-1.0）
+     * @param watermarkImageSize 水印缩放大小
+     * @param positions          水印文字
      */
     public static void watermark(@NotNull String sourcePath, @Nullable String distPath,
                                  @NotNull BufferedImage watermarkImage, @Nullable Double watermarkAngle, @Nullable Float watermarkOpacity,
@@ -710,11 +717,17 @@ public class Images {
     }
 
 
+    /**
+     * 灰度
+     *
+     * @param bufferedImage 图片源
+     */
     public static void doGray(BufferedImage bufferedImage) {
         ColorSpace gray_space = ColorSpace.getInstance(ColorSpace.CS_GRAY);
         ColorConvertOp convert_to_gray_op = new ColorConvertOp(gray_space, null);
         convert_to_gray_op.filter(bufferedImage, bufferedImage);
     }
+
 
     public static BufferedImage doClip(BufferedImage bufferedImage, int x, int y, Integer w, Integer h) throws Exception {
         if (w == null) {

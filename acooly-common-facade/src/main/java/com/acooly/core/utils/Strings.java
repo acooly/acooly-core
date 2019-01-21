@@ -12,13 +12,19 @@ public class Strings extends StringUtils {
     /**
      * 判断是否HTTP的URL
      *
-     * @param url
-     * @return
+     * @param url 链接字符串
+     * @return 是否HTTP-URL
      */
     public static boolean isHttpUrl(String url) {
         return httpUrlValidator.isValid(url);
     }
 
+    /**
+     * 驼峰转下划线
+     *
+     * @param param 驼峰格式的字符串
+     * @return 下划线分割的字符串
+     */
     public static String camelToUnderline(String param) {
         if (param == null || "".equals(param.trim())) {
             return "";
@@ -37,6 +43,14 @@ public class Strings extends StringUtils {
         return sb.toString();
     }
 
+    /**
+     * 判断空值设置默认值
+     *
+     * @param text         被判断的值（可以是非字符串对象）
+     * @param defaultValue 如果text为空字符或空对象时，设置的默认值
+     * @param <T>          被判断的值的泛型类型
+     * @return 结果值
+     */
     public static <T> T isBlankDefault(T text, T defaultValue) {
         if (text == null) {
             return defaultValue;
@@ -48,6 +62,13 @@ public class Strings extends StringUtils {
         }
     }
 
+    /**
+     * 判断正则匹配
+     *
+     * @param regex 正则表达式
+     * @param value 被判断的字符串
+     * @return 是否匹配（true:匹配）
+     */
     public static boolean matcher(String regex, String value) {
         Pattern p = Pattern.compile(regex);
         return p.matcher(value).matches();

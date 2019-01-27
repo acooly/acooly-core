@@ -3,7 +3,6 @@ package com.acooly.core.utils;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.conversion.StringToDateConverter;
 import com.acooly.core.utils.conversion.StringYuanToMoneyConverter;
-import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.net.HttpHeaders;
@@ -13,15 +12,18 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.springframework.core.convert.support.DefaultConversionService;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.ServletWebRequest;
 
+import javax.annotation.Nullable;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.constraints.NotNull;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -47,43 +49,76 @@ public class Servlets {
         CONVERSION_SERVICE.addConverter(new StringToDateConverter());
     }
 
-    public static void writeResponse(HttpServletResponse response, String data) {
-        writeResponse(response, data, MediaType.JSON_UTF_8.toString());
-    }
 
-    public static void writeText(HttpServletResponse response, String data) {
-        OutputStream output = null;
-        try {
-            response.setCharacterEncoding("UTF-8");
-            output = response.getOutputStream();
-            output.write(data.getBytes(Charsets.UTF_8));
-            output.flush();
-        } catch (Exception e) {
-            throw new RuntimeException("响应请求(flushResponse)失败:" + e.getMessage());
-        } finally {
-            IOUtils.closeQuietly(output);
+    /**
+     * 写入字符串到HttpServletResponse
+     *
+     * @param response
+     * @param data
+     * @param contentType 可选 默认JSON_UTF-8
+     */
+    public static void writeResponse(@NotNull HttpServletResponse response, @NotNull String data, @Nullable String contentType) {
+        response.setCharacterEncoding("UTF-8");
+        if (Strings.isBlank(contentType)) {
+            response.setContentType(MediaType.JSON_UTF_8.toString());
         }
-    }
-
-    public static void writeResponse(HttpServletResponse response, String data, String contentType) {
-        OutputStream output = null;
-        InputStream input = null;
-        try {
-            response.setCharacterEncoding("UTF-8");
-            if (Strings.isBlank(contentType)) {
-                response.setContentType(MediaType.JSON_UTF_8.toString());
-            }
-            output = response.getOutputStream();
-            input = new ByteArrayInputStream(data.getBytes(Charset.forName("UTF-8")));
+        try (InputStream input = new ByteArrayInputStream(data.getBytes(Charset.forName("UTF-8")));
+             OutputStream output = response.getOutputStream();) {
             IOUtils.copy(input, output);
             output.flush();
         } catch (Exception e) {
             throw new BusinessException("响应请求(flushResponse)失败:" + e.getMessage());
-        } finally {
-            IOUtils.closeQuietly(output);
-            IOUtils.closeQuietly(input);
         }
     }
+
+    /**
+     * 写入字符串到HttpServletResponse(JSON_UTF-8)
+     * contentType：JSON_UTF_8
+     *
+     * @param response
+     * @param data
+     */
+    public static void writeResponse(HttpServletResponse response, String data) {
+        writeResponse(response, data, MediaType.JSON_UTF_8.toString());
+    }
+
+    /**
+     * 写入字符串到HttpServletResponse
+     * contentType：PLAIN_TEXT_UTF_8
+     *
+     * @param response
+     * @param data
+     */
+    public static void writeText(HttpServletResponse response, String data) {
+        writeResponse(response, data, MediaType.PLAIN_TEXT_UTF_8.toString());
+    }
+
+    /**
+     * 从request中获取body
+     *
+     * @param request
+     * @return
+     */
+    public static String getBody(HttpServletRequest request, String encoding) {
+        try (InputStream in = request.getInputStream()) {
+            encoding = Strings.isBlankDefault(encoding, "UTF-8");
+            return StreamUtils.copyToString(in, Charset.forName(encoding));
+        } catch (Exception e) {
+            throw Exceptions.runtimeException("读取HttpRequest的body失败", e);
+        }
+    }
+
+    /**
+     * 从request中获取body
+     * 编码：UTF-8
+     *
+     * @param request
+     * @return
+     */
+    public static String getBody(HttpServletRequest request) {
+        return getBody(request, null);
+    }
+
 
     /**
      * 设置客户端缓存过期时间 的Header.

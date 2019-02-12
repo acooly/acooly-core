@@ -1,6 +1,6 @@
 ## 开发环境
 
-在开始开发之前，我们需要统一环境：
+在开始开发之前，我们需要统一环境。
 
 ### 1. jdk
 
@@ -8,23 +8,21 @@
 
 ### 2. maven
 
-使用maven最新版本
+使用maven最新版本（3.2以上即可）
 
-### 3. nexus
+请下载并统一使用:[maven\_setting\_acooly.xml](res/maven/maven-settings-acooly.xml)替换`maven`默认setting文件，IDE中的maven插件也请配置选择该配置文件
 
-* 开发环境统一使用nexus地址为：`http://acooly.cn/nexus/index.html`
+### 3. IDE
 
-请使用[maven setting](res/maven/maven-settings-acooly.xml)替换`maven`默认setting文件
+推荐使用`IDEA`，并导入配置：[idea\_settings\_acooly.jar](res/ide/idea/idea_settings_acooly.jar)
 
-### 4. IDE
+>Eclipse建议使用STS插件，但我们最近几年使用的少，帮不了你。
 
-推荐使用`IDEA`，安装lombok插件，并导入配置[settings.jar](res/ide/idea/settings.jar)
+IDEA插件:
 
-### 5. lombok
+* lombok: 框架大量使用了lombok，建议项目开发中也使用，减少代码量。
 
-框架大量使用了lombok，建议项目开发中也使用，减少代码量。
+### 4. 数据库
 
-### 6. 数据库
-
-使用mysql 5.7最新版本
+使用mysql 5.7最新版本,开发过程中，请尽量在本机安装数据库，方便操作。
 

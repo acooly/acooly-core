@@ -18,7 +18,9 @@ import java.util.*;
  * <p>函数主要由两部分组成，一是自反射提取元素的功能，二是源自Apache Commons Collection, 争取不用在项目里引入它。
  *
  * @author calvin
+ * @author zhangpu
  */
+//todo:增加通用Collection和Array的转换
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class Collections3 {
 

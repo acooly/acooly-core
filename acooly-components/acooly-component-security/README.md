@@ -1,13 +1,20 @@
 <!-- title: 后台管理组件   -->
 <!-- type: infrastructure -->
-<!-- author: kule,qiubo,shuijing -->
-## 1. 组件介绍
+<!-- author: zhangpu,qiubo,shuijing -->
+管理系统框架组件
+====
+acooly-component-security
+----
 
-此组件提供文件上传(图片压缩)、下载、访问的能力
+## 1. 简介
+
+提供基于国家安全等保三级别的管理系统框架，包括：安全登录认证，基于角色，权限，资源管理的权限管理系统等。
+
+
 
 ## 2. 使用说明
 
-maven坐标：
+maven坐标
 
      <dependency>
         <groupId>com.acooly</groupId>
@@ -15,7 +22,9 @@ maven坐标：
         <version>${acooly-latest-version}</version>
       </dependency>
 
-`${acooly-latest-version}`为框架最新版本或者购买的版本。
+`${acooly-latest-version}`为框架最新版本或者购买的版本，如：4.2.0-SNAPSHOT。
+
+
 
 ## 3. FAQ
 
@@ -76,6 +85,37 @@ acooly.framework.scripts[1]=/manage/assert/script/acooly.portal.js
 ```            
 >注意：扩展加入自定义的js和css引用后，会在扩展主界面（基础）加载，扩展内全局可用，请注意不要与现有扩展内资源冲突。
    
+### 3.6 设置功能权限控制按钮权限
+
+组件本身的权限控制粒度为最小业务操作（可以理解为控制层的方法级别），但为了简化管理配置，我们一般使用URL权限通配方式，即：只需配置控制器的首页则该模块都具有权限。在实际生产中，URL通配方式可以解决80%以上的需求，但也有明确需要控制某个页面上具体一个功能权限的需求，这个时候，我们使用功能权限进行设置，框架本身是能很好支持的。
+
+1. 功能权限配置
+
+	首选功能权限需要定义：在现有的：系统管理菜单->资源功能中，新增资源时请选择FUNCATION类型，资源值格式为：entity:action格式（*:* 表示所有功能的所有操作）。然后正常授权给具体的角色即可。
+
+	例如：我们需要控制会员管理界面的添加会员的权限，则可以定义FUNCTION的资源值为：**customer:create**
+
+2. 功能权限开发
+
+	因为是控制页面上的按钮，根据授权情况，是否显示，所有需要开发上进行一下操作：
+
+	* **页面上**：原有的按钮HTML标签使用shiro的权限判断标签包装并根据当前用户授权情况判断是否显示该按钮。
+
+	案例：acooly-showcase的客户管理功能：acooly-showcase/acooly-showcase-core/src/main/resources/META-INF/resources/WEB-INF/jsp/manage/showcase/customer.jsp
+
+	```html
+	<!-- 控制按钮权限：添加 -->
+	<shiro:hasPermission name="customer:create">
+		<a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/showcase/customer/create.html',entity:'customer',width:700,height:400,reload:true})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
+	</shiro:hasPermission>
+	```
+
+	* **控制层**：[可选]，严谨的做法，需要控制该功能的控制层访问权限，方式用户通过URL直接访问跳过页面上的显示控制。在功能对应的控制层方法中，增加对应的权限检查代码。如下：
+
+	```java
+	SecurityUtils.getSubject().checkPermission("customer:create");
+	```
+	    
                
 ## 4.附录
 

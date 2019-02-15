@@ -82,7 +82,8 @@ acooly.framework.styles[1]=/manage/assert/plugin/layui/css/layui.css
 
 acooly.framework.scripts[0]=/manage/assert/script/acooly.ui.layer.js
 acooly.framework.scripts[1]=/manage/assert/script/acooly.portal.js
-```            
+```
+
 >注意：扩展加入自定义的js和css引用后，会在扩展主界面（基础）加载，扩展内全局可用，请注意不要与现有扩展内资源冲突。
    
 ### 3.6 设置功能权限控制按钮权限

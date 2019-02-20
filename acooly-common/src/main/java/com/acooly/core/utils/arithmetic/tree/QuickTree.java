@@ -4,10 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 快速排序
@@ -24,6 +21,9 @@ public class QuickTree {
     /**
      * 快速构建树
      *
+     * comparator的快速构建建议采用lambda方式。
+     * <i>1. 单属性排序（null处理和反序），demo：Comparator.nullsLast(Comparator.comparing(SortEntity::getBirthday).reversed());<i/>
+     * <i>2. 多属性排序（先按性别字符排序，然后按ID倒序），demo：Comparator.nullsLast(Comparator.comparing(SortEntity::getGender).thenComparing(SortEntity::getId).reversed());<i/>
      * @param list
      * @param comparator
      * @param <T>

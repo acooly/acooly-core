@@ -55,9 +55,9 @@ public abstract class StandardDatabaseScriptIniter
             String evaluateTable = getEvaluateTable();
             Assert.notNull(componentName);
             Assert.notNull(evaluateTable);
-            if (!"SYS_USER".equals(evaluateTable)) {
-                Assert.isTrue(evaluateTable.contains(componentName));
-            }
+//            if (!"SYS_USER".equals(evaluateTable)) {
+//                Assert.isTrue(evaluateTable.contains(componentName));
+//            }
             String evaluateSql = String.format(EVALUATE_SQL_PATTERN, evaluateTable);
             Connection connection = null;
             try {

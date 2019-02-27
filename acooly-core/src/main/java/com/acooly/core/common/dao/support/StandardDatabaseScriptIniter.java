@@ -121,7 +121,7 @@ public abstract class StandardDatabaseScriptIniter
             Resource scriptResource = ApplicationContextHolder.get().getResource("classpath:" + sqlpath);
             EncodedResource encodedResource = new EncodedResource(scriptResource, Charsets.UTF_8);
             ScriptUtils.executeSqlScript(connection, encodedResource,
-                    isContinueOnError(), false, "--", ",", "/*", "*/");
+                    isContinueOnError(), false, "--", ";", "/*", "*/");
         } catch (Exception e) {
             throw new AppConfigException("初始化" + componentName + "失败", e);
         }

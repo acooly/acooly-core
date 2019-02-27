@@ -106,12 +106,22 @@ public abstract class StandardDatabaseScriptIniter
      */
     public abstract List<String> getInitSqlFile();
 
+    /**
+     * 执行初始化SQL时，发生错误是否忽略并继续。
+     *
+     * @return
+     */
+    protected boolean isContinueOnError() {
+        return false;
+    }
+
     private void exeSqlFile(String componentName, Connection connection, String sqlpath) {
         logger.info("发现组件或模块[{}]基础数据还没有初始化，开始初始化:{}", componentName, sqlpath);
         try {
             Resource scriptResource = ApplicationContextHolder.get().getResource("classpath:" + sqlpath);
             EncodedResource encodedResource = new EncodedResource(scriptResource, Charsets.UTF_8);
-            ScriptUtils.executeSqlScript(connection, encodedResource);
+            ScriptUtils.executeSqlScript(connection, encodedResource,
+                    isContinueOnError(), false, "--", ",", "/*", "*/");
         } catch (Exception e) {
             throw new AppConfigException("初始化" + componentName + "失败", e);
         }

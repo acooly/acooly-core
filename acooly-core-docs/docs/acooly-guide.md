@@ -1,4 +1,4 @@
-<!-- title: 后台视图开发  -->
+<!-- title: 开发指南  -->
 <!-- type: core -->
 <!-- author: zhangpu -->
 <!-- date: 2016-1-20 -->

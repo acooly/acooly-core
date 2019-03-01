@@ -1,3 +1,6 @@
+<!-- title: 代码生成  -->
+<!-- type: core -->
+<!-- author: zhangpu -->
 acooly coder自动代码生成工具
 ====
 

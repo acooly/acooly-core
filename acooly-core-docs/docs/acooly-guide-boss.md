@@ -1,3 +1,8 @@
+<!-- title: 后台视图开发  -->
+<!-- type: core -->
+<!-- author: zhangpu -->
+<!-- date: 2017-08-12 -->
+
 Acooly框架-BOSS开发指南
 ===
 

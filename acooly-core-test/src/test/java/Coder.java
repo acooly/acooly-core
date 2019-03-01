@@ -37,6 +37,8 @@ public class Coder {
         return projectPath + "/";
     }
 
+
+
     public static String getRootPackage() {
         return "com.acooly.module.eav.newv";
     }

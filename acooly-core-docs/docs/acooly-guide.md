@@ -1,3 +1,7 @@
+<!-- title: 后台视图开发  -->
+<!-- type: core -->
+<!-- author: zhangpu -->
+<!-- date: 2016-1-20 -->
 Acooly框架开发指南
 ====
 

@@ -226,7 +226,7 @@
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-eav</artifactId>
-                <version>4.1.0-SNAPSHOT</version>
+                <version>4.2.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -69,6 +69,18 @@ public class Dates {
         System.out.println(patterns);
     }
 
+    /**
+     * 获取日期部分
+     * <p>
+     * 例如：2019-11-11 12:12:12 --getDate()--> 2019-11-11 00:00:00
+     *
+     * @param date
+     * @return
+     */
+    public static Date getDate(Date date) {
+        return parse(format(date, Dates.CHINESE_DATE_FORMAT_LINE));
+    }
+
     public static String format(Date date, String pattern) {
         SimpleDateFormat sdf = getSimpleDateFormat(pattern);
         return sdf.format(date);
@@ -565,10 +577,4 @@ public class Dates {
                 .collect(Collectors.toList());
     }
 
-//  public static void main(String[] args) throws Exception {
-//    String timeStart = "2017-07-11";
-//    String timeEnd = "2017-09-20";
-//    Date date = addDate(new Date(), -40);
-//    collectLocalDates(addDay(new Date(), -40), new Date()).forEach(System.out::println);
-//  }
 }

@@ -80,8 +80,9 @@ public class MybatisProperties implements InitializingBean {
         }
         typeAliasesPackage.put("app", Apps.getBasePackage());
         typeAliasesPackage.put("components", COMPONENTS_PACKAGE);
-        daoScanPackages.put("components",COMPONENTS_PACKAGE + ".**.dao");
-        daoScanPackages.put("app",Apps.getBasePackage());
+        daoScanPackages.put("components", COMPONENTS_PACKAGE + ".**.dao");
+        daoScanPackages.put("portlets", "com.acooly.portlets.**.dao");
+        daoScanPackages.put("app", Apps.getBasePackage());
         if (supportMultiDataSource) {
             Assert.notEmpty(multi, "启用多数据源时，必须配置数据源信息");
             int primaryCount = 0;

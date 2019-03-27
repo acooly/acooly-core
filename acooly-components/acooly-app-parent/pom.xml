@@ -229,6 +229,14 @@
                 <version>4.2.0-SNAPSHOT</version>
             </dependency>
 
+            <!-- siteconfig -->
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-portlets-siteconfig</artifactId>
+                <version>4.2.0-SNAPSHOT</version>
+            </dependency>
+
+
             <!-- alog -->
             <dependency>
                 <groupId>com.acooly</groupId>

@@ -20,6 +20,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.TemplateLoader;
+import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.utility.XmlEscape;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -234,6 +235,12 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
             if (!StringUtils.isEmpty(ssoEnable)) {
                 variables.put("ssoEnable", Boolean.valueOf(ssoEnable));
             }
+
+            // 开启freemarker支持?api方式调用对象方法
+            // 参考：https://freemarker.apache.org/docs/ref_builtins_expert.html#ref_buitin_api_and_has_api
+            DefaultObjectWrapper defaultObjectWrapper = (DefaultObjectWrapper)configurer.getConfiguration().getObjectWrapper();
+            defaultObjectWrapper.setUseAdaptersForContainers(true);
+            defaultObjectWrapper.setForceLegacyNonListCollections(false);
 
             configurer.setFreemarkerVariables(variables);
             applyProperties(configurer);

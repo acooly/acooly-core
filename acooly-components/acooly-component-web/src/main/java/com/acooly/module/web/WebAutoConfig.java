@@ -236,12 +236,6 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
                 variables.put("ssoEnable", Boolean.valueOf(ssoEnable));
             }
 
-            // 开启freemarker支持?api方式调用对象方法
-            // 参考：https://freemarker.apache.org/docs/ref_builtins_expert.html#ref_buitin_api_and_has_api
-            DefaultObjectWrapper defaultObjectWrapper = (DefaultObjectWrapper)configurer.getConfiguration().getObjectWrapper();
-            defaultObjectWrapper.setUseAdaptersForContainers(true);
-            defaultObjectWrapper.setForceLegacyNonListCollections(false);
-
             configurer.setFreemarkerVariables(variables);
             applyProperties(configurer);
 

@@ -337,6 +337,12 @@ public abstract class AbstractStandardEntityController<
     }
 
     protected void onCreate(HttpServletRequest request, HttpServletResponse response, Model model) {
+        try {
+            model.addAttribute(getEntityName(), getEntityClass().newInstance());
+        } catch (Exception e) {
+            //ig
+        }
+
     }
 
     protected void onEdit(

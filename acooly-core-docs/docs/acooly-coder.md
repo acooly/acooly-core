@@ -122,33 +122,52 @@ CREATE TABLE `dm_customer` (
 application.propertes
 
 ```ini
-## database connection configurations
+#[database connection configurations]
+## [必填][mysql]
 jdbc.driver=com.mysql.jdbc.Driver
 jdbc.url=jdbc:mysql://localhost:3306/acooly?useUnicode=true&amp;characterEncoding=UTF-8
 jdbc.username=root
-jdbc.password=******
+jdbc.password=123456
 
 ## Code generator configurations
-# 生成的代码防止的目标java工程根路径
-generator.workspace=/Users/zhangpu/workspace/eclipse/acooly-demo
-# 生成的模块代码的根包
-generator.rootPackage=com.acooly.demo
-# 生成的模块的业务根路径
-generator.pagePath=/manage/demo
-# 表名转换为实体名称时，需要忽略的表的前缀。如:表明为dm_customer,配置该值为dm_ ,则生成的实体名称为Customer
-generator.tableToEntityIgnorPrefix=dm_
-# 模板方案路径，默认设置为easyui
-generator.templatePath=classpath:/template/easyui
-
-# 自定义数据类型映射,类JSON格式。格式{数据库数据类型1:java数据类型1（如果需要imports则需要完整包路径,...}
-# 这里设置了映射后，会覆盖生成器默认的数据类型映射规则
-generator.dataType.declare={decimal:java.math.BigDecimal}
-# 持久化方案(可选: jpa,mybatis)
+# [必选]生成的代码防止的目标java工程根路径
+generator.workspace=/Users/zhangpu/workspace/acooly4/acooly-coder/test
+# [必选]生成的模块代码的根包
+generator.rootPackage=com.ac.zhangpu
+# [可选]视图方案：freemarker（默认）,jsp
+generator.viewType=freemarker
+# [可选]需要生成的可选模块(entity,dao和service是默认的) 可选: manage,portal,facade,api. 目前portal,facade和openapi在开发中不可用，多个模块采用逗号分隔。如：manage,facade
+generator.modules=manage
+# [可选]持久化方案(可选: jpa,mybatis，默认jpa)
 generator.persistent.solution=mybatis
-# 代码作者
+# [可选]表名转换为实体名称时，需要忽略的表的前缀。如:表明为dm_customer,配置该值为dm_ ,则生成的实体名称为Customer
+generator.tableToEntityIgnorPrefix=dm_
+# [可选] 是否生成枚举，默认为true
+generator.enum.enable=true
+# [可选]枚举名称采用组合Entity名称+属性名称
+generator.enumName.assemble=false
+# [可选]生成的模块的业务根路径，如果不填写，且配置了生成manage模块，则默认为/manage
+generator.manage.path=/manage/zhangpu
+# [可选]生成的模块的前端页面根路径(依赖generator.modules中有portal)，默认/portal
+generator.portal.path=/portal/demo
+# [可选]代码作者，默认:acooly
 generator.code.author=acooly
-# 代码版权声明主体
+# [可选]代码版权声明主体,默认:acooly.cn
 generator.code.copyright=acooly.cn
+
+# [可选]模板方案路径，默认设置为：classpath:/template/easyui
+generator.templatePath=classpath:/template/easyui
+# [可选]自定义数据类型映射,类JSON格式。格式{数据库数据类型1:java数据类型1（如果需要imports则需要完整包路径,...}
+# [可选]这里设置了映射后，会覆盖生成器默认的数据类型映射规则，如：{decimal:java.math.BigDecimal}
+generator.dataType.declare=
+
+#[maven project struction]
+generator.codePath=src/main/java
+generator.testPath=src/test/java
+generator.resourcePath=src/main/resources
+generator.webappPath=src/main/resources/META-INF/resources/WEB-INF/jsp
+generator.viewSuffix=.jsp
+
 ```
 
 完成配置后，请保持退出，准备运行工具生成代码
@@ -242,5 +261,12 @@ OK，如果上步成功，请回到你的IDE及对应的模块，你应该看到
 * [业务前台开发指南](acooly-guide-portal.html)
 
 
+## 4 更新说明
+
+### 4.2.0-SNAPSHOT-20190402
+
+* 2019-04-02 - 可通过实体属性默认值，直接默认为添加表单的默认值；调整部分默认样式效果。 - [zhangpu] 38760dx
+* 2019-04-01 - freemarker视图支持开发分支提交完成开发的代码(generator.viewType=freemarker)。 - [zhangpu] 38460de
+* 2019-03-31 - 为生成的枚举的Messageable接口的实现方法增加@Override - [zhangpu] c09c06a
 
 

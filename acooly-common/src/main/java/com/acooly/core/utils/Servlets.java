@@ -60,8 +60,9 @@ public class Servlets {
     public static void writeResponse(@NotNull HttpServletResponse response, @NotNull String data, @Nullable String contentType) {
         response.setCharacterEncoding("UTF-8");
         if (Strings.isBlank(contentType)) {
-            response.setContentType(MediaType.JSON_UTF_8.toString());
+            contentType = MediaType.JSON_UTF_8.toString();
         }
+        response.setContentType(contentType);
         try (InputStream input = new ByteArrayInputStream(data.getBytes(Charset.forName("UTF-8")));
              OutputStream output = response.getOutputStream();) {
             IOUtils.copy(input, output);

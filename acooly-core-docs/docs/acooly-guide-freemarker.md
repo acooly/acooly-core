@@ -1,18 +1,17 @@
-<!-- title: Freemarker必备知识  -->
+<!-- title: Freemarker必备  -->
 <!-- type: core -->
 <!-- author: zhangpu -->
 <!-- date: 2019-04-23 -->
 
-Acooly Freemarker必备技能
+Acooly Freemarker必备
 =====
-
-# 简介
 
 本文主要提供Acooly框架的Web层采用freemarker作为控制层视图渲染时，必备和常用的知识点的统一归纳和演示，已方便查阅和参考。
 Acooly-coder自动代码生成默认已修改为生成freemarker的视图界面，所以，请所有开发人员必须掌握本文档总结的知识点。
+
 >注意：这里只是介绍在常规开发中，最常用的必须掌握的最少知识点和技能，Freemarker本身的能力很完善，在后续技能点的介绍中会表明对应更完善的文档，以应对你可能需要的能力
 
-# 必备知识点
+# 必备点
 
 ## 变量输出
 
@@ -30,27 +29,27 @@ Acooly-coder自动代码生成默认已修改为生成freemarker的视图界面�
 	<#-- jsonEntityResult.entity.id -->
 	${entity.id}
 	```
+	
 	>注意：你从控制层返回的JsonResult变量是渲染的根变量，在ftl界面上从其一级子成员开始引用。
 
 2. 另外一种情况，可以直接在视图（ftl文件）界面声明变量并赋值。指令为：assign.
 	例如：<#assign assignVarName = "acooly"> 表示给变量name赋值字符串"acooly", 输出则为：${assignVarName}
 
+	* 页面通过assign指令赋值的变量输出，`<#assign assignVarName = "acooly">` -> `${assignVarName}` -> acooly
+	* 对象属性直接输出: `${entity.username} -> fazheng
+	* 枚举值输出 `${entity.idcardType.message()}` --> 身份证
+	* Map<String,Object>转换输出 `${allCustomerTypes[entity.customerType]` --> 普通
+	* Map<Number,Object>转换输出 `${allStatuss?api.get(entity.status)` --> 正常
+	* 空对象属性的输出采用通用设置默认值的方法：()!，例如：user对象为空，可以：`${(user.username)!}`,放心，不报错。
 
-* 页面通过assign指令赋值的变量输出，`<#assign assignVarName = "acooly">` -> `${assignVarName}` -> acooly
-* 对象属性直接输出: `${entity.username} -> fazheng
-* 枚举值输出 `${entity.idcardType.message()}` --> 身份证
-* Map<String,Object>转换输出 `${allCustomerTypes[entity.customerType]` --> 普通
-* Map<Number,Object>转换输出 `${allStatuss?api.get(entity.status)` --> 正常
-* 空对象属性的输出采用通用设置默认值的方法：()!，例如：user对象为空，可以：`${(user.username)!}`,放心，不报错。
-
->注意：对于非字符串作为Map的key的转换输出，采用?api.get()模式，框架已在初始化时开启了对应的配置。
+	>注意：对于非字符串作为Map的key的转换输出，采用?api.get()模式，框架已在初始化时开启了对应的配置。
 
 ## 格式化输出
 
 格式化输出最常用的是数字和日期时间的格式化输出，所以是必须掌握的，其他格式化或转换可以参考freemarker文档。freemarker对变量及数据类型的格式化输出有非常强大的能力，详情请参考：<a href="http://freemarker.foofun.cn/ref_builtins.html" target="_blank">内建函数参考</a>
 
 
-#### 数字格式化
+### 数字格式化
 
 通过assign设置数字变量 x=102042.0083，下面介绍最常规的格式化输出：
 
@@ -63,7 +62,7 @@ Acooly-coder自动代码生成默认已修改为生成freemarker的视图界面�
 
 其他格式的转换请参考文档：<a href="http://freemarker.foofun.cn/ref_builtins_number.html#ref_builtin_string_for_number" target="_blank">数字格式化</a>
 
-#### 日期时间格式化
+### 日期时间格式化
 
 这里以 entity.createTime(=now()) 和 entity.updateTime(=null) 两个变量为例子。
 * SimpleDateFormat格式化：`${(createTime?string["yyyy-MM-dd HH:mm:ss.SSS"])!}` -->
@@ -177,7 +176,7 @@ map的迭代采用新语法后变动统一和简单。
 * 服务器端include: <@includePage path="/xxx/xxx/xx.html"> 
 * 静态include: <#include "/xxx/xxx/xx.ftl">
 
-## java方法调用
+## Java方法调用
 
 这里提供的是java对象的方法调用方案，一般不推荐使用，但在特殊场景，如果有需求，可以实现砸ftl文件中直接调用通过Model传入到freemarker的对象的方法。
 
@@ -192,4 +191,8 @@ ${object?api.method(...)}
 * entity.hashCode(): `${entity?api.hashCode()}` --> 0
 * entity.toString(): `${entity?api.toString()}` --> Customer{age=41,birthday=1978-04-13 14:02:22,comments=null,createTime=2019-04-13 14:02:22,customerType=normal,fee=null,gender=0,id=1,idcardNo=1234123412341234,idcardType=cert,mail=xiyang@acooly.cn,mobileNo=13989873641,realName=夕阳,salary=402100,status=10,subject=null,updateTime=null,username=xiyang}
 
+# 文档和示例
+
+* Freemarker中文文档：[http://freemarker.foofun.cn/](http://freemarker.foofun.cn/)
+* 本文相关的全[示例](http://showcase.acooly.cn/freemarker/demo/index.html)都在acooly-showcase工程中：/freemarker/demo/index.ftl
 

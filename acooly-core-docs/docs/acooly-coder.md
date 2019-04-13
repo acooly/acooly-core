@@ -1,7 +1,8 @@
 <!-- title: 代码生成  -->
 <!-- type: core -->
 <!-- author: zhangpu -->
-<!-- date: 2016-10-12 -->
+<!-- date: 2019-04-27 -->
+
 acooly coder自动代码生成工具
 ====
 

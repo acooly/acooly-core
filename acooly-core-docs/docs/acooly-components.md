@@ -1,3 +1,8 @@
+<!-- title: 组件体系  -->
+<!-- type: core -->
+<!-- author: zhangpu -->
+<!-- date: 2019-02-01 -->
+
 Acooly框架组件介绍
 ====
 

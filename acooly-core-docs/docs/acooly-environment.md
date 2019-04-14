@@ -28,6 +28,40 @@ IDEA推荐插件:
 
 >直接IDEA的插件安装页搜索名称即可找到，然后安装。
 
+### 文件模板
+
+文件模板是只，你在IDEA里面创建文件时，预定义的文件初始化生成模板。配置界面：File and Code Templates
+
+Acooly框架提供的模板中内置了常规java文件的模板（注释）和几个特殊的文件模板应用，如下：
+
+* 类文件注释：定义了统一的文件注释和类注释，你导入后，可根据组织或项目自行调整。位置在该模块下的Includes标签下的company和File Header两个模板。
+* Enum：Acooly框架约定所有业务开发中的枚举都必须实现Messageable接口，在创建时候，会自动生成对应的实现和帮助方法。
+* OpenApi：Acooly的OpenApi服务开发，自定义了很多annotaion，如果是开发OpenApi服务，请直接在新建类时选择：OpenApi，会少去很多手工工作量。但请注意：类名必须以ApiService结尾。如下图：
+
+	![](res/pic/env_new_openapi.jpg)
+
+
+### 代码模板
+
+代码模板的定义在：settings界面的Live Template项里面。Acooly只增加了几个常用的模板，可选使用。
+
+* 实现Messageable的枚举：`enums`，这个也可以直接使用文件模板里面创建Enum类时自动生成。
+* 异常段：`tryc`,自动生成框架推荐的各层异常处理模板。
+
+	```java
+	try {
+	    $END$
+	} catch (BusinessException be) {
+		 // 下层如果抛出了BusinessException，则直接上抛。
+	    throw be;
+	} catch (Exception e) {
+	    throw new BusinessException();
+	}
+```
+* 异常段：`trye`，运行时异常处理段。
+
+
+
 ## 4. 数据库
 
 使用mysql 5.7最新版本,开发过程中，请尽量在本机安装数据库，方便操作。

@@ -20,6 +20,7 @@ import com.acooly.module.ds.check.DBPatch;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.vendor.OracleValidConnectionChecker;
 import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 import lombok.Data;
@@ -173,6 +174,7 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
             this.beanClassLoader = ClassUtils.getDefaultClassLoader();
         }
         DruidDataSource dataSource = new DruidDataSource();
+
         // 基本配置
         dataSource.setDriverClassLoader(this.getBeanClassLoader());
         dataSource.setUrl(this.getUrl());
@@ -185,6 +187,10 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
         if (mysql()) {
             maxActive = Math.max(maxActive, MYSQL_MAX_ACTIVE);
             System.setProperty("spring.jpa.database", "MYSQL");
+
+            // 设置支持utf8mb4
+            dataSource.setConnectionInitSqls(Lists.newArrayList("set names utf8mb4;"));
+
         } else {
             maxActive = Math.max(maxActive, ORACLE_MAX_ACTIVE);
             System.setProperty("spring.jpa.database", "ORACLE");

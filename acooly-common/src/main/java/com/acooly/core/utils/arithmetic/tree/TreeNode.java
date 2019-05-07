@@ -32,15 +32,21 @@ public interface TreeNode<T extends TreeNode> {
     List<T> getChildren();
 
     /**
+     * 设置子对象
+     *
+     * @param children
+     */
+    void setChildren(List<T> children);
+
+    /**
      * 添加子到子对象集合中
      *
      * @param treeNode
      */
     default void addChild(T treeNode) {
-        List<T> children = getChildren();
-        if (children == null) {
-            children = Lists.newArrayList();
+        if (getChildren() == null) {
+            setChildren(Lists.newArrayList());
         }
-        children.add(treeNode);
+        getChildren().add(treeNode);
     }
 }

@@ -136,11 +136,21 @@ public abstract class AbstractFileOperationController<
                 workBook = WorkbookFactory.create(in);
                 Sheet sheet = workBook.getSheetAt(0);
                 List<String> row = null;
+                short sheetTitleCells = sheet.getRow(0).getLastCellNum();
                 for (Row r : sheet) {
-                    row = new ArrayList<String>(r.getLastCellNum());
-                    for (Cell cell : r) {
-                        cell.setCellType(CellType.STRING);
-                        row.add(cell.getStringCellValue());
+                	if (r.getLastCellNum() == -1){
+                		continue;
+                	}
+                    row = new ArrayList<String>(sheetTitleCells);
+                    for (int cellNum = 0; cellNum < sheetTitleCells; cellNum++) {
+                    	Cell cell = r.getCell(cellNum);
+                    	if (cell == null){
+                    		row.add(null);
+                    	}else{
+                    		cell.setCellType(CellType.STRING);
+                    		row.add(cell.getStringCellValue());
+                    	}
+                        
                     }
                     lines.add(row);
                 }

@@ -3,6 +3,7 @@
  */
 package com.acooly.module.ofile.auth;
 
+import com.acooly.core.common.exception.CommonErrorCodes;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
@@ -51,6 +52,8 @@ public class OFileUploadAuthenticateSpringProxy
                 logger.debug("认证器（" + entry.getValue().getClass() + "）认证失败.");
             }
         }
+        logger.info("没有一个认证实现通过，判断本次上传认证失败:{}", messages);
+        throw new OFileUploadException(CommonErrorCodes.UNAUTHENTICATED_ERROR, "文件上传认证未通过：" + messages);
     }
 
     @Override

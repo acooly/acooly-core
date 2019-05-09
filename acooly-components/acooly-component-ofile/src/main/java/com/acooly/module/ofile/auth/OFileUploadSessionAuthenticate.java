@@ -3,13 +3,12 @@
  */
 package com.acooly.module.ofile.auth;
 
+import com.acooly.core.common.exception.CommonErrorCodes;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.ofile.OFileProperties;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpServerErrorException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -37,7 +36,7 @@ public class OFileUploadSessionAuthenticate implements OFileUploadAuthenticate {
                 return;
             }
         }
-        throw new HttpServerErrorException(HttpStatus.UNAUTHORIZED, "Session认证未通过");
+        throw new OFileUploadException(CommonErrorCodes.UNAUTHENTICATED_ERROR, "Session认证未通过");
     }
 
 

@@ -53,6 +53,29 @@ acooly.ofile.configuredSignAuthAccessKey=YOUR_ACCESSKEY
 acooly.ofile.configuredSignAuthSecretKey=YOUR_SECRETKEY
 ```
 
+支持标准的multipart/form-data方式的form提交上传文件。参数如下：
+
+```html
+<form enctype="multipart/form-data" method="post">
+    <input name="accessKey" value="test" type="text">
+    <input name="fileName" value="xxxxx" type="file">
+    <input name="timestamp" value="yyyyMMddHHmmss" type="text">
+    <input name="sign" value="w87a6sdf87a6s78df6a87sdfdf">
+</form>
+```
+
+>1. timestamp请客户端每次区当前时间。
+>2. sign的计算方法请参考下方的”签名算法“
+>3. 其他非web客户端（小程序，App）可构造标准form的（multipart/form-data）模式上传。
+
+**签名算法**：
+
+ ```java
+String signWaiting = "accessKey=" + accessKey + "&fileName=" + fileName + "&timestamp=" + timestamp + secretKey;
+// md5的hex编码字符串
+String sign = DigestUtils.md5Hex(signWaiting);
+ ```
+
 
 #### 3.1.3 自定义签名认证
 

@@ -1,8 +1,10 @@
 package com.acooly.core.utils;
 
+import com.google.common.base.Splitter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class Strings extends StringUtils {
@@ -113,6 +115,17 @@ public class Strings extends StringUtils {
         return sb.toString();
     }
 
+    public static String mask(String text, MaskType maskType) {
+        Assert.hasLength(text);
+        Assert.notNull(maskType);
+        if (maskType == MaskType.Email) {
+            return maskEmail(text);
+        } else {
+            return maskReverse(text, maskType.start, maskType.end);
+        }
+
+    }
+
     public static String maskUserName(String text) {
         return maskReverse(text, 2, 1);
     }
@@ -127,6 +140,16 @@ public class Strings extends StringUtils {
 
     public static String maskMobileNo(String text) {
         return maskReverse(text, 3, 3);
+    }
+
+    public static String maskEmail(String text) {
+        if (Strings.isNotBlank(text) && Strings.contains(text, "@")) {
+            List<String> parts = Splitter.on("@").omitEmptyStrings().splitToList(text);
+            if (parts != null && parts.size() == 2) {
+                return maskReverse(parts.get(0), 2, 0) + "@" + parts.get(1);
+            }
+        }
+        return maskReverse(text, 2, 3);
     }
 
     public static String maskReverse(String text, int start, int end) {
@@ -190,14 +213,25 @@ public class Strings extends StringUtils {
         return true;
     }
 
-   /* public static void main(String[] args) {
-        String text = "zhangpu";
-        System.out.println("用户名: " + maskReverse(text, 6, 0, '*', 5));
-        text = "510221198209476371";
-        System.out.println("身份证: " + maskReverse(text, 3, 4, '*'));
-        text = "13896177630";
-        System.out.println("手机号: " + maskReverse(text, 3, 3, '*'));
-        text = "6221880231092323876";
-        System.out.println("银行卡: " + maskReverse(text, 4, 3, '*', 3));
-    }*/
+    /**
+     * mask 类型
+     */
+    public static enum MaskType {
+        UserName("用户名", 2, 1),
+        IdCardNo("身份证", 3, 4),
+        BankCardNo("银行卡", 4, 3),
+        MobileNo("手机号", 3, 3),
+        Email("邮箱", 2, 3);
+
+        private final String title;
+        private final int start;
+        private final int end;
+
+        MaskType(String title, int start, int end) {
+            this.title = title;
+            this.start = start;
+            this.end = end;
+        }
+    }
+
 }

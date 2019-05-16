@@ -217,6 +217,7 @@ public class Strings extends StringUtils {
      * mask 类型
      */
     public static enum MaskType {
+        All("全Mask", 0, 0),
         UserName("用户名", 2, 1),
         IdCardNo("身份证", 3, 4),
         BankCardNo("银行卡", 4, 3),

@@ -470,6 +470,15 @@ public class ToString {
         return toString(i, Generator.TO_STRING_ARRAY_SIZE_THRESHOLD);
     }
 
+
+    public static String mask(String str, Strings.MaskType maskType) {
+        return Strings.mask(str, maskType);
+    }
+
+    public static String mask(String str, Integer prefixLen, Integer postfixLen) {
+        return Strings.maskReverse(str, prefixLen, postfixLen);
+    }
+
     /**
      * 把字符串mask
      *
@@ -509,6 +518,7 @@ public class ToString {
         // 复制输出
         return new String(chars);
     }
+
 
     public static String maskAll(String str) {
         if (str == null || str.length() == 0) {
@@ -555,6 +565,7 @@ public class ToString {
 
     /**
      * 标注在getter上,标识此属性会被mask,只支持String、Map类型
+     * 优先级由高到低：prefixLen/postfixLen -> maskType -> maskAll
      */
     @Target({ElementType.METHOD, ElementType.FIELD})
     @Retention(RUNTIME)
@@ -569,6 +580,22 @@ public class ToString {
          * 标注在返回值为Map的getter或field上，会对指定的key对应的值mask
          */
         String[] maskKeys() default {};
+
+        /**
+         * mask类型（UserName,MobileNo...）
+         */
+        Strings.MaskType maskType() default Strings.MaskType.All;
+
+        /**
+         * 保留前置多少字节不mask
+         */
+        int prefixLen() default 0;
+
+        /**
+         * 保留后置多少字节不mask
+         */
+        int postfixLen() default 0;
+
     }
 
     public interface Masked extends Serializable {
@@ -810,7 +837,16 @@ public class ToString {
             } else if (maskable.maskAll()) {
                 readMethod = String.format("%s.maskAll((String)%s)", toStringClassName, readMethod);
             } else {
-                readMethod = String.format("%s.mask((String)%s)", toStringClassName, readMethod);
+
+                int prefixLen = maskable.prefixLen();
+                int postfixLen = maskable.postfixLen();
+                Strings.MaskType maskType = maskable.maskType();
+                if (prefixLen != 0 || postfixLen != 0) {
+                    // 设置了长度则根据前后置长度来mask
+                    readMethod = String.format("%s.mask((String)%s,(Integer)%s,(Integer)%s)", toStringClassName, readMethod, prefixLen, postfixLen);
+                } else {
+                    readMethod = String.format("%s.mask((String)%s,%s)", toStringClassName, readMethod, maskType);
+                }
             }
             doProp(propName, readMethod);
         }

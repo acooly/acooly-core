@@ -475,7 +475,7 @@ public class ToString {
         return Strings.mask(str, maskType);
     }
 
-    public static String mask(String str, Integer prefixLen, Integer postfixLen) {
+    public static String mask(String str, int prefixLen, int postfixLen) {
         return Strings.maskReverse(str, prefixLen, postfixLen);
     }
 
@@ -757,7 +757,8 @@ public class ToString {
                 String readMethod = buildReadMethod(pd);
                 if (returnType.isArray()) {
                     buildArray(toStringClassName, readMethod, propName);
-                } else if (proptertyType == String.class || returnType == String.class) {
+                } else if (proptertyType == String.class || returnType == String.class ||
+                        Number.class.isAssignableFrom(proptertyType) || Number.class.isAssignableFrom(returnType)) {
                     buildString(toStringClassName, pd, readMethod, propName);
                 } else if (isCollection(proptertyType) || isCollection(returnType)) {
                     buildCollection(toStringClassName, readMethod, propName);
@@ -829,13 +830,14 @@ public class ToString {
         private void buildString(
                 String toStringClassName, PropertyDescriptor pd, String readMethod, String propName) {
             Maskable maskable = getAnnotation(pd, Maskable.class);
+            String newReadMethod = readMethod;
             if (maskable == null) {
-                readMethod =
+                newReadMethod =
                         String.format(
-                                "%s.toString((String)%s,%d)",
+                                "%s.toString(String.valueOf(%s),%d)",
                                 toStringClassName, readMethod, TO_STRING_ARRAY_SIZE_THRESHOLD);
             } else if (maskable.maskAll()) {
-                readMethod = String.format("%s.maskAll((String)%s)", toStringClassName, readMethod);
+                newReadMethod = String.format("%s.maskAll(String.valueOf(%s))", toStringClassName, readMethod);
             } else {
 
                 int prefixLen = maskable.prefixLen();
@@ -843,13 +845,18 @@ public class ToString {
                 Strings.MaskType maskType = maskable.maskType();
                 if (prefixLen != 0 || postfixLen != 0) {
                     // 设置了长度则根据前后置长度来mask
-                    readMethod = String.format("%s.mask((String)%s,(Integer)%s,(Integer)%s)", toStringClassName, readMethod, prefixLen, postfixLen);
+                    newReadMethod = String.format("%s.mask(String.valueOf(%s),%d,%d)", toStringClassName, readMethod, prefixLen, postfixLen);
+                } else if (maskType != null) {
+                    newReadMethod = String.format("%s.mask(String.valueOf(%s),com.acooly.core.utils.Strings.MaskType.%s)", toStringClassName, readMethod, maskType);
                 } else {
-                    readMethod = String.format("%s.mask((String)%s,%s)", toStringClassName, readMethod, maskType);
+                    newReadMethod = String.format("%s.mask(String.valueOf(%s))", toStringClassName, readMethod);
                 }
             }
-            doProp(propName, readMethod);
+            newReadMethod = String.format("%s == null?null:%s", readMethod, newReadMethod);
+
+            doProp(propName, newReadMethod);
         }
+
 
         private <T extends Annotation> T getAnnotation(PropertyDescriptor pd, Class<T> annotationType) {
             T t = pd.getReadMethod().getAnnotation(annotationType);

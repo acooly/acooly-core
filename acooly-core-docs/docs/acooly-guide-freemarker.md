@@ -84,6 +84,7 @@ freemarker前端渲染的迭代输出主要针对Collection集合和Map的迭代
 ```
 >1. collection是当前scope内的集合变量，可以是Array，List，Set等
 >2. e表示collection的成员，可以是简单变量`${e}`，也可以是对象变量（`${e.username}`）
+>3. `<#if e?is_first>`:表示是否为第一个变量，`<#if e?is_last>`:表示是否为最后一个变量，`${e?index}`:循环中当前项的索引(从0开始的数字)，`<#if e?has_next>`:辨别当前项是否是序列的最后一项的布尔值，不再使用原有e_index,e_has_index形式
 
 实例：
 
@@ -92,6 +93,7 @@ freemarker前端渲染的迭代输出主要针对Collection集合和Map的迭代
     <#list entities as e>
         <div class="demolist">
             <div>${e.id}</div>
+            <div>${e?index}<#if e?is_first>first-</#if><#if e?is_last>last</#if><#if e?has_next>hasNext</#if></div>
             <div>${e.username}</div>
             <div>${e.realName}</div>
             <div>${e.age}</div>
@@ -174,7 +176,7 @@ map的迭代采用新语法后变动统一和简单。
 
 @includePage是acooly框架扩展的freemarker指令，实现服务器端include（RequestDispatcher.include），区别freemarker的#include是静态ftl的引入。
 * 服务器端include: <@includePage path="/xxx/xxx/xx.html"> 
-* 静态include: <#include "/xxx/xxx/xx.ftl">
+* 静态include: <#include "/xxx/xxx/xx.ftl">(由于开启classic_compatible=true，必须采用绝对路径，无法使用相对路径)
 
 ## Java方法调用
 

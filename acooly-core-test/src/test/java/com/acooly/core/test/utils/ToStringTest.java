@@ -27,7 +27,7 @@ public class ToStringTest {
 
     @Test
     public void testSimpleEntityToString() {
-        ToString.logSource = true;
+//        ToString.logSource = true;
         MaskEntity maskEntity = new MaskEntity();
         System.out.println(maskEntity);
     }

@@ -5,6 +5,8 @@
  */
 package com.acooly.core.utils;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,6 +25,30 @@ import java.util.*;
 //todo:增加通用Collection和Array的转换
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class Collections3 {
+
+
+    public static <T> Collection<T> top(Collection<T> collection, int limit) {
+        if (isEmpty(collection) || collection.size() <= limit) {
+            return collection;
+        }
+        Collection<T> tops = null;
+        if (collection instanceof List) {
+            tops = collection instanceof LinkedList ? Lists.newLinkedList() : Lists.newArrayList();
+        } else {
+            tops = collection instanceof HashSet ? Sets.newHashSet() : Sets.newLinkedHashSet();
+        }
+
+        Iterator<T> iterator = collection.iterator();
+        int i = 0;
+        while (iterator.hasNext()) {
+            if (++i >= limit) {
+                break;
+            }
+            tops.add(iterator.next());
+        }
+        return tops;
+    }
+
 
     /**
      * 提取集合中的对象的两个属性(通过Getter函数), 组合成Map.

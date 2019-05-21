@@ -28,7 +28,9 @@ public class ObsTestController {
 
     public static InputStream genFixedLengthInputStream(long fixedLength) {
         byte[] buf = new byte[(int) fixedLength];
-        for (int i = 0; i < buf.length; i++) buf[i] = 'a';
+        for (int i = 0; i < buf.length; i++) {
+            buf[i] = 'a';
+        }
         return new ByteArrayInputStream(buf);
     }
 

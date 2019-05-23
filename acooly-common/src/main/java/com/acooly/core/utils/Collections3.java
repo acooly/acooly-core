@@ -38,13 +38,12 @@ public class Collections3 {
             tops = collection instanceof HashSet ? Sets.newHashSet() : Sets.newLinkedHashSet();
         }
 
-        Iterator<T> iterator = collection.iterator();
-        int i = 0;
-        while (iterator.hasNext()) {
-            if (++i >= limit) {
+
+        for (T t : collection) {
+            if (tops.size() >= limit) {
                 break;
             }
-            tops.add(iterator.next());
+            tops.add(t);
         }
         return tops;
     }

@@ -5,6 +5,7 @@
  */
 package com.acooly.core.utils;
 
+import com.google.common.reflect.TypeToken;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -18,7 +19,9 @@ import java.sql.Timestamp;
 import java.util.*;
 
 /**
- * 反射工具类. 提供调用getter/setter方法, 访问私有变量, 调用私有方法, 获取泛型类型Class, 被AOP过的真实类等工具函数.
+ * 反射工具类.
+ * 1、提供调用getter/setter方法, 访问私有变量, 调用私有方法, 获取泛型类型Class, 被AOP过的真实类等工具函数.
+ * 2、泛型相关工具
  *
  * @author calvin
  * @author zhangpu
@@ -275,53 +278,6 @@ public class Reflections {
         }
     }
 
-    /**
-     * 通过反射, 获得Class定义中声明的泛型参数的类型, 注意泛型必须定义在父类处 如无法找到, 返回Object.class. eg. public UserDao extends
-     * HibernateDao<User>
-     *
-     * @param clazz The class to introspect
-     * @return the first generic declaration, or Object.class if cannot be determined
-     */
-    public static <T> Class<T> getClassGenricType(final Class clazz) {
-        return getClassGenricType(clazz, 0);
-    }
-
-    /**
-     * 通过反射, 获得Class定义中声明的父类的泛型参数的类型. 如无法找到, 返回Object.class. 如public UserDao extends
-     * HibernateDao<User,Long>
-     *
-     * @param clazz clazz The class to introspect
-     * @param index the Index of the generic ddeclaration,start from 0.
-     * @return the index generic declaration, or Object.class if cannot be determined
-     */
-    public static Class getClassGenricType(final Class clazz, final int index) {
-
-        Type genType = clazz.getGenericSuperclass();
-
-        if (!(genType instanceof ParameterizedType)) {
-            logger.warn(clazz.getSimpleName() + "'s superclass not ParameterizedType");
-            return Object.class;
-        }
-
-        Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
-
-        if (index >= params.length || index < 0) {
-            logger.warn(
-                    "Index: {}, Size of {}'s Parameterized Type: {}",
-                    params.length,
-                    index,
-                    clazz.getSimpleName());
-            return Object.class;
-        }
-        if (!(params[index] instanceof Class)) {
-            logger.warn(
-                    clazz.getSimpleName() + " not set the actual class on superclass generic parameter");
-            return Object.class;
-        }
-
-        return (Class) params[index];
-    }
-
     public static Class<?> getUserClass(Object instance) {
         Assert.notNull(instance, "Instance must not be null");
         Class clazz = instance.getClass();
@@ -444,9 +400,7 @@ public class Reflections {
      * @param clazz      要创建对象的类的{@link Class}对象。
      * @param parameters 要传递给构造方法的参数。
      * @return 对应的实例。
-     * @throws NoSuchMethodException            如果没有指定的构造方法。
-     * @throws InstantiationRuntimeException    生成类的实例时发生错误。
-     * @throws InvocationTargetRunTimeException 如果构造方法抛出异常。
+     * @throws NoSuchMethodException 如果没有指定的构造方法。
      */
     public static <T> T createObject(Class<T> clazz, Object... parameters)
             throws NoSuchMethodException {
@@ -465,9 +419,7 @@ public class Reflections {
      * @param parameterTypes 参数的类型。
      * @param parameters     要传递给构造方法的参数。
      * @return 对应的实例。
-     * @throws NoSuchMethodException            如果没有指定的构造方法。
-     * @throws InstantiationRuntimeException    生成类的实例时发生错误。
-     * @throws InvocationTargetRunTimeException 如果构造方法抛出异常。
+     * @throws NoSuchMethodException 如果没有指定的构造方法。
      */
     public static <T> T createObject(Class<T> clazz, Class<?>[] parameterTypes, Object[] parameters)
             throws NoSuchMethodException {
@@ -490,9 +442,7 @@ public class Reflections {
      * @param constructor 构造方法的 Constructor 对象。
      * @param parameters  要传递给构造方法的参数。
      * @return 对应的实例。
-     * @throws NullPointerException             如果 constructor 为 null 。
-     * @throws InstantiationRuntimeException    生成类的实例时发生错误。
-     * @throws InvocationTargetRunTimeException 如果构造方法抛出异常。
+     * @throws NullPointerException 如果 constructor 为 null 。
      */
     public static <T> T createObject(Constructor<T> constructor, Object... parameters) {
         if (!Modifier.isPublic(constructor.getModifiers())) {
@@ -515,6 +465,106 @@ public class Reflections {
         setAccessible(constructor);
     }
 
+
+    /**
+     * 通过反射, 获得Class定义中声明的泛型参数的类型, 注意泛型必须定义在父类处 如无法找到, 返回Object.class. eg. public UserDao extends
+     * HibernateDao<User>
+     *
+     * @param clazz The class to introspect
+     * @return the first generic declaration, or Object.class if cannot be determined
+     */
+    public static <T> Class<T> getClassGenricType(final Class clazz) {
+        return getClassGenricType(clazz, 0);
+    }
+
+    /**
+     * 通过反射, 获得Class定义中声明的父类的泛型参数的类型. 如无法找到, 返回Object.class. 如public UserDao extends
+     * HibernateDao<User,Long>
+     *
+     * @param clazz clazz The class to introspect
+     * @param index the Index of the generic ddeclaration,start from 0.
+     * @return the index generic declaration, or Object.class if cannot be determined
+     */
+    public static Class getClassGenricType(final Class clazz, final int index) {
+
+        Type genType = clazz.getGenericSuperclass();
+
+        if (!(genType instanceof ParameterizedType)) {
+            logger.warn(clazz.getSimpleName() + "'s superclass not ParameterizedType");
+            return Object.class;
+        }
+
+        Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
+
+        if (index >= params.length || index < 0) {
+            logger.warn(
+                    "Index: {}, Size of {}'s Parameterized Type: {}",
+                    params.length,
+                    index,
+                    clazz.getSimpleName());
+            return Object.class;
+        }
+        if (!(params[index] instanceof Class)) {
+            logger.warn(
+                    clazz.getSimpleName() + " not set the actual class on superclass generic parameter");
+            return Object.class;
+        }
+
+        return (Class) params[index];
+    }
+
+
+    /**
+     * 通过反射,获得定义Class时声明的父类的范型参数的类型.
+     */
+    public static Class getSuperClassGenricType(Class clazz) {
+        return getSuperClassGenricType(clazz, 0);
+    }
+
+    /**
+     * 通过反射,获得定义Class时声明的父类的范型参数的类型.
+     */
+    public static Class getSuperClassGenricType(Class clazz, int index)
+            throws IndexOutOfBoundsException {
+
+        Type genType = clazz.getGenericSuperclass();
+
+        if (!(genType instanceof ParameterizedType)) {
+
+            return Object.class;
+        }
+
+        Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
+
+        if (index >= params.length || index < 0) {
+            return Object.class;
+        }
+        if (!(params[index] instanceof Class)) {
+            return Object.class;
+        }
+        return (Class) params[index];
+    }
+
+
+    /**
+     * 获取Filed泛型参数类型
+     *
+     * @param field
+     * @return
+     */
+    public static Class<?> getParameterGenericType(Field field) {
+        TypeToken<?> t = TypeToken.of(field.getGenericType());
+        if (t.getType() instanceof ParameterizedType) {
+            Type type = ((ParameterizedType) t.getType())
+                    .getActualTypeArguments()[0];
+            if (type.toString().length() > 1) {
+                return ((Class<?>) type);
+            }
+        }
+        return null;
+    }
+
+
     private static void setAccessible(final AccessibleObject accessibleObject) {
         if (!accessibleObject.isAccessible()) {
             if (System.getSecurityManager() != null) {
@@ -530,4 +580,6 @@ public class Reflections {
             }
         }
     }
+
+
 }

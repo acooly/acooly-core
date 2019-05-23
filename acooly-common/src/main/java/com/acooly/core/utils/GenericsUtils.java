@@ -8,6 +8,7 @@ import java.lang.reflect.Type;
  *
  * @author sshwsfc@gmail.com
  */
+@Deprecated
 @SuppressWarnings("rawtypes")
 public class GenericsUtils {
     /**

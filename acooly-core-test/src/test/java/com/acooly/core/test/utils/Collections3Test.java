@@ -19,7 +19,7 @@ public class Collections3Test {
 
         List<String> list = Lists.newArrayList("a", "b", "c", "d", "e", "f", "g");
         log.info("collections3.top orignal list: {}", list);
-        log.info("collections3.top 2: {}", Collections3.top(list, 3));
+        log.info("collections3.top 3: {}", Collections3.top(list, 3));
         log.info("collections3.top 10: {}", Collections3.top(list, 10));
 
 

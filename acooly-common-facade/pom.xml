@@ -73,10 +73,46 @@
                     <source>1.7</source>
                     <target>1.7</target>
                     <encoding>UTF-8</encoding>
-                    <!--<optimize>true</optimize>-->
-                    <compilerArgument>-Xlint:unchecked</compilerArgument>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>acooly</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>acooly-releases</id>
+                    <name>acooly Internal Releases</name>
+                    <url>
+                        http://acooly.cn/nexus/content/repositories/releases/
+                    </url>
+                </repository>
+                <snapshotRepository>
+                    <id>acooly-snapshots</id>
+                    <name>acooly Internal snapshot</name>
+                    <url>
+                        http://acooly.cn/nexus/content/repositories/snapshots/
+                    </url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 </project>

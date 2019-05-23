@@ -1,13 +1,9 @@
 package com.acooly.core.utils;
 
-import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 常用类型工具
@@ -18,9 +14,15 @@ import java.util.Map;
 @Slf4j
 public class Types {
 
-    public static final List<Class<? extends Serializable>> BASE_TYPES = Lists.newArrayList(
-            String.class, Character.class, Boolean.class, Date.class, Number.class
-    );
+    public static final List<Class<? extends Serializable>> BASE_TYPES = new ArrayList<>();
+
+    static {
+        BASE_TYPES.add(String.class);
+        BASE_TYPES.add(Number.class);
+        BASE_TYPES.add(Character.class);
+        BASE_TYPES.add(Boolean.class);
+        BASE_TYPES.add(Date.class);
+    }
 
 
     public static boolean isJavaBean(Class<?> clazz) {

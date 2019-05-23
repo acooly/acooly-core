@@ -4,7 +4,6 @@ import com.acooly.core.utils.mapper.BeanCopier;
 import com.google.common.collect.Lists;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,6 +12,9 @@ import java.util.List;
  * @author zhangpu
  */
 public class PageInfo<T> implements Serializable {
+
+    private static final int DEFAULT_PAGE_SIZE = 10;
+    private static final int DEFAULT_PAGE_NO = 1;
     /**
      * UID
      */
@@ -26,7 +28,7 @@ public class PageInfo<T> implements Serializable {
     /**
      * 当页记录数 默认为10条记录
      */
-    private int countOfCurrentPage = 10;
+    private int countOfCurrentPage;
 
     /**
      * 当前页号
@@ -47,8 +49,8 @@ public class PageInfo<T> implements Serializable {
      * 构造函数
      */
     public PageInfo() {
-        this.currentPage = 1;
-        this.countOfCurrentPage = 10;
+        this.currentPage = DEFAULT_PAGE_NO;
+        this.countOfCurrentPage = DEFAULT_PAGE_SIZE;
         this.totalCount = 0;
         this.totalPage = 0;
     }
@@ -160,7 +162,7 @@ public class PageInfo<T> implements Serializable {
             }
             info.setPageResults(list);
         } else {
-            info.setPageResults((List<E>) Collections.emptyList());
+            info.setPageResults(Lists.<E>newArrayList());
         }
         return info;
     }

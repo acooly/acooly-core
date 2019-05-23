@@ -7,7 +7,9 @@ import java.util.Date;
 /**
  * @author qiuboboy@qq.com
  * @date 2018-07-31 13:46
+ * move to StarSign
  */
+@Deprecated
 public enum Zodiac implements Messageable {
     ARIES(newDate(3, 21), newDate(4, 20), "Aries", "白羊座"),
     TAURUS(newDate(4, 21), newDate(5, 21), "Taurus", "金牛座"),
@@ -40,7 +42,7 @@ public enum Zodiac implements Messageable {
     }
 
     public static Zodiac to(int monthOfYear, int dayOfMonth) {
-        Date date = new Date(1, monthOfYear-1, dayOfMonth);
+        Date date = new Date(1, monthOfYear - 1, dayOfMonth);
         for (Zodiac zodiac : values()) {
             Date fromWithYear = new Date(zodiac.from.getTime());
             Date toWithYear = new Date(zodiac.to.getTime());

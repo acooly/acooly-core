@@ -105,8 +105,8 @@ CREATE TABLE `dm_customer` (
   `subject` varchar(128) DEFAULT NULL COMMENT '摘要',
   `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态 {0:无效,1:有效}',
   `customer_type` varchar(16) NOT NULL COMMENT '客户类型 {normal:普通,vip:重要,sepc:特别}',
-  create_time timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  update_time timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `comments` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
@@ -261,8 +261,14 @@ OK，如果上步成功，请回到你的IDE及对应的模块，你应该看到
 * [管理后台开发指南](acooly-guide-boss.html)
 * [业务前台开发指南](acooly-guide-portal.html)
 
-
 ## 4 更新说明
+
+### 4.2.0-SNAPSHOT.20190525
+
+* 2019-05-26 - 新特性：可以自动生成OpenApi基础报文，请开发人员根据业务选择下面的属性用于快速定义OpenApi的报文，主要减轻定义@OpenApiField和JSR303的工作,可以通过配置参数（`generator.modules=manage,openapi`）打开生成OpenApi报文，请注意添加openapi-framework-common的依赖，否则编译不通过。 - [zhangpu] 42f319d
+* 2019-05-25 - 优化区分Date和DateTime分布在页面层生成不同大表达式（选择日期或选择日期+时间）；优化数字类型的验证，从长度验证调整为数值范围验证， - [zhangpu] 14357de
+* 2019-05-25 - fix: Issue #8 支持text类型的长度验证 - [zhangpu] fcf53ca
+
 
 ### 4.2.0-SNAPSHOT-20190402
 

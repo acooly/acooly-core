@@ -45,7 +45,7 @@ public class ListResult<T> extends ResultBase implements DtoAble {
             }
             result.setDto(sList);
         } else {
-            result.setDto((List<S>) Collections.emptyList());
+            result.setDto(Lists.<S>newArrayList());
         }
         result.setStatus(ResultStatus.success);
         return result;

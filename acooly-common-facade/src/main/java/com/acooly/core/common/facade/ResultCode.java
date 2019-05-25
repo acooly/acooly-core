@@ -41,7 +41,7 @@ public enum ResultCode implements Messageable {
     }
 
     public static Map<String, String> mapping() {
-        LinkedHashMap map = Maps.newLinkedHashMap();
+        LinkedHashMap<String, String> map = Maps.newLinkedHashMap();
         ResultCode[] var1 = values();
         int var2 = var1.length;
 
@@ -68,7 +68,7 @@ public enum ResultCode implements Messageable {
     }
 
     public static List<ResultCode> getAllStatus() {
-        ArrayList list = new ArrayList();
+        List<ResultCode> list = new ArrayList<>();
         ResultCode[] var1 = values();
         int var2 = var1.length;
 
@@ -81,7 +81,7 @@ public enum ResultCode implements Messageable {
     }
 
     public static List<String> getAllStatusCode() {
-        ArrayList list = new ArrayList();
+        List<String> list = new ArrayList<>();
         ResultCode[] var1 = values();
         int var2 = var1.length;
 

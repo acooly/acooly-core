@@ -149,12 +149,16 @@ public class PageInfo<T> implements Serializable {
                 pageResults, countOfCurrentPage, totalCount);
     }
 
-    public <E> PageInfo<E> to(Class<E> clazz) {
+
+    public <E> PageInfo<E> to(final Class<E> clazz, Boolean convert) {
         PageInfo<E> info = new PageInfo<>();
         info.setTotalPage(this.totalPage);
         info.setTotalCount(this.totalCount);
         info.setCurrentPage(this.currentPage);
         info.setCountOfCurrentPage(this.countOfCurrentPage);
+        if (convert == null || !convert) {
+            return info;
+        }
         if (pageResults != null && !pageResults.isEmpty()) {
             List<E> list = Lists.newArrayListWithCapacity(this.pageResults.size());
             for (T pageResult : pageResults) {
@@ -166,4 +170,9 @@ public class PageInfo<T> implements Serializable {
         }
         return info;
     }
+
+    public <E> PageInfo<E> to(final Class<E> clazz) {
+        return to(clazz, true);
+    }
+
 }

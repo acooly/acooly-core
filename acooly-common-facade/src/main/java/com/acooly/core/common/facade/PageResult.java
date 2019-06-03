@@ -16,6 +16,7 @@ import lombok.Setter;
 
 /**
  * @author qiubo@yiji.com
+ * @author zhangpu on 2019-06-03: from方法存在无法强制向下转型的问题(保留在OpenApi服务层PageApiResponse使用from做转换)，新增with方法代替
  */
 @Getter
 @Setter
@@ -40,4 +41,29 @@ public class PageResult<T> extends ResultBase implements DtoAble {
         result.setStatus(ResultStatus.success);
         return result;
     }
+
+    public static <R extends PageResult<S>, S> R with(PageInfo<S> pageInfo, Class<R> clazz) {
+        R result = null;
+        try {
+            result = clazz.newInstance();
+        } catch (Exception e) {
+            return null;
+        }
+        result.setDto(pageInfo);
+        result.setStatus(ResultStatus.success);
+        return result;
+    }
+
+    public static <R extends PageResult<S>, T, S> R with(PageInfo<T> pageInfo, Class<R> clazz, PageInfo.Function<T, S> function) {
+        R result = null;
+        try {
+            result = clazz.newInstance();
+        } catch (Exception e) {
+            return null;
+        }
+        result.setDto(pageInfo.to(function));
+        result.setStatus(ResultStatus.success);
+        return result;
+    }
+
 }

@@ -175,4 +175,27 @@ public class PageInfo<T> implements Serializable {
         return to(clazz, true);
     }
 
+
+    public <E> PageInfo<E> to(Function<T, E> function) {
+        PageInfo<E> info = new PageInfo<>();
+        info.setTotalPage(this.totalPage);
+        info.setTotalCount(this.totalCount);
+        info.setCurrentPage(this.currentPage);
+        info.setCountOfCurrentPage(this.countOfCurrentPage);
+        if (pageResults != null && !pageResults.isEmpty()) {
+            List<E> list = Lists.newArrayListWithCapacity(this.pageResults.size());
+            for (T pageResult : pageResults) {
+                list.add(function.apply(pageResult));
+            }
+            info.setPageResults(list);
+        } else {
+            info.setPageResults(Lists.<E>newArrayList());
+        }
+        return info;
+    }
+
+    //jdk 1.7打包兼容1.8 function interface
+    public interface Function<T, E> {
+        E apply(T t);
+    }
 }

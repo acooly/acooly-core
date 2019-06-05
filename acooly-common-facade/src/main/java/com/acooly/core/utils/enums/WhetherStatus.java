@@ -19,16 +19,19 @@ import java.util.Map;
  * @author zhangpu
  */
 public enum WhetherStatus implements Messageable {
-    yes("yes", "是"),
 
-    no("no", "否");
+    yes("yes", "是", true),
+
+    no("no", "否", false);
 
     private final String code;
     private final String message;
+    private final boolean bool;
 
-    WhetherStatus(String code, String message) {
+    WhetherStatus(String code, String message, boolean bool) {
         this.code = code;
         this.message = message;
+        this.bool = bool;
     }
 
     public static Map<String, String> mapping() {
@@ -89,10 +92,16 @@ public enum WhetherStatus implements Messageable {
         return message;
     }
 
+    public boolean isBool() {
+        return bool;
+    }
+
+    @Override
     public String code() {
         return code;
     }
 
+    @Override
     public String message() {
         return message;
     }

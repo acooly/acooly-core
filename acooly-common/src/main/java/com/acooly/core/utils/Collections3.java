@@ -6,11 +6,11 @@
 package com.acooly.core.utils;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Collections工具集.
@@ -27,25 +27,27 @@ import java.util.*;
 public class Collections3 {
 
 
+    /**
+     * 获取集合的Top列表
+     *
+     * @param collection 支持List和Set
+     * @param limit      top数量
+     * @param <T>
+     * @return
+     */
     public static <T> Collection<T> top(Collection<T> collection, int limit) {
         if (isEmpty(collection) || collection.size() <= limit) {
             return collection;
         }
-        Collection<T> tops = null;
         if (collection instanceof List) {
-            tops = collection instanceof LinkedList ? Lists.newLinkedList() : Lists.newArrayList();
+            return collection.stream().limit(limit).collect(Collectors.toList());
         } else {
-            tops = collection instanceof HashSet ? Sets.newHashSet() : Sets.newLinkedHashSet();
+            return collection.stream().limit(limit).collect(Collectors.toSet());
         }
+    }
 
-
-        for (T t : collection) {
-            if (tops.size() >= limit) {
-                break;
-            }
-            tops.add(t);
-        }
-        return tops;
+    public static <T> T[] toArray(Collection<T> collection) {
+        return (T[])collection.stream().toArray((Object[]::new));
     }
 
 

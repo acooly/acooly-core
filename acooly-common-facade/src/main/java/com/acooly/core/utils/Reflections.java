@@ -5,6 +5,7 @@
  */
 package com.acooly.core.utils;
 
+import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -564,6 +565,10 @@ public class Reflections {
         return null;
     }
 
+//    public static Class<?> getParameterGenericType(Class<?> clazz){
+//
+//    }
+
 
     private static void setAccessible(final AccessibleObject accessibleObject) {
         if (!accessibleObject.isAccessible()) {
@@ -580,6 +585,5 @@ public class Reflections {
             }
         }
     }
-
 
 }

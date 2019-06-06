@@ -46,10 +46,6 @@ public class Collections3 {
         }
     }
 
-    public static <T> T[] toArray(Collection<T> collection) {
-        return (T[])collection.stream().toArray((Object[]::new));
-    }
-
 
     /**
      * 提取集合中的对象的两个属性(通过Getter函数), 组合成Map.

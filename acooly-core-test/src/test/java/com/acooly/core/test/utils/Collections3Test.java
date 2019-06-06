@@ -42,10 +42,4 @@ public class Collections3Test {
         log.info("collections3.top() 10: {}", Collections3.top(maskEntities, 10));
     }
 
-    @Test
-    public void testToArray() {
-        List<String> list = com.google.common.collect.Lists.newArrayList("aaa", "bbb");
-        String[] array = Collections3.toArray(list);
-        log.info("List<String> toArray: {}", Arrays.toString(array));
-    }
 }

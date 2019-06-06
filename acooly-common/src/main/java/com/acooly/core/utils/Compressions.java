@@ -168,14 +168,4 @@ public class Compressions {
         }
     }
 
-    /*public static void main(String[] args) {
-        // File target = new
-        // File("/Users/zhangpu/workspace/temp/pic/frzjf.zip");
-        // File source = new
-        // File("/Users/zhangpu/workspace/temp/pic/frzjf.jpg");
-        // zip(Lists.newArrayList(new File[] { source }), target);
-
-        List<File> destFiles = unzip("/Users/zhangpu/temp/messageFactory.zip", null, false);
-        System.out.println(destFiles);
-    }*/
 }

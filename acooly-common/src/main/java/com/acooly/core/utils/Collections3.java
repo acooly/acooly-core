@@ -5,7 +5,6 @@
  */
 package com.acooly.core.utils;
 
-import com.google.common.collect.Lists;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -22,7 +21,6 @@ import java.util.stream.Collectors;
  * @author calvin
  * @author zhangpu
  */
-//todo:增加通用Collection和Array的转换
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class Collections3 {
 

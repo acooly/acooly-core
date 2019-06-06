@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -66,7 +67,6 @@ public class Dates {
                         }
                     }
                 });
-        System.out.println(patterns);
     }
 
     /**
@@ -81,6 +81,13 @@ public class Dates {
         return parse(format(date, Dates.CHINESE_DATE_FORMAT_LINE));
     }
 
+    /**
+     * 格式化输出
+     *
+     * @param date
+     * @param pattern
+     * @return
+     */
     public static String format(Date date, String pattern) {
         SimpleDateFormat sdf = getSimpleDateFormat(pattern);
         return sdf.format(date);
@@ -167,7 +174,8 @@ public class Dates {
         while (true) {
             c.add(Calendar.DAY_OF_YEAR, 1);
             int d = c.get(Calendar.DAY_OF_WEEK) - 1;
-            if (d != 0 && d != 6) { // 0代表是周末 6代表是周六
+            // 0代表是周末 6代表是周六
+            if (d != 0 && d != 6) {
                 totalDays++;
             }
             if (totalDays >= days) {
@@ -177,16 +185,57 @@ public class Dates {
         return c.getTime();
     }
 
+    /**
+     * 减去一天
+     *
+     * @param date
+     * @return
+     */
+    @Deprecated
     public static Date minusDay(Date date) {
         //24 * 60 * 60 * 1000= 86400 000
         long oneDayMillisecond = 86400000;
         return addDate(date, -oneDayMillisecond);
     }
 
-    public static Date addDate(Date date, long millisecond) {
-        return new Date(date.getTime() + millisecond);
+    /**
+     * 减法运算
+     */
+    public static Date subDate(Date date, long size, TimeUnit timeUnit) {
+        return opt(date, -size, timeUnit);
     }
 
+    /**
+     * 加法运算
+     */
+    public static Date addDate(Date date, long size, TimeUnit timeUnit) {
+        return opt(date, size, timeUnit);
+    }
+
+    public static Date addDate(Date date, long millisecond) {
+        return addDate(date, millisecond, TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * 加减运算
+     *
+     * @param date     计算的日期时间
+     * @param size     加减运算的值（正数为加，负数为减）
+     * @param timeUnit 单位
+     * @return 计算后的新日期
+     */
+    public static Date opt(Date date, long size, TimeUnit timeUnit) {
+        return new Date(date.getTime() + timeUnit.toMillis(size));
+    }
+
+    /**
+     * 两个时间减法
+     *
+     * @param left
+     * @param right
+     * @param type  Calendar.xxx
+     * @return
+     */
     public static long sub(Date left, Date right, int type) {
         long subms = left.getTime() - right.getTime();
         if (subms < 0) {

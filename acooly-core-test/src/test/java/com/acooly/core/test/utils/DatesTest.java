@@ -15,6 +15,7 @@ import org.junit.Test;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author zhangpu 2018-07-25 16:50
@@ -23,11 +24,21 @@ import java.util.Date;
 public class DatesTest {
 
     @Test
-    public void testSub() throws Exception{
+    public void testSub() throws Exception {
 
         Date birthday = Dates.parse("1982-07-15");
-        System.out.println(Dates.sub(new Date(),birthday,Calendar.YEAR));
+        System.out.println(Dates.sub(new Date(), birthday, Calendar.YEAR));
 
+    }
+
+    @Test
+    public void testSubDate() {
+        Date now = new Date();
+        log.info("now: {}", Dates.format(now));
+        long size = 2;
+        log.info("subDate by {} day: {}", size, Dates.format(Dates.subDate(now, size, TimeUnit.DAYS)));
+        log.info("subDate by {} seconds: {}", size, Dates.format(Dates.subDate(now, size, TimeUnit.SECONDS)));
+        log.info("subDate by {} hours: {}", size, Dates.format(Dates.subDate(now, size, TimeUnit.HOURS)));
     }
 
 }

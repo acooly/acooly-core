@@ -21,7 +21,9 @@ import java.util.Map;
  * <p>1. 持有Mapper的单例. 2. 返回值类型转换. 3. 批量转换Collection中的所有对象. 4. 区分创建新的B对象与将对象A值复制到已存在的B对象两种函数.
  *
  * @author calvin
+ * @author zhangpu 请使用BeanCopier
  */
+@Deprecated
 public class BeanMapper {
 
     /**

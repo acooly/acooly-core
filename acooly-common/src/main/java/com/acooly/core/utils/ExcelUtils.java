@@ -13,6 +13,7 @@ import java.util.List;
  *
  * @author zhangpu
  */
+@Deprecated
 public class ExcelUtils {
 
     public static void write(

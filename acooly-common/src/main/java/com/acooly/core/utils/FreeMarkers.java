@@ -61,19 +61,4 @@ public class FreeMarkers {
         return cfg;
     }
 
-    /*public static void main(String[] args) throws Exception {
-
-        String path = "file:/D:/workshop/feinno/code-generator";
-        URL uri = new URL(path);
-        System.out.println(uri.toString());
-        System.out.println(uri.getPath());
-        //		Configuration cfg = FreeMarkers
-        //				.buildConfiguration("file:///D:\\workshop\\feinno\\code-generator\\src\\main\\resources\\template");
-        //		Map<String, Object> root = new HashMap<String, Object>();
-        //		root.put("tableName", "SYS_USER");
-        //		root.put("domainName", "User");
-        //		String result = renderTemplate(cfg.getTemplate("domain.ftl"), root);
-        //		System.out.println(result);
-
-    }*/
 }

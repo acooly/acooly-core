@@ -11,7 +11,7 @@ import org.junit.Test;
 public class IdCardsTest {
     @Test
     public void name() {
-        String cardNo = "500234198612251859";
+        String cardNo = "51022119820915641X";
         System.out.println( IdCards.verify(cardNo));
         System.out.println( IdCards.parse(cardNo));
         System.out.println( Zodiac.to(12,23));

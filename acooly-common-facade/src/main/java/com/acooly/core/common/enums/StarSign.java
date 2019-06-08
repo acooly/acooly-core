@@ -46,6 +46,26 @@ public enum StarSign implements Messageable {
         return calendar.getTime();
     }
 
+    /**
+     * 解析星座
+     *
+     * @param date
+     * @return
+     */
+    public static StarSign to(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int monthOfYear = calendar.get(Calendar.MONTH) + 1;
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        return to(monthOfYear, dayOfMonth);
+    }
+
+    /**
+     * 解析星座
+     * @param monthOfYear
+     * @param dayOfMonth
+     * @return
+     */
     public static StarSign to(int monthOfYear, int dayOfMonth) {
         Date date = newDate(monthOfYear, dayOfMonth);
         long dating = date.getTime();

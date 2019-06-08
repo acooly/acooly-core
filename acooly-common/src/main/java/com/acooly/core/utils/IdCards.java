@@ -1,6 +1,8 @@
 package com.acooly.core.utils;
 
+import com.acooly.core.common.enums.AnimalSign;
 import com.acooly.core.common.enums.Gender;
+import com.acooly.core.common.enums.StarSign;
 import com.acooly.core.common.enums.Zodiac;
 import com.acooly.core.common.facade.InfoBase;
 import com.alibaba.fastjson.JSON;
@@ -11,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.InputStream;
+import java.util.Date;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
 
@@ -22,6 +25,10 @@ import java.util.zip.ZipInputStream;
  */
 @Slf4j
 public class IdCards {
+
+    public static final int IDCARD_LENGTH_OLD = 15;
+    public static final int IDCARD_LENGTH_NEW = 18;
+
     /**
      * 省
      */
@@ -129,7 +136,7 @@ public class IdCards {
      * @return
      */
     public static String upgrade(String oldCardNo) {
-        if (Strings.isNotBlank(oldCardNo) && Strings.length(oldCardNo) == 15) {
+        if (Strings.isNotBlank(oldCardNo) && Strings.length(oldCardNo) == IDCARD_LENGTH_OLD) {
             oldCardNo = oldCardNo.trim();
             StringBuffer sb = new StringBuffer(oldCardNo);
             sb.insert(6, "19");
@@ -159,26 +166,32 @@ public class IdCards {
      * @return
      */
     public static IdCardInfo parse(String cardNo) {
-        return parseIdCard(cardNo);
+        return doParse(cardNo);
     }
 
     @Deprecated
     public static IdCardInfo parseIdCard(String cardNo) {
+        return doParse(cardNo);
+    }
 
+    protected static IdCardInfo doParse(String cardNo) {
         if (StringUtils.isBlank(cardNo)) {
             throw new RuntimeException("身份证号码不能为空");
         }
         int len = StringUtils.trimToEmpty(cardNo).length();
-        if (len != 15 && len != 18) {
+        if (len != IDCARD_LENGTH_OLD && len != IDCARD_LENGTH_NEW) {
             throw new RuntimeException("身份证号码长度错误，只能是15或18位");
         }
-        if (len == 15) {
+        if (len == IDCARD_LENGTH_OLD) {
             cardNo = upgrade(cardNo);
         }
         IdCardInfo info = new IdCardInfo();
         info.setCardNo(cardNo);
         setPlaceInfo(info, cardNo);
         info.setBirthday(StringUtils.substring(cardNo, 6, 14));
+        info.setBirthdate(Dates.parse(info.birthday, "yyyyMMdd"));
+        info.setStarSign(StarSign.to(info.birthdate));
+        info.setAnimalSign(AnimalSign.to(info.birthdate));
         info.setGender(Integer.parseInt(StringUtils.substring(cardNo, 14, 17)) % 2 == 0 ? Gender.female : Gender.male);
         int month = Integer.parseInt(StringUtils.substring(cardNo, 10, 12));
         int date = Integer.parseInt(StringUtils.substring(cardNo, 12, 14));
@@ -188,6 +201,7 @@ public class IdCards {
 
     private static void setPlaceInfo(IdCardInfo info, String cardNo) {
         String govNo = StringUtils.substring(cardNo, 0, 6);
+        info.setRegionCode(govNo);
         Map<String, String> govMap = govCodes.get(govNo);
         if (govMap != null) {
             info.setProvince(govMap.get(PROVINCE_CODE));
@@ -199,7 +213,7 @@ public class IdCards {
 
     private static String calcCheckBit(String partCardNo) {
         String newCardNo = partCardNo;
-        if (Strings.length(newCardNo) != 17) {
+        if (Strings.length(newCardNo) != IDCARD_LENGTH_NEW - 1) {
             newCardNo = Strings.substring(newCardNo, 0, 17);
         }
         char[] ch = newCardNo.toCharArray();
@@ -218,10 +232,22 @@ public class IdCards {
         private String cardNo;
         private Gender gender;
         private String birthday;
+        private Date birthdate;
+        private String regionCode;
         private String province;
         private String city;
         private String area;
+        @Deprecated
         private Zodiac zodiac;
+
+        /**
+         * 星座
+         */
+        private StarSign starSign;
+        /**
+         * 生肖
+         */
+        private AnimalSign animalSign;
     }
 
 }

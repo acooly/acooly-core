@@ -11,6 +11,9 @@ import java.util.*;
  * @date 2018-07-31 13:46
  */
 public enum StarSign implements Messageable {
+    /**
+     * 白羊座
+     */
     ARIES(newDate(3, 21), newDate(4, 20), "Aries", "白羊座"),
     TAURUS(newDate(4, 21), newDate(5, 21), "Taurus", "金牛座"),
     GEMINI(newDate(5, 22), newDate(6, 21), "Gemini", "双子座"),
@@ -51,8 +54,10 @@ public enum StarSign implements Messageable {
             long toTimes = starSign.to.getTime();
 
             if (StarSign.CAPRICORN.equals(starSign)) {
-                if ((dating >= formTimes && dating <= newDate(12, 31).getTime())
-                        || (dating >= newDate(1, 1).getTime() && dating <= toTimes)) {
+                if ((dating >= formTimes && dating <= newDate(12, 31).getTime())) {
+                    return starSign;
+                }
+                if (dating >= newDate(1, 1).getTime() && dating <= toTimes) {
                     return starSign;
                 }
             } else {

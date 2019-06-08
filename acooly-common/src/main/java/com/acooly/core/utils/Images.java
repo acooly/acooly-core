@@ -37,6 +37,8 @@ public class Images {
 
     private static final String IMAGE_EXTS = "JPG,JPEG,PNG,GIF,BMP";
 
+    public static final String IMAGE_PNG_EXT = "png";
+
     /**
      * 裁剪
      *
@@ -436,8 +438,8 @@ public class Images {
     @Deprecated
     public static final void pressImage(String pressImg, String targetImg, int x, int y) {
         try {
-            File _file = new File(targetImg);
-            Image src = ImageIO.read(_file);
+            File file = new File(targetImg);
+            Image src = ImageIO.read(file);
             int wideth = src.getWidth(null);
             int height = src.getHeight(null);
             BufferedImage image = new BufferedImage(wideth, height, BufferedImage.TYPE_INT_RGB);
@@ -445,19 +447,19 @@ public class Images {
             g.drawImage(src, 0, 0, wideth, height, null);
 
             // 水印文件
-            File _filebiao = new File(pressImg);
-            Image src_biao = ImageIO.read(_filebiao);
-            int wideth_biao = src_biao.getWidth(null);
-            int height_biao = src_biao.getHeight(null);
+            File fileBiao = new File(pressImg);
+            Image srcBiao = ImageIO.read(fileBiao);
+            int widethBiao = srcBiao.getWidth(null);
+            int heightBiao = srcBiao.getHeight(null);
             g.drawImage(
-                    src_biao,
-                    wideth - wideth_biao - x,
-                    height - height_biao - y,
-                    wideth_biao,
-                    height_biao,
+                    srcBiao,
+                    wideth - widethBiao - x,
+                    height - heightBiao - y,
+                    widethBiao,
+                    heightBiao,
                     null);
             g.dispose();
-            ImageIO.write(image, getImageFormat(targetImg), _file);
+            ImageIO.write(image, getImageFormat(targetImg), file);
         } catch (Exception e) {
             log.warn("添加图片水印失败", e);
             throw new RuntimeException("添加图片水印失败");
@@ -483,15 +485,15 @@ public class Images {
             Graphics g = image.createGraphics();
             g.drawImage(src, 0, 0, wideth, height, null);
 
-            Image src_biao = ImageIO.read(markImageStream);
-            int wideth_biao = src_biao.getWidth(null);
-            int height_biao = src_biao.getHeight(null);
+            Image srcBiao = ImageIO.read(markImageStream);
+            int widethBiao = srcBiao.getWidth(null);
+            int heightBiao = srcBiao.getHeight(null);
             g.drawImage(
-                    src_biao,
-                    wideth - wideth_biao - x,
-                    height - height_biao - y,
-                    wideth_biao,
-                    height_biao,
+                    srcBiao,
+                    wideth - widethBiao - x,
+                    height - heightBiao - y,
+                    widethBiao,
+                    heightBiao,
                     null);
             g.dispose();
             ImageIO.write(image, getImageFormat(targetImgFile.getName()), targetImgFile);
@@ -540,7 +542,7 @@ public class Images {
             int height = src.getHeight(null);
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
             Graphics2D g = image.createGraphics();
-            if (getImageFormat(targetImg).equalsIgnoreCase("png")) {
+            if (IMAGE_PNG_EXT.equalsIgnoreCase(getImageFormat(targetImg))) {
                 image =
                         g.getDeviceConfiguration()
                                 .createCompatibleImage(width, height, Transparency.TRANSLUCENT);
@@ -574,8 +576,8 @@ public class Images {
     @Deprecated
     public static final void pressImages(String pressImg, int w, String sourceImg, String targetImg, int type) {
         try {
-            File _file = new File(sourceImg);
-            Image src = ImageIO.read(_file);
+            File file = new File(sourceImg);
+            Image src = ImageIO.read(file);
             int wideth = src.getWidth(null);
             int height = src.getHeight(null);
 
@@ -585,12 +587,12 @@ public class Images {
             g.drawImage(src, 0, 0, wideth, height, null);
 
             // 水印文件
-            File _filebiao = new File(pressImg);
-            Image src_biao = ImageIO.read(_filebiao);
-            int wideth_biao = src_biao.getWidth(null);
-            int height_biao = src_biao.getHeight(null);
+            File filebiao = new File(pressImg);
+            Image srcBiao = ImageIO.read(filebiao);
+            int widethBiao = srcBiao.getWidth(null);
+            int heightBiao = srcBiao.getHeight(null);
 
-            int h = Money.yuan(w * height_biao).divide(wideth_biao).getAmount().intValue();
+            int h = Money.yuan(w * heightBiao).divide(widethBiao).getAmount().intValue();
             int padding = w;
             int margin = h;
             int space = w;
@@ -604,7 +606,7 @@ public class Images {
                 y = margin + (h + space) * i;
                 for (int j = 0; j < cols; j++) {
                     x = padding + j * (w + space);
-                    g.drawImage(src_biao, x, y, w, h, null);
+                    g.drawImage(srcBiao, x, y, w, h, null);
                 }
             }
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
@@ -723,9 +725,9 @@ public class Images {
      * @param bufferedImage 图片源
      */
     public static void doGray(BufferedImage bufferedImage) {
-        ColorSpace gray_space = ColorSpace.getInstance(ColorSpace.CS_GRAY);
-        ColorConvertOp convert_to_gray_op = new ColorConvertOp(gray_space, null);
-        convert_to_gray_op.filter(bufferedImage, bufferedImage);
+        ColorSpace graySpace = ColorSpace.getInstance(ColorSpace.CS_GRAY);
+        ColorConvertOp convertToGrayOp = new ColorConvertOp(graySpace, null);
+        convertToGrayOp.filter(bufferedImage, bufferedImage);
     }
 
 
@@ -762,7 +764,6 @@ public class Images {
 
     /**
      * 生成文字对应的图片
-     *
      * @param text
      * @param font
      * @param color

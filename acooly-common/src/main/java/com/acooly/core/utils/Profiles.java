@@ -60,20 +60,48 @@ public class Profiles {
         return getProfile() == Profile.online;
     }
 
-    /*public static void main(String[] args) {
-        System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "dev");
-        System.out.println(getProfileFileName("validation.properties"));
-    }*/
 
+    /**
+     * 环境感知枚举
+     */
     public enum Profile {
+        /**
+         * 开发
+         */
         dev,
+
+        /**
+         * 系统公用开发
+         */
         sdev,
+        /**
+         * 测试
+         */
         test,
+        /**
+         * 系统公共测试
+         */
         stest,
+        /**
+         * 演示
+         */
         net,
+        /**
+         * 系统公共演示
+         */
         snet,
+        /**
+         * 预发布
+         */
         prev,
+        /**
+         * 生产
+         */
         online,
+
+        /**
+         * 其他
+         */
         other
     }
 }

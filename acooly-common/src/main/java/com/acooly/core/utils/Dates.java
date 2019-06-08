@@ -23,13 +23,16 @@ public class Dates {
     public static final String CHINESE_DATE_FORMAT_SLASH = "yyyy/MM/dd";
     public static final String CHINESE_DATETIME_FORMAT_SLASH = "yyyy/MM/dd HH:mm:ss";
     public static final String DATETIME_NOT_SEPARATOR = "yyyyMMddHHmmssSSS";
-    // 中国周一是一周的第一天
+    /**
+     * 中国周一是一周的第一天
+     */
     public static final int FIRST_DAY_OF_WEEK = Calendar.MONDAY;
     private static final String DEFAULT_DATE_FORMAT = CHINESE_DATETIME_FORMAT_LINE;
+
     /**
      * 根据模式长度倒叙排列
      */
-    private static final List<String> patterns =
+    private static final List<String> PATTERNS =
             Lists.newArrayList(
                     new String[]{
                             CHINESE_DATETIME_FORMAT_LINE,
@@ -40,18 +43,18 @@ public class Dates {
                     });
 
     public static void registerPattern(String pattern) {
-        patterns.add(pattern);
+        PATTERNS.add(pattern);
         sort();
     }
 
     public static void unRegisterPattern(String pattern) {
-        patterns.remove(pattern);
+        PATTERNS.remove(pattern);
         sort();
     }
 
     private static void sort() {
         Collections.sort(
-                patterns,
+                PATTERNS,
                 new Comparator<String>() {
                     @Override
                     public int compare(String o1, String o2) {
@@ -126,13 +129,13 @@ public class Dates {
         throw new UnsupportedOperationException(
                 "Parse String["
                         + dateString
-                        + "] to Date faulure with patterns["
+                        + "] to Date faulure with PATTERNS["
                         + Arrays.toString(patterns)
                         + "]");
     }
 
     public static Date parse(String dateString) {
-        return parse(dateString, patterns.toArray(new String[0]));
+        return parse(dateString, PATTERNS.toArray(new String[0]));
     }
 
     public static Date addYear(Date date, int years) {
@@ -310,8 +313,8 @@ public class Dates {
     public static int getWeekDay(Date date) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-        int week_of_year = c.get(Calendar.DAY_OF_WEEK);
-        return week_of_year - 1;
+        int weekOfYear = c.get(Calendar.DAY_OF_WEEK);
+        return weekOfYear - 1;
     }
 
     /**
@@ -323,8 +326,8 @@ public class Dates {
     public static int getWeekOfYear(Date date) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-        int week_of_year = c.get(Calendar.WEEK_OF_YEAR);
-        return week_of_year;
+        int weekOfYear = c.get(Calendar.WEEK_OF_YEAR);
+        return weekOfYear;
     }
 
     /**
@@ -510,7 +513,6 @@ public class Dates {
 
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-
         int nq = getQuarter(date);
         if (nq == 1) { // 第一季度
             c.set(Calendar.MONTH, Calendar.JANUARY);

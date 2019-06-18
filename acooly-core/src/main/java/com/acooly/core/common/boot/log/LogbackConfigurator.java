@@ -30,7 +30,6 @@ import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.Env;
 import com.google.common.collect.Lists;
 import org.springframework.boot.logging.logback.ColorConverter;
-import org.springframework.boot.logging.logback.LevelRemappingAppender;
 import org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter;
 import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
@@ -248,10 +247,10 @@ public class LogbackConfigurator {
         conversionRule("clr", ColorConverter.class);
         conversionRule("wex", WhitespaceThrowableProxyConverter.class);
         // remap logger level info to logger level debug
-        LevelRemappingAppender debugRemapAppender =
-                new LevelRemappingAppender("org.springframework.boot");
-        start(debugRemapAppender);
-        appender("DEBUG_LEVEL_REMAPPER", debugRemapAppender);
+//        LevelRemappingAppender debugRemapAppender =
+//                new LevelRemappingAppender("org.springframework.boot");
+//        start(debugRemapAppender);
+//        appender("DEBUG_LEVEL_REMAPPER", debugRemapAppender);
         logger("", Level.ERROR);
         logger("org.apache.catalina.startup.DigesterFactory", Level.ERROR);
         logger("org.apache.catalina.util.LifecycleBase", Level.ERROR);
@@ -264,8 +263,8 @@ public class LogbackConfigurator {
         logger("org.eclipse.jetty.util.component.AbstractLifeCycle", Level.ERROR);
         logger("org.hibernate.validator.internal.util.Version", Level.WARN);
         logger("org.springframework.boot.actuate.autoconfigure." + "CrshAutoConfiguration", Level.WARN);
-        logger("org.springframework.boot.actuate.endpoint.jmx", null, false, debugRemapAppender);
-        logger("org.thymeleaf", null, false, debugRemapAppender);
+//        logger("org.springframework.boot.actuate.endpoint.jmx", null, false, debugRemapAppender);
+//        logger("org.thymeleaf", null, false, debugRemapAppender);
     }
 
     private void setContextNameIfPossible(LoggerContext context) {

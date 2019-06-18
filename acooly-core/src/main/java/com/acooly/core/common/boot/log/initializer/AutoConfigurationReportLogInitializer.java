@@ -14,7 +14,6 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
 import com.acooly.core.common.boot.log.LogbackConfigurator;
-import org.springframework.boot.autoconfigure.logging.AutoConfigurationReportLoggingInitializer;
 
 /**
  * 用于打印AutoConfigurationReport到单独的文件
@@ -29,7 +28,6 @@ public class AutoConfigurationReportLogInitializer extends AbstractLogInitialize
         Appender<ILoggingEvent> appender =
                 configurator.fileAppender(
                         "AUTO-CONFIG", "%d{yyyy-MM-dd HH:mm:ss.SSS} - %msg%n", fileName, 1);
-        configurator.logger(
-                AutoConfigurationReportLoggingInitializer.class.getName(), Level.DEBUG, false, appender);
+        configurator.logger("AutoConfigurationReportLoggingInitializer", Level.DEBUG, false, appender);
     }
 }

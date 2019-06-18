@@ -13,7 +13,6 @@ import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.google.common.collect.Maps;
 import lombok.Data;
-import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -99,9 +98,8 @@ public class LogAutoConfig {
          * 从环境获取日志appender pattern
          */
         public static String pattern(boolean needAnsi) {
-            RelaxedPropertyResolver resolver =
-                    new RelaxedPropertyResolver(EnvironmentHolder.get(), "acooly.log.");
-            Pattern pattern = resolver.getProperty("pattern", Pattern.class, Pattern.COMMON);
+
+            Pattern pattern = Pattern.COMMON;
             //online remove extract thread stack info
             if (Env.isOnline()) {
                 return pattern.getPattern(needAnsi).replace(":%L", "");
@@ -114,9 +112,11 @@ public class LogAutoConfig {
          */
         public static Boolean consoleEnable() {
             //支持多种配置形势，比如acooly.log.consoleEnable、acooly.log.console-enable
-            RelaxedPropertyResolver resolver =
-                    new RelaxedPropertyResolver(EnvironmentHolder.get(), "acooly.log.");
-            return resolver.getProperty("consoleEnable", Boolean.class, Boolean.TRUE);
+//            RelaxedPropertyResolver resolver =
+//                    new RelaxedPropertyResolver(EnvironmentHolder.get(), "acooly.log.");
+//            return resolver.getProperty("consoleEnable", Boolean.class, Boolean.TRUE);
+            return EnvironmentHolder.get().getProperty("acooly.log.consoleEnable",Boolean.class,Boolean.TRUE);
+
         }
 
 

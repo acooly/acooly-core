@@ -12,13 +12,11 @@ package com.acooly.core.common.boot;
 import com.acooly.core.common.exception.AppConfigException;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.boot.bind.PropertiesConfigurationFactory;
-import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.convert.support.DefaultConversionService;
-import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
 
@@ -38,17 +36,7 @@ public class EnvironmentHolder implements EnvironmentAware {
     public static Environment get() {
         return environment;
     }
-
-    /**
-     * 获取RelaxedPropertyResolver
-     *
-     * @param prefix 前缀
-     * @return RelaxedPropertyResolver
-     */
-    public static RelaxedPropertyResolver get(String prefix) {
-        RelaxedPropertyResolver resolver = new RelaxedPropertyResolver(EnvironmentHolder.get(), prefix);
-        return resolver;
-    }
+    
 
     /**
      * 通过环境配置构建配置对象,配置对象必须标注{@link ConfigurationProperties},使用ConfigurationProperties中的prefix填充对象
@@ -97,8 +85,8 @@ public class EnvironmentHolder implements EnvironmentAware {
          * @param key    配置项key
          */
         public RelaxedProperty(String prefix, String key) {
-            Assert.notNull(prefix);
-            Assert.notNull(key);
+            Assert.notNull(prefix, "前缀不能为空");
+            Assert.notNull(key, "key不能为空");
             this.key = key;
             if (!prefix.endsWith(".")) {
                 prefix = prefix + ".";
@@ -134,7 +122,7 @@ public class EnvironmentHolder implements EnvironmentAware {
          * @param defaultValue 默认值
          */
         public String getProperty(String defaultValue) {
-            return EnvironmentHolder.get(this.prefix).getProperty(this.key, defaultValue);
+            return EnvironmentHolder.get().getProperty(this.prefix + this.key, defaultValue);
         }
 
         /**
@@ -153,7 +141,7 @@ public class EnvironmentHolder implements EnvironmentAware {
          * @param defaultValue 默认值
          */
         public <T> T getProperty(Class<T> targetType, T defaultValue) {
-            return EnvironmentHolder.get(this.prefix).getProperty(this.key, targetType, defaultValue);
+            return EnvironmentHolder.get().getProperty(this.prefix + this.key, targetType, defaultValue);
         }
     }
 
@@ -164,25 +152,8 @@ public class EnvironmentHolder implements EnvironmentAware {
         public static void build(Object target, String prefix) {
             Assert.notNull(target, "target对象不能为空");
             Assert.notNull(prefix, "prefix不能为空");
-            ConfigurationProperties properties =
-                    AnnotationUtils.findAnnotation(target.getClass(), ConfigurationProperties.class);
-            boolean ignoreInvalidFields = properties.ignoreInvalidFields();
-            boolean ignoreNestedProperties = properties.ignoreNestedProperties();
-            boolean ignoreUnknownFields = properties.ignoreUnknownFields();
-            boolean exceptionIfInvalid = properties.exceptionIfInvalid();
-
-            PropertiesConfigurationFactory<Object> configurationFactory =
-                    new PropertiesConfigurationFactory<>(target);
-            configurationFactory.setPropertySources(
-                    ((ConfigurableEnvironment) (EnvironmentHolder.get())).getPropertySources());
-            configurationFactory.setConversionService(defaultConversionService);
-            configurationFactory.setTargetName(prefix);
-            configurationFactory.setIgnoreInvalidFields(ignoreInvalidFields);
-            configurationFactory.setIgnoreNestedProperties(ignoreNestedProperties);
-            configurationFactory.setIgnoreUnknownFields(ignoreUnknownFields);
-            configurationFactory.setExceptionIfInvalid(exceptionIfInvalid);
             try {
-                configurationFactory.bindPropertiesToTarget();
+                Binder.get(EnvironmentHolder.get()).bind(prefix, target.getClass());
                 if (target instanceof InitializingBean) {
                     ((InitializingBean) target).afterPropertiesSet();
                 }

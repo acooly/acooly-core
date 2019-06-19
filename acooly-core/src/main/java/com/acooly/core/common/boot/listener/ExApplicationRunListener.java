@@ -32,6 +32,7 @@ import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
 import org.springframework.boot.logging.LoggingSystem;
+import org.springframework.boot.system.ApplicationPid;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.SpringVersion;
@@ -57,7 +58,7 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
         checkAndSetPackage(application);
         checkVersions();
         jvmPropstuning();
-        BootApp yijiBootApplication = findYijiBootApplication(application);
+        BootApp yijiBootApplication = findBootApplication(application);
         initEnvVars(yijiBootApplication);
         setThreadName();
         application.setBanner(new AppBanner(yijiBootApplication));
@@ -100,17 +101,14 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
     }
 
     private void checkAndSetPackage(SpringApplication application) {
-        application
-                .getSources()
-                .forEach(
-                        o -> {
-                            Package pkg = ((Class) o).getPackage();
-                            if (pkg == null || disabledPackageName.contains(pkg.getName())) {
-                                throw new AppConfigException(
-                                        "请把main-class定义到应用包中，禁止定义到以下包中:" + disabledPackageName);
-                            }
-                            System.setProperty(Apps.BASE_PACKAGE, pkg.getName());
-                        });
+        application.getAllSources().forEach(o -> {
+            Package pkg = ((Class) o).getPackage();
+            if (pkg == null || disabledPackageName.contains(pkg.getName())) {
+                throw new AppConfigException(
+                        "请把main-class定义到应用包中，禁止定义到以下包中:" + disabledPackageName);
+            }
+            System.setProperty(Apps.BASE_PACKAGE, pkg.getName());
+        });
     }
 
     private void setThreadName() {
@@ -149,11 +147,10 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
         System.setProperty("spring.devtools.restart.enabled", "false");
     }
 
-    private BootApp findYijiBootApplication(SpringApplication application) {
-
+    private BootApp findBootApplication(SpringApplication application) {
         Class sourceClass =
                 application
-                        .getSources()
+                        .getAllSources()
                         .stream()
                         .map(o1 -> (Class) o1)
                         .filter(o1 -> AnnotationUtils.findAnnotation(o1, BootApp.class) != null)
@@ -205,22 +202,30 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
     //	}
 
     @Override
-    public void finished(ConfigurableApplicationContext context, Throwable exception) {
-        if (exception == null) {
-            //install UncaughtExceptionHandler
-            UncaughtExceptionHandlerWrapper.install();
-            //fixme
-            // when system startup ,register shutdown hooks to clean resouces.
-            new ShutdownThread().register();
-            //log startup info
-            LoggerFactory.getLogger(ExApplicationRunListener.class)
-                    .info("启动成功: http://127.0.0.1:{}", context.getEnvironment().getProperty(Apps.HTTP_PORT));
-        } else {
-            ConsoleLogInitializer.addConsoleAppender();
-            LoggerFactory.getLogger(ExApplicationRunListener.class).error("启动失败", exception);
-            ShutdownHooks.shutdownAll();
-            shutdownLogSystem();
-        }
+    public void running(ConfigurableApplicationContext context) {
+
+    }
+
+
+    @Override
+    public void started(ConfigurableApplicationContext context) {
+        //install UncaughtExceptionHandler
+        UncaughtExceptionHandlerWrapper.install();
+        //fixme
+        // when system startup ,register shutdown hooks to clean resouces.
+        new ShutdownThread().register();
+        //log startup info
+        LoggerFactory.getLogger(ExApplicationRunListener.class)
+                .info("启动成功: http://127.0.0.1:{}", context.getEnvironment().getProperty(Apps.HTTP_PORT));
+    }
+
+
+    @Override
+    public void failed(ConfigurableApplicationContext context, Throwable exception) {
+        ConsoleLogInitializer.addConsoleAppender();
+        LoggerFactory.getLogger(ExApplicationRunListener.class).error("启动失败", exception);
+        ShutdownHooks.shutdownAll();
+        shutdownLogSystem();
     }
 
     public static class AppBanner implements Banner {

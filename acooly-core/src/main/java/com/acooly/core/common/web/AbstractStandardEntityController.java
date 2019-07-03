@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -366,10 +365,7 @@ public abstract class AbstractStandardEntityController<
     @SuppressWarnings("unchecked")
     protected void saveMessage(HttpServletRequest request, String message) {
         if (StringUtils.isNotBlank(message)) {
-            List<Object> messages =
-                    (List<Object>)
-                            WebUtils.getOrCreateSessionAttribute(
-                                    request.getSession(), "messages", ArrayList.class);
+            List<Object> messages = (List<Object>) WebUtils.getSessionAttribute(request, "messages");
             messages.add(message);
         }
     }

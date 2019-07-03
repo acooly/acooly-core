@@ -11,10 +11,9 @@
 package com.acooly.core.common.boot.log.initializer;
 
 import ch.qos.logback.classic.Level;
-import com.acooly.core.common.boot.log.LogAutoConfig;
 import com.acooly.core.common.boot.log.LogbackConfigurator;
+import com.acooly.core.common.boot.support.PropertySourceUtils;
 import org.slf4j.Logger;
-import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.core.annotation.Order;
 
 import java.util.Map;
@@ -31,12 +30,10 @@ import java.util.Map;
 public class LevelLogInitializer extends AbstractLogInitializer {
     @Override
     public void init(LogbackConfigurator configurator) {
-        LogAutoConfig.LogProperties logProperties = Binder.get(configurator.getEnvironment())
-                .bind("acooly.log", LogAutoConfig.LogProperties.class).get();
-        Map<String, String> levels = logProperties.getLevel();
-        for (Map.Entry<String, String> entry : levels.entrySet()) {
+        Map<String, Object> levels = PropertySourceUtils.getSubProperties(configurator.getEnvironment(), "acooly.log.level.");
+        for (Map.Entry<String, Object> entry : levels.entrySet()) {
             String loggerName = entry.getKey();
-            String level = entry.getValue();
+            String level = entry.getValue().toString();
             configurator.log("设置loggerName=%s,日志级别为:%s", loggerName, level);
             if (loggerName.equalsIgnoreCase("root")) {
                 loggerName = Logger.ROOT_LOGGER_NAME;

@@ -27,7 +27,6 @@ import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.ApplicationPid;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
@@ -131,7 +130,7 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
         // ref ContextIdApplicationContextInitializer
         System.setProperty("spring.application.name", sysName);
         //set servlet container display name
-        System.setProperty("server.display-name", sysName);
+        System.setProperty("server.servlet.application-display-name", sysName);
         //set servelt container response header server
         System.setProperty("server.server-header", "ACOOLY");
 

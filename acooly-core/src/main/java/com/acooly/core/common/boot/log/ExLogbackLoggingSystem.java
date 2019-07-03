@@ -94,12 +94,12 @@ public class ExLogbackLoggingSystem extends LogbackLoggingSystem {
             MutablePropertySources mutablePropertySources =
                     ((ConfigurableEnvironment) environment).getPropertySources();
             //参考：org.springframework.boot.context.config.ConfigFileApplicationListener.ConfigurationPropertySources.NAME
-            PropertySource ps =
-                    mutablePropertySources.get(
-                            ConfigFileApplicationListener.APPLICATION_CONFIGURATION_PROPERTY_SOURCE_NAME);
-            if (ps == null) {
-                throw new AppConfigException("在日志系统初始化过程中，Environment不能从配置文件中获取配置参数");
-            }
+//            PropertySource ps =
+//                    mutablePropertySources.get(
+//                            ConfigFileApplicationListener.APPLICATION_CONFIGURATION_PROPERTY_SOURCE_NAME);
+//            if (ps == null) {
+//                throw new AppConfigException("在日志系统初始化过程中，Environment不能从配置文件中获取配置参数");
+//            }
         }
     }
 

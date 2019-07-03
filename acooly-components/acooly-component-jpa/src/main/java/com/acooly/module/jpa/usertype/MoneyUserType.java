@@ -3,7 +3,7 @@ package com.acooly.module.jpa.usertype;
 import com.acooly.core.utils.Money;
 import org.hibernate.HibernateException;
 import org.hibernate.annotations.TypeDef;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
 
 import java.io.Serializable;
@@ -44,28 +44,25 @@ public class MoneyUserType implements UserType {
     }
 
     @Override
-    public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner)
-            throws HibernateException,
-            SQLException {
-        Long value = rs.getLong(names[0]);
+    public Object nullSafeGet(ResultSet resultSet, String[] strings, SharedSessionContractImplementor sharedSessionContractImplementor, Object o) throws HibernateException, SQLException {
+        Long value = resultSet.getLong(strings[0]);
         Money m = new Money();
         m.setCent(value);
         return m;
     }
 
     @Override
-    public void nullSafeSet(PreparedStatement st, Object value, int index,
-                            SessionImplementor session) throws HibernateException, SQLException {
-        if (value == null) {
-            st.setLong(index, 0L);
+    public void nullSafeSet(PreparedStatement preparedStatement, Object o, int i, SharedSessionContractImplementor sharedSessionContractImplementor) throws HibernateException, SQLException {
+        if (o == null) {
+            preparedStatement.setLong(i, 0L);
             return;
         }
 
-        if (!(value instanceof Money)) {
+        if (!(o instanceof Money)) {
             throw new HibernateException("value is not type of " + Money.class);
         }
 
-        st.setLong(index, ((Money) value).getCent());
+        preparedStatement.setLong(i, ((Money) o).getCent());
     }
 
     @Override
@@ -95,5 +92,6 @@ public class MoneyUserType implements UserType {
     public Object replace(Object original, Object target, Object owner) throws HibernateException {
         return original;
     }
+
 
 }

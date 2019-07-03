@@ -15,15 +15,18 @@ import com.acooly.module.web.WebProperties;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonComponent;
 
 import java.io.IOException;
 
 /**
  * @author qiubo@yiji.com
+ * @author zhangpu@acooly.cn 2019-06-23 修复webProperties为注入BUG，造成enableMoneyDisplayYuan参数无效
  */
 @JsonComponent
 public class MoneyJsonDeserializer extends StdDeserializer<Money> {
+    @Autowired
     private WebProperties webProperties;
 
     public MoneyJsonDeserializer() {

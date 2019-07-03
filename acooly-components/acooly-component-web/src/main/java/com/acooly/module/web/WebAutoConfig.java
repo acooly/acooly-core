@@ -16,11 +16,7 @@ import com.acooly.module.web.formatter.DBMapFormatter;
 import com.acooly.module.web.formatter.MoneyFormatter;
 import com.acooly.module.web.freemarker.IncludePage;
 import com.acooly.module.web.freemarker.ShiroPrincipalTag;
-import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
-import freemarker.cache.ClassTemplateLoader;
-import freemarker.cache.TemplateLoader;
-import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.utility.XmlEscape;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -28,11 +24,13 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.*;
-import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
-import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.WebMvcProperties;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContext;
@@ -40,62 +38,60 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
+import org.springframework.web.filter.FormContentFilter;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
-import org.springframework.web.filter.HttpPutFormContentFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerConfig;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.Servlet;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * @author qiubo
  */
+@Slf4j
 @Configuration
 @EnableWebMvc
 @ConditionalOnWebApplication
-@ConditionalOnClass({Servlet.class, DispatcherServlet.class, WebMvcConfigurerAdapter.class})
+@ConditionalOnClass({Servlet.class, DispatcherServlet.class, WebMvcConfigurer.class})
 @EnableConfigurationProperties({
         WebMvcProperties.class,
         ResourceProperties.class,
         WebProperties.class
 })
 @AutoConfigureAfter(WebMvcAutoConfiguration.class)
-@Slf4j
 @ComponentScan
-public class WebAutoConfig extends WebMvcConfigurerAdapter
-        implements ApplicationContextAware, InitializingBean {
+public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware, InitializingBean {
 
     public static final String SIMPLE_URL_MAPPING_VIEW_CONTROLLER = "simpleUrlMappingViewController";
 
     @Autowired
     private WebProperties webProperties;
 
+    @Autowired
+    private freemarker.template.Configuration configuration;
+
     private ApplicationContext applicationContext;
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        // 设置 welcome-file
-        if (!Strings.isNullOrEmpty(webProperties.getWelcomeFile())) {
-            String welcomeFile = webProperties.getWelcomeFile();
-            if (!welcomeFile.startsWith("/")) {
-                welcomeFile = "forward:/" + welcomeFile;
-            } else {
-                welcomeFile = "forward:" + welcomeFile;
-            }
-            registry.addViewController("/").setViewName(welcomeFile);
-            registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
-        }
+//        // 设置 welcome-file
+//        if (!Strings.isNullOrEmpty(webProperties.getWelcomeFile())) {
+//            String welcomeFile = webProperties.getWelcomeFile();
+//            if (!welcomeFile.startsWith("/")) {
+//                welcomeFile = "forward:/" + welcomeFile;
+//            } else {
+//                welcomeFile = "forward:" + welcomeFile;
+//            }
+//            registry.addViewController("/").setViewName(welcomeFile);
+//            registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+//        }
     }
 
     @Override
@@ -105,20 +101,13 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
     }
 
     /**
-     * 配置模板直接映射bean
+     * 添加自定义类型格式化
+     * 目前默认包括：
+     * 1、Money的格式化和解析（元格式:####.##）
+     * 2、DBMap的格式化和解析，主要用于EAV的数据存储JSON
+     *
+     * @param registry
      */
-    @Bean
-    public SimpleUrlHandlerMapping directUrlHandlerMapping(WebProperties webProperties) {
-        SimpleUrlHandlerMapping directUrlHandlerMapping = new SimpleUrlHandlerMapping();
-        directUrlHandlerMapping.setOrder(Integer.MAX_VALUE - 2);
-        Map<String, Object> urlMap = new HashMap<>();
-        for (String url : webProperties.buildMappingUrlList()) {
-            urlMap.put(url, SIMPLE_URL_MAPPING_VIEW_CONTROLLER);
-        }
-        directUrlHandlerMapping.setUrlMap(urlMap);
-        return directUrlHandlerMapping;
-    }
-
     @Override
     public void addFormatters(FormatterRegistry registry) {
         if (webProperties.isEnableMoneyDisplayYuan()) {
@@ -127,60 +116,19 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
         registry.addFormatter(new DBMapFormatter());
     }
 
-    /**
-     * 配置模板直接映射controller
-     */
-    @Bean(name = SIMPLE_URL_MAPPING_VIEW_CONTROLLER)
-    public SimpleUrlMappingViewController simpleUrlMappingViewController(
-            WebProperties webProperties) {
-        SimpleUrlMappingViewController simpleUrlMappingViewController =
-                new SimpleUrlMappingViewController();
-        Map<String, String> viewNameMap = webProperties.buildViewNameMap();
-        if (!viewNameMap.isEmpty()) {
-            log.info("配置url直接映射模板:{}", viewNameMap);
-        }
-        simpleUrlMappingViewController.setViewNameMap(viewNameMap);
-        return simpleUrlMappingViewController;
-    }
-
-    @Bean
-    @ConditionalOnBean(HiddenHttpMethodFilter.class)
-    public FilterRegistrationBean disableHiddenHttpMethodFilter(
-            HiddenHttpMethodFilter filter, WebProperties webProperties) {
-        FilterRegistrationBean registration = new FilterRegistrationBean(filter);
-        registration.setEnabled(webProperties.isHiddenHttpMethodFilterEnable());
-        return registration;
-    }
-
-    @Bean
-    @ConditionalOnProperty("acooly.web.httpsOnly")
-    public HttpsOnlyFilter httpsOnlyFilter() {
-        return new HttpsOnlyFilter();
-    }
-
-    @Bean
-    @ConditionalOnBean(HttpPutFormContentFilter.class)
-    public FilterRegistrationBean disableHttpPutFormContentFilter(
-            HttpPutFormContentFilter filter, WebProperties webProperties) {
-        FilterRegistrationBean registration = new FilterRegistrationBean(filter);
-        registration.setEnabled(webProperties.isHttpPutFormContentFilterEnable());
-        return registration;
-    }
-
-    //	@Override
-    //	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-    //
-    //	configurer.ignoreAcceptHeader(true).defaultContentType(MediaType.TEXT_HTML).favorPathExtension(true)
-    //			.favorParameter(false).useJaf(false).mediaType("html", MediaType.APPLICATION_JSON)
-    //			.mediaType("xml", MediaType.APPLICATION_XML).mediaType("json", MediaType.APPLICATION_JSON);
-    //	}
 
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
-        super.configureViewResolvers(registry);
         Map<String, Object> attributes = Maps.newHashMap();
         attributes.put("requestContextAttribute", "rc");
         attributes.put("xml_escape", new XmlEscape());
+
+        attributes.put("includePage", new IncludePage());
+        attributes.put("shiroPrincipal", new ShiroPrincipalTag());
+        String ssoEnable = System.getProperty("acooly.sso.freemarker.include");
+        if (!StringUtils.isEmpty(ssoEnable)) {
+            attributes.put("ssoEnable", Boolean.valueOf(ssoEnable));
+        }
         registry.freeMarker().attributes(attributes);
     }
 
@@ -198,6 +146,9 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
             log.error("1. JavaConfig中配置了@EnableWebMvc");
             log.error("2. 引入了spring-mvc xml配置文件");
         }
+
+
+        // 扩展freemarker
         if (EnvironmentHolder.get()
                 .getProperty(WebProperties.Jsp.ENABLE_KEY, Boolean.class, Boolean.TRUE)) {
             try {
@@ -211,49 +162,75 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
         }
     }
 
-    @Configuration
-    public static class AcoolyFreeMarkerConfiguration
-            extends FreeMarkerAutoConfiguration.FreeMarkerWebConfiguration {
-        @Bean
-        @ConditionalOnMissingBean(FreeMarkerConfig.class)
-        public FreeMarkerConfigurer freeMarkerConfigurer() {
-            FreeMarkerConfigurer configurer =
-                    new FreeMarkerConfigurer() {
-                        @Override
-                        protected void postProcessTemplateLoaders(List<TemplateLoader> templateLoaders) {
-                            templateLoaders.add(
-                                    new ClassTemplateLoader(FreeMarkerConfigurer.class, "/templates"));
-                            templateLoaders.add(
-                                    new ClassTemplateLoader(FreeMarkerConfigurer.class, "/templates/common"));
-                        }
-                    };
-            Map<String, Object> variables = Maps.newHashMap();
-            variables.put("includePage", new IncludePage());
-            variables.put("shiroPrincipal", new ShiroPrincipalTag());
 
-            String ssoEnable = System.getProperty("acooly.sso.freemarker.include");
-            if (!StringUtils.isEmpty(ssoEnable)) {
-                variables.put("ssoEnable", Boolean.valueOf(ssoEnable));
-            }
-
-            configurer.setFreemarkerVariables(variables);
-            applyProperties(configurer);
-
-            return configurer;
+    /**
+     * 配置模板直接映射bean
+     */
+    @Bean
+    public SimpleUrlHandlerMapping directUrlHandlerMapping(WebProperties webProperties) {
+        SimpleUrlHandlerMapping directUrlHandlerMapping = new SimpleUrlHandlerMapping();
+        directUrlHandlerMapping.setOrder(Integer.MAX_VALUE - 2);
+        Map<String, Object> urlMap = new HashMap<>();
+        for (String url : webProperties.buildMappingUrlList()) {
+            urlMap.put(url, SIMPLE_URL_MAPPING_VIEW_CONTROLLER);
         }
+        directUrlHandlerMapping.setUrlMap(urlMap);
+        return directUrlHandlerMapping;
+    }
 
-        /**
-         * 禁用org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter#viewResolver(org.springframework.beans.factory.BeanFactory)
-         * 禁用默认的org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration.FreeMarkerWebConfiguration#freeMarkerViewResolver()
-         *
-         * @return
-         */
-        @Bean(name = {"freeMarkerViewResolver", "viewResolver"})
-        public FreeMarkerViewResolver viewResolver() {
-            FreeMarkerViewResolver resolver = new FreeMarkerViewResolver();
-            this.properties.applyToViewResolver(resolver);
-            resolver.setOrder(Ordered.HIGHEST_PRECEDENCE);
-            return resolver;
+    /**
+     * 配置模板直接映射controller
+     */
+    @Bean(name = SIMPLE_URL_MAPPING_VIEW_CONTROLLER)
+    public SimpleUrlMappingViewController simpleUrlMappingViewController(WebProperties webProperties) {
+        SimpleUrlMappingViewController simpleUrlMappingViewController = new SimpleUrlMappingViewController();
+        Map<String, String> viewNameMap = webProperties.buildViewNameMap();
+        if (!viewNameMap.isEmpty()) {
+            log.info("配置url直接映射模板:{}", viewNameMap);
+        }
+        simpleUrlMappingViewController.setViewNameMap(viewNameMap);
+        return simpleUrlMappingViewController;
+    }
+
+    @Bean
+    @ConditionalOnBean(HiddenHttpMethodFilter.class)
+    public FilterRegistrationBean disableHiddenHttpMethodFilter(
+            HiddenHttpMethodFilter filter, WebProperties webProperties) {
+        FilterRegistrationBean registration = new FilterRegistrationBean(filter);
+        registration.setEnabled(webProperties.isHiddenHttpMethodFilterEnable());
+        return registration;
+    }
+
+
+    @Bean
+    @ConditionalOnBean(FormContentFilter.class)
+    public FilterRegistrationBean disableHttpPutFormContentFilter(
+            FormContentFilter filter, WebProperties webProperties) {
+        FilterRegistrationBean registration = new FilterRegistrationBean(filter);
+        registration.setEnabled(webProperties.isHttpPutFormContentFilterEnable());
+        return registration;
+    }
+
+    @Bean
+    @ConditionalOnProperty("acooly.web.httpsOnly")
+    public HttpsOnlyFilter httpsOnlyFilter() {
+        return new HttpsOnlyFilter();
+    }
+
+
+    /**
+     * 配置Freemarker的自定义的指令扩展
+     *
+     * @throws Exception
+     */
+    @PostConstruct
+    public void setConfigure() throws Exception {
+        configuration.setSharedVariable("includePage", new IncludePage());
+        configuration.setSharedVariable("shiroPrincipal", new ShiroPrincipalTag());
+        String ssoEnable = System.getProperty("acooly.sso.freemarker.include");
+        if (!StringUtils.isEmpty(ssoEnable)) {
+            configuration.setSharedVariable("ssoEnable", Boolean.valueOf(ssoEnable));
         }
     }
+
 }

@@ -11,6 +11,7 @@
     <artifactId>acooly-components</artifactId>
     <packaging>pom</packaging>
     <modules>
+        <module>acooly-component-appservice</module>
         <module>acooly-component-dubbo</module>
         <module>acooly-component-mybatis</module>
         <module>acooly-component-jpa</module>

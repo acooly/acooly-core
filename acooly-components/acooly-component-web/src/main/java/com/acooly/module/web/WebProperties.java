@@ -13,7 +13,6 @@ package com.acooly.module.web;
 import com.acooly.module.web.exceptionhandler.GlobalExceptionHandler;
 import com.google.common.base.Strings;
 import lombok.Data;
-import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.ArrayList;

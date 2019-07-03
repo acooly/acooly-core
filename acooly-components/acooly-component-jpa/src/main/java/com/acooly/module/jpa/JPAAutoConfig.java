@@ -96,7 +96,7 @@ public class JPAAutoConfig {
             JpaProperties properties,
             JPAProperties jpaProperties) {
         Map<String, Object> vendorProperties = new LinkedHashMap<String, Object>();
-        vendorProperties.putAll(properties.getHibernateProperties(dataSource));
+        vendorProperties.putAll(properties.getProperties());
         return factoryBuilder
                 .dataSource(dataSource)
                 .packages(jpaProperties.getEntityPackagesToScan().values().toArray(new String[0]))

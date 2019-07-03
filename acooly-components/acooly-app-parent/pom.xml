@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>acooly-components</artifactId>
+        <groupId>com.acooly</groupId>
+        <version>5.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>acooly-app-parent</artifactId>
+    <packaging>pom</packaging>
+    <description>acooly boot app parent</description>
+    <properties>
+        <caffeine.version>2.6.2</caffeine.version>
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-common</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-common-facade</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-core</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-configuration-processor</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-cache</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-ds</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-dubbo</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-jpa</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-mybatis</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-test</artifactId>
+                <scope>test</scope>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-tomcat</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-web</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-filterchain</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-appservice</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-event</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-threadpool</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+</project>

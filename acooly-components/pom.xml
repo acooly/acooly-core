@@ -22,8 +22,8 @@
         <module>acooly-component-filterchain</module>
         <module>acooly-component-event</module>
         <module>acooly-component-threadpool</module>
-        <module>acooly-component-appservice</module>
         <module>acooly-component-test</module>
+        <module>acooly-app-parent</module>
     </modules>
 
     <dependencies>

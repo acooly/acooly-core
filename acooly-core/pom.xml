@@ -137,29 +137,7 @@
             <artifactId>commons-email</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.extremecomponents</groupId>
-            <artifactId>extremecomponents</artifactId>
-            <version>1.0.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>taglibs</groupId>
-                    <artifactId>standard</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-collections</groupId>
-                    <artifactId>commons-collections</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-lang</groupId>
-                    <artifactId>commons-lang</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -14,6 +14,12 @@
         <deploy.skip>false</deploy.skip>
     </properties>
     <dependencies>
+
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-common</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -36,14 +42,10 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-configuration-processor</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>com.esotericsoftware</groupId>
             <artifactId>kryo</artifactId>
@@ -112,17 +114,7 @@
             <groupId>org.springside</groupId>
             <artifactId>joddform</artifactId>
         </dependency>
-        <!-- WEB end -->
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-taglibs</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.servlet.jsp</groupId>
-                    <artifactId>jsp-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+
         <!-- JMS end -->
         <!-- PDF -->
         <dependency>

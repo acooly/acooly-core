@@ -14,13 +14,20 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-tomcat</artifactId>
-            <version>${project.version}</version>
+            <version>${acooly.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-cache</artifactId>
-            <version>${project.version}</version>
+            <version>${acooly.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-taglibs</artifactId>
+            <version>${acooly.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>

@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>acooly-components</artifactId>
     <packaging>pom</packaging>
+
     <modules>
         <module>acooly-component-appservice</module>
         <module>acooly-component-dubbo</module>
@@ -29,18 +30,19 @@
     <dependencies>
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>acooly-core</artifactId>
-            <version>${project.version}</version>
+            <artifactId>acooly-common</artifactId>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>acooly-core-docs</artifactId>
-            <version>${project.version}</version>
+            <artifactId>acooly-common-facade</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-configuration-processor</artifactId>
-            <version>${project.version}</version>
             <optional>true</optional>
         </dependency>
     </dependencies>

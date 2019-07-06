@@ -24,7 +24,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 public class AppServiceProperties {
 
-    public static final String PREFIX = "acooly.appService";
+    public static final String PREFIX = "acooly.appservice";
     private static final String INTERNAL_EXCEPTION_HANDLER_PACKAGE =
             "com.acooly.module.appservice.ex," + Apps.getBasePackage();
     private boolean enable;

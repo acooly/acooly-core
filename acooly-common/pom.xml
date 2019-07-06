@@ -14,8 +14,8 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-common-facade</artifactId>
-            <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.javatuples</groupId>
             <artifactId>javatuples</artifactId>

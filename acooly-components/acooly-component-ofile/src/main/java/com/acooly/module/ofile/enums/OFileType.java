@@ -12,7 +12,7 @@ import java.util.Map;
  * @author zhangpu
  */
 public enum OFileType {
-    picture("picture", "图片", "jpg,jpeg,png,gif"),
+    picture("picture", "图片", "jpg,jpeg,png,gif,bmp"),
 
     app("app", "程序", "apk,ipa"),
 
@@ -38,7 +38,7 @@ public enum OFileType {
 
     public static OFileType with(String fileExtention) {
         for (OFileType type : values()) {
-            if (Strings.contains(type.getExtentions(), fileExtention)) {
+            if(Strings.indexOfIgnoreCase(type.getExtentions(), fileExtention) != -1){
                 return type;
             }
         }

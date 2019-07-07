@@ -9,7 +9,7 @@
 package com.acooly.core.test.utils;
 
 import com.acooly.core.common.exception.BusinessException;
-import com.acooly.core.utils.Assets;
+import com.acooly.core.utils.Asserts;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -24,17 +24,17 @@ public class AssetsTest {
     public void testNotEmpty() {
         String realName = null;
         try {
-            Assets.notEmpty(realName, "姓名", "姓名不能为空");
+            Asserts.notEmpty(realName, "姓名", "姓名不能为空");
         } catch (BusinessException be) {
             log.warn("Asset fail: {}", be.getMessage());
         }
         try {
-            Assets.notEmpty(realName, "姓名");
+            Asserts.notEmpty(realName, "姓名");
         } catch (BusinessException be) {
             log.warn("Asset fail: {}", be.getMessage());
         }
         try {
-            Assets.notEmpty(realName);
+            Asserts.notEmpty(realName);
         } catch (BusinessException be) {
             log.warn("Asset fail: {}", be.getMessage());
         }
@@ -44,17 +44,17 @@ public class AssetsTest {
     public void testEmpty() {
         String realName = "张飞";
         try {
-            Assets.empty(realName, "姓名", "姓名必须为空");
+            Asserts.empty(realName, "姓名", "姓名必须为空");
         } catch (BusinessException be) {
             log.warn("Asset fail: {}", be.getMessage());
         }
         try {
-            Assets.empty(realName, "姓名");
+            Asserts.empty(realName, "姓名");
         } catch (BusinessException be) {
             log.warn("Asset fail: {}", be.getMessage());
         }
         try {
-            Assets.empty(realName);
+            Asserts.empty(realName);
         } catch (BusinessException be) {
             log.warn("Asset fail: {}", be.getMessage());
         }

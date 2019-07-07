@@ -23,7 +23,7 @@ import java.util.Map;
  * @date 2019-06-08 10:39
  */
 @Slf4j
-public class Assets {
+public class Asserts {
 
     /**
      * 字符串不能为空

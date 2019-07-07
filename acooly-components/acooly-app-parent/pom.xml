@@ -15,34 +15,42 @@
 
     <dependencyManagement>
         <dependencies>
-
+            <!-- acooly-core基础 -->
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-core</artifactId>
                 <version>${acooly.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-common</artifactId>
                 <version>${acooly.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-common-facade</artifactId>
                 <version>${acooly.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-configuration-processor</artifactId>
                 <version>${acooly.version}</version>
             </dependency>
 
+            <!-- 基础组件 -->
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-appservice</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-cache</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-defence</artifactId>
                 <version>${acooly.version}</version>
             </dependency>
             <dependency>
@@ -53,6 +61,16 @@
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-dubbo</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-event</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-filterchain</artifactId>
                 <version>${acooly.version}</version>
             </dependency>
             <dependency>
@@ -74,6 +92,11 @@
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-threadpool</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-tomcat</artifactId>
                 <version>${acooly.version}</version>
             </dependency>
@@ -82,28 +105,6 @@
                 <artifactId>acooly-component-web</artifactId>
                 <version>${acooly.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>acooly-component-filterchain</artifactId>
-                <version>${acooly.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>acooly-component-appservice</artifactId>
-                <version>${acooly.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>acooly-component-event</artifactId>
-                <version>${acooly.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>acooly-component-threadpool</artifactId>
-                <version>${acooly.version}</version>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 </project>

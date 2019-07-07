@@ -12,19 +12,20 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>acooly-app-parent</module>
         <module>acooly-component-appservice</module>
-        <module>acooly-component-dubbo</module>
-        <module>acooly-component-mybatis</module>
-        <module>acooly-component-jpa</module>
         <module>acooly-component-cache</module>
+        <module>acooly-component-defence</module>
         <module>acooly-component-ds</module>
+        <module>acooly-component-dubbo</module>
+        <module>acooly-component-event</module>
+        <module>acooly-component-filterchain</module>
+        <module>acooly-component-jpa</module>
+        <module>acooly-component-mybatis</module>
+        <module>acooly-component-test</module>
+        <module>acooly-component-threadpool</module>
         <module>acooly-component-tomcat</module>
         <module>acooly-component-web</module>
-        <module>acooly-component-filterchain</module>
-        <module>acooly-component-event</module>
-        <module>acooly-component-threadpool</module>
-        <module>acooly-component-test</module>
-        <module>acooly-app-parent</module>
     </modules>
 
     <dependencies>

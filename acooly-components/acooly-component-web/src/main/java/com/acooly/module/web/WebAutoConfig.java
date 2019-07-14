@@ -18,6 +18,7 @@ import com.acooly.module.web.freemarker.IncludePage;
 import com.acooly.module.web.freemarker.ShiroPrincipalTag;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
+import com.jagregory.shiro.freemarker.ShiroTags;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.TemplateLoader;
 import freemarker.template.DefaultObjectWrapper;
@@ -230,6 +231,7 @@ public class WebAutoConfig extends WebMvcConfigurerAdapter
             Map<String, Object> variables = Maps.newHashMap();
             variables.put("includePage", new IncludePage());
             variables.put("shiroPrincipal", new ShiroPrincipalTag());
+            variables.put("shiro", new ShiroTags());//shiro标签
 
             String ssoEnable = System.getProperty("acooly.sso.freemarker.include");
             if (!StringUtils.isEmpty(ssoEnable)) {

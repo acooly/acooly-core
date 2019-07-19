@@ -10,8 +10,7 @@
 package com.acooly.module.jpa;
 
 import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
-import org.hibernate.SessionFactory;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.data.AbstractRepositoryConfigurationSourceSupport;
@@ -32,7 +31,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 
-import javax.persistence.EntityManagerFactory;
 import javax.servlet.DispatcherType;
 import javax.sql.DataSource;
 import java.lang.annotation.Annotation;
@@ -46,7 +44,7 @@ import java.util.Map;
 @Configuration
 @ConditionalOnProperty(value = JPAProperties.ENABLE_KEY, matchIfMissing = true)
 @Import(JPAAutoConfig.JpaRegistrar.class)
-@AutoConfigureAfter(HibernateJpaAutoConfiguration.class)
+@AutoConfigureBefore(HibernateJpaAutoConfiguration.class)
 @EnableConfigurationProperties({JPAProperties.class})
 @EnableJpaRepositories(
         repositoryBaseClass = AbstractEntityJpaDao.class,
@@ -84,10 +82,10 @@ public class JPAAutoConfig {
         return adapter;
     }
 
-    @Bean
-    public SessionFactory sessionFactory(EntityManagerFactory factory) {
-        return factory.unwrap(SessionFactory.class);
-    }
+//    @Bean
+//    public SessionFactory sessionFactory(EntityManagerFactory factory) {
+//        return factory.unwrap(SessionFactory.class);
+//    }
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(

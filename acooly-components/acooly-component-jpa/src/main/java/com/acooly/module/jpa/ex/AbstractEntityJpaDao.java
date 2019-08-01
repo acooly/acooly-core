@@ -76,6 +76,12 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
         save(entities);
     }
 
+    @Override
+    @Transactional
+    public void inserts(List<T> entities) {
+        save(entities);
+    }
+
     @Transactional
     @Override
     public <S extends T> S save(S entity) {

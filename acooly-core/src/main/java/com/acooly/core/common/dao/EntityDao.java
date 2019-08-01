@@ -16,7 +16,7 @@ import java.util.Map;
 public interface EntityDao<T> {
 
     /**
-     * 创建新实体
+     * 创建新实体(保存/更新)
      *
      * @param o
      */
@@ -45,6 +45,12 @@ public interface EntityDao<T> {
      * @param entities
      */
     void saves(List<T> entities);
+
+    /**
+     * 批量插入
+     * @param entities
+     */
+    void inserts(List<T> entities);
 
     /**
      * 删除

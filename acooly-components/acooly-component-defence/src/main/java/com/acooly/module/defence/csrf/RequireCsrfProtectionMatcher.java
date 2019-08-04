@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * @author qiubo
  */
-@Slf4j
+@Slf4j(topic = "acooly-component-defence")
 public class RequireCsrfProtectionMatcher implements RequestMatcher {
 
     public static final String POST = "POST";
@@ -33,6 +33,7 @@ public class RequireCsrfProtectionMatcher implements RequestMatcher {
     /**
      * @return true=需要过滤 false=不需要过滤
      */
+    @Override
     public boolean matches(HttpServletRequest request) {
         if (POST.equals(request.getMethod())) {
             String uri = request.getRequestURI();

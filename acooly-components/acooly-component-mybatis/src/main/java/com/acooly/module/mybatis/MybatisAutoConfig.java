@@ -90,6 +90,7 @@ public class MybatisAutoConfig {
         SqlSessionFactory sqlSessionFactory;
         try {
             sqlSessionFactory = factory.getObject();
+            sqlSessionFactory.getConfiguration().setMapUnderscoreToCamelCase(true);
         } catch (Exception e) {
             throw new AppConfigException(e);
         }
@@ -135,8 +136,9 @@ public class MybatisAutoConfig {
     public DateInterceptor updateInterceptor() {
         return new DateInterceptor();
     }
+
     @Bean
-    public ExInterceptor exInterceptor(){
+    public ExInterceptor exInterceptor() {
         return new ExInterceptor();
     }
 }

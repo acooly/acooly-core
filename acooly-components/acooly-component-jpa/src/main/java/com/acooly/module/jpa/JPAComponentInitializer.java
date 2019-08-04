@@ -9,9 +9,7 @@
  */
 package com.acooly.module.jpa;
 
-import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.component.ComponentInitializer;
-import com.acooly.module.ds.DruidProperties;
 import org.springframework.context.ConfigurableApplicationContext;
 
 /**
@@ -25,16 +23,18 @@ public class JPAComponentInitializer implements ComponentInitializer {
                 .getProperty(JPAProperties.ENABLE_KEY, Boolean.class, Boolean.TRUE)) {
             System.setProperty("spring.data.jpa.repositories.enabled", "false");
         }
-        DruidProperties druidProperties = Apps.buildProperties(DruidProperties.class);
-        if (druidProperties.isAutoCreateTable()) {
-            setPropertyIfMissing("spring.jpa.hibernate.ddl-auto", "update");
-        } else {
-            setPropertyIfMissing("spring.jpa.hibernate.ddl-auto", "none");
-        }
+        setPropertyIfMissing("spring.jpa.hibernate.ddl-auto", "none");
+        setPropertyIfMissing("spring.jpa.properties.hibernate.temp.use_jdbc_metadata_defaults", "false");
+
         //因为shiro的原因，使用filter代替 ref:com.acooly.core.common.boot.component.jpa.JPAAutoConfig.openEntityManagerInViewFilter
         System.setProperty("spring.jpa.open-in-view", "false");
         //关闭jpa校验
         System.setProperty("spring.jpa.properties.javax.persistence.validation.mode", "none");
-        setPropertyIfMissing("spring.data.redis.repositories.enabled","false");
+        setPropertyIfMissing("spring.data.redis.repositories.enabled", "false");
+        // 开启实体和列的自动驼峰转换
+        setPropertyIfMissing("spring.jpa.hibernate.naming.physical-strategy",
+                "org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy");
+        setPropertyIfMissing("spring.jpa.hibernate.naming.implicit-strategy",
+                "org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy");
     }
 }

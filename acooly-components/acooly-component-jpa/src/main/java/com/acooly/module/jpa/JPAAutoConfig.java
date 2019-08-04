@@ -15,6 +15,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.data.AbstractRepositoryConfigurationSourceSupport;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateSettings;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -26,31 +28,30 @@ import org.springframework.core.Ordered;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.jpa.repository.config.JpaRepositoryConfigExtension;
 import org.springframework.data.repository.config.RepositoryConfigurationExtension;
-import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
-import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 
 import javax.servlet.DispatcherType;
 import javax.sql.DataSource;
 import java.lang.annotation.Annotation;
 import java.util.EnumSet;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * @author qiubo
+ * @author zhangpu for 5.x
  */
 @Configuration
 @ConditionalOnProperty(value = JPAProperties.ENABLE_KEY, matchIfMissing = true)
 @Import(JPAAutoConfig.JpaRegistrar.class)
 @AutoConfigureBefore(HibernateJpaAutoConfiguration.class)
-@EnableConfigurationProperties({JPAProperties.class})
+@EnableConfigurationProperties({JPAProperties.class, HibernateProperties.class})
 @EnableJpaRepositories(
         repositoryBaseClass = AbstractEntityJpaDao.class,
         basePackages = "com.acooly.module.**.dao"
 )
 public class JPAAutoConfig {
+
 
     @Bean
     @ConditionalOnProperty(
@@ -72,29 +73,27 @@ public class JPAAutoConfig {
         return registration;
     }
 
-    @Bean
-    public JpaVendorAdapter jpaVendorAdapter(JpaProperties properties, DataSource dataSource) {
-        AbstractJpaVendorAdapter adapter = new ExHibernateJpaVendorAdapter();
-        adapter.setShowSql(properties.isShowSql());
-        adapter.setDatabase(properties.determineDatabase(dataSource));
-        adapter.setDatabasePlatform(properties.getDatabasePlatform());
-        adapter.setGenerateDdl(properties.isGenerateDdl());
-        return adapter;
-    }
-
-//    @Bean
-//    public SessionFactory sessionFactory(EntityManagerFactory factory) {
-//        return factory.unwrap(SessionFactory.class);
-//    }
-
+    /**
+     * 自定义 EntityManagerFactory
+     * <p>
+     * 目的：主要为扩展自定义默认的entity扫码路径
+     *
+     * @param factoryBuilder
+     * @param dataSource
+     * @param properties
+     * @param hibernateProperties
+     * @param jpaProperties
+     * @return
+     */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             EntityManagerFactoryBuilder factoryBuilder,
             DataSource dataSource,
             JpaProperties properties,
+            HibernateProperties hibernateProperties,
             JPAProperties jpaProperties) {
-        Map<String, Object> vendorProperties = new LinkedHashMap<String, Object>();
-        vendorProperties.putAll(properties.getProperties());
+        Map<String, Object> vendorProperties = hibernateProperties.
+                determineHibernateProperties(properties.getProperties(), new HibernateSettings());
         return factoryBuilder
                 .dataSource(dataSource)
                 .packages(jpaProperties.getEntityPackagesToScan().values().toArray(new String[0]))
@@ -102,6 +101,7 @@ public class JPAAutoConfig {
                 .jta(false)
                 .build();
     }
+
 
     static class JpaRegistrar extends AbstractRepositoryConfigurationSourceSupport {
 

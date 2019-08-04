@@ -28,8 +28,10 @@ import org.springframework.core.Ordered;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.jpa.repository.config.JpaRepositoryConfigExtension;
 import org.springframework.data.repository.config.RepositoryConfigurationExtension;
+import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
+import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 
 import javax.servlet.DispatcherType;
 import javax.sql.DataSource;
@@ -74,16 +76,26 @@ public class JPAAutoConfig {
     }
 
     /**
+     * 扩展支持自动生成表
+     *
+     * @param properties
+     * @param dataSource
+     * @return
+     */
+    @Bean
+    public JpaVendorAdapter jpaVendorAdapter(JpaProperties properties, DataSource dataSource) {
+        AbstractJpaVendorAdapter adapter = new ExHibernateJpaVendorAdapter();
+        adapter.setShowSql(properties.isShowSql());
+        adapter.setDatabase(properties.determineDatabase(dataSource));
+        adapter.setDatabasePlatform(properties.getDatabasePlatform());
+        adapter.setGenerateDdl(properties.isGenerateDdl());
+        return adapter;
+    }
+
+    /**
      * 自定义 EntityManagerFactory
      * <p>
      * 目的：主要为扩展自定义默认的entity扫码路径
-     *
-     * @param factoryBuilder
-     * @param dataSource
-     * @param properties
-     * @param hibernateProperties
-     * @param jpaProperties
-     * @return
      */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
@@ -94,12 +106,9 @@ public class JPAAutoConfig {
             JPAProperties jpaProperties) {
         Map<String, Object> vendorProperties = hibernateProperties.
                 determineHibernateProperties(properties.getProperties(), new HibernateSettings());
-        return factoryBuilder
-                .dataSource(dataSource)
+        return factoryBuilder.dataSource(dataSource)
                 .packages(jpaProperties.getEntityPackagesToScan().values().toArray(new String[0]))
-                .properties(vendorProperties)
-                .jta(false)
-                .build();
+                .properties(vendorProperties).jta(false).build();
     }
 
 

@@ -11,23 +11,21 @@ package com.acooly.core.common.boot.listener;
 
 import ch.qos.logback.classic.LoggerContext;
 import com.acooly.core.common.BootApp;
+import com.acooly.core.common.boot.AcoolyBanner;
 import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.common.boot.Apps;
-import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.boot.log.ExLogbackLoggingSystem;
 import com.acooly.core.common.boot.log.initializer.ConsoleLogInitializer;
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.common.exception.UncaughtExceptionHandlerWrapper;
 import com.acooly.core.utils.ShutdownHooks;
-import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
 import org.springframework.boot.logging.LoggingSystem;
@@ -37,14 +35,13 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.SpringVersion;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
 
-import java.io.PrintStream;
 import java.util.List;
 
 /**
  * @author qiubo
+ * @author zhangpu for v5
  */
 public class ExApplicationRunListener implements SpringApplicationRunListener {
     public static final String COMPONENTS_PACKAGE = "com.acooly.module";
@@ -57,10 +54,10 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
         checkAndSetPackage(application);
         checkVersions();
         jvmPropstuning();
-        BootApp yijiBootApplication = findBootApplication(application);
-        initEnvVars(yijiBootApplication);
+        BootApp bootApp = findBootApplication(application);
+        initEnvVars(bootApp);
         setThreadName();
-        application.setBanner(new AppBanner(yijiBootApplication));
+        application.setBanner(new AcoolyBanner(bootApp));
     }
 
     private static void shutdownLogSystem() {
@@ -227,40 +224,6 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
         shutdownLogSystem();
     }
 
-    public static class AppBanner implements Banner {
-        private static List<String> infos = Lists.newArrayList();
-        private BootApp application;
-
-        public AppBanner(BootApp application) {
-            this.application = application;
-        }
-
-        public static List<String> getInfos() {
-            return infos;
-        }
-
-        @Override
-        public void printBanner(Environment environment, Class<?> sourceClass, PrintStream out) {
-            printAppInfo();
-        }
-
-        private void printAppInfo() {
-            //don't init log system in object create phase
-            Logger logger = LoggerFactory.getLogger(AppBanner.class);
-            logger.info("************************************");
-            logger.info(
-                    "应用[{}]开始启动,env={},http port={},basePackage={}",
-                    Apps.getAppName(),
-                    Env.getEnv(),
-                    application.httpPort(),
-                    Preconditions.checkNotNull(Apps.getBasePackage()));
-            logger.info("************************************");
-            if (infos != null) {
-                infos.forEach(logger::info);
-                infos.clear();
-            }
-        }
-    }
 
     static class ShutdownThread extends Thread {
         public ShutdownThread() {

@@ -12,21 +12,18 @@ package com.acooly.core.common.boot.log;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.core.util.OptionHelper;
+import com.acooly.core.common.boot.AcoolyBanner;
 import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.boot.listener.DevModeDetector;
-import com.acooly.core.common.boot.listener.ExApplicationRunListener;
 import com.acooly.core.common.boot.log.initializer.LogInitializer;
-import com.acooly.core.common.exception.AppConfigException;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.impl.StaticLoggerBinder;
-import org.springframework.boot.context.config.ConfigFileApplicationListener;
 import org.springframework.boot.logging.LogFile;
 import org.springframework.boot.logging.LoggingInitializationContext;
 import org.springframework.boot.logging.logback.LogbackLoggingSystem;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.MutablePropertySources;
-import org.springframework.core.env.PropertySource;
 import org.springframework.core.io.support.SpringFactoriesLoader;
 import org.springframework.util.Assert;
 
@@ -83,7 +80,7 @@ public class ExLogbackLoggingSystem extends LogbackLoggingSystem {
         for (LogInitializer logInitializer : logInitializers) {
             logInitializer.init(configurator);
         }
-        ExApplicationRunListener.AppBanner.getInfos().addAll(configurator.getLogs());
+        AcoolyBanner.getInfos().addAll(configurator.getLogs());
     }
 
     /**

@@ -61,8 +61,8 @@ public class WebComponentInitializer implements ComponentInitializer {
         setPropertyIfMissing("spring.freemarker.settings.boolean_format", "true,false");
         // 开启freemarker支持?api方式调用对象方法
         // 参考：https://freemarker.apache.org/docs/ref_builtins_expert.html#ref_buitin_api_and_has_api
-        setPropertyIfMissing("spring.freemarker.settings.api_builtin_enabled", "true");
-        setPropertyIfMissing("spring.freemarker.settings.incompatible_improvements", "2.3.28");
+//        setPropertyIfMissing("spring.freemarker.settings.api_builtin_enabled", "true");
+//        setPropertyIfMissing("spring.freemarker.settings.incompatible_improvements", "2.3.28");
         // 设置 jackson
         setPropertyIfMissing("spring.jackson.date-format", "yyyy-MM-dd HH:mm:ss");
         setPropertyIfMissing("spring.jackson.time-zone", "Asia/Shanghai");

@@ -16,7 +16,12 @@ import com.acooly.module.web.formatter.DBMapFormatter;
 import com.acooly.module.web.formatter.MoneyFormatter;
 import com.acooly.module.web.freemarker.IncludePage;
 import com.acooly.module.web.freemarker.ShiroPrincipalTag;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import freemarker.cache.ClassTemplateLoader;
+import freemarker.cache.MultiTemplateLoader;
+import freemarker.cache.TemplateLoader;
 import freemarker.template.utility.XmlEscape;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -38,6 +43,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.FormContentFilter;
@@ -46,10 +52,12 @@ import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.Servlet;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -73,25 +81,26 @@ public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware,
 
     @Autowired
     private WebProperties webProperties;
-
     @Autowired
     private freemarker.template.Configuration configuration;
+    @Autowired
+    private FreeMarkerConfigurer freeMarkerConfigurer;
 
     private ApplicationContext applicationContext;
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-//        // 设置 welcome-file
-//        if (!Strings.isNullOrEmpty(webProperties.getWelcomeFile())) {
-//            String welcomeFile = webProperties.getWelcomeFile();
-//            if (!welcomeFile.startsWith("/")) {
-//                welcomeFile = "forward:/" + welcomeFile;
-//            } else {
-//                welcomeFile = "forward:" + welcomeFile;
-//            }
-//            registry.addViewController("/").setViewName(welcomeFile);
-//            registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
-//        }
+        // 设置 welcome-file
+        if (!Strings.isNullOrEmpty(webProperties.getWelcomeFile())) {
+            String welcomeFile = webProperties.getWelcomeFile();
+            if (!welcomeFile.startsWith("/")) {
+                welcomeFile = "forward:/" + welcomeFile;
+            } else {
+                welcomeFile = "forward:" + welcomeFile;
+            }
+            registry.addViewController("/").setViewName(welcomeFile);
+            registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        }
     }
 
     @Override
@@ -156,10 +165,14 @@ public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware,
                         applicationContext.getBean(InternalResourceViewResolver.class);
                 internalResourceViewResolver.setPrefix(webProperties.getJsp().getPrefix());
                 internalResourceViewResolver.setSuffix(webProperties.getJsp().getSuffix());
+
+
             } catch (BeansException e) {
                 // do nothing
             }
         }
+
+
     }
 
 
@@ -218,6 +231,45 @@ public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware,
     }
 
 
+//    @Bean
+//    @ConditionalOnMissingBean(FreeMarkerConfig.class)
+//    public FreeMarkerConfigurer freeMarkerConfigurer() {
+//        FreeMarkerConfigurer configurer =
+//                new FreeMarkerConfigurer() {
+//                    @Override
+//                    protected void postProcessTemplateLoaders(List<TemplateLoader> templateLoaders) {
+//                        templateLoaders.add(
+//                                new ClassTemplateLoader(FreeMarkerConfigurer.class, "/templates"));
+//                        templateLoaders.add(
+//                                new ClassTemplateLoader(FreeMarkerConfigurer.class, "/templates/common"));
+//                    }
+//                };
+//        Map<String, Object> variables = Maps.newHashMap();
+//        variables.put("includePage", new IncludePage());
+//        variables.put("shiroPrincipal", new ShiroPrincipalTag());
+//
+//        String ssoEnable = System.getProperty("acooly.sso.freemarker.include");
+//        if (!StringUtils.isEmpty(ssoEnable)) {
+//            variables.put("ssoEnable", Boolean.valueOf(ssoEnable));
+//        }
+//
+//        configurer.setFreemarkerVariables(variables);
+//        applyProperties(configurer);
+//        return configurer;
+//    }
+//
+//    protected void applyProperties(FreeMarkerConfigurationFactory factory) {
+//        FreeMarkerProperties properties = new FreeMarkerProperties();
+//        EnvironmentHolder.buildProperties(properties);
+//        factory.setTemplateLoaderPaths(properties.getTemplateLoaderPath());
+//        factory.setPreferFileSystemAccess(properties.isPreferFileSystemAccess());
+//        factory.setDefaultEncoding(properties.getCharsetName());
+//        Properties settings = new Properties();
+//        settings.putAll(properties.getSettings());
+//        factory.setFreemarkerSettings(settings);
+//    }
+
+
     /**
      * 配置Freemarker的自定义的指令扩展
      *
@@ -225,6 +277,18 @@ public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware,
      */
     @PostConstruct
     public void setConfigure() throws Exception {
+
+        MultiTemplateLoader templateLoaderOld = (MultiTemplateLoader) freeMarkerConfigurer.getConfiguration().getTemplateLoader();
+
+        List<TemplateLoader> templateLoaders = Lists.newLinkedList();
+        for (int i = 0; i < templateLoaderOld.getTemplateLoaderCount(); i++) {
+            templateLoaders.add(templateLoaderOld.getTemplateLoader(i));
+        }
+        templateLoaders.add(new ClassTemplateLoader(FreeMarkerConfigurer.class, "/templates"));
+        templateLoaders.add(new ClassTemplateLoader(FreeMarkerConfigurer.class, "/templates/common"));
+
+        freeMarkerConfigurer.getConfiguration().setTemplateLoader(new MultiTemplateLoader(templateLoaders.toArray(new TemplateLoader[]{})));
+
         configuration.setSharedVariable("includePage", new IncludePage());
         configuration.setSharedVariable("shiroPrincipal", new ShiroPrincipalTag());
         String ssoEnable = System.getProperty("acooly.sso.freemarker.include");

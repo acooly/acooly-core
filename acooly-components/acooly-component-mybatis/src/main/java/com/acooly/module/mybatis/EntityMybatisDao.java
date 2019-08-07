@@ -29,6 +29,7 @@ public interface EntityMybatisDao<T>
         FlushMapper<T>,
         RemoveMapper<T>,
         SavesMapper<T>,
+        InsertsMapper<T>,
         FindMapper<T>,
         ListMapper<T> {
 }

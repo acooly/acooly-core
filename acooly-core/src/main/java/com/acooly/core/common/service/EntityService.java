@@ -48,12 +48,20 @@ public interface EntityService<T> {
     void saveOrUpdate(T t) throws BusinessException;
 
     /**
-     * 批量保存对象
+     * 批量保存对象，id为空时新增，id不为空时修改
      *
      * @param ts
      * @throws BusinessException
      */
     void saves(List<T> ts) throws BusinessException;
+
+    /**
+     * 批量新增对象(仅做插入不做更新，id不能为空)
+     *
+     * @param ts
+     * @throws BusinessException
+     */
+    void inserts(List<T> ts) throws BusinessException;
 
     /**
      * 更新对象

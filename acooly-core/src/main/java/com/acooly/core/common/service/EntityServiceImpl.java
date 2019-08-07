@@ -9,7 +9,6 @@ import com.acooly.core.utils.GenericsUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -90,6 +89,11 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>>
     @Override
     public void saves(List<T> ts) throws BusinessException {
         getEntityDao().saves(ts);
+    }
+
+    @Override
+    public void inserts(List<T> ts) throws BusinessException {
+        getEntityDao().inserts(ts);
     }
 
     @Override

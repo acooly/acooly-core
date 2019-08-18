@@ -15,7 +15,7 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- acooly-core基础 -->
+            <!-- acooly-core 基础 -->
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-core</artifactId>
@@ -83,11 +83,9 @@
                 <artifactId>acooly-component-mybatis</artifactId>
                 <version>${acooly.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-test</artifactId>
-                <scope>test</scope>
                 <version>${acooly.version}</version>
             </dependency>
             <dependency>
@@ -103,6 +101,167 @@
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-web</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+
+
+            <!-- 应用组件 -->
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-app</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-captcha</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-certification</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-chart</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-chat</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-cms</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-cms-facade</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-config</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-data-region</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-distributedlock</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-eav</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-mail</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-ofile</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-olog</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-pdf</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-rocketmq</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-safety</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-scheduler</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-security</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-seq</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-sms</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-sso</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-wechat</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+
+
+            <!-- openapi -->
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>openapi-framework-common</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>openapi-framework-core</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>openapi-framework-service</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>openapi-framework-notify</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>openapi-framework-extensions</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>openapi-framework-facade</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>openapi-framework-client</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>openapi-framework-apidoc</artifactId>
                 <version>${acooly.version}</version>
             </dependency>
         </dependencies>

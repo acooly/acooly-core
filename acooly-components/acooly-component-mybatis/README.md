@@ -1,22 +1,33 @@
 <!-- title: mybatis组件  -->
 <!-- type: infrastructure -->
-<!-- author: qiubo -->
+<!-- author: qiubo,zhangpu -->
 ## 1. 组件介绍
 
-此组件提供mybatis的sqlSessionFactory，sqlSessionTemplate, mapperScannerConfigurer定义，启用了[mybatis分页插件](https://github.com/abel533/Mapper)
-
-
-## 2. 使用说明
+此组件提供mybatis的规范使用和封装，整合mapper扩展支持CRUD自动处理，多条件分页查询自动处理等能力，支持多数据源。
 
 maven坐标：
 
-     <dependency>
-        <groupId>com.acooly</groupId>
-        <artifactId>acooly-component-mybatis</artifactId>
-        <version>${acooly-latest-version}</version>
-      </dependency>
+```xml
+<dependency>
+	<groupId>com.acooly</groupId>
+	<artifactId>acooly-component-mybatis</artifactId>
+	<version>${acooly-latest-version}</version>
+</dependency>
+```
 
-`${acooly-latest-version}`为框架最新版本或者购买的版本。
+`${acooly-latest-version}`为框架最新版本。
+
+## 2. 特性说明
+
+### 2.1 DAO扫描
+
+默认情况下，根据springboot特性，已经加入了当前应用的根包下的所有dao包的扫描（`${appRootPackage}..dao`）,如果在你当前工程有需要非当前应用根包的mybatis代码和dao，则可显示使用@MapperScan指定扫描dao的包路径。
+
+例如：
+
+1、例如当前应用的根包路径为：com.acooly.demo
+
+
 
 ## 3. FAQ
 

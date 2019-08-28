@@ -19,6 +19,7 @@ import com.acooly.module.web.freemarker.ShiroPrincipalTag;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.jagregory.shiro.freemarker.ShiroTags;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.MultiTemplateLoader;
 import freemarker.cache.TemplateLoader;
@@ -231,44 +232,6 @@ public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware,
     }
 
 
-//    @Bean
-//    @ConditionalOnMissingBean(FreeMarkerConfig.class)
-//    public FreeMarkerConfigurer freeMarkerConfigurer() {
-//        FreeMarkerConfigurer configurer =
-//                new FreeMarkerConfigurer() {
-//                    @Override
-//                    protected void postProcessTemplateLoaders(List<TemplateLoader> templateLoaders) {
-//                        templateLoaders.add(
-//                                new ClassTemplateLoader(FreeMarkerConfigurer.class, "/templates"));
-//                        templateLoaders.add(
-//                                new ClassTemplateLoader(FreeMarkerConfigurer.class, "/templates/common"));
-//                    }
-//                };
-//        Map<String, Object> variables = Maps.newHashMap();
-//        variables.put("includePage", new IncludePage());
-//        variables.put("shiroPrincipal", new ShiroPrincipalTag());
-//
-//        String ssoEnable = System.getProperty("acooly.sso.freemarker.include");
-//        if (!StringUtils.isEmpty(ssoEnable)) {
-//            variables.put("ssoEnable", Boolean.valueOf(ssoEnable));
-//        }
-//
-//        configurer.setFreemarkerVariables(variables);
-//        applyProperties(configurer);
-//        return configurer;
-//    }
-//
-//    protected void applyProperties(FreeMarkerConfigurationFactory factory) {
-//        FreeMarkerProperties properties = new FreeMarkerProperties();
-//        EnvironmentHolder.buildProperties(properties);
-//        factory.setTemplateLoaderPaths(properties.getTemplateLoaderPath());
-//        factory.setPreferFileSystemAccess(properties.isPreferFileSystemAccess());
-//        factory.setDefaultEncoding(properties.getCharsetName());
-//        Properties settings = new Properties();
-//        settings.putAll(properties.getSettings());
-//        factory.setFreemarkerSettings(settings);
-//    }
-
 
     /**
      * 配置Freemarker的自定义的指令扩展
@@ -291,6 +254,7 @@ public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware,
 
         configuration.setSharedVariable("includePage", new IncludePage());
         configuration.setSharedVariable("shiroPrincipal", new ShiroPrincipalTag());
+        configuration.setSharedVariable("shiro", new ShiroTags());
         String ssoEnable = System.getProperty("acooly.sso.freemarker.include");
         if (!StringUtils.isEmpty(ssoEnable)) {
             configuration.setSharedVariable("ssoEnable", Boolean.valueOf(ssoEnable));

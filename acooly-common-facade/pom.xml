@@ -14,7 +14,7 @@
         <servlet-api.version>3.1.0</servlet-api.version>
         <lombok.version>1.18.0</lombok.version>
         <slf4j.version>1.7.22</slf4j.version>
-<!--        <javassist.version>3.21.0-GA</javassist.version>-->
+        <!--        <javassist.version>3.21.0-GA</javassist.version>-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
@@ -58,6 +58,13 @@
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
             <version>1.5.1</version>
+        </dependency>
+
+        <!-- 拼音转换 -->
+        <dependency>
+            <groupId>com.belerweb</groupId>
+            <artifactId>pinyin4j</artifactId>
+            <version>2.5.0</version>
         </dependency>
     </dependencies>
 

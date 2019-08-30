@@ -40,7 +40,7 @@ public class Strings extends StringUtils {
      * @param hanzi
      * @return
      */
-    public static String toPinyinFistLetter(String hanzi) {
+    public static String toPinyinFistWord(String hanzi) {
         if (Strings.isBlank(hanzi)) {
             return null;
         }
@@ -55,8 +55,14 @@ public class Strings extends StringUtils {
         return Strings.upperCase(sb.toString());
     }
 
-    public static String toPinyinFistWord(String hanzi) {
-        return Strings.substring(toPinyinFistLetter(hanzi),0,1);
+    /**
+     * 汉字字符串首字的首字母
+     *
+     * @param hanzi
+     * @return
+     */
+    public static String toPinyinFistLetter(String hanzi) {
+        return Strings.substring(toPinyinFistWord(hanzi), 0, 1);
     }
 
     /**

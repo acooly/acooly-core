@@ -11,9 +11,7 @@
 package com.acooly.core.common.boot.log;
 
 import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.core.util.OptionHelper;
 import com.acooly.core.common.boot.AcoolyBanner;
-import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.boot.listener.DevModeDetector;
 import com.acooly.core.common.boot.log.initializer.LogInitializer;
 import org.slf4j.ILoggerFactory;
@@ -22,8 +20,6 @@ import org.springframework.boot.logging.LogFile;
 import org.springframework.boot.logging.LoggingInitializationContext;
 import org.springframework.boot.logging.logback.LogbackLoggingSystem;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.Environment;
-import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.io.support.SpringFactoriesLoader;
 import org.springframework.util.Assert;
 
@@ -31,16 +27,15 @@ import java.security.CodeSource;
 import java.security.ProtectionDomain;
 import java.util.List;
 
-import static com.acooly.core.common.boot.log.LogAutoConfig.LogProperties.pattern;
-
 /**
  * @author qiubo
+ * @author zhangpu for v5
  */
 @SuppressWarnings("all")
-public class ExLogbackLoggingSystem extends LogbackLoggingSystem {
+public class AcoolyLogbackLoggingSystem extends LogbackLoggingSystem {
     private ClassLoader classLoader;
 
-    public ExLogbackLoggingSystem(ClassLoader classLoader) {
+    public AcoolyLogbackLoggingSystem(ClassLoader classLoader) {
         super(classLoader);
         this.classLoader = classLoader;
     }
@@ -68,12 +63,6 @@ public class ExLogbackLoggingSystem extends LogbackLoggingSystem {
     }
 
     private void customLog(LogbackConfigurator configurator) {
-        assertEnv(configurator.getEnvironment());
-        //set syspop for logback config
-        //for (LogAutoConfiguration.LogProperties.Pattern pattern : LogAutoConfiguration.LogProperties.Pattern.values()) {
-        //	System.setProperty("yiji.log.pattern." + pattern.name(), pattern.getPattern());
-        //}
-        //
         //config log extension
         List<LogInitializer> logInitializers =
                 SpringFactoriesLoader.loadFactories(LogInitializer.class, getClassLoader());
@@ -81,23 +70,6 @@ public class ExLogbackLoggingSystem extends LogbackLoggingSystem {
             logInitializer.init(configurator);
         }
         AcoolyBanner.getInfos().addAll(configurator.getLogs());
-    }
-
-    /**
-     * 确保环境配置符合预期
-     */
-    private void assertEnv(Environment environment) {
-        if (environment instanceof ConfigurableEnvironment) {
-            MutablePropertySources mutablePropertySources =
-                    ((ConfigurableEnvironment) environment).getPropertySources();
-            //参考：org.springframework.boot.context.config.ConfigFileApplicationListener.ConfigurationPropertySources.NAME
-//            PropertySource ps =
-//                    mutablePropertySources.get(
-//                            ConfigFileApplicationListener.APPLICATION_CONFIGURATION_PROPERTY_SOURCE_NAME);
-//            if (ps == null) {
-//                throw new AppConfigException("在日志系统初始化过程中，Environment不能从配置文件中获取配置参数");
-//            }
-        }
     }
 
     /**
@@ -112,7 +84,7 @@ public class ExLogbackLoggingSystem extends LogbackLoggingSystem {
         LoggerContext loggerContext = getLoggerContext();
         //渲染异常日志时，忽略的栈
         System.setProperty(
-                "yiji.log.ignoredStackFrames",
+                "acooly.log.ignoredStackFrames",
                 "java.lang.reflect.Method,"
                         + "org.apache.catalina,"
                         + "sun.reflect,"
@@ -121,13 +93,6 @@ public class ExLogbackLoggingSystem extends LogbackLoggingSystem {
                         + "org.springframework.web.filter.OncePerRequestFilter,"
                         + "org.springframework.web.servlet,"
                         + "com.alibaba.dubbo.rpc.protocol.ProtocolFilterWrapper");
-        //设置异常日志长度
-        if (Env.isOnline()) {
-            System.setProperty("yiji.log.exLength", "20");
-        } else {
-            System.setProperty("yiji.log.exLength", "full");
-        }
-        System.setProperty("yiji.log.pattern.str", OptionHelper.substVars(pattern(), loggerContext));
 
         super.loadConfiguration(initializationContext, location, logFile);
         LogbackConfigurator configurator =

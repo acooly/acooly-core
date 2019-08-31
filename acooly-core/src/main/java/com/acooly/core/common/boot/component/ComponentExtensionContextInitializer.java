@@ -30,7 +30,7 @@ public class ComponentExtensionContextInitializer implements ApplicationContextI
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         new DevModeDetector().apply(applicationContext.getEnvironment());
-        String[] exclude = applicationContext.getEnvironment().getProperty("spring.autoconfigure.exclude",String[].class);
+        String[] exclude = applicationContext.getEnvironment().getProperty("spring.autoconfigure.exclude", String[].class);
         if (exclude == null) {
             exclude = new String[0];
         }
@@ -43,6 +43,8 @@ public class ComponentExtensionContextInitializer implements ApplicationContextI
                             excludes.addAll(componentInitializer.excludeAutoconfigClassNames());
                         });
 
+        // 添加禁用spring-security的AutoConfiguration
+        excludes.add("org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration");
         if (!excludes.isEmpty()) {
             System.setProperty("spring.autoconfigure.exclude", Joiner.on(',').join(excludes));
         }

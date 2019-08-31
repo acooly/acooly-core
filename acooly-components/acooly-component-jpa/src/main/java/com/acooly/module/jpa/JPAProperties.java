@@ -20,7 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.List;
 import java.util.Map;
 
-import static com.acooly.core.common.boot.listener.ExApplicationRunListener.COMPONENTS_PACKAGE;
+import static com.acooly.core.common.boot.listener.AcoolyApplicationRunListener.COMPONENTS_PACKAGE;
 import static com.acooly.module.jpa.JPAProperties.PREFIX;
 
 /**

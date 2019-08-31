@@ -4,7 +4,7 @@
  */
 package com.acooly.core.common.boot;
 
-import com.acooly.core.common.boot.listener.ExApplicationRunListener;
+import com.acooly.core.common.boot.listener.AcoolyApplicationRunListener;
 import com.acooly.core.common.boot.log.LogAutoConfig;
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.utils.Strings;
@@ -140,7 +140,7 @@ public class Apps {
     }
 
     public static void shutdown() {
-        ExApplicationRunListener.shutdownApp();
+        AcoolyApplicationRunListener.shutdownApp();
     }
 
     public static <T> T buildProperties(Class<T> clazz) {

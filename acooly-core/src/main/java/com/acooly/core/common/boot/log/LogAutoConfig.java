@@ -32,12 +32,12 @@ public class LogAutoConfig {
 
         public static final String GID_KEY = "gid";
 
-        //		public static final String LOG_PATTERN = "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{0}:%L- %msg%n%xEx{full, ${ignoredStackFrames}}";
-        //		/**
-        //		 * log pattern same as {@link #LOG_PATTERN} with ANSI Escape sequences
-        //		 * color support
-        //		 */
-        //		public static final String ANSI_LOG_PATTERN = "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%-5level) %clr([%thread]){faint} %clr(%logger{0}){cyan}%clr(:%L){faint}%clr(-){red}  %m%n%xEx{full, ${ignoredStackFrames}}";
+        public static final String LOG_PATTERN = "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{0}:%L- %msg%n%xEx{full, ${ignoredStackFrames}}";
+        /**
+         * log pattern same as {@link #LOG_PATTERN} with ANSI Escape sequences
+         * color support
+         */
+        public static final String ANSI_LOG_PATTERN = "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%-5level) %clr([%thread]){faint} %clr(%logger{0}){cyan}%clr(:%L){faint}%clr(-){red}  %m%n%xEx{full, ${ignoredStackFrames}}";
 
         /**
          * mdc log pattern with parameter gid
@@ -111,12 +111,8 @@ public class LogAutoConfig {
          * 从环境获取是否启用console log
          */
         public static Boolean consoleEnable() {
-            //支持多种配置形势，比如acooly.log.consoleEnable、acooly.log.console-enable
-//            RelaxedPropertyResolver resolver =
-//                    new RelaxedPropertyResolver(EnvironmentHolder.get(), "acooly.log.");
-//            return resolver.getProperty("consoleEnable", Boolean.class, Boolean.TRUE);
-            return EnvironmentHolder.get().getProperty("acooly.log.consoleEnable",Boolean.class,Boolean.TRUE);
-
+            //acooly.log.console-enable
+            return EnvironmentHolder.get().getProperty("acooly.log.consoleEnable", Boolean.class, Boolean.TRUE);
         }
 
 

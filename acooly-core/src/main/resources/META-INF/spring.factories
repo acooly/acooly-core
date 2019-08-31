@@ -1,5 +1,5 @@
 org.springframework.boot.SpringApplicationRunListener=\
-com.acooly.core.common.boot.listener.ExApplicationRunListener,\
+com.acooly.core.common.boot.listener.AcoolyApplicationRunListener,\
 com.acooly.core.common.boot.listener.DependencyCheckRunListener
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.acooly.core.common.boot.log.LogAutoConfig

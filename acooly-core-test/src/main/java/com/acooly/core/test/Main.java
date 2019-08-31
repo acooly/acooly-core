@@ -12,11 +12,15 @@ package com.acooly.core.test;
 import com.acooly.core.common.BootApp;
 import com.acooly.core.common.boot.Apps;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 
 /**
  * @author qiubo
  */
 @BootApp(sysName = "acooly-test", httpPort = 8081)
+//@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class, UserDetailsServiceAutoConfiguration.class})
 public class Main {
     public static void main(String[] args) {
         Apps.setProfileIfNotExists("sdev");

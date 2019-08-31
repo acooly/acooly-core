@@ -11,6 +11,18 @@ import java.util.regex.Pattern;
 public class Strings extends StringUtils {
     private static final char UNDERLINE = '_';
     private static UrlValidator httpUrlValidator = new UrlValidator(new String[]{"http", "https"});
+    private static int ONE_WORD_LEN = 1;
+
+
+    /**
+     * 字符串首字
+     *
+     * @param text
+     * @return
+     */
+    public static String first(String text) {
+        return Strings.left(text, ONE_WORD_LEN);
+    }
 
 
     /**

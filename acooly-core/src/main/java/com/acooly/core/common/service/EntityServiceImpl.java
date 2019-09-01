@@ -5,11 +5,10 @@ import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.BeanUtils;
-import com.acooly.core.utils.GenericsUtils;
+import com.acooly.core.utils.Reflections;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -30,13 +29,12 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>>
     private M entityDao;
     private ApplicationContext context;
 
-    @SuppressWarnings("unchecked")
     protected M getEntityDao() throws BusinessException {
         if (entityDao != null) {
             return entityDao;
         }
         // 获取定义的第一个实例变量类型
-        Class<M> daoType = GenericsUtils.getSuperClassGenricType(getClass(), 1);
+        Class<M> daoType = Reflections.getSuperClassGenricType(getClass(), 1);
         List<Field> fields = BeanUtils.getFieldsByType(this, daoType);
         try {
             if (fields != null && fields.size() > 0) {
@@ -99,12 +97,12 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>>
 
     @Override
     public void saveOrUpdate(T t) throws BusinessException {
-        Assert.notNull(t);
+        Assert.notNull(t, "实体不能为空");
         if (t instanceof Entityable) {
             if (((Entityable) t).getId() != null) {
-                getEntityDao().update(t);
+                update(t);
             } else {
-                getEntityDao().create(t);
+                save(t);
             }
         } else {
             throw new UnsupportedOperationException("实体类必须继承Entityable才能使用saveOrUpdate方法");

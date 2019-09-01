@@ -5,6 +5,8 @@ import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.core.common.web.support.JsonResult;
+import com.acooly.core.utils.Regexs;
+import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.Messageable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -18,7 +20,6 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -36,7 +37,6 @@ import java.util.List;
 public abstract class AbstractStandardEntityController<
         T extends Entityable, M extends EntityService<T>>
         extends AbstractFileOperationController<T, M> {
-
     protected static final String LISTVIEW_POSIX = "List";
     protected static final String EDITVIEW_POSIX = "Edit";
     protected static final String SHOWVIEW_POSIX = "Show";
@@ -401,6 +401,12 @@ public abstract class AbstractStandardEntityController<
      */
     protected void handleException(JsonResult result, String action, Exception e) {
         String message = getExceptionMessage(action, e);
+        // 猜测是MYSQL的唯一索引错误
+        if (Strings.containsIgnoreCase(message, "sql") && Strings.containsIgnoreCase(message, "Duplicate")) {
+            String msg = Strings.substringAfter(message, "Duplicate");
+            String value = Regexs.finder(Regexs.CommonRegex.QUITATION, msg);
+            message = "违反唯一性，值(" + (value != null ? "[" + value + "]" : "") + ")已经存在";
+        }
         logger.error(message, e);
         result.setSuccess(false);
         if (e instanceof Messageable) {
@@ -435,7 +441,7 @@ public abstract class AbstractStandardEntityController<
             } else {
                 source = source.getCause();
             }
-            if (source.getClass().toString().equals(SQLException.class.toString())) {
+            if (Strings.indexOfIgnoreCase(source.getClass().toString(), "SQL") != -1) {
                 return source.getCause();
             }
         }

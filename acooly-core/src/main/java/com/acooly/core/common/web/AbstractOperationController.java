@@ -77,12 +77,12 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param response
      */
     protected PageInfo<T> doList(
-            HttpServletRequest request, HttpServletResponse response, Model model) {
+            HttpServletRequest request, HttpServletResponse response, Model model) throws Exception{
         return getEntityService()
                 .query(getPageInfo(request), getSearchParams(request), getSortMap(request));
     }
 
-    protected PageInfo<T> doList(HttpServletRequest request, HttpServletResponse response) {
+    protected PageInfo<T> doList(HttpServletRequest request, HttpServletResponse response) throws Exception{
         return doList(request, response, null);
     }
 
@@ -94,11 +94,11 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param response
      * @return
      */
-    protected List<T> doQuery(HttpServletRequest request, HttpServletResponse response, Model model) {
+    protected List<T> doQuery(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
         return getEntityService().query(getSearchParams(request), getSortMap(request));
     }
 
-    protected List<T> doQuery(HttpServletRequest request, HttpServletResponse response) {
+    protected List<T> doQuery(HttpServletRequest request, HttpServletResponse response) throws Exception {
         return doQuery(request, response, null);
     }
 
@@ -143,7 +143,7 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param model
      * @param ids
      */
-    protected void doRemove(HttpServletRequest request, HttpServletResponse response, Model model, Serializable... ids) {
+    protected void doRemove(HttpServletRequest request, HttpServletResponse response, Model model, Serializable... ids) throws Exception {
 
         if (ids == null || ids.length == 0) {
             throw new IllegalArgumentException("请求参数中没有指定需要删除的实体Id");
@@ -167,7 +167,7 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param model
      */
     @Deprecated
-    protected void doRemove(HttpServletRequest request, HttpServletResponse response, Model model) {
+    protected void doRemove(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
         String[] ids = request.getParameterValues(getEntityIdName());
         List<Long> idList = Lists.newArrayList();
         getIds(idList, ids);
@@ -237,7 +237,7 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param model
      * @param isCreate
      */
-    protected T onSave(HttpServletRequest request, HttpServletResponse response, Model model, T entity, boolean isCreate) {
+    protected T onSave(HttpServletRequest request, HttpServletResponse response, Model model, T entity, boolean isCreate) throws Exception {
         return entity;
     }
 

@@ -41,6 +41,34 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      */
     protected int defaultPageSize = 15;
 
+
+    /**
+     * 置顶
+     */
+    protected void doTop(HttpServletRequest request, HttpServletResponse response, Model model) {
+        Long id = Servlets.getLongParameter(getEntityIdName());
+        getEntityService().top(id);
+    }
+
+    /**
+     * 上移
+     */
+    protected void doUp(HttpServletRequest request, HttpServletResponse response, Model model) {
+        Long id = Servlets.getLongParameter(getEntityIdName());
+        Map<String, Object> map = Maps.newHashMap();
+        Map<String, Boolean> sortMap = Maps.newLinkedHashMap();
+        customUpQuery(request, id, map, sortMap);
+        getEntityService().up(id, map, sortMap);
+    }
+
+    /**
+     * 预留上移查询的条件自定义方法
+     * do：查询比当前id排序值大的条件
+     */
+    protected void customUpQuery(HttpServletRequest request, Long id, Map<String, Object> map, Map<String, Boolean> sortMap) {
+
+    }
+
     /**
      * 執行分頁查詢
      *

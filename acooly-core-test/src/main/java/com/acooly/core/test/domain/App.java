@@ -71,4 +71,6 @@ public class App extends AbstractEntity {
      */
     private Long parentId;
     private Money price;
+
+    private Boolean enable;
 }

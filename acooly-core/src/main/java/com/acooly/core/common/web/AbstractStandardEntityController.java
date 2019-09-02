@@ -335,6 +335,36 @@ public abstract class AbstractStandardEntityController<
         return getSuccessView();
     }
 
+
+    @RequestMapping(value = "top")
+    public String top(HttpServletRequest request, HttpServletResponse response, Model model) {
+        allow(request, response, MappingMethod.move);
+        try {
+            model.addAllAttributes(referenceData(request));
+            doTop(request, response, model);
+            saveMessage(request, "置顶成功");
+        } catch (Exception e) {
+            logger.warn(getExceptionMessage("top", e), e);
+            handleException("置顶", e, request);
+        }
+        return getSuccessView();
+    }
+
+    @RequestMapping(value = "up")
+    public String up(HttpServletRequest request, HttpServletResponse response, Model model) {
+        allow(request, response, MappingMethod.move);
+        try {
+            model.addAllAttributes(referenceData(request));
+            doUp(request, response, model);
+            saveMessage(request, "上移成功");
+        } catch (Exception e) {
+            logger.warn(getExceptionMessage("up", e), e);
+            handleException("上移", e, request);
+        }
+        return getSuccessView();
+    }
+
+
     protected void onCreate(HttpServletRequest request, HttpServletResponse response, Model model) {
         try {
             model.addAttribute(getEntityName(), getEntityClass().newInstance());

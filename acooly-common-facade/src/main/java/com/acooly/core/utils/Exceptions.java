@@ -14,7 +14,7 @@ import java.io.StringWriter;
 /**
  * 关于异常的工具类.
  *
- * @author calvin
+ * @author zhangpu
  */
 public class Exceptions {
 
@@ -53,13 +53,14 @@ public class Exceptions {
             throw new BusinessException(throwable.getMessage());
         }
     }
-    public static BusinessException rethrowBusinessException(Throwable throwable,String msg) {
+
+    public static BusinessException rethrowBusinessException(Throwable throwable, String msg) {
         if (throwable instanceof BusinessException) {
             throw (BusinessException) throwable;
         } else if (throwable instanceof Error) {
             throw (Error) throwable;
         } else {
-            throw new BusinessException(msg,throwable.getMessage());
+            throw new BusinessException(msg, throwable.getMessage());
         }
     }
 

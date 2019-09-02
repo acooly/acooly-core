@@ -77,13 +77,12 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param response
      */
     protected PageInfo<T> doList(
-            HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
+            HttpServletRequest request, HttpServletResponse response, Model model) {
         return getEntityService()
                 .query(getPageInfo(request), getSearchParams(request), getSortMap(request));
     }
 
-    protected PageInfo<T> doList(HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
+    protected PageInfo<T> doList(HttpServletRequest request, HttpServletResponse response) {
         return doList(request, response, null);
     }
 
@@ -94,15 +93,12 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param request
      * @param response
      * @return
-     * @throws Exception
      */
-    protected List<T> doQuery(HttpServletRequest request, HttpServletResponse response, Model model)
-            throws Exception {
+    protected List<T> doQuery(HttpServletRequest request, HttpServletResponse response, Model model) {
         return getEntityService().query(getSearchParams(request), getSortMap(request));
     }
 
-    protected List<T> doQuery(HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
+    protected List<T> doQuery(HttpServletRequest request, HttpServletResponse response) {
         return doQuery(request, response, null);
     }
 
@@ -113,11 +109,8 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param response
      * @param model
      * @param isCreate
-     * @throws Exception
      */
-    protected T doSave(
-            HttpServletRequest request, HttpServletResponse response, Model model, boolean isCreate)
-            throws Exception {
+    protected T doSave(HttpServletRequest request, HttpServletResponse response, Model model, boolean isCreate) throws Exception {
         T entity = loadEntity(request);
         if (entity == null) {
             // create
@@ -149,11 +142,8 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param response
      * @param model
      * @param ids
-     * @throws Exception
      */
-    protected void doRemove(
-            HttpServletRequest request, HttpServletResponse response, Model model, Serializable... ids)
-            throws Exception {
+    protected void doRemove(HttpServletRequest request, HttpServletResponse response, Model model, Serializable... ids) {
 
         if (ids == null || ids.length == 0) {
             throw new IllegalArgumentException("请求参数中没有指定需要删除的实体Id");
@@ -175,11 +165,9 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param request
      * @param response
      * @param model
-     * @throws Exception
      */
     @Deprecated
-    protected void doRemove(HttpServletRequest request, HttpServletResponse response, Model model)
-            throws Exception {
+    protected void doRemove(HttpServletRequest request, HttpServletResponse response, Model model) {
         String[] ids = request.getParameterValues(getEntityIdName());
         List<Long> idList = Lists.newArrayList();
         getIds(idList, ids);
@@ -233,7 +221,7 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param request
      * @return
      */
-    protected T loadEntity(HttpServletRequest request) throws Exception {
+    protected T loadEntity(HttpServletRequest request) {
         String id = request.getParameter(getEntityIdName());
         if (StringUtils.isNotBlank(id)) {
             return getEntityService().get(Long.valueOf(id));
@@ -248,15 +236,8 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param response
      * @param model
      * @param isCreate
-     * @throws Exception
      */
-    protected T onSave(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            Model model,
-            T entity,
-            boolean isCreate)
-            throws Exception {
+    protected T onSave(HttpServletRequest request, HttpServletResponse response, Model model, T entity, boolean isCreate) {
         return entity;
     }
 
@@ -292,7 +273,7 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
         return Maps.newHashMap();
     }
 
-    protected void doDataBinding(HttpServletRequest request, Object command) throws Exception {
+    protected void doDataBinding(HttpServletRequest request, Object command) {
         bind(request, command);
     }
 
@@ -309,8 +290,7 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * 兼容设置
      */
     @Override
-    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder)
-            throws Exception {
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
         initBinder(binder);
     }
 

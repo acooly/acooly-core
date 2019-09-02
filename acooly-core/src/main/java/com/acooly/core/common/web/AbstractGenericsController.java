@@ -6,8 +6,9 @@ import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.UnMappingMethodException;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.core.utils.BeanUtils;
-import com.acooly.core.utils.GenericsUtils;
+import com.acooly.core.utils.Exceptions;
 import com.acooly.core.utils.Money;
+import com.acooly.core.utils.Reflections;
 import com.acooly.core.utils.system.IPUtil;
 import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
@@ -58,7 +59,7 @@ public abstract class AbstractGenericsController<T extends Entityable, M extends
 
     private DefaultConversionService conversionService = new DefaultConversionService();
 
-    protected void bind(HttpServletRequest request, Object command) throws Exception {
+    protected void bind(HttpServletRequest request, Object command) {
         ServletRequestDataBinder binder = createBinder(request, command);
         binder.setConversionService(conversionService);
         binder.bind(request);
@@ -69,26 +70,24 @@ public abstract class AbstractGenericsController<T extends Entityable, M extends
                 }
             }
         }
-        binder.closeNoCatch();
+        closeBinder(binder);
     }
 
 
-    protected void bindNotValidator(HttpServletRequest request, Object command) throws Exception {
+    protected void bindNotValidator(HttpServletRequest request, Object command) {
         ServletRequestDataBinder binder = createBinder(request, command);
         binder.setConversionService(conversionService);
         binder.bind(request);
-        binder.closeNoCatch();
+        closeBinder(binder);
     }
 
-    protected ServletRequestDataBinder createBinder(HttpServletRequest request, Object command)
-            throws Exception {
+    protected ServletRequestDataBinder createBinder(HttpServletRequest request, Object command) {
         ServletRequestDataBinder binder = new ServletRequestDataBinder(command, "command");
         initBinder(request, binder);
         return binder;
     }
 
-    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder)
-            throws Exception {
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
     }
 
     protected void allow(
@@ -118,7 +117,7 @@ public abstract class AbstractGenericsController<T extends Entityable, M extends
      */
     @SuppressWarnings("unchecked")
     protected Class<T> getEntityClass() {
-        entityClass = GenericsUtils.getSuperClassGenricType(getClass());
+        entityClass = Reflections.getSuperClassGenricType(getClass());
         return entityClass;
     }
 
@@ -139,10 +138,9 @@ public abstract class AbstractGenericsController<T extends Entityable, M extends
     /**
      * 获得EntityManager类进行CRUD操作，可以在子类重载.
      */
-    @SuppressWarnings("unchecked")
     protected M getEntityService() {
         if (entityService == null) {
-            Class<M> entityServiceClass = GenericsUtils.getSuperClassGenricType(getClass(), 1);
+            Class<M> entityServiceClass = Reflections.getSuperClassGenricType(getClass(), 1);
             List<Field> fields = BeanUtils.getFieldsByType(this, entityServiceClass);
             try {
                 if (fields.isEmpty()) {
@@ -158,6 +156,15 @@ public abstract class AbstractGenericsController<T extends Entityable, M extends
             Assert.notNull(entityService, "EntityService未能成功初始化");
         }
         return entityService;
+    }
+
+
+    private void closeBinder(ServletRequestDataBinder binder) {
+        try {
+            binder.closeNoCatch();
+        } catch (Exception e) {
+            Exceptions.rethrowBusinessException(e, "自动绑定关闭异常");
+        }
     }
 
     @Override

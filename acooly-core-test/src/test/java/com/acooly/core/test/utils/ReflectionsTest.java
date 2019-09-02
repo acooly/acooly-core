@@ -1,14 +1,12 @@
 package com.acooly.core.test.utils;
 
+import com.acooly.core.test.domain.App;
 import com.acooly.core.test.utils.bean.MaskNode;
-import com.acooly.core.test.utils.bean.MaskSubEntity;
 import com.acooly.core.utils.Reflections;
-import com.acooly.core.utils.arithmetic.tree.TreeNode;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
-import java.util.List;
 
 /**
  * @author zhangpu
@@ -25,6 +23,11 @@ public class ReflectionsTest {
         log.info("ParameterGenericType:{}", Reflections.getParameterGenericType(filed));
     }
 
+    @Test
+    public void testCreateObject() throws Exception {
+        App app = Reflections.createObject(App.class);
+        log.info("CreateObject:{}", app.toString());
+    }
 
 
 }

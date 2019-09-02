@@ -264,6 +264,12 @@
                 <artifactId>openapi-framework-apidoc</artifactId>
                 <version>${acooly.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-coder</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

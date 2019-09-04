@@ -3,24 +3,29 @@ package com.acooly.core.common.web;
 import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.domain.Entityable;
+import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.common.exception.CommonErrorCodes;
 import com.acooly.core.common.exception.UnMappingMethodException;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.core.utils.BeanUtils;
-import com.acooly.core.utils.Exceptions;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.Reflections;
 import com.acooly.core.utils.system.IPUtil;
 import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
+import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -28,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 抽象泛型控制器
@@ -87,7 +93,29 @@ public abstract class AbstractGenericsController<T extends Entityable, M extends
         return binder;
     }
 
+
     protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
+    }
+
+    protected void closeBinder(ServletRequestDataBinder binder) {
+        try {
+            binder.closeNoCatch();
+        } catch (Exception e) {
+            List<ObjectError> objectErrors = binder.getBindingResult().getAllErrors();
+            Map<String, String> errors = Maps.newLinkedHashMap();
+            for (ObjectError objectError : objectErrors) {
+                if (objectError.getArguments() != null) {
+                    DefaultMessageSourceResolvable d = (DefaultMessageSourceResolvable) objectError.getArguments()[0];
+                    errors.put(d.getDefaultMessage(), objectError.getDefaultMessage());
+                }
+            }
+            StringBuilder sb = new StringBuilder();
+            errors.forEach((k, v) -> {
+                sb.append(k).append(":").append(v).append(" ,");
+            });
+            sb.substring(0, sb.length() - 1);
+            throw new BusinessException(CommonErrorCodes.PARAMETER_ERROR, sb.toString());
+        }
     }
 
     protected void allow(
@@ -158,14 +186,6 @@ public abstract class AbstractGenericsController<T extends Entityable, M extends
         return entityService;
     }
 
-
-    private void closeBinder(ServletRequestDataBinder binder) {
-        try {
-            binder.closeNoCatch();
-        } catch (Exception e) {
-            Exceptions.rethrowBusinessException(e, "自动绑定关闭异常");
-        }
-    }
 
     @Override
     public void afterPropertiesSet() throws Exception {

@@ -13,6 +13,7 @@ import com.acooly.core.common.exception.AppConfigException;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -153,7 +154,10 @@ public class EnvironmentHolder implements EnvironmentAware {
             Assert.notNull(target, "target对象不能为空");
             Assert.notNull(prefix, "prefix不能为空");
             try {
-                Binder.get(EnvironmentHolder.get()).bind(prefix, target.getClass());
+                BindResult bindResult = Binder.get(EnvironmentHolder.get()).bind(prefix, target.getClass());
+                if(bindResult.isBound()){
+                    target = bindResult.get();
+                }
                 if (target instanceof InitializingBean) {
                     ((InitializingBean) target).afterPropertiesSet();
                 }

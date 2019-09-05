@@ -37,7 +37,7 @@ public class EnvironmentHolder implements EnvironmentAware {
     public static Environment get() {
         return environment;
     }
-    
+
 
     /**
      * 通过环境配置构建配置对象,配置对象必须标注{@link ConfigurationProperties},使用ConfigurationProperties中的prefix填充对象
@@ -51,8 +51,7 @@ public class EnvironmentHolder implements EnvironmentAware {
     public static <T> T buildProperties(Class<T> clazz) {
         try {
             T t = clazz.newInstance();
-            PropertiesBuilder.build(t);
-            return t;
+            return (T) PropertiesBuilder.build(t);
         } catch (Exception e) {
             throw new AppConfigException(e);
         }
@@ -64,8 +63,8 @@ public class EnvironmentHolder implements EnvironmentAware {
      * @param target 配置对象
      * @param prefix 配置前缀
      */
-    public static void buildProperties(Object target, String prefix) {
-        PropertiesBuilder.build(target, prefix);
+    public static Object buildProperties(Object target, String prefix) {
+        return PropertiesBuilder.build(target, prefix);
     }
 
     @Override
@@ -150,12 +149,12 @@ public class EnvironmentHolder implements EnvironmentAware {
         private static DefaultConversionService defaultConversionService =
                 new DefaultConversionService();
 
-        public static void build(Object target, String prefix) {
+        public static Object build(Object target, String prefix) {
             Assert.notNull(target, "target对象不能为空");
             Assert.notNull(prefix, "prefix不能为空");
             try {
                 BindResult bindResult = Binder.get(EnvironmentHolder.get()).bind(prefix, target.getClass());
-                if(bindResult.isBound()){
+                if (bindResult.isBound()) {
                     target = bindResult.get();
                 }
                 if (target instanceof InitializingBean) {
@@ -164,9 +163,10 @@ public class EnvironmentHolder implements EnvironmentAware {
             } catch (Exception e) {
                 throw new AppConfigException(target.getClass().getSimpleName() + "配置对象初始化失败", e);
             }
+            return target;
         }
 
-        public static void build(Object target) {
+        public static Object build(Object target) {
             Assert.notNull(target, "target对象不能为空");
             ConfigurationProperties properties =
                     AnnotationUtils.findAnnotation(target.getClass(), ConfigurationProperties.class);
@@ -176,7 +176,7 @@ public class EnvironmentHolder implements EnvironmentAware {
             if (Strings.isNullOrEmpty(prefix)) {
                 prefix = properties.value();
             }
-            build(target, prefix);
+            return build(target, prefix);
         }
     }
 }

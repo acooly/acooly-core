@@ -5,6 +5,7 @@ import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.BeanUtils;
+import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.GenericsUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -88,12 +89,16 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>>
 
     @Override
     public void saves(List<T> ts) throws BusinessException {
-        getEntityDao().saves(ts);
+        if (Collections3.isNotEmpty(ts)) {
+            getEntityDao().saves(ts);
+        }
     }
 
     @Override
     public void inserts(List<T> ts) throws BusinessException {
-        getEntityDao().inserts(ts);
+        if (Collections3.isNotEmpty(ts)) {
+            getEntityDao().inserts(ts);
+        }
     }
 
     @Override

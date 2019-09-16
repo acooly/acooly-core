@@ -49,6 +49,20 @@ public class Servlets {
         CONVERSION_SERVICE.addConverter(new StringToDateConverter());
     }
 
+    /**
+     * 重定向
+     *
+     * @param response
+     * @param location
+     */
+    public static void redirect(HttpServletResponse response, String location) {
+        try {
+            response.sendRedirect(location);
+        } catch (Exception e) {
+            throw new RuntimeException("重定向失败,location:" + location + " :", e);
+        }
+    }
+
 
     /**
      * 写入字符串到HttpServletResponse

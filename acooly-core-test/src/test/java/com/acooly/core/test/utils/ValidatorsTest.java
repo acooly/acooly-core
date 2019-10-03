@@ -9,6 +9,12 @@ import com.acooly.core.utils.validate.jsr303.MoneyConstraint;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 
 /**
  * @author zhangpu
@@ -17,20 +23,36 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ValidatorsTest {
 
-
-    public static void main(String[] args) {
+    @Test
+    public void testBeanValidatorWithJsr303() {
         CustomJsr303PropertyBean bean = new CustomJsr303PropertyBean();
         bean.setCertNo("51022119820915641x");
         bean.setMobileNo("19909091989");
         bean.setPrice(Money.cent(100));
         bean.setUrl("http://acooly.cn");
+        bean.setTitle("title");
+//        bean.setName("name");
+
         Validators.assertJSR303(bean);
+        log.info("validator ok with custom JSR303");
     }
 
 
     @Getter
     @Setter
     static class CustomJsr303PropertyBean {
+
+        /**
+         * hibernate的NotEmpty
+         */
+        @org.hibernate.validator.constraints.NotEmpty
+        private String title;
+
+        /**
+         * javax的NotBlank
+         */
+        @NotEmpty
+        private String name;
 
         @CertNo
         private String certNo;

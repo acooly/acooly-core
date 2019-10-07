@@ -37,6 +37,8 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
 
     public void setStatus(Messageable status) {
         this.status = status;
+        this.code = status.code();
+        this.detail = status.message();
     }
 
     public void markProcessing() {

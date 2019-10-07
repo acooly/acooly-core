@@ -426,22 +426,37 @@ public class Servlets {
         return values;
     }
 
-    public static Map<String, String> getHeaders(HttpServletRequest request, String prefixName) {
+
+    /**
+     * 获取Headers
+     *
+     * @param request
+     * @param prefixName        前缀
+     * @param includePrefixName key是否包含前缀
+     * @return
+     */
+    public static Map<String, String> getHeaders(HttpServletRequest request, String prefixName, boolean includePrefixName) {
         Enumeration<String> names = request.getHeaderNames();
         String name = null;
         Map<String, String> map = Maps.newLinkedHashMap();
         while (names.hasMoreElements()) {
             name = names.nextElement();
-            if (StringUtils.isNotBlank(prefixName)) {
-                if (StringUtils.startsWithIgnoreCase(name, prefixName)) {
-                    map.put(StringUtils.lowerCase(name), getHeaderValue(request, name));
-                }
-            } else {
-                map.put(StringUtils.lowerCase(name), getHeaderValue(request, name));
+            if (Strings.isBlank(prefixName)) {
+                map.put(name, getHeaderValue(request, name));
+                continue;
+            }
+
+            if (StringUtils.startsWithIgnoreCase(name, prefixName)) {
+                map.put(includePrefixName ? name : Strings.substringAfter(name, prefixName), getHeaderValue(request, name));
             }
         }
         return map;
     }
+
+    public static Map<String, String> getHeaders(HttpServletRequest request, String prefixName) {
+        return getHeaders(request, prefixName, true);
+    }
+
 
     public static void setHeader(HttpServletResponse response, String name, String value) {
         response.setHeader(name, value);

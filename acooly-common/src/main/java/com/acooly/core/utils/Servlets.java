@@ -241,34 +241,11 @@ public class Servlets {
      *
      * <p>返回的结果的Parameter名已去除前缀.
      */
-    @SuppressWarnings("rawtypes")
-    public static Map<String, Object> getParametersStartingWith(
-            ServletRequest request, String prefix) {
-        Validate.notNull(request, "Request must not be null");
-        Enumeration paramNames = request.getParameterNames();
-        Map<String, Object> params = new TreeMap<String, Object>();
-        if (prefix == null) {
-            prefix = "";
-        }
-        while (paramNames != null && paramNames.hasMoreElements()) {
-            String paramName = (String) paramNames.nextElement();
-            if ("".equals(prefix) || paramName.startsWith(prefix)) {
-                String unprefixed = paramName.substring(prefix.length());
-                String[] values = request.getParameterValues(paramName);
-                if (values == null || values.length == 0) {
-                    // Do nothing, no values found at all.
-                } else if (values.length > 1) {
-                    params.put(unprefixed, values);
-                } else {
-                    params.put(unprefixed, values[0]);
-                }
-            }
-        }
-        return params;
+    public static Map<String, Object> getParametersStartingWith(ServletRequest request, String prefix) {
+        return Maps.transformValues(getParameters(request, prefix, false), v -> String.valueOf(v));
     }
 
-    public static Map<String, String> getParameters(
-            ServletRequest request, String prefix, boolean includeEmpty) {
+    public static Map<String, String> getParameters(ServletRequest request, String prefix, boolean includeEmpty) {
         Validate.notNull(request, "Request must not be null");
         Enumeration<String> paramNames = request.getParameterNames();
         Map<String, String> params = Maps.newLinkedHashMap();
@@ -289,8 +266,7 @@ public class Servlets {
         return params;
     }
 
-    public static Map<String, String> getParameters(
-            ServletRequest request) {
+    public static Map<String, String> getParameters(ServletRequest request) {
         return getParameters(request, null, true);
     }
 
@@ -358,14 +334,8 @@ public class Servlets {
      * @see #getParametersStartingWith
      */
     public static String encodeParameterStringWithPrefix(Map<String, ?> params, String prefix) {
-        if (params == null || params.size() == 0) {
-            return "";
-        }
-
-        if (prefix == null) {
-            prefix = "";
-        }
-
+        Asserts.notEmpty(params);
+        prefix = Strings.trimToEmpty(prefix);
         StringBuilder queryStringBuilder = new StringBuilder();
         Iterator<? extends Entry<String, ?>> it = params.entrySet().iterator();
         while (it.hasNext()) {
@@ -376,6 +346,11 @@ public class Servlets {
             }
         }
         return queryStringBuilder.toString();
+    }
+
+
+    public static String buildQueryString(Map<String, String> params) {
+        return encodeParameterStringWithPrefix(params, null);
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.acooly.core.utils;
 
+import com.acooly.core.utils.system.Hex;
 import com.acooly.core.utils.system.IPUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -10,14 +11,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.acooly.core.utils.ObjectId.createProcessIdentifier;
-
 /**
- * orderNo生成器
+ * Id生成器
  *
- *
- *
- * <p>简单实现：支持分布式环境，单机秒级并发1000
+ * <p>简单实现：支持分布式环境，单机秒级并发9999
  *
  * @author zhangpu
  */
@@ -28,7 +25,7 @@ public class Ids {
 
     static {
         try {
-            PROCESS_IDENTIFIER = createProcessIdentifier();
+            PROCESS_IDENTIFIER = ObjectId.getGeneratedProcessIdentifier();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -49,7 +46,7 @@ public class Ids {
         StringBuilder sb = new StringBuilder();
         sb.append(padding(systemCode, 4));
         sb.append(padding(reserved, 8));
-        sb.append(new ObjectId().toHexString());
+        sb.append(ObjectId.get().toHexString());
         return sb.toString();
     }
 
@@ -61,7 +58,7 @@ public class Ids {
      * 长度24位全球唯一标识
      */
     public static String gid() {
-        return "g" + new ObjectId().toHexString();
+        return "G" + new ObjectId().toHexString();
     }
 
     /**
@@ -79,7 +76,7 @@ public class Ids {
 
     public static String oid() {
         StringBuilder sb = new StringBuilder();
-        sb.append("o");
+        sb.append("O");
         sb.append(Did.getInstance().getId(20));
         return sb.toString();
     }
@@ -165,8 +162,8 @@ public class Ids {
             // 当前时间(12位)
             sb.append(format(new Date(), "yyMMddHHmmss"));
             // 随机数字(size-18位)
-            sb.append(RandomNumberGenerator.getNewString((size - 18)));
-            // 进程id(2位)
+            sb.append(RandomNumberGenerator.getNewString((size - MIN_LENGTH)));
+            // 进程id(4位)
             sb.append(getPid());
             // 序列号(4位)
             sb.append(getSequ());
@@ -177,13 +174,17 @@ public class Ids {
          * 获取两位pid
          */
         private String getPid() {
+
             if (pidStr == null) {
-                pidStr = String.valueOf(Math.abs(short2(PROCESS_IDENTIFIER)));
+                StringBuilder sb = new StringBuilder();
+                Hex.append(sb, PROCESS_IDENTIFIER);
+                pidStr = Strings.upperCase(sb.toString());
             }
             return pidStr;
         }
 
         public String getSequ() {
+
             long timeCount = 0;
             while (true) {
                 timeCount = sequence.get();
@@ -285,5 +286,6 @@ public class Ids {
     public static String format(Date date) {
         return format(date, DEFAULT_DATE_FORMAT);
     }
+
 
 }

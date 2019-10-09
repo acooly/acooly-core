@@ -253,7 +253,7 @@ public final class ObjectId implements Comparable<ObjectId>, Serializable {
      *
      * @return the process id
      */
-    public static int getGeneratedProcessIdentifier() {
+    public static short getGeneratedProcessIdentifier() {
         return PROCESS_IDENTIFIER;
     }
 
@@ -355,6 +355,7 @@ public final class ObjectId implements Comparable<ObjectId>, Serializable {
                     "Failed to get machine identifier from network interface, using random number instead",
                     t);
         }
+
         machinePiece = machinePiece & LOW_ORDER_THREE_BYTES;
         return machinePiece;
     }
@@ -524,7 +525,7 @@ public final class ObjectId implements Comparable<ObjectId>, Serializable {
             chars[i++] = HEX_CHARS[b >> 4 & 0xF];
             chars[i++] = HEX_CHARS[b & 0xF];
         }
-        return new String(chars);
+        return Strings.upperCase(new String(chars));
     }
 
     // Big-Endian helpers, in this class because all other BSON numbers are little-endian

@@ -10,6 +10,7 @@
 package com.acooly.core.test.utils;
 
 import com.acooly.core.utils.Ids;
+import com.acooly.core.utils.ObjectId;
 import com.acooly.core.utils.id.NetAddressIdWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -25,12 +26,11 @@ import java.util.concurrent.CountDownLatch;
 @Slf4j
 public class IdsTest {
 
-
     @Test
-    public void testIds() throws Exception {
+    public void testGetGidBatch() throws Exception {
         final Set<String> container = Collections.synchronizedSet(new HashSet<>());
 
-        int times = 999;
+        int times = 99;
         int threads = 100;
         CountDownLatch latch = new CountDownLatch(threads);
         for (int i = 0; i < threads; i++) {
@@ -57,11 +57,60 @@ public class IdsTest {
         System.out.println("test saved count:" + container.size());
     }
 
+
+    @Test
+    public void testGid() throws Exception {
+        String gid = Ids.gid();
+        log.info("gid: {}, length: {}", gid, gid.length());
+    }
+
+    @Test
+    public void testGetGid() throws Exception {
+        String gid = Ids.getDid();
+        log.info("gid: {}, length: {}", gid, gid.length());
+    }
+
+    @Test
+    public void testGidBatch() throws Exception {
+        final Set<String> container = Collections.synchronizedSet(new HashSet<>());
+
+        int times = 999;
+        int threads = 100;
+        CountDownLatch latch = new CountDownLatch(threads);
+        for (int i = 0; i < threads; i++) {
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("线程:" + Thread.currentThread().getName() + " 开始");
+                    String id = null;
+                    for (int j = 0; j < times; j++) {
+                        id = Ids.gid();
+                        if (!container.add(id)) {
+                            System.out.println("----- 重复数据：----- " + id);
+                        }
+                    }
+                    latch.countDown();
+                    System.out.println("线程:" + Thread.currentThread().getName() + " 结束");
+                }
+            });
+            t.setName("test_" + i);
+            t.start();
+        }
+        latch.await();
+        System.out.println("test get count:" + times * threads);
+        System.out.println("test saved count:" + container.size());
+    }
+
     @Test
     public void name() throws Exception {
 
         NetAddressIdWorker netAddressIdWorker = new NetAddressIdWorker();
         Long generate = netAddressIdWorker.generate();
         System.out.println(generate + ":" + Long.toString(generate).toString().length());
+    }
+
+    @Test
+    public void objectId() throws Exception {
+        System.out.println((char)54);
     }
 }

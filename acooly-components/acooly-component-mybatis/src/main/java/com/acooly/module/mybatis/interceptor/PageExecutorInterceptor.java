@@ -42,7 +42,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 @Order(0)
 public class PageExecutorInterceptor extends AbstractInterceptor implements Interceptor {
 
-    private static Map<String, String> countSqlMap = Maps.newConcurrentMap();
+    private static  Map<String, String> countSqlMap = Maps.newConcurrentMap();
 
     CountSqlParser countSqlParser = new CountSqlParser();
 
@@ -132,6 +132,7 @@ public class PageExecutorInterceptor extends AbstractInterceptor implements Inte
                         mappedStatement.getConfiguration().getEnvironment().getDataSource()
                                 .getConnection();
             }
+
             PreparedStatement countStmt = connection.prepareStatement(countSql);
             BoundSql countBS = copyFromBoundSql(mappedStatement, boundSql, countSql);
             DefaultParameterHandler parameterHandler =

@@ -117,7 +117,7 @@ public class PageExecutorInterceptor extends AbstractInterceptor implements Inte
         long totpage = 0;
         try {
 
-            //如果在一个事物中先做了insert/delete 操作，考虑到innodb 的默认级别是不可重复读，如果这里重新去获取一个连接拿到
+            //如果在一个事物中先做了insert/delete 操作，考虑到innodb 的默认级别是可重复读，如果这里重新去获取一个连接拿到
             // 的这个总数是未执行insert /delete 之前的，显然不正确，但是不推荐把增删和读取放在一个事物里面
             SqlSessionHolder holder = (SqlSessionHolder) TransactionSynchronizationManager
                     .getResource(sqlSessionFactory);

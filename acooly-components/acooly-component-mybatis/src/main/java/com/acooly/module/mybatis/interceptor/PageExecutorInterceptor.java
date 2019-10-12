@@ -7,15 +7,6 @@ import com.acooly.module.mybatis.page.MyBatisPage;
 import com.github.pagehelper.parser.CountSqlParser;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
-import org.apache.ibatis.executor.Executor;
-import org.apache.ibatis.mapping.BoundSql;
-import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.plugin.*;
-import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
-import org.apache.ibatis.session.ResultHandler;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.core.annotation.Order;
-
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,6 +15,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import org.apache.ibatis.executor.Executor;
+import org.apache.ibatis.mapping.BoundSql;
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.plugin.Intercepts;
+import org.apache.ibatis.plugin.Invocation;
+import org.apache.ibatis.plugin.Plugin;
+import org.apache.ibatis.plugin.Signature;
+import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
+import org.apache.ibatis.session.ResultHandler;
+import org.apache.ibatis.session.RowBounds;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionHolder;
+import org.springframework.core.annotation.Order;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Intercepts({
         @Signature(
@@ -39,9 +46,11 @@ public class PageExecutorInterceptor extends AbstractInterceptor implements Inte
 
     CountSqlParser countSqlParser = new CountSqlParser();
 
+    private SqlSessionFactory sqlSessionFactory;
+
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
-    public Object intercept(Invocation invocation) throws Throwable {
+    public Object intercept( Invocation invocation ) throws Throwable {
         PageInfo pageInfo = havePageInfoArg(invocation);
         if (pageInfo == null) {
             return invocation.proceed();
@@ -58,9 +67,9 @@ public class PageExecutorInterceptor extends AbstractInterceptor implements Inte
         // 总记录数
         long totalCount = getCount(mappedStatement, originalSql, boundSql, parameterObject);
         long totalPage =
-                (totalCount % pageInfo.getCountOfCurrentPage() == 0
+                ( totalCount % pageInfo.getCountOfCurrentPage() == 0
                         ? totalCount / pageInfo.getCountOfCurrentPage()
-                        : totalCount / pageInfo.getCountOfCurrentPage() + 1);
+                        : totalCount / pageInfo.getCountOfCurrentPage() + 1 );
         pageInfo.setTotalCount(totalCount);
         pageInfo.setTotalPage(totalPage);
 
@@ -80,16 +89,17 @@ public class PageExecutorInterceptor extends AbstractInterceptor implements Inte
     }
 
     @Override
-    public Object plugin(Object arg0) {
+    public Object plugin( Object arg0 ) {
         return Plugin.wrap(arg0, this);
     }
 
     @Override
-    public void setProperties(Properties arg0) {
+    public void setProperties( Properties arg0 ) {
     }
 
     @SuppressWarnings("rawtypes")
-    private String getPageSql(MappedStatement mappedStatement, PageInfo pageInfo, String originalSql)
+    private String getPageSql( MappedStatement mappedStatement, PageInfo pageInfo,
+            String originalSql )
             throws Throwable {
         Connection connection =
                 mappedStatement.getConfiguration().getEnvironment().getDataSource().getConnection();
@@ -100,14 +110,28 @@ public class PageExecutorInterceptor extends AbstractInterceptor implements Inte
             MappedStatement mappedStatement,
             String originalSql,
             BoundSql boundSql,
-            Object parameterObject)
+            Object parameterObject )
             throws Throwable {
         String countSql = getCountSql(mappedStatement, originalSql);
         Connection connection = null;
         long totpage = 0;
         try {
-            connection =
-                    mappedStatement.getConfiguration().getEnvironment().getDataSource().getConnection();
+
+            //如果在一个事物中先做了insert/delete 操作，考虑到innodb 的默认级别是不可重复读，如果这里重新去获取一个连接拿到
+            // 的这个总数是未执行insert /delete 之前的，显然不正确，但是不推荐把增删和读取放在一个事物里面
+            SqlSessionHolder holder = (SqlSessionHolder) TransactionSynchronizationManager
+                    .getResource(sqlSessionFactory);
+            if (holder != null) {
+                SqlSession sqlSession = holder.getSqlSession();
+                if (null != sqlSession) {
+                    connection = sqlSession.getConnection();
+                }
+            } else {
+
+                connection =
+                        mappedStatement.getConfiguration().getEnvironment().getDataSource()
+                                .getConnection();
+            }
             PreparedStatement countStmt = connection.prepareStatement(countSql);
             BoundSql countBS = copyFromBoundSql(mappedStatement, boundSql, countSql);
             DefaultParameterHandler parameterHandler =
@@ -121,7 +145,7 @@ public class PageExecutorInterceptor extends AbstractInterceptor implements Inte
             rs.close();
             countStmt.close();
         } finally {
-            if (connection != null) {
+            if (!TransactionSynchronizationManager.isSynchronizationActive()) {
                 connection.close();
             }
         }
@@ -132,14 +156,14 @@ public class PageExecutorInterceptor extends AbstractInterceptor implements Inte
     /**
      * 根据原Sql语句获取对应的查询总记录数的Sql语句
      */
-    private String getCountSql(MappedStatement mappedStatement, String sql) {
+    private String getCountSql( MappedStatement mappedStatement, String sql ) {
         String countSqlByAnnotation = getCountSqlByAnnotation(mappedStatement);
         return !Strings.isNullOrEmpty(countSqlByAnnotation)
                 ? countSqlByAnnotation
                 : countSqlParser.getSmartCountSql(sql);
     }
 
-    private String getCountSqlByAnnotation(MappedStatement mappedStatement) {
+    private String getCountSqlByAnnotation( MappedStatement mappedStatement ) {
         String id = mappedStatement.getId();
         String cached = countSqlMap.get(id);
         if (cached == null) {
@@ -168,5 +192,9 @@ public class PageExecutorInterceptor extends AbstractInterceptor implements Inte
             cached = countSql;
         }
         return cached;
+    }
+
+    public void setSqlSessionFactory( SqlSessionFactory sqlSessionFactory ) {
+        this.sqlSessionFactory = sqlSessionFactory;
     }
 }

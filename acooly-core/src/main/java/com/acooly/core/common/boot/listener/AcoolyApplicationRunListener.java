@@ -33,6 +33,7 @@ import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.boot.system.ApplicationPid;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.PriorityOrdered;
 import org.springframework.core.SpringVersion;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -45,7 +46,7 @@ import java.util.List;
  *
  * @author zhangpu for v5
  */
-public class AcoolyApplicationRunListener implements SpringApplicationRunListener {
+public class AcoolyApplicationRunListener implements SpringApplicationRunListener, PriorityOrdered {
 
     public static final String COMPONENTS_PACKAGE = "com.acooly.module";
     private static List<String> disabledPackageName =
@@ -55,11 +56,7 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
 
     private SpringApplication application;
     private String[] args;
-    /**
-     *  如果引入了 spring cloud 的依赖，会在执行到 environmentPrepared的时候调用反射重新执行一次main 实现spring cloud 的bootstrapContext 的初始化
-     *  加个标志避免被重新初始化
-     */
-    private static boolean initialized = false;
+
 
     public AcoolyApplicationRunListener( SpringApplication application, String[] args ) {
         this.application = application;
@@ -77,8 +74,8 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
      */
     @Override
     public void starting() {
-        if (!initialized) {
-            initialized = true;
+        if (!Apps.isInitialized()) {
+            Apps.markInitialized();
             checkAndSetPackage(application);
             checkCoreVersions();
             jvmPropstuning();
@@ -243,7 +240,7 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
 
     @Override
     public void started( ConfigurableApplicationContext context ) {
-        if (!initialized) {
+        if (!Apps.isInitialized()) {
             //install UncaughtExceptionHandler
             UncaughtExceptionHandlerWrapper.install();
             //fixme
@@ -263,6 +260,11 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
         LoggerFactory.getLogger(AcoolyApplicationRunListener.class).error("启动失败", exception);
         ShutdownHooks.shutdownAll();
         shutdownLogSystem();
+    }
+
+    @Override
+    public int getOrder() {
+        return LOWEST_PRECEDENCE - 2;
     }
 
 

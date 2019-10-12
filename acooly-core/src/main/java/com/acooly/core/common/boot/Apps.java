@@ -23,6 +23,7 @@ import java.io.IOException;
  * @author qiubo
  */
 public class Apps {
+
     /**
      * 应用名称
      */
@@ -44,9 +45,24 @@ public class Apps {
 
     public static final String BASE_PACKAGE = "acooly.basePackage";
     public static String logBasePath = null;
+    /**
+     * 如果引入了 spring cloud 的依赖，会在执行到 environmentPrepared的时候调用反射重新执行一次main 实现spring cloud
+     * 的bootstrapContext 的初始化 加个标志避免被重新初始化
+     */
+    private static boolean initialized = false;
     private static String logPath = null;
     private static String dataPath = null;
     private static Boolean isTest = null;
+
+
+    public static boolean isInitialized() {
+        return initialized;
+    }
+
+    public static void markInitialized() {
+        initialized = true;
+    }
+
 
     public static String getAppName() {
         String name = System.getProperty(APP_NAME);
@@ -80,7 +96,7 @@ public class Apps {
         return logPath;
     }
 
-    public static void setLogPath(String tmp) {
+    public static void setLogPath( String tmp ) {
         logPath = tmp;
     }
 
@@ -114,10 +130,10 @@ public class Apps {
     /**
      * 暴露info信息，可以通过 actuator info endpoint获取
      *
-     * @param key   key
+     * @param key key
      * @param value value
      */
-    public static void exposeInfo(String key, Object value) {
+    public static void exposeInfo( String key, Object value ) {
         String infoKey = "info." + key;
         System.setProperty(infoKey, String.valueOf(value));
     }
@@ -125,7 +141,7 @@ public class Apps {
     /**
      * 当系统参数中没有{@link Apps#SPRING_PROFILE_ACTIVE}时，设置应用运行环境
      */
-    public static void setProfileIfNotExists(String profile) {
+    public static void setProfileIfNotExists( String profile ) {
         if (!StringUtils.hasLength(System.getProperty(SPRING_PROFILE_ACTIVE))
                 && !System.getenv().containsKey("SPRING_PROFILES_ACTIVE")) {
             System.setProperty(SPRING_PROFILE_ACTIVE, profile);
@@ -143,7 +159,7 @@ public class Apps {
         AcoolyApplicationRunListener.shutdownApp();
     }
 
-    public static <T> T buildProperties(Class<T> clazz) {
+    public static <T> T buildProperties( Class<T> clazz ) {
         return EnvironmentHolder.buildProperties(clazz);
     }
 
@@ -164,7 +180,7 @@ public class Apps {
         return isTest;
     }
 
-    public static MDC.MDCCloseable mdc(String gid) {
-       return MDC.putCloseable(LogAutoConfig.LogProperties.GID_KEY, gid);
+    public static MDC.MDCCloseable mdc( String gid ) {
+        return MDC.putCloseable(LogAutoConfig.LogProperties.GID_KEY, gid);
     }
 }

@@ -29,6 +29,12 @@
 
         <dependency>
             <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-dubbo</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.acooly</groupId>
             <artifactId>acooly-component-security</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

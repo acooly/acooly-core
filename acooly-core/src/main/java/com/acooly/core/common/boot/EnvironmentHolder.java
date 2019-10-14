@@ -14,10 +14,10 @@ import com.google.common.base.Strings;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.BindResult;
+import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
 
@@ -76,84 +76,15 @@ public class EnvironmentHolder implements EnvironmentAware {
         }
     }
 
-    public static class RelaxedProperty {
-        private String prefix;
-        private String key;
-
-        /**
-         * @param prefix 配置项前缀
-         * @param key    配置项key
-         */
-        public RelaxedProperty(String prefix, String key) {
-            Assert.notNull(prefix, "前缀不能为空");
-            Assert.notNull(key, "key不能为空");
-            this.key = key;
-            if (!prefix.endsWith(".")) {
-                prefix = prefix + ".";
-            }
-            this.prefix = prefix;
-        }
-
-        public String getKey() {
-            return key;
-        }
-
-        public String getPrefix() {
-            return prefix;
-        }
-
-        /**
-         * 获取此配置项的配置名
-         */
-        public String getPropertyName() {
-            return this.prefix + this.key;
-        }
-
-        /**
-         * 从环境中获取配置项的值
-         */
-        public String getProperty() {
-            return getProperty((String) null);
-        }
-
-        /**
-         * 从环境中获取配置项的值,如果值为空则返回默认值
-         *
-         * @param defaultValue 默认值
-         */
-        public String getProperty(String defaultValue) {
-            return EnvironmentHolder.get().getProperty(this.prefix + this.key, defaultValue);
-        }
-
-        /**
-         * 从环境中获取配置项的值,并转换为目标类型
-         *
-         * @param targetType 目标类型
-         */
-        public <T> T getProperty(Class<T> targetType) {
-            return getProperty(targetType, null);
-        }
-
-        /**
-         * 从环境中获取配置项的值,并转换为目标类型
-         *
-         * @param targetType   目标类型
-         * @param defaultValue 默认值
-         */
-        public <T> T getProperty(Class<T> targetType, T defaultValue) {
-            return EnvironmentHolder.get().getProperty(this.prefix + this.key, targetType, defaultValue);
-        }
-    }
-
     private static class PropertiesBuilder {
-        private static DefaultConversionService defaultConversionService =
-                new DefaultConversionService();
 
         public static Object build(Object target, String prefix) {
             Assert.notNull(target, "target对象不能为空");
             Assert.notNull(prefix, "prefix不能为空");
             try {
-                BindResult bindResult = Binder.get(EnvironmentHolder.get()).bind(prefix, target.getClass());
+
+
+                BindResult bindResult = Binder.get(EnvironmentHolder.get()).bind(prefix, Bindable.ofInstance(target));
                 if (bindResult.isBound()) {
                     target = bindResult.get();
                 }

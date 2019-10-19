@@ -2,7 +2,8 @@ package com.acooly.core.common.facade;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotBlank;
 
 /**
  * 命令请求基类
@@ -19,6 +20,6 @@ public class BizOrderBase extends OrderBase {
     /**
      * 业务订单号 *
      */
-    @NotEmpty
+    @NotBlank
     private String bizOrderNo;
 }

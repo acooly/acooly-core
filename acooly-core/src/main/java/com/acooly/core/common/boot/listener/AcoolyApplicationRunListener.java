@@ -83,6 +83,60 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
     }
 
 
+
+    @Override
+    public void started( ConfigurableApplicationContext context ) {
+        if (!Apps.isInitialized()) {
+            //install UncaughtExceptionHandler
+            UncaughtExceptionHandlerWrapper.install();
+            //fixme
+            // when system startup ,register shutdown hooks to clean resouces.
+            new ShutdownThread().register();
+        }
+        //log startup info
+        LoggerFactory.getLogger(AcoolyApplicationRunListener.class)
+                .info("启动成功: http://127.0.0.1:{}",
+                        context.getEnvironment().getProperty(Apps.HTTP_PORT));
+    }
+
+    /**
+     * 初始化EnvironmentHolder
+     *
+     * 在environmentPrepared阶段会优先执行，在此阶段初始化EnvironmentHolder，可以用于日志系统配置时获取环境。
+     * 在日志系统配置中使用此类时，获取的环境不包括hera PropertySource
+     */
+    @Override
+    public void environmentPrepared( ConfigurableEnvironment environment ) {
+        new EnvironmentHolder().setEnvironment(environment);
+        setProfileIfEnableActiveProfiles(environment);
+    }
+
+
+    @Override
+    public void contextPrepared( final ConfigurableApplicationContext context ) {
+    }
+
+    @Override
+    public void contextLoaded( ConfigurableApplicationContext context ) {
+    }
+
+    @Override
+    public void running( ConfigurableApplicationContext context ) {
+
+    }
+
+
+
+
+    @Override
+    public void failed( ConfigurableApplicationContext context, Throwable exception ) {
+        ConsoleLogInitializer.addConsoleAppender();
+        LoggerFactory.getLogger(AcoolyApplicationRunListener.class).error("启动失败", exception);
+        ShutdownHooks.shutdownAll();
+        shutdownLogSystem();
+    }
+
+
     private static void shutdownLogSystem() {
         //关闭日志，日志需要最后关闭,等所有资源清理后关闭日志
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
@@ -140,11 +194,6 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
         Thread.currentThread().setName("main");
     }
 
-    @Override
-    public void contextLoaded( ConfigurableApplicationContext context ) {
-    }
-
-
     private void initEnvVars( BootApp bootApp ) {
         String sysName = bootApp.sysName();
         Assert.hasLength(sysName, "系统名不能为空");
@@ -201,19 +250,6 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
         System.setProperty("java.security.egd", "file:/dev/./urandom");
     }
 
-    /**
-     * 初始化EnvironmentHolder
-     *
-     * <p>YijiApplicationRunListener实现了PriorityOrdered接口，
-     * 在environmentPrepared阶段会优先执行，在此阶段初始化EnvironmentHolder，可以用于日志系统配置时获取环境。
-     * 在日志系统配置中使用此类时，获取的环境不包括hera PropertySource
-     */
-    @Override
-    public void environmentPrepared( ConfigurableEnvironment environment ) {
-        new EnvironmentHolder().setEnvironment(environment);
-        setProfileIfEnableActiveProfiles(environment);
-    }
-
     private void setProfileIfEnableActiveProfiles( ConfigurableEnvironment environment ) {
         if (Strings.isNullOrEmpty(System.getProperty(Apps.SPRING_PROFILE_ACTIVE))) {
             String profile = environment.getProperty(Apps.SPRING_PROFILE_ACTIVE);
@@ -223,44 +259,6 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
         }
     }
 
-    @Override
-    public void contextPrepared( final ConfigurableApplicationContext context ) {
-    }
-
-    //	@Override
-    //	public int getOrder() {
-    //		return Ordered.LOWEST_PRECEDENCE - 1;
-    //	}
-
-    @Override
-    public void running( ConfigurableApplicationContext context ) {
-
-    }
-
-
-    @Override
-    public void started( ConfigurableApplicationContext context ) {
-        if (!Apps.isInitialized()) {
-            //install UncaughtExceptionHandler
-            UncaughtExceptionHandlerWrapper.install();
-            //fixme
-            // when system startup ,register shutdown hooks to clean resouces.
-            new ShutdownThread().register();
-            //log startup info
-            LoggerFactory.getLogger(AcoolyApplicationRunListener.class)
-                    .info("启动成功: http://127.0.0.1:{}",
-                            context.getEnvironment().getProperty(Apps.HTTP_PORT));
-        }
-    }
-
-
-    @Override
-    public void failed( ConfigurableApplicationContext context, Throwable exception ) {
-        ConsoleLogInitializer.addConsoleAppender();
-        LoggerFactory.getLogger(AcoolyApplicationRunListener.class).error("启动失败", exception);
-        ShutdownHooks.shutdownAll();
-        shutdownLogSystem();
-    }
 
     @Override
     public int getOrder() {

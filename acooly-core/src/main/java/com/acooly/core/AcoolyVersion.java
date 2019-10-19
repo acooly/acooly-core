@@ -40,4 +40,6 @@ public class AcoolyVersion {
     public static String getMajorVersion() {
         return Strings.first(getVersion());
     }
+
+
 }

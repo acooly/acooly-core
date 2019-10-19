@@ -11,7 +11,8 @@ package com.acooly.core.common.facade;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotBlank;
 
 /**
  * @author qiubo@yiji.com
@@ -27,6 +28,6 @@ public class DtoBase extends InfoBase {
     /**
      * 业务订单号 *
      */
-    @NotEmpty
+    @NotBlank
     private String bizOrderNo;
 }

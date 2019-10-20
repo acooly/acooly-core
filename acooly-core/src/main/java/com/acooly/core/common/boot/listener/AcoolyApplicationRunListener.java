@@ -84,20 +84,6 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
 
 
 
-    @Override
-    public void started( ConfigurableApplicationContext context ) {
-        if (!Apps.isInitialized()) {
-            //install UncaughtExceptionHandler
-            UncaughtExceptionHandlerWrapper.install();
-            //fixme
-            // when system startup ,register shutdown hooks to clean resouces.
-            new ShutdownThread().register();
-        }
-        //log startup info
-        LoggerFactory.getLogger(AcoolyApplicationRunListener.class)
-                .info("启动成功: http://127.0.0.1:{}",
-                        context.getEnvironment().getProperty(Apps.HTTP_PORT));
-    }
 
     /**
      * 初始化EnvironmentHolder
@@ -125,6 +111,20 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
 
     }
 
+    @Override
+    public void started( ConfigurableApplicationContext context ) {
+        if (!Apps.isInitialized()) {
+            //install UncaughtExceptionHandler
+            UncaughtExceptionHandlerWrapper.install();
+            //fixme
+            // when system startup ,register shutdown hooks to clean resouces.
+            new ShutdownThread().register();
+        }
+        //log startup info
+        LoggerFactory.getLogger(AcoolyApplicationRunListener.class)
+                .info("启动成功: http://127.0.0.1:{}",
+                        context.getEnvironment().getProperty(Apps.HTTP_PORT));
+    }
 
 
 

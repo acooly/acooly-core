@@ -164,7 +164,7 @@ public class Systems {
             }
             String[] sn = Strings.split(info, symbol);
             if (sn != null && sn.length > 1) {
-                return sn[1];
+                return Strings.trimToEmpty(sn[1]);
             }
         }
         return null;

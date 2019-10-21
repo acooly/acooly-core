@@ -32,20 +32,9 @@ import java.util.Arrays;
 public class Systems {
 
 
-    public static void main(String[] args) throws Exception {
-        log.info("OS: {}", getOS());
-        log.info("HostName: {}", getHostName());
-        log.info("ComputeName: {}", getComputeName());
-        log.info("CpuId: {}", getCpuId());
-        log.info("MainboardId: {}", getMainboardId());
-        log.info("DiskId: {}", getDiskId());
-        log.info("Mac: {}", getMac());
-        log.info("SystemId: {}", getSystemId());
-    }
-
-
     /**
      * 获取HostName
+     *
      * @return
      */
     public static String getHostName() {
@@ -57,10 +46,6 @@ public class Systems {
         return null;
     }
 
-    public static String getComputeName(){
-        return System.getenv("COMPUTERNAME");
-    }
-
     /**
      * 获取系统唯一标志
      *
@@ -69,7 +54,7 @@ public class Systems {
     public static String getSystemId() {
         StringBuilder sb = new StringBuilder();
         sb.append(getCpuId()).append(getMainboardId()).append(getMac());
-        return DigestUtils.md5Hex(sb.toString());
+        return Strings.upperCase(DigestUtils.md5Hex(sb.toString()));
     }
 
 
@@ -214,6 +199,7 @@ public class Systems {
     /**
      * 操作系统
      */
+    @Slf4j
     public static enum OS implements HardWareInfo {
         /**
          * OS类型
@@ -252,20 +238,22 @@ public class Systems {
                 return getExecValue(new String[]{"wmic", "DISKDRIVE", "where", "index=0", "get", "SerialNumber", "/value"}, "SerialNumber", "=");
             }
 
-        }, Mac {
+        },
+        Mac {
+            // system_profiler -listDataTypes
             @Override
             public String getCpuId() {
-                return getExecValue("system_profiler SPHardwareDataType", "UUID", ":");
+                return getExecValue(new String[]{"system_profiler", "SPHardwareDataType"}, "UUID", ":");
             }
 
             @Override
             public String getMainboardId() {
-                return null;
+                return getExecValue(new String[]{"system_profiler", "SPHardwareDataType"}, "Serial Number", ":");
             }
 
             @Override
             public String getDiskId() {
-                return null;
+                return getExecValue(new String[]{"system_profiler", "SPStorageDataType"}, "UUID", ":");
             }
 
         }, Other {
@@ -297,12 +285,21 @@ public class Systems {
                 return OS.Other;
             }
         }
+
+
+        public String toJson() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("{");
+            sb.append("\"cpuId\":\"").append(this.getCpuId()).append("\",");
+            sb.append("\"mainboardId\":\"").append(this.getMainboardId()).append("\",");
+            sb.append("\"diskId\":\"").append(this.getDiskId()).append("\"}");
+            return sb.toString();
+        }
     }
 
     @Getter
     @Setter
     public static class OsPlatform extends InfoBase {
-
 
         private OS os;
         private String arch;

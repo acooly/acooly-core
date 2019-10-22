@@ -39,6 +39,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
+import org.springframework.util.StopWatch;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -51,8 +52,9 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
     private static List<String> disabledPackageName =
             Lists.newArrayList(
                     "", "com.acooly", "com.acooly.core", "com.acooly.core.common.boot", COMPONENTS_PACKAGE);
-
+    private StopWatch stopWatch = new StopWatch();
     public ExApplicationRunListener(SpringApplication application, String[] args) {
+        stopWatch.start();
         application.setRegisterShutdownHook(false);
         checkAndSetPackage(application);
         checkVersions();
@@ -221,6 +223,9 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
             ShutdownHooks.shutdownAll();
             shutdownLogSystem();
         }
+        stopWatch.stop();
+        Apps.setStartupTimes(stopWatch.getTotalTimeMillis());
+        Apps.report();
     }
 
     public static class AppBanner implements Banner {

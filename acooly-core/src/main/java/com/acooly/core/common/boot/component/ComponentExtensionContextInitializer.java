@@ -38,13 +38,16 @@ public class ComponentExtensionContextInitializer implements ApplicationContextI
             exclude = new String[0];
         }
         List<String> excludes = Lists.newArrayList(exclude);
-        SpringFactoriesLoader.loadFactories(
-                ComponentInitializer.class, applicationContext.getClassLoader())
-                .forEach(
-                        componentInitializer -> {
-                            componentInitializer.initialize(applicationContext);
-                            excludes.addAll(componentInitializer.excludeAutoconfigClassNames());
-                        });
+        List<ComponentInitializer> componentInitializers = SpringFactoriesLoader.loadFactories(
+                ComponentInitializer.class, applicationContext.getClassLoader());
+
+        
+
+        componentInitializers.forEach(
+                componentInitializer -> {
+                    componentInitializer.initialize(applicationContext);
+                    excludes.addAll(componentInitializer.excludeAutoconfigClassNames());
+                });
 
         if (!excludes.isEmpty()) {
             System.setProperty("spring.autoconfigure.exclude", Joiner.on(',').join(excludes));

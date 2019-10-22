@@ -45,22 +45,22 @@
             <artifactId>acooly-component-cms</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-openapi</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.acooly</groupId>-->
+<!--            <artifactId>acooly-component-openapi</artifactId>-->
+<!--            <version>${project.parent.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-app</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-app-openapi</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.acooly</groupId>-->
+<!--            <artifactId>acooly-component-app</artifactId>-->
+<!--            <version>${project.parent.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.acooly</groupId>-->
+<!--            <artifactId>acooly-component-app-openapi</artifactId>-->
+<!--            <version>${project.parent.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-sms</artifactId>

@@ -116,7 +116,6 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
         }
         stopWatch.stop();
         Apps.setStartupTimes(stopWatch.getTotalTimeMillis());
-        System.setProperty("acooly.startup.times", String.valueOf(stopWatch.getTotalTimeMillis()));
         //log startup info
         LoggerFactory.getLogger(AcoolyApplicationRunListener.class)
                 .info("启动成功: http://127.0.0.1:{}", context.getEnvironment().getProperty(Apps.HTTP_PORT));

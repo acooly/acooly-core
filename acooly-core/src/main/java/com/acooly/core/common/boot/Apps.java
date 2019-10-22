@@ -4,10 +4,19 @@
  */
 package com.acooly.core.common.boot;
 
+import com.acooly.core.AcoolyVersion;
 import com.acooly.core.common.boot.listener.AcoolyApplicationRunListener;
 import com.acooly.core.common.boot.log.LogAutoConfig;
 import com.acooly.core.common.exception.AppConfigException;
+import com.acooly.core.common.web.support.JsonEntityResult;
+import com.acooly.core.utils.Exceptions;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.mapper.JsonMapper;
+import com.acooly.core.utils.system.IPUtil;
+import com.acooly.core.utils.system.Systems;
+import com.github.kevinsawicki.http.HttpRequest;
+import com.google.common.collect.Maps;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.MDC;
 import org.springframework.context.ApplicationContext;
@@ -18,6 +27,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author qiubo
@@ -40,6 +50,8 @@ public class Apps {
      * 进程id
      */
     public static final String PID = "acooly.pid";
+
+    public static final String STARTUP_TIMES = "acooly.startup.times";
 
     public static final String SPRING_PROFILE_ACTIVE = "spring.profiles.active";
 
@@ -96,7 +108,7 @@ public class Apps {
         return logPath;
     }
 
-    public static void setLogPath( String tmp ) {
+    public static void setLogPath(String tmp) {
         logPath = tmp;
     }
 
@@ -130,10 +142,10 @@ public class Apps {
     /**
      * 暴露info信息，可以通过 actuator info endpoint获取
      *
-     * @param key key
+     * @param key   key
      * @param value value
      */
-    public static void exposeInfo( String key, Object value ) {
+    public static void exposeInfo(String key, Object value) {
         String infoKey = "info." + key;
         System.setProperty(infoKey, String.valueOf(value));
     }
@@ -141,11 +153,62 @@ public class Apps {
     /**
      * 当系统参数中没有{@link Apps#SPRING_PROFILE_ACTIVE}时，设置应用运行环境
      */
-    public static void setProfileIfNotExists( String profile ) {
+    public static void setProfileIfNotExists(String profile) {
         if (!StringUtils.hasLength(System.getProperty(SPRING_PROFILE_ACTIVE))
                 && !System.getenv().containsKey("SPRING_PROFILES_ACTIVE")) {
             System.setProperty(SPRING_PROFILE_ACTIVE, profile);
         }
+    }
+
+    public static void setStartupTimes(long startupTimes) {
+        System.setProperty(STARTUP_TIMES, String.valueOf(startupTimes));
+    }
+
+    public static long getStartupTimes() {
+        String temp = System.getProperty(STARTUP_TIMES);
+        if (Strings.isBlank(temp)) {
+            return 0;
+        } else {
+            return Long.valueOf(temp);
+        }
+    }
+
+    public static void report() {
+        if (!Env.isOnline()) {
+            return;
+        }
+        if (Strings.startsWithIgnoreCase(Apps.getAppName(), "acooly")) {
+            return;
+        }
+        new Thread(() -> {
+            try {
+                String url = "http://acooly.cn/acooly/app/report.html";
+                Map<String, String> data = Maps.newHashMap();
+                data.put("appName", Apps.getAppName());
+                data.put("appPort", String.valueOf(Apps.getHttpPort()));
+                data.put("machineNo", Systems.getSystemId());
+                data.put("internalIp", IPUtil.getFirstNoLoopbackIPV4Address());
+                data.put("hostName", Systems.getHostName());
+                Systems.OsPlatform platform = Systems.getOS();
+                data.put("osName", platform.getOs().name() + "_" + platform.getArch());
+                data.put("osVersion", platform.getVersion());
+                data.put("javaVersion", System.getProperty("java.version"));
+                data.put("acoolyVersion", AcoolyVersion.getVersion());
+                data.put("startupTime", String.valueOf(Apps.getStartupTimes()));
+                data.put("sign", DigestUtils.md5Hex(Apps.getAppName() + data.get("machineNo") + data.get("startupTime")));
+                HttpRequest httpRequest = HttpRequest.post(url).contentType(HttpRequest.CONTENT_TYPE_FORM).form(data);
+                if (!httpRequest.ok()) {
+                    Exceptions.runtimeException("通讯失败");
+                }
+                String responseBody = httpRequest.body();
+                JsonEntityResult result = JsonMapper.nonEmptyMapper().fromJson(responseBody, JsonEntityResult.class);
+                if (!result.isSuccess()) {
+                    Exceptions.rethrow(result.getCode(), result.getMessage());
+                }
+            } catch (Exception e) {
+                // ig
+            }
+        }).start();
     }
 
     /**
@@ -159,7 +222,7 @@ public class Apps {
         AcoolyApplicationRunListener.shutdownApp();
     }
 
-    public static <T> T buildProperties( Class<T> clazz ) {
+    public static <T> T buildProperties(Class<T> clazz) {
         return EnvironmentHolder.buildProperties(clazz);
     }
 
@@ -180,7 +243,8 @@ public class Apps {
         return isTest;
     }
 
-    public static MDC.MDCCloseable mdc( String gid ) {
+
+    public static MDC.MDCCloseable mdc(String gid) {
         return MDC.putCloseable(LogAutoConfig.LogProperties.GID_KEY, gid);
     }
 }

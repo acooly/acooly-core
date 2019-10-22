@@ -43,10 +43,17 @@ public enum CommonErrorCodes implements Messageable {
      * 不支持错误
      */
     UNSUPPORTED_ERROR("UNSUPPORTED_ERROR", "不支持的操作"),
+
+    /**
+     * 通讯错误
+     */
+    COMMUNICATION_ERROR("COMMUNICATION_ERROR", "通讯错误"),
+
     /**
      * 参数错误
      */
     PARAMETER_ERROR("PARAMETER_ERROR", "参数错误");
+
     private final String code;
     private final String message;
 

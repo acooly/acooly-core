@@ -38,6 +38,7 @@ import org.springframework.core.SpringVersion;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.util.Assert;
+import org.springframework.util.StopWatch;
 
 import java.util.List;
 
@@ -50,17 +51,18 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
 
     public static final String COMPONENTS_PACKAGE = "com.acooly.module";
     private static List<String> disabledPackageName =
-            Lists.newArrayList(
-                    "", "com.acooly", "com.acooly.core", "com.acooly.core.common.boot",
+            Lists.newArrayList("", "com.acooly", "com.acooly.core", "com.acooly.core.common.boot",
                     COMPONENTS_PACKAGE);
 
     private SpringApplication application;
     private String[] args;
 
+    private StopWatch stopWatch = new StopWatch();
 
-    public AcoolyApplicationRunListener( SpringApplication application, String[] args ) {
+    public AcoolyApplicationRunListener(SpringApplication application, String[] args) {
         this.application = application;
         this.args = args;
+        stopWatch.start();
         setThreadName();
         application.setRegisterShutdownHook(false);
         BootApp bootApp = findBootApplication(application);
@@ -83,57 +85,55 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
     }
 
 
-
-
     /**
      * 初始化EnvironmentHolder
-     *
+     * <p>
      * 在environmentPrepared阶段会优先执行，在此阶段初始化EnvironmentHolder，可以用于日志系统配置时获取环境。
      * 在日志系统配置中使用此类时，获取的环境不包括hera PropertySource
      */
     @Override
-    public void environmentPrepared( ConfigurableEnvironment environment ) {
+    public void environmentPrepared(ConfigurableEnvironment environment) {
         new EnvironmentHolder().setEnvironment(environment);
         setProfileIfEnableActiveProfiles(environment);
     }
 
 
     @Override
-    public void contextPrepared( final ConfigurableApplicationContext context ) {
+    public void contextPrepared(final ConfigurableApplicationContext context) {
     }
 
     @Override
-    public void contextLoaded( ConfigurableApplicationContext context ) {
+    public void contextLoaded(ConfigurableApplicationContext context) {
     }
 
-    @Override
-    public void running( ConfigurableApplicationContext context ) {
-
-    }
 
     @Override
-    public void started( ConfigurableApplicationContext context ) {
+    public void started(ConfigurableApplicationContext context) {
         if (!Apps.isInitialized()) {
             //install UncaughtExceptionHandler
             UncaughtExceptionHandlerWrapper.install();
-            //fixme
-            // when system startup ,register shutdown hooks to clean resouces.
             new ShutdownThread().register();
         }
+        stopWatch.stop();
+        Apps.setStartupTimes(stopWatch.getTotalTimeMillis());
+        System.setProperty("acooly.startup.times", String.valueOf(stopWatch.getTotalTimeMillis()));
         //log startup info
         LoggerFactory.getLogger(AcoolyApplicationRunListener.class)
-                .info("启动成功: http://127.0.0.1:{}",
-                        context.getEnvironment().getProperty(Apps.HTTP_PORT));
+                .info("启动成功: http://127.0.0.1:{}", context.getEnvironment().getProperty(Apps.HTTP_PORT));
     }
 
 
-
     @Override
-    public void failed( ConfigurableApplicationContext context, Throwable exception ) {
+    public void failed(ConfigurableApplicationContext context, Throwable exception) {
         ConsoleLogInitializer.addConsoleAppender();
         LoggerFactory.getLogger(AcoolyApplicationRunListener.class).error("启动失败", exception);
         ShutdownHooks.shutdownAll();
         shutdownLogSystem();
+    }
+
+    @Override
+    public void running(ConfigurableApplicationContext context) {
+        Apps.report();
     }
 
 
@@ -154,10 +154,10 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
         //close spring container
         ApplicationContext applicationContext = ApplicationContextHolder.get();
         if (applicationContext instanceof ConfigurableApplicationContext) {
-            if (!( (ConfigurableApplicationContext) applicationContext ).isActive()) {
+            if (!((ConfigurableApplicationContext) applicationContext).isActive()) {
                 System.exit(0);
             } else {
-                ( (ConfigurableApplicationContext) applicationContext ).close();
+                ((ConfigurableApplicationContext) applicationContext).close();
             }
         }
         ShutdownHooks.shutdownAll();
@@ -179,9 +179,9 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
 
     }
 
-    private void checkAndSetPackage( SpringApplication application ) {
+    private void checkAndSetPackage(SpringApplication application) {
         application.getAllSources().forEach(o -> {
-            Package pkg = ( (Class) o ).getPackage();
+            Package pkg = ((Class) o).getPackage();
             if (pkg == null || disabledPackageName.contains(pkg.getName())) {
                 throw new AppConfigException(
                         "请把main-class定义到应用包中，禁止定义到以下包中:" + disabledPackageName);
@@ -194,7 +194,7 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
         Thread.currentThread().setName("main");
     }
 
-    private void initEnvVars( BootApp bootApp ) {
+    private void initEnvVars(BootApp bootApp) {
         String sysName = bootApp.sysName();
         Assert.hasLength(sysName, "系统名不能为空");
         System.setProperty(Apps.APP_NAME, sysName);
@@ -226,7 +226,7 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
 
     }
 
-    private BootApp findBootApplication( SpringApplication application ) {
+    private BootApp findBootApplication(SpringApplication application) {
         Class sourceClass =
                 application
                         .getAllSources()
@@ -250,7 +250,7 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
         System.setProperty("java.security.egd", "file:/dev/./urandom");
     }
 
-    private void setProfileIfEnableActiveProfiles( ConfigurableEnvironment environment ) {
+    private void setProfileIfEnableActiveProfiles(ConfigurableEnvironment environment) {
         if (Strings.isNullOrEmpty(System.getProperty(Apps.SPRING_PROFILE_ACTIVE))) {
             String profile = environment.getProperty(Apps.SPRING_PROFILE_ACTIVE);
             if (!Strings.isNullOrEmpty(profile)) {
@@ -258,7 +258,6 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
             }
         }
     }
-
 
     @Override
     public int getOrder() {

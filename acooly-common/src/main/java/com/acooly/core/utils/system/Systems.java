@@ -12,6 +12,8 @@ import com.acooly.core.common.facade.InfoBase;
 import com.acooly.core.utils.Exceptions;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.io.Streams;
+import com.github.kevinsawicki.http.HttpRequest;
+import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,7 @@ import java.io.*;
 import java.net.InetAddress;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * @author zhangpu
@@ -68,10 +71,19 @@ public class Systems {
         try (InputStream in = Runtime.getRuntime().exec(cmd).getInputStream();
              StringWriter stringWriter = new StringWriter()) {
             IOUtils.copy(in, stringWriter, Charset.defaultCharset());
-
             return stringWriter.toString();
         } catch (Exception e) {
             throw Exceptions.runtimeException("执行命令失败。命令: " + Arrays.toString(cmd) + ", 错误: " + e.getMessage());
+        }
+    }
+
+    public static String exec(String cmd) {
+        try (InputStream in = Runtime.getRuntime().exec(cmd).getInputStream();
+             StringWriter stringWriter = new StringWriter()) {
+            IOUtils.copy(in, stringWriter, Charset.defaultCharset());
+            return stringWriter.toString();
+        } catch (Exception e) {
+            throw Exceptions.runtimeException("执行命令失败。命令: " + cmd + ", 错误: " + e.getMessage());
         }
     }
 

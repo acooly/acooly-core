@@ -10,6 +10,7 @@
  */
 package com.acooly.module.tomcat;
 
+import java.time.Duration;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -41,6 +42,11 @@ public class TomcatProperties {
      * 可选: 设置uri编码
      */
     private String uriEncoding = "UTF-8";
+
+    /**
+     * tomcat 启动后台任务间隔时间 单位秒
+     */
+    private int backgroundProcessorDelay= 10;
 
     /**
      * 可选: 通过外部配置自定义tomcat端口

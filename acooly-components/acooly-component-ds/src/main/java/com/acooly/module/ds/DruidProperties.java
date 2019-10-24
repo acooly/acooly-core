@@ -45,8 +45,8 @@ import java.util.Properties;
  * @author qiubo
  */
 @ConfigurationProperties(prefix = DruidProperties.PREFIX)
-@Getter
 @Setter
+@Getter
 @Slf4j
 public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
 
@@ -149,6 +149,7 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
         return druidProperties.build();
     }
 
+    @Override
     public void check() {
         if (enable) {
             Assert.hasText(url, "数据库连接" + PREFIX + ".url不能为空");
@@ -157,7 +158,14 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
         }
     }
 
-    public String getUrl() {
+    //bug fix spring 初始化properties会做类型转换 会先调用get取旧的value，如果转换失败会返回旧的value，此时url有可能还没被set
+    // 因此不要在get，set方法中写逻辑
+//    public String getUrls() {
+//        return normalizeUrl(this.url);
+//    }
+
+
+    public String fetchUrl() {
         return normalizeUrl(this.url);
     }
 
@@ -177,7 +185,7 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
 
         // 基本配置
         dataSource.setDriverClassLoader(this.getBeanClassLoader());
-        dataSource.setUrl(this.getUrl());
+        dataSource.setUrl(this.fetchUrl());
         dataSource.setUsername(this.getUsername());
         dataSource.setPassword(this.getPassword());
         //应用程序可以自定义的参数

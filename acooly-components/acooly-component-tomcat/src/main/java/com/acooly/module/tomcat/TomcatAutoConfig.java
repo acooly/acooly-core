@@ -78,6 +78,7 @@ public class TomcatAutoConfig {
 
             factory.addContextCustomizers(context -> {
                 context.addWelcomeFile("index.html");
+                context.setBackgroundProcessorDelay((int)tomcatProperties.getBackgroundProcessorDelay().getSeconds());
             });
 
         };

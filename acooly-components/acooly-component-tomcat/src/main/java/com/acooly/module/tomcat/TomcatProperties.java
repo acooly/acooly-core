@@ -10,6 +10,7 @@
  */
 package com.acooly.module.tomcat;
 
+import java.time.Duration;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -19,6 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("acooly.tomcat")
 @Data
 public class TomcatProperties {
+
     public static final String HTTP_ACCESS_LOG_FORMAT =
             "%h %l [%{yyyy-MM-dd HH:mm:ss.SSS}t] \"%r\" %s %b %D";
     /**
@@ -46,6 +48,9 @@ public class TomcatProperties {
      * 可选: 通过外部配置自定义tomcat端口
      */
     private Integer port = null;
+
+
+    private Duration backgroundProcessorDelay = Duration.ofSeconds(10);
 
     /**
      * 40X状态返回的页面

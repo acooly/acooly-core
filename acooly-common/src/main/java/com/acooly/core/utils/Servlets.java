@@ -243,7 +243,7 @@ public class Servlets {
      */
     @SuppressWarnings("rawtypes")
     public static Map<String, Object> getParametersStartingWith(ServletRequest request, String prefix) {
-        return Maps.transformValues(getParameters(request, prefix, false), v -> String.valueOf(v));
+        return Maps.newHashMap(Maps.transformValues(getParameters(request, prefix, false), v -> v));
     }
 
     public static Map<String, String> getParameters(ServletRequest request, String prefix, boolean includeEmpty) {

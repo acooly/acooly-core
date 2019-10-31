@@ -51,6 +51,7 @@ import java.util.Set;
 @ConditionalOnClass(Tomcat.class)
 @EnableConfigurationProperties({TomcatProperties.class})
 public class TomcatAutoConfig {
+
     private static final Logger logger = LoggerFactory.getLogger(TomcatAutoConfig.class);
 
     @Autowired
@@ -94,17 +95,20 @@ public class TomcatAutoConfig {
                                         @SuppressWarnings("rawtypes")
                                         AbstractProtocol protocol = (AbstractProtocol) handler;
                                         protocol.setMaxThreads(tomcatProperties.getMaxThreads());
-                                        protocol.setMinSpareThreads(tomcatProperties.getMinSpareThreads());
+                                        protocol.setMinSpareThreads(
+                                                tomcatProperties.getMinSpareThreads());
                                     }
-                                    connector.setAttribute("acceptCount", Integer.toString(tomcatProperties.getAcceptCount()));
+                                    connector.setAttribute("acceptCount",
+                                            Integer.toString(tomcatProperties.getAcceptCount()));
                                 });
                 // 2.2 设置访问日志目录和日志格式
                 if (tomcatProperties.isAccessLogEnable()) {
                     if (factory
                             .getContextValves()
                             .stream()
-                            .anyMatch((valve) -> valve instanceof AccessLogValve)) {
-                        throw new AppConfigException("AccessLogValve已经配置，请不要启用默认spring-boot AccessLogValve配置");
+                            .anyMatch(( valve ) -> valve instanceof AccessLogValve)) {
+                        throw new AppConfigException(
+                                "AccessLogValve已经配置，请不要启用默认spring-boot AccessLogValve配置");
                     }
                     AccessLogValve valve = new AccessLogValve();
                     // 参数含义参考AbstractAccessLogValve 注释
@@ -117,13 +121,17 @@ public class TomcatAutoConfig {
                 }
                 // 2.3 设置错误页面
                 setErrorPage(container);
+                factory.addContextCustomizers(context -> {
+                    context.setBackgroundProcessorDelay(
+                            tomcatProperties.getBackgroundProcessorDelay());
+                });
 
                 // fix https://github.com/spring-projects/spring-boot/issues/9670
                 if (!Apps.isDevMode()) {
                     factory.addContextLifecycleListeners(
                             event -> {
                                 if (event.getType().equals(Lifecycle.CONFIGURE_START_EVENT)) {
-                                    ((StandardContext) event.getLifecycle())
+                                    ( (StandardContext) event.getLifecycle() )
                                             .getResources()
                                             .setCacheTtl(100L * 24 * 60 * 60 * 1000);
                                 }
@@ -135,7 +143,7 @@ public class TomcatAutoConfig {
         };
     }
 
-    private void setTomcatWorkDir(TomcatEmbeddedServletContainerFactory factory) {
+    private void setTomcatWorkDir( TomcatEmbeddedServletContainerFactory factory ) {
         // 设置tomcat base dir
         File file = new File(Apps.getAppDataPath() + "/tomcat-" + Apps.getHttpPort());
         file.mkdirs();
@@ -149,7 +157,7 @@ public class TomcatAutoConfig {
         logger.info("设置tomcat baseDir={},docbase={}", file, docbase);
     }
 
-    private void setErrorPage(ConfigurableEmbeddedServletContainer container) {
+    private void setErrorPage( ConfigurableEmbeddedServletContainer container ) {
         String error40XPage = tomcatProperties.getError40XPage();
         String error50XPage = tomcatProperties.getError50XPage();
 

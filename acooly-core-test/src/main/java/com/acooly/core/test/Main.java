@@ -16,7 +16,7 @@ import org.springframework.boot.SpringApplication;
 /**
  * @author qiubo
  */
-@BootApp(sysName = "acooly-test", httpPort = 8081)
+@BootApp(sysName = "chuangxing-desires", httpPort = 8081)
 public class Main {
     public static void main(String[] args) {
         Apps.setProfileIfNotExists("sdev");

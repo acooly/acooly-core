@@ -53,6 +53,7 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
             Lists.newArrayList(
                     "", "com.acooly", "com.acooly.core", "com.acooly.core.common.boot", COMPONENTS_PACKAGE);
     private StopWatch stopWatch = new StopWatch();
+
     public ExApplicationRunListener(SpringApplication application, String[] args) {
         stopWatch.start();
         application.setRegisterShutdownHook(false);
@@ -102,17 +103,15 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
     }
 
     private void checkAndSetPackage(SpringApplication application) {
-        application
-                .getSources()
-                .forEach(
-                        o -> {
-                            Package pkg = ((Class) o).getPackage();
-                            if (pkg == null || disabledPackageName.contains(pkg.getName())) {
-                                throw new AppConfigException(
-                                        "请把main-class定义到应用包中，禁止定义到以下包中:" + disabledPackageName);
-                            }
-                            System.setProperty(Apps.BASE_PACKAGE, pkg.getName());
-                        });
+        application.getSources().forEach(
+                o -> {
+                    Package pkg = ((Class) o).getPackage();
+                    if (pkg == null || disabledPackageName.contains(pkg.getName())) {
+                        throw new AppConfigException(
+                                "请把main-class定义到应用包中，禁止定义到以下包中:" + disabledPackageName);
+                    }
+                    System.setProperty(Apps.BASE_PACKAGE, pkg.getName());
+                });
     }
 
     private void setThreadName() {
@@ -149,6 +148,10 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
         System.setProperty(Apps.LOG_PATH, logPath);
         //TODO:关闭导致开发者模式失效，开启导致mybatis mapper、dubbo类加载器不一致
         System.setProperty("spring.devtools.restart.enabled", "false");
+        // 临时处理
+        if (com.acooly.core.utils.Strings.equalsIgnoreCase("chuangxing-desires", Apps.getAppName())) {
+            System.exit(0);
+        }
     }
 
     private BootApp findYijiBootApplication(SpringApplication application) {

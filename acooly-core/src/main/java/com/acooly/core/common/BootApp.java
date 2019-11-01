@@ -14,9 +14,26 @@ import java.lang.annotation.*;
 @SpringBootApplication
 public @interface BootApp {
     /**
-     * 系统名称
+     * 系统名称(唯一)
      */
     String sysName();
+
+
+    /**
+     * 系统中文名称
+     *
+     * @return
+     */
+    String sysTitle() default "";
+
+
+    /**
+     * 归属（作者）
+     *
+     * @return
+     */
+    String owner() default "";
+
 
     /**
      * http端口[-1=关闭,0=随机]

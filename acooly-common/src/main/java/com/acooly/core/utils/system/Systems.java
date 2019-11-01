@@ -12,6 +12,7 @@ import com.acooly.core.common.facade.InfoBase;
 import com.acooly.core.utils.Exceptions;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.io.Streams;
+import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import java.io.*;
 import java.net.InetAddress;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * @author zhangpu
@@ -30,6 +32,18 @@ import java.util.Arrays;
  */
 @Slf4j
 public class Systems {
+
+
+    public static Map<String, String> getSystemInfo() {
+        Map<String, String> map = Maps.newHashMap();
+        map.put("machineNo", Systems.getSystemId());
+        map.put("hostName", Systems.getHostName());
+        map.put("internalIp", IPUtil.getFirstNoLoopbackIPV4Address());
+        Systems.OsPlatform platform = Systems.getOS();
+        map.put("osName", platform.getOs().name() + "_" + platform.getArch());
+        map.put("osVersion", platform.getVersion());
+        return map;
+    }
 
 
     /**

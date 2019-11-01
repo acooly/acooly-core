@@ -131,6 +131,8 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
         String sysName = bootApp.sysName();
         Assert.hasLength(sysName, "系统名不能为空");
         System.setProperty(Apps.APP_NAME, sysName);
+        System.setProperty(Apps.APP_TITLE, bootApp.sysTitle());
+        System.setProperty(Apps.APP_OWNER, bootApp.owner());
         // ref ContextIdApplicationContextInitializer
         System.setProperty("spring.application.name", sysName);
         //set servlet container display name

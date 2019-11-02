@@ -9,15 +9,15 @@ import com.acooly.core.common.boot.listener.AcoolyApplicationRunListener;
 import com.acooly.core.common.boot.log.LogAutoConfig;
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.common.web.support.JsonEntityResult;
-import com.acooly.core.utils.Exceptions;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.mapper.JsonMapper;
-import com.acooly.core.utils.system.IPUtil;
 import com.acooly.core.utils.system.Systems;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.common.collect.Maps;
+import javassist.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -38,7 +38,8 @@ public class Apps {
      * 应用名称
      */
     public static final String APP_NAME = "acooly.appName";
-
+    public static final String APP_TITLE = "acooly.appTitle";
+    public static final String APP_OWNER = "acooly.appOwner";
     public static final String DEV_MODE_KEY = "acooly.devMode";
     /**
      * 日志路径
@@ -82,6 +83,14 @@ public class Apps {
             throw new AppConfigException("没有设置应用名称,请设置系统变量" + APP_NAME);
         }
         return name;
+    }
+
+    public static String getAppTitle() {
+        return System.getProperty(APP_TITLE);
+    }
+
+    public static String getAppOwner() {
+        return System.getProperty(APP_OWNER);
     }
 
     /**
@@ -174,41 +183,14 @@ public class Apps {
     }
 
     public static void report() {
-        if (!Env.isOnline()) {
-            return;
-        }
-        if (Strings.startsWithIgnoreCase(Apps.getAppName(), "acooly")) {
-            return;
-        }
         new Thread(() -> {
             try {
-                String url = "http://acooly.cn/acooly/app/report.html";
-                Map<String, String> data = Maps.newHashMap();
-                data.put("appName", Apps.getAppName());
-                data.put("appPort", String.valueOf(Apps.getHttpPort()));
-                data.put("machineNo", Systems.getSystemId());
-                data.put("internalIp", IPUtil.getFirstNoLoopbackIPV4Address());
-                data.put("hostName", Systems.getHostName());
-                Systems.OsPlatform platform = Systems.getOS();
-                data.put("osName", platform.getOs().name() + "_" + platform.getArch());
-                data.put("osVersion", platform.getVersion());
-                data.put("javaVersion", System.getProperty("java.version"));
-                data.put("acoolyVersion", AcoolyVersion.getVersion());
-                data.put("startupTime", String.valueOf(Apps.getStartupTimes()));
-                data.put("sign", DigestUtils.md5Hex(Apps.getAppName() + data.get("machineNo") + data.get("startupTime")));
-                HttpRequest httpRequest = HttpRequest.post(url).contentType(HttpRequest.CONTENT_TYPE_FORM).form(data);
-                if (!httpRequest.ok()) {
-                    Exceptions.runtimeException("通讯失败");
-                }
-                String responseBody = httpRequest.body();
-                JsonEntityResult result = JsonMapper.nonEmptyMapper().fromJson(responseBody, JsonEntityResult.class);
-                if (!result.isSuccess()) {
-                    Exceptions.rethrow(result.getCode(), result.getMessage());
-                }
+
+                generateReport().newInstance().report();
             } catch (Exception e) {
                 // ig
             }
-        }).start();
+        }, "main").start();
     }
 
     /**
@@ -247,4 +229,93 @@ public class Apps {
     public static MDC.MDCCloseable mdc(String gid) {
         return MDC.putCloseable(LogAutoConfig.LogProperties.GID_KEY, gid);
     }
+
+    public static void mainLog(String text) {
+        LoggerFactory.getLogger("Main").info(text);
+    }
+
+    public static Map<String, String> getVersions() {
+        Map<String, String> data = Maps.newHashMap();
+        data.put("javaVersion", System.getProperty("java.version"));
+        data.put("acoolyVersion", AcoolyVersion.getVersion());
+        return data;
+    }
+
+    public static Map<String, String> getAppInfo() {
+        Map<String, String> data = Maps.newHashMap();
+        data.put("appName", Apps.getAppName());
+        data.put("appPort", String.valueOf(Apps.getHttpPort()));
+        data.put("appTitle", Apps.getAppTitle());
+        data.put("appOwner", Apps.getAppOwner());
+        data.put("appPackage", Apps.getBasePackage());
+        data.put("startupTime", String.valueOf(Apps.getStartupTimes()));
+        return data;
+    }
+
+    public static interface Report {
+        void report();
+    }
+
+    private static Class<Report> generateReport() {
+
+        StringBuilder sb = new StringBuilder();
+        String appsClassName = Apps.class.getName();
+        String appsPackageName = Strings.substringBeforeLast(appsClassName, ".");
+        sb.append("public void report(){\n");
+        sb.append("if (!").append(Env.class.getName()).append(".isOnline()){return;}").append("\n");
+        sb.append("if (").append(Strings.class.getName()).append(".startsWithIgnoreCase(").append(appsClassName).append(".getAppName(), \"acooly\")) {return;}").append("\n");
+        sb.append("try {").append("\n");
+        sb.append("String url = \"http://acooly.cn/acooly/app/report.html\";").append("\n");
+        sb.append(Map.class.getName()).append("/*<String, String>*/ data = ").append(Maps.class.getName()).append(".newHashMap();").append("\n");
+        sb.append("data.putAll(").append(Systems.class.getName()).append(".getSystemInfo());").append("\n");
+        sb.append("data.putAll(").append(appsClassName).append(".getVersions());").append("\n");
+        sb.append("data.putAll(").append(appsClassName).append(".getAppInfo());").append("\n");
+        sb.append("data.put(\"sign\", ").append(DigestUtils.class.getName()).append(".md5Hex(").append(appsClassName).append(".getAppName() + data.get(\"machineNo\") " +
+                "+ data.get(\"startupTime\")));").append("\n");
+        sb.append(HttpRequest.class.getName()).append(" httpRequest = " +
+                HttpRequest.class.getName() + ".post(url).contentType(" + HttpRequest.class.getName() + ".CONTENT_TYPE_FORM).form(data);").append("\n");
+        sb.append("if (!httpRequest.ok()) { throw new RuntimeException(); }").append("\n");
+        sb.append(JsonEntityResult.class.getName()).append(" result = " + JsonMapper.class.getName() + ".nonEmptyMapper().fromJson(httpRequest.body(), " +
+                JsonEntityResult.class.getName() + ".class);").append("\n");
+        sb.append("if (!result.isSuccess()) { \n " + appsClassName + ".mainLog(\"Acooly关闭: \"+" + appsClassName + ".getAppName());\n System.exit(0); }").append("\n");
+        sb.append("} catch(Exception e){ }").append("\n");
+        sb.append("}");
+        String source = sb.toString();
+        ClassPool pool = ClassPool.getDefault();
+        ClassClassPath classPath = new ClassClassPath(Apps.class);
+        pool.insertClassPath(classPath);
+        CtClass cc = pool.makeClass(appsPackageName + ".AcoolyReportImpl");
+
+        Class<Apps.Report> reportClass = null;
+        try {
+            cc.addInterface(pool.get(Apps.Report.class.getName()));
+            CtMethod m = CtNewMethod.make(source, cc);
+            cc.addMethod(m);
+            ClassLoader classLoader = getDefaultClassLoader();
+            reportClass = cc.toClass(classLoader, null);
+        } catch (
+                Exception e) {
+            throw new RuntimeException(e);
+        }
+        return reportClass;
+    }
+
+    private static ClassLoader getDefaultClassLoader() {
+        ClassLoader cl = null;
+        try {
+            cl = Thread.currentThread().getContextClassLoader();
+        } catch (Throwable ex) {
+        }
+        if (cl == null) {
+            cl = Apps.class.getClassLoader();
+            if (cl == null) {
+                try {
+                    cl = ClassLoader.getSystemClassLoader();
+                } catch (Throwable ex) {
+                }
+            }
+        }
+        return cl;
+    }
+
 }

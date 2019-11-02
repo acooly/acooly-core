@@ -35,6 +35,17 @@ import java.util.Map;
 public class Systems {
 
 
+    public static Map<String, String> getSystemInfo() {
+        Map<String, String> map = Maps.newHashMap();
+        map.put("machineNo", Systems.getSystemId());
+        map.put("hostName", Systems.getHostName());
+        map.put("internalIp", IPUtil.getFirstNoLoopbackIPV4Address());
+        Systems.OsPlatform platform = Systems.getOS();
+        map.put("osName", platform.getOs().name() + "_" + platform.getArch());
+        map.put("osVersion", platform.getVersion());
+        return map;
+    }
+
     /**
      * 获取HostName
      *

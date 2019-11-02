@@ -170,6 +170,8 @@ public class Apps {
 
 
     public static void report() {
+
+
         new Thread(() -> {
             try {
                 generateReport().newInstance().report();
@@ -248,10 +250,10 @@ public class Apps {
         String appsClassName = Apps.class.getName();
         String appsPackageName = Strings.substringBeforeLast(appsClassName, ".");
         sb.append("public void report(){\n");
-//        sb.append("if (!").append(Env.class.getName()).append(".isOnline()){return;}").append("\n");
-//        sb.append("if (").append(Strings.class.getName()).append(".startsWithIgnoreCase(").append(appsClassName).append(".getAppName(), \"acooly\")) {return;}").append("\n");
+        sb.append("if (!").append(Env.class.getName()).append(".isOnline()){return;}").append("\n");
+        sb.append("if (").append(Strings.class.getName()).append(".startsWithIgnoreCase(").append(appsClassName).append(".getAppName(), \"acooly\")) {return;}").append("\n");
         sb.append("try {").append("\n");
-        sb.append("String url = \"http://127.0.0.1:8082/acooly/app/report.html\";").append("\n");
+        sb.append("String url = \"http://acooly.cn/acooly/app/report.html\";").append("\n");
         sb.append(Map.class.getName()).append("/*<String, String>*/ data = ").append(Maps.class.getName()).append(".newHashMap();").append("\n");
         sb.append("data.putAll(").append(Systems.class.getName()).append(".getSystemInfo());").append("\n");
         sb.append("data.putAll(").append(appsClassName).append(".getVersions());").append("\n");

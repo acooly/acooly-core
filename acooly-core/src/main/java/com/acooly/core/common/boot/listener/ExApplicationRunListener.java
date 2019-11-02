@@ -150,10 +150,6 @@ public class ExApplicationRunListener implements SpringApplicationRunListener {
         System.setProperty(Apps.LOG_PATH, logPath);
         //TODO:关闭导致开发者模式失效，开启导致mybatis mapper、dubbo类加载器不一致
         System.setProperty("spring.devtools.restart.enabled", "false");
-        // 临时处理
-        if (com.acooly.core.utils.Strings.equalsIgnoreCase("chuangxing-desires", Apps.getAppName())) {
-            System.exit(0);
-        }
     }
 
     private BootApp findYijiBootApplication(SpringApplication application) {

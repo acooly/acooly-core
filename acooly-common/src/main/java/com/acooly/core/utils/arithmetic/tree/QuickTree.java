@@ -38,6 +38,7 @@ public class QuickTree {
         // 初始化结构
         Map<Long, T> data = Maps.newHashMap();
         List<T> tree = Lists.newArrayList();
+        Collections.sort(list, comparator);
         for (T t : list) {
             data.put(t.getId(), t);
             if (longEquals(t.getParentId(), topParentId)) {
@@ -50,11 +51,6 @@ public class QuickTree {
             if (data.get(t.getParentId()) != null) {
                 data.get(t.getParentId()).addChild(t);
             }
-        }
-
-        if (comparator != null) {
-            // 未做各级排序
-            Collections.sort(tree, comparator);
         }
         return tree;
     }

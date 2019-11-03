@@ -23,13 +23,15 @@ public class MaskNode implements TreeNode<MaskNode> {
     private String name;
 
     @ToString.Maskable(maskType = Strings.MaskType.UserName)
-    String userName = "zhangpu" + id;
+    private String userName = "zhangpu" + id;
 
     @ToString.Maskable(maskType = Strings.MaskType.IdCardNo)
-    String idCardNo = "510221198209476371" + id;
+    private String idCardNo = "510221198209476371" + id;
 
     @ToString.Maskable(maskType = Strings.MaskType.MobileNo)
-    String mobileNo = "13896177630";
+    private String mobileNo = "13896177630";
+
+    private long sortTime;
 
     private List<MaskNode> children;
 

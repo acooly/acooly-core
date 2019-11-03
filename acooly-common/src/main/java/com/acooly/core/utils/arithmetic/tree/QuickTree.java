@@ -27,7 +27,7 @@ public class QuickTree {
      * <p>
      * comparator的快速构建建议采用lambda方式。
      * <i>1. 单属性排序（null处理和反序），demo：Comparator.nullsLast(Comparator.comparing(SortEntity::getBirthday).reversed());<i/>
-     * <i>2. 多属性排序（先按性别字符排序，然后按ID倒序），demo：Comparator.nullsLast(Comparator.comparing(SortEntity::getGender).thenComparing(SortEntity::getId).reversed());<i/>
+     * <i>2. 多属性排序（先按性别字符排序，然后按ID倒序），demo：Comparator.nullsLast(Comparator.comparing(SortEntity::getGender).thenComparing(t -> -t.getId));<i/>
      *
      * @param list
      * @param comparator
@@ -38,6 +38,7 @@ public class QuickTree {
         // 初始化结构
         Map<Long, T> data = Maps.newHashMap();
         List<T> tree = Lists.newArrayList();
+        Collections.sort(list, comparator);
         for (T t : list) {
             data.put(t.getId(), t);
             if (longEquals(t.getParentId(), topParentId)) {
@@ -50,11 +51,6 @@ public class QuickTree {
             if (data.get(t.getParentId()) != null) {
                 data.get(t.getParentId()).addChild(t);
             }
-        }
-
-        if (comparator != null) {
-            // 未做各级排序
-            Collections.sort(tree, comparator);
         }
         return tree;
     }

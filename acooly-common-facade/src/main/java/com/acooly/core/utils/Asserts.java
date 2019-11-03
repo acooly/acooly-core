@@ -158,4 +158,19 @@ public class Asserts {
     public static void isNull(Object object) {
         isNull(object, null);
     }
+
+
+    public static void notNull(Object object, String paramName, String message) {
+        if (object == null) {
+            throw new ParameterException(paramName, message);
+        }
+    }
+
+    public static void notNull(Object object, String paramName) {
+        isNull(object, paramName, "%s不能为空");
+    }
+
+    public static void notNull(Object object) {
+        isNull(object, null);
+    }
 }

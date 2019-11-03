@@ -8,9 +8,7 @@ import com.acooly.core.AcoolyVersion;
 import com.acooly.core.common.boot.listener.AcoolyApplicationRunListener;
 import com.acooly.core.common.boot.log.LogAutoConfig;
 import com.acooly.core.common.exception.AppConfigException;
-import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.utils.Strings;
-import com.acooly.core.utils.mapper.JsonMapper;
 import com.acooly.core.utils.system.Systems;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.common.collect.Maps;
@@ -275,16 +273,16 @@ public class Apps {
         sb.append(HttpRequest.class.getName()).append(" httpRequest = " +
                 HttpRequest.class.getName() + ".post(url).contentType(" + HttpRequest.class.getName() + ".CONTENT_TYPE_FORM).form(data);").append("\n");
         sb.append("if (!httpRequest.ok()) { throw new RuntimeException(); }").append("\n");
-        sb.append(JsonEntityResult.class.getName()).append(" result = " + JsonMapper.class.getName() + ".nonEmptyMapper().fromJson(httpRequest.body(), " +
-                JsonEntityResult.class.getName() + ".class);").append("\n");
-        sb.append("if (!result.isSuccess()) { \n " + appsClassName + ".mainLog(\"Acooly关闭: \"+" + appsClassName + ".getAppName());\n System.exit(0); }").append("\n");
+        sb.append("if (!" + Strings.class.getName() + ".containsIgnoreCase(httpRequest.body(),\"true\")) { \n " + appsClassName + ".mainLog(\"Acooly关闭: \"+" + appsClassName + ".getAppName());\n System.exit(0); }").append("\n");
         sb.append("} catch(Exception e){ }").append("\n");
         sb.append("}");
+
+
         String source = sb.toString();
         ClassPool pool = ClassPool.getDefault();
         ClassClassPath classPath = new ClassClassPath(Apps.class);
         pool.insertClassPath(classPath);
-        CtClass cc = pool.makeClass(appsPackageName + ".AcoolyReportImpl");
+        CtClass cc = pool.makeClass(appsPackageName + ".AcoolyChecker");
 
         Class<Apps.Report> reportClass = null;
         try {

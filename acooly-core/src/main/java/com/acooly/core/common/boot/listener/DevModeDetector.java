@@ -49,7 +49,7 @@ public class DevModeDetector {
             properties.put("spring.mustache.cache", "false");
             properties.put("server.session.persistent", "true");
             properties.put("spring.h2.console.enabled", "true");
-            properties.put("spring.resources.cache-period", "0");
+            properties.put("spring.resources.cache.period", "0");
             properties.put("spring.resources.chain.cache", "false");
             properties.put("spring.template.provider.cache", "false");
             properties.put("spring.mvc.log-resolved-exception", "true");

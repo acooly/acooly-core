@@ -39,7 +39,7 @@ public class WebComponentInitializer implements ComponentInitializer {
 
         // 静态文件缓存
         if (!Apps.isDevMode()) {
-            System.setProperty("spring.resources.cache-period", "-1");
+            System.setProperty("spring.resources.cache.period", "-1");
         }
         // 设置freemarker
         setPropertyIfMissing("spring.freemarker.expose-session-attributes", false);

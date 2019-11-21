@@ -14,11 +14,14 @@ import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.exception.AppConfigException;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.valves.AccessLogValve;
 import org.apache.coyote.AbstractProtocol;
 import org.apache.coyote.ProtocolHandler;
+import org.apache.tomcat.util.descriptor.web.SecurityCollection;
+import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +39,13 @@ import org.springframework.http.HttpStatus;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 /**
  * @author qiubo
+ * @author zhangpu
  */
 @Configuration
 @ConditionalOnWebApplication
@@ -76,11 +81,41 @@ public class TomcatAutoConfig {
                 connector.setAttribute("acceptCount", Integer.toString(tomcatProperties.getAcceptCount()));
             });
 
+            // 添加tomcat的默认访问页
             factory.addContextCustomizers(context -> {
                 context.addWelcomeFile("index.html");
-                context.setBackgroundProcessorDelay((int)tomcatProperties.getBackgroundProcessorDelay().getSeconds());
+                context.setBackgroundProcessorDelay((int) tomcatProperties.getBackgroundProcessorDelay().getSeconds());
             });
 
+            // 禁用内置Tomcat的不安全请求方法
+            if (tomcatProperties.getSecurity().isEnable()) {
+                factory.addContextCustomizers(context -> {
+                    SecurityConstraint securityConstraint = new SecurityConstraint();
+                    // 开启认证
+                    securityConstraint.setAuthConstraint(true);
+                    SecurityCollection collection = new SecurityCollection();
+                    // 对所有资源生效
+                    collection.addPattern(tomcatProperties.getSecurity().getPattern());
+                    // 以下是排除认证的非安全http方法（安全的方法）
+                    List<String> omittedMethods = tomcatProperties.getSecurity().getOmittedMethods();
+                    if (omittedMethods == null) {
+                        omittedMethods = Lists.newArrayList();
+                    }
+                    if (omittedMethods.isEmpty()) {
+                        omittedMethods.add("GET");
+                        omittedMethods.add("get");
+                        omittedMethods.add("post");
+                        omittedMethods.add("POST");
+                    }
+
+                    for (String omittedMethod : omittedMethods) {
+                        collection.addOmittedMethod(omittedMethod);
+                    }
+
+                    securityConstraint.addCollection(collection);
+                    context.addConstraint(securityConstraint);
+                });
+            }
         };
     }
 

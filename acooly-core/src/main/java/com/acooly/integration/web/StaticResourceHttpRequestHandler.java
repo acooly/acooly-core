@@ -21,10 +21,11 @@ import java.util.List;
  * <p>实现先加载webapp下资源,如果不存在再加载指定classpath下资源。用户封装静态资源到jar中， 但外部项目任然可以通过在webapp下建同名资源文件覆盖扩展
  *
  * <p>该特性使用了springmvc的HttpRequestHandler作为工具来实现请求资源的处理
- *
+ * @Deprecated：用于springV3+acoolyV3时代的JSP和Freemarker整合
  * @author zhangpu
  * @date 2015年10月12日
  */
+@Deprecated
 public class StaticResourceHttpRequestHandler extends ResourceHttpRequestHandler {
 
     private String classpathViewRoot = "static/";

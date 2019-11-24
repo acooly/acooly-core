@@ -16,8 +16,10 @@ import java.io.IOException;
  * 静态资源访问filter
  *
  * @author zhangpu
+ * @Deprecated：用于acoolyV3时代
  * @date 2015年10月12日
  */
+@Deprecated
 public class StaticResourceSpringFilter extends OncePerRequestFilter {
 
     @Resource(name = "staticResourceHttpRequestHandler")

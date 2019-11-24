@@ -13,10 +13,11 @@ import java.util.Locale;
  * JSTL springMVC View 扩展实现
  *
  * <p>增强对resource是否存在的检查
- *
+ * @Deprecated：用于springV3+acoolyV3时代的JSP和Freemarker整合
  * @author zhangpu
  * @date 2015年10月15日
  */
+@Deprecated
 public class ResourceCheckJstlView extends JstlView {
 
     @Override

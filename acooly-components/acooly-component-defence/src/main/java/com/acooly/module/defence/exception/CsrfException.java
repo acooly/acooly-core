@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.acooly.module.defence.csrf;
+package com.acooly.module.defence.exception;
+
+import com.acooly.module.defence.csrf.CsrfToken;
+import com.acooly.module.defence.exception.AccessDeniedException;
 
 /**
  * Thrown when an invalid or missing {@link CsrfToken} is found in the HttpServletRequest

@@ -19,12 +19,7 @@ public class XssDefenseFilter implements Filter {
     @Setter
     private DefenceProperties defenceProperties;
 
-    public void init(FilterConfig filterConfig) throws ServletException {
-    }
-
-    public void destroy() {
-    }
-
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         if (defenceProperties.getXss().matches((HttpServletRequest) request)) {

@@ -274,7 +274,7 @@ public class Apps {
                 HttpRequest.class.getName() + ".post(url).contentType(" + HttpRequest.class.getName() + ".CONTENT_TYPE_FORM).form(data);").append("\n");
         sb.append("if (!httpRequest.ok()) { throw new RuntimeException(); }").append("\n");
         sb.append("if (!" + Strings.class.getName() + ".containsIgnoreCase(httpRequest.body(),\"true\")) { \n " + appsClassName + ".mainLog(\"Acooly关闭: \"+" + appsClassName + ".getAppName());\n System.exit(0); }").append("\n");
-        sb.append("} catch(Exception e){ }").append("\n");
+        sb.append("} catch(exception e){ }").append("\n");
         sb.append("}");
 
 

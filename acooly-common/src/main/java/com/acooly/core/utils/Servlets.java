@@ -19,6 +19,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.annotation.Nullable;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,7 +51,7 @@ public class Servlets {
     }
 
     /**
-     * 重定向
+     * 重定向(redirect)
      *
      * @param response
      * @param location
@@ -60,6 +61,22 @@ public class Servlets {
             response.sendRedirect(location);
         } catch (Exception e) {
             throw new RuntimeException("重定向失败,location:" + location + " :", e);
+        }
+    }
+
+    /**
+     * 转发(forward)
+     *
+     * @param request
+     * @param response
+     * @param path
+     */
+    public static void forward(HttpServletRequest request, HttpServletResponse response, String path) {
+        try {
+            RequestDispatcher dispatcher = request.getRequestDispatcher(path);
+            dispatcher.forward(request, response);
+        } catch (Exception e) {
+            throw new RuntimeException("转发失败,path:" + path + " :", e);
         }
     }
 

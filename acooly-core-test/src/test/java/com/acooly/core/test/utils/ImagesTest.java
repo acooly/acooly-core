@@ -167,10 +167,10 @@
 //    /**
 //     * 测试使用文字绘制水印图片
 //     *
-//     * @throws Exception
+//     * @throws exception
 //     */
 //    @Test
-//    public void testDrawWatermarkWithText() throws Exception {
+//    public void testDrawWatermarkWithText() throws exception {
 //        Color color = Color.WHITE;
 //        Font font = new Font("微软雅黑", Font.BOLD, 20);
 //        String text = "Acooly框架";
@@ -199,7 +199,7 @@
 //
 //
 //    @Test
-//    public void testClipImageWithThumbnails() throws Exception {
+//    public void testClipImageWithThumbnails() throws exception {
 //        String distFile = getImagePath() + "dist/clip_test_Thumbnails.png";
 //        int x = 0;
 //        int y = 0;
@@ -210,7 +210,7 @@
 //
 //    @Test
 //    // todo
-//    public void testCropWithThumbnails() throws Exception {
+//    public void testCropWithThumbnails() throws exception {
 //        String distFile = getImagePath() + "dist/crop_test_Thumbnails.png";
 //        int x = 0;
 //        int y = 0;
@@ -227,7 +227,7 @@
 //    }
 //
 //    @Test
-//    public void testGrayWithColorConvertO() throws Exception {
+//    public void testGrayWithColorConvertO() throws exception {
 //        long start = System.currentTimeMillis();
 //        String distPath = getImagePath() + "dist/gray_ColorConvertOp.batch";
 //        BufferedImage source = ImageIO.read(new File(sourcePath));

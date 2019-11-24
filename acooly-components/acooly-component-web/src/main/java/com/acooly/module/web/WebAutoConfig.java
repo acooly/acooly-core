@@ -47,6 +47,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.FormContentFilter;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -106,9 +107,17 @@ public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware,
 
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        // 和原逻辑保持一直，原因未知。
+        // 和底版本原逻辑保持一致：指定MVC的URL后置为html,已便于其他组件安全控制的粒度。不用去排除资源文件
         configurer.mediaType("html", MediaType.APPLICATION_JSON);
     }
+
+//    @Override
+//    public void configurePathMatch(PathMatchConfigurer configurer) {
+//        configurer.setUseRegisteredSuffixPatternMatch(true);
+//        AntPathMatcher antPathMatcher = new AntPathMatcher("/**/*.html");
+//        configurer.setPathMatcher(antPathMatcher)
+//    }
+
 
     /**
      * 添加自定义类型格式化
@@ -230,7 +239,6 @@ public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware,
     public HttpsOnlyFilter httpsOnlyFilter() {
         return new HttpsOnlyFilter();
     }
-
 
 
     /**

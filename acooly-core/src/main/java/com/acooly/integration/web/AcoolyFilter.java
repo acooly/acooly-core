@@ -28,7 +28,7 @@ import java.util.List;
  * @author zhangpu
  * @date 2019-11-24
  */
-public class AcoolyFilter extends OncePerRequestFilter {
+public abstract class AcoolyFilter extends OncePerRequestFilter {
     private PathMatcher pathMatcher = new AntPathMatcher();
     private List<String> exclusions = new ArrayList<String>();
 
@@ -50,10 +50,8 @@ public class AcoolyFilter extends OncePerRequestFilter {
         doFilterDetermine(request, response, filterChain);
     }
 
-    protected void doFilterDetermine(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-
-    }
+    protected abstract void doFilterDetermine(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException;
 
     /**
      * 检查是否匹配排除的URL

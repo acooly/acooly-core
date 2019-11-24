@@ -8,8 +8,10 @@
  * qzhanbo@yiji.com 2015-06-25 11:26 创建
  *
  */
-package com.acooly.module.defence.csrf;
+package com.acooly.module.defence.exception.handle;
 
+import com.acooly.module.defence.exception.AccessDeniedException;
+import com.acooly.module.defence.exception.AccessDeniedHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +23,7 @@ import java.io.IOException;
 
 /**
  * @author qiubo
+ * @author zhangpu 调整异常输出
  */
 public class CsrfAccessDeniedHandlerImpl implements AccessDeniedHandler {
     private static final Logger logger = LoggerFactory.getLogger(CsrfAccessDeniedHandlerImpl.class);
@@ -30,13 +33,11 @@ public class CsrfAccessDeniedHandlerImpl implements AccessDeniedHandler {
     public CsrfAccessDeniedHandlerImpl() {
     }
 
-    public void handle(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            AccessDeniedException accessDeniedException)
+    @Override
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException)
             throws IOException, ServletException {
         if (!response.isCommitted()) {
-            logger.error("csrf校验异常,url={}", getRequestUrl(request), accessDeniedException);
+            logger.error("CSRF防御 异常，url: {}, Exception: {}", getRequestUrl(request), accessDeniedException.getClass().getSimpleName());
             if (this.errorPage != null) {
                 request.setAttribute("SPRING_SECURITY_403_EXCEPTION", accessDeniedException);
                 response.setStatus(403);

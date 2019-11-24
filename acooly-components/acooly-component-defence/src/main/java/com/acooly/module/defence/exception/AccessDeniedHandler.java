@@ -8,7 +8,7 @@
  * qzhanbo@yiji.com 2015-06-25 11:26 创建
  *
  */
-package com.acooly.module.defence.csrf;
+package com.acooly.module.defence.exception;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -28,9 +28,7 @@ public interface AccessDeniedHandler {
      * @throws IOException      in the event of an IOException
      * @throws ServletException in the event of a ServletException
      */
-    void handle(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            AccessDeniedException accessDeniedException)
+    void handle(HttpServletRequest request, HttpServletResponse response,
+                AccessDeniedException accessDeniedException)
             throws IOException, ServletException;
 }

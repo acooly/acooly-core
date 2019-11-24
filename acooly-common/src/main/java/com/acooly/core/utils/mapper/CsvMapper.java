@@ -102,7 +102,7 @@ public class CsvMapper {
      * @param args
      * @throws Exception
      */
-    /*public static void main(String[] args) throws Exception {
+    /*public static void main(String[] args) throws exception {
         String line = "a,b,c,,\"asdfasdf,asdfas\",\"asd\"\"12\"\"123\"";
         System.out.println(line);
         List<String> result = CsvMapper.unmarshal(line);

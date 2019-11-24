@@ -25,31 +25,6 @@ public final class Barcodes {
 
     public static final String DEFAULT_ENCODING = "UTF-8";
 
-    /**
-     * 主方法用于测试
-     *
-     * @param args
-     */
-  /*public static void main(String[] args) throws Exception {
-  		// QRcode二维码测试
-  		String content = "http://www.woldd.com/app/app.jsp";
-  		String encoding = "utf-8";
-  		int size = 200;
-  		File file = new File("d:\\temp\\woldd_android_online.png");
-  		encodeQRcode(content, encoding, size, new FileOutputStream(file), true);
-  		System.out.println("生成QRcode二维码图片：" + file.getPath());
-  		String decodeContent = decode(file);
-  		System.out.println("解码完成：" + decodeContent);
-
-  		// 条形码测试
-  //		content = "0123456789";
-  //		File barcodeFile = new File("e:\\temp\\testBarcode.png");
-  //		encodeBarcode(content, 200, 100, new FileOutputStream(barcodeFile), true);
-  //		System.out.println("生成barcode条形码图片：" + barcodeFile.getPath());
-  //		decodeContent = decode(barcodeFile);
-  //		System.out.println("条形码解码完成：" + decodeContent);
-
-  	}*/
 
     /**
      * 通用条形码生成

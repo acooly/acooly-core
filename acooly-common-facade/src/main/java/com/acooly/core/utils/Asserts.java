@@ -26,6 +26,25 @@ import java.util.Map;
 public class Asserts {
 
     /**
+     * 判断数字在start（含）和end（含）间
+     *
+     * @param number
+     * @param start
+     * @param end
+     */
+    public static void between(int paramValue, int start, int end, String paramName, String message) {
+        if (paramValue < start || paramValue > end) {
+            throw new ParameterException(paramName, message);
+        }
+    }
+
+    public static void between(long paramValue, long start, long end, String paramName, String message) {
+        if (paramValue < start || paramValue > end) {
+            throw new ParameterException(paramName, message);
+        }
+    }
+
+    /**
      * 字符串不能为空
      *
      * @param text

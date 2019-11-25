@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.dao.DataAccessException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -430,36 +431,47 @@ public abstract class AbstractStandardEntityController<
      * @param e
      */
     protected void handleException(JsonResult result, String action, Exception e) {
-        String message = getExceptionMessage(action, e);
-        // 猜测是MYSQL的唯一索引错误
-        if (Strings.containsIgnoreCase(message, "sql") && Strings.containsIgnoreCase(message, "Duplicate")) {
-            String msg = Strings.substringAfter(message, "Duplicate");
-            String value = Regexs.finder(Regexs.CommonRegex.QUITATION, msg);
-            message = "违反唯一性，值(" + (value != null ? "[" + value + "]" : "") + ")已经存在";
-        }
-        logger.error(message, e);
+        String message = null;
         result.setSuccess(false);
         if (e instanceof Messageable) {
             Messageable be = (Messageable) e;
             result.setCode(be.code());
             result.setMessage(be.message());
         } else {
-            result.setCode(e.getClass().toString());
-            result.setMessage(message);
+            result.setCode(e.getClass().getSimpleName());
+            result.setMessage(getExceptionMessage(action, e));
         }
+        logger.error(result.getMessage(), e);
     }
 
     protected void handleException(String action, Exception e, HttpServletRequest request) {
-        String message = getExceptionMessage(action, e);
+        String message = null;
+        if (e instanceof Messageable) {
+            Messageable be = (Messageable) e;
+            message = be.message();
+        } else {
+            message = getExceptionMessage(action, e);
+        }
         saveMessage(request, message);
         logger.error(message, e);
     }
 
     protected String getExceptionMessage(String action, Exception e) {
-        Throwable source = getSqlException(e);
-        return (StringUtils.isNotBlank(action) ? (action + " -> ") : "")
-                + e.getMessage()
-                + (source != null ? " --> DB_ERROR:" + source.getMessage() : "");
+        // 数据操作异常
+        String message = null;
+        if (DataAccessException.class.isAssignableFrom(e.getClass()) || getSqlException(e) != null) {
+            message = "数据访问异常,请重试或联系管理员";
+        }
+        // 猜测是MYSQL的唯一索引错误
+        if (Strings.containsIgnoreCase(message, "sql") && Strings.containsIgnoreCase(message, "Duplicate")) {
+            String msg = Strings.substringAfter(message, "Duplicate");
+            String value = Regexs.finder(Regexs.CommonRegex.QUITATION, msg);
+            message = "违反唯一性，值(" + (value != null ? "[" + value + "]" : "") + ")已经存在";
+        }
+        if (Strings.isBlank(message)) {
+            message = e.getMessage();
+        }
+        return message;
     }
 
     protected Throwable getSqlException(Exception e) {

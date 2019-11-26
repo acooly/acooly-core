@@ -13,6 +13,7 @@ package com.acooly.module.defence.password;
  */
 
 import com.acooly.core.utils.Regexs;
+import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.module.defence.exception.DefenceErrorCodes;
 import com.acooly.module.defence.exception.DefenceException;
@@ -90,6 +91,10 @@ public enum PasswordStrength implements Messageable {
 
     public String getRegex() {
         return regex;
+    }
+
+    public String getRegexForJs() {
+        return Strings.replace(this.getRegex(), "\\", "\\\\");
     }
 
     @Override

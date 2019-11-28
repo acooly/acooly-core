@@ -1,4 +1,4 @@
-package org.apache.ibatis.builder;
+package org.apache.ibatis.buildernotuse;
 
 import org.apache.ibatis.binding.BindingException;
 import org.apache.ibatis.mapping.BoundSql;

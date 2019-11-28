@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.ibatis.builder;
+package org.apache.ibatis.buildernotuse;
 
+import org.apache.ibatis.builder.BaseBuilder;
+import org.apache.ibatis.builder.BuilderException;
+import org.apache.ibatis.builder.ParameterExpression;
 import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.parsing.GenericTokenParser;

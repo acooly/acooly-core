@@ -30,7 +30,6 @@ import static com.acooly.module.jpa.JPAProperties.PREFIX;
 @Getter
 @Setter
 public class JPAProperties implements InitializingBean {
-
     public static final String PREFIX = "acooly.jpa";
     public static final String ENABLE_KEY = PREFIX + ".enable";
     private boolean enable = true;

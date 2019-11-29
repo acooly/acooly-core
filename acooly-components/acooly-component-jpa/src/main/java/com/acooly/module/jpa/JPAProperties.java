@@ -30,9 +30,11 @@ import static com.acooly.module.jpa.JPAProperties.PREFIX;
 @Getter
 @Setter
 public class JPAProperties implements InitializingBean {
+
     public static final String PREFIX = "acooly.jpa";
     public static final String ENABLE_KEY = PREFIX + ".enable";
     private boolean enable = true;
+    private boolean diableScanCurrentProjectEntity = false;
     /**
      * 是否启用openEntityManagerInViewFilter
      */
@@ -47,8 +49,10 @@ public class JPAProperties implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        entityPackagesToScan.put("app0", Apps.getBasePackage() + ".**.domain");
-        entityPackagesToScan.put("app1", Apps.getBasePackage() + ".**.entity");
+        if (diableScanCurrentProjectEntity) {
+            entityPackagesToScan.put("app0", Apps.getBasePackage() + ".**.domain");
+            entityPackagesToScan.put("app1", Apps.getBasePackage() + ".**.entity");
+        }
 
         entityPackagesToScan.put("components0", COMPONENTS_PACKAGE + ".**.domain");
         entityPackagesToScan.put("components1", COMPONENTS_PACKAGE + ".**.entity");

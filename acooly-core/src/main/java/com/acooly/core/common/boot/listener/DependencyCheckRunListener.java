@@ -27,6 +27,7 @@ public class DependencyCheckRunListener implements SpringApplicationRunListener 
 
     private SpringApplication application;
     private String[] args;
+    private static  boolean initialized = false;
 
     public DependencyCheckRunListener( SpringApplication application, String[] args ) {
         this.application = application;
@@ -48,7 +49,7 @@ public class DependencyCheckRunListener implements SpringApplicationRunListener 
 
     @Override
     public void contextLoaded( ConfigurableApplicationContext configurableApplicationContext ) {
-        if (!Apps.isInitialized()) {
+        if (!initialized) {
             List<DependencyChecker> dependencyCheckers =
                     SpringFactoriesLoader.loadFactories(
                             DependencyChecker.class, ClassUtils.getDefaultClassLoader());
@@ -59,6 +60,7 @@ public class DependencyCheckRunListener implements SpringApplicationRunListener 
                                 dependencyChecker
                                         .check(configurableApplicationContext.getEnvironment());
                             });
+            initialized = true;
         }
     }
 

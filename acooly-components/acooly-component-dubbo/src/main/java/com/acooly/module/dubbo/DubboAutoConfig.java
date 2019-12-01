@@ -78,15 +78,26 @@ public class DubboAutoConfig implements InitializingBean {
     public static RegistryConfig registryConfig() {
         initDubboProperties();
         RegistryConfig config = new RegistryConfig();
-        config.setProtocol("zookeeper");
-        logger.info(
-                "dubbo使用注册中心地址:{}, 是否注册:{}", dubboProperties.getZkUrl(), dubboProperties.isRegister());
+        if (dubboProperties.isEnableNacos()) {
+            config.setProtocol("nacos");
+            config.setAddress(dubboProperties.getNacosUrl());
+            config.setClient("nacos");
+            logger.info(
+                    "dubbo使用注册中心地址:{}, 是否注册:{}", dubboProperties.getNacosUrl(),
+                    dubboProperties.isRegister());
+        } else {
+            config.setProtocol("zookeeper");
+            config.setAddress(dubboProperties.getZkUrl());
+            config.setClient("zkclient");
+            logger.info(
+                    "dubbo使用注册中心地址:{}, 是否注册:{}", dubboProperties.getZkUrl(),
+                    dubboProperties.isRegister());
+        }
         config.setRegister(dubboProperties.isRegister());
-        config.setAddress(dubboProperties.getZkUrl());
         if (!Apps.isRunInTest()) {
             config.setFile(Apps.getAppDataPath() + "/dubbo/dubbo.cache");
         }
-        config.setClient("zkclient");
+
         config.setCluster("failfast");
         return config;
     }
@@ -127,7 +138,7 @@ public class DubboAutoConfig implements InitializingBean {
         return createRefOnlyRegistry(refOnlyZkUrl3, "3");
     }
 
-    private static RegistryConfig createRefOnlyRegistry(String zkUrl, String id) {
+    private static RegistryConfig createRefOnlyRegistry( String zkUrl, String id ) {
         RegistryConfig config = new RegistryConfig();
         config.setProtocol("zookeeper");
         String cacheFile = Apps.getAppDataPath() + "/dubbo/dubbo.cache.refOnly" + id;
@@ -184,7 +195,7 @@ public class DubboAutoConfig implements InitializingBean {
 
 
     @Bean
-    public DubboFactory dubboFactory(ConsumerConfig consumerConfig) {
+    public DubboFactory dubboFactory( ConsumerConfig consumerConfig ) {
         return new DubboFactoryImpl(consumerConfig);
     }
 

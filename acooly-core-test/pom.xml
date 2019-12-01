@@ -15,6 +15,9 @@
         <start-class>com.acooly.core.test.Main</start-class>
     </properties>
     <dependencies>
+
+
+
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-mybatis</artifactId>

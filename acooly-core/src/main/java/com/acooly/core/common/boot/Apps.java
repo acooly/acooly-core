@@ -8,11 +8,16 @@ import com.acooly.core.AcoolyVersion;
 import com.acooly.core.common.boot.listener.AcoolyApplicationRunListener;
 import com.acooly.core.common.boot.log.LogAutoConfig;
 import com.acooly.core.common.exception.AppConfigException;
+import com.acooly.core.common.transformer.Retransformer;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.system.Systems;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.common.collect.Maps;
+import java.lang.instrument.Instrumentation;
+import java.util.List;
 import javassist.*;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.agent.builder.AgentBuilder;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.LoggerFactory;
@@ -60,19 +65,32 @@ public class Apps {
      * 如果引入了 spring cloud 的依赖，会在执行到 environmentPrepared的时候调用反射重新执行一次main 实现spring cloud
      * 的bootstrapContext 的初始化 加个标志避免被重新初始化
      */
-    private static boolean initialized = false;
+
     private static String logPath = null;
     private static String dataPath = null;
     private static Boolean isTest = null;
 
 
-    public static boolean isInitialized() {
-        return initialized;
-    }
 
-    public static void markInitialized() {
-        initialized = true;
-    }
+
+    /**
+     * 用于class redefine
+     */
+    public static ByteBuddy byteBuddy;
+
+
+    /**
+     * 用于识别应用是否运行于容器
+     */
+    public static boolean isContainerd = false;
+
+
+    /**
+     * agent Instrumentation 实例
+     */
+    public static Instrumentation INSTRUMENTATION;
+
+
 
 
     public static String getAppName() {

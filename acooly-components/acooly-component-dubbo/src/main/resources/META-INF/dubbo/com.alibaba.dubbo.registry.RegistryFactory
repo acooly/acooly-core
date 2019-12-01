@@ -1,0 +1,1 @@
+nacos=com.acooly.module.dubbo.nacos.NacosRegistryFactory

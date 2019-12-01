@@ -12,6 +12,7 @@ import com.acooly.core.common.web.AbstractStandardEntityController;
 import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.test.domain.App;
+import com.acooly.core.test.transformer.OriginClass;
 import com.acooly.core.utils.Money;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
@@ -39,12 +40,22 @@ public class AcoolyContoller extends AbstractStandardEntityController<App, AppSe
     @Autowired
     private AppService appService;
 
+
+    @Autowired
+    private OriginClass origin;
+
     @ResponseBody
     @RequestMapping("jsonResult")
     public JsonResult jsonResult( HttpServletRequest request ) {
         JsonResult result = new JsonResult();
         result.appendData("a", "b");
         return result;
+    }
+
+    @ResponseBody
+    @RequestMapping("transformer")
+    public String transformer() {
+        return origin.sayHello();
     }
 
 

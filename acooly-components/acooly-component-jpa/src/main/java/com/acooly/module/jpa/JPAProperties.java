@@ -30,6 +30,7 @@ import static com.acooly.module.jpa.JPAProperties.PREFIX;
 @Getter
 @Setter
 public class JPAProperties implements InitializingBean {
+
     public static final String PREFIX = "acooly.jpa";
     public static final String ENABLE_KEY = PREFIX + ".enable";
     private boolean enable = true;
@@ -49,12 +50,17 @@ public class JPAProperties implements InitializingBean {
     @Override
     public void afterPropertiesSet() {
         if (disableScanCurrentProjectEntity) {
+            entityPackagesToScan.put("components0", COMPONENTS_PACKAGE + ".**.domain");
+            entityPackagesToScan.put("components1", COMPONENTS_PACKAGE + ".**.entity");
+            openEntityManagerInViewFilterUrlPatterns.add("/manage/*");
+        } else {
             entityPackagesToScan.put("app0", Apps.getBasePackage() + ".**.domain");
             entityPackagesToScan.put("app1", Apps.getBasePackage() + ".**.entity");
+            entityPackagesToScan.put("components0", COMPONENTS_PACKAGE + ".**.domain");
+            entityPackagesToScan.put("components1", COMPONENTS_PACKAGE + ".**.entity");
+            openEntityManagerInViewFilterUrlPatterns.add("/manage/*");
         }
 
-        entityPackagesToScan.put("components0", COMPONENTS_PACKAGE + ".**.domain");
-        entityPackagesToScan.put("components1", COMPONENTS_PACKAGE + ".**.entity");
-        openEntityManagerInViewFilterUrlPatterns.add("/manage/*");
+
     }
 }

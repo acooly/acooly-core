@@ -24,7 +24,7 @@ public class AgentInstRegListener implements SpringApplicationRunListener, Prior
     /**
      * 用于检测是否使用了spring cloud 了防止被spring cloud 的bootstrap 初始化后在被spring boot 初始化一次
      */
-    private static boolean initialized = false;
+    private static boolean cloudEnv = false;
 
     /**
      * 用于class redefine
@@ -32,12 +32,12 @@ public class AgentInstRegListener implements SpringApplicationRunListener, Prior
     private static List<Retransformer> retransformers;
 
     public AgentInstRegListener( SpringApplication application, String[] args ) {
-
+        cloudEnv = Apps.checkCloudEnv(application);
     }
 
     @Override
     public void starting() {
-        if (!initialized) {
+        if (!cloudEnv) {
             retransformers = SpringFactoriesLoader
                     .loadFactories(Retransformer.class,
                             Thread.currentThread().getContextClassLoader());
@@ -61,7 +61,7 @@ public class AgentInstRegListener implements SpringApplicationRunListener, Prior
                 );
                 Apps.byteBuddy = byteBuddy;
             }
-            initialized = true;
+
         }
 
     }

@@ -27,9 +27,10 @@ public class DependencyCheckRunListener implements SpringApplicationRunListener 
 
     private SpringApplication application;
     private String[] args;
-    private static  boolean initialized = false;
+    private boolean cloudEnv;
 
     public DependencyCheckRunListener( SpringApplication application, String[] args ) {
+        cloudEnv = Apps.checkCloudEnv(application);
         this.application = application;
         this.args = args;
     }
@@ -49,7 +50,7 @@ public class DependencyCheckRunListener implements SpringApplicationRunListener 
 
     @Override
     public void contextLoaded( ConfigurableApplicationContext configurableApplicationContext ) {
-        if (!initialized) {
+        if (!cloudEnv) {
             List<DependencyChecker> dependencyCheckers =
                     SpringFactoriesLoader.loadFactories(
                             DependencyChecker.class, ClassUtils.getDefaultClassLoader());
@@ -60,7 +61,6 @@ public class DependencyCheckRunListener implements SpringApplicationRunListener 
                                 dependencyChecker
                                         .check(configurableApplicationContext.getEnvironment());
                             });
-            initialized = true;
         }
     }
 

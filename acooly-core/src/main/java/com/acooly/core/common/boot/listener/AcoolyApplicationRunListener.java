@@ -23,6 +23,8 @@ import com.acooly.core.common.exception.UncaughtExceptionHandlerWrapper;
 import com.acooly.core.utils.ShutdownHooks;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
@@ -53,21 +55,25 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
     private static List<String> disabledPackageName =
             Lists.newArrayList("", "com.acooly", "com.acooly.core", "com.acooly.core.common.boot",
                     COMPONENTS_PACKAGE);
-    private static boolean initialized = false;
+    private boolean cloudEnv;
     private SpringApplication application;
     private String[] args;
 
     private StopWatch stopWatch = new StopWatch();
 
     public AcoolyApplicationRunListener( SpringApplication application, String[] args ) {
-        this.application = application;
-        this.args = args;
-        stopWatch.start();
-        setThreadName();
-        application.setRegisterShutdownHook(false);
-        BootApp bootApp = findBootApplication(application);
-        application.setBanner(new AcoolyBanner(bootApp));
-        initEnvVars(bootApp);
+        // application.getAllSources().contains()
+        cloudEnv = Apps.checkCloudEnv(application);
+        if (!cloudEnv) {
+            this.application = application;
+            this.args = args;
+            stopWatch.start();
+            setThreadName();
+            application.setRegisterShutdownHook(false);
+            BootApp bootApp = findBootApplication(application);
+            application.setBanner(new AcoolyBanner(bootApp));
+            initEnvVars(bootApp);
+        }
     }
 
 
@@ -76,11 +82,10 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
      */
     @Override
     public void starting() {
-        if (!initialized) {
+        if (!cloudEnv) {
             checkAndSetPackage(application);
             checkCoreVersions();
             jvmPropstuning();
-            initialized = true;
         }
     }
 
@@ -94,6 +99,7 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
     @Override
     public void environmentPrepared( ConfigurableEnvironment environment ) {
         new EnvironmentHolder().setEnvironment(environment);
+
         setProfileIfEnableActiveProfiles(environment);
     }
 
@@ -110,7 +116,7 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
     @Override
     public void started( ConfigurableApplicationContext context ) {
         // in spring cloud context,don't do it
-        if(!context.getId().equals("bootstrap")) {
+        if (!cloudEnv) {
             //install UncaughtExceptionHandler
             UncaughtExceptionHandlerWrapper.install();
             new ShutdownThread().register();
@@ -127,15 +133,19 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
 
     @Override
     public void failed( ConfigurableApplicationContext context, Throwable exception ) {
-        ConsoleLogInitializer.addConsoleAppender();
-        LoggerFactory.getLogger(AcoolyApplicationRunListener.class).error("启动失败", exception);
-        ShutdownHooks.shutdownAll();
-        shutdownLogSystem();
+        if (!cloudEnv) {
+            ConsoleLogInitializer.addConsoleAppender();
+            LoggerFactory.getLogger(AcoolyApplicationRunListener.class).error("启动失败", exception);
+            ShutdownHooks.shutdownAll();
+            shutdownLogSystem();
+        }
     }
 
     @Override
     public void running( ConfigurableApplicationContext context ) {
-        Apps.report();
+        if (!cloudEnv) {
+            Apps.report();
+        }
     }
 
 
@@ -198,8 +208,13 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
 
     private void initEnvVars( BootApp bootApp ) {
         String sysName = bootApp.sysName();
+
         Assert.hasLength(sysName, "系统名不能为空");
         System.setProperty(Apps.APP_NAME, sysName);
+        System.setProperty("spring.cloud.bootstrap.enabled",
+                Boolean.toString(bootApp.enableSpringCloud()));
+        System.setProperty("spring.cloud.service-registry.auto-registration.enabled",
+                Boolean.toString(bootApp.enableSpringCloud()));
         // ref ContextIdApplicationContextInitializer
         System.setProperty("spring.application.name", sysName);
         //set servlet container display name

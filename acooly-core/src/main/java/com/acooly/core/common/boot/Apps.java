@@ -15,6 +15,8 @@ import com.github.kevinsawicki.http.HttpRequest;
 import com.google.common.collect.Maps;
 import java.lang.instrument.Instrumentation;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javassist.*;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.builder.AgentBuilder;
@@ -22,6 +24,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
@@ -66,11 +69,12 @@ public class Apps {
      * 的bootstrapContext 的初始化 加个标志避免被重新初始化
      */
 
+    private static final String CLOUD_CLASS = "org.springframework.cloud.bootstrap.BootstrapImportSelectorConfiguration";
+
+
     private static String logPath = null;
     private static String dataPath = null;
     private static Boolean isTest = null;
-
-
 
 
     /**
@@ -90,8 +94,19 @@ public class Apps {
      */
     public static Instrumentation INSTRUMENTATION;
 
-
-
+    /**
+     * 检查是否增加了spring cloud 的依赖
+     * @param application
+     * @return
+     */
+    public static boolean checkCloudEnv( SpringApplication application ) {
+        for (Object o : application.getAllSources()) {
+            if (( (Class) o ).getName().equals(CLOUD_CLASS)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static String getAppName() {
         String name = System.getProperty(APP_NAME);
@@ -133,7 +148,7 @@ public class Apps {
         return logPath;
     }
 
-    public static void setLogPath(String tmp) {
+    public static void setLogPath( String tmp ) {
         logPath = tmp;
     }
 
@@ -167,10 +182,10 @@ public class Apps {
     /**
      * 暴露info信息，可以通过 actuator info endpoint获取
      *
-     * @param key   key
+     * @param key key
      * @param value value
      */
-    public static void exposeInfo(String key, Object value) {
+    public static void exposeInfo( String key, Object value ) {
         String infoKey = "info." + key;
         System.setProperty(infoKey, String.valueOf(value));
     }
@@ -178,14 +193,14 @@ public class Apps {
     /**
      * 当系统参数中没有{@link Apps#SPRING_PROFILE_ACTIVE}时，设置应用运行环境
      */
-    public static void setProfileIfNotExists(String profile) {
+    public static void setProfileIfNotExists( String profile ) {
         if (!StringUtils.hasLength(System.getProperty(SPRING_PROFILE_ACTIVE))
                 && !System.getenv().containsKey("SPRING_PROFILES_ACTIVE")) {
             System.setProperty(SPRING_PROFILE_ACTIVE, profile);
         }
     }
 
-    public static void setStartupTimes(long startupTimes) {
+    public static void setStartupTimes( long startupTimes ) {
         System.setProperty(STARTUP_TIMES, String.valueOf(startupTimes));
     }
 
@@ -220,7 +235,7 @@ public class Apps {
         AcoolyApplicationRunListener.shutdownApp();
     }
 
-    public static <T> T buildProperties(Class<T> clazz) {
+    public static <T> T buildProperties( Class<T> clazz ) {
         return EnvironmentHolder.buildProperties(clazz);
     }
 
@@ -242,11 +257,11 @@ public class Apps {
     }
 
 
-    public static MDC.MDCCloseable mdc(String gid) {
+    public static MDC.MDCCloseable mdc( String gid ) {
         return MDC.putCloseable(LogAutoConfig.LogProperties.GID_KEY, gid);
     }
 
-    public static void mainLog(String text) {
+    public static void mainLog( String text ) {
         LoggerFactory.getLogger("Main").info(text);
     }
 
@@ -269,6 +284,7 @@ public class Apps {
     }
 
     public static interface Report {
+
         void report();
     }
 
@@ -279,22 +295,29 @@ public class Apps {
         String appsPackageName = Strings.substringBeforeLast(appsClassName, ".");
         sb.append("public void report(){\n");
         sb.append("if (!").append(Env.class.getName()).append(".isOnline()){return;}").append("\n");
-        sb.append("if (").append(Strings.class.getName()).append(".startsWithIgnoreCase(").append(appsClassName).append(".getAppName(), \"acooly\")) {return;}").append("\n");
+        sb.append("if (").append(Strings.class.getName()).append(".startsWithIgnoreCase(")
+                .append(appsClassName).append(".getAppName(), \"acooly\")) {return;}").append("\n");
         sb.append("try {").append("\n");
         sb.append("String url = \"http://acooly.cn/acooly/app/report.html\";").append("\n");
-        sb.append(Map.class.getName()).append("/*<String, String>*/ data = ").append(Maps.class.getName()).append(".newHashMap();").append("\n");
-        sb.append("data.putAll(").append(Systems.class.getName()).append(".getSystemInfo());").append("\n");
+        sb.append(Map.class.getName()).append("/*<String, String>*/ data = ")
+                .append(Maps.class.getName()).append(".newHashMap();").append("\n");
+        sb.append("data.putAll(").append(Systems.class.getName()).append(".getSystemInfo());")
+                .append("\n");
         sb.append("data.putAll(").append(appsClassName).append(".getVersions());").append("\n");
         sb.append("data.putAll(").append(appsClassName).append(".getAppInfo());").append("\n");
-        sb.append("data.put(\"sign\", ").append(DigestUtils.class.getName()).append(".md5Hex(").append(appsClassName).append(".getAppName() + data.get(\"machineNo\") " +
+        sb.append("data.put(\"sign\", ").append(DigestUtils.class.getName()).append(".md5Hex(")
+                .append(appsClassName).append(".getAppName() + data.get(\"machineNo\") " +
                 "+ data.get(\"startupTime\")));").append("\n");
         sb.append(HttpRequest.class.getName()).append(" httpRequest = " +
-                HttpRequest.class.getName() + ".post(url).contentType(" + HttpRequest.class.getName() + ".CONTENT_TYPE_FORM).form(data);").append("\n");
+                HttpRequest.class.getName() + ".post(url).contentType(" + HttpRequest.class
+                .getName() + ".CONTENT_TYPE_FORM).form(data);").append("\n");
         sb.append("if (!httpRequest.ok()) { throw new RuntimeException(); }").append("\n");
-        sb.append("if (!" + Strings.class.getName() + ".containsIgnoreCase(httpRequest.body(),\"true\")) { \n " + appsClassName + ".mainLog(\"Acooly关闭: \"+" + appsClassName + ".getAppName());\n System.exit(0); }").append("\n");
+        sb.append("if (!" + Strings.class.getName()
+                + ".containsIgnoreCase(httpRequest.body(),\"true\")) { \n " + appsClassName
+                + ".mainLog(\"Acooly关闭: \"+" + appsClassName
+                + ".getAppName());\n System.exit(0); }").append("\n");
         sb.append("} catch(exception e){ }").append("\n");
         sb.append("}");
-
 
         String source = sb.toString();
         ClassPool pool = ClassPool.getDefault();

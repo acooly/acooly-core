@@ -130,7 +130,7 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
     public static String normalizeUrl(String url) {
         if (isMysql(url) && !url.contains("?")) {
             return url
-                    + "?useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false";
+                    + "?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false";
         }
         return url;
     }

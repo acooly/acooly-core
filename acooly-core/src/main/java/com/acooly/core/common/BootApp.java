@@ -24,9 +24,4 @@ public @interface BootApp {
      */
     int httpPort() default 0;
 
-    /**
-     * 是否启用spring cloud
-     * @return
-     */
-    boolean enableSpringCloud() default false;
 }

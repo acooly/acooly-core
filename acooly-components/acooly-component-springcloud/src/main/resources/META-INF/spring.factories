@@ -1,0 +1,2 @@
+com.acooly.core.common.boot.component.ComponentInitializer=com.acooly.module.springcloud.CloudComponentInitializer
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.acooly.module.springcloud.SpringcloudAutoConfiguration

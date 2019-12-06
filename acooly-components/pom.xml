@@ -26,6 +26,7 @@
         <module>acooly-component-threadpool</module>
         <module>acooly-component-tomcat</module>
         <module>acooly-component-web</module>
+        <module>acooly-component-springcloud</module>
     </modules>
 
     <dependencies>

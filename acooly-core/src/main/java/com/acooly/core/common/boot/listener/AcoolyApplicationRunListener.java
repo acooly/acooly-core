@@ -211,15 +211,6 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
 
         Assert.hasLength(sysName, "系统名不能为空");
         System.setProperty(Apps.APP_NAME, sysName);
-        // spring cloud 版本太乱，防止版本对不上造成问题，提前引入依赖，并禁用
-        if (!bootApp.enableSpringCloud()) {
-            System.setProperty("spring.cloud.bootstrap.enabled", "false");
-            System.setProperty("spring.autoconfigure.exclude",
-                    "org.springframework.cloud.alibaba.nacos.NacosDiscoveryAutoConfiguration,"
-                            + "org.springframework.cloud.alibaba.nacos.ribbon.RibbonNacosAutoConfiguration,"
-                            + "org.springframework.cloud.alibaba.nacos.endpoint.NacosDiscoveryEndpointAutoConfiguration,"
-                            + "org.springframework.cloud.alibaba.nacos.discovery.NacosDiscoveryClientAutoConfiguration");
-        }
         // ref ContextIdApplicationContextInitializer
         System.setProperty("spring.application.name", sysName);
         //set servlet container display name

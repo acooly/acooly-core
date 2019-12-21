@@ -12,7 +12,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>acooly-app-parent</module>
         <module>acooly-component-appservice</module>
         <module>acooly-component-cache</module>
         <module>acooly-component-defence</module>
@@ -27,7 +26,6 @@
         <module>acooly-component-tomcat</module>
         <module>acooly-component-web</module>
     </modules>
-
     <dependencies>
         <dependency>
             <groupId>com.acooly</groupId>

@@ -13,7 +13,6 @@
     <packaging>pom</packaging>
     <properties>
         <caffeine.version>2.6.2</caffeine.version>
-        <acooly.version>5.0.0-SNAPSHOT</acooly.version>
     </properties>
     <name>acooly-core-parent</name>
     <description>Acooly Common Basic Framework. Provide unified package for domian, dao, service, cache, webservice, etc.</description>
@@ -27,6 +26,7 @@
         <module>acooly-common</module>
         <module>acooly-common-facade</module>
         <module>acooly-archetypes</module>
+        <module>acooly-app-parents</module>
     </modules>
 
     <dependencyManagement>

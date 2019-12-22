@@ -92,7 +92,16 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>>
 
     @Override
     public void saves(List<T> ts) throws BusinessException {
-        getEntityDao().saves(ts);
+        if (Collections3.isNotEmpty(ts)) {
+            getEntityDao().saves(ts);
+        }
+    }
+
+    @Override
+    public void inserts(List<T> ts) throws BusinessException {
+        if (Collections3.isNotEmpty(ts)) {
+            getEntityDao().inserts(ts);
+        }
     }
 
     @Override

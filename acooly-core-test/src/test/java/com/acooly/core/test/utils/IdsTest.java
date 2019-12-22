@@ -10,58 +10,90 @@
 package com.acooly.core.test.utils;
 
 import com.acooly.core.utils.Ids;
-import com.acooly.core.utils.id.NetAddressIdWorker;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * @author acooly
+ * Ids分布式Id单元测试
+ *
+ * @author zhangpu@acooly.cn
  */
-@Slf4j
 public class IdsTest {
 
+    public static final Logger log = LoggerFactory.getLogger(IdsTest.class);
+
+    final int threads = 100;
+    final int timesPerThread = 100;
+    final Set<String> container = Collections.synchronizedSet(new HashSet<String>());
 
     @Test
-    public void testIds() throws Exception {
-        final Set<String> container = Collections.synchronizedSet(new HashSet<>());
-
-        int times = 999;
-        int threads = 100;
-        CountDownLatch latch = new CountDownLatch(threads);
-        for (int i = 0; i < threads; i++) {
-            Thread t = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println("线程:" + Thread.currentThread().getName() + " 开始");
-                    String id = null;
-                    for (int j = 0; j < times; j++) {
-                        id = Ids.getDid();
-                        if (!container.add(id)) {
-                            System.out.println("----- 重复数据：----- " + id);
-                        }
+    public void testBatchIds() throws Exception {
+        AtomicLong successCounter = new AtomicLong();
+        long timeTasks = runTasks(threads, new Runnable() {
+            @Override
+            public void run() {
+                for (int j = 0; j < timesPerThread; j++) {
+                    String id = Ids.getDid();
+                    if (container.add(id)) {
+                        successCounter.incrementAndGet();
+                    } else {
+                        log.info("重复Id: {}", id);
                     }
-                    latch.countDown();
-                    System.out.println("线程:" + Thread.currentThread().getName() + " 结束");
                 }
-            });
-            t.setName("test_" + i);
-            t.start();
-        }
-        latch.await();
-        System.out.println("test get count:" + times * threads);
-        System.out.println("test saved count:" + container.size());
+            }
+        });
+        log.info("Ids Batch test -> threads:{}, count:{} success:{}, ms:{}", threads, threads * timesPerThread, successCounter.longValue(), timeTasks);
     }
 
-    @Test
-    public void name() throws Exception {
 
-        NetAddressIdWorker netAddressIdWorker = new NetAddressIdWorker();
-        Long generate = netAddressIdWorker.generate();
-        System.out.println(generate + ":" + Long.toString(generate).toString().length());
+    /**
+     * 指定多个线程同时运行一个任务，测试并发性
+     *
+     * @param nThreads
+     * @param task
+     * @return
+     * @throws InterruptedException
+     */
+    public long runTasks(int nThreads, final Runnable task) throws InterruptedException {
+        // 真正的测试
+        // 使用同步工具类，保证多个线程同时（近似同时）执行
+        final CountDownLatch startGate = new CountDownLatch(1);
+        // 使用同步工具类，用于等待所有线程都运行结束时，再统计耗时
+        final CountDownLatch endGate = new CountDownLatch(nThreads);
+        for (int i = 0; i < nThreads; i++) {
+            Thread t = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        log.debug("task await: {}", Thread.currentThread().getName());
+                        startGate.await();
+                        try {
+                            task.run();
+                        } finally {
+                            endGate.countDown();
+                        }
+                    } catch (InterruptedException e) {
+                        log.warn("多线同步执行失败", e);
+                    }
+                }
+            };
+            t.setName("task_" + i);
+            t.start();
+        }
+        startGate.countDown();
+        long start = System.currentTimeMillis();
+        log.info("runTasks 线程准备完成 threads:{}", nThreads);
+        endGate.await();
+        long end = System.currentTimeMillis();
+        long times = end - start;
+        log.info("runTasks 线程执行完成 threads:{}, times: {}", nThreads, times);
+        return times;
     }
 }

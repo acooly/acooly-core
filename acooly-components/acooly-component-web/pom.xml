@@ -14,18 +14,15 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-tomcat</artifactId>
-            <version>${acooly.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-cache</artifactId>
-            <version>${acooly.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-taglibs</artifactId>
-            <version>${acooly.version}</version>
         </dependency>
 
         <dependency>

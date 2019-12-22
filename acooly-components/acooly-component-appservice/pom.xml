@@ -14,12 +14,10 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-filterchain</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
-            <version>${spring.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

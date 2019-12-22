@@ -19,7 +19,7 @@ import org.springframework.boot.jackson.JsonComponent;
 import java.io.IOException;
 
 /**
- * @author qiubo@yiji.com
+ * @author xiyang@acooly.cn
  */
 @JsonComponent
 public class LongJsonSerializer extends JsonSerializer<Long> {
@@ -34,7 +34,7 @@ public class LongJsonSerializer extends JsonSerializer<Long> {
         //long型超过16位到web前端序列化精度会丢失，超过16位时转换为string
         if (value != null && value.toString().length() > 16) {
             jgen.writeString(value.toString());
-        }else {
+        } else {
             jgen.writeNumber(value);
         }
     }

@@ -3,7 +3,6 @@ package com.acooly.core.utils;
 import com.acooly.core.common.enums.AnimalSign;
 import com.acooly.core.common.enums.Gender;
 import com.acooly.core.common.enums.StarSign;
-import com.acooly.core.common.enums.Zodiac;
 import com.acooly.core.common.facade.InfoBase;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
@@ -193,9 +192,6 @@ public class IdCards {
         info.setStarSign(StarSign.to(info.birthdate));
         info.setAnimalSign(AnimalSign.to(info.birthdate));
         info.setGender(Integer.parseInt(StringUtils.substring(cardNo, 14, 17)) % 2 == 0 ? Gender.female : Gender.male);
-        int month = Integer.parseInt(StringUtils.substring(cardNo, 10, 12));
-        int date = Integer.parseInt(StringUtils.substring(cardNo, 12, 14));
-        info.setZodiac(Zodiac.to(month, date));
         return info;
     }
 
@@ -237,8 +233,6 @@ public class IdCards {
         private String province;
         private String city;
         private String area;
-        @Deprecated
-        private Zodiac zodiac;
 
         /**
          * 星座

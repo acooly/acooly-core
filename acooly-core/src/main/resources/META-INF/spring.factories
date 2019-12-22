@@ -1,6 +1,7 @@
 org.springframework.boot.SpringApplicationRunListener=\
-com.acooly.core.common.boot.listener.ExApplicationRunListener,\
-com.acooly.core.common.boot.listener.DependencyCheckRunListener
+com.acooly.core.common.boot.listener.AcoolyApplicationRunListener,\
+com.acooly.core.common.boot.listener.DependencyCheckRunListener,\
+com.acooly.core.common.transformer.AgentInstRegListener
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.acooly.core.common.boot.log.LogAutoConfig
 #logger initializer
@@ -13,7 +14,8 @@ com.acooly.core.common.boot.log.initializer.LevelLogInitializer,\
 com.acooly.core.common.boot.log.initializer.ScriptUtilsLogInitializer
 org.springframework.context.ApplicationContextInitializer=\
 com.acooly.core.common.boot.component.ComponentExtensionContextInitializer,\
-com.acooly.core.common.boot.listener.HolderInitApplicationContextInitializer
+com.acooly.core.common.boot.listener.HolderInitApplicationContextInitializer,\
+com.acooly.core.common.transformer.AgentInitializer 
 org.springframework.context.ApplicationListener=\
 com.acooly.core.common.boot.listener.EnvironmentApplicationListener,\
 com.acooly.core.common.boot.listener.ApplicationReadyListener

@@ -1,6 +1,6 @@
 package com.acooly.core.test.utils;
 
-import com.acooly.core.common.enums.Zodiac;
+import com.acooly.core.common.enums.StarSign;
 import com.acooly.core.utils.IdCards;
 import org.junit.Test;
 
@@ -12,11 +12,11 @@ public class IdCardsTest {
     @Test
     public void name() {
         String cardNo = "51022119820915641X";
-        System.out.println( IdCards.verify(cardNo));
-        System.out.println( IdCards.parse(cardNo));
-        System.out.println( Zodiac.to(12,23));
-        System.out.println( Zodiac.to(1,19));
-        System.out.println( Zodiac.to(1,20));
+        System.out.println(IdCards.verify(cardNo));
+        System.out.println(IdCards.parse(cardNo));
+        System.out.println(StarSign.to(12, 23));
+        System.out.println(StarSign.to(1, 19));
+        System.out.println(StarSign.to(1, 20));
 
     }
 }

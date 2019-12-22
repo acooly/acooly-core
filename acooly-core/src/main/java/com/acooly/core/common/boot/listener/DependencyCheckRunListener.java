@@ -9,6 +9,7 @@
  */
 package com.acooly.core.common.boot.listener;
 
+import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.component.DependencyChecker;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
@@ -23,10 +24,13 @@ import java.util.List;
  * @author qiubo@yiji.com
  */
 public class DependencyCheckRunListener implements SpringApplicationRunListener {
+
     private SpringApplication application;
     private String[] args;
+    private boolean cloudEnv;
 
-    public DependencyCheckRunListener(SpringApplication application, String[] args) {
+    public DependencyCheckRunListener( SpringApplication application, String[] args ) {
+        cloudEnv = Apps.checkCloudEnv(application);
         this.application = application;
         this.args = args;
     }
@@ -37,28 +41,42 @@ public class DependencyCheckRunListener implements SpringApplicationRunListener 
     }
 
     @Override
-    public void environmentPrepared(ConfigurableEnvironment configurableEnvironment) {
+    public void environmentPrepared( ConfigurableEnvironment configurableEnvironment ) {
     }
 
     @Override
-    public void contextPrepared(ConfigurableApplicationContext configurableApplicationContext) {
+    public void contextPrepared( ConfigurableApplicationContext configurableApplicationContext ) {
     }
 
     @Override
-    public void contextLoaded(ConfigurableApplicationContext configurableApplicationContext) {
-        List<DependencyChecker> dependencyCheckers =
-                SpringFactoriesLoader.loadFactories(
-                        DependencyChecker.class, ClassUtils.getDefaultClassLoader());
-        dependencyCheckers
-                .stream()
-                .forEach(
-                        dependencyChecker -> {
-                            dependencyChecker.check(configurableApplicationContext.getEnvironment());
-                        });
+    public void contextLoaded( ConfigurableApplicationContext configurableApplicationContext ) {
+        if (!cloudEnv) {
+            List<DependencyChecker> dependencyCheckers =
+                    SpringFactoriesLoader.loadFactories(
+                            DependencyChecker.class, ClassUtils.getDefaultClassLoader());
+            dependencyCheckers
+                    .stream()
+                    .forEach(
+                            dependencyChecker -> {
+                                dependencyChecker
+                                        .check(configurableApplicationContext.getEnvironment());
+                            });
+        }
+    }
+
+
+    @Override
+    public void started( ConfigurableApplicationContext context ) {
+
     }
 
     @Override
-    public void finished(
-            ConfigurableApplicationContext configurableApplicationContext, Throwable throwable) {
+    public void running( ConfigurableApplicationContext context ) {
+
+    }
+
+    @Override
+    public void failed( ConfigurableApplicationContext context, Throwable exception ) {
+
     }
 }

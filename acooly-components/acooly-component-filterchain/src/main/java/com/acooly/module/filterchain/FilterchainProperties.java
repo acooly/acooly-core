@@ -13,7 +13,7 @@ import com.google.common.base.Strings;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import static com.acooly.core.common.boot.listener.ExApplicationRunListener.COMPONENTS_PACKAGE;
+import static com.acooly.core.common.boot.listener.AcoolyApplicationRunListener.COMPONENTS_PACKAGE;
 
 /**
  * @author qiubo@yiji.com

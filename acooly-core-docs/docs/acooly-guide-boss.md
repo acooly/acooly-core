@@ -18,7 +18,7 @@ Acooly框架-BOSS开发指南
 * javascript：要求至少能阅读常规代码，编写基本的表单验证功能。
 * jquery：熟悉常规的jquery操作，包括：选择器，ajax的语法和异常处理。
 * easyui：至少熟悉：布局管理（easyui-layout），表格（easyui-datagrid），弹出框（dialog），按钮（easyui-linkbutton）等
-* jsp/jstl/freemarker: 至少熟悉：servlet内置变量的操作，自定义变量输出，Map和List的跌倒，if控制语句等。
+* jsp/jstl/freemarker: 至少熟悉：servlet内置变量的操作，自定义变量输出，Map和List的迭代，if控制语句等。
 
 # 开发规范和约定
 

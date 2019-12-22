@@ -90,6 +90,30 @@ public interface EntityService<T> {
     void removes(Serializable... ids) throws BusinessException;
 
     /**
+     * 置顶
+     * T 必须实现Sortable
+     *
+     * @param id
+     */
+    void top(Serializable id);
+
+    /**
+     * 上移（默认sortTime条件和倒序查询）
+     *
+     * @param id
+     */
+    void up(Serializable id);
+
+    /**
+     * 上移（自定义前一个的查询条件）
+     *
+     * @param id
+     * @param map
+     * @param sortMap
+     */
+    void up(Serializable id, Map<String, Object> map, Map<String, Boolean> sortMap);
+
+    /**
      * 带条件和排序的分页查询
      *
      * @param pageInfo
@@ -104,4 +128,16 @@ public interface EntityService<T> {
     PageInfo<T> query(PageInfo<T> pageInfo, Map<String, Object> map) throws BusinessException;
 
     List<T> query(Map<String, Object> map, Map<String, Boolean> sortMap);
+
+    /**
+     * 树形结构数据查询
+     * T必须实现TreeNode接口
+     *
+     * @param map
+     * @param sortMap
+     * @return
+     */
+//    List<T> tree(Map<String, Object> map, Map<String, Boolean> sortMap);
+
+
 }

@@ -3,7 +3,7 @@
  */
 package com.acooly.integration.bean;
 
-import com.acooly.core.utils.GenericsUtils;
+import com.acooly.core.utils.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -35,12 +35,12 @@ public abstract class AbstractSpringProxyBean<T, D> implements InitializingBean 
 
     @SuppressWarnings("unchecked")
     protected Class<T> getTargetInterface() {
-        return GenericsUtils.getSuperClassGenricType(getClass(), 0);
+        return Reflections.getSuperClassGenricType(getClass(), 0);
     }
 
     @SuppressWarnings("unchecked")
     protected Class<D> getDefaultClass() {
-        return GenericsUtils.getSuperClassGenricType(getClass(), 1);
+        return Reflections.getSuperClassGenricType(getClass(), 1);
     }
 
     @SuppressWarnings("unchecked")

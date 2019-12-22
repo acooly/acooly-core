@@ -2,13 +2,14 @@ package com.acooly.core.test.utils;
 
 import com.acooly.core.test.utils.bean.MaskSubEntity;
 import com.acooly.core.utils.Collections3;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.util.Lists;
-import org.assertj.core.util.Sets;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -40,6 +41,32 @@ public class Collections3Test {
         log.info("collections3.top() 1: {}", Collections3.top(maskEntities, 1));
         log.info("collections3.top() 3: {}", Collections3.top(maskEntities, 3));
         log.info("collections3.top() 10: {}", Collections3.top(maskEntities, 10));
+    }
+
+    @Test
+    public void testMapTransformValues() {
+        Map<String, Object> objectMap = Maps.newHashMap();
+        objectMap.put("A", "a");
+        objectMap.put("B", 3L);
+        log.info("original: {}", objectMap);
+        Map<String, String> stringMap = Maps.transformValues(objectMap, v -> v.toString());
+        log.info("transformValues: {}", stringMap);
+        stringMap = Maps.newHashMap(stringMap);
+        stringMap.put("C", "xxx");
+        log.info("result: {}", stringMap);
+    }
+
+    @Test
+    public void testMapTransform() {
+        Map<String, Object> objectMap = Maps.newHashMap();
+        objectMap.put("A", "a");
+        objectMap.put("B", 3L);
+        log.info("original: {}", objectMap);
+        Map<String, String> stringMap = Maps.transformEntries(objectMap, (k, v) -> v.toString());
+        log.info("transformValues: {}", stringMap);
+        stringMap = Maps.newHashMap(stringMap);
+        stringMap.put("C", "xxx");
+        log.info("result: {}", stringMap);
     }
 
 }

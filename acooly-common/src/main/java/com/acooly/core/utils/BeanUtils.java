@@ -208,7 +208,6 @@ public class BeanUtils {
     public static String getAccessorName(Class type, String fieldName) {
         Assert.hasText(fieldName, "FieldName required");
         Assert.notNull(type, "Type required");
-
         if ("boolean".equals(type.getName())) {
             return "is" + StringUtils.capitalize(fieldName);
         } else {

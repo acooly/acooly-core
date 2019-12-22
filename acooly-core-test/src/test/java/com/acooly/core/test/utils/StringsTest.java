@@ -17,6 +17,17 @@ public class StringsTest {
     String bankCardNo = "6221880231092323876";
     String email = "zhangpu@acooly.cn";
 
+
+    @Test
+    public void testToPinyin() {
+        String hanzi = "我是中国人！1111i love china";
+        System.out.println(hanzi + " [全拼] : " + Strings.toPinyin(hanzi));
+        System.out.println(hanzi + " [全拼首字母] : " + Strings.toPinyinFistLetter(hanzi));
+        System.out.println(hanzi + " [首字拼音首字母] : " + Strings.toPinyinFistWord(hanzi));
+
+    }
+
+
     @Test
     public void testMaskByMaskType() {
         System.out.println("用户名: " + Strings.mask(userName, Strings.MaskType.UserName));

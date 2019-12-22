@@ -5,13 +5,18 @@
     <parent>
         <artifactId>acooly-components</artifactId>
         <groupId>com.acooly</groupId>
-        <version>4.2.0-SNAPSHOT</version>
+        <version>5.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>acooly-component-mybatis</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-ds</artifactId>
+        </dependency>
+
         <!--mybatis-->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -46,11 +51,6 @@
             <version>3.4.0</version>
         </dependency>
         <!--pagehelper-->
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-ds</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>

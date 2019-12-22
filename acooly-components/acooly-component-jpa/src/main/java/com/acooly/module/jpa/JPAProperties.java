@@ -20,7 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.List;
 import java.util.Map;
 
-import static com.acooly.core.common.boot.listener.ExApplicationRunListener.COMPONENTS_PACKAGE;
+import static com.acooly.core.common.boot.listener.AcoolyApplicationRunListener.COMPONENTS_PACKAGE;
 import static com.acooly.module.jpa.JPAProperties.PREFIX;
 
 /**
@@ -30,9 +30,11 @@ import static com.acooly.module.jpa.JPAProperties.PREFIX;
 @Getter
 @Setter
 public class JPAProperties implements InitializingBean {
+
     public static final String PREFIX = "acooly.jpa";
     public static final String ENABLE_KEY = PREFIX + ".enable";
     private boolean enable = true;
+    private boolean disableScanCurrentProjectEntity = false;
     /**
      * 是否启用openEntityManagerInViewFilter
      */
@@ -47,11 +49,18 @@ public class JPAProperties implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        entityPackagesToScan.put("app0", Apps.getBasePackage() + ".**.domain");
-        entityPackagesToScan.put("app1", Apps.getBasePackage() + ".**.entity");
+        if (disableScanCurrentProjectEntity) {
+            entityPackagesToScan.put("components0", COMPONENTS_PACKAGE + ".**.domain");
+            entityPackagesToScan.put("components1", COMPONENTS_PACKAGE + ".**.entity");
+            openEntityManagerInViewFilterUrlPatterns.add("/manage/*");
+        } else {
+            entityPackagesToScan.put("app0", Apps.getBasePackage() + ".**.domain");
+            entityPackagesToScan.put("app1", Apps.getBasePackage() + ".**.entity");
+            entityPackagesToScan.put("components0", COMPONENTS_PACKAGE + ".**.domain");
+            entityPackagesToScan.put("components1", COMPONENTS_PACKAGE + ".**.entity");
+            openEntityManagerInViewFilterUrlPatterns.add("/manage/*");
+        }
 
-        entityPackagesToScan.put("components0", COMPONENTS_PACKAGE + ".**.domain");
-        entityPackagesToScan.put("components1", COMPONENTS_PACKAGE + ".**.entity");
-        openEntityManagerInViewFilterUrlPatterns.add("/manage/*");
+
     }
 }

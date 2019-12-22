@@ -27,7 +27,7 @@ public class QuickTree {
      * <p>
      * comparator的快速构建建议采用lambda方式。
      * <i>1. 单属性排序（null处理和反序），demo：Comparator.nullsLast(Comparator.comparing(SortEntity::getBirthday).reversed());<i/>
-     * <i>2. 多属性排序（先按性别字符排序，然后按ID倒序），demo：Comparator.nullsLast(Comparator.comparing(SortEntity::getGender).thenComparing(SortEntity::getId).reversed());<i/>
+     * <i>2. 多属性排序（先按性别字符排序，然后按ID倒序），demo：Comparator.nullsLast(Comparator.comparing(SortEntity::getGender).thenComparing(t -> -t.getId));<i/>
      *
      * @param list
      * @param comparator

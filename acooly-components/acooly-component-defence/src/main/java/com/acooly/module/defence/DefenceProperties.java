@@ -17,6 +17,7 @@ import java.util.Map;
 
 /**
  * @author qiubo@yiji.com
+ * @author zhangpu
  */
 @ConfigurationProperties(DefenceProperties.PREFIX)
 @Data
@@ -25,6 +26,7 @@ public class DefenceProperties {
     private CSRF csrf = new CSRF();
     private Xss xss = new Xss();
     private Url url = new Url();
+    private Hha hha = new Hha();
 
     @PostConstruct
     public void initXss() {
@@ -36,11 +38,12 @@ public class DefenceProperties {
     public static class CSRF {
         private boolean enable = true;
         private Map<String, List<String>> exclusions = Maps.newHashMap();
-        private String errorPage = "/error/csrf.htm";
+        private String errorPage;
 
         public CSRF() {
+            // 已知的组建安全忽略
             List<String> list = Lists.newArrayList();
-            list.add("/gateway.html");
+            list.add("/gateway*");
             list.add("/ofile/upload.html");
             list.add("/mock/gateway/**");
             exclusions.put("security", list);
@@ -91,5 +94,22 @@ public class DefenceProperties {
         public void init() {
             exclusions.values().forEach(v -> ex.addAll(v));
         }
+    }
+
+    /**
+     * Http Header Attack defence
+     * 开启后：
+     * 1、请求host必须与匹配配置的hosts列表
+     * 2、请求的refer必须匹配的配置hosts列表
+     */
+    @Data
+    public static class Hha {
+        private boolean enable = false;
+        private Map<String, List<String>> exclusions = Maps.newHashMap();
+        private String errorPage;
+        /**
+         * 允许的安全host，多个使用英文逗号分隔
+         */
+        private String hosts = "127.0.0.1";
     }
 }

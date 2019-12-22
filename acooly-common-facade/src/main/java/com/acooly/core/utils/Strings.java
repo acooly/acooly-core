@@ -1,6 +1,7 @@
 package com.acooly.core.utils;
 
 import com.google.common.base.Splitter;
+import net.sourceforge.pinyin4j.PinyinHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 
@@ -23,6 +24,58 @@ public class Strings extends StringUtils {
         return Strings.left(text, ONE_WORD_LEN);
     }
 
+
+    /**
+     * 汉字转拼音
+     *
+     * @param hanzi
+     * @return
+     */
+    public static String toPinyin(String hanzi) {
+        if (Strings.isBlank(hanzi)) {
+            return null;
+        }
+        StringBuffer sb = new StringBuffer();
+        String[] wordArray;
+        for (char c : hanzi.toCharArray()) {
+            wordArray = PinyinHelper.toHanyuPinyinStringArray(c);
+            if (null != wordArray) {
+                sb.append(wordArray[0].replaceAll("\\d", ""));
+            }
+        }
+        return Strings.upperCase(sb.toString());
+    }
+
+    /**
+     * 汉字转拼音首字母
+     *
+     * @param hanzi
+     * @return
+     */
+    public static String toPinyinFistWord(String hanzi) {
+        if (Strings.isBlank(hanzi)) {
+            return null;
+        }
+        StringBuffer sb = new StringBuffer();
+        String[] oneWord;
+        for (char c : hanzi.toCharArray()) {
+            oneWord = PinyinHelper.toHanyuPinyinStringArray(c);
+            if (oneWord != null && oneWord.length > 0) {
+                sb.append(oneWord[0].charAt(0));
+            }
+        }
+        return Strings.upperCase(sb.toString());
+    }
+
+    /**
+     * 汉字字符串首字的首字母
+     *
+     * @param hanzi
+     * @return
+     */
+    public static String toPinyinFistLetter(String hanzi) {
+        return Strings.substring(toPinyinFistWord(hanzi), 0, 1);
+    }
 
     /**
      * 判断是否HTTP的URL

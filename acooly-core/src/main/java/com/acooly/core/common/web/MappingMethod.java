@@ -31,6 +31,8 @@ public enum MappingMethod implements Messageable {
 
     delete("delete", "删除"),
 
+    move("move", "移动"),
+
     exports("export", "导出"),
 
     imports("import", "导入");

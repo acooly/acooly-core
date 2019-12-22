@@ -121,7 +121,7 @@ public class Ids {
     public static class Did {
         private static final Logger logger = LoggerFactory.getLogger(Ids.class);
         private static final int MIN_LENGTH = 20;
-        private static final int SEQU_LENGTH = 4;
+        private static final int SEQU_LENGTH = 5;
         private static final int SEQU_MAX = 9999;
         private static Did did = new Did();
         private static String pidStr = null;

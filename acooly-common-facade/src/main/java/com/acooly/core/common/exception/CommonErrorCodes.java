@@ -18,18 +18,42 @@ import java.util.Map;
 
 public enum CommonErrorCodes implements Messageable {
 
-
+    /**
+     * 内部错误
+     */
     INTERNAL_ERROR("INTERNAL_ERROR", "系统错误"),
-
+    /**
+     * 对象不存在
+     */
     OBJECT_NOT_EXIST("OBJECT_NOT_EXIST", "对象不存在"),
-
+    /**
+     * 对象不唯一
+     */
     OBJECT_NOT_UNIQUE("OBJECT_NOT_UNIQUE", "对象不存在"),
-
+    /**
+     * 认证错误
+     */
     UNAUTHENTICATED_ERROR("UNAUTHENTICATED_ERROR", "认证(签名)错误"),
-
+    /**
+     * 权限错误
+     */
     UNAUTHORIZED_ERROR("UNAUTHORIZED_ERROR", "未授权的访问"),
-    
+
+    /**
+     * 不支持错误
+     */
+    UNSUPPORTED_ERROR("UNSUPPORTED_ERROR", "不支持的操作"),
+
+    /**
+     * 通讯错误
+     */
+    COMMUNICATION_ERROR("COMMUNICATION_ERROR", "通讯错误"),
+
+    /**
+     * 参数错误
+     */
     PARAMETER_ERROR("PARAMETER_ERROR", "参数错误");
+
     private final String code;
     private final String message;
 

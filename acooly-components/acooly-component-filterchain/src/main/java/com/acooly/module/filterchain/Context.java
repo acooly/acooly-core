@@ -19,7 +19,7 @@ import java.util.Iterator;
  * @author qiubo@yiji.com
  */
 public abstract class Context extends HashMap<String, Object> implements Serializable {
-    protected transient Iterator<Filter<? extends Context>> iterator;
+    public transient Iterator<Filter<? extends Context>> iterator;
 
     /**
      * 设置此对象可以重入filterChain

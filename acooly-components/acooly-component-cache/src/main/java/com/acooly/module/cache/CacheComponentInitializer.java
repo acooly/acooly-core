@@ -26,9 +26,8 @@ import static redis.embedded.util.OS.WINDOWS;
 public class CacheComponentInitializer implements ComponentInitializer {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
-        setPropertyIfMissing("spring.redis.pool.maxActive", "100");
-        setPropertyIfMissing("spring.redis.pool.maxWait", "5000");
-        setPropertyIfMissing("spring.session.redis.namespace", "session:" + Apps.getAppName());
+        setPropertyIfMissing("spring.redis.jedis.pool.max-idle", "100");
+        setPropertyIfMissing("spring.redis.jedis.pool.max-wait", "5000");
         if (CacheProperties.isLocalRedisCanEnable()) {
             log.info("发现redis服务没有启动，使用内置redis用于开发测试");
             Thread thread = new Thread(

@@ -22,6 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -55,7 +59,12 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
     @SuppressWarnings("unchecked")
     @Override
     public T get(Serializable id) throws DataAccessException {
-        return findOne((ID) id);
+        return findOne(new Specification<T>() {
+            @Override
+            public Predicate toPredicate(Root<T> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                return criteriaBuilder.and(criteriaBuilder.equal(root.get("id"), id));
+            }
+        }).get();
     }
 
     @Transactional
@@ -93,6 +102,21 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
         } else {
             onUpdate(entity);
             return em.merge(entity);
+        }
+    }
+
+    @Transactional
+    public <S extends T> List<S> save(Iterable<S> entities) {
+        List<S> result = new ArrayList();
+        if (entities == null) {
+            return result;
+        } else {
+            Iterator<S> var3 = entities.iterator();
+            while (var3.hasNext()) {
+                S entity = var3.next();
+                result.add(this.save(entity));
+            }
+            return result;
         }
     }
 
@@ -134,7 +158,7 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
     @SuppressWarnings("unchecked")
     @Override
     public void removeById(Serializable id) throws DataAccessException {
-        delete((ID) id);
+        deleteById((ID) id);
     }
 
     @Transactional
@@ -189,6 +213,7 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
         return pageInfo;
     }
 
+    @Override
     protected Class<T> getDomainClass() {
         return domainClass;
     }
@@ -244,6 +269,6 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
         Map<String, Object> searchFilters = Maps.newHashMap();
         searchFilters.put(property, value);
         Specification<T> spec = buildSpecification(searchFilters);
-        return findOne(spec);
+        return findOne(spec).get();
     }
 }

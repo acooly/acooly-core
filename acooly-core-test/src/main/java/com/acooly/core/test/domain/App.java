@@ -32,12 +32,7 @@ public class App extends AbstractEntity {
      * serialVersionUID
      */
     private static final long serialVersionUID = 1L;
-    /**
-     * id
-     */
-    @Id
-    @GeneratedValue
-    private Long id;
+
     /**
      * display_name
      */
@@ -71,4 +66,6 @@ public class App extends AbstractEntity {
      */
     private Long parentId;
     private Money price;
+
+
 }

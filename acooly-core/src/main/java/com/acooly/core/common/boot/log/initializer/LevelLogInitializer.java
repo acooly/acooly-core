@@ -12,26 +12,25 @@ package com.acooly.core.common.boot.log.initializer;
 
 import ch.qos.logback.classic.Level;
 import com.acooly.core.common.boot.log.LogbackConfigurator;
+import com.acooly.core.common.boot.support.PropertySourceUtils;
 import org.slf4j.Logger;
-import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.core.annotation.Order;
 
 import java.util.Map;
 
 /**
- * 解析yiji.log.level配置
+ * 解析acooly.log.level配置
  *
- * <p>用户可以通过配置yiji.log.level.com.yiji=debug 设置com.yiji的日志级别
+ * <p>用户可以通过配置acooly.log.level.com.acooly=debug 设置com.acooly的日志级别
  *
  * @author qiubo
+ * @author zhangpu 2019-06-19
  */
 @Order
 public class LevelLogInitializer extends AbstractLogInitializer {
     @Override
     public void init(LogbackConfigurator configurator) {
-        Map<String, Object> levels =
-                new RelaxedPropertyResolver(configurator.getEnvironment())
-                        .getSubProperties("acooly.log.level.");
+        Map<String, Object> levels = PropertySourceUtils.getSubProperties(configurator.getEnvironment(), "acooly.log.level.");
         for (Map.Entry<String, Object> entry : levels.entrySet()) {
             String loggerName = entry.getKey();
             String level = entry.getValue().toString();

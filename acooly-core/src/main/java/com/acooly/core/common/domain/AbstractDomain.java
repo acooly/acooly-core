@@ -52,7 +52,6 @@ public class AbstractDomain extends AbstractEntity {
                 }
             }
         }
-        autowiredAnnotationBeanPostProcessor.postProcessPropertyValues(
-                null, null, this, getClass().getName());
+        autowiredAnnotationBeanPostProcessor.postProcessProperties(null,this, getClass().getName());
     }
 }

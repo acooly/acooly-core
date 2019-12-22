@@ -24,8 +24,8 @@ public class TomcatComponentInitializer implements ComponentInitializer {
         setPropertyIfMissing("server.tomcat.internal-proxies", ".*");
         setPropertyIfMissing("server.tomcat.remoteIpHeader", "x-forwarded-for");
         setPropertyIfMissing("server.tomcat.protocolHeader", "x-forwarded-proto");
-        setPropertyIfMissing("server.tomcat.portHeader", "x-forwarded-port");
-//        setPropertyIfMissing(Constants.SCAN_JARS_PROPERTY,"acooly-core*.jar,acooly-taglibs-*.jar,jstl-*.jar,shiro-web-*.jar");
+        // 没必要，默认就是
+        setPropertyIfMissing("server.tomcat.uri-encoding", "UTF-8");
         if (applicationContext.getEnvironment().getProperty("acooly.tomcat.port") != null) {
             System.setProperty(
                     Apps.HTTP_PORT, applicationContext.getEnvironment().getProperty("acooly.tomcat.port"));

@@ -10,7 +10,7 @@
 package com.acooly.module.cache.declarative;
 
 import org.springframework.cache.Cache;
-import org.springframework.data.redis.cache.DefaultRedisCachePrefix;
+import org.springframework.data.redis.cache.CacheKeyPrefix;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -39,7 +39,7 @@ public class DefaultCache implements Cache {
         this.expiration = expiration;
         this.redisTemplate = redisTemplate;
         this.valueRedisSerializer = redisTemplate.getValueSerializer();
-        this.prefix = new DefaultRedisCachePrefix().prefix(name);
+        this.prefix = CacheKeyPrefix.simple().compute(name).getBytes();
     }
 
     @Override

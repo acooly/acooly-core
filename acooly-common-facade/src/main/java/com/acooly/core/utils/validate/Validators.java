@@ -39,7 +39,6 @@ public class Validators extends Validate {
             Object object, ValidatorFactory validatorFactory, Class<?>... groups) {
         if (validatorFactory == null) {
             validatorFactory = HibernateValidatorFactory.getInstance();
-            // validatorFactory = Validation.buildDefaultValidatorFactory();
         }
         Objects.requireNonNull(object);
         Set<ConstraintViolation<Object>> constraintViolations =

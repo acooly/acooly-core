@@ -19,6 +19,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.annotation.Nullable;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,7 +51,7 @@ public class Servlets {
     }
 
     /**
-     * 重定向
+     * 重定向(redirect)
      *
      * @param response
      * @param location
@@ -60,6 +61,22 @@ public class Servlets {
             response.sendRedirect(location);
         } catch (Exception e) {
             throw new RuntimeException("重定向失败,location:" + location + " :", e);
+        }
+    }
+
+    /**
+     * 转发(forward)
+     *
+     * @param request
+     * @param response
+     * @param path
+     */
+    public static void forward(HttpServletRequest request, HttpServletResponse response, String path) {
+        try {
+            RequestDispatcher dispatcher = request.getRequestDispatcher(path);
+            dispatcher.forward(request, response);
+        } catch (Exception e) {
+            throw new RuntimeException("转发失败,path:" + path + " :", e);
         }
     }
 
@@ -241,28 +258,9 @@ public class Servlets {
      *
      * <p>返回的结果的Parameter名已去除前缀.
      */
+    @SuppressWarnings("rawtypes")
     public static Map<String, Object> getParametersStartingWith(ServletRequest request, String prefix) {
-        Validate.notNull(request, "Request must not be null");
-        Enumeration paramNames = request.getParameterNames();
-        Map<String, Object> params = new TreeMap<String, Object>();
-        if (prefix == null) {
-            prefix = "";
-        }
-        while (paramNames != null && paramNames.hasMoreElements()) {
-            String paramName = (String) paramNames.nextElement();
-            if ("".equals(prefix) || paramName.startsWith(prefix)) {
-                String unprefixed = paramName.substring(prefix.length());
-                String[] values = request.getParameterValues(paramName);
-                if (values == null || values.length == 0) {
-                    // Do nothing, no values found at all.
-                } else if (values.length > 1) {
-                    params.put(unprefixed, values);
-                } else {
-                    params.put(unprefixed, values[0]);
-                }
-            }
-        }
-        return params;
+        return Maps.newHashMap(Maps.transformValues(getParameters(request, prefix, false), v -> v));
     }
 
     public static Map<String, String> getParameters(ServletRequest request, String prefix, boolean includeEmpty) {

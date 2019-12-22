@@ -13,7 +13,6 @@ import com.acooly.core.common.boot.listener.DevModeDetector;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
@@ -31,9 +30,7 @@ public class ComponentExtensionContextInitializer implements ApplicationContextI
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         new DevModeDetector().apply(applicationContext.getEnvironment());
-        RelaxedPropertyResolver resolver =
-                new RelaxedPropertyResolver(applicationContext.getEnvironment(), "spring.autoconfigure.");
-        String[] exclude = resolver.getProperty("exclude", String[].class);
+        String[] exclude = applicationContext.getEnvironment().getProperty("spring.autoconfigure.exclude", String[].class);
         if (exclude == null) {
             exclude = new String[0];
         }
@@ -49,6 +46,8 @@ public class ComponentExtensionContextInitializer implements ApplicationContextI
                     excludes.addAll(componentInitializer.excludeAutoconfigClassNames());
                 });
 
+        // 添加禁用spring-security的AutoConfiguration
+        excludes.add("org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration");
         if (!excludes.isEmpty()) {
             System.setProperty("spring.autoconfigure.exclude", Joiner.on(',').join(excludes));
         }

@@ -10,9 +10,14 @@
  */
 package com.acooly.module.tomcat;
 
-import java.time.Duration;
+import com.google.common.collect.Lists;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.time.Duration;
+import java.util.List;
 
 /**
  * @author qiubo
@@ -20,8 +25,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("acooly.tomcat")
 @Data
 public class TomcatProperties {
+
     public static final String HTTP_ACCESS_LOG_FORMAT =
             "%h %l [%{yyyy-MM-dd HH:mm:ss.SSS}t] \"%r\" %s %b %D";
+
     /**
      * 可选：最小空闲线程
      */
@@ -44,14 +51,12 @@ public class TomcatProperties {
     private String uriEncoding = "UTF-8";
 
     /**
-     * tomcat 启动后台任务间隔时间 单位秒
-     */
-    private int backgroundProcessorDelay= 10;
-
-    /**
      * 可选: 通过外部配置自定义tomcat端口
      */
     private Integer port = null;
+
+
+    private Duration backgroundProcessorDelay = Duration.ofSeconds(10);
 
     /**
      * 40X状态返回的页面
@@ -61,4 +66,25 @@ public class TomcatProperties {
      * 50X状态返回的页面
      */
     private String error50XPage;
+
+    private Security security = new Security();
+
+
+    @Getter
+    @Setter
+    public static class Security {
+        /**
+         * 是否开启禁用非安全方法的访问
+         */
+        private boolean enable = true;
+
+        /**
+         * 访问URL-PATTERN, 默认全部
+         */
+        private String pattern = "/*";
+
+        private List<String> omittedMethods = Lists.newArrayList("GET", "get", "POST", "post");
+
+    }
+
 }

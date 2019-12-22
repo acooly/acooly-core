@@ -41,6 +41,34 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      */
     protected int defaultPageSize = 15;
 
+
+    /**
+     * 置顶
+     */
+    protected void doTop(HttpServletRequest request, HttpServletResponse response, Model model) {
+        Long id = Servlets.getLongParameter(getEntityIdName());
+        getEntityService().top(id);
+    }
+
+    /**
+     * 上移
+     */
+    protected void doUp(HttpServletRequest request, HttpServletResponse response, Model model) {
+        Long id = Servlets.getLongParameter(getEntityIdName());
+        Map<String, Object> map = Maps.newHashMap();
+        Map<String, Boolean> sortMap = Maps.newLinkedHashMap();
+        customUpQuery(request, id, map, sortMap);
+        getEntityService().up(id, map, sortMap);
+    }
+
+    /**
+     * 预留上移查询的条件自定义方法
+     * do：查询比当前id排序值大的条件
+     */
+    protected void customUpQuery(HttpServletRequest request, Long id, Map<String, Object> map, Map<String, Boolean> sortMap) {
+
+    }
+
     /**
      * 執行分頁查詢
      *
@@ -49,13 +77,12 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param response
      */
     protected PageInfo<T> doList(
-            HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
+            HttpServletRequest request, HttpServletResponse response, Model model) throws Exception{
         return getEntityService()
                 .query(getPageInfo(request), getSearchParams(request), getSortMap(request));
     }
 
-    protected PageInfo<T> doList(HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
+    protected PageInfo<T> doList(HttpServletRequest request, HttpServletResponse response) throws Exception{
         return doList(request, response, null);
     }
 
@@ -66,15 +93,12 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param request
      * @param response
      * @return
-     * @throws Exception
      */
-    protected List<T> doQuery(HttpServletRequest request, HttpServletResponse response, Model model)
-            throws Exception {
+    protected List<T> doQuery(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
         return getEntityService().query(getSearchParams(request), getSortMap(request));
     }
 
-    protected List<T> doQuery(HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
+    protected List<T> doQuery(HttpServletRequest request, HttpServletResponse response) throws Exception {
         return doQuery(request, response, null);
     }
 
@@ -85,11 +109,8 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param response
      * @param model
      * @param isCreate
-     * @throws Exception
      */
-    protected T doSave(
-            HttpServletRequest request, HttpServletResponse response, Model model, boolean isCreate)
-            throws Exception {
+    protected T doSave(HttpServletRequest request, HttpServletResponse response, Model model, boolean isCreate) throws Exception {
         T entity = loadEntity(request);
         if (entity == null) {
             // create
@@ -121,11 +142,8 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param response
      * @param model
      * @param ids
-     * @throws Exception
      */
-    protected void doRemove(
-            HttpServletRequest request, HttpServletResponse response, Model model, Serializable... ids)
-            throws Exception {
+    protected void doRemove(HttpServletRequest request, HttpServletResponse response, Model model, Serializable... ids) throws Exception {
 
         if (ids == null || ids.length == 0) {
             throw new IllegalArgumentException("请求参数中没有指定需要删除的实体Id");
@@ -147,11 +165,9 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param request
      * @param response
      * @param model
-     * @throws Exception
      */
     @Deprecated
-    protected void doRemove(HttpServletRequest request, HttpServletResponse response, Model model)
-            throws Exception {
+    protected void doRemove(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
         String[] ids = request.getParameterValues(getEntityIdName());
         List<Long> idList = Lists.newArrayList();
         getIds(idList, ids);
@@ -205,7 +221,7 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param request
      * @return
      */
-    protected T loadEntity(HttpServletRequest request) throws Exception {
+    protected T loadEntity(HttpServletRequest request) {
         String id = request.getParameter(getEntityIdName());
         if (StringUtils.isNotBlank(id)) {
             return getEntityService().get(Long.valueOf(id));
@@ -220,15 +236,8 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param response
      * @param model
      * @param isCreate
-     * @throws Exception
      */
-    protected T onSave(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            Model model,
-            T entity,
-            boolean isCreate)
-            throws Exception {
+    protected T onSave(HttpServletRequest request, HttpServletResponse response, Model model, T entity, boolean isCreate) throws Exception {
         return entity;
     }
 
@@ -264,7 +273,7 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
         return Maps.newHashMap();
     }
 
-    protected void doDataBinding(HttpServletRequest request, Object command) throws Exception {
+    protected void doDataBinding(HttpServletRequest request, Object command) {
         bind(request, command);
     }
 
@@ -281,8 +290,7 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * 兼容设置
      */
     @Override
-    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder)
-            throws Exception {
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
         initBinder(binder);
     }
 

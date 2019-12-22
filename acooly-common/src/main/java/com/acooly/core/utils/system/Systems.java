@@ -12,6 +12,7 @@ import com.acooly.core.common.facade.InfoBase;
 import com.acooly.core.utils.Exceptions;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.io.Streams;
+import com.github.kevinsawicki.http.HttpRequest;
 import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,7 +45,6 @@ public class Systems {
         map.put("osVersion", platform.getVersion());
         return map;
     }
-
 
     /**
      * 获取HostName

@@ -60,14 +60,18 @@ public class MybatisAutoConfig {
     private ResourceLoader resourceLoader;
 
     @Bean
-    public SqlSessionFactory sqlSessionFactory(DataSource dataSource, MybatisProperties properties) {
+    public SqlSessionFactory sqlSessionFactory( DataSource dataSource,
+            MybatisProperties properties ) {
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
+
         factory.setDataSource(dataSource);
         factory.setVfs(SpringBootVFS.class);
         if (StringUtils.hasText(properties.getConfigLocation())) {
-            factory.setConfigLocation(this.resourceLoader.getResource(properties.getConfigLocation()));
+            factory.setConfigLocation(
+                    this.resourceLoader.getResource(properties.getConfigLocation()));
         }
-        Map<String, Interceptor> beansOfType = Apps.getApplicationContext().getBeansOfType(Interceptor.class);
+        Map<String, Interceptor> beansOfType = Apps.getApplicationContext()
+                .getBeansOfType(Interceptor.class);
         if (!ObjectUtils.isEmpty(beansOfType)) {
             Interceptor[] interceptors = beansOfType.values().toArray(new Interceptor[0]);
             AnnotationAwareOrderComparator.sort(interceptors);
@@ -77,7 +81,8 @@ public class MybatisAutoConfig {
             factory.setDatabaseIdProvider(this.databaseIdProvider);
         }
         if (!properties.getTypeAliasesPackage().isEmpty()) {
-            String packages = Joiner.on(',').join(properties.getTypeAliasesPackage().values().iterator());
+            String packages = Joiner.on(',')
+                    .join(properties.getTypeAliasesPackage().values().iterator());
             factory.setTypeAliasesPackage(packages);
         }
         factory.setTypeAliasesSuperType(Entityable.class);
@@ -90,6 +95,11 @@ public class MybatisAutoConfig {
         SqlSessionFactory sqlSessionFactory;
         try {
             sqlSessionFactory = factory.getObject();
+            sqlSessionFactory.getConfiguration().setMapUnderscoreToCamelCase(true);
+            Interceptor interceptor = beansOfType.get("pageExecutorInterceptor");
+            if (null != interceptor) {
+                ( (PageExecutorInterceptor) interceptor ).setSqlSessionFactory(sqlSessionFactory);
+            }
         } catch (Exception e) {
             throw new AppConfigException(e);
         }
@@ -98,7 +108,8 @@ public class MybatisAutoConfig {
     }
 
     private void customConfig(
-            org.apache.ibatis.session.Configuration configuration, MybatisProperties mybatisProperties) {
+            org.apache.ibatis.session.Configuration configuration,
+            MybatisProperties mybatisProperties ) {
         BeanWrapperImpl wrapper = new BeanWrapperImpl(configuration);
         mybatisProperties
                 .getSettings()
@@ -114,7 +125,7 @@ public class MybatisAutoConfig {
         return databaseIdProvider;
     }
 
-    public void setDatabaseIdProvider(DatabaseIdProvider databaseIdProvider) {
+    public void setDatabaseIdProvider( DatabaseIdProvider databaseIdProvider ) {
         this.databaseIdProvider = databaseIdProvider;
     }
 
@@ -122,7 +133,7 @@ public class MybatisAutoConfig {
         return resourceLoader;
     }
 
-    public void setResourceLoader(ResourceLoader resourceLoader) {
+    public void setResourceLoader( ResourceLoader resourceLoader ) {
         this.resourceLoader = resourceLoader;
     }
 
@@ -135,8 +146,9 @@ public class MybatisAutoConfig {
     public DateInterceptor updateInterceptor() {
         return new DateInterceptor();
     }
+
     @Bean
-    public ExInterceptor exInterceptor(){
+    public ExInterceptor exInterceptor() {
         return new ExInterceptor();
     }
 }

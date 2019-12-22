@@ -3,10 +3,14 @@ package com.acooly.core.common.service;
 import com.acooly.core.common.dao.EntityDao;
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.domain.Entityable;
+import com.acooly.core.common.domain.Sortable;
 import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.common.exception.CommonErrorCodes;
 import com.acooly.core.utils.BeanUtils;
 import com.acooly.core.utils.Collections3;
-import com.acooly.core.utils.GenericsUtils;
+import com.acooly.core.utils.Exceptions;
+import com.acooly.core.utils.Reflections;
+import com.google.common.collect.Maps;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -30,13 +34,12 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>>
     private M entityDao;
     private ApplicationContext context;
 
-    @SuppressWarnings("unchecked")
     protected M getEntityDao() throws BusinessException {
         if (entityDao != null) {
             return entityDao;
         }
         // 获取定义的第一个实例变量类型
-        Class<M> daoType = GenericsUtils.getSuperClassGenricType(getClass(), 1);
+        Class<M> daoType = Reflections.getSuperClassGenricType(getClass(), 1);
         List<Field> fields = BeanUtils.getFieldsByType(this, daoType);
         try {
             if (fields != null && fields.size() > 0) {
@@ -89,16 +92,7 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>>
 
     @Override
     public void saves(List<T> ts) throws BusinessException {
-        if (Collections3.isNotEmpty(ts)) {
-            getEntityDao().saves(ts);
-        }
-    }
-
-    @Override
-    public void inserts(List<T> ts) throws BusinessException {
-        if (Collections3.isNotEmpty(ts)) {
-            getEntityDao().inserts(ts);
-        }
+        getEntityDao().saves(ts);
     }
 
     @Override
@@ -108,16 +102,73 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>>
 
     @Override
     public void saveOrUpdate(T t) throws BusinessException {
-        Assert.notNull(t);
+        Assert.notNull(t, "实体不能为空");
         if (t instanceof Entityable) {
             if (((Entityable) t).getId() != null) {
-                getEntityDao().update(t);
+                update(t);
             } else {
-                getEntityDao().create(t);
+                save(t);
             }
         } else {
             throw new UnsupportedOperationException("实体类必须继承Entityable才能使用saveOrUpdate方法");
         }
+    }
+
+    /**
+     * 置顶操
+     * 设置sortTime为当前时间
+     *
+     * @param id
+     */
+    @Override
+    public void top(Serializable id) {
+        Class<T> entityType = Reflections.getSuperClassGenricType(getClass());
+        if (!Sortable.class.isAssignableFrom(entityType)) {
+            Exceptions.rethrow(CommonErrorCodes.UNSUPPORTED_ERROR);
+        }
+        T t = get(id);
+        Sortable sortable = (Sortable) t;
+        sortable.setSortTime(System.currentTimeMillis());
+        update(t);
+    }
+
+    @Override
+    public void up(Serializable id) {
+        up(id, null, null);
+    }
+
+    @Override
+    public void up(Serializable id, Map<String, Object> map, Map<String, Boolean> sortMap) {
+        Class<T> entityType = Reflections.getSuperClassGenricType(getClass());
+        if (!Sortable.class.isAssignableFrom(entityType)) {
+            Exceptions.rethrow(CommonErrorCodes.UNSUPPORTED_ERROR);
+        }
+        Sortable current = (Sortable) get(id);
+        Long currentSortTime = current.getSortTime();
+        if (map == null) {
+            map = Maps.newHashMap();
+        }
+        if (map.size() == 0) {
+            map.put("GT_sortTime", currentSortTime);
+        }
+        if (sortMap == null) {
+            sortMap = Maps.newLinkedHashMap();
+        }
+        if (sortMap.size() == 0) {
+            sortMap.put("sortTime", true);
+        }
+        PageInfo<T> pageInfo = new PageInfo<>(1, 1);
+        query(pageInfo, map, sortMap);
+
+        if (Collections3.isNotEmpty(pageInfo.getPageResults())) {
+            Sortable up = (Sortable) Collections3.getFirst(pageInfo.getPageResults());
+            current.setSortTime(up.getSortTime());
+            up.setSortTime(currentSortTime);
+            update((T) up);
+        } else {
+            current.setSortTime(System.currentTimeMillis());
+        }
+        update((T) current);
     }
 
     @Override

@@ -87,7 +87,7 @@ public class ConsoleLogInitializer extends AbstractLogInitializer {
                             Thread.sleep(CONSOLE_LOG_ENABLE_MILLISECONDS);
                             removeConsoleAppender(configurator);
                         } catch (Exception e) {
-                            System.err.println("Exception when removing ConsoleAppender: " + e.getMessage());
+                            System.err.println("exception when removing ConsoleAppender: " + e.getMessage());
                         }
                     },
                     "ConsoleAppender-removing-thread")

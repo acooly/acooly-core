@@ -29,6 +29,7 @@ import org.springframework.util.Assert;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
 import java.util.List;
 
 /**
@@ -66,7 +67,8 @@ public abstract class StandardDatabaseScriptIniter
             } catch (DataAccessException e) {
                 Throwable throwable = Throwables.getRootCause(e);
                 String msg = throwable.getMessage();
-                if (throwable.getClass().getName().endsWith("MySQLSyntaxErrorException")
+
+                if (throwable.getClass().getName().endsWith(SQLSyntaxErrorException.class.getSimpleName())
                         && msg.endsWith("doesn't exist")) {
                     List<String> files = getInitSqlFile();
                     List<String> abFiles = Lists.newArrayListWithCapacity(files.size());

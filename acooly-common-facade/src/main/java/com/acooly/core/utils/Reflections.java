@@ -5,7 +5,6 @@
  */
 package com.acooly.core.utils;
 
-import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -403,11 +402,7 @@ public class Reflections {
      * @return 对应的实例。
      * @throws NoSuchMethodException 如果没有指定的构造方法。
      */
-    public static <T> T createObject(Class<T> clazz, Object... parameters)
-            throws NoSuchMethodException {
-        if (clazz == null) {
-            throw new RuntimeException("不能'null' 创建实例。");
-        }
+    public static <T> T createObject(Class<T> clazz, Object... parameters) {
         Class<?>[] parameterTypes = processParameterToParameterType(parameters);
         return createObject(clazz, parameterTypes, parameters);
     }
@@ -422,17 +417,18 @@ public class Reflections {
      * @return 对应的实例。
      * @throws NoSuchMethodException 如果没有指定的构造方法。
      */
-    public static <T> T createObject(Class<T> clazz, Class<?>[] parameterTypes, Object[] parameters)
-            throws NoSuchMethodException {
-        if (clazz == null) {
-            throw new RuntimeException("不能 'null' 创建实例。");
-        }
+    public static <T> T createObject(Class<T> clazz, Class<?>[] parameterTypes, Object[] parameters) {
+        Asserts.notNull(clazz, null, "不能'null' 创建实例");
         Constructor<T> constructor;
-        if (ArrayUtils.isEmpty(parameterTypes)) {
-            constructor = clazz.getDeclaredConstructor();
-            parameters = null;
-        } else {
-            constructor = clazz.getDeclaredConstructor(parameterTypes);
+        try {
+            if (ArrayUtils.isEmpty(parameterTypes)) {
+                constructor = clazz.getDeclaredConstructor();
+                parameters = null;
+            } else {
+                constructor = clazz.getDeclaredConstructor(parameterTypes);
+            }
+        } catch (NoSuchMethodException be) {
+            throw new RuntimeException(be);
         }
         return createObject(constructor, parameters);
     }

@@ -13,6 +13,7 @@ import java.lang.annotation.*;
 @Inherited
 @SpringBootApplication
 public @interface BootApp {
+
     /**
      * 系统名称(唯一)
      */
@@ -39,4 +40,5 @@ public @interface BootApp {
      * http端口[-1=关闭,0=随机]
      */
     int httpPort() default 0;
+
 }

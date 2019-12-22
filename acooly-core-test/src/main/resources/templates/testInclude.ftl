@@ -4,6 +4,6 @@
 </head>
 <body>
 ${where}
-    <@includePage path="/testFtl.html"/>
+<@includePage path="/testFtl.html"/>
 </body>
 </html>

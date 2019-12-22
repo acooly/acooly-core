@@ -5,11 +5,11 @@
     <parent>
         <groupId>com.acooly</groupId>
         <artifactId>acooly-parent</artifactId>
-        <version>4.2.0-SNAPSHOT</version>
+        <version>5.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>acooly-core-parent</artifactId>
-    <version>4.2.0-SNAPSHOT</version>
+    <version>5.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <properties>
         <caffeine.version>2.6.2</caffeine.version>
@@ -21,11 +21,42 @@
         <module>acooly-core-test</module>
         <module>acooly-components</module>
         <module>acooly-configuration-processor</module>
-        <module>acooly-archetype</module>
         <module>acooly-core-docs</module>
         <module>acooly-common</module>
         <module>acooly-common-facade</module>
+        <module>acooly-archetypes</module>
+        <module>acooly-app-parents</module>
     </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-core</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-common</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-common-facade</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-configuration-processor</artifactId>
+                <version>${project.parent.version}</version>
+                <optional>true</optional>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

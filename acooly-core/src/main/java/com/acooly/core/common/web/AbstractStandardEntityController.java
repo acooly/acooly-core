@@ -5,11 +5,14 @@ import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.core.common.web.support.JsonResult;
+import com.acooly.core.utils.Regexs;
+import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.Messageable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.dao.DataAccessException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -18,8 +21,6 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,7 +38,6 @@ import java.util.List;
 public abstract class AbstractStandardEntityController<
         T extends Entityable, M extends EntityService<T>>
         extends AbstractFileOperationController<T, M> {
-
     protected static final String LISTVIEW_POSIX = "List";
     protected static final String EDITVIEW_POSIX = "Edit";
     protected static final String SHOWVIEW_POSIX = "Show";
@@ -336,6 +336,36 @@ public abstract class AbstractStandardEntityController<
         return getSuccessView();
     }
 
+
+    @RequestMapping(value = "top")
+    public String top(HttpServletRequest request, HttpServletResponse response, Model model) {
+        allow(request, response, MappingMethod.move);
+        try {
+            model.addAllAttributes(referenceData(request));
+            doTop(request, response, model);
+            saveMessage(request, "置顶成功");
+        } catch (Exception e) {
+            logger.warn(getExceptionMessage("top", e), e);
+            handleException("置顶", e, request);
+        }
+        return getSuccessView();
+    }
+
+    @RequestMapping(value = "up")
+    public String up(HttpServletRequest request, HttpServletResponse response, Model model) {
+        allow(request, response, MappingMethod.move);
+        try {
+            model.addAllAttributes(referenceData(request));
+            doUp(request, response, model);
+            saveMessage(request, "上移成功");
+        } catch (Exception e) {
+            logger.warn(getExceptionMessage("up", e), e);
+            handleException("上移", e, request);
+        }
+        return getSuccessView();
+    }
+
+
     protected void onCreate(HttpServletRequest request, HttpServletResponse response, Model model) {
         try {
             model.addAttribute(getEntityName(), getEntityClass().newInstance());
@@ -366,10 +396,7 @@ public abstract class AbstractStandardEntityController<
     @SuppressWarnings("unchecked")
     protected void saveMessage(HttpServletRequest request, String message) {
         if (StringUtils.isNotBlank(message)) {
-            List<Object> messages =
-                    (List<Object>)
-                            WebUtils.getOrCreateSessionAttribute(
-                                    request.getSession(), "messages", ArrayList.class);
+            List<Object> messages = (List<Object>) WebUtils.getSessionAttribute(request, "messages");
             messages.add(message);
         }
     }
@@ -404,30 +431,47 @@ public abstract class AbstractStandardEntityController<
      * @param e
      */
     protected void handleException(JsonResult result, String action, Exception e) {
-        String message = getExceptionMessage(action, e);
-        logger.error(message, e);
+        String message = null;
         result.setSuccess(false);
         if (e instanceof Messageable) {
             Messageable be = (Messageable) e;
             result.setCode(be.code());
             result.setMessage(be.message());
         } else {
-            result.setCode(e.getClass().toString());
-            result.setMessage(message);
+            result.setCode(e.getClass().getSimpleName());
+            result.setMessage(getExceptionMessage(action, e));
         }
+        logger.error(result.getMessage(), e);
     }
 
     protected void handleException(String action, Exception e, HttpServletRequest request) {
-        String message = getExceptionMessage(action, e);
+        String message = null;
+        if (e instanceof Messageable) {
+            Messageable be = (Messageable) e;
+            message = be.message();
+        } else {
+            message = getExceptionMessage(action, e);
+        }
         saveMessage(request, message);
         logger.error(message, e);
     }
 
     protected String getExceptionMessage(String action, Exception e) {
-        Throwable source = getSqlException(e);
-        return (StringUtils.isNotBlank(action) ? (action + " -> ") : "")
-                + e.getMessage()
-                + (source != null ? " --> DB_ERROR:" + source.getMessage() : "");
+        // 数据操作异常
+        String message = null;
+        if (DataAccessException.class.isAssignableFrom(e.getClass()) || getSqlException(e) != null) {
+            message = "数据访问异常,请重试或联系管理员";
+        }
+        // 猜测是MYSQL的唯一索引错误
+        if (Strings.containsIgnoreCase(message, "sql") && Strings.containsIgnoreCase(message, "Duplicate")) {
+            String msg = Strings.substringAfter(message, "Duplicate");
+            String value = Regexs.finder(Regexs.CommonRegex.QUITATION, msg);
+            message = "违反唯一性，值(" + (value != null ? "[" + value + "]" : "") + ")已经存在";
+        }
+        if (Strings.isBlank(message)) {
+            message = e.getMessage();
+        }
+        return message;
     }
 
     protected Throwable getSqlException(Exception e) {
@@ -439,7 +483,7 @@ public abstract class AbstractStandardEntityController<
             } else {
                 source = source.getCause();
             }
-            if (source.getClass().toString().equals(SQLException.class.toString())) {
+            if (Strings.indexOfIgnoreCase(source.getClass().toString(), "SQL") != -1) {
                 return source.getCause();
             }
         }

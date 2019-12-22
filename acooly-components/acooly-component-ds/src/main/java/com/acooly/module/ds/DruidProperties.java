@@ -22,7 +22,6 @@ import com.alibaba.druid.pool.vendor.OracleValidConnectionChecker;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,6 +36,7 @@ import org.springframework.util.ClassUtils;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -109,6 +109,7 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
 
     private boolean testOnBorrow = false;
 
+    @Deprecated
     private boolean useTomcatDataSource = false;
 
     /**
@@ -129,7 +130,7 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
     public static String normalizeUrl(String url) {
         if (isMysql(url) && !url.contains("?")) {
             return url
-                    + "?useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false";
+                    + "?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false";
         }
         return url;
     }
@@ -245,7 +246,7 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
             dataSource.init();
         } catch (SQLException e) {
             if (Apps.isDevMode() && mysql()) {
-                if (e instanceof MySQLSyntaxErrorException) {
+                if (e instanceof SQLSyntaxErrorException) {
                     if (e.getMessage().contains("Unknown database")) {
                         try {
                             DruidDataSource xdataSource = new DruidDataSource();
@@ -263,7 +264,7 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
                                             connection, new ByteArrayResource(createDataBaseSql.getBytes(Charsets.UTF_8)));
                                     log.warn("创建数据库[{}]成功", dataBase);
                                 } catch (ScriptException e1) {
-                                    throw new AppConfigException("druid连接池初始化失败", e);
+                                    throw new AppConfigException("druid连接池自动创建数据库失败", e);
                                 }
                             }
                             xdataSource.close();

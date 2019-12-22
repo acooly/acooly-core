@@ -30,12 +30,23 @@ import java.util.Set;
 @ConfigurationProperties(DubboProperties.PREFIX)
 @Data
 public class DubboProperties implements InitializingBean {
+
     public static final String PREFIX = "acooly.dubbo";
 
     /**
      * 是否启用dubbo
      */
     private boolean enable = true;
+
+
+    /**
+     * 是否启用nacos 默认是zk 如果启用zk 将被静止
+     */
+    private boolean enableNacos = false;
+
+
+    private String nacosUrl = "127.0.0.1:8848";
+
 
     /**
      * 是否注册本应用的服务到注册中心(测试的时候可能需要本地服务不注册到注册中心)
@@ -80,7 +91,7 @@ public class DubboProperties implements InitializingBean {
      * dubbo 可自定义增加注解扫描路径，用,分割，此路径下会扫描{@link Reference}，{@link Service}这两个注解，默认会扫描{@link
      * Apps#getBasePackage()}路径
      */
-    private Map<String,String> customPackagesToScan= Maps.newHashMap();
+    private Map<String, String> customPackagesToScan = Maps.newHashMap();
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -91,6 +102,7 @@ public class DubboProperties implements InitializingBean {
 
     @Data
     public static class Provider {
+
         public static final int DEFAULT_THREAD = 400;
         public static final int DEFAULT_TIMEOUT = 60000;
         public static final boolean DEFAULT_REGISTER = true;
@@ -132,16 +144,18 @@ public class DubboProperties implements InitializingBean {
         private boolean register = DEFAULT_REGISTER;
     }
 
-    public Set<String> getPackagesToScan(){
-        Set<String> packages= Sets.newHashSet();
+    public Set<String> getPackagesToScan() {
+        Set<String> packages = Sets.newHashSet();
         packages.add(Apps.getBasePackage());
-        if(!customPackagesToScan.isEmpty()){
+        if (!customPackagesToScan.isEmpty()) {
             packages.addAll(customPackagesToScan.values());
         }
         return packages;
     }
+
     @Data
     public static class Consumer {
+
         private List<String> mockInterfaces;
     }
 }

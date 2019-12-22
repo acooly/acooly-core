@@ -10,12 +10,13 @@
 package com.acooly.module.jpa;
 
 import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
-import org.hibernate.SessionFactory;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.data.AbstractRepositoryConfigurationSourceSupport;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateSettings;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -32,27 +33,27 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 
-import javax.persistence.EntityManagerFactory;
 import javax.servlet.DispatcherType;
 import javax.sql.DataSource;
 import java.lang.annotation.Annotation;
 import java.util.EnumSet;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * @author qiubo
+ * @author zhangpu for 5.x
  */
 @Configuration
 @ConditionalOnProperty(value = JPAProperties.ENABLE_KEY, matchIfMissing = true)
 @Import(JPAAutoConfig.JpaRegistrar.class)
-@AutoConfigureAfter(HibernateJpaAutoConfiguration.class)
-@EnableConfigurationProperties({JPAProperties.class})
+@AutoConfigureBefore(HibernateJpaAutoConfiguration.class)
+@EnableConfigurationProperties({JPAProperties.class, HibernateProperties.class})
 @EnableJpaRepositories(
         repositoryBaseClass = AbstractEntityJpaDao.class,
         basePackages = "com.acooly.module.**.dao"
 )
 public class JPAAutoConfig {
+
 
     @Bean
     @ConditionalOnProperty(
@@ -74,6 +75,13 @@ public class JPAAutoConfig {
         return registration;
     }
 
+    /**
+     * 扩展支持自动生成表
+     *
+     * @param properties
+     * @param dataSource
+     * @return
+     */
     @Bean
     public JpaVendorAdapter jpaVendorAdapter(JpaProperties properties, DataSource dataSource) {
         AbstractJpaVendorAdapter adapter = new ExHibernateJpaVendorAdapter();
@@ -84,26 +92,25 @@ public class JPAAutoConfig {
         return adapter;
     }
 
-    @Bean
-    public SessionFactory sessionFactory(EntityManagerFactory factory) {
-        return factory.unwrap(SessionFactory.class);
-    }
-
+    /**
+     * 自定义 EntityManagerFactory
+     * <p>
+     * 目的：主要为扩展自定义默认的entity扫码路径
+     */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             EntityManagerFactoryBuilder factoryBuilder,
             DataSource dataSource,
             JpaProperties properties,
+            HibernateProperties hibernateProperties,
             JPAProperties jpaProperties) {
-        Map<String, Object> vendorProperties = new LinkedHashMap<String, Object>();
-        vendorProperties.putAll(properties.getHibernateProperties(dataSource));
-        return factoryBuilder
-                .dataSource(dataSource)
+        Map<String, Object> vendorProperties = hibernateProperties.
+                determineHibernateProperties(properties.getProperties(), new HibernateSettings());
+        return factoryBuilder.dataSource(dataSource)
                 .packages(jpaProperties.getEntityPackagesToScan().values().toArray(new String[0]))
-                .properties(vendorProperties)
-                .jta(false)
-                .build();
+                .properties(vendorProperties).jta(false).build();
     }
+
 
     static class JpaRegistrar extends AbstractRepositoryConfigurationSourceSupport {
 

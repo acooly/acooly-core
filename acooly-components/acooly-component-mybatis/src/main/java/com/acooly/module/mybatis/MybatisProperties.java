@@ -25,7 +25,7 @@ import org.springframework.util.Assert;
 import java.io.IOException;
 import java.util.Map;
 
-import static com.acooly.core.common.boot.listener.ExApplicationRunListener.COMPONENTS_PACKAGE;
+import static com.acooly.core.common.boot.listener.AcoolyApplicationRunListener.COMPONENTS_PACKAGE;
 
 /**
  * @author qiubo

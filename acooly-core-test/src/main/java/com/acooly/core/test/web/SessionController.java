@@ -18,13 +18,13 @@ public class SessionController {
     @RequestMapping("create")
     public String testEx(HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession();
-        session.setAttribute("a","aaa");
+        session.setAttribute("B","bbbbbbbbbbb");
         return "create";
     }
     @RequestMapping("get")
     public String get(HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession(false);
-        Object a = session.getAttribute("a");
-        return "get";
+        Object a = session.getAttribute("B");
+        return a.toString();
     }
 }

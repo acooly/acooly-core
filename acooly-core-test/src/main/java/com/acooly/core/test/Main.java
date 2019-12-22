@@ -12,14 +12,20 @@ package com.acooly.core.test;
 import com.acooly.core.common.BootApp;
 import com.acooly.core.common.boot.Apps;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * @author qiubo
  */
-@BootApp(sysName = "zhangpu-test", sysTitle = "测试核心系统", owner = "张浦", httpPort = 8081)
+@BootApp(sysName = "core-test", httpPort = 8081)
+@EnableTransactionManagement(proxyTargetClass = true)
 public class Main {
     public static void main(String[] args) {
-        Apps.setProfileIfNotExists("sdev");
+        Apps.setProfileIfNotExists("online");
         SpringApplication.run(Main.class, args);
     }
 }

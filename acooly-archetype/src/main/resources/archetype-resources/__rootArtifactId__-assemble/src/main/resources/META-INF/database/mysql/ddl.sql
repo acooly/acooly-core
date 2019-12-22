@@ -1,1 +1,0 @@
-# execute some ddl at dao inited

@@ -25,17 +25,21 @@ maven坐标：
 ### 2.1 使用前提
 
 请先下载nacos 并启动
-```shell script
+
+```shell
 wget https://github.com/alibaba/nacos/releases/download/1.1.4/nacos-server-1.1.4.zip
 unzip nacos-server-1.1.4.zip
 bin/startup.sh -m standalone
 ```
+
 访问地址 http://127.0.0.1:8848/nacos  默认用户名/密码 nacos/nacos
+
 更多详细的配置请参考[nacos官网](https://nacos.io/)
 
 ### 2.2 例子
 
 ####服务端提供Restful服务接口
+
 ```java
 @RestController
 @RequestMapping("v1")
@@ -59,6 +63,7 @@ public class TestController {
 }
 ```
 #### 服务端提供Feign Client的facade包
+
 ```java
 @FeignClient(value = "AppTest1")
 @RequestMapping("v1")
@@ -76,6 +81,7 @@ public interface FooService {
 2、在`main`启动方法类中使用注解 `@EnableFeignClients(basePackages = {"xx.xx"})` xx.xx 是需要扫描facade 路径
 
 3、然后使用依赖注入调用即可
+
 ```java
 @Resource
 private FooService fooService
@@ -96,6 +102,7 @@ private FooService fooService
 
 ## 3. FAQ
 ### 可使用RestTemplate 方式做测试调用（已经集成负载均衡）
+
 ```java
     @Resource
     private RestTemplate template;

@@ -8,6 +8,8 @@
  */
 package com.acooly.core.test.portal;
 
+import com.acooly.core.test.dubbo.TestService;
+import com.alibaba.dubbo.config.annotation.Reference;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,9 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/test/httpmethod/")
 public class SimplePortalTestController {
+
+    @Reference
+    private TestService testService;
 
 
     @RequestMapping("index")

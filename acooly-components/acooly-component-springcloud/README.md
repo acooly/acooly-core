@@ -38,7 +38,7 @@ bin/startup.sh -m standalone
 
 ### 2.2 例子
 
-####服务端提供Restful服务接口
+#### 服务端提供Restful服务接口
 
 ```java
 @RestController

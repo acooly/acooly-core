@@ -11,20 +11,18 @@ package com.acooly.core.test;
 
 import com.acooly.core.common.BootApp;
 import com.acooly.core.common.boot.Apps;
+import com.acooly.core.utils.Ids;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * @author qiubo
  */
-@BootApp(sysName = "core-test", httpPort = 8081)
+@BootApp(sysName = "core-test", httpPort = 8082)
 @EnableTransactionManagement(proxyTargetClass = true)
 public class Main {
     public static void main(String[] args) {
+       // System.out.println(Ids.getDid(20).length());
         Apps.setProfileIfNotExists("online");
         SpringApplication.run(Main.class, args);
     }

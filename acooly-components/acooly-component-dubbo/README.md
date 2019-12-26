@@ -30,7 +30,7 @@ bin/startup.sh -m standalone
 2、开启nacos配置
 ```shell
 acooly.dubbo.enableNacos=true
-acooly.dubbo.nacosUrl=127.0.0.1:8848 //多个地址使用nacos://127.0.0.1:8848?backup=127.0.0.1:8849,127.0.0.1:8850
+acooly.dubbo.nacosUrl=127.0.0.1:8848 //多个地址使用127.0.0.1:8848?backup=127.0.0.1:8849,127.0.0.1:8850
 ```
 
 

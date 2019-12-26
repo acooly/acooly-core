@@ -18,7 +18,22 @@ maven坐标：
 
 `${acooly-latest-version}`为框架最新版本或者购买的版本。
 
-此组件已经初始化了dubbo基本配置，如果要配置provider或者consumer，可以通过xml或者java config来配置：
+* 此组件已经初始化了dubbo基本配置，如果要配置provider或者consumer，可以通过xml或者java config来配置：
+* 此组件支持nacos 注册中心,使用方式如下：
+
+1、请先下载nacos 并启动
+```shell script
+wget https://github.com/alibaba/nacos/releases/download/1.1.4/nacos-server-1.1.4.zip
+unzip nacos-server-1.1.4.zip
+bin/startup.sh -m standalone
+```
+2、开启nacos配置
+```shell script
+acooly.dubbo.enableNacos=true
+acooly.dubbo.nacosUrl=127.0.0.1:8848 //多个地址使用nacos://127.0.0.1:8848?backup=127.0.0.1:8849,127.0.0.1:8850
+```
+
+
     
 ### 2.1. java config配置
 

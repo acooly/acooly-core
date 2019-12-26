@@ -215,7 +215,6 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
         dataSource.setTestOnBorrow(testOnBorrow);
         dataSource.setTestOnReturn(false);
         dataSource.setValidationQueryTimeout(5);
-
         dataSource.setRemoveAbandoned(true);
         dataSource.setRemoveAbandonedTimeout(3600);
         dataSource.setLogAbandoned(true);

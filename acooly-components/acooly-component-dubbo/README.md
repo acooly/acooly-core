@@ -22,13 +22,13 @@ maven坐标：
 * 此组件支持nacos 注册中心,使用方式如下：
 
 1、请先下载nacos 并启动
-```shell script
+```shell
 wget https://github.com/alibaba/nacos/releases/download/1.1.4/nacos-server-1.1.4.zip
 unzip nacos-server-1.1.4.zip
 bin/startup.sh -m standalone
 ```
 2、开启nacos配置
-```shell script
+```shell
 acooly.dubbo.enableNacos=true
 acooly.dubbo.nacosUrl=127.0.0.1:8848 //多个地址使用nacos://127.0.0.1:8848?backup=127.0.0.1:8849,127.0.0.1:8850
 ```

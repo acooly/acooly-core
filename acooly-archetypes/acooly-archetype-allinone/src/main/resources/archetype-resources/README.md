@@ -10,7 +10,7 @@ acooly-allinone 项目说明
 ### 结构
 
 ```java
-+ assemble
++ assemble                  整合打包和配置
 + common                    公共结构和工具
 + facade                    微服务接口定义
 - openapi                   对外Api接口
@@ -27,3 +27,5 @@ acooly-allinone 项目说明
     + platform-moduleN      业务模块N
 + test                      单元测试
 ```
+
+>各模块详细说明，请参考模块内的README.md

@@ -1,0 +1,10 @@
+#set( $systemName = ${rootArtifactId} )
+#if(${rootArtifactId.indexOf("-")}!=-1)
+    #set( $cc = ${rootArtifactId.split("-")})
+    #if($cc != $null && ${cc.size()} > 0)
+        #set( $lastIndex = $cc.size() - 1 )
+        #set( $systemName = $cc[$lastIndex] )
+    #end
+#end
+
+systemName: $systemName

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>${rootArtifactId}-platform</artifactId>
+        <groupId>${groupId}</groupId>
+        <version>${version}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>${artifactId}</artifactId>
+
+    <properties>
+        <deploy.skip>true</deploy.skip>
+    </properties>
+    <dependencies>
+
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>${rootArtifactId}-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>${rootArtifactId}-facade</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-core</artifactId>
+        </dependency>
+
+        <!-- 组件：数据库连接池 -->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-ds</artifactId>
+        </dependency>
+        <!-- 组件：web及springMvc封装组件 -->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-web</artifactId>
+        </dependency>
+        <!-- 组件：基于角色的权限管理后台框架 -->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-security</artifactId>
+        </dependency>
+        <!-- 组件：mybatis -->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-mybatis</artifactId>
+        </dependency>
+    </dependencies>
+</project>

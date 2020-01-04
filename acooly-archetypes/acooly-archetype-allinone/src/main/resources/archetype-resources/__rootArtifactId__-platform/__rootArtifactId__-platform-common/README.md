@@ -1,0 +1,1 @@
+短信/push/文件/消息/整合组件（基础能力:ds/MyBatis/Web/Security…）

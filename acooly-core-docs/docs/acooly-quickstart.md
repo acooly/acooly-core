@@ -21,12 +21,15 @@ acooly框架的基础开发环境需要：
 
 acooly框架提供了一些方便快捷的开发工具脚本，请在开始前，下载工具包，并解压即可使用，为方便，你可以再你的操作系统设置对PATH应环境变量。
 
-下载地址：[acooly-script](http://acooly.cn/nexus/service/local/repositories/releases/content/com/acooly/acooly-script/4.2.0/acooly-script-4.2.0-dev.tar.gz)
+下载地址：
+
+* [acooly-script-V4](http://acooly.cn/nexus/service/local/repositories/releases/content/com/acooly/acooly-script/4.2.0/acooly-script-4.2.0-dev.tar.gz)
+* [acooly-script-V5](http://acooly.cn/nexus/service/local/repositories/releases/content/com/acooly/acooly-script/5.0.0/acooly-script-5.0.0-dev.tar.gz)
 
 工具包为cli方式，下载后，直接解压及可用。工具包里面提供的工具请参考解压后根目录的README.md文件，或跟随下面的说明来熟悉。
 
 ```sh
-# 如果你是windows，随便解压都可以，解压后目录为：acooly-script-4.2.0
+# 如果你是windows，随便解压都可以，解压后目录为：acooly-script-4.2.0/5.0.0
 wget http://acooly.cn/nexus/service/local/repositories/releases/content/com/acooly/acooly-script/4.2.0/acooly-script-4.2.0-dev.tar.gz
 cd acooly-script-4.2.0
 ```
@@ -49,6 +52,23 @@ quickstart.bat
 
 如果你已安装了JDK1.8,MAVEN3.X和mysql，根据提示完成操作后，基于SpringBoot的项目会成功启动，请在浏览器输入：http://localhost:8080 访问
 
+### 4. 新建工程
+
+```bat
+d:
+cd d:\workspace
+mvna
+[INFO] 请选择使用的archetype:
+[INFO] 1. acooly-archetype-simple v5.0.0-SNAPSHOT
+[INFO] 2. acooly-archetype-microservice v5.0.0-SNAPSHOT
+[INFO] 3. acooly-archetype-allinone v5.0.0-SNAPSHOT
+[INFO] -----------------------------------------
+[INFO] 9. acooly-archetype-4.2.0-SNAPSHOT
+请选择使用的archetype编号[1-9]:3
+...
+```
+
+>根据提示完成工程构建
 
 ### 4. 手动体验
 
@@ -58,7 +78,12 @@ quickstart.bat
 
 框架提供了`maven archtype`快速生成项目工程。在生成项目之前，我们需要确认如下参数：
 
-     mvn archetype:generate  -DarchetypeGroupId=com.acooly  -DarchetypeArtifactId=acooly-archetype -DarchetypeVersion=4.2.0-SNAPSHOT -DarchetypeRepository=http://acooly.cn/nexus/content/groups/public/ -DgroupId=com.acooly.demo -DartifactId=acooly-demo -Dversion=1.0 -Dwebport=8080 -DmysqlHost=127.0.0.1 -DmysqUserName=root -DmysqlPassword=123456
+```bash
+mvn archetype:generate -Dauthor= -Dwebport= -DmysqlHost= -DmysqUserName= -DmysqlPassword= \
+     -DarchetypeGroupId=com.acooly \
+     -DarchetypeArtifactId=acooly-archetype-allinone \
+     -DarchetypeVersion=5.0.0-SNAPSHOT
+```
     
 * 项目groupId
 * 项目artifactId

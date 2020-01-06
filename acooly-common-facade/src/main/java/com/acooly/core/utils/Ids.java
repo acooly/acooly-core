@@ -122,7 +122,7 @@ public class Ids {
         private static final Logger logger = LoggerFactory.getLogger(Ids.class);
         private static final int MIN_LENGTH = 20;
         private static final int SEQU_LENGTH = 4;
-        private static final int SEQU_MAX = 9999;
+        private static final int SEQU_MAX = 10000;
         private static Did did = new Did();
         private static String pidStr = null;
         private AtomicLong sequence = new AtomicLong(1);
@@ -184,18 +184,8 @@ public class Ids {
         }
 
         public String getSequ() {
-
-            long timeCount = 0;
-            while (true) {
-                timeCount = sequence.get();
-                if (sequence.compareAndSet(SEQU_MAX, 1)) {
-                    timeCount = 1;
-                    break;
-                }
-                if (sequence.compareAndSet(timeCount, timeCount + 1)) {
-                    break;
-                }
-            }
+            long timeCount = sequence.getAndIncrement();
+            sequence.compareAndSet(SEQU_MAX, 1);
             return Strings.leftPad(String.valueOf(timeCount), SEQU_LENGTH, '0');
         }
 

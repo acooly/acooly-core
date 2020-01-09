@@ -166,9 +166,9 @@ public class Ids {
       // 当前时间(12位)
       sb.append(format(new Date(), "yyMMddHHmmss"));
       // 随机数字(size-18位)
-      sb.append(RandomNumberGenerator.getNewString((size - MIN_LENGTH)));
-      // 进程id(4位)
-      sb.append(getPid());
+      sb.append(RandomNumberGenerator.getNewString((4 + size - MIN_LENGTH)));
+      // 进程id(4位) 在容器里面没啥用 因为pid 都为1
+      //sb.append(getPid());
       // 序列号(4位)
       sb.append(getSequ());
       return sb.toString();
@@ -200,7 +200,7 @@ public class Ids {
         if (sequence++ == SEQU_MAX) {
           sequence = 0;
         }
-      }finally {
+      } finally {
         lock.set(false);
       }
       return Strings.leftPad(String.valueOf(sequence), SEQU_LENGTH, '0');
@@ -293,5 +293,7 @@ public class Ids {
   public static String format(Date date) {
     return format(date, DEFAULT_DATE_FORMAT);
   }
+
+
 
 }

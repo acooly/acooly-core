@@ -31,6 +31,7 @@ public class PasswordStrengthTest {
 
         log.info("test simple:");
         doTestPasswordStrength("1234567890", PasswordStrength.simple);
+        doTestPasswordStrength("Zp1234567890!#$%", PasswordStrength.simple);
         doTestPasswordStrength("1234567890", PasswordStrength.usually);
         doTestPasswordStrength("1234567890", PasswordStrength.complex);
         doTestPasswordStrength("12345678901234567", PasswordStrength.simple);
@@ -47,6 +48,7 @@ public class PasswordStrengthTest {
         doTestPasswordStrength("Ab1234", PasswordStrength.usually);
 
         log.info("test complex:");
+        doTestPasswordStrength("1234567890", PasswordStrength.complex);
         doTestPasswordStrength("Ab123456%$#", PasswordStrength.complex);
         doTestPasswordStrength("9!%wfzw(xNaJ", PasswordStrength.complex);
         doTestPasswordStrength("tdo$qTi8*(Xh", PasswordStrength.complex);

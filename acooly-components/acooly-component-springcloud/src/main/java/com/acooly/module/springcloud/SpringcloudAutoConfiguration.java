@@ -19,7 +19,6 @@ import org.springframework.web.client.RestTemplate;
  * @description
  */
 @Configuration
-@EnableFeignClients
 public class SpringcloudAutoConfiguration {
 
     @Bean

@@ -69,7 +69,7 @@ public class Apps {
      * 的bootstrapContext 的初始化 加个标志避免被重新初始化
      */
 
-    private static final String CLOUD_CLASS = "org.springframework.cloud.bootstrap.BootstrapImportSelectorConfiguration";
+    private static final String CLOUD_CLASS = "org.springframework.cloud.bootstrap.BootstrapImportSelectorConfiguration ";
 
 
     private static String logPath = null;

@@ -1,5 +1,6 @@
 package com.acooly.module.web.exceptionhandler;
 
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.view.ViewResult;
 import com.acooly.core.utils.enums.Messageable;
 import org.slf4j.Logger;
@@ -55,124 +56,132 @@ import java.util.Date;
  *
  * @author qiubo@yiji.com
  */
-@ConditionalOnProperty(value = "acooly.web.enableMVCGlobalExceptionHandler",matchIfMissing = true)
+@ConditionalOnProperty(value = "acooly.web.enableMVCGlobalExceptionHandler", matchIfMissing = true)
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    public static final int DEFAULT_STATUS_CODE = HttpStatus.INTERNAL_SERVER_ERROR.value();
-    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-    private static final String ACCEPT_HEADER = "Accept";
-    @Value("${server.error.path:${error.path:/error}}")
-    private String errorPath = "/error";
 
-    @ExceptionHandler({Exception.class})
-    public Object badRequest(HttpServletRequest req, HttpServletResponse rep, Exception exception) {
-        logger.error("", exception);
-        if (isJsonRequest(req)) {
-            ViewResult info = new ViewResult();
-            buildViewResultInfo(exception, info);
-            return new ResponseEntity<>(info, HttpStatus.OK);
+  public static final int DEFAULT_STATUS_CODE = HttpStatus.INTERNAL_SERVER_ERROR.value();
+  private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+  private static final String ACCEPT_HEADER = "Accept";
+  private static final String DEFAULT_ERROR_MESSAGE = "系统内部异常";
+  @Value("${server.error.path:${error.path:/error}}")
+  private String errorPath = "/error";
+
+  @ExceptionHandler({Exception.class})
+  public Object badRequest(HttpServletRequest req, HttpServletResponse rep, Exception exception) {
+    logger.error("", exception);
+
+    if (!(exception instanceof BusinessException)) {
+      exception = new BusinessException(DEFAULT_ERROR_MESSAGE);
+    }
+    if (isJsonRequest(req)) {
+      ViewResult info = new ViewResult();
+      buildViewResultInfo(exception, info);
+      return new ResponseEntity<>(info, HttpStatus.OK);
+    } else {
+      int statusCode = getStatus(req, exception);
+      rep.setStatus(statusCode);
+      ModelAndView mav = new ModelAndView();
+      buildModelAndView(req, exception, statusCode, mav);
+      return mav;
+    }
+  }
+
+  private void buildModelAndView(
+      HttpServletRequest req, Exception exception, int statusCode, ModelAndView mav) {
+    mav.addObject("timestamp", new Date());
+    mav.addObject("status", statusCode);
+    setException(exception, mav);
+    setPath(req, mav);
+    mav.setViewName("error");
+  }
+
+  private void buildViewResultInfo(Exception exception, ViewResult info) {
+    info.setSuccess(false);
+    String msg;
+    msg = exception.getMessage();
+    if (exception instanceof Messageable) {
+      info.setCode(((Messageable) exception).code());
+      info.setDetail(msg);
+    } else {
+      info.setDetail(msg);
+    }
+  }
+
+  private void setPath(HttpServletRequest req, ModelAndView mav) {
+    Object path = req.getAttribute("javax.servlet.error.request_uri");
+    if (path != null) {
+      mav.addObject("path", path);
+    } else {
+      mav.addObject("path", req.getRequestURL());
+    }
+  }
+
+  private void setException(Exception exception, ModelAndView mav) {
+    while (exception instanceof ServletException && exception.getCause() != null) {
+      exception = (Exception) exception.getCause();
+    }
+    mav.addObject("error", exception.getClass().getName());
+    ResponseStatus responseStatus =
+        AnnotationUtils.findAnnotation(exception.getClass(), ResponseStatus.class);
+    if (responseStatus != null) {
+
+      mav.addObject("message", responseStatus.reason());
+    } else {
+      if (!(exception instanceof BindingResult)) {
+        mav.addObject("message", exception.getMessage());
+      } else {
+        BindingResult result = (BindingResult) exception;
+        if (result.getErrorCount() > 0) {
+          mav.addObject("errors", result.getAllErrors());
+          mav.addObject(
+              "message",
+              "Validation failed for object='"
+                  + result.getObjectName()
+                  + "'. Error count: "
+                  + result.getErrorCount());
         } else {
-            int statusCode = getStatus(req, exception);
-            rep.setStatus(statusCode);
-            ModelAndView mav = new ModelAndView();
-            buildModelAndView(req, exception, statusCode, mav);
-            return mav;
+          mav.addObject("message", "No errors");
         }
+      }
+    }
+  }
+
+  private int getStatus(HttpServletRequest req, Exception exception) {
+    while (exception instanceof ServletException && exception.getCause() != null) {
+      exception = (Exception) exception.getCause();
+    }
+    ResponseStatus responseStatus =
+        AnnotationUtils.findAnnotation(exception.getClass(), ResponseStatus.class);
+    int statusCode = DEFAULT_STATUS_CODE;
+    if (responseStatus != null) {
+      statusCode = responseStatus.code().value();
+    } else {
+      Object status = req.getAttribute("javax.servlet.error.status_code");
+      if (status != null) {
+        try {
+          statusCode = Integer.parseInt(status.toString());
+        } catch (Exception e) {
+          // just ignore
+        }
+      }
+    }
+    return statusCode;
+  }
+
+  private boolean isJsonRequest(HttpServletRequest request) {
+    String uri = request.getRequestURI();
+    if (uri.endsWith(".json") || uri.endsWith(".data")) {
+      return true;
     }
 
-    private void buildModelAndView(
-            HttpServletRequest req, Exception exception, int statusCode, ModelAndView mav) {
-        mav.addObject("timestamp", new Date());
-        mav.addObject("status", statusCode);
-        setException(exception, mav);
-        setPath(req, mav);
-        mav.setViewName(errorPath);
+    String acceptHeader = request.getHeader(ACCEPT_HEADER);
+    if (StringUtils.hasText(acceptHeader)) {
+      return acceptHeader.contains(MediaType.APPLICATION_JSON_VALUE);
     }
-
-    private void buildViewResultInfo(Exception exception, ViewResult info) {
-        info.setSuccess(false);
-        String msg;
-        msg = exception.getMessage();
-        if (exception instanceof Messageable) {
-            info.setCode(((Messageable) exception).code());
-            info.setDetail(msg);
-        } else {
-            info.setDetail(msg);
-        }
+    if (uri.endsWith(".html") || uri.endsWith(".htm")) {
+      return false;
     }
-
-    private void setPath(HttpServletRequest req, ModelAndView mav) {
-        Object path = req.getAttribute("javax.servlet.error.request_uri");
-        if (path != null) {
-            mav.addObject("path", path);
-        } else {
-            mav.addObject("path", req.getRequestURL());
-        }
-    }
-
-    private void setException(Exception exception, ModelAndView mav) {
-        while (exception instanceof ServletException && exception.getCause() != null) {
-            exception = (Exception) exception.getCause();
-        }
-        mav.addObject("exception", exception);
-        ResponseStatus responseStatus =
-                AnnotationUtils.findAnnotation(exception.getClass(), ResponseStatus.class);
-        if (responseStatus != null) {
-            mav.addObject("message", responseStatus.reason());
-        } else {
-            if (!(exception instanceof BindingResult)) {
-                mav.addObject("message", exception.getMessage());
-            } else {
-                BindingResult result = (BindingResult) exception;
-                if (result.getErrorCount() > 0) {
-                    mav.addObject("errors", result.getAllErrors());
-                    mav.addObject(
-                            "message",
-                            "Validation failed for object='"
-                                    + result.getObjectName()
-                                    + "'. Error count: "
-                                    + result.getErrorCount());
-                } else {
-                    mav.addObject("message", "No errors");
-                }
-            }
-        }
-    }
-
-    private int getStatus(HttpServletRequest req, Exception exception) {
-        while (exception instanceof ServletException && exception.getCause() != null) {
-            exception = (Exception) exception.getCause();
-        }
-        ResponseStatus responseStatus =
-                AnnotationUtils.findAnnotation(exception.getClass(), ResponseStatus.class);
-        int statusCode = DEFAULT_STATUS_CODE;
-        if (responseStatus != null) {
-            statusCode = responseStatus.code().value();
-        } else {
-            Object status = req.getAttribute("javax.servlet.error.status_code");
-            if (status != null) {
-                try {
-                    statusCode = Integer.parseInt(status.toString());
-                } catch (Exception e) {
-                    // just ignore
-                }
-            }
-        }
-        return statusCode;
-    }
-
-    private boolean isJsonRequest(HttpServletRequest request) {
-        String uri = request.getRequestURI();
-        if (uri.endsWith(".json") || uri.endsWith(".data")) {
-            return true;
-        }
-        String acceptHeader = request.getHeader(ACCEPT_HEADER);
-        if (StringUtils.hasText(acceptHeader)) {
-            return acceptHeader.contains(MediaType.APPLICATION_JSON_VALUE);
-        }
-        if (uri.endsWith(".html") || uri.endsWith(".htm")) {
-            return false;
-        }
-        return false;
-    }
+    return false;
+  }
 }

@@ -73,9 +73,9 @@ public class Reflections {
             if (object == null) {
                 result.add(null);
             } else if (object instanceof Date) {
-                result.add(Ids.format((Date) object));
+                result.add(Dates.format((Date) object));
             } else if (object instanceof Calendar) {
-                result.add(Ids.format(((Calendar) object).getTime()));
+                result.add(Dates.format(((Calendar) object).getTime()));
             } else {
                 result.add(object.toString());
             }

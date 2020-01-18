@@ -80,6 +80,7 @@ public interface SavesMapper<T> {
                             + insertSql
                             + "      </if>\n"
                             + "</foreach>";
+
             return sql;
         }
 

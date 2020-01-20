@@ -57,7 +57,9 @@ public class Ids {
     public static String gid(String systemCode, String reserved) {
         StringBuilder sb = new StringBuilder();
         sb.append(padding(systemCode, 4));
-        sb.append(padding(reserved, 8));
+        if (Strings.isNotBlank(reserved)) {
+            sb.append(padding(reserved, 8));
+        }
         sb.append(Did.getInstance().getId());
         return sb.toString();
     }

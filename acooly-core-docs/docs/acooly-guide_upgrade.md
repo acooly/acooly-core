@@ -1,9 +1,9 @@
-<!-- title: 升级V4-V5  -->
+<!-- title: Acooly-V5  -->
 <!-- type: core -->
 <!-- author: zhangpu -->
 <!-- date: 2019-10-1 -->
 
-acooly版本升级指南
+Acooly-V5新版本升级指南
 ====
 
 ## 1 简介
@@ -11,11 +11,11 @@ acooly版本升级指南
 
 ## 2 v4 To v5升级
 
-### 配置参数
+### 2.1 配置参数
 
 所有boot的配置参数，全部从驼峰模式切换为`-`分割。
 
-### 数据库
+### 2.2 数据库
 * security组件在v5后，所有的数据表统一调整为小写，v4版本的工程sys_开头的数据表需要全部转换为小写。
 
 ```sql
@@ -31,7 +31,7 @@ rename table SYS_USER to sys_user1;
 rename table sys_user1 to sys_user;
 ```
 
-### v5-changelogs
+## 3 v5-changelogs
 
 ### acooly-common-facade-5.0.0-SNAPSHOT-20200120
 

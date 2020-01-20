@@ -22,7 +22,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class Ids {
 
-    public static final char PADCHAR = '0';
+    public static final char PAD_CHAR = '0';
     private static final short PROCESS_IDENTIFIER;
 
     static {
@@ -118,7 +118,7 @@ public class Ids {
         if (Strings.length(txt) > size) {
             txt = Strings.substring(txt, Strings.length(txt) - size);
         }
-        return Strings.leftPad(txt, size, PADCHAR);
+        return Strings.leftPad(txt, size, PAD_CHAR);
     }
 
     /**
@@ -141,6 +141,7 @@ public class Ids {
 
         private static Lock lock = new ReentrantLock();
         private static LongAdder counter = new LongAdder();
+        private volatile int sequ = 0;
         private static Did did = new Did();
         private static String pidStr = "0";
         private static String ipStr;
@@ -219,19 +220,15 @@ public class Ids {
          * @return
          */
         public String getSequ() {
-            int sequ = 0;
-            lock.lock();
             try {
-                counter.increment();
-                sequ = counter.intValue();
-                if (sequ == SEQU_MAX) {
-                    counter.reset();
+                lock.lock();
+                if (sequ++ == SEQU_MAX) {
                     sequ = 0;
                 }
+                return Strings.leftPad(String.valueOf(sequ), SEQU_LENGTH, PAD_CHAR);
             } finally {
                 lock.unlock();
             }
-            return Strings.leftPad(String.valueOf(sequ), SEQU_LENGTH, PAD_CHAR);
         }
 
         /**

@@ -12,6 +12,7 @@ package com.acooly.core.test.utils;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.Tasks;
+import com.google.common.collect.Sets;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -33,7 +34,7 @@ public class IdsBatchTest {
 
     final int threads = 200;
     final int timesPerThread = 400;
-    final Set<String> container = Collections.synchronizedSet(new HashSet<String>());
+    final Set<String> container = Sets.newConcurrentHashSet();
 
 
     @Test
@@ -53,7 +54,6 @@ public class IdsBatchTest {
         log.info("oid(systemCode:S001):{},length:{}", id, Strings.length(id));
         id = Ids.mid();
         log.info("mid():{},length:{}", id, Strings.length(id));
-
     }
 
     @Test
@@ -65,7 +65,9 @@ public class IdsBatchTest {
             public void run() {
                 for (int j = 0; j < timesPerThread; j++) {
                     String id = Ids.gid();
-                    if (container.add(id)) {
+                    log.info(id);
+                    if (!container.contains(id)) {
+                        container.add(id);
                         successCounter.incrementAndGet();
                     } else {
                         log.info("重复Id: {}", id);

@@ -5,7 +5,6 @@
  */
 package com.acooly.core.utils;
 
-import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +16,7 @@ import java.lang.reflect.*;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -74,15 +74,16 @@ public class Reflections {
             if (object == null) {
                 result.add(null);
             } else if (object instanceof Date) {
-                result.add(Ids.format((Date) object));
+                result.add(dateFormat((Date) object));
             } else if (object instanceof Calendar) {
-                result.add(Ids.format(((Calendar) object).getTime()));
+                result.add(dateFormat(((Calendar) object).getTime()));
             } else {
                 result.add(object.toString());
             }
         }
         return result;
     }
+
 
     /**
      * 调用Setter方法, 仅匹配方法名。
@@ -584,6 +585,11 @@ public class Reflections {
                 accessibleObject.setAccessible(true);
             }
         }
+    }
+
+    private static String dateFormat(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(date);
     }
 
 }

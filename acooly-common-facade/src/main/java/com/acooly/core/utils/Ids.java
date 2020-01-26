@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.LongAdder;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Id生成器
@@ -20,7 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Ids {
 
-    public static final char PADCHAR = '0';
+    public static final char PAD_CHAR = '0';
     private static final short PROCESS_IDENTIFIER;
 
     static {
@@ -29,6 +31,16 @@ public class Ids {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * MongodbId生成方案
+     * 长度24，格式：HEX
+     *
+     * @return
+     */
+    public static String mid() {
+        return ObjectId.get().toHexString();
     }
 
     // ******* 特定场景ID ***********//
@@ -45,8 +57,10 @@ public class Ids {
     public static String gid(String systemCode, String reserved) {
         StringBuilder sb = new StringBuilder();
         sb.append(padding(systemCode, 4));
-        sb.append(padding(reserved, 8));
-        sb.append(ObjectId.get().toHexString());
+        if (Strings.isNotBlank(reserved)) {
+            sb.append(padding(reserved, 8));
+        }
+        sb.append(Did.getInstance().getId());
         return sb.toString();
     }
 
@@ -58,7 +72,7 @@ public class Ids {
      * 长度24位全球唯一标识
      */
     public static String gid() {
-        return "G" + new ObjectId().toHexString();
+        return "G" + Did.getInstance().getId();
     }
 
     /**
@@ -106,28 +120,34 @@ public class Ids {
         if (Strings.length(txt) > size) {
             txt = Strings.substring(txt, Strings.length(txt) - size);
         }
-        return Strings.leftPad(txt, size, PADCHAR);
+        return Strings.leftPad(txt, size, PAD_CHAR);
     }
 
     /**
      * ID生成器
      *
-     *
-     *
-     * <p>20字符长度 yyMMddHHmmss+3位本机IP末三位+5位随机数字
+     * <p>20字符长度 yyMMddHHmmss+3位本机IP末三位+(大于24:PID)+5位并发计数器
      *
      * @author zhangpu
+     * @date 2020-1-17 重构
      */
     public static class Did {
+
         private static final Logger logger = LoggerFactory.getLogger(Ids.class);
         private static final int MIN_LENGTH = 20;
         private static final int SEQU_LENGTH = 4;
-        private static final int SEQU_MAX = 9999;
+        private static final int SEQU_MAX = Double.valueOf(Math.pow(10, SEQU_LENGTH) - 1).intValue();
+        private static final char PAD_CHAR = '0';
+        private static final int PID_LENGTH = 4;
+        private static final int IP_LENGTH = 4;
+        private static final String DEFAULT_DATE_FORMAT = "yyMMddHHmmss";
+
+        private static Lock lock = new ReentrantLock();
+        private static LongAdder counter = new LongAdder();
+        private volatile int sequ = 0;
         private static Did did = new Did();
-        private static String pidStr = null;
-        private AtomicLong sequence = new AtomicLong(1);
-        private String nodeFlag;
-        private Object nodeFlagLock = new Object();
+        private static String pidStr = "0";
+        private static String ipStr;
 
         private Did() {
             super();
@@ -135,11 +155,6 @@ public class Ids {
 
         public static Did getInstance() {
             return did;
-        }
-
-        private static short short2(final short x) {
-            short b = (short) (x % (short) 100);
-            return b <= 10 ? 10 : b;
         }
 
         /**
@@ -151,21 +166,31 @@ public class Ids {
             return getId(MIN_LENGTH);
         }
 
+
         /**
-         * @param size 位数需大于20
+         * 生产新Id
+         *
+         * @param size最少20位
          */
         public String getId(int size) {
             if (size < MIN_LENGTH) {
-                throw Exceptions.runtimeException("did最小长度为" + MIN_LENGTH);
+                size = MIN_LENGTH;
             }
             StringBuilder sb = new StringBuilder();
-            // 当前时间(12位)
-            sb.append(format(new Date(), "yyMMddHHmmss"));
-            // 随机数字(size-18位)
-            sb.append(RandomNumberGenerator.getNewString((size - MIN_LENGTH)));
-            // 进程id(4位)
-            sb.append(getPid());
-            // 序列号(4位)
+            // 固定：当前时间(12位)
+            sb.append(getTimestamp());
+            // 固定：考虑在容器中PID无效，恢复为IP后两段(4位)
+            sb.append(getIp());
+            // 动态：如果size > MIN_LENGTH(20),可选加入随机数或PID
+            int randomLength = size - MIN_LENGTH;
+            if (randomLength >= PID_LENGTH) {
+                randomLength = randomLength - PID_LENGTH;
+                sb.append(getPid());
+            }
+            if (randomLength > 0) {
+                sb.append(RandomNumberGenerator.getNewString(randomLength));
+            }
+            // 固定：序列号(4位)
             sb.append(getSequ());
             return sb.toString();
         }
@@ -174,7 +199,6 @@ public class Ids {
          * 获取两位pid
          */
         private String getPid() {
-
             if (pidStr == null) {
                 StringBuilder sb = new StringBuilder();
                 Hex.append(sb, PROCESS_IDENTIFIER);
@@ -183,52 +207,85 @@ public class Ids {
             return pidStr;
         }
 
-        public String getSequ() {
-
-            long timeCount = 0;
-            while (true) {
-                timeCount = sequence.get();
-                if (sequence.compareAndSet(SEQU_MAX, 1)) {
-                    timeCount = 1;
-                    break;
-                }
-                if (sequence.compareAndSet(timeCount, timeCount + 1)) {
-                    break;
-                }
-            }
-            return Strings.leftPad(String.valueOf(timeCount), SEQU_LENGTH, '0');
-        }
-
-        private synchronized String getNodeFlag() {
-            if (this.nodeFlag == null) {
-                this.nodeFlag = generateNodeFlag();
-            }
-            return this.nodeFlag;
-        }
-
         /**
-         * 简单节点编码
-         *
-         *
-         *
-         * <p>逻辑：Ip地址后三位，便于快速知道是哪个节点
+         * 获取节点IP后缀3位
          *
          * @return
          */
-        private String generateNodeFlag() {
+        private String getIp() {
+            if (ipStr == null) {
+                ipStr = generateIpPostfix();
+            }
+            return ipStr;
+        }
+
+        /**
+         * 计数器
+         *
+         * @return
+         */
+        public String getSequ() {
+            try {
+                lock.lock();
+                if (sequ++ == SEQU_MAX) {
+                    sequ = 0;
+                }
+                return Strings.leftPad(String.valueOf(sequ), SEQU_LENGTH, PAD_CHAR);
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        /**
+         * 获取当前时间戳
+         *
+         * @return
+         */
+        public String getTimestamp() {
+            SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
+            return sdf.format(new Date());
+        }
+
+        /**
+         * IP地址后两段
+         * <p>逻辑：Ip地址后两段6位，采用两个short分别存储两个段，共4字节
+         *
+         * @return
+         */
+        private String generateIpPostfix() {
             String result = null;
             try {
                 String ip = IPUtil.getFirstNoLoopbackIPV4Address();
                 if (Strings.isNotBlank(ip)) {
-                    result = Strings.substringAfterLast(ip, ".");
-                } else {
-                    result = Strings.right(IPUtil.getHostName(), 3);
+                    String[] ips = Strings.split(ip, ".");
+                    short[] ipSegment = new short[2];
+                    if (ips.length == IP_LENGTH) {
+                        ipSegment[0] = Short.valueOf(ips[2]);
+                        ipSegment[1] = Short.valueOf(ips[3]);
+                    }
+                    result = ipSegmentToHex(ipSegment);
                 }
-                result = StringUtils.leftPad(result, 3, "0");
+                if (Strings.isBlank(result)) {
+                    result = Strings.right(IPUtil.getHostName(), IP_LENGTH);
+                }
+                result = Strings.upperCase(result);
+                result = StringUtils.leftPad(result, IP_LENGTH, PAD_CHAR);
             } catch (Exception e) {
                 logger.warn("生产DID要素本机IP获取失败:" + e.getMessage());
             }
             return result;
+        }
+
+        private String ipSegmentToHex(short[] segment) {
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < segment.length; i++) {
+                String hex = Integer.toHexString(segment[i] & 0xFF);
+                if (hex.length() < 2) {
+                    sb.append(0);
+                }
+                sb.append(hex);
+            }
+            return sb.toString();
         }
     }
 
@@ -254,12 +311,6 @@ public class Ids {
 
         private static String convertBytesToString(final byte[] random) {
             final char[] output = new char[random.length];
-            //IntStream.range(0, random.length)
-//             .forEach(
-//                    i -> {
-//                        final int index = Math.abs(random[i] % PRINTABLE_CHARACTERS.length);
-//                        output[i] = PRINTABLE_CHARACTERS[index];
-//                    });
             for (int i = 0; i < random.length; i++) {
                 final int index = Math.abs(random[i] % PRINTABLE_CHARACTERS.length);
                 output[i] = PRINTABLE_CHARACTERS[index];
@@ -267,24 +318,6 @@ public class Ids {
 
             return new String(output);
         }
-    }
-
-    public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
-
-    public static String format(Date date, String pattern) {
-        SimpleDateFormat sdf = getSimpleDateFormat(pattern);
-        return sdf.format(date);
-    }
-
-    private static SimpleDateFormat getSimpleDateFormat(String defaultFormat) {
-        if (Strings.isBlank(defaultFormat)) {
-            defaultFormat = DEFAULT_DATE_FORMAT;
-        }
-        return new SimpleDateFormat(defaultFormat);
-    }
-
-    public static String format(Date date) {
-        return format(date, DEFAULT_DATE_FORMAT);
     }
 
 

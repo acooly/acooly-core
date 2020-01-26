@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -143,10 +142,9 @@ public class Ids {
         private static final String DEFAULT_DATE_FORMAT = "yyMMddHHmmss";
 
         private static Lock lock = new ReentrantLock();
-        private static LongAdder counter = new LongAdder();
         private volatile int sequ = 0;
         private static Did did = new Did();
-        private static String pidStr = "0";
+        private static String pidStr;
         private static String ipStr;
 
         private Did() {

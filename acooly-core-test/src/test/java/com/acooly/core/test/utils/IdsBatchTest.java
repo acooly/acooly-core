@@ -40,20 +40,20 @@ public class IdsBatchTest {
     @Test
     public void testDid() {
         String id = Ids.getDid();
-        log.info("Did:{},length:{}", id, Strings.length(id));
+        log.info("getDid():     {}, length:{}", id, Strings.length(id));
         id = Ids.gid();
-        log.info("gid():{},length:{}", id, Strings.length(id));
+        log.info("gid():        {}, length:{}", id, Strings.length(id));
         id = Ids.gid("S001");
-        log.info("gid(systemCode:S001):{},length:{}", id, Strings.length(id));
+        log.info("gid(S001):    {}, length:{}", id, Strings.length(id));
         id = Ids.gid("S001", "R12345678");
-        log.info("gid(systemCode:S001,reserved:R12345678):{},length:{}",
+        log.info("gid(S001,...):{}, length:{}",
                 id, Strings.length(id));
         id = Ids.oid();
-        log.info("oid:{},length:{}", id, Strings.length(id));
+        log.info("oid():        {}, length:  {}", id, Strings.length(id));
         id = Ids.oid("S001");
-        log.info("oid(systemCode:S001):{},length:{}", id, Strings.length(id));
+        log.info("oid(S001):    {}, length:{}", id, Strings.length(id));
         id = Ids.mid();
-        log.info("mid():{},length:{}", id, Strings.length(id));
+        log.info("mid():        {}, length:{}", id, Strings.length(id));
     }
 
     @Test

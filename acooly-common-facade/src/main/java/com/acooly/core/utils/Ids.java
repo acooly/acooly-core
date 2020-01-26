@@ -101,7 +101,15 @@ public class Ids {
      * @return 默认20字符长度的数字不重复编码
      */
     public static String getDid() {
+        return did();
+    }
+
+    public static String did() {
         return Did.getInstance().getId();
+    }
+
+    public static String did(int size) {
+        return Did.getInstance().getId(size);
     }
 
     /**
@@ -135,18 +143,18 @@ public class Ids {
 
         private static final Logger logger = LoggerFactory.getLogger(Ids.class);
         private static final int MIN_LENGTH = 20;
-        private static final int SEQU_LENGTH = 5;
+        private static final int SEQU_LENGTH = 4;
         private static final int SEQU_MAX = Double.valueOf(Math.pow(10, SEQU_LENGTH) - 1).intValue();
         private static final char PAD_CHAR = '0';
         private static final int PID_LENGTH = 4;
+        private static final int IP_LENGTH = 4;
         private static final String DEFAULT_DATE_FORMAT = "yyMMddHHmmss";
 
         private static Lock lock = new ReentrantLock();
-        private static LongAdder counter = new LongAdder();
-        private volatile int sequ = 0;
         private static Did did = new Did();
-        private static String pidStr = "0";
+        private static String pidStr;
         private static String ipStr;
+        private volatile int sequ = 0;
 
         private Did() {
             super();
@@ -176,18 +184,20 @@ public class Ids {
                 size = MIN_LENGTH;
             }
             StringBuilder sb = new StringBuilder();
-            // 当前时间(12位)
+            // 固定：当前时间(12位)
             sb.append(getTimestamp());
-            // 考虑在容器中PID无效，恢复为IP最后3位(3位)
+            // 固定：考虑在容器中PID无效，恢复为IP后两段(4位)
             sb.append(getIp());
-            // 如果size > MIN_LENGTH(20),可选加入随机数或PID
+            // 动态：如果size > MIN_LENGTH(20),可选加入随机数或PID
             int randomLength = size - MIN_LENGTH;
             if (randomLength >= PID_LENGTH) {
                 randomLength = randomLength - PID_LENGTH;
                 sb.append(getPid());
             }
-            sb.append(RandomNumberGenerator.getNewString(randomLength));
-            // 序列号(5位)
+            if (randomLength > 0) {
+                sb.append(RandomNumberGenerator.getNewString(randomLength));
+            }
+            // 固定：序列号(4位)
             sb.append(getSequ());
             return sb.toString();
         }
@@ -205,7 +215,7 @@ public class Ids {
         }
 
         /**
-         * 获取节点IP后缀3位
+         * 获取节点IP后缀4位
          *
          * @return
          */
@@ -257,15 +267,35 @@ public class Ids {
             try {
                 String ip = IPUtil.getFirstNoLoopbackIPV4Address();
                 if (Strings.isNotBlank(ip)) {
-                    result = Strings.substringAfterLast(ip, ".");
-                } else {
-                    result = Strings.right(IPUtil.getHostName(), 3);
+                    String[] ips = Strings.split(ip, ".");
+                    short[] ipSegment = new short[2];
+                    if (ips.length == IP_LENGTH) {
+                        ipSegment[0] = Short.valueOf(ips[2]);
+                        ipSegment[1] = Short.valueOf(ips[3]);
+                    }
+                    result = ipSegmentToHex(ipSegment);
                 }
-                result = StringUtils.leftPad(result, 3, PAD_CHAR);
+                if (Strings.isBlank(result)) {
+                    result = Strings.right(IPUtil.getHostName(), IP_LENGTH);
+                }
+                result = Strings.upperCase(result);
+                result = StringUtils.leftPad(result, IP_LENGTH, PAD_CHAR);
             } catch (Exception e) {
                 logger.warn("生产DID要素本机IP获取失败:" + e.getMessage());
             }
             return result;
+        }
+
+        private String ipSegmentToHex(short[] segment) {
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < segment.length; i++) {
+                String hex = Integer.toHexString(segment[i] & 0xFF);
+                if (hex.length() < 2) {
+                    sb.append(PAD_CHAR);
+                }
+                sb.append(hex);
+            }
+            return sb.toString();
         }
     }
 

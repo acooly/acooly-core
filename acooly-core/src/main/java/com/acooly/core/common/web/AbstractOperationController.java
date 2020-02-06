@@ -77,12 +77,12 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param response
      */
     protected PageInfo<T> doList(
-            HttpServletRequest request, HttpServletResponse response, Model model) throws Exception{
+            HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
         return getEntityService()
                 .query(getPageInfo(request), getSearchParams(request), getSortMap(request));
     }
 
-    protected PageInfo<T> doList(HttpServletRequest request, HttpServletResponse response) throws Exception{
+    protected PageInfo<T> doList(HttpServletRequest request, HttpServletResponse response) throws Exception {
         return doList(request, response, null);
     }
 
@@ -274,7 +274,8 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
     }
 
     protected void doDataBinding(HttpServletRequest request, Object command) {
-        bind(request, command);
+//        bind(request, command);
+        bindNotValidator(request, command);
     }
 
     protected Map<String, Object> referenceData(HttpServletRequest request) {

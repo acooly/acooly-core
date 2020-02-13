@@ -1,6 +1,7 @@
 <!-- title: 线程池组件 -->
 <!-- type: infrastructure -->
 <!-- author: qiubo -->
+<!-- date: 2019-12-08 -->
 ## 1. 组件介绍
 
    定制线程池，增加线程异常包裹和`MDC`传递

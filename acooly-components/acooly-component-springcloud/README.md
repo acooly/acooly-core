@@ -1,6 +1,7 @@
-<!-- title: springCloud组件 -->
+<!-- title: SpringCloud组件 -->
 <!-- type: infrastructure -->
 <!-- author: aleishus -->
+<!-- date: 2019-12-18 -->
 
 ## 1. 组件介绍
 

@@ -1,6 +1,7 @@
-<!-- title: appservice组件 -->
-<!-- type: app -->
+<!-- title: AppService组件 -->
+<!-- type: infrastructure -->
 <!-- author: qiubo -->
+<!-- date: 2019-12-16 -->
 ## 1. 组件介绍
 
 ### 1.1 提供主要能力

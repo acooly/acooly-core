@@ -1,6 +1,7 @@
-<!-- title: mybatis组件  -->
+<!-- title: MyBatis组件  -->
 <!-- type: infrastructure -->
 <!-- author: qiubo,zhangpu -->
+<!-- date: 2019-12-30 -->
 ## 1. 组件介绍
 
 此组件提供mybatis的规范使用和封装，整合mapper扩展支持CRUD自动处理，多条件分页查询自动处理等能力，支持多数据源。

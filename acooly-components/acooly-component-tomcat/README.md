@@ -1,6 +1,7 @@
 <!-- title: tomcat组件 -->
 <!-- type: infrastructure -->
 <!-- author: qiubo -->
+<!-- date: 2019-12-25 -->
 ## 1. 组件介绍
 
    定制tomcat，配置线程、日志、自定义错误页等

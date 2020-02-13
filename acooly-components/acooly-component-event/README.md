@@ -1,6 +1,7 @@
 <!-- title: 事件组件 -->
 <!-- type: infrastructure -->
 <!-- author: qiubo -->
+<!-- date: 2019-12-12 -->
 ## 1. 提供能力
 
 EventBus提供jvm内事件处理发布、处理机制，相对于spring提供的事件做以下增强：

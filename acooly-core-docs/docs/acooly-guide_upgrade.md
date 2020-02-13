@@ -1,7 +1,7 @@
 <!-- title: Acooly-V5  -->
 <!-- type: core -->
 <!-- author: zhangpu -->
-<!-- date: 2019-10-1 -->
+<!-- date: 2019-12-1 -->
 
 Acooly-V5新版本升级指南
 ====

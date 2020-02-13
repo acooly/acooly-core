@@ -1,6 +1,7 @@
 <!-- title: 白盒测试组件 -->
-<!-- type: app -->
+<!-- type: infrastructure -->
 <!-- author: qiubo -->
+<!-- date: 2019-12-05 -->
 
 ## 1. 组件介绍
 

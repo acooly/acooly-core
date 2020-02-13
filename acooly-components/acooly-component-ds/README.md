@@ -1,6 +1,7 @@
 <!-- title: 数据库连接池组件   -->
 <!-- type: infrastructure -->
 <!-- author: qiubo -->
+<!-- date: 2019-12-31 -->
 ## 1. 组件介绍
 
 此组件提供druid的数据源

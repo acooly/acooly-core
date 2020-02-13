@@ -24,6 +24,15 @@ import java.util.concurrent.TimeUnit;
 public class DatesTest {
 
     @Test
+    public void testDates() {
+
+        log.info(Dates.format(new Date()));
+
+
+    }
+
+
+    @Test
     public void testSub() throws Exception {
 
         Date birthday = Dates.parse("1982-07-15");

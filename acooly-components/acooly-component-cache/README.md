@@ -1,6 +1,7 @@
 <!-- title: 分布式缓存组件 -->
 <!-- type: infrastructure -->
 <!-- author: qiubo -->
+<!-- date: 2019-12-21 -->
 ## 1. 组件介绍
 
 此组件提供分布式缓存的能力

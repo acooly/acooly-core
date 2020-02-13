@@ -1,7 +1,7 @@
-<!-- title: web组件 -->
+<!-- title: Web组件 -->
 <!-- type: infrastructure -->
-<!-- author: qiubo -->
-
+<!-- author: qiubo,zhangpu -->
+<!-- date: 2019-12-23 -->
 ## 1. 组件介绍
 此组件提供spring mvc 的能力
 

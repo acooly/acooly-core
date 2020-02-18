@@ -9,7 +9,6 @@
  */
 package com.acooly.module.mybatis;
 
-import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.module.ds.JDBCAutoConfig;
@@ -25,10 +24,13 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -50,7 +52,7 @@ import static com.acooly.module.mybatis.MybatisProperties.PREFIX;
 @EnableConfigurationProperties({MybatisProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @AutoConfigureAfter(JDBCAutoConfig.class)
-public class MybatisAutoConfig {
+public class MybatisAutoConfig implements ApplicationContextAware {
 
 
     @Autowired(required = false)
@@ -59,9 +61,11 @@ public class MybatisAutoConfig {
     @Autowired
     private ResourceLoader resourceLoader;
 
+    private ApplicationContext applicationContext;
+
     @Bean
-    public SqlSessionFactory sqlSessionFactory( DataSource dataSource,
-            MybatisProperties properties ) {
+    public SqlSessionFactory sqlSessionFactory(DataSource dataSource,
+                                               MybatisProperties properties) {
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
 
         factory.setDataSource(dataSource);
@@ -70,8 +74,7 @@ public class MybatisAutoConfig {
             factory.setConfigLocation(
                     this.resourceLoader.getResource(properties.getConfigLocation()));
         }
-        Map<String, Interceptor> beansOfType = Apps.getApplicationContext()
-                .getBeansOfType(Interceptor.class);
+        Map<String, Interceptor> beansOfType = applicationContext.getBeansOfType(Interceptor.class);
         if (!ObjectUtils.isEmpty(beansOfType)) {
             Interceptor[] interceptors = beansOfType.values().toArray(new Interceptor[0]);
             AnnotationAwareOrderComparator.sort(interceptors);
@@ -98,7 +101,7 @@ public class MybatisAutoConfig {
             sqlSessionFactory.getConfiguration().setMapUnderscoreToCamelCase(true);
             Interceptor interceptor = beansOfType.get("pageExecutorInterceptor");
             if (null != interceptor) {
-                ( (PageExecutorInterceptor) interceptor ).setSqlSessionFactory(sqlSessionFactory);
+                ((PageExecutorInterceptor) interceptor).setSqlSessionFactory(sqlSessionFactory);
             }
         } catch (Exception e) {
             throw new AppConfigException(e);
@@ -109,7 +112,7 @@ public class MybatisAutoConfig {
 
     private void customConfig(
             org.apache.ibatis.session.Configuration configuration,
-            MybatisProperties mybatisProperties ) {
+            MybatisProperties mybatisProperties) {
         BeanWrapperImpl wrapper = new BeanWrapperImpl(configuration);
         mybatisProperties
                 .getSettings()
@@ -125,7 +128,7 @@ public class MybatisAutoConfig {
         return databaseIdProvider;
     }
 
-    public void setDatabaseIdProvider( DatabaseIdProvider databaseIdProvider ) {
+    public void setDatabaseIdProvider(DatabaseIdProvider databaseIdProvider) {
         this.databaseIdProvider = databaseIdProvider;
     }
 
@@ -133,9 +136,10 @@ public class MybatisAutoConfig {
         return resourceLoader;
     }
 
-    public void setResourceLoader( ResourceLoader resourceLoader ) {
+    public void setResourceLoader(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
+
 
     @Bean
     public PageExecutorInterceptor pageExecutorInterceptor() {
@@ -150,5 +154,10 @@ public class MybatisAutoConfig {
     @Bean
     public ExInterceptor exInterceptor() {
         return new ExInterceptor();
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }

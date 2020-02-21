@@ -22,7 +22,9 @@ public class HolderInitApplicationContextInitializer
         implements ApplicationContextInitializer<ConfigurableApplicationContext>, PriorityOrdered {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
-        new ApplicationContextHolder().setApplicationContext(applicationContext);
+        if (applicationContext.getEnvironment().getPropertySources().get("bootstrap") == null) {
+            new ApplicationContextHolder().setApplicationContext(applicationContext);
+        }
     }
 
     @Override

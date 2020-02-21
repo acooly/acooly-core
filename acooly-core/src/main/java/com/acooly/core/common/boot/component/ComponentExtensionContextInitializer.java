@@ -9,6 +9,7 @@
  */
 package com.acooly.core.common.boot.component;
 
+import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.boot.listener.DevModeDetector;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
@@ -27,29 +28,32 @@ import java.util.List;
 @Order(value = Ordered.LOWEST_PRECEDENCE)
 @Slf4j
 public class ComponentExtensionContextInitializer implements ApplicationContextInitializer {
+
     @Override
-    public void initialize(ConfigurableApplicationContext applicationContext) {
-        new DevModeDetector().apply(applicationContext.getEnvironment());
-        String[] exclude = applicationContext.getEnvironment().getProperty("spring.autoconfigure.exclude", String[].class);
-        if (exclude == null) {
-            exclude = new String[0];
-        }
-        List<String> excludes = Lists.newArrayList(exclude);
-        List<ComponentInitializer> componentInitializers = SpringFactoriesLoader.loadFactories(
-                ComponentInitializer.class, applicationContext.getClassLoader());
+    public void initialize( ConfigurableApplicationContext applicationContext ) {
+        if (applicationContext.getEnvironment().getPropertySources().get("bootstrap") == null) {
+            new DevModeDetector().apply(applicationContext.getEnvironment());
+            String[] exclude = applicationContext.getEnvironment()
+                    .getProperty("spring.autoconfigure.exclude", String[].class);
+            if (exclude == null) {
+                exclude = new String[0];
+            }
+            List<String> excludes = Lists.newArrayList(exclude);
+            List<ComponentInitializer> componentInitializers = SpringFactoriesLoader.loadFactories(
+                    ComponentInitializer.class, applicationContext.getClassLoader());
 
-        
+            componentInitializers.forEach(
+                    componentInitializer -> {
+                        componentInitializer.initialize(applicationContext);
+                        excludes.addAll(componentInitializer.excludeAutoconfigClassNames());
+                    });
 
-        componentInitializers.forEach(
-                componentInitializer -> {
-                    componentInitializer.initialize(applicationContext);
-                    excludes.addAll(componentInitializer.excludeAutoconfigClassNames());
-                });
-
-        // 添加禁用spring-security的AutoConfiguration
-        excludes.add("org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration");
-        if (!excludes.isEmpty()) {
-            System.setProperty("spring.autoconfigure.exclude", Joiner.on(',').join(excludes));
+            // 添加禁用spring-security的AutoConfiguration
+            excludes.add(
+                    "org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration");
+            if (!excludes.isEmpty()) {
+                System.setProperty("spring.autoconfigure.exclude", Joiner.on(',').join(excludes));
+            }
         }
     }
 }

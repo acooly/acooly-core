@@ -8,15 +8,17 @@
  * qzhanbo@yiji.com 2015-08-24 14:32 创建
  *
  */
-package com.acooly.module.ds;
+package com.acooly.module.tenant.ds;
 
-import com.acooly.core.common.boot.ApplicationContextHolder;
-import com.acooly.core.common.boot.EnvironmentHolder;
-import com.acooly.core.common.dao.support.DataSourceReadyEvent;
-import com.acooly.core.common.exception.AppConfigException;
-import com.acooly.module.ds.check.DBPatchChecker;
+import com.acooly.core.utils.mapper.BeanCopier;
+import com.acooly.module.ds.DruidProperties;
+import com.acooly.module.ds.DruidProperties.TenantDsProps;
+import com.acooly.module.ds.PagedJdbcTemplate;
+import com.alibaba.druid.pool.DruidDataSource;
+import java.util.Map.Entry;
 import javax.sql.DataSource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -31,13 +33,13 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 /**
- * @author qiubo
+ * @author zhouxi
  */
 @Configuration
 @EnableConfigurationProperties({DruidProperties.class})
 @ConditionalOnProperty(value = DruidProperties.ENABLE_KEY, matchIfMissing = true)
 @Slf4j
-public class JDBCAutoConfig {
+public class JDBCAutoConfigX {
 
     @Autowired
     private DruidProperties druidProperties;
@@ -45,51 +47,45 @@ public class JDBCAutoConfig {
     @Bean
     @ConditionalOnMissingBean
     public DataSource dataSource() {
-        DataSource dataSource;
-        try {
-            if (druidProperties == null) {
-                druidProperties = new DruidProperties();
-                EnvironmentHolder.buildProperties(druidProperties, DruidProperties.PREFIX);
-            }
-            if (druidProperties.isUseTomcatDataSource()) {
-                dataSource = new TomcatDataSourceProperties().build(druidProperties);
-            } else {
-                dataSource = druidProperties.build();
-            }
-            if (druidProperties.isAutoCreateTable()) {
-                ApplicationContextHolder.get().publishEvent(new DataSourceReadyEvent(dataSource));
-            }
-            new DBPatchChecker(druidProperties).check(dataSource);
-            return dataSource;
-        } catch (Exception e) {
-            //这种方式有点挫，先就这样吧
-            log.error("初始化数据库连接池异常，关闭应用", e);
-            System.exit(0);
-            throw new AppConfigException("数据源配置异常", e);
+        if (MapUtils.isEmpty(druidProperties.getTenant())) {
+            throw new RuntimeException("检测到租户数据源没有配置，请配置租户数据源");
         }
+        DataSource dataSource;
+        TenantDatasource tenantDatasource = new TenantDatasource();
+        for (Entry<String, TenantDsProps> entry : druidProperties.getTenant().entrySet()) {
+            DruidProperties copy = new DruidProperties();
+            BeanCopier.copy(druidProperties, copy);
+            tenantDatasource.registerTenantDataSource(entry.getKey(),
+                    (DruidDataSource) Utils
+                            .createDs(Utils.replaceDefaultProps(copy, entry.getValue())));
+        }
+        dataSource = tenantDatasource;
+        return dataSource;
     }
+
 
     @Bean
     @ConditionalOnMissingBean(JdbcOperations.class)
-    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+    public JdbcTemplate jdbcTemplate( DataSource dataSource ) {
         return new JdbcTemplate(dataSource);
     }
 
     @Bean
-    public PagedJdbcTemplate pagedJdbcTemplate(DataSource dataSource) {
+    public PagedJdbcTemplate pagedJdbcTemplate( DataSource dataSource ) {
         return new PagedJdbcTemplate(dataSource);
     }
 
     @Bean
     @ConditionalOnMissingBean(NamedParameterJdbcOperations.class)
-    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
+    public NamedParameterJdbcTemplate namedParameterJdbcTemplate( DataSource dataSource ) {
         return new NamedParameterJdbcTemplate(dataSource);
     }
 
     @Bean
     @ConditionalOnMissingBean(TransactionTemplate.class)
     public TransactionTemplate transactionTemplate(
-            PlatformTransactionManager platformTransactionManager) {
+            PlatformTransactionManager platformTransactionManager ) {
         return new TransactionTemplate(platformTransactionManager);
     }
+
 }

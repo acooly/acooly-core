@@ -18,4 +18,6 @@ public interface Orderable extends Serializable {
     String getPartnerId();
 
     void check();
+
+    String getTenantId();
 }

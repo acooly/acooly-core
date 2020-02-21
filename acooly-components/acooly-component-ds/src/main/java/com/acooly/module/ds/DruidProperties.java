@@ -22,6 +22,12 @@ import com.alibaba.druid.pool.vendor.OracleValidConnectionChecker;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,13 +39,6 @@ import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.SQLSyntaxErrorException;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * @author qiubo
@@ -63,6 +62,14 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
      * 是否启用此组件
      */
     private boolean enable = true;
+
+
+    /**
+     * 租户配置
+     */
+    private Map<String,TenantDsProps> tenant ;
+
+
 
     /**
      * 必填：jdbc url
@@ -277,6 +284,33 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
             throw new AppConfigException("druid连接池初始化失败", e);
         }
         return dataSource;
+    }
+
+
+    @Data
+    public static class  TenantDsProps {
+
+        private String url;
+
+         String username;
+
+        @ToString.Maskable(maskAll = true)
+        private String password;
+
+        private Integer initialSize ;
+
+
+        private Integer minIdle ;
+
+        private Integer maxActive ;
+
+        private Integer maxWait ;
+
+        /**
+         * 检查表是否缺少某些字段，如果缺少，启动报错。
+         */
+        @ToString.Invisible
+        private Map<String, List<DBPatch>> dbPatchs;
     }
 
     @Data

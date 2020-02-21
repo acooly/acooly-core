@@ -14,11 +14,11 @@ public interface Retransformer {
     /**
      * 对于简单单个Class的转换这个已经可以满足
      */
-    void simpleTransformer( ByteBuddy byteBuddy ) throws Throwable;
+   default  void simpleTransformer( ByteBuddy byteBuddy ) throws Throwable{};
 
     /**
      * 对于复杂多个Class的转换请用这个
      */
-    AgentBuilder agentTransformer( AgentBuilder agentBuilder ) throws Throwable;
+   default AgentBuilder agentTransformer( AgentBuilder agentBuilder ) throws Throwable{return null;};
 
 }

@@ -1,6 +1,6 @@
 /**
  * acooly-core-parent
- * <p>
+ * <ORDER_PATTERN>
  * Copyright 2014 Acooly.cn, Inc. All rights reserved.
  *
  * @author zhangpu
@@ -9,7 +9,6 @@
 package com.acooly.core.test.defence;
 
 import com.acooly.core.common.exception.BusinessException;
-import com.acooly.core.utils.Regexs;
 import com.acooly.module.defence.exception.DefenceErrorCodes;
 import com.acooly.module.defence.password.PasswordStrength;
 import lombok.extern.slf4j.Slf4j;

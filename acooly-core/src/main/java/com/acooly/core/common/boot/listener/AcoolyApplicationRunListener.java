@@ -23,8 +23,6 @@ import com.acooly.core.common.exception.UncaughtExceptionHandlerWrapper;
 import com.acooly.core.utils.ShutdownHooks;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;

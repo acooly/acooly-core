@@ -1,8 +1,8 @@
 package com.acooly.module.jpa;
 
 import com.acooly.core.common.dao.support.PageInfo;
-import com.acooly.core.utils.GenericsUtils;
-import org.springframework.util.Assert;
+import com.acooly.core.utils.Asserts;
+import com.acooly.core.utils.Reflections;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,6 +19,8 @@ import java.util.regex.Pattern;
  */
 public abstract class JapDynamicQueryDao<T> {
 
+    protected static Pattern ORDER_PATTERN = Pattern.compile("order\\s*by[\\w|\\W|\\s|\\S]*", Pattern.CASE_INSENSITIVE);
+
     @PersistenceContext
     protected EntityManager entityManager;
 
@@ -27,13 +29,14 @@ public abstract class JapDynamicQueryDao<T> {
      */
     protected Class<T> entityClass;
 
+
     /**
      * 去除select 子句，未考虑union的情况
      */
     private static String removeSelect(String hql) {
-        Assert.hasText(hql);
+        Asserts.notEmpty(hql);
         int beginPos = hql.toLowerCase().indexOf("from");
-        Assert.isTrue(beginPos != -1, " hql : " + hql + " must has a keyword 'from'");
+        Asserts.isTrue(beginPos != -1, " hql : " + hql + " must has a keyword 'from'");
         return hql.substring(beginPos);
     }
 
@@ -41,9 +44,8 @@ public abstract class JapDynamicQueryDao<T> {
      * 去除orderby 子句
      */
     private static String removeOrders(String hql) {
-        Assert.hasText(hql);
-        Pattern p = Pattern.compile("order\\s*by[\\w|\\W|\\s|\\S]*", Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(hql);
+        Asserts.notEmpty(hql);
+        Matcher m = ORDER_PATTERN.matcher(hql);
         StringBuffer sb = new StringBuffer();
         while (m.find()) {
             m.appendReplacement(sb, "");
@@ -167,7 +169,7 @@ public abstract class JapDynamicQueryDao<T> {
      */
     @SuppressWarnings("unchecked")
     private Class<T> getEntityClass() {
-        entityClass = GenericsUtils.getSuperClassGenricType(getClass());
+        entityClass = Reflections.getSuperClassGenricType(getClass());
         return entityClass;
     }
 

@@ -11,6 +11,6 @@ import com.acooly.core.common.service.EntityService;
  * @author zhangpu
  */
 public abstract class AbstractPortalController<T extends Entityable, M extends EntityService<T>>
-        extends AbstractJQueryEntityController<T, M> {
+        extends AbstractJsonEntityController<T, M> {
 
 }

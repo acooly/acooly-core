@@ -1,5 +1,6 @@
 package com.acooly.core.common.web.servlet;
 
+import com.acooly.core.utils.io.Streams;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -43,8 +44,8 @@ public class SimpleDownloadServlet extends HttpServlet {
             logger.warn("请求下载文件失败", e);
             response.sendError(500, "请求下载文件失败");
         } finally {
-            IOUtils.closeQuietly(in);
-            IOUtils.closeQuietly(out);
+            Streams.close(in);
+            Streams.close(out);
         }
     }
 }

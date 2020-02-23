@@ -5,11 +5,11 @@
     <parent>
         <groupId>com.acooly</groupId>
         <artifactId>acooly-parent</artifactId>
-        <version>5.0.0-SNAPSHOT</version>
+        <version>5.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>acooly-core-parent</artifactId>
-    <version>5.0.0-SNAPSHOT</version>
+    <version>5.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <properties>
         <caffeine.version>2.6.2</caffeine.version>
@@ -20,12 +20,12 @@
         <module>acooly-core</module>
         <module>acooly-core-test</module>
         <module>acooly-components</module>
-        <module>acooly-configuration-processor</module>
         <module>acooly-core-docs</module>
         <module>acooly-common</module>
-        <module>acooly-common-facade</module>
         <module>acooly-archetypes</module>
         <module>acooly-app-parents</module>
+        <module>acooly-common-type</module>
+        <module>acooly-configuration-processor</module>
     </modules>
 
     <dependencyManagement>
@@ -44,9 +44,10 @@
 
             <dependency>
                 <groupId>com.acooly</groupId>
-                <artifactId>acooly-common-facade</artifactId>
+                <artifactId>acooly-common-type</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-configuration-processor</artifactId>
@@ -56,16 +57,4 @@
         </dependencies>
     </dependencyManagement>
 
-
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-    </dependencies>
 </project>

@@ -1,7 +1,7 @@
 package com.acooly.module.dubbo;
 
 import com.acooly.core.common.dubbo.DubboFactory;
-import com.acooly.core.utils.Assert;
+import com.acooly.core.utils.Asserts;
 import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ConsumerConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
@@ -38,9 +38,9 @@ public class DubboFactoryImpl implements DubboFactory, InitializingBean, Disposa
 
     @Override
     public <T> T getProxy(Class<T> clazz, String group, String version, int timeout) {
-        Assert.notNull(clazz);
-        Assert.notNull(group);
-        Assert.notNull(version);
+        Asserts.notNull(clazz);
+        Asserts.notNull(group);
+        Asserts.notNull(version);
 
         ApplicationConfig applicationConfig = applicationContext.getBean(ApplicationConfig.class);
         Map<String, RegistryConfig> registryConfigMap =

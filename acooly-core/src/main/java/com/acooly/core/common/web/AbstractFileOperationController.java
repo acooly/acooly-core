@@ -5,10 +5,10 @@ import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.core.utils.*;
+import com.acooly.core.utils.io.Streams;
 import com.acooly.core.utils.mapper.CsvMapper;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -138,19 +138,19 @@ public abstract class AbstractFileOperationController<
                 List<String> row = null;
                 short sheetTitleCells = sheet.getRow(0).getLastCellNum();
                 for (Row r : sheet) {
-                	if (r.getLastCellNum() == -1){
-                		continue;
-                	}
+                    if (r.getLastCellNum() == -1) {
+                        continue;
+                    }
                     row = new ArrayList<String>(sheetTitleCells);
                     for (int cellNum = 0; cellNum < sheetTitleCells; cellNum++) {
-                    	Cell cell = r.getCell(cellNum);
-                    	if (cell == null){
-                    		row.add(null);
-                    	}else{
-                    		cell.setCellType(CellType.STRING);
-                    		row.add(cell.getStringCellValue());
-                    	}
-                        
+                        Cell cell = r.getCell(cellNum);
+                        if (cell == null) {
+                            row.add(null);
+                        } else {
+                            cell.setCellType(CellType.STRING);
+                            row.add(cell.getStringCellValue());
+                        }
+
                     }
                     lines.add(row);
                 }
@@ -165,8 +165,8 @@ public abstract class AbstractFileOperationController<
                 throw new RuntimeException(
                         "读取文件[" + uResult.getName() + "]行错误,行号:" + readRows + " ,原因:" + e.getMessage());
             } finally {
-                IOUtils.closeQuietly(workBook);
-                IOUtils.closeQuietly(in);
+                Streams.close(workBook);
+                Streams.close(in);
                 if (!uploadConfig.isUseMemery()) {
                     if (uResult.getFile().exists()) {
                         uResult.getFile().delete();
@@ -217,7 +217,7 @@ public abstract class AbstractFileOperationController<
                                 + e.getMessage());
                 throw new RuntimeException("读取文件[" + uResult.getName() + "]行错误,行号:" + readRows);
             } finally {
-                IOUtils.closeQuietly(reader);
+                Streams.close(reader);
                 if (!uploadConfig.isUseMemery()) {
                     if (uResult.getFile().exists()) {
                         uResult.getFile().delete();
@@ -401,8 +401,8 @@ public abstract class AbstractFileOperationController<
             logger.warn("do export excel failure -> " + e.getMessage(), e);
             throw new BusinessException("执行导出过程失败[" + e.getMessage() + "]");
         } finally {
-            IOUtils.closeQuietly(out);
-            IOUtils.closeQuietly(workbook);
+            Streams.close(out);
+            Streams.close(workbook);
             workbook.dispose();
         }
     }
@@ -488,7 +488,7 @@ public abstract class AbstractFileOperationController<
             logger.warn("do export csv failure -> " + e.getMessage(), e);
             throw new BusinessException("CSV输出失败[" + e.getMessage() + "]");
         } finally {
-            IOUtils.closeQuietly(p);
+            Streams.close(p);
         }
     }
 

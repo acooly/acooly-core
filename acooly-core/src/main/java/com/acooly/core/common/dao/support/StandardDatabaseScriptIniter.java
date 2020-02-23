@@ -13,6 +13,7 @@ import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.common.dao.dialect.DatabaseDialectManager;
 import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.exception.AppConfigException;
+import com.acooly.core.utils.Asserts;
 import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
@@ -24,7 +25,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
-import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -54,8 +54,8 @@ public abstract class StandardDatabaseScriptIniter
                     DatabaseDialectManager.getDatabaseType(dataSource.getConnection());
             String componentName = getComponentName();
             String evaluateTable = getEvaluateTable();
-            Assert.notNull(componentName);
-            Assert.notNull(evaluateTable);
+            Asserts.notNull(componentName);
+            Asserts.notNull(evaluateTable);
 //            if (!"SYS_USER".equals(evaluateTable)) {
 //                Assert.isTrue(evaluateTable.contains(componentName));
 //            }

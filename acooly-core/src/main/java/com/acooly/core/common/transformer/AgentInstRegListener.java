@@ -5,6 +5,8 @@ import java.util.List;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.AgentBuilder.Default;
+import net.bytebuddy.agent.builder.AgentBuilder.InitializationStrategy;
+import net.bytebuddy.agent.builder.AgentBuilder.InitializationStrategy.NoOp;
 import net.bytebuddy.agent.builder.AgentBuilder.RedefinitionStrategy;
 import net.bytebuddy.agent.builder.AgentBuilder.TypeStrategy;
 import org.springframework.boot.SpringApplication;
@@ -45,7 +47,8 @@ public class AgentInstRegListener implements SpringApplicationRunListener, Prior
                 ByteBuddy byteBuddy = new ByteBuddy();
                 AgentBuilder builder = new Default(byteBuddy)
                         .with(TypeStrategy.Default.REDEFINE)
-                        .with(RedefinitionStrategy.RETRANSFORMATION);
+                        .with(RedefinitionStrategy.RETRANSFORMATION)
+                        .with(NoOp.INSTANCE);
                 retransformers.stream().forEach(
                         reTransformer -> {
                             try {

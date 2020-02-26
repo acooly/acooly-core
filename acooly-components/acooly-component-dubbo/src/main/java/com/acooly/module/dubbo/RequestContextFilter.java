@@ -14,10 +14,13 @@ import com.acooly.core.common.facade.OrderBase;
 import com.acooly.core.common.facade.Orderable;
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.extension.Activate;
-import com.alibaba.dubbo.rpc.*;
+import com.alibaba.dubbo.rpc.Filter;
+import com.alibaba.dubbo.rpc.Invocation;
+import com.alibaba.dubbo.rpc.Invoker;
+import com.alibaba.dubbo.rpc.Result;
+import com.alibaba.dubbo.rpc.RpcContext;
+import com.alibaba.dubbo.rpc.RpcException;
 import com.google.common.base.Strings;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author qiubo@yiji.com
@@ -33,11 +36,11 @@ public class RequestContextFilter implements Filter {
                     for (Object arg : args) {
                         if (arg instanceof OrderBase) {
                             RequestContext ctx = RequestContext.getContext();
-                            ctx.gid = ((Orderable) arg).getGid();
-                            ctx.partnerId = ((Orderable) arg).getPartnerId();
+                            ctx.setGid( ((Orderable) arg).getGid());
+                            ctx.setPartnerId( ((Orderable) arg).getPartnerId());
                             if (arg instanceof BizOrderBase) {
-                                ctx.bizOrderNo = ((BizOrderBase) arg).getBizOrderNo();
-                                ctx.merchOrderNo = ((BizOrderBase) arg).getMerchOrderNo();
+                                ctx.setBizOrderNo( ((BizOrderBase) arg).getBizOrderNo());
+                                ctx.setMerchOrderNo( ((BizOrderBase) arg).getMerchOrderNo());
                             }
                             break;
                         }
@@ -54,19 +57,19 @@ public class RequestContextFilter implements Filter {
                     if (arg instanceof OrderBase) {
                         RequestContext ctx = RequestContext.getContext();
                         if (Strings.isNullOrEmpty(((OrderBase) arg).getGid())) {
-                            ((OrderBase) arg).setGid(ctx.gid);
+                            ((OrderBase) arg).setGid(ctx.getGid());
                         }
                         if (Strings.isNullOrEmpty(((OrderBase) arg).getPartnerId())) {
-                            ((OrderBase) arg).setPartnerId(ctx.partnerId);
+                            ((OrderBase) arg).setPartnerId(ctx.getPartnerId());
                         }
                         if (arg instanceof BizOrderBase) {
                             String bizOrderNo = ((BizOrderBase) arg).getBizOrderNo();
                             if (Strings.isNullOrEmpty(bizOrderNo)) {
-                                ((BizOrderBase) arg).setBizOrderNo(ctx.bizOrderNo);
+                                ((BizOrderBase) arg).setBizOrderNo(ctx.getBizOrderNo());
                             }
                             String merchOrderNo = ((BizOrderBase) arg).getMerchOrderNo();
                             if (Strings.isNullOrEmpty(merchOrderNo)) {
-                                ((BizOrderBase) arg).setMerchOrderNo(ctx.merchOrderNo);
+                                ((BizOrderBase) arg).setMerchOrderNo(ctx.getMerchOrderNo());
                             }
                         }
                         break;
@@ -74,25 +77,6 @@ public class RequestContextFilter implements Filter {
                 }
             }
             return invoker.invoke(inv);
-        }
-    }
-
-    @Getter
-    @Setter
-    public static class RequestContext {
-        private static final ThreadLocal<RequestContext> LOCAL =
-                ThreadLocal.withInitial(() -> new RequestContext());
-        private String partnerId;
-        private String gid;
-        private String merchOrderNo;
-        private String bizOrderNo;
-
-        public static RequestContext getContext() {
-            return LOCAL.get();
-        }
-
-        public static void removeContext() {
-            LOCAL.remove();
         }
     }
 }

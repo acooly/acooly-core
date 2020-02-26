@@ -78,6 +78,7 @@ public class EventBusX<T> extends MBassador<T> implements InitializingBean {
     @Override
     public IMessagePublication publish(T message) {
         log.info("发送事件:{}", message);
+        message = TenantContext.wrapEvent(message);
         return super.publish(message);
     }
 

@@ -12,12 +12,11 @@ package com.acooly.core.common.boot.log;
 import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.google.common.collect.Maps;
+import java.util.Map;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Map;
 
 /**
  * @author qiubo
@@ -32,6 +31,7 @@ public class LogAutoConfig {
 
         public static final String GID_KEY = "gid";
 
+
         public static final String LOG_PATTERN = "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{0}:%L- %msg%n%xEx{full, ${ignoredStackFrames}}";
         /**
          * log pattern same as {@link #LOG_PATTERN} with ANSI Escape sequences
@@ -45,12 +45,12 @@ public class LogAutoConfig {
         public static final String MDC_LOG_PATTERN_WITH_GID =
                 "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{0}:%L-%X{"
                         + GID_KEY
-                        + "}- %msg%n%xEx{${acooly.log.exLength}, ${acooly.log.ignoredStackFrames}}";
+                        + "}:%X{tid}- %msg%n%xEx{${acooly.log.exLength}, ${acooly.log.ignoredStackFrames}}";
 
         public static final String ANSI_MDC_LOG_PATTERN_WITH_GID =
                 "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%-5level) %clr([%thread]){faint} %clr(%logger{0}){cyan}%clr(:%L){faint}%clr(-){red}%X{"
                         + GID_KEY
-                        + "}- %m%n%xEx{${acooly.log.exLength}, ${acooly.log.ignoredStackFrames}}";
+                        + "}:%X{tid}- %m%n%xEx{${acooly.log.exLength}, ${acooly.log.ignoredStackFrames}}";
 
         /**
          * mdc log pattern with parameter gid(inner unique id ) and oid(outter unique id)
@@ -58,12 +58,12 @@ public class LogAutoConfig {
         public static final String MDC_LOG_PATTERN_WITH_GID_AND_OID =
                 "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{0}:%L-%X{"
                         + GID_KEY
-                        + "}:%X{oid}- %msg%n%xEx{${acooly.log.exLength}, ${acooly.log.ignoredStackFrames}}";
+                        + "}:%X{oid}:%X{tid}- %msg%n%xEx{${acooly.log.exLength}, ${acooly.log.ignoredStackFrames}}";
 
         public static final String ANSI_MDC_LOG_PATTERN_WITH_GID_AND_OID =
                 "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%-5level) %clr([%thread]){faint} %clr(%logger{0}){cyan}%clr(:%L){faint}%clr(-){red}%X{"
                         + GID_KEY
-                        + "}:%X{oid}- %m%n%xEx{${acooly.log.exLength}, ${acooly.log.ignoredStackFrames}}";
+                        + "}:%X{oid}:%X{tid}- %m%n%xEx{${acooly.log.exLength}, ${acooly.log.ignoredStackFrames}}";
         /**
          * 是否启用控制台日志
          */

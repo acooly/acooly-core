@@ -8,27 +8,27 @@ public class DubboRequestContext {
      * 获取请求上下文中的partnerId
      */
     public static String getPartnerId() {
-        return RequestContextFilter.RequestContext.getContext().getPartnerId();
+        return RequestContext.getContext().getPartnerId();
     }
 
     /**
      * 获取请求上下文中的gid
      */
     public static String getGid() {
-        return RequestContextFilter.RequestContext.getContext().getGid();
+        return RequestContext.getContext().getGid();
     }
 
     /**
      * 获取请求上下文中的merchOrderNo
      */
     public static String getMerchOrderNo() {
-        return RequestContextFilter.RequestContext.getContext().getMerchOrderNo();
+        return RequestContext.getContext().getMerchOrderNo();
     }
 
     /**
      * 获取请求上下文中的bizOrderNo
      */
     public static String getBizOrderNo() {
-        return RequestContextFilter.RequestContext.getContext().getBizOrderNo();
+        return RequestContext.getContext().getBizOrderNo();
     }
 }

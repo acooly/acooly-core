@@ -34,7 +34,7 @@ public class OrderBase implements Orderable {
     @Length(min = 1, max = 64)
     private String gid;
 
-    @Length(min = 4, max = 10)
+    @Length( max = 32)
     private String tenantId;
 
     public void check() {

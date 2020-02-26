@@ -13,6 +13,7 @@ import org.springframework.cache.Cache;
 import org.springframework.data.redis.cache.CacheKeyPrefix;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStringCommands.SetOption;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.types.Expiration;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -89,7 +90,7 @@ public class DefaultCache implements Cache {
                 key,
                 (conn, newkey) -> {
                     conn.set(
-                            newkey, valueRedisSerializer.serialize(value), Expiration.seconds(expiration), null);
+                            newkey, valueRedisSerializer.serialize(value), Expiration.seconds(expiration), SetOption.UPSERT);
                     return null;
                 });
     }

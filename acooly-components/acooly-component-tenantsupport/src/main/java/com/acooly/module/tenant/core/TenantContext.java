@@ -1,5 +1,6 @@
 package com.acooly.module.tenant.core;
 
+import com.acooly.core.utils.StringUtils;
 import java.util.concurrent.Callable;
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,7 +52,9 @@ public class TenantContext {
         final String tenantId = get();
         return () -> {
             try {
-                set(tenantId);
+                if (!StringUtils.isEmpty(tenantId)) {
+                    set(tenantId);
+                }
                 r.run();
             } finally {
                 remove();
@@ -66,7 +69,9 @@ public class TenantContext {
         final String tenantId = get();
         return () -> {
             try {
-                set(tenantId);
+                if (!StringUtils.isEmpty(tenantId)) {
+                    set(tenantId);
+                }
                 return c.call();
             } finally {
                 remove();

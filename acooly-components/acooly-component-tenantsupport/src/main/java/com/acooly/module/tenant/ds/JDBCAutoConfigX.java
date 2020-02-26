@@ -10,10 +10,13 @@
  */
 package com.acooly.module.tenant.ds;
 
+import com.acooly.core.common.boot.ApplicationContextHolder;
+import com.acooly.core.common.dao.support.DataSourceReadyEvent;
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.module.ds.DruidProperties;
 import com.acooly.module.ds.DruidProperties.TenantDsProps;
 import com.acooly.module.ds.PagedJdbcTemplate;
+import com.acooly.module.ds.check.DBPatchChecker;
 import com.alibaba.druid.pool.DruidDataSource;
 import java.util.Map.Entry;
 import javax.sql.DataSource;
@@ -55,9 +58,15 @@ public class JDBCAutoConfigX {
         for (Entry<String, TenantDsProps> entry : druidProperties.getTenant().entrySet()) {
             DruidProperties copy = new DruidProperties();
             BeanCopier.copy(druidProperties, copy);
+            log.info("init tenant Datasource: {} ",entry.getKey());
+            DataSource source = Utils
+                    .createDs(Utils.replaceDefaultProps(copy, entry.getValue()));
+            if (druidProperties.isAutoCreateTable()) {
+                ApplicationContextHolder.get().publishEvent(new DataSourceReadyEvent(source));
+            }
+            new DBPatchChecker(druidProperties).check(source);
             tenantDatasource.registerTenantDataSource(entry.getKey(),
-                    (DruidDataSource) Utils
-                            .createDs(Utils.replaceDefaultProps(copy, entry.getValue())));
+                    (DruidDataSource) source);
         }
         dataSource = tenantDatasource;
         return dataSource;

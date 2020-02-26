@@ -9,6 +9,7 @@
  */
 package com.acooly.module.mybatis;
 
+import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.module.ds.JDBCAutoConfig;
@@ -52,7 +53,7 @@ import static com.acooly.module.mybatis.MybatisProperties.PREFIX;
 @EnableConfigurationProperties({MybatisProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @AutoConfigureAfter(JDBCAutoConfig.class)
-public class MybatisAutoConfig implements ApplicationContextAware {
+public class MybatisAutoConfig  {
 
 
     @Autowired(required = false)
@@ -60,8 +61,6 @@ public class MybatisAutoConfig implements ApplicationContextAware {
 
     @Autowired
     private ResourceLoader resourceLoader;
-
-    private ApplicationContext applicationContext;
 
     @Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource,
@@ -74,7 +73,7 @@ public class MybatisAutoConfig implements ApplicationContextAware {
             factory.setConfigLocation(
                     this.resourceLoader.getResource(properties.getConfigLocation()));
         }
-        Map<String, Interceptor> beansOfType = applicationContext.getBeansOfType(Interceptor.class);
+        Map<String, Interceptor> beansOfType = Apps.getApplicationContext().getBeansOfType(Interceptor.class);
         if (!ObjectUtils.isEmpty(beansOfType)) {
             Interceptor[] interceptors = beansOfType.values().toArray(new Interceptor[0]);
             AnnotationAwareOrderComparator.sort(interceptors);
@@ -156,8 +155,5 @@ public class MybatisAutoConfig implements ApplicationContextAware {
         return new ExInterceptor();
     }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
+
 }

@@ -461,7 +461,7 @@ public abstract class AbstractStandardEntityController<
         String message = null;
 
         // 猜测是MYSQL的唯一索引错误
-        if (Strings.containsIgnoreCase(message, "sql") && Strings.containsIgnoreCase(message, "Duplicate")) {
+        if (Strings.containsIgnoreCase(message, "Duplicate")) {
             String msg = Strings.substringAfter(message, "Duplicate");
             String value = Regexs.finder(Regexs.CommonRegex.QUITATION, msg);
             message = "违反唯一性，值(" + (value != null ? "[" + value + "]" : "") + ")已经存在";

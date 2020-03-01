@@ -3,6 +3,7 @@ package com.acooly.module.tenant.core;
 import com.acooly.core.utils.StringUtils;
 import java.util.concurrent.Callable;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 
 /**
  * z Zhouxi O_o
@@ -12,6 +13,9 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class TenantContext {
+
+
+    public static final String TENANT_ID = "tenantId";
 
     /**
      * 请求来的放入其中
@@ -54,10 +58,12 @@ public class TenantContext {
             try {
                 if (!StringUtils.isEmpty(tenantId)) {
                     set(tenantId);
+                    MDC.put("tid", tenantId);
                 }
                 r.run();
             } finally {
                 remove();
+                MDC.clear();
             }
         };
     }
@@ -71,10 +77,12 @@ public class TenantContext {
             try {
                 if (!StringUtils.isEmpty(tenantId)) {
                     set(tenantId);
+                    MDC.put("tid", tenantId);
                 }
                 return c.call();
             } finally {
                 remove();
+                MDC.clear();
             }
         };
     }

@@ -6,12 +6,18 @@ import com.acooly.module.ds.JDBCAutoConfig;
 import com.acooly.module.dubbo.MDCFilter;
 import com.acooly.module.dubbo.RequestContextFilter;
 import com.acooly.module.event.EventBus;
+import com.acooly.module.scheduler.SchedulerAutoConfig;
+import com.acooly.module.scheduler.executor.LocalTaskExecutor;
+import com.acooly.module.scheduler.job.QuartzJob;
 import com.acooly.module.tenant.cache.DefaultKeySerializerX;
 import com.acooly.module.tenant.ds.JDBCAutoConfigX;
 import com.acooly.module.tenant.dubbo.MDCFilterX;
 import com.acooly.module.tenant.dubbo.RequestContextFilterX;
 import com.acooly.module.tenant.event.AdviceX;
 import com.acooly.module.tenant.event.EventBusX;
+import com.acooly.module.tenant.scheduler.LocalTaskExecutorX;
+import com.acooly.module.tenant.scheduler.QuartzJobX;
+import com.acooly.module.tenant.scheduler.SchedulerAutoConfigX;
 import com.acooly.module.tenant.threadpool.ThreadPoolAutoConfigX;
 import com.acooly.module.threadpool.ThreadPoolAutoConfig;
 import net.bytebuddy.ByteBuddy;
@@ -56,6 +62,17 @@ public class TenantTransformer implements Retransformer {
                 .make().load(ThreadPoolAutoConfig.class.getClassLoader(),
                 ClassReloadingStrategy.fromInstalledAgent());
 
+        byteBuddy.redefine(LocalTaskExecutorX.class).name(LocalTaskExecutor.class.getName())
+                .make().load(LocalTaskExecutor.class.getClassLoader(),
+                ClassReloadingStrategy.fromInstalledAgent());
+
+        byteBuddy.redefine(QuartzJobX.class).name(QuartzJob.class.getName())
+                .make().load(QuartzJob.class.getClassLoader(),
+                ClassReloadingStrategy.fromInstalledAgent());
+
+        byteBuddy.redefine(SchedulerAutoConfigX.class).name(SchedulerAutoConfig.class.getName())
+                .make().load(SchedulerAutoConfig.class.getClassLoader(),
+                ClassReloadingStrategy.fromInstalledAgent());
 
 
     }

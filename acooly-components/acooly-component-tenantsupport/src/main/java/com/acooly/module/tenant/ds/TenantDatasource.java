@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -29,6 +30,9 @@ public class TenantDatasource implements DataSource, Closeable {
      */
     private Map<String, DruidDataSource> tenantDataSourceMap = new HashMap<>();
 
+    public Map<String, DruidDataSource> getTenantDataSourceMap() {
+        return Collections.unmodifiableMap(tenantDataSourceMap);
+    }
 
     public void registerTenantDataSource( String tenantId, DruidDataSource dataSource ) {
         if (StringUtils.isEmpty(tenantId)) {

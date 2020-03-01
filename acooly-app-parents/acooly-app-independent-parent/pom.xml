@@ -274,6 +274,82 @@
                 <version>5.0.0-SNAPSHOT</version>
             </dependency>
 
+            <!-- Portlets组件 -->
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-portlets-feedback-client</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-portlets-feedback-core</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-portlets-feedback-openapi</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-portlets-fqa-client</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-portlets-fqa-core</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-portlets-fqa-openapi</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-portlets-comment-client</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-portlets-comment-core</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-portlets-comment-openapi</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-portlets-siteconfig</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-portlets-alog-client</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-portlets-alog-core</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-portlets-alog-openapi</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-portlets-alog-analysis</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <!-- 工具 -->
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-coder</artifactId>

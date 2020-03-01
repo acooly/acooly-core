@@ -459,15 +459,16 @@ public abstract class AbstractStandardEntityController<
     protected String getExceptionMessage(String action, Exception e) {
         // 数据操作异常
         String message = null;
-        if (DataAccessException.class.isAssignableFrom(e.getClass()) || getSqlException(e) != null) {
-            message = "数据访问异常,请重试或联系管理员";
-        }
+
         // 猜测是MYSQL的唯一索引错误
-        if (Strings.containsIgnoreCase(message, "sql") && Strings.containsIgnoreCase(message, "Duplicate")) {
+        if (Strings.containsIgnoreCase(message, "Duplicate")) {
             String msg = Strings.substringAfter(message, "Duplicate");
             String value = Regexs.finder(Regexs.CommonRegex.QUITATION, msg);
             message = "违反唯一性，值(" + (value != null ? "[" + value + "]" : "") + ")已经存在";
+        } else if (DataAccessException.class.isAssignableFrom(e.getClass()) || getSqlException(e) != null) {
+            message = "数据访问异常,请重试或联系管理员";
         }
+
         if (Strings.isBlank(message)) {
             message = e.getMessage();
         }

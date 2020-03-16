@@ -64,6 +64,7 @@ public class SchedulerAutoConfigX {
         jobFactory.setApplicationContext(applicationContext);
         return jobFactory;
     }
+
     @Bean
     public SchedulerFactoryBean schedulerFactoryBean( DataSource dataSource, JobFactory jobFactory )
             throws IOException {

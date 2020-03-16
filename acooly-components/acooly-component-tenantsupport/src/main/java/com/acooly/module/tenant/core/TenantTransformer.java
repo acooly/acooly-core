@@ -15,9 +15,12 @@ import com.acooly.module.tenant.dubbo.MDCFilterX;
 import com.acooly.module.tenant.dubbo.RequestContextFilterX;
 import com.acooly.module.tenant.event.AdviceX;
 import com.acooly.module.tenant.event.EventBusX;
+import com.acooly.module.tenant.ofile.FileAdviceX;
 import com.acooly.module.tenant.scheduler.LocalTaskExecutorX;
 import com.acooly.module.tenant.scheduler.QuartzJobX;
 import com.acooly.module.tenant.scheduler.SchedulerAutoConfigX;
+import com.acooly.module.tenant.security.CheckAdviceX;
+import com.acooly.module.tenant.security.LoginAdviceX;
 import com.acooly.module.tenant.threadpool.ThreadPoolAutoConfigX;
 import com.acooly.module.threadpool.ThreadPoolAutoConfig;
 import net.bytebuddy.ByteBuddy;
@@ -79,9 +82,23 @@ public class TenantTransformer implements Retransformer {
 
     @Override
     public AgentBuilder agentTransformer( AgentBuilder agentBuilder ) throws Throwable {
-        return agentBuilder.type(ElementMatchers.is(MessagePublication.class))
+        return agentBuilder
+                .type(ElementMatchers.is(MessagePublication.class))
                 .transform(( b, t, c, j ) ->
-                        b.visit(Advice.to(AdviceX.class).on(ElementMatchers.named("execute"))));
+                        b.visit(Advice.to(AdviceX.class).on(ElementMatchers.named("execute"))))
+                .type(ElementMatchers
+                        .named(LoginAdviceX.CLASS))
+                .transform(( b, t, c, j ) -> b.visit(Advice.to(LoginAdviceX.class)
+                        .on(ElementMatchers.named("executeLogin"))))
+                .type(ElementMatchers
+                        .named(CheckAdviceX.CLASS))
+                .transform(( b, t, c, j ) -> b.visit(Advice.to(CheckAdviceX.class)
+                        .on(ElementMatchers.named("isAccessAllowed"))))
+                .type(ElementMatchers
+                        .named(FileAdviceX.CLASS))
+                .transform(( b, t, c, j ) -> b.visit(Advice.to(FileAdviceX.class)
+                        .on(ElementMatchers.named("getStorageRoot"))));
+
 
     }
 }

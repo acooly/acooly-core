@@ -30,7 +30,7 @@ public class FileAdviceX {
         if (StringUtils.isEmpty(tenantId)) {
             throw new BusinessException("上下文中不存在tenantId，请先认证者登录");
         }
-        path = path + tenantId + File.separator;
+        path = path +File.separator+ tenantId + File.separator;
     }
 
 }

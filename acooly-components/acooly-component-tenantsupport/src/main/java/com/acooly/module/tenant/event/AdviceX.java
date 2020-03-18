@@ -16,6 +16,7 @@ import org.slf4j.MDC;
  */
 public class AdviceX {
 
+    public static final String CLASS="net.engio.mbassy.bus.MessagePublication";
 
     @OnMethodEnter
     public static void before( @This MessagePublication publication ) {

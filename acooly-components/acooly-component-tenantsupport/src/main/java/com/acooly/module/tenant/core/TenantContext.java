@@ -1,6 +1,9 @@
 package com.acooly.module.tenant.core;
 
 import com.acooly.core.utils.StringUtils;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -16,6 +19,13 @@ public class TenantContext {
 
 
     public static final String TENANT_ID = "tenantId";
+
+    private static Map<String,String> allTenant = new HashMap<>();
+
+
+    public static Map<String,String> getAllTenantId() {
+        return  Collections.unmodifiableMap(allTenant);
+    }
 
     /**
      * 请求来的放入其中

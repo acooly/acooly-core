@@ -27,6 +27,13 @@
 
     <dependency>
       <groupId>com.acooly</groupId>
+      <artifactId>acooly-component-ofile</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.acooly</groupId>
       <artifactId>acooly-component-scheduler</artifactId>
       <version>${project.parent.version}</version>
       <scope>provided</scope>

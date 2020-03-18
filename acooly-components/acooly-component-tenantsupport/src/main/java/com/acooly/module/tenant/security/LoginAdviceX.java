@@ -25,7 +25,7 @@ public class LoginAdviceX {
 
     @OnMethodEnter
     public static void before(
-            @Argument(value = 1, typing = Typing.DYNAMIC) ServletRequest request ) {
+            @Argument(value = 0, typing = Typing.DYNAMIC) ServletRequest request ) {
         String tenantId = request.getParameter("tenantId");
         if (StringUtils.isEmpty(tenantId)) {
             throw new BusinessException("登录请求中不存在 tenantId ");
@@ -37,9 +37,10 @@ public class LoginAdviceX {
     }
 
     @OnMethodExit
-    public static void before( @Argument(value = 1, typing = Typing.DYNAMIC) ServletRequest request,
-            @Return(typing = Typing.DYNAMIC) boolean result ) {
-        if(result == true){
+    public static void after( @Argument(value = 0, typing = Typing.DYNAMIC) ServletRequest request,
+            @Return(typing = Typing.STATIC) Boolean result ) {
+
+        if(result == false){
             HttpSession session = ((HttpServletRequest)request).getSession();
             session.setAttribute("TENANT_ID",TenantContext.get());
         }

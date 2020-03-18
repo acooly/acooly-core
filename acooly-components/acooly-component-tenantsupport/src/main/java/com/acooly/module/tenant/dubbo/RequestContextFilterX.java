@@ -12,6 +12,7 @@ package com.acooly.module.tenant.dubbo;
 import com.acooly.core.common.facade.BizOrderBase;
 import com.acooly.core.common.facade.OrderBase;
 import com.acooly.core.common.facade.Orderable;
+import com.acooly.core.utils.StringUtils;
 import com.acooly.module.dubbo.RequestContext;
 import com.acooly.module.tenant.core.TenantContext;
 import com.alibaba.dubbo.common.Constants;
@@ -34,6 +35,10 @@ public class RequestContextFilterX implements Filter {
     public Result invoke( Invoker<?> invoker, Invocation inv ) throws RpcException {
         if (RpcContext.getContext().isProviderSide()) {
             try {
+                String tenantId = RpcContext.getContext().getAttachment("tenantId");
+                if (!StringUtils.isEmpty(tenantId)) {
+                    TenantContext.set(tenantId);
+                }
                 Object[] args = inv.getArguments();
                 if (args != null) {
                     for (Object arg : args) {

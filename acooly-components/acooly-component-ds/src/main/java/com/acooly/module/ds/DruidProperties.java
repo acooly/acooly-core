@@ -306,6 +306,8 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
 
         private Integer maxWait ;
 
+        private String alias ;
+
         /**
          * 检查表是否缺少某些字段，如果缺少，启动报错。
          */

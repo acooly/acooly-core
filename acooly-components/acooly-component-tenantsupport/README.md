@@ -38,8 +38,10 @@ acooly.ds.slowSqlThreshold=0
 
 acooly.ds.tenant.tenant1.url=jdbc:mysql://127.0.0.1:3306/t1
 acooly.ds.tenant.tenant1.maxActive=10
+acooly.ds.tenant.tenant1.alias=阿里    # 别名为必须配置项目，没有配置会造成启动失败
 acooly.ds.tenant.tenant2.url=jdbc:mysql://127.0.0.1:3306/t2
 acooly.ds.tenant.tenant2.min-idle=5
+acooly.ds.tenant.tenant1.alias=腾讯
 
 # 其中tenant1和tenant2 为约定的租户号（从openapi 透传过来的租户Id），每个租户的数据源亦可根据自身需要覆盖数据源的公共配置
 ```
@@ -56,6 +58,8 @@ com.acooly.core.common.facade.OrderBase.tenantId
 
 3、对其他可能涉及入口可通过显示调用`com.acooly.module.tenant.core.TenantContext.set`方法设置
 
+
+* 对于oflie 需要事先建立好好租户的文件路径如 `/mnt/media/tenant1`,`/mnt/media/tenant2`,
 
 
 

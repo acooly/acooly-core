@@ -13,7 +13,6 @@ import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.StringUtils;
 import com.acooly.module.tenant.core.TenantContext;
 import java.nio.charset.Charset;
-import lombok.Data;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 

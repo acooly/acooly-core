@@ -12,12 +12,17 @@ package com.acooly.module.tenant.ds;
 
 import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.common.dao.support.DataSourceReadyEvent;
+import com.acooly.core.utils.StringUtils;
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.module.ds.DruidProperties;
 import com.acooly.module.ds.DruidProperties.TenantDsProps;
 import com.acooly.module.ds.PagedJdbcTemplate;
 import com.acooly.module.ds.check.DBPatchChecker;
+import com.acooly.module.tenant.core.TenantContext;
 import com.alibaba.druid.pool.DruidDataSource;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import javax.sql.DataSource;
 import lombok.extern.slf4j.Slf4j;
@@ -55,10 +60,15 @@ public class JDBCAutoConfigX {
         }
         DataSource dataSource;
         TenantDatasource tenantDatasource = new TenantDatasource();
+        Map<String, String> tenantInfoMap = new HashMap<>();
         for (Entry<String, TenantDsProps> entry : druidProperties.getTenant().entrySet()) {
             DruidProperties copy = new DruidProperties();
+            if (StringUtils.isEmpty(entry.getValue().getAlias())) {
+                throw new RuntimeException("租户数据源:" + entry.getKey() + "没有指定别名");
+            }
+            tenantInfoMap.put(entry.getKey(), entry.getValue().getAlias());
             BeanCopier.copy(druidProperties, copy);
-            log.info("init tenant Datasource: {} ",entry.getKey());
+            log.info("init tenant Datasource: {} ", entry.getKey());
             DataSource source = Utils
                     .createDs(Utils.replaceDefaultProps(copy, entry.getValue()));
             if (druidProperties.isAutoCreateTable()) {
@@ -67,6 +77,14 @@ public class JDBCAutoConfigX {
             new DBPatchChecker(druidProperties).check(source);
             tenantDatasource.registerTenantDataSource(entry.getKey(),
                     (DruidDataSource) source);
+        }
+        try {
+            Field field = TenantContext.class.getDeclaredField("allTenant");
+            field.setAccessible(true);
+            field.set(null, tenantInfoMap);
+        } catch (Exception e) {
+            //nothing
+            log.error("error", e);
         }
         dataSource = tenantDatasource;
         return dataSource;

@@ -4,13 +4,12 @@ import static com.acooly.module.scheduler.SchedulerProperties.PREFIX;
 
 import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
+import com.acooly.module.scheduler.DefaultStandardDatabaseScriptIniter;
 import com.acooly.module.scheduler.SchedulerProperties;
 import com.acooly.module.scheduler.job.AutowiringSpringBeanJobFactory;
 import com.acooly.module.tenant.ds.TenantDatasource;
 import com.alibaba.druid.pool.DruidDataSource;
-import com.google.common.collect.Lists;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 import javax.sql.DataSource;
@@ -40,22 +39,7 @@ public class SchedulerAutoConfigX {
 
     @Bean
     public StandardDatabaseScriptIniter schedulerScriptIniter() {
-        return new StandardDatabaseScriptIniter() {
-            @Override
-            public String getEvaluateTable() {
-                return "scheduler_rule";
-            }
-
-            @Override
-            public String getComponentName() {
-                return "scheduler";
-            }
-
-            @Override
-            public List<String> getInitSqlFile() {
-                return Lists.newArrayList("scheduler", "scheduler_urls");
-            }
-        };
+        return new DefaultStandardDatabaseScriptIniter() ;
     }
 
     @Bean

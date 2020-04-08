@@ -21,10 +21,6 @@
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>acooly-common-facade</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
             <artifactId>acooly-core</artifactId>
         </dependency>
         <dependency>

@@ -94,7 +94,7 @@ public class JPAAutoConfig {
 
     /**
      * 自定义 EntityManagerFactory
-     * <p>
+     * <ORDER_PATTERN>
      * 目的：主要为扩展自定义默认的entity扫码路径
      */
     @Bean

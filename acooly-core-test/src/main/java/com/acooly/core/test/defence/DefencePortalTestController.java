@@ -1,6 +1,6 @@
 /**
  * acooly-core-parent
- * <p>
+ * <ORDER_PATTERN>
  * Copyright 2014 Acooly.cn, Inc. All rights reserved.
  *
  * @author zhangpu

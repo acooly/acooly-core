@@ -13,16 +13,17 @@ import java.util.List;
  * 访问在当前类声明的private/protected成员变量及private/protected函数的BeanUtils.
  * 注意,因为必须为当前类声明的变量,通过继承获得的protected变量将不能访问, 需要转型到声明该变量的类才能访问. 反射的其他功能请使用Apache Jarkarta Commons
  * BeanUtils
+ *
+ * @author zhangpu
  */
-@SuppressWarnings("rawtypes")
 public class BeanUtils {
     /**
      * 获取当前类声明的private/protected变量
      */
     public static Object getPrivateProperty(Object object, String propertyName)
             throws IllegalAccessException, NoSuchFieldException {
-        Assert.notNull(object);
-        Assert.hasText(propertyName);
+        Asserts.notNull(object);
+        Asserts.notEmpty(propertyName);
         Field field = object.getClass().getDeclaredField(propertyName);
         field.setAccessible(true);
         return field.get(object);
@@ -33,8 +34,8 @@ public class BeanUtils {
      */
     public static void setPrivateProperty(Object object, String propertyName, Object newValue)
             throws IllegalAccessException, NoSuchFieldException {
-        Assert.notNull(object);
-        Assert.hasText(propertyName);
+        Asserts.notNull(object);
+        Asserts.notEmpty(propertyName);
 
         Field field = object.getClass().getDeclaredField(propertyName);
         field.setAccessible(true);
@@ -46,8 +47,8 @@ public class BeanUtils {
      */
     public static Object invokePrivateMethod(Object object, String methodName, Object[] params)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        Assert.notNull(object);
-        Assert.hasText(methodName);
+        Asserts.notNull(object);
+        Asserts.notEmpty(methodName);
         Class[] types = new Class[params.length];
         for (int i = 0; i < params.length; i++) {
             types[i] = params[i].getClass();
@@ -67,8 +68,8 @@ public class BeanUtils {
 
     public static Field getDeclaredField(Object object, String propertyName)
             throws NoSuchFieldException {
-        Assert.notNull(object);
-        Assert.hasText(propertyName);
+        Asserts.notNull(object);
+        Asserts.notEmpty(propertyName);
         return getDeclaredField(object.getClass(), propertyName);
     }
 
@@ -79,8 +80,8 @@ public class BeanUtils {
      */
     public static Field getDeclaredField(Class clazz, String propertyName)
             throws NoSuchFieldException {
-        Assert.notNull(clazz);
-        Assert.hasText(propertyName);
+        Asserts.notNull(clazz);
+        Asserts.notEmpty(propertyName);
         for (Class superClass = clazz;
              superClass != Object.class;
              superClass = superClass.getSuperclass()) {
@@ -100,8 +101,8 @@ public class BeanUtils {
      */
     public static Object forceGetProperty(Object object, String propertyName)
             throws NoSuchFieldException {
-        Assert.notNull(object);
-        Assert.hasText(propertyName);
+        Asserts.notNull(object);
+        Asserts.notEmpty(propertyName);
 
         Field field = getDeclaredField(object, propertyName);
 
@@ -125,8 +126,8 @@ public class BeanUtils {
      */
     public static void forceSetProperty(Object object, String propertyName, Object newValue)
             throws NoSuchFieldException {
-        Assert.notNull(object);
-        Assert.hasText(propertyName);
+        Asserts.notNull(object);
+        Asserts.notEmpty(propertyName);
 
         Field field = getDeclaredField(object, propertyName);
         boolean accessible = field.isAccessible();
@@ -144,8 +145,8 @@ public class BeanUtils {
      */
     public static Object getDeclaredProperty(Object object, String propertyName)
             throws IllegalAccessException, NoSuchFieldException {
-        Assert.notNull(object);
-        Assert.hasText(propertyName);
+        Asserts.notNull(object);
+        Asserts.notEmpty(propertyName);
 
         Field field = getDeclaredField(object, propertyName);
         return getDeclaredProperty(object, field);
@@ -156,8 +157,8 @@ public class BeanUtils {
      */
     public static Object getDeclaredProperty(Object object, Field field)
             throws IllegalAccessException {
-        Assert.notNull(object);
-        Assert.notNull(field);
+        Asserts.notNull(object);
+        Asserts.notNull(field);
         boolean accessible = field.isAccessible();
         field.setAccessible(true);
         Object result = field.get(object);
@@ -170,8 +171,8 @@ public class BeanUtils {
      */
     public static void setDeclaredProperty(Object object, String propertyName, Object newValue)
             throws IllegalAccessException, NoSuchFieldException {
-        Assert.notNull(object);
-        Assert.hasText(propertyName);
+        Asserts.notNull(object);
+        Asserts.notEmpty(propertyName);
 
         Field field = object.getClass().getDeclaredField(propertyName);
         setDeclaredProperty(object, field, newValue);
@@ -206,8 +207,8 @@ public class BeanUtils {
      * 获得field的getter名称
      */
     public static String getAccessorName(Class type, String fieldName) {
-        Assert.hasText(fieldName, "FieldName required");
-        Assert.notNull(type, "Type required");
+        Asserts.notEmpty(fieldName, "FieldName required");
+        Asserts.notNull(type, "Type required");
         if ("boolean".equals(type.getName())) {
             return "is" + StringUtils.capitalize(fieldName);
         } else {

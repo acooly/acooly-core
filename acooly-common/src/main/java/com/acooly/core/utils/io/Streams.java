@@ -8,6 +8,7 @@
  */
 package com.acooly.core.utils.io;
 
+import com.google.common.base.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 
@@ -32,7 +33,6 @@ public class Streams extends IOUtils {
         if (closeables == null) {
             return;
         }
-
         for (final Closeable closeable : closeables) {
             closeQuietly(closeable);
         }

@@ -426,7 +426,7 @@ public class Image {
      * This makes the 2 images equal in presence. If jump=3 than every 3rd
      * pixel is replaced by the new image.
      * As the jump is higher this is how much the new image has less presence.
-     * <p>
+     * <ORDER_PATTERN>
      * ignoreColor is a color in the new image that will not be copied -
      * this is good where there is a background which you do not want to copy.
      *

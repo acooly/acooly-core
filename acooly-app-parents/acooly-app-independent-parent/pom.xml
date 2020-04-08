@@ -28,7 +28,7 @@
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
-                <artifactId>acooly-common-facade</artifactId>
+                <artifactId>acooly-common-type</artifactId>
                 <version>5.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>

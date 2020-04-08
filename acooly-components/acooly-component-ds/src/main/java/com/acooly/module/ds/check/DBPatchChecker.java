@@ -6,7 +6,6 @@ import com.acooly.module.ds.check.dic.Column;
 import com.acooly.module.ds.check.loader.TableLoader;
 import com.acooly.module.ds.check.loader.TableLoaderProvider;
 import com.google.common.base.Charsets;
-import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.ByteArrayResource;

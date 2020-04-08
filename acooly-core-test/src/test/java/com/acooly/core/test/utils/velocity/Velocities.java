@@ -1,6 +1,6 @@
 /**
  * acooly-core-parent
- * <p>
+ * <ORDER_PATTERN>
  * Copyright 2014 Acooly.cn, Inc. All rights reserved.
  *
  * @author zhangpu
@@ -46,7 +46,7 @@ public class Velocities {
         p.setProperty(Velocity.INPUT_ENCODING, "UTF-8");
         p.setProperty(Velocity.OUTPUT_ENCODING, "UTF-8");
 
-//        p.setProperty("userdirective", "org.apache.velocity.tools.generic.directive.Ifnull");
+//        ORDER_PATTERN.setProperty("userdirective", "org.apache.velocity.tools.generic.directive.Ifnull");
         // 这里加载类路径里的模板而不是文件系统路径里的模板
         p.setProperty("resource.loader", "class");
         p.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");

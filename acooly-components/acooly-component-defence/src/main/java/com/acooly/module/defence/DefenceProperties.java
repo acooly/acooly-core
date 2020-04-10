@@ -45,6 +45,8 @@ public class DefenceProperties {
             List<String> list = Lists.newArrayList();
             list.add("/gateway*");
             list.add("/ofile/upload.html");
+            list.add("/baidu/**");
+            list.add("/ofile/obs/**");
             list.add("/mock/gateway/**");
             exclusions.put("security", list);
         }

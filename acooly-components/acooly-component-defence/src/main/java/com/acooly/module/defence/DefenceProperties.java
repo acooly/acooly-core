@@ -44,9 +44,9 @@ public class DefenceProperties {
             // 已知的组建安全忽略
             List<String> list = Lists.newArrayList();
             list.add("/gateway*");
+            list.add("/ofile/upload");
             list.add("/ofile/upload.html");
             list.add("/baidu/**");
-            list.add("/ofile/obs/**");
             list.add("/mock/gateway/**");
             exclusions.put("security", list);
         }

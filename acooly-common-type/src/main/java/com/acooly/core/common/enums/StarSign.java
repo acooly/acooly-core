@@ -13,18 +13,18 @@ public enum StarSign implements Messageable {
     /**
      * 白羊座
      */
-    ARIES(newDate(3, 21), newDate(4, 20), "Aries", "白羊座"),
-    TAURUS(newDate(4, 21), newDate(5, 21), "Taurus", "金牛座"),
-    GEMINI(newDate(5, 22), newDate(6, 21), "Gemini", "双子座"),
-    CANCER(newDate(6, 22), newDate(7, 22), "Cancer", "巨蟹座"),
-    LEO(newDate(7, 23), newDate(8, 22), "Leo", "狮子座"),
-    VIRGO(newDate(8, 23), newDate(9, 23), "Virgo", "处女座"),
-    LIBRA(newDate(9, 24), newDate(10, 23), "Libra", "天秤座"),
-    SCORPIO(newDate(10, 24), newDate(11, 22), "Scorpio", "天蝎座"),
-    SAGITTARIUS(newDate(11, 23), newDate(12, 21), "Sagittarius", "人马座"),
-    CAPRICORN(newDate(12, 22), newDate(1, 20), "Capricorn", "摩羯座"),
-    AQUARIUS(newDate(1, 21), newDate(2, 19), "Aquarius", "水瓶座"),
-    PISCES(newDate(2, 20), newDate(3, 20), "Pisces", "双鱼座");
+    Aries(newDate(3, 21), newDate(4, 20), "Aries", "白羊座"),
+    Taurus(newDate(4, 21), newDate(5, 21), "Taurus", "金牛座"),
+    Gemini(newDate(5, 22), newDate(6, 21), "Gemini", "双子座"),
+    Cancer(newDate(6, 22), newDate(7, 22), "Cancer", "巨蟹座"),
+    Leo(newDate(7, 23), newDate(8, 22), "Leo", "狮子座"),
+    Virgo(newDate(8, 23), newDate(9, 23), "Virgo", "处女座"),
+    Libra(newDate(9, 24), newDate(10, 23), "Libra", "天秤座"),
+    Scorpio(newDate(10, 24), newDate(11, 22), "Scorpio", "天蝎座"),
+    Sagittarius(newDate(11, 23), newDate(12, 21), "Sagittarius", "人马座"),
+    Capricorn(newDate(12, 22), newDate(1, 20), "Capricorn", "摩羯座"),
+    Aquarius(newDate(1, 21), newDate(2, 19), "Aquarius", "水瓶座"),
+    Pisces(newDate(2, 20), newDate(3, 20), "Pisces", "双鱼座");
 
     private final Date from;
     private final Date to;
@@ -73,7 +73,7 @@ public enum StarSign implements Messageable {
             long formTimes = starSign.from.getTime();
             long toTimes = starSign.to.getTime();
 
-            if (StarSign.CAPRICORN.equals(starSign)) {
+            if (StarSign.Capricorn.equals(starSign)) {
                 if ((dating >= formTimes && dating <= newDate(12, 31).getTime())) {
                     return starSign;
                 }

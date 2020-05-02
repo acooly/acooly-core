@@ -11,33 +11,26 @@ acooly coder是为acooly框架配套的专用代码生成工具，设计目的�
 
 ## 2 工具获取
 
-### 2.1 cli工具
 
-acooly coder的发布包采用maven方式发布，目前只提供cli工具。
-仓库地址：http://acooly.cn/nexus/content/repositories/releases/
+v4以上坐标：
 
-工具包maven坐标（请根据需要更新对应的版本,当前版本：4.2.0-SNAPSHOT)
+```xml
+<dependency>
+	<groupId>com.acooly</groupId>
+	<artifactId>acooly-coder</artifactId>
+	<version>5.0.0-SNAPSHOT</version>
+</dependency>
+```
 
-### 2.2 工程内集成工具
+推荐使用说明：v4版本以上已经集成到项目的test中（AcoolyCoder.java），可直接main方式运行。
 
-v4.x坐标：
-
-		<dependency>
-	  		<groupId>com.acooly</groupId>
-	  		<artifactId>acooly-coder</artifactId>
-	  		<version>4.2.0-SNAPSHOT</version>
-		</dependency>
-
-
-使用说明：v4版本已经集成到项目的test中（Acoolycoder.java），可直接main方式运行。
-
-## 3 使用手册
+## 3 设计手册
 
 ### 3.1 框架约定
 
 acooly框架为了方便开发和设计，以开发经验为基础，对使用acooly进行了部分设计上的约定，通过约定降低设计和开发难度，提高效率。当然，这也符合流行的约定大于配置的设计理念。
 
-**程序结构约定**
+#### 3.1.1 程序结构约定
 
 工程结构完全按maven j2ee工程骨架，这个可以通过acooly-archetype生成后就可以清楚展现，程序模块的设计开发有一下基本约定。
 
@@ -45,24 +38,25 @@ acooly框架为了方便开发和设计，以开发经验为基础，对使用ac
 * 每个模块的程序分为domian（entity和领域domain合并），dao，service和controller四层。命名规则依次为:EntityDao,EntityService,EntityManageController(后台)和EntityPortalController
 * 视图层命名约定为：${entityName/domainName}[List].ftl/jsp为列表或主界面, ${entityName/domainName}[Show].ftl/jsp为查看视图，${entityName/domainName}[Edit].ftl/jsp为创建和编辑公用视图。
 
-**数据库设计**
+#### 3.1.2 数据库设计约定
 
 为了方便自动生成结构性代码，对数据库表结构设计进行部分约定，但都符合常规习惯。
 
-* 表名全部小写，不能以数字开头，必须添加备注，表名应该以模块或组件为前缀
-* 每个表必须有以id命名的物理主键，且为数字类型，如：mysql为 `id  bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID'`, oracle为number。
-* 列名称全部小写，不能以数字开头；如果存在多个自然单词的组合，使用下划线分隔(\_)。如："user\_type"
-* 列定义必须添加备注 （这个备注则为生成的页面及表单的label）
-* 每个表必须添加`create_time`和`update_time`两个日期时间类型的字段
-
+* **表定义：**表名全部小写，不能以数字开头，必须添加备注，表名应该以模块或组件为前缀
+* **物理ID：**每个表必须有以id命名的物理主键，且为数字类型，如：mysql为 `id  bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID'`, oracle为number。
+* **列定义：**列名称全部小写，不能以数字开头；如果存在多个自然单词的组合，使用下划线分隔(\_)。如："user\_type"，列定义必须添加备注 （备注规范请参考下一节详细介绍）
+* **固定字段：**每个表必须添加`create_time`和`update_time`两个日期时间类型的字段
 	mysql如下：
 	
-		create_time timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
-		update_time timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
+	```sql
+	create_time timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+	update_time timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
+	```	
 
 * 如果有选项类型的字段，其选项值使用类json格式写入列备注字段，自动生成工具会自动为该列对应的属性和页面生成选项。如：表列为：`user_type` ,备注可以为：`用户类型 {normal:普通,vip:高级}`
-* 特别注意，强烈要求选项类（自动生成枚举类的）字段项目全局唯一名称，否则会生成enum名称相同的枚举相互覆盖。
-* 特别注意，MySQL在5.5.3之后增加了这个utf8mb4的编码，mb4就是most bytes 4的意思，专门用来兼容四字节的unicode,utf8mb4是utf8的超集。强烈建议表的字符集设置为utf8mb4，在MariaDB情况下utf8会出现字符集不兼容，强烈建议字符集设置为utf8mb4，如：
+* **列名唯一：**强烈要求选项类（自动生成枚举类的）字段项目全局唯一名称，否则会生成enum名称相同的枚举相互覆盖。
+* **字符集：**，表的字符集选择：`utf8mb4/utf8mb4_general_ci`。
+	>MySQL在5.5.3之后增加了这个utf8mb4的编码，mb4就是most bytes 4的意思，专门用来兼容四字节的unicode,utf8mb4是utf8的超集。强烈建议表的字符集设置为utf8mb4，在MariaDB情况下utf8会出现字符集不兼容，强烈建议字符集设置为utf8mb4，如：
        
 	```sql
 	CREATE TABLE `cms_content_body` (
@@ -73,9 +67,95 @@ acooly框架为了方便开发和设计，以开发经验为基础，对使用ac
 	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='内容主体';
 	```
+	
+### 3.2 列备注增强设计
+
+默认情况下，备注只是用于生成的视图界面的label显示，但我们约定备注可设置类JSON格式，用于定于复杂的视图界面行为。
+
+#### 3.2.1 语法
+
+类JSON备注语法：
+
+```json
+{
+	title: '中文label名称',
+	type: '自定义数据类型，包括：money,percent,mobile...',
+	alias: '业务类型别名，空间已定义好的枚举。gender，whether，animal等'
+	// 当type="option"时，自定义的选项值
+	options: {
+		key1:'val1',
+		key2:'val2'
+	}
+}
+```
+> 注意：
+> 1. 备注JSON中的key可以没有单引号，但值必须有单引号，在有些数据库客户端软件中，无法输入英文单引号的情况，可输入中文单引号（工具兼容）
+> 2. 只有title是必选的。但是如果只有title,请直接写入备注，不用JSON格式。
+> 3. 类JSON结构备注不用换号。
+
+以下是关键属性说明。
+
+#### 3.2.2 自定义类型
+
+type：自定义的数据类型，用于定义前端BOSS生成时的界面显示和表单验证对应处理。取值和效果情况如下：
+
+|取值			|实体类型         |列表显示	          |表单         |备注
+|------------|----------------|----------------|------------|-----------
+| text       |String			|			       | 文本框     | 默认情况
+| option     |Enum	          |key对应的中文名           |下拉选择     |需要同时设置options的map结构
+| integer    |Integer		   |整数数字          |文本框：范围验证 |
+| money|Money|两位小数的财务货币格式（20,000.00）|文本框/mask/范围验证|注意：数据库类型定义为BIGINT，单位：分
+| percent|Integer|百分数|文本框/mask/范围0-100.00|数据库类型为int，存的是百分数。23.33表示23.33%
+| mobile|String|手机号码|文本框/mask/长度11字|
+|email|String|电邮|文本框/mask/格式和长度验证|
+|idcard|String|身份证号码|文本框/mask/格式和长度验证|
+|bankcard|String|银行卡号|文本框/mask/格式长度验证|
+|url|String|链接|文本框/mask/格式验证|
+|chinese|String|全中文内容|文本框/格式验证|
+|account|String|用户账户|文本框/mask/格式长度验证|字母开头，由字母，数字和下划线组成的字符串
 
 
-### 3.2 代码生成
+
+#### 3.2.3 内置枚举类型
+
+alisa：内置的Enum类型，常用的Enum类型框架已提供，为防止重复定义，可使用别名方式代替：`type:'option',options:{}`的自定义定义模式。如果定义了alias，则表示`type=option`具体取值如下。
+
+|取值			|枚举         	|名称	     |取值
+|------------|----------------|-----------|-----
+|whether	   |WhetherStatus	|是否开关	  |yes/no
+|simple		|SimpleStatus	   |简单状态     |enable/pause/disable
+|able        |AbleStatus      |开关状态     |enable/disable
+|gender	   |Gender			|性别	      |male/female
+|animal		|AnimalSign		|生效		   |十二生肖
+|star			|StarSign			|星座		   |星座
+|channel		|ChannelEnum		|渠道		   |WECHAT,WEB,ADNROID...
+
+#### 3.2.4 自定义选项
+
+自定义选项是通过列备注定义key/val结构的mapping，用于自动生成对应的枚举(或常量),已实现数据与label的分类和视图下拉选择。
+
+首先，兼容老版本的定义模式。即：直接在备注中定义label+类JSON的选项值模式。例如：
+
+类型 {normal:普通,vip:高级}		--> 自动生成枚举
+状态 {1:OK,2:禁用}				--> 生成常量列表
+
+>注意：老版语法中，类JSON的定义中值部分没有[单]引号
+
+最新版本的自定义选项遵循签名的语法定义，采用类JSON格式。
+
+* title：必选，label中文名
+* type：取值必须是option
+* options参数的值必选，是自定义mapping的定义（参考老版本定义），但值需要使用单引号(中英文都可以)
+
+例如：
+
+```json
+{title:'类型',type:'option',options:{normal:'普通',vip:’高级‘}}
+{title:'状态',type:'option',options:{1:'OK',2:'禁用'}}
+```
+
+
+## 4 代码生成
 
 自动代码生成的方案与目前流行的方式设计上是基本一致的。主要核心设计为：
 
@@ -87,46 +167,81 @@ acooly框架为了方便开发和设计，以开发经验为基础，对使用ac
 
 下面以一个案例来简单说明这个开发过程。
 
-#### 3.2.1 设计表
+### 4.1 设计表
 
-本案例中，我们以mysql为案例设计一个客户信息表，名称为:dm_customer, 表结构如下：
+
+本案例中，我们以mysql为案例设计一个客户信息表，名称为:acooly_coder_customer, 表结构如下：
 
 ```sql
-CREATE TABLE `dm_customer` (
+CREATE TABLE `acooly_coder_customer` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `username` varchar(255) NOT NULL COMMENT '用户名',
-  `age` int(11) NOT NULL COMMENT '年龄',
-  `birthday` datetime NOT NULL COMMENT '生日',
-  `gender` int(11) DEFAULT NULL COMMENT '性别 {1:男,2:女,3:人妖}',
-  `mail` varchar(64) DEFAULT NULL COMMENT '邮件',
-  `mobile_no` varchar(32) DEFAULT NULL COMMENT '手机号码',
-  `real_name` varchar(16) DEFAULT NULL COMMENT '姓名',
-  `idcard_no` varchar(18) DEFAULT NULL COMMENT '身份证号码',
+  `username` varchar(32) NOT NULL COMMENT '{title:’用户名’,type:’account’}',
+  `age` tinyint(4) DEFAULT NULL COMMENT '年龄',
+  `birthday` date NOT NULL COMMENT '生日',
+  `gender` varchar(16) NOT NULL COMMENT '{title:''性别’,alias: ‘gender’}',
+  `animal` varchar(16) DEFAULT NULL COMMENT '{title:’生肖’, alias: ‘animal’}',
+  `real_name` varchar(16) NOT NULL COMMENT '{title:’姓名’,type:’chinese’}',
+  `idcard_type` varchar(18) NOT NULL COMMENT '{title:’证件类型’, type:’option’,options:{cert:’身份证‘,pass:’护照‘,other:’其他‘}}',
+  `idcard_no` varchar(48) NOT NULL COMMENT '{title:’身份证号码’,type:’idcard’}',
+  `mobile_no` varchar(11) DEFAULT NULL COMMENT '{title:’手机号码’,type:’mobile’}',
+  `mail` varchar(64) DEFAULT NULL COMMENT '{title:’邮件’,type:’email’}',
+  `customer_type` varchar(16) DEFAULT NULL COMMENT '{title:’客户类型’, type:’option’,options:{normal:’普通‘,vip:’重要‘,sepc:’特别‘}}',
   `subject` varchar(128) DEFAULT NULL COMMENT '摘要',
-  `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态 {0:无效,1:有效}',
-  `customer_type` varchar(16) NOT NULL COMMENT '客户类型 {normal:普通,vip:重要,sepc:特别}',
-  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `content` text COMMENT '详情',
+  `done_ratio` int(11) DEFAULT NULL COMMENT '{title:’完成度‘,type:’percent’}',
+  `salary` int(11) DEFAULT NULL COMMENT '{title:’薪水’,type:’money’}',
+  `registry_channel` varchar(16) DEFAULT NULL COMMENT '{title:’注册渠道’, alias: ‘channel’}',
+  `push_adv` varchar(16) DEFAULT NULL COMMENT '{title:’推送广告’, alias:’whether’}',
+  `num_status` tinyint(4) DEFAULT NULL COMMENT '数字类型{1:A,2:B,3:C类型}',
+  `status` varchar(16) NOT NULL DEFAULT '1' COMMENT '{title:’状态’, alias:’simple’}',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
   `comments` varchar(255) DEFAULT NULL COMMENT '备注',
+  `website` varchar(128) DEFAULT NULL COMMENT '{title:’网址’,type:’url’}',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='acoolycoder测试';
 ```
+
 
 请将上面的表结构DLL在数据库中执行，生成本次演示的数据表。
 
 > 本案例基于本系列的第一篇文章《acooly框架一:archetype》，假设你已生成了工程，名称为acooly-demo，并建立数据库acooly，然后成功运行的基础上.
 
-#### 3.2.2 配置
+### 4.2 配置
 
 打开工具包后，你会看到根目录下有`acoolycoder.properties`文件，请打开进行配置。
 
 application.propertes
 
+#### 4.2.1 常用配置
+
+```ini
+# 数据库连接配置
+jdbc.driver=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://127.0.0.1:3306/acooly-coder
+jdbc.username=root
+jdbc.password=123456
+# 配置表明转换为实体名时，需要忽略的表前缀。例如配置：p_ 则表示p_customer(表名) -> Customer(实体类名)
+generator.tableToEntityIgnorPrefix=a_acooly_
+# 视图类型：ftlEasyboot/freemarker(默认)/jsp
+generator.viewType=ftlEasyboot
+# 管理界面的根目录
+generator.manage.path=/manage/demo
+# 代码作者
+generator.code.author=acooly
+# 代码版权
+generator.code.copyright=acooly.cn
+```
+
+>推荐使用常用配置
+
+#### 4.2.2 完整配置
+
 ```ini
 #[database connection configurations]
 ## [必填][mysql]
 jdbc.driver=com.mysql.jdbc.Driver
-jdbc.url=jdbc:mysql://localhost:3306/acooly?useUnicode=true&amp;characterEncoding=UTF-8
+jdbc.url=jdbc:mysql://localhost:3306/acooly
 jdbc.username=root
 jdbc.password=123456
 
@@ -136,7 +251,7 @@ generator.workspace=/Users/zhangpu/workspace/acooly4/acooly-coder/test
 # [必选]生成的模块代码的根包
 generator.rootPackage=com.ac.zhangpu
 # [可选]视图方案：freemarker（默认）,jsp
-generator.viewType=freemarker
+generator.viewType=ftlEasyboot
 # [可选]需要生成的可选模块(entity,dao和service是默认的) 可选: manage,portal,facade,api. 目前portal,facade和openapi在开发中不可用，多个模块采用逗号分隔。如：manage,facade
 generator.modules=manage
 # [可选]持久化方案(可选: jpa,mybatis，默认jpa)
@@ -155,53 +270,49 @@ generator.portal.path=/portal/demo
 generator.code.author=acooly
 # [可选]代码版权声明主体,默认:acooly.cn
 generator.code.copyright=acooly.cn
-
-# [可选]模板方案路径，默认设置为：classpath:/template/easyui
-generator.templatePath=classpath:/template/easyui
-# [可选]自定义数据类型映射,类JSON格式。格式{数据库数据类型1:java数据类型1（如果需要imports则需要完整包路径,...}
-# [可选]这里设置了映射后，会覆盖生成器默认的数据类型映射规则，如：{decimal:java.math.BigDecimal}
-generator.dataType.declare=
-
-#[maven project struction]
-generator.codePath=src/main/java
-generator.testPath=src/test/java
-generator.resourcePath=src/main/resources
-generator.webappPath=src/main/resources/META-INF/resources/WEB-INF/jsp
-generator.viewSuffix=.jsp
-
 ```
 
 完成配置后，请保持退出，准备运行工具生成代码
 
-#### 3.2.3 生成代码
+### 4.3 生成代码
 
 运行环境基础要求JDK1.8，本工具支持同时生成多张表到同一个模块。
 
-**工程内集成方式**
+#### 4.3.1 工程内Main方法
 
 如果你是通过acooly-archetype或mvna命令方式创建的新工程，在你的工程test模块下有对应的AcoolyCoder.java或acoolycode.properties文件，你可以直接按上面的配置说明调整配置后，Main方式运行AcoolyCoder.java生成代码。
 
->注意：AcoolyCode.java中代码设置的参数会覆盖acoolycode.properties的配置。
+>注意：AcoolyCode.java中代码设置的参数会覆盖acoolycode.properties的配置。你可以通过代码中的常量调整常用参数，代码中的设置优先级高于配置文件。
 
 
 ```java
-/**
- * 代码生成工具
- */
 public class AcoolyCoder {
+    // 生成代码的目标模块
+    static String MODULE_NAME = "acooly-coder-test";
+    // 生成代码的根包
+    static String ROOT_PACKAGE = "com.acooly.coder.test";
+    // 生成代码的管理视图相对路径
+    static String MANAGE_VIEW_PATH = "/manage/coder/";
+    // 配置表名转换为实体名时，需要忽略的表前缀。例如配置：p_ 则表示p_customer(表名) -> Customer(实体类名)
+    static String TABLE_IGNOR_PREFIX = "acooly_coder_";
+    // 生成代码的表
+    static String[] TABLES = {"acooly_coder_customer"};
+
+    /**
+     * 代码方式配置关键参数
+     * <p>
+     * 代码方式参数优先级高于配置文件
+     *
+     * @param args
+     */
     public static void main(String[] args) {
-        DefaultCodeGenerateService service = (DefaultCodeGenerateService) Generator.getGenerator();
-        // 设置生成代码的工程或模块路径
-        if (StringUtils.isBlank(service.getGenerateConfiguration().getWorkspace())) {
-            String workspace = getProjectPath() + "your-project-module-name";
-            service.getGenerateConfiguration().setWorkspace(workspace);
-        }
-        // 设置生成的代码的包路径
-        if (StringUtils.isBlank(service.getGenerateConfiguration().getRootPackage())) {
-            service.getGenerateConfiguration().setRootPackage(getRootPackage());
-        }
-        // 这里设置需要一次性生成到一个包下面的表名，可以参数数组。
-        service.generateTable("dm_customer");
+        CodeGenerateService service = Generator.getGenerator();
+        GenerateConfig config = GenerateConfig.INSTANCE();
+        config.setWorkspace(getProjectPath() + MODULE_NAME);
+        config.setManagePath(MANAGE_VIEW_PATH);
+        config.setTableToEntityIgnorPrefix(TABLE_IGNOR_PREFIX);
+        config.setRootPackage(ROOT_PACKAGE);
+        service.generateTable(config, TABLES);
     }
 
     public static String getProjectPath() {
@@ -210,18 +321,14 @@ public class AcoolyCoder {
         String projectPath = testModulePath.substring(0, testModulePath.lastIndexOf("/"));
         return projectPath + "/";
     }
-
-	 // 返回本次代码生成的目标包路径
-    private static String getRootPackage() {
-        return "com.qiudot.dassets.portal";
-    }
 }
-
 ```
 
+直接运行main方式就OK。
 
+#### 4.3.2 命令行方式
 
-**命令行方式**
+>该模式兼容V4版本，V5版本已废弃，请直接使用通过`acooly-type-*`骨架生成的工程的test模块中的Main方法方式运行。
 
 解压开自动生成工具，根目录下存在start.bat,start.sh等启动文件，如果你的windows，则可以直接cmd进入到当前目录，运行start.bat，根据提示输入需要自动生成的表名称，回车即可。
 
@@ -246,12 +353,12 @@ com.acooly.module.coder.generate.GenerateConfiguration@38294acb[
 
 生成成功后，一般情况，只需重新启动服务器，从controller中找到访问的URL，配置到权限管理系统则可以直接访问，完成开发的第一步。
 
-#### 3.2.4 运行查看效果
+### 4.4 运行查看效果
 
 OK，如果上步成功，请回到你的IDE及对应的模块，你应该看到在原来空的 src/main/java目录下存在了新生成的代码，并编译通过。同时在src/main/resources/META-INF/resource/jsp/manage/demo（jsp模式）或src/main/resources/templates（freemarker）下存在了该模块的管理界面。
 
 
-### 3.3 进阶
+## 5 进阶
 
 以上完成了一个acooly框架基础开发的案例，基本展示了acooly半自动代码生产开发模式。但在实际业务开发中这些远还不够，程序员根据实际业务的需求，还需要做很多工作，包括：多实体关联关系配置，业务逻辑服务编写和调用，页面的特殊定制等，但这些本应是程序员的职责，acooly框架提供的是把大量重复的工作自动化和工具化~，后续将逐步发布各种业务开发场景在前端和服务器端的开发说明，大量的组件能力说明~
 
@@ -261,7 +368,15 @@ OK，如果上步成功，请回到你的IDE及对应的模块，你应该看到
 * [管理后台开发指南](acooly-guide-boss.html)
 * [业务前台开发指南](acooly-guide-portal.html)
 
-## 4 更新说明
+## 6 更新说明
+
+
+### 5.0.0-SNAPSHOT(2020-05-02)
+
+该版本做了大量的升级和优化，主要在以下两方面。
+
+* 新增模板`ftlEasyboot`,用于提供基于adminlte3+bootstrap4的新表单界面。
+* 增强列备注设计能力，支持JSON格式配置特性，支持自定义类型和内置枚举指定。
 
 ### 4.2.0-SNAPSHOT.20190525
 

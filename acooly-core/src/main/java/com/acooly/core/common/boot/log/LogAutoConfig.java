@@ -101,9 +101,9 @@ public class LogAutoConfig {
 
             Pattern pattern = Pattern.COMMON;
             //online remove extract thread stack info
-            if (Env.isOnline()) {
-                return pattern.getPattern(needAnsi).replace(":%L", "");
-            }
+//            if (Env.isOnline()) {
+//                return pattern.getPattern(needAnsi).replace(":%L", "");
+//            }
             return pattern.getPattern(needAnsi);
         }
 

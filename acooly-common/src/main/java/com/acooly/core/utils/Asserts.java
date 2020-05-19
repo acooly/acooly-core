@@ -165,7 +165,7 @@ public class Asserts {
     }
 
     public static void isNull(Object object, String paramName, String message) {
-        if (object != null) {
+        if (object == null) {
             throw new ParameterException(paramName, message);
         }
     }

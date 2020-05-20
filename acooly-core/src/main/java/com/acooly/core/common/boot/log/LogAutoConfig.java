@@ -12,11 +12,12 @@ package com.acooly.core.common.boot.log;
 import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.google.common.collect.Maps;
-import java.util.Map;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Map;
 
 /**
  * @author qiubo
@@ -80,6 +81,11 @@ public class LogAutoConfig {
         private String msgReplace;
 
         /**
+         * 是否显示行号，该参数设置为True极耗性能，临时调整可开启
+         */
+        private boolean showRowNumber = false;
+
+        /**
          * 设置包名日志级别
          */
         private Map<String, String> level = Maps.newHashMap();
@@ -101,9 +107,9 @@ public class LogAutoConfig {
 
             Pattern pattern = Pattern.COMMON;
             //online remove extract thread stack info
-//            if (Env.isOnline()) {
-//                return pattern.getPattern(needAnsi).replace(":%L", "");
-//            }
+            if (Env.isOnline() && !showRowNumberEnable()) {
+                return pattern.getPattern(needAnsi).replace(":%L", "");
+            }
             return pattern.getPattern(needAnsi);
         }
 
@@ -115,6 +121,10 @@ public class LogAutoConfig {
             return EnvironmentHolder.get().getProperty("acooly.log.consoleEnable", Boolean.class, Boolean.TRUE);
         }
 
+        public static Boolean showRowNumberEnable() {
+            return (EnvironmentHolder.get().getProperty("acooly.log.showRowNumber", Boolean.class, Boolean.FALSE)
+                    || EnvironmentHolder.get().getProperty("acooly.log.show-row-number", Boolean.class, Boolean.FALSE));
+        }
 
         public enum Pattern {
             COMMON(MDC_LOG_PATTERN_WITH_GID, ANSI_MDC_LOG_PATTERN_WITH_GID),

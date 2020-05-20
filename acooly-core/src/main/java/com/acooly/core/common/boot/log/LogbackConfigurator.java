@@ -40,6 +40,7 @@ import java.util.Map;
 
 import static ch.qos.logback.core.util.FileSize.GB_COEFFICIENT;
 import static com.acooly.core.common.boot.log.LogAutoConfig.LogProperties.pattern;
+import static com.acooly.core.common.boot.log.LogAutoConfig.LogProperties.showRowNumberEnable;
 
 /**
  * @author qiubo
@@ -168,10 +169,8 @@ public class LogbackConfigurator {
                 fileAppender(appenderName, pattern, fileName, maxHistory);
 
         logbackAsyncAppender.addAppender(appender);
-        //线上环境不收集栈信息
-        if (Env.isOnline()) {
-            logbackAsyncAppender.setIncludeCallerData(false);
-        }
+        //是否开启收集栈信息
+        logbackAsyncAppender.setIncludeCallerData(Env.isOnline() && showRowNumberEnable());
         start(logbackAsyncAppender);
 
         return logbackAsyncAppender;

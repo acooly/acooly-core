@@ -15,8 +15,7 @@ import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.rpc.*;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -25,14 +24,15 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * @author qiubo@yiji.com
  */
+@Slf4j
 public class ProviderLogFilter implements Filter {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProviderLogFilter.class);
     private static final AtomicLong requestId = new AtomicLong();
     private static String providerLogEnableKey = "dubboProviderLogEnableKey";
 
     private static Map<String, Method> methodMap = Maps.newHashMap();
 
+    @Override
     public Result invoke(Invoker<?> invoker, Invocation inv) throws RpcException {
 
         String methodString = formatMethodGroup(invoker, inv);
@@ -53,13 +53,13 @@ public class ProviderLogFilter implements Filter {
                 }
                 sn.append(" ip:").append(context.getRemoteHost());
                 String msg = sn.toString();
-                logger.info("[DUBBO-{}]请求:{}", id, msg);
+                log.info("[DUBBO-P-{}] 请求:{}", id, msg);
             } catch (Exception t) {
-                logger.warn("Exception in ProviderLogFilter of service( {} -> {})", invoker, inv, t);
+                log.warn("Exception in ProviderLogFilter of service( {} -> {})", invoker, inv, t);
             }
 
             Result result = invoker.invoke(inv);
-            logger.info("[DUBBO-{}]响应:{} 耗时:{}ms", id, result, System.currentTimeMillis() - now);
+            log.info("[DUBBO-P-{}] 响应:{} 耗时:{}ms", id, result, System.currentTimeMillis() - now);
             return result;
         }
     }
@@ -104,7 +104,7 @@ public class ProviderLogFilter implements Filter {
                 method = anInterface.getMethod(methodName, inv.getParameterTypes());
                 methodMap.put(methodFullName, method);
             } catch (NoSuchMethodException e) {
-                logger.error("no such method {}.{}", anInterface.getName(), methodName, e);
+                log.error("no such method {}.{}", anInterface.getName(), methodName, e);
             }
         }
         return method;

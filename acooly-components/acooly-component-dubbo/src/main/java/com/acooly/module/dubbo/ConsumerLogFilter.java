@@ -12,8 +12,7 @@ package com.acooly.module.dubbo;
 import com.acooly.core.utils.ToString;
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.rpc.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -21,13 +20,14 @@ import static com.acooly.module.dubbo.ProviderLogFilter.isIgnore;
 
 /**
  * @author qiubo@yiji.com
+ * @author zhangpu : 切换日志和修正标准
  */
+@Slf4j
 public class ConsumerLogFilter implements Filter {
-
-    private static final Logger logger = LoggerFactory.getLogger(ConsumerLogFilter.class);
 
     private static final AtomicLong requestId = new AtomicLong();
 
+    @Override
     public Result invoke(Invoker<?> invoker, Invocation inv) throws RpcException {
 
         if (isIgnore(invoker, inv)) {
@@ -55,14 +55,13 @@ public class ConsumerLogFilter implements Filter {
                         .append(":")
                         .append(context.getRemotePort());
                 String msg = sn.toString();
-                logger.info("[DUBBO-{}]请求:{}", id, msg);
+                log.info("[DUBBO-C-{}] 请求:{}", id, msg);
             } catch (Throwable t) {
-                logger.warn(
-                        "Exception in ConsumerRequestLogFilter of service(" + invoker + " -> " + inv + ")", t);
+                log.warn("Exception in ConsumerRequestLogFilter of service(" + invoker + " -> " + inv + ")", t);
             }
 
             Result result = invoker.invoke(inv);
-            logger.info("[DUBBO-{}]响应:{} 耗时:{}ms", id, result, System.currentTimeMillis() - now);
+            log.info("[DUBBO-C-{}] 响应:{} 耗时:{}ms", id, result, System.currentTimeMillis() - now);
             return result;
         }
     }

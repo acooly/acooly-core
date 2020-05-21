@@ -49,7 +49,7 @@ public class ExceptionHandleFilter implements Filter<AppServiceContext> {
         if (e instanceof InvocationTargetException) {
             e = ((InvocationTargetException) e).getTargetException();
         }
-        logger.error("处理异常:", e);
+        logger.error("AppService Exception:{}, Message: {}", e.getClass().getSimpleName(), e.getMessage());
         Class<?> returnType = context.getMethodInvocation().getMethod().getReturnType();
         if (returnType != null && ResultBase.class.isAssignableFrom(returnType)) {
             Object result = instantiate(returnType);

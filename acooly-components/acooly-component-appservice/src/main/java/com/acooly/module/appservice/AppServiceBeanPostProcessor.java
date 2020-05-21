@@ -14,6 +14,7 @@ import com.acooly.module.appservice.ex.ExceptionHandler;
 import com.acooly.module.appservice.ex.ExceptionHandlers;
 import com.acooly.module.appservice.filter.AppServiceFilterChain;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.ProxyFactory;
@@ -61,15 +62,17 @@ public class AppServiceBeanPostProcessor
 
     private boolean checkBPP = false;
 
-    private List<String> scanPackageList;
+    private List<String> scanPackageList = Lists.newArrayList();
 
     public AppServiceBeanPostProcessor(AppServiceProperties appServiceProperties) {
         this.appServiceProperties = appServiceProperties;
-        scanPackageList =
-                Splitter.on(",")
-                        .trimResults()
-                        .omitEmptyStrings()
-                        .splitToList(appServiceProperties.getAppServiceScanPackage());
+        if (appServiceProperties.getScanPackages() != null &&
+                appServiceProperties.getScanPackages().size() > 0) {
+            scanPackageList.addAll(appServiceProperties.getScanPackages().values());
+        }
+        scanPackageList.addAll(Splitter.on(",").trimResults().omitEmptyStrings()
+                .splitToList(appServiceProperties.getAppServiceScanPackage()));
+
     }
 
     public static boolean isCglibProxyClass(Class clazz) {

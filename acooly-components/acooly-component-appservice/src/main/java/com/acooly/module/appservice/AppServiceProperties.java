@@ -12,10 +12,13 @@ package com.acooly.module.appservice;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.utils.validate.Validators;
 import com.acooly.module.appservice.ex.ExceptionHandler;
+import com.google.common.collect.Maps;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import javax.validation.constraints.NotBlank;
+import java.util.Map;
 
 /**
  * @author qiubo@yiji.com
@@ -33,6 +36,12 @@ public class AppServiceProperties {
      */
     @NotBlank
     private String appServiceScanPackage = Apps.getBasePackage();
+
+    /**
+     * 扩展annotation扫描路径
+     * 防止与`appServiceScanPackage`参数的冲突，增加该参与，用于在其他组件内非Apps.basePackage下定义扫描路径
+     */
+    private Map<String, String> scanPackages = Maps.newHashMap();
 
     /**
      * {@link ExceptionHandler} 实现类扫描路径

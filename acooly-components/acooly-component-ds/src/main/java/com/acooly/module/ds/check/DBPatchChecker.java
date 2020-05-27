@@ -104,11 +104,11 @@ public class DBPatchChecker {
 
     private String getMysqlschema(DataSource dataSource) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
-            String scheme =
-                    StringUtils.substringAfterLast(connection.getMetaData().getURL(), "/");
+            String scheme = connection.getMetaData().getURL();
             if (StringUtils.contains(scheme, "?")) {
                 scheme = StringUtils.substringBefore(scheme, "?");
             }
+            scheme = StringUtils.substringAfterLast(scheme, "/");
             return scheme;
         }
     }

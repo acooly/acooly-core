@@ -57,7 +57,7 @@ public class Profiles {
     }
 
     public static boolean isOnline() {
-        return getProfile() == Profile.online;
+        return getProfile() == Profile.online || getProfile() == Profile.prev;
     }
 
 

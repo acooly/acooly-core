@@ -49,6 +49,9 @@ public class AcoolyContoller extends AbstractStandardEntityController<App, AppSe
     public JsonResult jsonResult( HttpServletRequest request ) {
         JsonResult result = new JsonResult();
         result.appendData("a", "b");
+        if(true){
+            throw new RuntimeException();
+        }
         return result;
     }
 

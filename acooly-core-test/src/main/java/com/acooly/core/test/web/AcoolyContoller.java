@@ -11,21 +11,20 @@ package com.acooly.core.test.web;
 import com.acooly.core.common.web.AbstractStandardEntityController;
 import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.common.web.support.JsonResult;
-import com.acooly.core.test.domain.App;
+import com.acooly.core.test.core.entity.App;
+import com.acooly.core.test.core.service.AppService;
 import com.acooly.core.test.transformer.OriginClass;
 import com.acooly.core.utils.Money;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 /**
@@ -37,19 +36,16 @@ import java.util.Date;
 @RequestMapping("/test/acooly")
 public class AcoolyContoller extends AbstractStandardEntityController<App, AppService> {
 
-    @Autowired
-    private AppService appService;
-
 
     @Autowired
     private OriginClass origin;
 
     @ResponseBody
     @RequestMapping("jsonResult")
-    public JsonResult jsonResult( HttpServletRequest request ) {
+    public JsonResult jsonResult(HttpServletRequest request) {
         JsonResult result = new JsonResult();
         result.appendData("a", "b");
-        if(true){
+        if (true) {
             throw new RuntimeException();
         }
         return result;
@@ -62,17 +58,8 @@ public class AcoolyContoller extends AbstractStandardEntityController<App, AppSe
     }
 
 
-    @ResponseBody
-    @RequestMapping("trans")
-    public String trans( HttpServletRequest request, HttpServletResponse response, Model model )
-            throws Exception {
-        // ttt(request, response, model);
-        appService.doit(request, response, model);
-        return "sss";
-    }
-
     @Transactional(rollbackFor = {Exception.class})
-    public void ttt( HttpServletRequest request, HttpServletResponse response, Model model )
+    public void ttt(HttpServletRequest request, HttpServletResponse response, Model model)
             throws Exception {
         App s = new App();
         s.setDisplayName("sss");
@@ -82,7 +69,6 @@ public class AcoolyContoller extends AbstractStandardEntityController<App, AppSe
         s.setUserId(32323L);
         s.setParentAppId(121212L);
         s.setPrice(new Money(0));
-
         getEntityService().save(s);
         doList(request, response, model);
 
@@ -90,7 +76,7 @@ public class AcoolyContoller extends AbstractStandardEntityController<App, AppSe
 
     @ResponseBody
     @RequestMapping("jsonEntityResult")
-    public JsonEntityResult<App> jsonEntityResult( HttpServletRequest request ) {
+    public JsonEntityResult<App> jsonEntityResult(HttpServletRequest request) {
         JsonEntityResult<App> result = new JsonEntityResult();
         App app = new App();
         app.setDisplayName("张浦");

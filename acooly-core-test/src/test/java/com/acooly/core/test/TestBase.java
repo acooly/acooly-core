@@ -16,7 +16,7 @@ import com.acooly.module.test.AppWebTestBase;
  * @author qiubo@yiji.com
  */
 public abstract class TestBase extends AppWebTestBase {
-    protected static final String PROFILE = "dev";
+    protected static final String PROFILE = "sdev";
 
     static {
         Apps.setProfileIfNotExists(PROFILE);

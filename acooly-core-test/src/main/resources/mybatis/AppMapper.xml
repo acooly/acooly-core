@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.acooly.core.test.core.dao.AppDao">
+
+    <resultMap id="appResultMap" type="com.acooly.core.test.core.entity.App">
+        <id property="id" column="app_id"/>
+        <result property="createTime" column="app_create_time"/>
+        <result property="updateTime" column="app_update_time"/>
+        <result property="displayName" column="app_display_name"/>
+        <result property="name" column="app_name"/>
+        <result property="parentAppId" column="app_parent_app_id"/>
+        <result property="parentId" column="app_parent_id"/>
+        <result property="rawAddTime" column="app_raw_add_time"/>
+        <result property="rawUpdateTime" column="app_raw_update_time"/>
+        <result property="type" column="app_type"/>
+        <result property="userId" column="app_user_id"/>
+        <result property="price" column="app_price"/>
+    </resultMap>
+
+    <sql id="appSqlSelect">
+            app.id as app_id,
+            app.create_time as app_create_time,
+            app.update_time as app_update_time,
+            app.display_name as app_display_name,
+            app.name as app_name,
+            app.parent_app_id as app_parent_app_id,
+            app.parent_id as app_parent_id,
+            app.raw_add_time as app_raw_add_time,
+            app.raw_update_time as app_raw_update_time,
+            app.type as app_type,
+            app.user_id as app_user_id,
+            app.price as app_price
+    </sql>
+
+</mapper>

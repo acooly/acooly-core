@@ -1,6 +1,6 @@
 package com.acooly.core.test.utils;
 
-import com.acooly.core.test.domain.App;
+import com.acooly.core.test.core.entity.App;
 import com.acooly.core.test.utils.bean.MaskNode;
 import com.acooly.core.utils.Reflections;
 import lombok.extern.slf4j.Slf4j;

@@ -8,7 +8,7 @@
  */
 package com.acooly.core.test.utils;
 
-import com.acooly.core.test.domain.App;
+import com.acooly.core.test.core.entity.App;
 import com.acooly.core.utils.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -22,8 +22,7 @@ public class BeanUtilsTest {
 
     @Test
     public void testGetAccessor() {
-
-        System.out.println(BeanUtils.getAccessorName(App.class,"displayName"));
-        System.out.println(BeanUtils.getAccessorName(App.class,"enable"));
+        System.out.println(BeanUtils.getAccessorName(App.class, "displayName"));
+        System.out.println(BeanUtils.getAccessorName(App.class, "enable"));
     }
 }

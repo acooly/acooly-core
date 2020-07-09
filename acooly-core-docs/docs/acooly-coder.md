@@ -19,12 +19,15 @@ acooly coder是为acooly框架配套的专用代码生成工具，设计目的�
 
 安装并重新启动IDEA后，在你工程任何需要生成代码的包(package)上，右键菜单底部：Acooly -> AcoolyCoder
 
+<div>
+<iframe frameborder="none" width="384px" height="319px" src="https://plugins.jetbrains.com/embeddable/install/14462"></iframe>
+</div>
 
 <div>
-<div style="display:inline;"><img width="45%" src="res/coder/2.conn.jpg"></div>
-<div style="display:inline;"><img width="45%" src="res/coder/3.db.jpg"></div>
-<div style="display:inline;"><img width="45%" src="res/coder/4.table.png"></div>
-<div style="display:inline;"><img width="45%" src="res/coder/5.generate.png"></div>
+<div style="display:inline;"><img width="45%" src="/docs/res/coder/2.conn.jpg"></div>
+<div style="display:inline;"><img width="45%" src="/docs/res/coder/3.db.jpg"></div>
+<div style="display:inline;"><img width="45%" src="/docs/res/coder/4.table.png"></div>
+<div style="display:inline;"><img width="45%" src="/docs/res/coder/5.generate.png"></div>
 </div>
 
 

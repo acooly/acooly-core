@@ -7,22 +7,35 @@ acooly coder自动代码生成工具
 ====
 
 ## 1 简介
-acooly coder是为acooly框架配套的专用代码生成工具，设计目的为跟进acooly框架封装的最佳代码实践，快速生成业务程序的骨架代码和基本功能，最大程度的减少程序员的重复劳动及规范统一代码风格和规范~
+Acooly Coder是为Acooly框架配套的专用代码生成工具，设计目的为跟进Acooly框架封装的最佳代码实践，快速生成业务程序的骨架代码和基本功能，最大程度的减少程序员的重复劳动及规范统一代码风格和规范。主要特性：
+
+* 基于数据库表生成基于实体的端到端代码。
+* 生成的代码包括：实体，DAO(MyBatis/JPA)，服务层，管理控制器，管理页面(多条件排序查询,添加，编辑，删除，上移，置顶，导入，导出等)
+* 视图层的生成支持JSP和Freemarker两种模板界面
+* 支持批量生成多个表到一个模块
+* 支持去除表前缀和增加自定义实体前缀
+* 支持一套自定义的数据库列备注规范，可生成下拉选择,表单类型验证和mask
+* 可选：生成开放平台的API对应的message定义
+
 
 ## 2 工具获取
 
-### Idea插件
+### 2.1 Idea插件
 
 当前插件为发布到Intellij Idea的marketplace，请直接下载后，拖动到你的idea中即可完成安装。目前支持的版本：idea2018.1及以上版本。
 
-点击这里下载IDEA的AcoolyCoder插件: [acooly-coder-plugin-1.0.0](http://acooly.cn/nexus/content/groups/public/cn/acooly/acooly-coder-plugin/1.0.0/acooly-coder-plugin-1.0.0.zip)
+#### 2.2.1 下线安装
+
+<div>
+<iframe frameborder="none" width="230px" height="110px" src="https://plugins.jetbrains.com/embeddable/card/14462"></iframe>
+</div>
+
+点击这里下载IDEA的AcoolyCoder插件: [acooly-coder-plugin-1.0.2](http://acooly.cn/nexus/content/groups/public/cn/acooly/acooly-coder-plugin/1.0.0/acooly-coder-plugin-1.0.2.zip)
 
 安装并重新启动IDEA后，在你工程任何需要生成代码的包(package)上，右键菜单底部：Acooly -> AcoolyCoder
 
-<div>
-<iframe frameborder="none" width="384px" height="319px" src="https://plugins.jetbrains.com/embeddable/install/14462"></iframe>
-</div>
 
+#### 2.2.2 插件截图
 <div>
 <div style="display:inline;"><img width="45%" src="/docs/res/coder/2.conn.jpg"></div>
 <div style="display:inline;"><img width="45%" src="/docs/res/coder/3.db.jpg"></div>
@@ -396,6 +409,16 @@ OK，如果上步成功，请回到你的IDE及对应的模块，你应该看到
 
 ## 6 更新说明
 
+### 5.0.0-SNAPSHOT(2020-07-10)
+
+* 2020-07-10 - 优化日志输出格式精简，同时设置系统变量，切换freemarker的日志为JUL，与工具整体一致（依赖最少） - [zhangpu] 50f2ca7
+* 2020-07-10 - 新增generate.sso.enable参数，控制是否生成sso支持；修正list页面生成时initPage的参数未动态生成的问题。 - [zhangpu] 7c14678
+* 2020-06-11 - 增加IDEA插件的文档说明 - [zhangpu] a4362c4
+* 2020-06-10 - 特性增加：增加entityPrefix参数，用于配置生成的实体增加统一前缀 - [zhangpu] a7a873c
+* 2020-06-10 - 新增特性：代码生成过程事件处理（AcoolyCoderEvent和AcoolyCoderListener），用于支持界面端生成进度条的有效展示。 - [zhangpu] 3d213de
+* 2020-06-07 - 清理acooly-coder的冗余依赖，精简部署包大小 - [zhangpu] 4d6846a
+* 2020-05-09 - 修正DateTime和Date两种数据类型应对java的Date对象，但也能区分格式化输出。 - [zhangpu] ebc803a
+* 2020-05-08 - 调整Money类型的列表格式化为moneyFormatter - [zhangpu] 2192d9e
 
 ### 5.0.0-SNAPSHOT(2020-05-03)
 

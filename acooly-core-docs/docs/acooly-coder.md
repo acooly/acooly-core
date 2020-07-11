@@ -27,10 +27,10 @@ Acooly Coder是为Acooly框架配套的专用代码生成工具，设计目的�
 #### 2.2.1 下线安装
 
 <div>
-<iframe frameborder="none" width="230px" height="110px" src="https://plugins.jetbrains.com/embeddable/card/14462"></iframe>
+<button style="width: 200px;height:30px;font-size:14px;" type="button" onclick="window.open('https://plugins.jetbrains.com/embeddable/card/14462')">IntelliJ插件首页</button>
 </div>
 
-点击这里下载IDEA的AcoolyCoder插件: [acooly-coder-plugin-1.0.2](http://acooly.cn/nexus/content/groups/public/cn/acooly/acooly-coder-plugin/1.0.0/acooly-coder-plugin-1.0.2.zip)
+点击这里下载IDEA的AcoolyCoder插件: [acooly-coder-plugin-1.0.2-release.zip](http://acooly.cn/nexus/service/local/repositories/releases/content/cn/acooly/acooly-coder-plugin/1.0.2/acooly-coder-plugin-1.0.2-release.zip)
 
 安装并重新启动IDEA后，在你工程任何需要生成代码的包(package)上，右键菜单底部：Acooly -> AcoolyCoder
 

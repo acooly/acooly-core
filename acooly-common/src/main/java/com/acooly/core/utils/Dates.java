@@ -628,4 +628,16 @@ public class Dates {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 判断是否存日期
+     * （time部分为0）
+     *
+     * @param date
+     * @return
+     */
+    public static boolean isDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.HOUR_OF_DAY) == 0 && calendar.get(Calendar.MINUTE) == 0 && calendar.get(Calendar.SECOND) == 0;
+    }
 }

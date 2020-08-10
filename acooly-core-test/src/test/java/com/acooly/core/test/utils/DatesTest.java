@@ -50,4 +50,30 @@ public class DatesTest {
         log.info("subDate by {} hours: {}", size, Dates.format(Dates.subDate(now, size, TimeUnit.HOURS)));
     }
 
+
+    @Test
+    public void testGetDate() throws Exception {
+        Date date = Dates.parse("1982-07-15 23:11:00");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        Calendar calendarDate = Calendar.getInstance();
+        calendarDate.set(calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+        Date day = calendarDate.getTime();
+
+        log.info("getDate Date {} day: {}", Dates.format(date), Dates.format(day));
+    }
+
+    @Test
+    public void testIsDate() {
+        Date datetime = Dates.parse("1982-07-15 00:00:00");
+        log.info("Dates.isDate() Date {} isDate: {}", Dates.format(datetime), Dates.isDate(datetime));
+        Date date = Dates.parse("1982-07-15");
+        log.info("Dates.isDate() Date {} isDate: {}", Dates.format(date), Dates.isDate(date));
+        Date datetime1 = Dates.parse("1982-07-15 12:00:00");
+        log.info("Dates.isDate() Date {} isDate: {}", Dates.format(datetime1), Dates.isDate(datetime1));
+    }
+
+
 }

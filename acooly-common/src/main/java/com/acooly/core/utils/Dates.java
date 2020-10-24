@@ -2,6 +2,7 @@ package com.acooly.core.utils;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -639,5 +640,92 @@ public class Dates {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar.get(Calendar.HOUR_OF_DAY) == 0 && calendar.get(Calendar.MINUTE) == 0 && calendar.get(Calendar.SECOND) == 0;
+    }
+
+
+    /**
+     * 判断日期时间段是否重叠
+     *
+     * @param period
+     * @param periods
+     * @return
+     */
+    public static boolean isOverlap(Pair<Date, Date> period, List<Pair<Date, Date>> periods) {
+        for (Pair<Date, Date> p : periods) {
+            if (isOverlap(period, p)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isOverlap(Pair<Date, Date> period1, Pair<Date, Date> period2) {
+        return !(lt(period1.getRight(), period2.getLeft()) || gt(period1.getLeft(), period2.getRight()));
+    }
+
+    /**
+     * 判断日期是否在start和end之间
+     *
+     * @param date
+     * @param start
+     * @param end
+     * @return
+     */
+    public static boolean between(Date date, Date start, Date end) {
+        return gte(date, start) && lte(date, end);
+    }
+
+
+    /**
+     * 日期时间大于比较
+     * <p>
+     * left > right: true
+     *
+     * @param left
+     * @param right
+     * @return
+     */
+    public static boolean gt(Date left, Date right) {
+        return left.compareTo(right) > 0;
+    }
+
+    /**
+     * 日期时间大于等于比较
+     * <p>
+     * left >= right: true
+     *
+     * @param left
+     * @param right
+     * @return
+     */
+    public static boolean gte(Date left, Date right) {
+        return left.compareTo(right) >= 0;
+    }
+
+
+    /**
+     * 日期时间小于比较
+     * <p>
+     * left < right: true
+     *
+     * @param left
+     * @param right
+     * @return
+     */
+    public static boolean lt(Date left, Date right) {
+        return left.compareTo(right) < 0;
+    }
+
+    /**
+     * 日期时间小于等于比较
+     * <p>
+     * left <= right: true
+     *
+     * @param left
+     * @param right
+     * @return
+     */
+    public static boolean lte(Date left, Date right) {
+        return left.compareTo(right) <= 0;
     }
 }

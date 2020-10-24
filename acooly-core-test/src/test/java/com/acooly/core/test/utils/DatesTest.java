@@ -11,10 +11,13 @@ package com.acooly.core.test.utils;
 
 import com.acooly.core.utils.Dates;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
+import org.assertj.core.util.Lists;
 import org.junit.Test;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -75,5 +78,37 @@ public class DatesTest {
         log.info("Dates.isDate() Date {} isDate: {}", Dates.format(datetime1), Dates.isDate(datetime1));
     }
 
+
+    @Test
+    public void testCompare() {
+        Date datetime1 = Dates.parse("1982-07-15 00:00:00");
+        Date datetime11 = Dates.parse("1982-07-15 00:00:00");
+        Date datetime2 = Dates.parse("1982-07-18 12:00:00");
+        Date datetime22 = Dates.parse("1982-07-18 12:00:00");
+
+        log.info("Dates.gt({},{}) : {}", Dates.format(datetime1), Dates.format(datetime2), Dates.gt(datetime1, datetime2));
+        log.info("Dates.gte({},{}) : {}", Dates.format(datetime1), Dates.format(datetime11), Dates.gte(datetime1, datetime11));
+        log.info("Dates.gte({},{}) : {}", Dates.format(datetime2), Dates.format(datetime1), Dates.gte(datetime2, datetime1));
+
+        log.info("Dates.lt({},{}) : {}", Dates.format(datetime1), Dates.format(datetime2), Dates.lt(datetime1, datetime2));
+        log.info("Dates.lte({},{}) : {}", Dates.format(datetime2), Dates.format(datetime22), Dates.lte(datetime2, datetime22));
+        log.info("Dates.lte({},{}) : {}", Dates.format(datetime2), Dates.format(datetime1), Dates.lte(datetime2, datetime1));
+    }
+
+    @Test
+    public void testIsOverlap() {
+        Date start = Dates.parse("1982-07-15");
+        Date end = Dates.parse("1984-09-15");
+        Pair<Date, Date> period = Pair.of(start, end);
+
+        Pair<Date, Date> item = Pair.of(Dates.parse("1983-07-15"), Dates.parse("1986-07-15"));
+        List<Pair<Date, Date>> periods = Lists.newArrayList();
+        periods.add(item);
+
+        log.info("Dates.isOverlap: {}", Dates.isOverlap(period, item));
+
+
+
+    }
 
 }

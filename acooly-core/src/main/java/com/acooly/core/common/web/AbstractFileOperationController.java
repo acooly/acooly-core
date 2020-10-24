@@ -6,6 +6,7 @@ import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.core.utils.*;
 import com.acooly.core.utils.io.Streams;
+import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.core.utils.mapper.CsvMapper;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,10 +16,12 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -43,6 +46,9 @@ public abstract class AbstractFileOperationController<
     protected UploadConfig uploadConfig = new UploadConfig();
 
     private int defaultExportBatchSize = 1000;
+
+    @Resource(name = "mvcConversionService")
+    private ConversionService conversionService;
 
     /**
      * 批量导入保存模板数据基础实现
@@ -409,32 +415,47 @@ public abstract class AbstractFileOperationController<
 
     protected int doExportExcelPage(List<T> list, int startRow, Sheet sheet) throws Exception {
         int rowNum = startRow;
-        String value;
+        Object value;
         Row row;
         Cell cell;
         for (T entity : list) {
-            List<String> entityData = doExportEntity(entity);
+            List data = doExportEntity(entity);
             row = sheet.createRow(rowNum);
-            for (int cellNum = 0; cellNum < entityData.size(); cellNum++) {
-                value = Strings.trimToEmpty(entityData.get(cellNum));
+            for (int cellNum = 0; cellNum < data.size(); cellNum++) {
+                value = data.get(cellNum);
                 cell = row.createCell(cellNum);
-                // 简单特殊操作处理一些特殊的数字，不采用反射和类型判断处理。
-//                if (Strings.isNumber(value)) {
-//                    if (Strings.length(value) > 1
-//                            && Strings.startsWith(value, "0")
-//                            && !Strings.startsWith(value, "0.")) {
-//                        cell.setCellValue(value);
-//                    } else if (Strings.length(value) > 11) {
-//                        cell.setCellValue(value);
-//                    } else {
-//                        cell.setCellValue(Double.valueOf(value));
-//                    }
-//                } else {
-//                    cell.setCellValue(value);
-//                }
-                //防止出现excel科学计算法，都用string代替
-                cell.setCellValue(value);
+                // 空值直接返回
+                if (value == null) {
+                    cell.setCellType(CellType.BLANK);
+                    continue;
+                }
+                // Money转数字
+                if (value instanceof Money) {
+                    value = ((Money) value).getAmount();
+                }
+                // 日期处理
+                if (value instanceof Date) {
+                    if (Dates.isDate((Date) value)) {
+                        value = Dates.format((Date) value, Dates.CHINESE_DATE_FORMAT_SLASH);
+                    } else {
+                        value = Dates.format((Date) value);
+                    }
+                }
+                if (value instanceof Number) {
+                    cell.setCellType(CellType.NUMERIC);
+                    cell.setCellValue(conversionService.convert(value, Double.class));
+                } else {
+                    if (!(value instanceof String)) {
+                        value = conversionService.convert(value, String.class);
+                    }
+                    cell.setCellValue((String) value);
+                    int cellColumnWidth = (((String) value).getBytes("UTF-8").length + 1) * 256;
+                    if (cellColumnWidth > sheet.getColumnWidth(cellNum)) {
+                        sheet.setColumnWidth(cellNum, cellColumnWidth);
+                    }
+                }
             }
+
             rowNum = rowNum + 1;
         }
         return rowNum;
@@ -510,6 +531,10 @@ public abstract class AbstractFileOperationController<
         Set<String> simplePropertyNames = Reflections.getSimpleFieldNames(entity.getClass());
         String[] propertyNames = simplePropertyNames.toArray(new String[]{});
         return Reflections.invokeGetterToString(entity, propertyNames);
+    }
+
+    protected List<Object> doExportRow(T entity) {
+        return null;
     }
 
     /**

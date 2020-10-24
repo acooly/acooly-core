@@ -5,6 +5,7 @@ import com.acooly.core.utils.ToString;
 import lombok.Getter;
 import lombok.Setter;
 import org.assertj.core.util.Lists;
+import org.springframework.core.annotation.Order;
 
 import java.util.Date;
 import java.util.List;
@@ -20,12 +21,15 @@ public class MaskEntity {
     @ToString.Maskable
     String customXProperty = "123456789123456789";
 
+    @Order(1)
     @ToString.Maskable(maskType = Strings.MaskType.UserName)
-    String userName;
+    String userName = "zhangpu";
 
+    @Order(2)
     @ToString.Maskable(maskType = Strings.MaskType.IdCardNo)
     String idCardNo = "510221198209476371";
 
+    @Order(3)
     @ToString.Maskable(maskType = Strings.MaskType.MobileNo)
     String mobileNo = "13896177630";
 

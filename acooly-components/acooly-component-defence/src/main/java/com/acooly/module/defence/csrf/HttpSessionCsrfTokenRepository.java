@@ -23,6 +23,7 @@ import javax.servlet.http.HttpSession;
  * A {@link CsrfTokenRepository} that stores the {@link CsrfToken} in the {@link HttpSession}.
  *
  * @author Rob Winch
+ * @author zhangpu
  * @since 3.2
  */
 public final class HttpSessionCsrfTokenRepository implements CsrfTokenRepository {
@@ -32,10 +33,7 @@ public final class HttpSessionCsrfTokenRepository implements CsrfTokenRepository
 
     private String sessionAttributeName = DEFAULT_CSRF_TOKEN_ATTR_NAME;
 
-    /*
-     * (non-Javadoc)
-     * @see org.springframework.security.web.csrf.CsrfTokenRepository#saveToken(org.springframework.security.web.csrf.CsrfToken, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
+    @Override
     public void saveToken(CsrfToken token, HttpServletRequest request, HttpServletResponse response) {
         if (token == null) {
             HttpSession session = request.getSession(false);
@@ -48,9 +46,7 @@ public final class HttpSessionCsrfTokenRepository implements CsrfTokenRepository
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.springframework.security.web.csrf.CsrfTokenRepository#loadToken(javax.servlet.http.HttpServletRequest)
-     */
+    @Override
     public CsrfToken loadToken(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null) {
@@ -59,9 +55,5 @@ public final class HttpSessionCsrfTokenRepository implements CsrfTokenRepository
         return (CsrfToken) session.getAttribute(sessionAttributeName);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.springframework.security.web.csrf.CsrfTokenRepository#generateToken(javax.servlet.http.HttpServletRequest)
-     */
 
 }

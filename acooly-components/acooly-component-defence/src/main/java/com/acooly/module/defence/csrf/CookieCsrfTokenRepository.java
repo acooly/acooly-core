@@ -15,12 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author qiubo
+ * @author zhangpu
  */
 public class CookieCsrfTokenRepository implements CsrfTokenRepository {
 
     @Override
     public void saveToken(CsrfToken token, HttpServletRequest request, HttpServletResponse response) {
         Cookie tokenCookie = new Cookie(token.getParameterName(), token.getToken());
+        tokenCookie.setHttpOnly(true);
         tokenCookie.setPath(request.getContextPath() + "/");
         response.addCookie(tokenCookie);
     }

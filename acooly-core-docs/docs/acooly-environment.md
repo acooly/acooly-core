@@ -13,13 +13,13 @@ Acooly框架建议开发人员统一环境和工具，以提高效率和协作�
 
 使用maven最新版本（3.2以上即可）
 
-请下载并统一使用: [maven\_setting\_acooly.xml](res/maven/maven-settings-acooly.xml) 替换`maven`默认setting文件，IDE中的maven插件也请配置选择该配置文件
+请下载并统一使用: [maven\_setting\_acooly.xml](/docs/res/maven/maven-settings-acooly.xml) 替换`maven`默认setting文件，IDE中的maven插件也请配置选择该配置文件
 
 >注意：因目前主流的公共仓库都不支持nexus代理，maven\_setting\_acooly.xml文件已经升级（2020-11-09）为阿里云公共仓库+acooly私有仓库共用模式，请各团队进行下载最新的配置文件。
 
 ## 3. IDE
 
-推荐使用`IDEA`，并导入配置：[idea\_settings\_acooly.jar](res/ide/idea/idea_settings_acooly.jar)
+推荐使用`IDEA`，并导入配置：[idea\_settings\_acooly.jar](/docs/res/ide/idea/idea_settings_acooly.jar)
 
 >Eclipse建议使用STS插件，但我们最近几年使用的少，帮不了你。
 
@@ -40,7 +40,7 @@ Acooly框架提供的模板中内置了常规java文件的模板（注释）和�
 * Enum：Acooly框架约定所有业务开发中的枚举都必须实现Messageable接口，在创建时候，会自动生成对应的实现和帮助方法。
 * OpenApi：Acooly的OpenApi服务开发，自定义了很多annotaion，如果是开发OpenApi服务，请直接在新建类时选择：OpenApi，会少去很多手工工作量。但请注意：类名必须以ApiService结尾。如下图：
 
-	![](res/pic/env_new_openapi.jpg)
+	![](/docs/res/pic/env_new_openapi.jpg)
 
 
 ### 代码模板

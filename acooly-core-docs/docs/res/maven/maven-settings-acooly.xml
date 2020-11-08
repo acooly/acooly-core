@@ -30,17 +30,12 @@
 
     <mirrors>
         <mirror>
-            <id>acooly-mirror</id>
+            <id>aliyunmaven</id>
             <mirrorOf>central</mirrorOf>
-            <name>nexue repository mirror for acooly.</name>
-            <url>http://acooly.cn/nexus/content/groups/public</url>
-            <!-- 如果nexus服务要求密码认证才能访问或拉取源代码包（*-sources.jar）,则需要配置URL认证 -->
-            <!--
-            <url>http://${nexus.deployment.username}:${nexus.deployment.password}@acooly.cn/nexus/content/groups/public</url>
-            -->
+            <name>阿里云公共仓库</name>
+            <url>https://maven.aliyun.com/repository/public</url>
         </mirror>
     </mirrors>
-
 
     <profiles>
         <profile>
@@ -79,13 +74,35 @@
             </repositories>
         </profile>
 
-        <!-- 你的本地nexus服务配置 profiles, 一般分dev,online等 -->
+        <profile>
+            <id>aliyun</id>
+            <repositories>
+                <repository>
+                    <id>alimaven</id>
+                    <name>aliyun maven</name>
+                    <url>https://maven.aliyun.com/repository/central</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>alimaven</id>
+                    <name>aliyun maven</name>
+                    <url>https://maven.aliyun.com/repository/central</url>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
 
     </profiles>
 
     <!-- activeProfiles | List of profiles that are active for all builds. | -->
     <activeProfiles>
         <activeProfile>acooly</activeProfile>
+        <activeProfile>aliyun</activeProfile>
     </activeProfiles>
-
 </settings>

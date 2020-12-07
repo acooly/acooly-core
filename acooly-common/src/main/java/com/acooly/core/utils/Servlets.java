@@ -1,6 +1,7 @@
 package com.acooly.core.utils;
 
 import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.common.exception.CommonErrorCodes;
 import com.acooly.core.utils.conversion.StringToDateConverter;
 import com.acooly.core.utils.conversion.StringYuanToMoneyConverter;
 import com.google.common.collect.Lists;
@@ -49,6 +50,24 @@ public class Servlets {
         CONVERSION_SERVICE.addConverter(new StringYuanToMoneyConverter());
         CONVERSION_SERVICE.addConverter(new StringToDateConverter());
     }
+
+    /**
+     * 根据URL获取根服务路径
+     *
+     * @param urlString
+     * @return
+     */
+    public static String getServerRoot(String urlString) {
+        try {
+            URL url = new URL(urlString);
+            StringBuilder sb = new StringBuilder();
+            sb.append(url.getProtocol()).append("://").append(url.getAuthority());
+            return sb.toString();
+        } catch (Exception e) {
+            throw new BusinessException(CommonErrorCodes.PARAMETER_ERROR, "URL格式错误或解析错误");
+        }
+    }
+
 
     /**
      * 重定向(redirect)

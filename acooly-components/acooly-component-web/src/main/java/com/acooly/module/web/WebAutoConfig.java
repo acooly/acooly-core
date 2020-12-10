@@ -15,11 +15,9 @@ import com.acooly.module.web.filter.HttpsOnlyFilter;
 import com.acooly.module.web.formatter.DBMapFormatter;
 import com.acooly.module.web.formatter.MoneyFormatter;
 import com.acooly.module.web.freemarker.IncludePage;
-import com.acooly.module.web.freemarker.ShiroPrincipalTag;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.jagregory.shiro.freemarker.ShiroTags;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.MultiTemplateLoader;
 import freemarker.cache.TemplateLoader;
@@ -47,7 +45,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.FormContentFilter;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -143,7 +140,6 @@ public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware,
         attributes.put("xml_escape", new XmlEscape());
 
         attributes.put("includePage", new IncludePage());
-        attributes.put("shiroPrincipal", new ShiroPrincipalTag());
         String ssoEnable = System.getProperty("acooly.sso.freemarker.include");
         if (!StringUtils.isEmpty(ssoEnable)) {
             attributes.put("ssoEnable", Boolean.valueOf(ssoEnable));
@@ -261,8 +257,6 @@ public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware,
         freeMarkerConfigurer.getConfiguration().setTemplateLoader(new MultiTemplateLoader(templateLoaders.toArray(new TemplateLoader[]{})));
 
         configuration.setSharedVariable("includePage", new IncludePage());
-        configuration.setSharedVariable("shiroPrincipal", new ShiroPrincipalTag());
-        configuration.setSharedVariable("shiro", new ShiroTags());
         String ssoEnable = System.getProperty("acooly.sso.freemarker.include");
         if (!StringUtils.isEmpty(ssoEnable)) {
             configuration.setSharedVariable("ssoEnable", Boolean.valueOf(ssoEnable));

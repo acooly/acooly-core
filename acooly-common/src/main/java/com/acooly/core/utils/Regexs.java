@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 public class Regexs {
 
 
-    private static final int REGEX_GOURP_FIRST = 1;
+    private static final int REGEX_GROUP_FIRST = 1;
 
     /**
      * 判断正则匹配
@@ -45,7 +45,7 @@ public class Regexs {
     public static String finder(Pattern p, String text) {
         Matcher matcher = p.matcher(text);
         if (matcher.find()) {
-            return matcher.group(REGEX_GOURP_FIRST);
+            return matcher.group(REGEX_GROUP_FIRST);
         }
         return null;
     }
@@ -54,7 +54,7 @@ public class Regexs {
         Matcher matcher = p.matcher(text);
         List<String> result = Lists.newArrayList();
         while (matcher.find()) {
-            result.add(matcher.group(REGEX_GOURP_FIRST));
+            result.add(matcher.group(REGEX_GROUP_FIRST));
         }
         return result;
     }

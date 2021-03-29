@@ -34,9 +34,10 @@ public class OrderBase implements Orderable {
     @Length(min = 1, max = 64)
     private String gid;
 
-    @Length( max = 32)
+    @Length(max = 32)
     private String tenantId;
 
+    @Override
     public void check() {
         Validators.assertJSR303(this);
     }
@@ -46,41 +47,43 @@ public class OrderBase implements Orderable {
         return tenantId;
     }
 
-    public void setTenantId( String tenantId ) {
+    public void setTenantId(String tenantId) {
         this.tenantId = tenantId;
     }
 
-    public void checkWithGroup( Class<?>... groups ) {
+    public void checkWithGroup(Class<?>... groups) {
         Validators.assertJSR303(this, null, groups);
     }
 
+    @Override
     public String getPartnerId() {
         return partnerId;
     }
 
-    public void setPartnerId( String partnerId ) {
+    public void setPartnerId(String partnerId) {
         this.partnerId = partnerId;
     }
 
+    @Override
     public String getGid() {
         return gid;
     }
 
-    public void setGid( String gid ) {
+    public void setGid(String gid) {
         this.gid = gid;
     }
-
+    
     public OrderBase gid() {
         this.gid = Ids.gid();
         return this;
     }
 
-    public OrderBase gid( String gid ) {
+    public OrderBase gid(String gid) {
         this.gid = gid;
         return this;
     }
 
-    public OrderBase partnerId( String partnerId ) {
+    public OrderBase partnerId(String partnerId) {
         this.partnerId = partnerId;
         return this;
     }

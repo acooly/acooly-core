@@ -14,6 +14,8 @@ import com.acooly.core.utils.enums.ResultStatus;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.function.BiFunction;
+
 /**
  * @author qiubo@yiji.com
  * @author zhangpu on 2019-06-03: from方法存在无法强制向下转型的问题(保留在OpenApi服务层PageApiResponse使用from做转换)，新增with方法代替
@@ -41,6 +43,26 @@ public class PageResult<T> extends ResultBase implements DtoAble {
         result.setStatus(ResultStatus.success);
         return result;
     }
+
+    /**
+     * 把T类型PageInfo转换为S类型PageInfo后构造结果对象,同时支持每个成员实体转换后的后置函数处理
+     *
+     * @param pageInfo
+     * @param clazz
+     * @param function
+     * @param <T>
+     * @param <S>
+     * @return
+     */
+    public static <T, S> PageResult<S> from(PageInfo<T> pageInfo, Class<S> clazz, BiFunction<T, S, S> function) {
+        PageResult<S> result = new PageResult<>();
+        if (pageInfo != null) {
+            result.setDto(pageInfo.to(clazz, function));
+        }
+        result.setStatus(ResultStatus.success);
+        return result;
+    }
+
 
     public static <R extends PageResult<S>, S> R with(PageInfo<S> pageInfo, Class<R> clazz) {
         R result = null;

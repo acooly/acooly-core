@@ -1,10 +1,12 @@
 package com.acooly.core.common.dao.support;
 
+import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.google.common.collect.Lists;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.function.BiFunction;
 
 /**
  * 分页对象
@@ -149,7 +151,58 @@ public class PageInfo<T> implements Serializable {
                 pageResults, countOfCurrentPage, totalCount);
     }
 
+    /**
+     * 转换PageInfo<T>为PageInfo<E>（完整实现）
+     * <p>
+     * 一般使用场景为：从数据库查询出entity的PageInfo<T>转换为facade或接口层的DTO类型PageInfo<E>
+     * <li>内部自动BeanCopies</li>
+     * <li>可后置处理已经完成Bean Copy的DTO</li>
+     *
+     * @param clazz      DTO类型
+     * @param biFunction 转换后置处理函数
+     * @param <E>        DTO泛型
+     * @return DTO分页对象
+     */
+    public <E> PageInfo<E> to(final Class<E> clazz, BiFunction<T, E, E> biFunction) {
+        PageInfo<E> info = new PageInfo<>();
+        info.setTotalPage(this.totalPage);
+        info.setTotalCount(this.totalCount);
+        info.setCurrentPage(this.currentPage);
+        info.setCountOfCurrentPage(this.countOfCurrentPage);
+        if (pageResults != null && !pageResults.isEmpty()) {
+            boolean needConvert = !Collections3.getFirst(pageResults).getClass().equals(clazz);
+            List<E> list = Lists.newArrayListWithCapacity(this.pageResults.size());
+            for (T pageResult : pageResults) {
+                E e = null;
+                if (needConvert) {
+                    e = BeanCopier.copy(pageResult, clazz, BeanCopier.CopyStrategy.IGNORE_NULL);
+                } else {
+                    e = (E) pageResult;
+                }
+                if (biFunction != null) {
+                    e = biFunction.apply(pageResult, e);
+                }
+                list.add(e);
+            }
+            info.setPageResults(list);
+        } else {
+            info.setPageResults(Lists.<E>newArrayList());
+        }
+        return info;
+    }
 
+
+    /**
+     * 转换PageInfo&lt;T&gt;为PageInfo&lt;E&gt;
+     * 注意：废弃Boolean convert参数的重载方法，在新的基础方法中自动判断如果T和E不同类型则转换拷贝属性，
+     *
+     * @param clazz   DTO类型
+     * @param convert 是否转换
+     * @param <E>     DTO泛型
+     * @return DTO分页对象
+     * @see com.acooly.core.common.dao.support.PageInfo#to(Class, BiFunction)
+     */
+    @Deprecated
     public <E> PageInfo<E> to(final Class<E> clazz, Boolean convert) {
         PageInfo<E> info = new PageInfo<>();
         info.setTotalPage(this.totalPage);
@@ -171,12 +224,56 @@ public class PageInfo<T> implements Serializable {
         return info;
     }
 
+    /**
+     * 转换PageInfo<T>为PageInfo<E>,默认空后置处理
+     *
+     * @param clazz
+     * @param <E>
+     * @return
+     */
     public <E> PageInfo<E> to(final Class<E> clazz) {
-        return to(clazz, true);
+        return to(clazz, (T t, E e) -> {
+            return e;
+        });
     }
 
-
+    /**
+     * 自定义人工方式转换PageInfo<T>为PageInfo<E>
+     * <p>
+     * 废弃原因：使用Java1.8的Function代替自定义Function接口，不再支持JDK1.7
+     *
+     * @param function 转换函数
+     * @param <E>      DTO泛型
+     * @return DTO分页对象
+     */
+    @Deprecated
     public <E> PageInfo<E> to(Function<T, E> function) {
+        PageInfo<E> info = new PageInfo<>();
+        info.setTotalPage(this.totalPage);
+        info.setTotalCount(this.totalCount);
+        info.setCurrentPage(this.currentPage);
+        info.setCountOfCurrentPage(this.countOfCurrentPage);
+        if (pageResults != null && !pageResults.isEmpty()) {
+            List<E> list = Lists.newArrayListWithCapacity(this.pageResults.size());
+            for (T pageResult : pageResults) {
+                list.add(function.apply(pageResult));
+            }
+            info.setPageResults(list);
+        } else {
+            info.setPageResults(Lists.<E>newArrayList());
+        }
+        return info;
+    }
+
+    /**
+     * 自定义人工方式转换PageInfo<T>为PageInfo<E>
+     * 代替1.7的同参数重载方法
+     *
+     * @param function 转换函数
+     * @param <E>      DTO泛型
+     * @return DTO分页对象
+     */
+    public <E> PageInfo<E> to(java.util.function.Function<T, E> function) {
         PageInfo<E> info = new PageInfo<>();
         info.setTotalPage(this.totalPage);
         info.setTotalCount(this.totalCount);

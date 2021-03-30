@@ -9,18 +9,20 @@
  */
 package com.acooly.module.appservice.ex;
 
+import com.acooly.core.common.exception.CommonErrorCodes;
 import com.acooly.core.common.exception.OrderCheckException;
 import com.acooly.core.common.facade.ResultBase;
-import com.acooly.core.utils.enums.ResultStatus;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 /**
  * @author qiubo@yiji.com
+ * @author zhangpu
  */
 public class ConstraintViolationExceptionHandler
         implements ExceptionHandler<ConstraintViolationException> {
+
     @Override
     public void handle(ExceptionContext<?> context, ConstraintViolationException e) {
         OrderCheckException exception = new OrderCheckException();
@@ -29,8 +31,6 @@ public class ConstraintViolationExceptionHandler
                     constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
         }
         ResultBase res = context.getResponse();
-        res.setStatus(ResultStatus.failure);
-        res.setDetail(e.getMessage());
-        res.setCode(ResultStatus.failure.getCode());
+        res.setStatus(CommonErrorCodes.PARAMETER_ERROR, exception.getMessage());
     }
 }

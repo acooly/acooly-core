@@ -109,13 +109,16 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
         return detail;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     /**
      * 当status != ResultStatus.success抛出业务异常
      */
     public ResultBase throwIfNotSuccess() {
         if (!success()) {
-            throw new BusinessException(this.getDetail(), this.getCode());
+            throw new BusinessException(this.code(), this.message(), this.getDetail());
         }
         return this;
     }
@@ -126,7 +129,7 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
      */
     public ResultBase throwIfFailure() {
         if (status == ResultStatus.failure) {
-            throw new BusinessException(this.getDetail(), this.getCode());
+            throw new BusinessException(this.code(), this.message(), this.getDetail());
         }
         return this;
     }

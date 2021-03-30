@@ -10,6 +10,7 @@ import org.springframework.dao.DuplicateKeyException;
  */
 public class DuplicateKeyExceptionHandler implements ExceptionHandler<DuplicateKeyException> {
 
+    @Override
     public void handle(ExceptionContext<?> context, DuplicateKeyException e) {
         ResultBase res = context.getResponse();
         res.setStatus(ResultStatus.failure);

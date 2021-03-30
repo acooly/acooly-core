@@ -144,12 +144,27 @@ public class BusinessException extends RuntimeException implements Messageable {
         this.detail = cause.getMessage();
     }
 
+    @Deprecated
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+
     public String getCode() {
         return code;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public Messageable getErrorCode() {
+        return errorCode;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
+
+    public String getDetail() {
+        return detail;
     }
 
     @Override

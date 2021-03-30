@@ -126,7 +126,11 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
 
     /**
      * 当status == ResultStatus.failure抛出业务异常
+     * 废弃原因：尽可能不适用确定的错误码进行判断，非success和processing就是错误
+     *
+     * @see #throwIfNotSuccess()
      */
+    @Deprecated
     public ResultBase throwIfFailure() {
         if (status == ResultStatus.failure) {
             throw new BusinessException(this.code(), this.message(), this.getDetail());

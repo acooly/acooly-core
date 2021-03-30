@@ -15,6 +15,8 @@ import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.core.utils.mapper.BeanCopier;
 
 /**
+ * Facade基础返回参数
+ *
  * @author zhangpu
  */
 public class ResultBase extends LinkedHashMapParameterize<String, Object>
@@ -32,18 +34,23 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
      */
     private String code = ResultCode.SUCCESS.getCode();
 
+    private String message = ResultCode.SUCCESS.getMessage();
+
     private String detail = ResultCode.SUCCESS.getMessage();
 
 
     public void setStatus(Messageable status) {
         this.status = status;
         this.code = status.code();
+        this.message = status.message();
+        // 保留status.message()作为默认的detail，兼容老代码
         this.detail = status.message();
     }
 
     public void setStatus(Messageable status, String detail) {
         this.status = status;
         this.code = status.code();
+        this.message = status.message();
         this.detail = this.detail;
     }
 

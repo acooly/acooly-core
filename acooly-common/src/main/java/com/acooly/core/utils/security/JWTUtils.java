@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -19,11 +21,14 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * @author shuijing
  */
 @Slf4j
+@Component
 public class JWTUtils {
 
     public static final String KEY_TARGETURL = "targetUrl";
@@ -107,6 +112,11 @@ public class JWTUtils {
      */
     public static final String PROTOCOL_TYPE_JWT = "jwt";
 
+    /**
+     * 黑名单KEY
+     */
+    public static final String KEY_JTW_BLACKLIST = "sso_redis_cache:blacklist";
+
     public static final char SEPARATOR_CHAR = '.';
     /**
      * jwt 过期时间，单位分钟
@@ -127,11 +137,22 @@ public class JWTUtils {
     private static String aud = "boss";
     private static ObjectMapper objectMapper;
 
+    @Resource
+    private RedisTemplate redisTemplate;
+
+    private static JWTUtils jwtUtils;
+
     static {
         headerMap = new HashMap<>();
         headerMap.put(HEADER_KEY_TYP, PROTOCOL_TYPE_JWT);
         headerMap.put(HEADER_KEY_ALG, SignatureAlgorithm.HS256.getValue());
         objectMapper = new ObjectMapper();
+    }
+
+    @PostConstruct
+    public void init() {
+        jwtUtils = this;
+        jwtUtils.redisTemplate = this.redisTemplate;
     }
 
     public static String createJwt(String sub, String subjectStr) {
@@ -324,8 +345,24 @@ public class JWTUtils {
                 cookie.setDomain(domain);
                 cookie.setMaxAge(0);
                 Servlets.getResponse().addCookie(cookie);
+                JWTUtils.putBlackToken(cookie.getValue());
             }
         }
+    }
+
+    /**
+     * 是否存在黑名单中
+     * @param token
+     */
+    public static boolean isBlackToken(String token) {
+        SetOperations<K, V> kvSetOperations = jwtUtils.redisTemplate.opsForSet();
+        return kvSetOperations.isMember(KEY_JTW_BLACKLIST,token);
+    }
+
+    public static void putBlackToken(String token) {
+        SetOperations<K, V> kvSetOperations = jwtUtils.redisTemplate.opsForSet();
+        kvSetOperations.add(KEY_JTW_BLACKLIST,token);
+
     }
 
     public static String getDomainName() {

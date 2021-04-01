@@ -10,9 +10,10 @@ import io.jsonwebtoken.lang.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -21,14 +22,12 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author shuijing
  */
 @Slf4j
-@Component
 public class JWTUtils {
 
     public static final String KEY_TARGETURL = "targetUrl";
@@ -127,6 +126,7 @@ public class JWTUtils {
      * header
      */
     public static Map headerMap;
+
     /**
      * JWT 签发者 value
      */
@@ -136,23 +136,14 @@ public class JWTUtils {
      */
     private static String aud = "boss";
     private static ObjectMapper objectMapper;
-
-    @Resource
-    private RedisTemplate redisTemplate;
-
-    private static JWTUtils jwtUtils;
+    private static RedisTemplate redisTemplate;
 
     static {
         headerMap = new HashMap<>();
         headerMap.put(HEADER_KEY_TYP, PROTOCOL_TYPE_JWT);
         headerMap.put(HEADER_KEY_ALG, SignatureAlgorithm.HS256.getValue());
         objectMapper = new ObjectMapper();
-    }
 
-    @PostConstruct
-    public void init() {
-        jwtUtils = this;
-        jwtUtils.redisTemplate = this.redisTemplate;
     }
 
     public static String createJwt(String sub, String subjectStr) {
@@ -298,7 +289,9 @@ public class JWTUtils {
      * @return
      */
     public static boolean validateJwt(String jwt, String sub) {
-        if (sub == null) return false;
+        if (sub == null) {
+            return false;
+        }
         Claims claims = getClaims(jwt);
         String subject = claims.getSubject();
         long expTime = claims.getExpiration().getTime();
@@ -352,21 +345,35 @@ public class JWTUtils {
 
     /**
      * 是否存在黑名单中
+     *
      * @param token
      */
     public static boolean isBlackToken(String token) {
-        SetOperations<K, V> kvSetOperations = jwtUtils.redisTemplate.opsForSet();
-        return kvSetOperations.isMember(KEY_JTW_BLACKLIST,token);
+        Assert.notNull(redisTemplate, "redisTemplate为空，请检查redis配置");
+        SetOperations<String, String> kvSetOperations = redisTemplate.opsForSet();
+        return kvSetOperations.isMember(KEY_JTW_BLACKLIST, token);
     }
 
     public static void putBlackToken(String token) {
-        SetOperations<K, V> kvSetOperations = jwtUtils.redisTemplate.opsForSet();
-        kvSetOperations.add(KEY_JTW_BLACKLIST,token);
-
+        Assert.notNull(redisTemplate, "redisTemplate为空，请检查redis配置");
+        SetOperations<String, String> kvSetOperations = redisTemplate.opsForSet();
+        kvSetOperations.add(KEY_JTW_BLACKLIST, token);
+        redisTemplate.expire(KEY_JTW_BLACKLIST, 2, TimeUnit.HOURS);
     }
 
     public static String getDomainName() {
         return Servlets.getRequest().getServerName().replaceAll(".*\\.(?=.*\\.)", "");
+    }
+
+
+    /**
+     * 为了减少各种依赖，改为在security组件中为jwtutils注入RedisTemplate
+     *
+     * @param template
+     * @throws BeansException
+     */
+    public static void setRedisTemplate(RedisTemplate template) throws BeansException {
+        redisTemplate = template;
     }
 
     private static class JwtSigningKeyResolver extends SigningKeyResolverAdapter {

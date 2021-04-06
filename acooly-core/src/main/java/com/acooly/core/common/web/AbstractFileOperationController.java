@@ -822,7 +822,7 @@ public abstract class AbstractFileOperationController<
     protected static class UploadConfig {
         //1024 * 1024 * 32 = 33554432
         private long maxSize = 33554432;
-        private String allowExtentions = "txt,zip,csv,xls,xlsx,jpg,gif,png";
+        private String allowExtentions = "txt,zip,csv,xls,xlsx,pdf,jpg,jpeg,gif,png";
         private String storageRoot = System.getenv("java.tmp");
         private String storageNameSpace;
         private boolean useMemery = true;

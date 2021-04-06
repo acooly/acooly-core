@@ -4,12 +4,15 @@ import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityService;
+import com.acooly.core.common.web.support.FileUploadError;
 import com.acooly.core.utils.*;
 import com.acooly.core.utils.io.Streams;
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.core.utils.mapper.CsvMapper;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -25,6 +28,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -34,6 +38,7 @@ import java.util.*;
  * @param <M>
  * @author zhangpu
  */
+@Slf4j
 public abstract class AbstractFileOperationController<
         T extends Entityable, M extends EntityService<T>>
         extends AbstractOperationController<T, M> {
@@ -560,13 +565,14 @@ public abstract class AbstractFileOperationController<
         return fileName;
     }
 
+
     /**
      * 上传处理
      *
      * @param request
      * @return key --> 请求的表单参数名称, value ---> 上传结果
      */
-    protected Map<String, UploadResult> doUpload(HttpServletRequest request) throws Exception {
+    protected Map<String, UploadResult> doUpload(HttpServletRequest request) {
         Map<String, UploadResult> uploadResults = new HashMap<String, UploadResult>();
         MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
         MultiValueMap<String, MultipartFile> multipartFiles = multiRequest.getMultiFileMap();
@@ -583,7 +589,47 @@ public abstract class AbstractFileOperationController<
         return uploadResults;
     }
 
-    protected void loadUploadResult(HttpServletRequest request, String key, MultipartFile mfile, Map<String, UploadResult> uploadResults) throws Exception {
+    /**
+     * 上传文件并绑定到entity对应的属性
+     *
+     * <p>
+     * 规则约定：
+     * <li>文件上传表单名称命名为：${entity.propertyName}_uploadFile</li>
+     * <li>请设置uploadConfig上传的参数控制 @see #getUploadConfig()</li>
+     * </p>
+     *
+     * @param request
+     * @param entity
+     */
+    protected void doUpload(HttpServletRequest request, T entity) {
+        Map<String, UploadResult> uploadResults = doUpload(request);
+        if (Collections3.isEmpty(uploadResults.values())) {
+            return;
+        }
+        // 反射方式设置上传的path，可以根据项目情况手动调整为直接设值，效率更高。
+        // 规则：文件上传的属性的表单名称的命名规则为：${propertyName}File
+        for (UploadResult uploadResult : uploadResults.values()) {
+            String paramName = uploadResult.getParameterName();
+            if (!Strings.endsWith(paramName, "_uploadFile")) {
+                log.warn("文件上传 警告:{}, 规则：${propertyName}_uploadFile", FileUploadError.File_INPUT_NAME_ILLEGAL.message());
+                continue;
+            }
+            String fieldName = Strings.removeEnd(paramName, "_uploadFile");
+            Field field = Reflections.getAccessibleField(entity, fieldName);
+            if (field == null) {
+                log.warn("文件上传 警告:{}, 属性名：", FileUploadError.File_PATH_FIELD_NOT_EXIST.message(), fieldName);
+                continue;
+            }
+            String exist = (String) Reflections.getFieldValue(entity, field);
+            if (Strings.isNotBlank(exist)) {
+                File file = new File(uploadConfig.getStorageRoot() + "/" + exist);
+                FileUtils.deleteQuietly(file);
+            }
+            Reflections.setFieldValue(entity, field, uploadResult.getRelativeFile());
+        }
+    }
+
+    protected void loadUploadResult(HttpServletRequest request, String key, MultipartFile mfile, Map<String, UploadResult> uploadResults) {
         UploadResult result = null;
         if (mfile == null || mfile.getSize() <= 0) {
             return;
@@ -591,19 +637,26 @@ public abstract class AbstractFileOperationController<
         UploadConfig uploadConfig = getUploadConfig();
         String filename = mfile.getOriginalFilename();
         if (mfile.getSize() > uploadConfig.getMaxSize()) {
-            throw new BusinessException(
-                    "文件[" + filename + "]大小操作限制，最大限制:" + uploadConfig.getMaxSize() / 1024 / 1024 + "M");
+            log.error("文件上传 失败:{}。fileSize:{}, allowMaxSize:{}", FileUploadError.FILE_UPLOAD_SIZE_LIMIT,
+                    mfile.getSize(), uploadConfig.getMaxSize());
+            throw new BusinessException(FileUploadError.FILE_UPLOAD_SIZE_LIMIT, "最大限制:" + uploadConfig.getMaxSize() / 1024 / 1024 + "M");
         }
         String fileExtention = getFileExtention(filename);
         if (!StringUtils.containsIgnoreCase(uploadConfig.getAllowExtentions(), fileExtention)) {
-            throw new BusinessException(
-                    "文件[" + filename + "]类型不支持，支持类型:" + uploadConfig.getAllowExtentions());
+            log.error("文件上传 失败:{}。fileExt:{}, allowExts:{}", FileUploadError.FILE_UPLOAD_TYPE_LIMIT,
+                    fileExtention, uploadConfig.getAllowExtentions());
+            throw new BusinessException(FileUploadError.FILE_UPLOAD_TYPE_LIMIT, "支持类型:" + uploadConfig.getAllowExtentions());
         }
+
 
         if (uploadConfig.isUseMemery()) {
             // 内存方式，不转存到服务器存储，直接返回流给调用端
-            result =
-                    new UploadResult(key, filename, mfile.getSize(), mfile.getInputStream());
+            try {
+                result = new UploadResult(key, filename, mfile.getSize(), mfile.getInputStream());
+            } catch (Exception e) {
+                //ig
+            }
+
         } else {
             File destFile = doTransfer(mfile, request);
             File thumFile = doThumbnail(destFile, request);
@@ -630,7 +683,7 @@ public abstract class AbstractFileOperationController<
         return filePath;
     }
 
-    protected File doTransfer(MultipartFile mfile, HttpServletRequest request) throws IOException {
+    protected File doTransfer(MultipartFile mfile, HttpServletRequest request) {
         // 转存到服务器，返回服务器文件
         File destFile = new File(getUploadFileName(mfile.getOriginalFilename(), uploadConfig, request));
         // modify by zhangpu on 20141026
@@ -639,7 +692,14 @@ public abstract class AbstractFileOperationController<
         if (!pathFile.exists()) {
             pathFile.mkdirs();
         }
-        mfile.transferTo(destFile);
+        try {
+            mfile.transferTo(destFile);
+        } catch (Exception e) {
+            log.error("文件上传 失败: {}。from:{},to:{}", FileUploadError.FILE_UPLOAD_TRANSFER_ERROR,
+                    mfile.getName(), destFile.getPath());
+            throw new BusinessException(FileUploadError.FILE_UPLOAD_TRANSFER_ERROR);
+        }
+
         return destFile;
     }
 

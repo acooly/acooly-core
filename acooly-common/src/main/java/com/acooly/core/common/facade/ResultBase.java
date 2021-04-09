@@ -9,7 +9,6 @@ package com.acooly.core.common.facade;
 
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.Strings;
-import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.core.utils.mapper.BeanCopier;
@@ -36,28 +35,39 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
 
     private String message = ResultCode.SUCCESS.getMessage();
 
-    private String detail = ResultCode.SUCCESS.getMessage();
+    private String detail;
 
 
     public void setStatus(Messageable status) {
-        this.status = status;
-        this.code = status.code();
-        this.message = status.message();
-        // 保留status.message()作为默认的detail，兼容老代码
-        this.detail = status.message();
+        setStatus(status, null);
     }
 
     public void setStatus(Messageable status, String detail) {
         this.status = status;
-        this.code = status.code();
-        this.message = status.message();
-        this.detail = this.detail;
+        // 兼容老代码处理，ResultStatus.success == ResultCode.SUCCESS,
+        if (status == ResultStatus.success) {
+            this.code = ResultCode.SUCCESS.getCode();
+            this.message = ResultCode.SUCCESS.getMessage();
+        } else if (status == ResultStatus.processing) {
+            this.code = ResultCode.PROCESSING.getCode();
+            this.message = ResultCode.PROCESSING.getMessage();
+        } else {
+            this.code = status.code();
+            this.message = status.message();
+        }
+
+        // 保留status.message()作为默认的detail，兼容老代码
+        if (Strings.isNotBlank(detail)) {
+            this.detail = detail;
+        } else {
+            this.detail = this.message;
+        }
     }
 
     public void markProcessing() {
         this.status = ResultStatus.processing;
         this.code = ResultCode.PROCESSING.code();
-        this.detail = ResultCode.PROCESSING.message();
+        this.message = ResultCode.PROCESSING.message();
     }
 
     @Override
@@ -82,6 +92,14 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
         this.code = code;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public boolean success() {
         return status == ResultStatus.success || Strings.equalsIgnoreCase(status.code(), ResultCode.SUCCESS.code());
     }
@@ -91,12 +109,18 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
     }
 
     public boolean failure() {
-        return status == ResultStatus.failure || Strings.equalsIgnoreCase(status.code(), ResultCode.FAILURE.code());
+        return status != ResultStatus.success && !Strings.equalsIgnoreCase(status.code(), ResultCode.SUCCESS.code())
+                && status != ResultStatus.processing && !Strings.equalsIgnoreCase(status.code(), ResultCode.PROCESSING.code());
     }
 
     @Override
     public String toString() {
-        return ToString.toString(this);
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.code).append(":").append(this.message);
+        if (Strings.isNotBlank(this.detail)) {
+            sb.append(":").append(this.detail);
+        }
+        return sb.toString();
     }
 
     @Override
@@ -106,12 +130,9 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
 
     @Override
     public String message() {
-        return detail;
+        return this.message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     /**
      * 当status != ResultStatus.success抛出业务异常
@@ -125,14 +146,12 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
 
 
     /**
-     * 当status == ResultStatus.failure抛出业务异常
-     * 废弃原因：尽可能不适用确定的错误码进行判断，非success和processing就是错误
+     * 失败时跑出异常
      *
-     * @see #throwIfNotSuccess()
+     * @return
      */
-    @Deprecated
     public ResultBase throwIfFailure() {
-        if (status == ResultStatus.failure) {
+        if (!success() && !processing()) {
             throw new BusinessException(this.code(), this.message(), this.getDetail());
         }
         return this;

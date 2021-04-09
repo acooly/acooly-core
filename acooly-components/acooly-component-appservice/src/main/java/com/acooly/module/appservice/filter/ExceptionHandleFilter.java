@@ -57,7 +57,6 @@ public class ExceptionHandleFilter implements Filter<AppServiceContext> {
             ExceptionContext<?> exceptionContext =
                     new ExceptionContext<>(newResult, context.getMethodInvocation().getArguments());
             if (!exceptionHandlers.handle(exceptionContext, e)) {
-                newResult.setDetail(e.getMessage());
                 newResult.setStatus(ResultStatus.failure);
             }
             context.setResult(newResult);

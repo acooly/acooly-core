@@ -23,9 +23,6 @@ public class BusinessExceptionHandler implements ExceptionHandler<BusinessExcept
     @Override
     public void handle(ExceptionContext<?> context, BusinessException e) {
         ResultBase res = context.getResponse();
-        res.setStatus(e.getErrorCode());
-        res.setDetail(e.getDetail());
-        res.setCode(e.code());
-        res.setMessage(e.message());
+        res.setStatus(e.getErrorCode(), e.getDetail());
     }
 }

@@ -106,7 +106,7 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
 
     @Override
     public String message() {
-        return detail;
+        return message;
     }
 
     public void setMessage(String message) {

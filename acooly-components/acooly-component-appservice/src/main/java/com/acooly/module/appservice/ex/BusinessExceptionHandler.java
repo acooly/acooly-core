@@ -12,6 +12,7 @@ package com.acooly.module.appservice.ex;
 
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.facade.ResultBase;
+import com.acooly.core.utils.enums.ResultStatus;
 
 /**
  * BusinessException拦截处理
@@ -24,8 +25,12 @@ public class BusinessExceptionHandler implements ExceptionHandler<BusinessExcept
     public void handle(ExceptionContext<?> context, BusinessException e) {
         ResultBase res = context.getResponse();
         res.setStatus(e.getErrorCode());
-        res.setDetail(e.getDetail());
+        //不是真的内部异常，保持原有逻辑
+        if (res.getCode() != null && !e.getErrorCode().code().equals(e.getCode())) {
+            res.setStatus(ResultStatus.failure);
+        }
+        res.setDetail(e.getDetail() == null ? e.getMessage() : e.getDetail());
         res.setCode(e.code());
-        res.setMessage(e.message());
+        res.setMessage(e.message() == null ? e.getDetail() : e.getMessage());
     }
 }

@@ -7,7 +7,6 @@ import com.acooly.core.common.service.EntityService;
 import com.acooly.core.common.web.support.FileUploadError;
 import com.acooly.core.utils.*;
 import com.acooly.core.utils.io.Streams;
-import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.core.utils.mapper.CsvMapper;
 import lombok.Getter;
 import lombok.Setter;
@@ -456,7 +455,11 @@ public abstract class AbstractFileOperationController<
                     cell.setCellValue((String) value);
                     int cellColumnWidth = (((String) value).getBytes("UTF-8").length + 1) * 256;
                     if (cellColumnWidth > sheet.getColumnWidth(cellNum)) {
-                        sheet.setColumnWidth(cellNum, cellColumnWidth);
+                        if (cellColumnWidth <= 255 * 256) {
+                            sheet.setColumnWidth(cellNum, cellColumnWidth);
+                        } else {
+                            sheet.setColumnWidth(cellNum, 100 * 255);
+                        }
                     }
                 }
             }

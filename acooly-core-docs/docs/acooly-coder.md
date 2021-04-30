@@ -24,18 +24,17 @@ Acooly Coder是为Acooly框架配套的专用代码生成工具，设计目的�
 
 当前插件为发布到Intellij Idea的marketplace，请直接下载后，拖动到你的idea中即可完成安装。目前支持的版本：idea2018.1及以上版本。
 
-#### 2.2.1 下线安装
+#### 2.1.1 下线安装
 
 <div>
 <button style="width: 200px;height:30px;font-size:14px;" type="button" onclick="window.open('https://plugins.jetbrains.com/embeddable/card/14462')">IntelliJ插件首页</button>
 </div>
 
-点击这里下载IDEA的AcoolyCoder插件: [acooly-coder-plugin-1.0.2-release.zip](http://acooly.cn/nexus/service/local/repositories/releases/content/cn/acooly/acooly-coder-plugin/1.0.2/acooly-coder-plugin-1.0.2-release.zip)
+点击这里下载IDEA的AcoolyCoder插件: [acooly-coder-plugin-1.1.0-release.zip](http://acooly.cn/nexus/service/local/repositories/releases/content/cn/acooly/acooly-coder-plugin/1.1.0/acooly-coder-plugin-1.1.0-release.zip)
 
 安装并重新启动IDEA后，在你工程任何需要生成代码的包(package)上，右键菜单底部：Acooly -> AcoolyCoder
 
-
-#### 2.2.2 插件截图
+#### 2.1.2 插件截图
 <div>
 <div style="display:inline;"><img width="45%" src="/docs/res/coder/2.conn.jpg"></div>
 <div style="display:inline;"><img width="45%" src="/docs/res/coder/3.db.jpg"></div>
@@ -44,24 +43,66 @@ Acooly Coder是为Acooly框架配套的专用代码生成工具，设计目的�
 </div>
 
 
-### cli工具
+### 2.2 工具包
 
-acooly coder的发布包采用maven方式发布，目前只提供cli工具。
-仓库地址：http://${host}/nexus/content/repositories/releases/
-
-工具包maven坐标（请根据需要更新对应的版本,当前版本：4.0.0-SNAPSHOT）：
+工具包采用maven坐标拉取，acooly-archetype的工具的test模块会自动集成，通过Java的main方法调用
+工具包maven坐标（请根据需要更新对应的版本,当前最新版本：5.1.0）：
 
 ```xml
 <dependency>
   <groupId>com.acooly</groupId>
   <artifactId>acooly-coder</artifactId>
   <version>${acooly.coder.version}</version>
-  <classifier>distribution</classifier>
-  <type>zip</type>
 </dependency>
 ```
 
->使用说明：拉取发布包后直接解压，application.properties为配置文件，请跟进生成的需求配置，然后运行start.sh/start.bat生成代码。
+>注意：main方法代码方式生成，仍然可以使用classpath根下的acoolycoder.properties配置文件，但优先使用代码设置的参数。
+
+例如：
+
+```java
+@Slf4j
+public class AcoolyCoder {
+    // 生成代码的目标模块
+    static String MODULE_NAME = "acooly-coder-test";
+    // 生成代码的根包
+    static String ROOT_PACKAGE = "com.acooly.coder.test";
+    // 生成代码的管理视图相对路径
+    static String MANAGE_VIEW_PATH = "/manage/coder/";
+    // 配置表名转换为实体名时，需要忽略的表前缀。例如配置：p_ 则表示p_customer(表名) -> Customer(实体类名)
+    static String TABLE_IGNOR_PREFIX = "acooly_coder_";
+    // 生成代码的表
+    static String[] TABLES = {"acooly_coder_customer"};
+
+    /**
+     * 代码方式配置关键参数
+     * <p>
+     * 代码方式参数优先级高于配置文件
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
+        CodeGenerateService service = Generator.getGenerator();
+        GenerateConfig config = GenerateConfig.INSTANCE();
+
+        config.setWorkspace(getProjectPath() + MODULE_NAME);
+        config.setManagePath(MANAGE_VIEW_PATH);
+        config.setTableToEntityIgnorPrefix(TABLE_IGNOR_PREFIX);
+        config.setRootPackage(ROOT_PACKAGE);
+        Set<GenerateModule> modules = Sets.newLinkedHashSet(GenerateModule.Manage, GenerateModule.Facade, GenerateModule.OpenApi);
+        config.setGeneratorModules(modules);
+        service.generateTable(TABLES);
+    }
+
+    public static String getProjectPath() {
+        String file = AcoolyCoder.class.getClassLoader().getResource(".").getFile();
+        String testModulePath = file.substring(0, file.indexOf("/target/"));
+        String projectPath = testModulePath.substring(0, testModulePath.lastIndexOf("/"));
+        return projectPath + "/";
+    }
+}
+```
+
 
 ## 3 设计手册
 
@@ -85,28 +126,28 @@ acooly框架为了方便开发和设计，以开发经验为基础，对使用ac
 * **物理ID：**每个表必须有以id命名的物理主键，且为数字类型，如：mysql为 `id  bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID'`, oracle为number。
 * **列定义：**列名称全部小写，不能以数字开头；如果存在多个自然单词的组合，使用下划线分隔(\_)。如："user\_type"，列定义必须添加备注 （备注规范请参考下一节详细介绍）
 * **固定字段：**每个表必须添加`create_time`和`update_time`两个日期时间类型的字段
-	mysql如下：
-	
-	```sql
-	create_time timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
-	update_time timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
-	```	
+  mysql如下：
+
+  ```sql
+  create_time timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+  update_time timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
+  ```	
 
 * 如果有选项类型的字段，其选项值使用类json格式写入列备注字段，自动生成工具会自动为该列对应的属性和页面生成选项。如：表列为：`user_type` ,备注可以为：`用户类型 {normal:普通,vip:高级}`
 * **列名唯一：**强烈要求选项类（自动生成枚举类的）字段项目全局唯一名称，否则会生成enum名称相同的枚举相互覆盖。
 * **字符集：**，表的字符集选择：`utf8mb4/utf8mb4_general_ci`。
-	>MySQL在5.5.3之后增加了这个utf8mb4的编码，mb4就是most bytes 4的意思，专门用来兼容四字节的unicode,utf8mb4是utf8的超集。强烈建议表的字符集设置为utf8mb4，在MariaDB情况下utf8会出现字符集不兼容，强烈建议字符集设置为utf8mb4，如：
-       
-	```sql
-	CREATE TABLE `cms_content_body` (
-	  `id` bigint(20) NOT NULL COMMENT '主键',
-	  `body` text NOT NULL COMMENT '内容主体',
-	  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-	  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-	  PRIMARY KEY (`id`)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='内容主体';
-	```
-	
+  >MySQL在5.5.3之后增加了这个utf8mb4的编码，mb4就是most bytes 4的意思，专门用来兼容四字节的unicode,utf8mb4是utf8的超集。强烈建议表的字符集设置为utf8mb4，在MariaDB情况下utf8会出现字符集不兼容，强烈建议字符集设置为utf8mb4，如：
+
+  ```sql
+  CREATE TABLE `cms_content_body` (
+    `id` bigint(20) NOT NULL COMMENT '主键',
+    `body` text NOT NULL COMMENT '内容主体',
+    `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    PRIMARY KEY (`id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='内容主体';
+  ```
+
 ### 3.2 列备注增强设计
 
 默认情况下，备注只是用于生成的视图界面的label显示，但我们约定备注可设置类JSON格式，用于定于复杂的视图界面行为。
@@ -152,6 +193,7 @@ type：自定义的数据类型，用于定义前端BOSS生成时的界面显示
 |url|String|链接|文本框/mask/格式验证|
 |chinese|String|全中文内容|文本框/格式验证|
 |account|String|用户账户|文本框/mask/格式长度验证|字母开头，由字母，数字和下划线组成的字符串
+|file	|String|文件上传|文件选择|自动生成文件上传代码，并保持相对路径到该字段
 
 
 
@@ -409,6 +451,15 @@ OK，如果上步成功，请回到你的IDE及对应的模块，你应该看到
 
 ## 6 更新说明
 
+### 5.1.O-SNAPSHOT(2021-04-29)
+
+* 2021-04-15 - 完成OpenApi和facade自动代码生成的主线开发 - [zhangpu] 7769cfa
+* 2021-04-13 - 完成facade自动代码生成 - [zhangpu] 4f91246
+* 2021-04-12 - 增加多模块工程开关参数。完成dto和enums可生成到xxx-common模块的能力 - [zhangpu] 4343173
+* 2021-04-07 - 完成Facade的dto的生成 - [zhangpu] 290e8bd
+* 2021-04-07 - 支持文件上传表单的自动处理 - [zhangpu] b3942fb
+
+
 ### 5.0.0-SNAPSHOT(2020-07-10)
 
 * 2020-07-10 - 优化日志输出格式精简，同时设置系统变量，切换freemarker的日志为JUL，与工具整体一致（依赖最少） - [zhangpu] 50f2ca7
@@ -455,7 +506,7 @@ OK，如果上步成功，请回到你的IDE及对应的模块，你应该看到
 
 ### v1.2.2
 
-* 2016-08-15 16:54:29  cuifuq  [add] 列表页面更新：bigint 类型数据自动添加统计求和功能，使用方式 sum="true"   
+* 2016-08-15 16:54:29  cuifuq  [add] 列表页面更新：bigint 类型数据自动添加统计求和功能，使用方式 sum="true"
 * 统计功能：sum:求和；avg:平均；max：最大值；min：最小值
 
 > 使用统计功能需acooly-module-security版本升级为3.4.4以上

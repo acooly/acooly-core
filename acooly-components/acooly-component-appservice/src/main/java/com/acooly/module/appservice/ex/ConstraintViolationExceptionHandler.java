@@ -9,9 +9,9 @@
  */
 package com.acooly.module.appservice.ex;
 
-import com.acooly.core.common.exception.CommonErrorCodes;
 import com.acooly.core.common.exception.OrderCheckException;
 import com.acooly.core.common.facade.ResultBase;
+import com.acooly.core.common.facade.ResultCode;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -31,6 +31,6 @@ public class ConstraintViolationExceptionHandler
                     constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
         }
         ResultBase res = context.getResponse();
-        res.setStatus(CommonErrorCodes.PARAMETER_ERROR, exception.getMessage());
+        res.setStatus(ResultCode.PARAMETER_ERROR, exception.getMessage());
     }
 }

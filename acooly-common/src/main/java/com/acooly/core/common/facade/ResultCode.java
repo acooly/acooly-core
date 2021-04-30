@@ -30,6 +30,7 @@ public enum ResultCode implements Messageable {
     PARAM_FORMAT_ERROR("PARAM_FORMAT_ERROR", "参数格式错误"),
     REQUEST_NO_NOT_UNIQUE("REQUEST_NO_NOT_UNIQUE", "请求号重复"),
     FIELD_NOT_UNIQUE("FIELD_NOT_UNIQUE", "对象字段重复"),
+    DATA_UNIQUE_CONFLICT("DATA_UNIQUE_CONFLICT", "唯一性数据已存在"),
     REQUEST_GID_NOT_EXSIT("REQUEST_GID_NOT_EXSIT", "gid不存在");
 
     private final String code;

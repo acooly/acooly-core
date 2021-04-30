@@ -13,18 +13,16 @@ package com.acooly.module.appservice.ex;
 import com.acooly.core.common.exception.OrderCheckException;
 import com.acooly.core.common.facade.ResultBase;
 import com.acooly.core.common.facade.ResultCode;
-import com.acooly.core.utils.enums.ResultStatus;
 
 /**
  * @author qzhanbo@yiji.com
+ * @author zhangpu
  */
 public class OrderCheckExceptionHandler implements ExceptionHandler<OrderCheckException> {
 
     @Override
     public void handle(ExceptionContext<?> context, OrderCheckException ex) {
         ResultBase res = context.getResponse();
-        res.setStatus(ResultStatus.failure);
-        res.setDetail(ex.getMessage());
-        res.setCode(ResultCode.PARAMETER_ERROR.getCode());
+        res.setStatus(ResultCode.PARAMETER_ERROR, ex.getMessage());
     }
 }

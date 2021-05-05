@@ -1,7 +1,3 @@
-<!-- title: Acooly工具库  -->
-<!-- type: core -->
-<!-- author: zhangpu -->
-<!-- date: 2020-1-1 -->
 
 Acooly工具库
 ====

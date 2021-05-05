@@ -10,7 +10,7 @@ acooly coder自动代码生成工具
 Acooly Coder是为Acooly框架配套的专用代码生成工具，设计目的为跟进Acooly框架封装的最佳代码实践，快速生成业务程序的骨架代码和基本功能，最大程度的减少程序员的重复劳动及规范统一代码风格和规范。主要特性：
 
 * 基于数据库表生成基于实体的端到端代码。
-* 生成的代码包括：实体，DAO(MyBatis/JPA)，服务层，管理控制器，管理页面(多条件排序查询,添加，编辑，删除，上移，置顶，导入，导出等)
+* 生成的代码包括：实体，DAO(MyBatis/JPA)，服务层，管理控制器，管理页面(多条件排序查询,添加，编辑，删除，上移，置顶，导入，导出等)，Facade,OpenApi
 * 视图层的生成支持JSP和Freemarker两种模板界面
 * 支持批量生成多个表到一个模块
 * 支持去除表前缀和增加自定义实体前缀
@@ -24,18 +24,24 @@ Acooly Coder是为Acooly框架配套的专用代码生成工具，设计目的�
 
 当前插件为发布到Intellij Idea的marketplace，请直接下载后，拖动到你的idea中即可完成安装。目前支持的版本：idea2018.1及以上版本。
 
-#### 2.1.1 下线安装
+#### 2.1.1 私有插件仓库安装（推荐）
 
-<div>
-<button style="width: 200px;height:30px;font-size:14px;" type="button" onclick="window.open('https://plugins.jetbrains.com/embeddable/card/14462')">IntelliJ插件首页</button>
-</div>
+* 打开IDEA的Settings(windows：File -> Settings，Mac：command+.), 选择`Plugin`菜单
+* 在你的界面上找到`Manage Plugin Repositories`菜单。（不同平台和版本位置不同，找下），下图是2021版本的位置。
 
-点击这里下载IDEA的AcoolyCoder插件: [acooly-coder-plugin-1.0.2-release.zip](http://acooly.cn/nexus/service/local/repositories/releases/content/cn/acooly/acooly-coder-plugin/1.0.2/acooly-coder-plugin-1.0.2-release.zip)
+<div><img width="90%" src="/docs/res/coder/plugin_repos_install.jpg"></div>
 
-安装并重新启动IDEA后，在你工程任何需要生成代码的包(package)上，右键菜单底部：Acooly -> AcoolyCoder
+* 点击进入后，添加acooly插件私有仓库地址：`http://plugin.acooly.cn/` 
+* 选择插件界面的`Marketplace`选项卡，然后再查下框输入：`acooly` 搜索出插件安装即可
 
+>推荐原因：Idea会提醒你自动升级更新
 
-#### 2.1.2 插件截图
+#### 2.1.2 下线安装
+
+点击这里下载IDEA的AcoolyCoder插件: [acooly-coder-plugin-1.1.1-release.zip](http://acooly.cn/nexus/service/local/repositories/releases/content/cn/acooly/acooly-coder-plugin/1.1.1/acooly-coder-plugin-1.1.1-release.zip)
+下载到本地后，拖动zip文件到你Idea的编辑区即可自动完成安装，重新启动IDEA后，在你工程任何需要生成代码的包(package)上，右键菜单底部：Acooly -> AcoolyCoder
+
+#### 2.1.3 插件截图
 <div>
 <div style="display:inline;"><img width="45%" src="/docs/res/coder/2.conn.jpg"></div>
 <div style="display:inline;"><img width="45%" src="/docs/res/coder/3.db.jpg"></div>

@@ -4,8 +4,9 @@ import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityService;
-import com.acooly.core.common.web.support.FileUploadError;
+import com.acooly.core.common.exception.FileOperateErrorCodes;
 import com.acooly.core.utils.*;
+import com.acooly.core.utils.io.Files;
 import com.acooly.core.utils.io.Streams;
 import com.acooly.core.utils.mapper.CsvMapper;
 import lombok.Getter;
@@ -614,19 +615,25 @@ public abstract class AbstractFileOperationController<
         for (UploadResult uploadResult : uploadResults.values()) {
             String paramName = uploadResult.getParameterName();
             if (!Strings.endsWith(paramName, "_uploadFile")) {
-                log.warn("文件上传 警告:{}, 规则：${propertyName}_uploadFile", FileUploadError.File_INPUT_NAME_ILLEGAL.message());
+                log.warn("文件上传 警告:{}, 规则：${propertyName}_uploadFile", FileOperateErrorCodes.File_INPUT_NAME_ILLEGAL.message());
                 continue;
             }
             String fieldName = Strings.removeEnd(paramName, "_uploadFile");
             Field field = Reflections.getAccessibleField(entity, fieldName);
             if (field == null) {
-                log.warn("文件上传 警告:{}, 属性名：", FileUploadError.File_PATH_FIELD_NOT_EXIST.message(), fieldName);
+                log.warn("文件上传 警告:{}, 属性名：", FileOperateErrorCodes.File_PATH_FIELD_NOT_EXIST.message(), fieldName);
                 continue;
             }
             String exist = (String) Reflections.getFieldValue(entity, field);
-            if (Strings.isNotBlank(exist)) {
+            // 文件删除风险大，除程序BUG外，需考虑手动修改数据库值造成的风险
+            // 1、如果数据库存在值exist为空或根(/)，保障不会删除整个storageRoot。
+            if (Strings.isNotBlank(exist) && !Strings.equals(exist, "/")) {
                 File file = new File(uploadConfig.getStorageRoot() + "/" + exist);
-                FileUtils.deleteQuietly(file);
+                // 2.不会删除目录，上传文件不会是目录，保障安全（其实也解决了1的问题，双重）
+                if (file.isFile()) {
+                    // 3.保证不删除文件系统根目录，操作系统保留目录下的文件。
+                    Files.deleteSafely(file);
+                }
             }
             Reflections.setFieldValue(entity, field, uploadResult.getRelativeFile());
         }
@@ -640,15 +647,15 @@ public abstract class AbstractFileOperationController<
         UploadConfig uploadConfig = getUploadConfig();
         String filename = mfile.getOriginalFilename();
         if (mfile.getSize() > uploadConfig.getMaxSize()) {
-            log.error("文件上传 失败:{}。fileSize:{}, allowMaxSize:{}", FileUploadError.FILE_UPLOAD_SIZE_LIMIT,
+            log.error("文件上传 失败:{}。fileSize:{}, allowMaxSize:{}", FileOperateErrorCodes.FILE_UPLOAD_SIZE_LIMIT,
                     mfile.getSize(), uploadConfig.getMaxSize());
-            throw new BusinessException(FileUploadError.FILE_UPLOAD_SIZE_LIMIT, "最大限制:" + uploadConfig.getMaxSize() / 1024 / 1024 + "M");
+            throw new BusinessException(FileOperateErrorCodes.FILE_UPLOAD_SIZE_LIMIT, "最大限制:" + uploadConfig.getMaxSize() / 1024 / 1024 + "M");
         }
         String fileExtention = getFileExtention(filename);
         if (!StringUtils.containsIgnoreCase(uploadConfig.getAllowExtentions(), fileExtention)) {
-            log.error("文件上传 失败:{}。fileExt:{}, allowExts:{}", FileUploadError.FILE_UPLOAD_TYPE_LIMIT,
+            log.error("文件上传 失败:{}。fileExt:{}, allowExts:{}", FileOperateErrorCodes.FILE_UPLOAD_TYPE_LIMIT,
                     fileExtention, uploadConfig.getAllowExtentions());
-            throw new BusinessException(FileUploadError.FILE_UPLOAD_TYPE_LIMIT, "支持类型:" + uploadConfig.getAllowExtentions());
+            throw new BusinessException(FileOperateErrorCodes.FILE_UPLOAD_TYPE_LIMIT, "支持类型:" + uploadConfig.getAllowExtentions());
         }
 
 
@@ -677,12 +684,13 @@ public abstract class AbstractFileOperationController<
     protected String getRelativePath(File file, HttpServletRequest request) {
         String filePath = file.getPath();
         filePath = filePath.replaceAll("\\\\", "/");
-        filePath = StringUtils.substringAfter(filePath, this.uploadConfig.getStorageRoot().replaceAll("\\\\", "/"));
+        // 通过File对象清洗为规范path，防止配置重复文件分隔符(//)造成后续字符串处理BUG。
+        File storageRootFile = new File(this.uploadConfig.getStorageRoot());
+        String prefix = storageRootFile.getPath().replaceAll("\\\\", "/");
+        filePath = StringUtils.substringAfter(filePath, prefix);
         if (!Strings.startsWith(filePath, "/")) {
             filePath = "/" + filePath;
         }
-
-
         return filePath;
     }
 
@@ -698,9 +706,9 @@ public abstract class AbstractFileOperationController<
         try {
             mfile.transferTo(destFile);
         } catch (Exception e) {
-            log.error("文件上传 失败: {}。from:{},to:{}", FileUploadError.FILE_UPLOAD_TRANSFER_ERROR,
+            log.error("文件上传 失败: {}。from:{},to:{}", FileOperateErrorCodes.FILE_UPLOAD_TRANSFER_ERROR,
                     mfile.getName(), destFile.getPath());
-            throw new BusinessException(FileUploadError.FILE_UPLOAD_TRANSFER_ERROR);
+            throw new BusinessException(FileOperateErrorCodes.FILE_UPLOAD_TRANSFER_ERROR);
         }
 
         return destFile;

@@ -375,6 +375,13 @@
                 <artifactId>acooly-portlets-alog-analysis</artifactId>
                 <version>5.0.0-SNAPSHOT</version>
             </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-portlets-successtory</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+
+
 
             <!-- 短信聚合组件 -->
             <dependency>
@@ -414,6 +421,8 @@
                 <artifactId>acooly-component-account</artifactId>
                 <version>5.0.0-SNAPSHOT</version>
             </dependency>
+
+
 
 
             <!-- 工具 -->

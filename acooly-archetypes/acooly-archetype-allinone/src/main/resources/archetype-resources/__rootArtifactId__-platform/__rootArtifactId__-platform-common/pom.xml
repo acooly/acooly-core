@@ -49,5 +49,15 @@
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-mybatis</artifactId>
         </dependency>
+        <!-- 组件：ofile -->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-ofile</artifactId>
+        </dependency>
+        <!-- 组件：appservice -->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-appservice</artifactId>
+        </dependency>
     </dependencies>
 </project>

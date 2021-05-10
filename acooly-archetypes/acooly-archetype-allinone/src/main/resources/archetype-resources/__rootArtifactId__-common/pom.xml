@@ -14,6 +14,10 @@
             <groupId>com.acooly</groupId>
             <artifactId>acooly-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-common-util</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

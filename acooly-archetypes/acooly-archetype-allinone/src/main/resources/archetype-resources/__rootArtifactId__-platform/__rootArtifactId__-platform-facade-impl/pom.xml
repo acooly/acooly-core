@@ -23,17 +23,6 @@
             <artifactId>${rootArtifactId}-platform-core</artifactId>
         </dependency>
 
-        <!-- 组件: appservice -->
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-appservice</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-dubbo</artifactId>
-        </dependency>
-
     </dependencies>
 
 </project>

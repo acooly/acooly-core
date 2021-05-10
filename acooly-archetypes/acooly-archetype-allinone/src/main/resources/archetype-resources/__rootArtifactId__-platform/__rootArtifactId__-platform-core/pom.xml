@@ -8,37 +8,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>${artifactId}</artifactId>
-
     <properties>
         <deploy.skip>true</deploy.skip>
     </properties>
     <dependencies>
-
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>${rootArtifactId}-platform-common</artifactId>
-        </dependency>
-
-
-        <!-- 组件：数据库连接池 -->
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-ds</artifactId>
-        </dependency>
-        <!-- 组件：web及springMvc封装组件 -->
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-web</artifactId>
-        </dependency>
-        <!-- 组件：基于角色的权限管理后台框架 -->
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-security</artifactId>
-        </dependency>
-        <!-- 组件：mybatis -->
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-mybatis</artifactId>
         </dependency>
     </dependencies>
 </project>

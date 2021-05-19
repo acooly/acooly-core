@@ -209,7 +209,6 @@
 //    }
 //
 //    @Test
-//    // todo
 //    public void testCropWithThumbnails() throws exception {
 //        String distFile = getImagePath() + "dist/crop_test_Thumbnails.png";
 //        int x = 0;

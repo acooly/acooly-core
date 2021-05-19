@@ -40,7 +40,6 @@ public class SearchFilterParser {
         if (value instanceof Date) {
             value = Dates.format((Date) value);
         }
-        //fixme: sql injection
         switch (searchFilter.operator) {
             case EQ:
                 if (value instanceof String) {

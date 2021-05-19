@@ -274,14 +274,11 @@ public class PortalSimplePaging extends TagSupport {
 
     @Override
     public int doEndTag() throws JspException {
-        // TODO Auto-generated method stub
         return SKIP_BODY;
     }
 
     @Override
     public int doStartTag() throws JspException {
-        // TODO Auto-generated method stub
-
         JspWriter out = this.pageContext.getOut();
 
         PageInfo<Object> pageInfo = this.getPageInfo();

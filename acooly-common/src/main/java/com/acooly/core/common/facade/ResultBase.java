@@ -9,6 +9,7 @@ package com.acooly.core.common.facade;
 
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.core.utils.mapper.BeanCopier;
@@ -115,12 +116,7 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object>
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.code).append(":").append(this.message);
-        if (Strings.isNotBlank(this.detail)) {
-            sb.append(":").append(this.detail);
-        }
-        return sb.toString();
+        return ToString.toString(this);
     }
 
     @Override

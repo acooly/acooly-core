@@ -90,10 +90,12 @@ public enum SimpleStatus implements Messageable {
         return message;
     }
 
+    @Override
     public String code() {
         return code;
     }
 
+    @Override
     public String message() {
         return message;
     }

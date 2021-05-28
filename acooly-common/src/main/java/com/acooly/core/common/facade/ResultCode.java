@@ -102,10 +102,12 @@ public enum ResultCode implements Messageable {
         return this.message;
     }
 
+    @Override
     public String code() {
         return this.code;
     }
 
+    @Override
     public String message() {
         return this.message;
     }

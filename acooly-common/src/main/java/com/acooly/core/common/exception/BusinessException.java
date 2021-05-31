@@ -1,5 +1,6 @@
 package com.acooly.core.common.exception;
 
+import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.Messageable;
 
 /**
@@ -166,4 +167,13 @@ public class BusinessException extends RuntimeException implements Messageable {
         return this.message;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.code).append(":").append(this.message);
+        if (Strings.isNoneBlank(this.detail)) {
+            sb.append(":").append(this.detail);
+        }
+        return sb.toString();
+    }
 }

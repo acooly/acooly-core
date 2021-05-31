@@ -30,8 +30,7 @@ public class BusinessException extends RuntimeException implements Messageable {
 
     @Deprecated
     public BusinessException(String message) {
-        super(message);
-        this.message = message;
+        this(CommonErrorCodes.INTERNAL_ERROR.getCode(), message, message);
     }
 
     /**
@@ -41,7 +40,7 @@ public class BusinessException extends RuntimeException implements Messageable {
     @Deprecated
     public BusinessException(String message, boolean writableStackTrace) {
         super(message, null, false, writableStackTrace);
-        this.message = message;
+        this(CommonErrorCodes.INTERNAL_ERROR.getCode(), message, message);
     }
 
     /**
@@ -51,40 +50,37 @@ public class BusinessException extends RuntimeException implements Messageable {
     @Deprecated
     public BusinessException(String message, String code, boolean writableStackTrace) {
         super(message, null, false, writableStackTrace);
-        this.code = code;
-        this.message = message;
+        this(code, message, message);
     }
 
     @Deprecated
     public BusinessException(String message, Throwable cause) {
         super(message, cause);
-        this.message = message;
+        this(CommonErrorCodes.INTERNAL_ERROR.getCode(), message, message);
     }
 
     @Deprecated
     public BusinessException(Throwable cause) {
         super(cause);
-        this.message = cause.getMessage();
+        this(CommonErrorCodes.INTERNAL_ERROR, cause.getMessage());
     }
 
     @Deprecated
     public BusinessException(Throwable cause, String code) {
         super(cause);
-        this.code = code;
-        this.message = cause.getMessage();
+        this(code, cause.getMessage(), cause.getMessage());
     }
 
     @Deprecated
     public BusinessException(String message, String code) {
         super(message);
-        this.code = code;
-        this.message = message;
+        this(code, message, message);
     }
 
     @Deprecated
     public BusinessException(String message, Throwable cause, String code) {
         super(message, cause);
-        this.code = code;
+        this(code, message, cause.getMessage());
     }
 
     public BusinessException(String code, String message, String detail) {

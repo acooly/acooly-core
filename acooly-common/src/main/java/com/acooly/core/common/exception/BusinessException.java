@@ -39,7 +39,6 @@ public class BusinessException extends RuntimeException implements Messageable {
      */
     @Deprecated
     public BusinessException(String message, boolean writableStackTrace) {
-        super(message, null, false, writableStackTrace);
         this(CommonErrorCodes.INTERNAL_ERROR.getCode(), message, message);
     }
 
@@ -49,37 +48,31 @@ public class BusinessException extends RuntimeException implements Messageable {
      */
     @Deprecated
     public BusinessException(String message, String code, boolean writableStackTrace) {
-        super(message, null, false, writableStackTrace);
         this(code, message, message);
     }
 
     @Deprecated
     public BusinessException(String message, Throwable cause) {
-        super(message, cause);
         this(CommonErrorCodes.INTERNAL_ERROR.getCode(), message, message);
     }
 
     @Deprecated
     public BusinessException(Throwable cause) {
-        super(cause);
         this(CommonErrorCodes.INTERNAL_ERROR, cause.getMessage());
     }
 
     @Deprecated
     public BusinessException(Throwable cause, String code) {
-        super(cause);
         this(code, cause.getMessage(), cause.getMessage());
     }
 
     @Deprecated
     public BusinessException(String message, String code) {
-        super(message);
         this(code, message, message);
     }
 
     @Deprecated
     public BusinessException(String message, Throwable cause, String code) {
-        super(message, cause);
         this(code, message, cause.getMessage());
     }
 

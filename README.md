@@ -16,6 +16,7 @@ acooly框架是基于spring-boot提供快速开发、最佳实践，组件化的
 
 2021-05-31
 
+* 2021-05-31 - 为BusinessException增加toString()：（code:message:detail），便于日志打印。 - [zhangpu] 48d746d8
 * 2021-05-31 - fixed: 合并森林对异常体系的调整。包括：BusinessException的废弃构造兼容新的三元模式；appservice组件的异常拦截器兼容老的构造产生的BusinessException。 - [zhangpu] 19af957f
 * 2021-05-28 - fixed: 为Messageable接口增加Serializable继承，以解决匿名Messageable实现支持序列化，防止Dubbo远程接口序列化失败; 完善Messageable接口及实现的标准化javadoc - [zhangpu] 693e2732
 * 2021-05-09 - 优化：文件操作基础控制器优化文件删除，采用Files.deleteSafety，保障不会应应用BUG或配置错误造成错误删除根或系统目录等；迁移FileUploadError枚举到acooly-common中为FileOperateErrorCodes,全局可用。 - [zhangpu] bd6b3887

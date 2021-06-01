@@ -86,10 +86,13 @@ public class BusinessException extends RuntimeException implements Messageable {
             public String code() {
                 return code;
             }
-
             @Override
             public String message() {
                 return message;
+            }
+            @Override
+            public String toString() {
+                return this.code()+":"+this.message()
             }
         };
         this.detail = detail;
@@ -108,6 +111,11 @@ public class BusinessException extends RuntimeException implements Messageable {
             @Override
             public String message() {
                 return message;
+            }
+
+            @Override
+            public String toString() {
+                return this.code()+":"+this.message()
             }
         };
         this.detail = cause.getMessage();

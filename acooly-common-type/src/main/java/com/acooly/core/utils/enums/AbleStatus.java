@@ -18,8 +18,15 @@ import java.util.Map;
  * @author zhangpu
  */
 public enum AbleStatus implements Messageable {
+
+    /**
+     * 正常状态
+     */
     enable("enable", "正常"),
 
+    /**
+     * 禁用状态
+     */
     disable("disable", "禁用");
 
     private final String code;
@@ -31,7 +38,7 @@ public enum AbleStatus implements Messageable {
     }
 
     public static Map<String, String> mapping() {
-        Map<String, String> map = new LinkedHashMap();
+        Map<String, String> map = new LinkedHashMap<String, String>();
         for (AbleStatus type : values()) {
             map.put(type.getCode(), type.getMessage());
         }

@@ -12,6 +12,12 @@ acooly框架是基于spring-boot提供快速开发、最佳实践，组件化的
 
 ## changelog
 
+### 5.0.0-SNAPSHOT 2021-06-01
+
+2021-06-01
+
+* fixed: 为BusinessException内部的Messageable匿名实现增加toString方法，便于日志打印。
+
 ### 5.0.0-SNAPSHOT 2021-05-31
 
 2021-05-31

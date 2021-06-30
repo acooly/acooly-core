@@ -8,18 +8,18 @@
  */
 package com.acooly.core.test.utils;
 
+import com.acooly.core.utils.BigMoney;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 /**
  * @author zhangpu
  * @date 2021-05-26 17:46
  */
 @Slf4j
-public class BigMoneyMoneyTest {
+public class BigMoneyTest {
 
     @Test
     public void testCalc() {
@@ -29,9 +29,18 @@ public class BigMoneyMoneyTest {
         BigDecimal n3 = new BigDecimal(4);
 //        n3.setScale(8);
 
-        BigDecimal divideResult = n100.divide(n3,8,BigDecimal.ROUND_HALF_UP);
+        BigDecimal divideResult = n100.divide(n3, 8, BigDecimal.ROUND_HALF_UP);
         System.out.println(divideResult.toPlainString());
 
+    }
+
+
+    @Test
+    public void testAdd() {
+        BigMoney b1 = new BigMoney("100000.12345678");
+        BigMoney b2 = new BigMoney(100000.00000002);
+        BigMoney b3 = b1.add(b2);
+        System.out.println(b3);
     }
 
 

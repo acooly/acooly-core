@@ -12,6 +12,7 @@ package com.acooly.module.web;
 
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.module.web.filter.HttpsOnlyFilter;
+import com.acooly.module.web.formatter.BigMoneyFormatter;
 import com.acooly.module.web.formatter.DBMapFormatter;
 import com.acooly.module.web.formatter.MoneyFormatter;
 import com.acooly.module.web.freemarker.IncludePage;
@@ -108,14 +109,6 @@ public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware,
         configurer.mediaType("html", MediaType.APPLICATION_JSON);
     }
 
-//    @Override
-//    public void configurePathMatch(PathMatchConfigurer configurer) {
-//        configurer.setUseRegisteredSuffixPatternMatch(true);
-//        AntPathMatcher antPathMatcher = new AntPathMatcher("/**/*.html");
-//        configurer.setPathMatcher(antPathMatcher)
-//    }
-
-
     /**
      * 添加自定义类型格式化
      * 目前默认包括：
@@ -129,6 +122,7 @@ public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware,
         if (webProperties.isEnableMoneyDisplayYuan()) {
             registry.addFormatter(new MoneyFormatter());
         }
+        registry.addFormatter(new BigMoneyFormatter());
         registry.addFormatter(new DBMapFormatter());
     }
 

@@ -26,6 +26,20 @@ public class BigMoney {
     private int scale = DEFAULT_SCALE;
     private int roundingMode = BigDecimal.ROUND_HALF_UP;
 
+
+    public static BigMoney valueOf(BigDecimal value) {
+        return new BigMoney(value);
+    }
+
+    public static BigMoney valueOf(String value) {
+        return new BigMoney(value);
+    }
+
+    public static BigMoney ZERO(){
+        return BigMoney.valueOf(BigDecimal.ZERO);
+    }
+
+
     public BigMoney(BigDecimal value) {
         this(value, DEFAULT_SCALE, DEFAULT_ROUNDING_MODE);
     }

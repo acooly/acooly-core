@@ -1,22 +1,21 @@
 /*
-* acooly.cn Inc.
-* Copyright (c) 2020 All Rights Reserved.
-* create by acooly
-* date:2020-07-03
-*/
+ * acooly.cn Inc.
+ * Copyright (c) 2020 All Rights Reserved.
+ * create by acooly
+ * date:2020-07-03
+ */
 package com.acooly.core.test.core.entity;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
+import com.acooly.core.common.domain.AbstractEntity;
+import com.acooly.core.utils.BigMoney;
 import com.acooly.core.utils.Money;
-import org.hibernate.validator.constraints.*;
-import javax.validation.constraints.*;
-import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-import com.acooly.core.common.domain.AbstractEntity;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -34,13 +33,13 @@ public class App extends AbstractEntity {
     /**
      * display_name
      */
-	@Size(max = 255)
+    @Size(max = 255)
     private String displayName;
 
     /**
      * name
      */
-	@Size(max = 255)
+    @Size(max = 255)
     private String name;
 
     /**
@@ -66,7 +65,7 @@ public class App extends AbstractEntity {
     /**
      * type
      */
-	@Size(max = 255)
+    @Size(max = 255)
     private String type;
 
     /**
@@ -78,5 +77,7 @@ public class App extends AbstractEntity {
      * price
      */
     private Money price;
+
+    private BigMoney amount;
 
 }

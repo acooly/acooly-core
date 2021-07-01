@@ -16,6 +16,12 @@ acooly框架是基于spring-boot提供快速开发、最佳实践，组件化的
 
 ## changelog
 
+### 5.0.0-SNAPSHOT.20210701
+
+2021-07-01
+
+* 新增：BigMoney数据类型的开发，以BigDecimal为基础提供可指定小数位数和舍取模式的金额数据类型，可用于高精度计算场景。并完成数据库（BigMoney <-> MySQL Decimal(20,8)）和Web/Json的映射集成。
+
 ### 5.0.0-SNAPSHOT 2021-06-01
 
 2021-06-01

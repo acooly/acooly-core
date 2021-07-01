@@ -62,4 +62,10 @@ public class AppServiceTest {
             log.info("app_{}: {}", app.getId(), app);
         }
     }
+
+    @Test
+    public void testRemoveWithNull() {
+        appService.remove(null);
+    }
+
 }

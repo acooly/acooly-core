@@ -97,7 +97,7 @@ public class BigMoney {
 
     @Override
     public String toString() {
-        return this.value.toString();
+        return this.value.toPlainString();
     }
 
 

@@ -625,6 +625,11 @@ public abstract class AbstractFileOperationController<
                 continue;
             }
             String exist = (String) Reflections.getFieldValue(entity, field);
+
+            // 如果上传的文件与原文件相同，则不用对原数据进行处理。文件内容已上传覆盖
+            if (Strings.equals(exist, uploadResult.getRelativeFile())) {
+                return;
+            }
             // 文件删除风险大，除程序BUG外，需考虑手动修改数据库值造成的风险
             // 1、如果数据库存在值exist为空或根(/)，保障不会删除整个storageRoot。
             if (Strings.isNotBlank(exist) && !Strings.equals(exist, "/")) {

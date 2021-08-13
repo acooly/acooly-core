@@ -427,7 +427,12 @@
             </dependency>
 
 
-
+            <!-- 认证组件库 -->
+            <dependency>
+                <groupId>cn.acooly</groupId>
+                <artifactId>acooly-auth-google-authenticator</artifactId>
+                <version>5.0.0</version>
+            </dependency>
 
             <!-- 工具 -->
             <dependency>

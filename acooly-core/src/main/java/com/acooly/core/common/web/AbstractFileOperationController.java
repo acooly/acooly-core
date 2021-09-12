@@ -6,6 +6,7 @@ import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.core.common.exception.FileOperateErrorCodes;
 import com.acooly.core.utils.*;
+import com.acooly.core.utils.enums.Messageable;
 import com.acooly.core.utils.io.Files;
 import com.acooly.core.utils.io.Streams;
 import com.acooly.core.utils.mapper.CsvMapper;
@@ -30,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 文件上传下载，数据导入导出操作封装
@@ -410,7 +412,7 @@ public abstract class AbstractFileOperationController<
             out.flush();
         } catch (Exception e) {
             logger.warn("do export excel failure -> " + e.getMessage(), e);
-            throw new BusinessException("执行导出过程失败[" + e.getMessage() + "]");
+            throw new BusinessException("FILE_EXPORT_EXCEL_FAIL", "EXCEL文件输出失败", e.getMessage());
         } finally {
             Streams.close(out);
             Streams.close(workbook);
@@ -424,7 +426,7 @@ public abstract class AbstractFileOperationController<
         Row row;
         Cell cell;
         for (T entity : list) {
-            List data = doExportEntity(entity);
+            List data = doExportRow(entity);
             row = sheet.createRow(rowNum);
             for (int cellNum = 0; cellNum < data.size(); cellNum++) {
                 value = data.get(cellNum);
@@ -434,11 +436,18 @@ public abstract class AbstractFileOperationController<
                     cell.setCellType(CellType.BLANK);
                     continue;
                 }
+
                 // Money转数字
                 if (value instanceof Money) {
                     value = ((Money) value).getAmount();
                 }
-                // 日期处理
+
+                // 枚举转字符串
+                if (value instanceof Messageable) {
+                    value = ((Messageable) value).message();
+                }
+
+                // 日期转字符串
                 if (value instanceof Date) {
                     if (Dates.isDate((Date) value)) {
                         value = Dates.format((Date) value, Dates.CHINESE_DATE_FORMAT_SLASH);
@@ -446,6 +455,8 @@ public abstract class AbstractFileOperationController<
                         value = Dates.format((Date) value);
                     }
                 }
+
+                // 数字或字符串处理
                 if (value instanceof Number) {
                     cell.setCellType(CellType.NUMERIC);
                     cell.setCellValue(conversionService.convert(value, Double.class));
@@ -492,9 +503,7 @@ public abstract class AbstractFileOperationController<
             HttpServletRequest request, HttpServletResponse response, int batchSize) throws Exception {
         PrintWriter p = null;
         try {
-            p =
-                    new PrintWriter(
-                            new OutputStreamWriter(response.getOutputStream(), getCharsetName(request)));
+            p = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), getCharsetName(request)));
             List<String> headers = getExportTitles();
             if (headers != null) {
                 p.println(CsvMapper.marshal(headers));
@@ -516,7 +525,7 @@ public abstract class AbstractFileOperationController<
             p.close();
         } catch (Exception e) {
             logger.warn("do export csv failure -> " + e.getMessage(), e);
-            throw new BusinessException("CSV输出失败[" + e.getMessage() + "]");
+            throw new BusinessException("FILE_EXPORT_CSV_FAIL", "CSV文件输出失败", e.getMessage());
         } finally {
             Streams.close(p);
         }
@@ -543,7 +552,7 @@ public abstract class AbstractFileOperationController<
     }
 
     protected List<Object> doExportRow(T entity) {
-        return null;
+        return doExportEntity(entity).stream().collect(Collectors.toList());
     }
 
     /**

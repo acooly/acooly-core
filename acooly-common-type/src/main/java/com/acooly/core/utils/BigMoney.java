@@ -8,6 +8,7 @@
  */
 package com.acooly.core.utils;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
@@ -17,7 +18,7 @@ import java.text.DecimalFormat;
  * @author zhangpu
  * @date 2021-05-26 18:17
  */
-public class BigMoney {
+public class BigMoney implements Serializable {
 
     public static final int DEFAULT_SCALE = 8;
     public static final int DEFAULT_ROUNDING_MODE = BigDecimal.ROUND_HALF_EVEN;
@@ -35,7 +36,7 @@ public class BigMoney {
         return new BigMoney(value);
     }
 
-    public static BigMoney ZERO(){
+    public static BigMoney ZERO() {
         return BigMoney.valueOf(BigDecimal.ZERO);
     }
 

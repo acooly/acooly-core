@@ -41,6 +41,25 @@ public class IPUtil {
     private static Collection<InetAddress> allHostAddress = null;
     private static String macAddress = null;
 
+
+    /**
+     * 判断指定IP是否在子网网段内
+     * 例如：ip 192.168.1.1 , cidr 192.168.1.0/24
+     *
+     * @param ip
+     * @param cidr
+     * @return
+     */
+    public static boolean isInRange(String ip, String cidr) {
+        long ipLong = ip2Long(ip);
+        String[] cidrParts = Strings.split(cidr, "/");
+        int type = Integer.parseInt(cidrParts[1]);
+        int mask = 0xFFFFFFFF << (32 - type);
+        String cidrIp = cidrParts[0];
+        long cidrIpLong = ip2Long(cidrIp);
+        return (ipLong & mask) == (cidrIpLong & mask);
+    }
+
     /**
      * 将IP地址(61.172.201.235)转变成Long，如果ip格式非法，那么返回0
      *

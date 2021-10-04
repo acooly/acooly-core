@@ -134,7 +134,7 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
     public void failed( ConfigurableApplicationContext context, Throwable exception ) {
         if (!cloudEnv) {
             ConsoleLogInitializer.addConsoleAppender();
-            LoggerFactory.getLogger(AcoolyApplicationRunListener.class).error("启动失败", exception);
+            LoggerFactory.getLogger(AcoolyApplicationRunListener.class).error("启动失败: {}", exception);
             ShutdownHooks.shutdownAll();
             shutdownLogSystem();
         }

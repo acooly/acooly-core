@@ -8,10 +8,12 @@ import com.acooly.core.AcoolyVersion;
 import com.acooly.core.common.boot.listener.AcoolyApplicationRunListener;
 import com.acooly.core.common.boot.log.LogAutoConfig;
 import com.acooly.core.common.exception.AppConfigException;
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.system.Systems;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.common.collect.Maps;
+
 import java.lang.instrument.Instrumentation;
 
 import javassist.*;
@@ -92,12 +94,13 @@ public class Apps {
 
     /**
      * 检查是否增加了spring cloud 的依赖
+     *
      * @param application
      * @return
      */
-    public static boolean checkCloudEnv( SpringApplication application ) {
+    public static boolean checkCloudEnv(SpringApplication application) {
         for (Object o : application.getAllSources()) {
-            if (( (Class) o ).getName().equals(CLOUD_CLASS)) {
+            if (((Class) o).getName().equals(CLOUD_CLASS)) {
                 return true;
             }
         }
@@ -139,12 +142,12 @@ public class Apps {
         try {
             FileUtils.forceMkdir(new File(logPath));
         } catch (IOException e) {
-            throw new AppConfigException("创建日志目录失败", e);
+            throw new BusinessException("APP_CONFIG_ERROR", "创建日志目录失败", logPath);
         }
         return logPath;
     }
 
-    public static void setLogPath( String tmp ) {
+    public static void setLogPath(String tmp) {
         logPath = tmp;
     }
 
@@ -178,10 +181,10 @@ public class Apps {
     /**
      * 暴露info信息，可以通过 actuator info endpoint获取
      *
-     * @param key key
+     * @param key   key
      * @param value value
      */
-    public static void exposeInfo( String key, Object value ) {
+    public static void exposeInfo(String key, Object value) {
         String infoKey = "info." + key;
         System.setProperty(infoKey, String.valueOf(value));
     }
@@ -189,14 +192,14 @@ public class Apps {
     /**
      * 当系统参数中没有{@link Apps#SPRING_PROFILE_ACTIVE}时，设置应用运行环境
      */
-    public static void setProfileIfNotExists( String profile ) {
+    public static void setProfileIfNotExists(String profile) {
         if (!StringUtils.hasLength(System.getProperty(SPRING_PROFILE_ACTIVE))
                 && !System.getenv().containsKey("SPRING_PROFILES_ACTIVE")) {
             System.setProperty(SPRING_PROFILE_ACTIVE, profile);
         }
     }
 
-    public static void setStartupTimes( long startupTimes ) {
+    public static void setStartupTimes(long startupTimes) {
         System.setProperty(STARTUP_TIMES, String.valueOf(startupTimes));
     }
 
@@ -231,7 +234,7 @@ public class Apps {
         AcoolyApplicationRunListener.shutdownApp();
     }
 
-    public static <T> T buildProperties( Class<T> clazz ) {
+    public static <T> T buildProperties(Class<T> clazz) {
         return EnvironmentHolder.buildProperties(clazz);
     }
 
@@ -253,11 +256,11 @@ public class Apps {
     }
 
 
-    public static MDC.MDCCloseable mdc( String gid ) {
+    public static MDC.MDCCloseable mdc(String gid) {
         return MDC.putCloseable(LogAutoConfig.LogProperties.GID_KEY, gid);
     }
 
-    public static void mainLog( String text ) {
+    public static void mainLog(String text) {
         LoggerFactory.getLogger("Main").info(text);
     }
 

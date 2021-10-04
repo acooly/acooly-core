@@ -18,12 +18,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * @author qiubo
  */
-@BootApp(sysName = "core-test", httpPort = 8082)
+@BootApp(sysName = "acooly-core", httpPort = 8082)
 @EnableTransactionManagement(proxyTargetClass = true)
 public class Main {
     public static void main(String[] args) {
-       // System.out.println(Ids.getDid(20).length());
-        Apps.setProfileIfNotExists("online");
+        Apps.setProfileIfNotExists("sdev");
         SpringApplication.run(Main.class, args);
     }
 }

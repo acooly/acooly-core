@@ -391,7 +391,6 @@
             </dependency>
 
 
-
             <!-- 短信聚合组件 -->
             <dependency>
                 <groupId>com.acooly</groupId>
@@ -438,6 +437,29 @@
                 <artifactId>acooly-auth-google-authenticator</artifactId>
                 <version>5.0.0</version>
             </dependency>
+
+            <!-- SDK组件 -->
+
+            <!-- 汇率查询 -->
+            <dependency>
+                <groupId>cn.acooly</groupId>
+                <artifactId>acooly-sdk-exchangerate</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+            <!-- 数字货币数据 -->
+            <dependency>
+                <groupId>cn.acooly</groupId>
+                <artifactId>acooly-sdk-coinapi</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <!-- 阿里云市场：物流数据 -->
+            <dependency>
+                <groupId>cn.acooly</groupId>
+                <artifactId>acooly-sdk-aliyun-express</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
+
 
             <!-- 工具 -->
             <dependency>

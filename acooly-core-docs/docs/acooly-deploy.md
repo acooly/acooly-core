@@ -70,12 +70,11 @@ Acooly生产环境与部署
 
 环境准备好后，我们只针对单台服务的OS环境和部署进行说明。我们的环境以linux（CentOS 6.x - 7.x）为准（非常不建议windows服务器，至于原因，请自行百度和脑补~）
 
-请参考：[快速开始](quickstart.html) -> 工具包部分，在生产服务器上下周和安装配置好工具包，也可以直接通过git clone获取。
+#### 2.1.1 下载安装
+请参考：[快速开始](https://acooly.cn/docs/core/acooly-quickstart.html) -> 工具包部分，在生产服务器上下周和安装配置好工具包，也可以直接通过git clone获取。
 
-使用SSH登录ECS服务器,进行工具包安装配置
-
-* 获取acooly-scripts工具包，并设置环境变量: ${acooly_script}/deploy/env/bin
-* 安装部署工具: ${acooly_script}/deploy/app/bin
+#### 2.1.2 [推荐] git-clone安装
+使用SSH登录应用服务器,先安装git，然后clone工具包
 
 root身份操作：
 
@@ -85,17 +84,22 @@ root身份操作：
 # yum install git
 ...
 # git clone http://gitlab.acooly.cn/acoolys/acooly-script.git
-# echo "export PATH=\$PATH:/root/acooly-script/deploy/env" >> /etc/profile
+# echo "export PATH=\$PATH:/root/acooly-script/deploy/env/bin" >> /etc/profile
 # source /etc/profile
 # cp -r acooly-script/deploy/app /opt/
 ```
 
+#### 2.1.3 配置工具环境变量
 
-### 2.2 应用服务安装配置
+* 环境部署工具: ${acooly_script}/deploy/env/bin (设置到PATH环境变量中，方便使用)
+* 应用部署工具: ${acooly_script}/deploy/app/bin（不设置PATH，拷贝所有部署命令到/opt/apps下）
+
+
+### 2.2 应用服务环境安装配置
 
 请使用环境工具包里面的命令直接安装对应的软件和服务即可，下面介绍典型配置。
 
-#### 2.2.1.[必选] 操作系统加固
+#### 2.2.1 [必选] 操作系统加固
 
 这个一般是运维的事（如果你有的化...）
 
@@ -121,7 +125,7 @@ please enter a new host name:
 new host name: app1
 ...
 ```
-#### 2.2.2.[必选] 运行环境
+#### 2.2.2 [必选] JDK和Maven
 
 acooly框架的部署方式为：拉取（脚本或工具）项目源代码 --> 服务器打包 --> 运行 模式。我们需要安装配置JDK和maven环境。请运行：`install.jdk.sh` 和 `install.maven.sh`
 
@@ -137,7 +141,7 @@ acooly框架的部署方式为：拉取（脚本或工具）项目源代码 --> 
 
 #### 2.2.3.[可选] 共享磁盘(NFS)
 
-如果你的多节点部署（一般我们建议每个应用至少），你可能需要NFS共享磁盘配置。请运行命令：`install.nfs.sh`.支持两种方式的挂载。
+如果你的多节点部署（一般我们建议每个应用至少双节点高可用），你可能需要NFS共享磁盘（低安全性）配置。请运行命令：`install.nfs.sh`.支持两种方式的挂载。
 
 * 阿里云NAS挂载，请运行命令后直接输入nas的域名地址即可
 * 共享磁盘挂载，请输入共享持平的局域网地址
@@ -148,12 +152,8 @@ acooly框架的部署方式为：拉取（脚本或工具）项目源代码 --> 
 
 如果你不喜欢，习惯用root运行，没有人能强求你的，你跳过就OK。否则，请运行：`install.optuser.sh`，后续的操作请切换到该普通用户。
 
-#### 2.2.5.[可选] 节点复制
 
-应用节点复制：`clone.sh`,基于SCP拷贝相关的软件和配置到另外的节点，节省公网带宽消耗和提高安装配置效率。
-zookeeper节点复制：`install.zk.clone.sh`
-
-### 2.3 依赖服务安装配置
+### 2.2.5 [可选] MySQL和Redis
 
 如果是阿里云，你的RDS，REDIS无需安装，否则，你可以使用对应的安装脚本自动下载合适的版本并安装配置。如果你选择自建安装，推荐使用下面的工具直接运行安装。
 
@@ -162,12 +162,21 @@ zookeeper节点复制：`install.zk.clone.sh`
 
 >相关配置，请百度或自行脑补~
 
-如果你是微服务的平台，需要使用dubbo环境，无论是否阿里云，请自行安装zk环境，于是请运行：`install.zk.sh`
-
 >请记住你安装或购买的mysql, redis等服务的账号，你需要提供给开发团队，以便其在工程中配置环境感知配置文件。
 
+### 2.2.6 [可选] zookeeper
 
-### 2.4 环境参数
+如果你是微服务的平台，需要使用dubbo环境，无论是否阿里云，请自行安装zk环境，于是请运行：`install.zk.sh`
+
+
+#### 2.2.7.[可选] 节点复制
+
+应用节点复制：`clone.sh`,基于SCP拷贝相关的软件和配置到另外的节点，节省公网带宽消耗和提高安装配置效率。
+zookeeper节点复制：`install.zk.clone.sh`
+
+>不熟悉的情况下，建议谨慎使用。
+
+### 2.3 环境参数
 
 当你完成所有的安装和配置工作后，请收集一下服务相关的参数，一并提交给开发团队进行参数配置。
 

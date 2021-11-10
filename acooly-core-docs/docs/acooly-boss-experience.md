@@ -121,7 +121,9 @@ let val = $.acooly.formVal("manage_showcaseMemberProfile_editform", "manager");
 $.acooly.formVal("manage_showcaseMemberProfile_editform", "manager", "newVal");
 ```
 
-### tooltip
+## tooltip
+
+快速提示效果，一般用于对界面上功能的简单帮助说明或引导
 
 ```html
 <a title="需要提示显示的内容" class="easyui-tooltip"><i class="fa fa-info-circle" aria-hidden="true"></i></a>

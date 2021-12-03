@@ -32,14 +32,8 @@ public class MoneyUtil {
     if (money == null) {
       throw new IllegalArgumentException("金额不能为null");
     }
-    DecimalFormat fmt = new DecimalFormat("##,###,###,###,###.00");
-    String result = fmt.format(money.getAmount().doubleValue());
-    if (result.indexOf(".") == 0) {
-      result = "0" + result;
-    } else if (result.indexOf("-") == 0 && result.indexOf(".") == 1) {
-      result = result.replace("-", "-0");
-    }
-    return result;
+    DecimalFormat fmt = new DecimalFormat("##,###,###,###,##0.00");
+    return fmt.format(money.getAmount().doubleValue());
   }
 
   /**

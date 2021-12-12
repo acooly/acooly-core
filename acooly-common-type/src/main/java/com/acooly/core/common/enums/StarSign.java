@@ -41,7 +41,8 @@ public enum StarSign implements Messageable {
 
     private static Date newDate(int monthOfYear, int dayOfMonth) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(1970, monthOfYear, dayOfMonth);
+        calendar.set(1970, monthOfYear - 1, dayOfMonth, 0, 0, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
     }
 

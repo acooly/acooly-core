@@ -1,6 +1,7 @@
 package com.acooly.core.test.enums;
 
 import com.acooly.core.common.enums.StarSign;
+import com.acooly.core.utils.Dates;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -16,7 +17,6 @@ public class StarSignTest {
 
     @Test
     public void testStarSign() {
-
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -25,7 +25,17 @@ public class StarSignTest {
         log.info("{}-{} : {}", month, day, StarSign.to(month, day));
 
         //边界测试
-        log.info("12-28 : {}",StarSign.to(12, 28));
-        log.info("1-3 : {}",StarSign.to(1, 3));
+        log.info("12-28 : {}", StarSign.to(12, 28));
+        log.info("1-3 : {}", StarSign.to(1, 3));
     }
+
+
+    @Test
+    public void testBoundary() {
+        log.info("9-23 : {}", StarSign.to(9, 23));
+        log.info("9-24 : {}", StarSign.to(9, 24));
+
+    }
+
+
 }

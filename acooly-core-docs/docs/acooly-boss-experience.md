@@ -3,7 +3,6 @@
 <!-- author: zhangpu -->
 <!-- date: 2019-04-26 -->
 
-# 经验
 
 ## 图片(文件)上传
 
@@ -129,3 +128,41 @@ $.acooly.formVal("manage_showcaseMemberProfile_editform", "manager", "newVal");
 <a title="需要提示显示的内容" class="easyui-tooltip"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
 ```
 
+## bootstrap单元和复选框
+
+* 参考案例和文档：https://acooly.cn/resource/AdminLTE-3.0.4/pages/forms/advanced.html
+* 参考showcase的`会员配置`信息模块的编辑功能。
+
+icheckbox的checkbox效果
+```html
+<div class="col-sm-9 col-form-content">
+    <div class="icheck-primary d-inline">
+        <input type="checkbox" name="dailyWords" value="game" <#if showcaseMemberProfile.dailyWords?index_of("game") != -1>checked</#if> id="manage_showcaseMemberProfile_editform_dailyWords_1">
+        <label for="manage_showcaseMemberProfile_editform_dailyWords_1">游戏</label>
+    </div>
+    <div class="icheck-danger d-inline">
+        <input type="checkbox" name="dailyWords" value="music" <#if showcaseMemberProfile.dailyWords?index_of("music") != -1>checked</#if> id="manage_showcaseMemberProfile_editform_dailyWords_2">
+        <label for="manage_showcaseMemberProfile_editform_dailyWords_2">音乐</label>
+    </div>
+    <div class="icheck-warning d-inline">
+        <input type="checkbox" name="dailyWords" value="read" <#if showcaseMemberProfile.dailyWords?index_of("read") != -1>checked</#if> id="manage_showcaseMemberProfile_editform_dailyWords_3">
+        <label for="manage_showcaseMemberProfile_editform_dailyWords_3">看书</label>
+    </div>
+    <div class="icheck-success d-inline">
+        <input type="checkbox" name="dailyWords" value="sport" <#if showcaseMemberProfile.dailyWords?index_of("sport") != -1>checked</#if> id="manage_showcaseMemberProfile_editform_dailyWords_4">
+        <label for="manage_showcaseMemberProfile_editform_dailyWords_4">运动</label>
+    </div>
+</div>
+```
+
+icheckbox的radio效果
+```html
+<div class="col-sm-9 col-form-content">
+    <#list allEmailStatuss as k,v>
+    <div class="icheck-primary d-inline">
+        <input type="radio" id="manage_showcaseMemberProfile_editform_emailStatus_${k}" value="${k}" name="emailStatus">
+        <label for="manage_showcaseMemberProfile_editform_emailStatus_${k}">${v}</label>
+    </div>
+</#list>
+</div>
+```

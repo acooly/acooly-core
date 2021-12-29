@@ -34,7 +34,6 @@ public class StarSignTest {
     public void testBoundary() {
         log.info("9-23 : {}", StarSign.to(9, 23));
         log.info("9-24 : {}", StarSign.to(9, 24));
-
     }
 
 

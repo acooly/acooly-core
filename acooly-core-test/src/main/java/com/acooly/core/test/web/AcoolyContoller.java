@@ -77,7 +77,7 @@ public class AcoolyContoller extends AbstractStandardEntityController<App, AppSe
     @ResponseBody
     @RequestMapping("jsonEntityResult")
     public JsonEntityResult<App> jsonEntityResult(HttpServletRequest request) {
-        JsonEntityResult<App> result = new JsonEntityResult();
+        JsonEntityResult<App> result = new JsonEntityResult<>();
         App app = new App();
         app.setDisplayName("张浦");
         app.setId(1L);

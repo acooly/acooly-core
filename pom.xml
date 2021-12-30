@@ -13,6 +13,8 @@
     <packaging>pom</packaging>
     <properties>
         <caffeine.version>2.6.2</caffeine.version>
+        <!-- 修复log4jBUG漏洞 -->
+        <log4j2.version>2.15.0-rc2</log4j2.version>
     </properties>
     <name>acooly-core-parent</name>
     <description>Acooly Common Basic Framework. Provide unified package for domian, dao, service, cache, webservice, etc.</description>

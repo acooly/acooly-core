@@ -20,16 +20,34 @@ import java.text.DecimalFormat;
  */
 public class BigMoney implements Serializable {
 
-    public static final int DEFAULT_SCALE = 8;
-    public static final int DEFAULT_ROUNDING_MODE = BigDecimal.ROUND_HALF_EVEN;
+    /**
+     * 默认精度：小数点后8位
+     */
+    public static int DEFAULT_SCALE = 8;
+    /**
+     * 默认取舍模式：四舍五入
+     */
+    public static int DEFAULT_ROUNDING_MODE = BigDecimal.ROUND_HALF_EVEN;
+    /**
+     * 数据库存储模式。 1:存Decimal(BigDecimal), 2:存BIGINT(Long)
+     */
+    public static final int DB_MODE_BIG_DECIMAL = 1;
+    public static final int DB_MODE_LONG = 2;
+    public static int DEFAULT_DB_MODE = DB_MODE_BIG_DECIMAL;
 
     private BigDecimal value;
     private int scale = DEFAULT_SCALE;
     private int roundingMode = BigDecimal.ROUND_HALF_UP;
+    private int dbMode = DEFAULT_DB_MODE;
 
 
     public static BigMoney valueOf(BigDecimal value) {
         return new BigMoney(value);
+    }
+
+    public static BigMoney centOf(Long cent) {
+        double d = Math.pow(10, BigMoney.DEFAULT_SCALE);
+        return BigMoney.valueOf(new BigDecimal(cent).divide(new BigDecimal(d)));
     }
 
     public static BigMoney valueOf(String value) {
@@ -40,6 +58,16 @@ public class BigMoney implements Serializable {
         return BigMoney.valueOf(BigDecimal.ZERO);
     }
 
+    public BigMoney(BigDecimal value, int scale, int roundingMode, int dbMode) {
+        this.scale = scale;
+        this.roundingMode = roundingMode;
+        this.value = value.setScale(this.scale, this.roundingMode);
+        this.dbMode = dbMode;
+    }
+
+    public BigMoney(BigDecimal value, int scale, int roundingMode) {
+        this(value, scale, roundingMode, DEFAULT_DB_MODE);
+    }
 
     public BigMoney(BigDecimal value) {
         this(value, DEFAULT_SCALE, DEFAULT_ROUNDING_MODE);
@@ -49,11 +77,6 @@ public class BigMoney implements Serializable {
         this(value, scale, DEFAULT_ROUNDING_MODE);
     }
 
-    public BigMoney(BigDecimal value, int scale, int roundingMode) {
-        this.scale = scale;
-        this.roundingMode = roundingMode;
-        this.value = value.setScale(this.scale, this.roundingMode);
-    }
 
     public BigMoney(String value, int scale, int roundingMode) {
         this(new BigDecimal(value), scale, roundingMode);
@@ -153,6 +176,21 @@ public class BigMoney implements Serializable {
     public BigMoney divisionBy(BigMoney other) {
         this.value = this.value.divide(other.value, this.scale, this.roundingMode);
         return this;
+    }
+
+    /**
+     * 获取"分"整数值。
+     * 注意：该值与精度相关。例如：进度为8，则该值为：`value * 10^8`然后取整数
+     *
+     * @return
+     */
+    public Long getCent() {
+        double d = Math.pow(10, this.value.scale());
+        return value.multiply(new BigDecimal(d)).longValue();
+    }
+
+    public int getDbMode() {
+        return dbMode;
     }
 
     @Override

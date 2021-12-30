@@ -26,24 +26,39 @@ public class BigMoneyTypeHandler extends BaseTypeHandler<BigMoney> {
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, BigMoney parameter, JdbcType jdbcType)
             throws SQLException {
-        ps.setBigDecimal(i, parameter.getAmount());
+        if (parameter.getDbMode() == BigMoney.DB_MODE_BIG_DECIMAL) {
+            ps.setBigDecimal(i, parameter.getAmount());
+        } else {
+            ps.setLong(i, parameter.getCent());
+        }
     }
 
     @Override
     public BigMoney getNullableResult(ResultSet rs, String columnName) throws SQLException {
-        BigDecimal result = rs.getBigDecimal(columnName);
-        return result == null ? null : BigMoney.valueOf(result);
+        Object object = rs.getObject(columnName);
+        return doDeserialize(object);
     }
 
     @Override
     public BigMoney getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
-        BigDecimal result = rs.getBigDecimal(columnIndex);
-        return result == null ? null : BigMoney.valueOf(result);
+        Object object = rs.getObject(columnIndex);
+        return doDeserialize(object);
     }
 
     @Override
     public BigMoney getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
-        BigDecimal result = cs.getBigDecimal(columnIndex);
-        return result == null ? null : BigMoney.valueOf(result);
+        Object object = cs.getObject(columnIndex);
+        return doDeserialize(object);
+    }
+
+    protected BigMoney doDeserialize(Object object) {
+        if (object == null) {
+            return null;
+        }
+        if (BigDecimal.class.isAssignableFrom(object.getClass())) {
+            return BigMoney.valueOf((BigDecimal) object);
+        } else {
+            return BigMoney.centOf((Long) object);
+        }
     }
 }

@@ -80,4 +80,6 @@ public class App extends AbstractEntity {
 
     private BigMoney amount;
 
+    private BigMoney balance;
+
 }

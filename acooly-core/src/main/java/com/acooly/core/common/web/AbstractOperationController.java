@@ -6,6 +6,7 @@ import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.exception.CommonErrorCodes;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.core.common.web.support.MultiFormatCustomDateEditor;
+import com.acooly.core.utils.Reflections;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.google.common.collect.Lists;
@@ -300,13 +301,17 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @return
      */
     protected List<T> mergeBatchEntities(HttpServletRequest request, List<T> exists) {
+        return mergeBatchEntities(request, exists, getEntityClass());
+    }
+
+    protected <X extends Entityable> List<X> mergeBatchEntities(HttpServletRequest request, List<X> exists, Class<X> clazz) {
         // 获取前缀为实体名字开头的请求参数。格式：${entityName}_${propertyName}_${index}
-        Map<String, String> params = Servlets.getParameters(request, getEntityName() + "_", false);
+        Map<String, String> params = Servlets.getParameters(request, Strings.uncapitalize(clazz.getSimpleName()) + "_", false);
         // 清洗数据：index -> entityDataMap
         Map<Integer, Map<String, String>> entityMap = Maps.newHashMap();
         for (Map.Entry<String, String> entry : params.entrySet()) {
             if (Strings.contains(entry.getKey(), "_")) {
-                Pair<String, Integer> pair = parseBatchPropertyName(entry.getKey());
+                Pair<String, Integer> pair = mergeBatchPropertyName(entry.getKey());
                 Integer index = pair.getRight();
                 if (index == null) {
                     continue;
@@ -317,16 +322,16 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
                 entityMap.get(index).put(pair.getLeft(), entry.getValue());
             }
         }
-        List<T> entities = Lists.newArrayList();
-        Map<Long, T> existingMap = Maps.newHashMap();
-        for (T exist : exists) {
+        List<X> entities = Lists.newArrayList();
+        Map<Long, X> existingMap = Maps.newHashMap();
+        for (X exist : exists) {
             existingMap.put((Long) exist.getId(), exist);
         }
         for (Map<String, String> entityDataMap : entityMap.values()) {
             String reqIdStr = entityDataMap.get("id");
             // 新增：新行
             if (Strings.isBlank(reqIdStr)) {
-                entities.add(bindMap(entityDataMap, newEntity()));
+                entities.add(bindMap(entityDataMap, Reflections.createObject(clazz)));
                 continue;
             }
             // 修改：已存在的
@@ -337,6 +342,7 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
         }
         return entities;
     }
+
 
     protected T newEntity() {
         try {
@@ -355,7 +361,7 @@ public abstract class AbstractOperationController<T extends Entityable, M extend
      * @param key
      * @return
      */
-    private Pair<String, Integer> parseBatchPropertyName(String key) {
+    protected Pair<String, Integer> mergeBatchPropertyName(String key) {
         Integer index = null;
         String propertyName = null;
         if (Strings.contains(key, "_")) {

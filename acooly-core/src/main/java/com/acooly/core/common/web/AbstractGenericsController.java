@@ -16,12 +16,14 @@ import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+import org.springframework.validation.DataBinder;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -62,7 +64,26 @@ public abstract class AbstractGenericsController<T extends Entityable, M extends
     @Autowired(required = false)
     private Validator[] validators;
 
-    private DefaultConversionService conversionService = new DefaultConversionService();
+    protected DefaultConversionService conversionService = new DefaultConversionService();
+
+    /**
+     * 通过Map作为数据源绑定到实体
+     *
+     * @param map
+     * @param command
+     */
+    protected void bindMap(Map<String, String> map, Object command) {
+        try {
+            DataBinder binder = new DataBinder(command, "command");
+            binder.setConversionService(conversionService);
+            MutablePropertyValues pvs = new MutablePropertyValues(map);
+            binder.bind(pvs);
+            binder.close();
+        } catch (Exception e) {
+            throw new BusinessException("MAP_TO_ENTITY_BIND_ERROR", "绑定对象值失败", e.getMessage());
+        }
+    }
+
 
     protected void bind(HttpServletRequest request, Object command) {
         ServletRequestDataBinder binder = createBinder(request, command);

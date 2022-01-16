@@ -72,13 +72,14 @@ public abstract class AbstractGenericsController<T extends Entityable, M extends
      * @param map
      * @param command
      */
-    protected void bindMap(Map<String, String> map, Object command) {
+    protected <T> T bindMap(Map<String, String> map, T command) {
         try {
             DataBinder binder = new DataBinder(command, "command");
             binder.setConversionService(conversionService);
             MutablePropertyValues pvs = new MutablePropertyValues(map);
             binder.bind(pvs);
             binder.close();
+            return command;
         } catch (Exception e) {
             throw new BusinessException("MAP_TO_ENTITY_BIND_ERROR", "绑定对象值失败", e.getMessage());
         }

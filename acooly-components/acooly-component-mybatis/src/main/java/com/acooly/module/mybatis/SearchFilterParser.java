@@ -180,7 +180,7 @@ public class SearchFilterParser {
         } else {
             if (searchFilter.value != null) {
                 if (!proType.isAssignableFrom(searchFilter.value.getClass())) {
-                    if (searchFilter.operator == SearchFilter.Operator.LTE
+                    if (searchFilter.operator == SearchFilter.Operator.LT
                             && proType.isAssignableFrom(java.sql.Date.class)) {
                         String oriValue = (String) searchFilter.value;
                         if (oriValue.length() == Dates.CHINESE_DATE_FORMAT_LINE.length()) {

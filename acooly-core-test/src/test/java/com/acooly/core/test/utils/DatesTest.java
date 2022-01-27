@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 public class DatesTest {
 
     @Test
-    public void utcDate(){
+    public void utcDate() {
         String utc = "Thu, 27 May 2021 00:02:31 +0000";
         Date date = new Date(utc);
         SimpleDateFormat sdf = new SimpleDateFormat(Dates.CHINESE_DATETIME_FORMAT_LINE);
@@ -119,9 +119,14 @@ public class DatesTest {
         periods.add(item);
 
         log.info("Dates.isOverlap: {}", Dates.isOverlap(period, item));
+    }
 
-
-
+    @Test
+    public void testDate() {
+        Date date = new Date();
+        log.info("毫秒格式化：{}", Dates.format(date, "yyyy-MM-dd HH:mm:ss.SSS"));
+        log.info("毫秒解析：{}", Dates.parse("2022-01-27 11:23:10.681", "yyyy-MM-dd HH:mm:ss.SSS"));
+        log.info("毫秒解析：{}", Dates.parse("2022-01-27 11:23:10", "yyyy-MM-dd HH:mm:ss.SSS"));
     }
 
 }

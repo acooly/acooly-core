@@ -180,18 +180,18 @@ public class SearchFilterParser {
         } else {
             if (searchFilter.value != null) {
                 if (!proType.isAssignableFrom(searchFilter.value.getClass())) {
-                    if (searchFilter.operator == SearchFilter.Operator.LT
+                    if (searchFilter.operator == SearchFilter.Operator.LTE
                             && proType.isAssignableFrom(java.sql.Date.class)) {
                         String oriValue = (String) searchFilter.value;
                         if (oriValue.length() == Dates.CHINESE_DATE_FORMAT_LINE.length()) {
-                            searchFilter.value = Dates.addDay(Dates.parse(oriValue));
+                            // Mysql默认定义DATETIME或TIMESTAMP存入精确到秒，暂时不对毫秒精度（DATETIME(3)等）进行处理。
+                            searchFilter.value = Dates.parse(oriValue + " 23:59:59", Dates.CHINESE_DATETIME_FORMAT_LINE);
                         }
                     }
                     value = conversionService.convert(searchFilter.value, proType);
                 } else {
                     value = searchFilter.value;
                 }
-
             } else {
                 if (!(searchFilter.operator == SearchFilter.Operator.NULL
                         || searchFilter.operator == SearchFilter.Operator.NOTNULL)) {

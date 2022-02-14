@@ -59,9 +59,20 @@ public class BigMoneyTest {
         BigDecimal newVal = val.multiply(new BigDecimal(d));
         log.info("newVal: {}", newVal);
         log.info("newVal integer: {}", newVal.longValue());
+    }
 
-
-
+    @Test
+    public void testPart() {
+        BigMoney.DEFAULT_SCALE = 4;
+        BigMoney.DEFAULT_DB_MODE = 2;
+        BigMoney b1 = new BigMoney("33.0003");
+        log.info("b1: {}, {}", b1, b1.toStandardString());
+        b1 = new BigMoney("33.0030");
+        log.info("b1: {}, {}", b1, b1.toStandardString());
+        b1 = new BigMoney("33.0300");
+        log.info("b1: {}, {}", b1, b1.toStandardString());
+        b1 = new BigMoney("33.0000");
+        log.info("b1: {}, {}", b1, b1.toStandardString());
     }
 
 

@@ -126,18 +126,14 @@ public class BigMoney implements Serializable {
 
 
     public String toStandardString() {
-        StringBuilder sb = new StringBuilder();
-        BigDecimal bigDecimal = this.getAmount();
-        long integerPart = bigDecimal.longValue();
-        double decimalPart = bigDecimal.subtract(BigDecimal.valueOf(integerPart)).doubleValue();
-        DecimalFormat fmt = new DecimalFormat(",###");
-        sb.append(fmt.format(integerPart));
-        if (decimalPart > 0) {
-            String decimalString = String.valueOf(decimalPart);
-            decimalString = decimalString.substring(1, decimalString.length());
-            sb.append(decimalString);
+        String toString = this.toString();
+        while (toString.endsWith("0")) {
+            toString = toString.substring(0, toString.length() - 1);
         }
-        return sb.toString();
+        if (toString.endsWith(".")) {
+            toString = toString.substring(0, toString.length() - 1);
+        }
+        return toString;
     }
 
 

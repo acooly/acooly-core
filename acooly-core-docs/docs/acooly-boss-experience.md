@@ -120,14 +120,6 @@ let val = $.acooly.formVal("manage_showcaseMemberProfile_editform", "manager");
 $.acooly.formVal("manage_showcaseMemberProfile_editform", "manager", "newVal");
 ```
 
-## tooltip
-
-快速提示效果，一般用于对界面上功能的简单帮助说明或引导
-
-```html
-<a title="需要提示显示的内容" class="easyui-tooltip"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
-```
-
 ## bootstrap单元和复选框
 
 * 参考案例和文档：https://acooly.cn/resource/AdminLTE-3.0.4/pages/forms/advanced.html
@@ -165,4 +157,32 @@ icheckbox的radio效果
     </div>
 </#list>
 </div>
+```
+
+## textarea字数统计
+
+```html
+<textarea rows="3" cols="40" name="xxxx" class="easyui-validatebox form-control form-words" data-words="2048" data-options="validType:['length[1,2048]']" required="true"></textarea>
+```
+
+关键点：
+1. 增加`form-words`样式类
+2. 增加属性`data-words`，设置最大字数
+
+# EasyUI经验
+
+## tooltip
+
+快速提示效果，一般用于对界面上功能的简单帮助说明或引导
+
+```html
+<a title="需要提示显示的内容" class="easyui-tooltip"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+```
+
+## 动态修改文本框的验证类型
+
+```js
+// 次方法修改后，无需重新渲染，及时生效
+$('#id').validatebox('options').validType = ['length[1,2048]'];
+$('#id').validatebox('options').validType = ['json', 'length[1,2048]'];
 ```

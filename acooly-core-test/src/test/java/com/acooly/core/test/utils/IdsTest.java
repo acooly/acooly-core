@@ -9,6 +9,7 @@
  */
 package com.acooly.core.test.utils;
 
+import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.Tasks;
@@ -18,6 +19,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigInteger;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -77,4 +81,28 @@ public class IdsTest {
         log.info("Ids Batch test -> threads:{}, count:{}, success:{}, ms:{}", threads, threads * timesPerThread, successCounter.longValue(), timeTasks);
         Assert.assertEquals(threads * timesPerThread, successCounter.longValue());
     }
+
+
+    @Test
+    public void testNewId15() throws Exception  {
+        AtomicLong successCounter = new AtomicLong();
+        log.info("Ids.newId15 Batch test -> threads:{}, count:{} ", threads, threads * timesPerThread);
+        long timeTasks = Tasks.concurrentTasks(threads, new Runnable() {
+            @Override
+            public void run() {
+                for (int j = 0; j < timesPerThread; j++) {
+                    String id = Ids.newId15();
+                    if (!container.contains(id)) {
+                        container.add(id);
+                        successCounter.incrementAndGet();
+                    } else {
+                        log.info("重复Id: {}", id);
+                    }
+                }
+            }
+        });
+        log.info("Ids Batch test -> threads:{}, count:{}, success:{}, ms:{}", threads, threads * timesPerThread, successCounter.longValue(), timeTasks);
+        Assert.assertEquals(threads * timesPerThread, successCounter.longValue());
+    }
+
 }

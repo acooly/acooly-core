@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.Lock;
@@ -31,6 +32,11 @@ public class Ids {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    public static String newId15() {
+        return Did.getInstance().newId15();
     }
 
     /**
@@ -165,6 +171,23 @@ public class Ids {
         }
 
         /**
+         * 15位唯一ID
+         *
+         * @return
+         */
+        public String newId15() {
+            StringBuilder sb = new StringBuilder();
+            // 固定：当前时间(7位)
+            sb.append(getCompressTimestamp());
+            // 固定：考虑在容器中PID无效，恢复为IP后两段(4位)
+            sb.append(getIp());
+            // 固定：序列号(4位)
+            sb.append(getSequ());
+            return Strings.upperCase(sb.toString());
+        }
+
+
+        /**
          * 生产新Id(20位)
          *
          * @return
@@ -251,6 +274,39 @@ public class Ids {
         public String getTimestamp() {
             SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
             return sdf.format(new Date());
+        }
+
+        /**
+         * 压缩的时间戳
+         * （7字符）
+         *
+         * @return
+         */
+        public String getCompressTimestamp() {
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR) - 2000;
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minute = calendar.get(Calendar.MINUTE);
+            int second = calendar.get(Calendar.SECOND);
+            int minuteSecond = Integer.valueOf((minute < 10 ? "0" + minute : "" + minute) + (second < 10 ? "0" + second : "" + second));
+            StringBuilder sb = new StringBuilder();
+            // 年：1字符，32进制的2000年后2位年（目前22年，最大支持2032年）
+            sb.append(Integer.toString(year, 32));
+            // 月：1字符，16进制（最大12）
+            sb.append(Integer.toString(month, 16));
+            // 日：1字符，32进制（最大31）
+            sb.append(Integer.toString(day, 32));
+            // 时：1字符，32进制（最大24）
+            sb.append(Integer.toString(hour, 32));
+            // 分秒：3字符，32进制（mmss格式，最大：5959：5q7）
+            String ms = Integer.toString(minuteSecond, 32);
+            if (Strings.length(ms) < 3) {
+                ms = Strings.leftPad(ms, 3, "0");
+            }
+            sb.append(Integer.toString(minuteSecond, 32));
+            return sb.toString();
         }
 
         /**

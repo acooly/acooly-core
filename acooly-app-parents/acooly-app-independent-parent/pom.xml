@@ -459,6 +459,12 @@
                 <artifactId>acooly-sdk-aliyun-express</artifactId>
                 <version>5.0.0-SNAPSHOT</version>
             </dependency>
+            <!-- 企业微信SDK -->
+            <dependency>
+                <groupId>cn.acooly</groupId>
+                <artifactId>acooly-sdk-wecom</artifactId>
+                <version>5.0.0-SNAPSHOT</version>
+            </dependency>
 
 
             <!-- 工具 -->

@@ -256,7 +256,7 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
                     if (e.getMessage().contains("Unknown database")) {
                         try {
                             DruidDataSource xdataSource = new DruidDataSource();
-                            String url = this.url.substring(0, this.url.lastIndexOf("/")) + "/mysql?useSSL=false";
+                            String url = DruidProperties.normalizeUrl(this.url.substring(0, this.url.lastIndexOf("/")) + "/mysql");
                             xdataSource.setUrl(url);
                             String dataBase = this.url.substring(this.url.lastIndexOf("/") + 1);
                             log.warn("配置文件中指定的数据库[{}]不存在，尝试创建数据库", dataBase);

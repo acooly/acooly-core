@@ -255,6 +255,12 @@ public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware,
         if (!StringUtils.isEmpty(ssoEnable)) {
             configuration.setSharedVariable("ssoEnable", Boolean.valueOf(ssoEnable));
         }
+
+        List<String> tlds = Lists.newArrayList();
+        tlds.add("/META-INF/acooly.tld");
+        tlds.add("/META-INF/form_tag.tld");
+        freeMarkerConfigurer.getTaglibFactory().setClasspathTlds(tlds);
+
     }
 
 }

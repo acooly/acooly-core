@@ -29,7 +29,7 @@ public enum CommonErrorCodes implements Messageable {
     /**
      * 对象已存在
      */
-    OBJECT_ALREADY_EXIST("OBJECT_ALREADY_EXIST", "对象不存在"),
+    OBJECT_ALREADY_EXIST("OBJECT_ALREADY_EXIST", "对象已存在"),
     /**
      * 对象不唯一
      */

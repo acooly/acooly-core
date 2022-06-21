@@ -21,6 +21,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
  * @date 2020-01-02 11:51
  */
 @Slf4j
+@EnableConfigurationProperties({CommonProperties.class})
 @ConditionalOnProperty(value = CommonProperties.PREFIX + ".enable", matchIfMissing = true)
 public class CommonAutoConfig {
 

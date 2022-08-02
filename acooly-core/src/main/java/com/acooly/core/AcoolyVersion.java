@@ -16,7 +16,7 @@ import com.acooly.core.utils.Strings;
  */
 public class AcoolyVersion {
 
-    public static final String VERSION_5_0_0_SNAPSHOT = "5.0.0-SNAPSHOT";
+    public static final String VERSION_5_0_0_SNAPSHOT = "5.1.0-SNAPSHOT";
 
     private AcoolyVersion() {
     }

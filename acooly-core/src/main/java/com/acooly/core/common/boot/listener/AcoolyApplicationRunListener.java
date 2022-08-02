@@ -80,7 +80,6 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
      */
     @Override
     public void starting() {
-
         if (!cloudEnv) {
             checkAndSetPackage(application);
             checkCoreVersions();
@@ -207,7 +206,6 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
 
     private void initEnvVars(BootApp bootApp) {
         String sysName = bootApp.sysName();
-
         Assert.hasLength(sysName, "系统名不能为空");
         System.setProperty(Apps.APP_NAME, sysName);
         // ref ContextIdApplicationContextInitializer

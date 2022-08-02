@@ -13,9 +13,6 @@ import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.system.Systems;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.common.collect.Maps;
-
-import java.lang.instrument.Instrumentation;
-
 import javassist.*;
 import net.bytebuddy.ByteBuddy;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -31,6 +28,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.instrument.Instrumentation;
 import java.util.Map;
 
 /**
@@ -66,7 +64,6 @@ public class Apps {
      * 如果引入了 spring cloud 的依赖，会在执行到 environmentPrepared的时候调用反射重新执行一次main 实现spring cloud
      * 的bootstrapContext 的初始化 加个标志避免被重新初始化
      */
-
     private static final String CLOUD_CLASS = "org.springframework.cloud.bootstrap.BootstrapImportSelectorConfiguration";
 
 
@@ -306,7 +303,7 @@ public class Apps {
         sb.append("data.putAll(").append(appsClassName).append(".getAppInfo());").append("\n");
         sb.append("data.put(\"sign\", ").append(DigestUtils.class.getName()).append(".md5Hex(")
                 .append(appsClassName).append(".getAppName() + data.get(\"machineNo\") " +
-                "+ data.get(\"startupTime\")));").append("\n");
+                        "+ data.get(\"startupTime\")));").append("\n");
         sb.append(HttpRequest.class.getName()).append(" httpRequest = " +
                 HttpRequest.class.getName() + ".post(url).contentType(" + HttpRequest.class
                 .getName() + ".CONTENT_TYPE_FORM).form(data);").append("\n");

@@ -3,17 +3,18 @@ package com.acooly.core.common.web;
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.BusinessException;
-import com.acooly.core.common.service.EntityService;
 import com.acooly.core.common.exception.FileOperateErrorCodes;
+import com.acooly.core.common.service.EntityService;
 import com.acooly.core.utils.*;
 import com.acooly.core.utils.enums.Messageable;
+import com.acooly.core.utils.ie.ExportResult;
+import com.acooly.core.utils.ie.Exports;
 import com.acooly.core.utils.io.Files;
 import com.acooly.core.utils.io.Streams;
 import com.acooly.core.utils.mapper.CsvMapper;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -552,7 +553,12 @@ public abstract class AbstractFileOperationController<
     }
 
     protected List<Object> doExportRow(T entity) {
-        return doExportEntity(entity).stream().collect(Collectors.toList());
+        ExportResult exportResult = Exports.parse(entity);
+        // 为空，则走原有流程
+        if (Collections3.isEmpty(exportResult.getRow())) {
+            return doExportEntity(entity).stream().collect(Collectors.toList());
+        }
+        return exportResult.getRow();
     }
 
     /**

@@ -2,6 +2,7 @@ package com.acooly.core.common.domain;
 
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.ToString;
+import com.acooly.core.utils.ie.ExportColumn;
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.google.common.collect.Lists;
 import lombok.Getter;
@@ -30,6 +31,7 @@ public abstract class AbstractEntity implements Entityable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ExportColumn(title = "ID", order = 0)
     private Long id;
 
     /**
@@ -39,6 +41,7 @@ public abstract class AbstractEntity implements Entityable {
             name = "create_time",
             columnDefinition = " timestamp  DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'"
     )
+    @ExportColumn(title = "创建时间", order = 999)
     private Date createTime = new Date();
 
     @Column(
@@ -47,6 +50,7 @@ public abstract class AbstractEntity implements Entityable {
                     "timestamp  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'"
     )
     /** 修改时间 */
+    @ExportColumn(title = "更新时间", order = 1000)
     private Date updateTime = new Date();
 
     public static <T, S extends AbstractEntity> List<T> to(List<S> list, Class<T> clazz) {

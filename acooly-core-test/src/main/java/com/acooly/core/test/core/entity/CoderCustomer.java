@@ -4,7 +4,7 @@
  * create by acooly
  * date:2022-06-25
  */
-package com.acooly.core.test.entity;
+package com.acooly.core.test.core.entity;
 
 
 import com.acooly.core.common.domain.AbstractEntity;
@@ -114,20 +114,20 @@ public class CoderCustomer extends AbstractEntity {
      * 完成度
      * 任务完成度，根据不同完成度获得对应的特权。<li>1、50%以下：基本会员权限</li><li>1、50%以上：VIP会员权限</li>
      */
-    @ExportColumn(title = "完成度", order = 11)
+    @ExportColumn(title = "完成度(%)", order = 11)
     private Integer doneRatio;
 
     /**
      * 付款率
      * 演示说明：付款率字段采用支持2位小数的百分数（15.55%）。注意点如下: <li>1、数据库字段类型采用BIGINT</li><li>2、实体类型采用Money</li><li>3、数据库保存的是万分位值（例如:1555表示15.55%）</li>
      */
-    @ExportColumn(title = "付款率", order = 12)
+    @ExportColumn(title = "付款率(%)", order = 12)
     private Money payRate;
 
     /**
      * 薪水
      */
-    @ExportColumn(title = "薪水", order = 13)
+    @ExportColumn(title = "薪水(元)", order = 13)
     private Money salary;
 
     /**

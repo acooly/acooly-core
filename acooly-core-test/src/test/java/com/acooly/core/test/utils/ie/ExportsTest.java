@@ -11,20 +11,17 @@ package com.acooly.core.test.utils.ie;
 import com.acooly.core.common.enums.AnimalSign;
 import com.acooly.core.common.enums.ChannelEnum;
 import com.acooly.core.common.enums.Gender;
-import com.acooly.core.test.entity.CoderCustomer;
+import com.acooly.core.test.core.entity.CoderCustomer;
 import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.enums.SimpleStatus;
 import com.acooly.core.utils.enums.WhetherStatus;
-import com.acooly.core.utils.ie.ExportItem;
 import com.acooly.core.utils.ie.ExportResult;
 import com.acooly.core.utils.ie.Exports;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author zhangpu

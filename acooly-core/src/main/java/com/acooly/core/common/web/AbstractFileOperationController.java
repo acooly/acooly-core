@@ -306,6 +306,20 @@ public abstract class AbstractFileOperationController<
         return doImportEntity(fields);
     }
 
+    /**
+     * 为保持原有持续结构，并合理处理性能：
+     * 1、在导入入口对目标实体进行基于@Annotation的元数据解析，
+     * 2、然后通本ThreadLocal变量进行线程类变量传输，不用在每行输出时都进行实体解析
+     */
+    private static ThreadLocal<ExportResult> exportResultLocal = new ThreadLocal<>();
+
+    /**
+     * 导出主方法
+     *
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     protected void doExport(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         FileType fileType = getFileType(request);
@@ -313,16 +327,18 @@ public abstract class AbstractFileOperationController<
             doExportCsv(request, response);
         } else if (fileType == FileType.EXCEL) {
             doExportExcel(request, response);
-        } else {
-            throw new UnsupportedOperationException("不支持的导出文件类型:" + fileType);
         }
+    }
+
+    private ExportResult getExportResult() {
+        return exportResultLocal.get();
     }
 
     protected FileType getFileType(HttpServletRequest request) throws Exception {
         String fType = request.getParameter(WebRequestParameterEnum.importFileType.code());
         FileType fileType = FileType.findOf(fType);
         if (fileType == null) {
-            fileType = FileType.CSV;
+            fileType = FileType.EXCEL;
         }
         return fileType;
     }
@@ -338,8 +354,21 @@ public abstract class AbstractFileOperationController<
      */
     protected void doExportExcel(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
-        doExportExcelHeader(request, response);
-        doExportExcelBody(request, response, getExportBatchSize());
+        try {
+            // 1、提前解析T的导出元数据，缓冲到线程变量中
+            Class<T> clazz = getEntityClass();
+            ExportResult exportResult = Exports.parse(clazz);
+            if (exportResult != null) {
+                exportResultLocal.set(exportResult);
+            }
+
+            // 2、导出数据
+            doExportExcelHeader(request, response);
+            doExportExcelBody(request, response, getExportBatchSize());
+        } finally {
+            // 3、清理线程变量
+            exportResultLocal.remove();
+        }
     }
 
     /**
@@ -362,8 +391,7 @@ public abstract class AbstractFileOperationController<
         String fileName = getExportFileName(request);
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "attachment");
-        response.setHeader(
-                "Content-Disposition", "filename=\"" + Encodes.urlEncode(fileName) + ".xlsx\"");
+        response.setHeader("Content-Disposition", "filename=\"" + Encodes.urlEncode(fileName) + ".xlsx\"");
     }
 
     /**
@@ -553,12 +581,13 @@ public abstract class AbstractFileOperationController<
     }
 
     protected List<Object> doExportRow(T entity) {
-        ExportResult exportResult = Exports.parse(entity);
-        // 为空，则走原有流程
-        if (Collections3.isEmpty(exportResult.getRow())) {
-            return doExportEntity(entity).stream().collect(Collectors.toList());
+        ExportResult exportResult = getExportResult();
+        if (exportResult != null && Collections3.isNotEmpty(exportResult.getItems())) {
+            exportResult = Exports.parse(exportResult, entity);
+            return exportResult.getRow();
         }
-        return exportResult.getRow();
+        // 为空，则走原有流程
+        return doExportEntity(entity).stream().collect(Collectors.toList());
     }
 
     /**
@@ -567,7 +596,11 @@ public abstract class AbstractFileOperationController<
      * @return
      */
     protected List<String> getExportTitles() {
-        return null;
+        ExportResult exportResult = getExportResult();
+        if (exportResult == null) {
+            return null;
+        }
+        return exportResult.getTitles();
     }
 
     /**
@@ -577,6 +610,11 @@ public abstract class AbstractFileOperationController<
      */
     protected String getExportFileName(HttpServletRequest request) {
         String fileName = getEntityName();
+        // @ExportModel.fileName优先级高于实体名称
+        ExportResult result = getExportResult();
+        if (result != null && Strings.isNotBlank(result.getFileName())) {
+            fileName = result.getFileName();
+        }
         String exportFileName = request.getParameter(WebRequestParameterEnum.exportFileName.code());
         if (StringUtils.isNotBlank(exportFileName)) {
             fileName = exportFileName;

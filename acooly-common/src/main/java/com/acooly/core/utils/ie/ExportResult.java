@@ -21,12 +21,17 @@ import java.util.List;
 @Getter
 @Setter
 public class ExportResult extends InfoBase {
-    
+
 
     /**
      * 文件名
      */
     private String fileName;
+
+    /**
+     * 属性列表
+     */
+    private List<ExportItem> items;
 
     /**
      * 表头

@@ -31,13 +31,13 @@ import java.util.Map;
 public class Exports {
 
     /**
-     * 导出
+     * 解析导出元数据
      *
-     * @param object
+     * @param clazz
      * @return
      */
-    public static ExportResult parse(Object object) {
-        ExportModel exportModel = object.getClass().getAnnotation(ExportModel.class);
+    public static ExportResult parse(Class<?> clazz) {
+        ExportModel exportModel = clazz.getAnnotation(ExportModel.class);
         if (exportModel == null) {
             return null;
         }
@@ -49,26 +49,25 @@ public class Exports {
 
         // 获取对象继承树类列表写入sources列表（子类在前）
         List<Class> sources = Lists.newArrayList();
-        Class<?> cc = object.getClass();
+        Class<?> cc = clazz;
         while (cc != null && cc != Object.class) {
             sources.add(cc);
             cc = cc.getSuperclass();
         }
-        log.debug("sources: {}", sources);
         // 倒置sources（基类在前）
         Collections.reverse(sources);
-        log.debug("sources reversed: {}", sources);
 
         // 根据@ExportModel.ignores配置忽略属性
         List<String> ignores = Lists.newArrayList(exportModel.ignores());
 
-        for (Class<?> clazz : sources) {
+        for (Class<?> cls : sources) {
             Field[] fields = clazz.getDeclaredFields();
             for (Field field : fields) {
                 if (Modifier.isStatic(field.getModifiers())) {
                     continue;
                 }
-                //@ExportColumn标识的才做解析
+
+                // @ExportColumn标识的才做解析
                 if (!field.isAnnotationPresent(ExportColumn.class)) {
                     continue;
                 }
@@ -77,8 +76,7 @@ public class Exports {
                     continue;
                 }
                 ExportColumn exportColumn = field.getAnnotation(ExportColumn.class);
-                Object value = Reflections.getFieldValue(object, field);
-                itemMap.put(field.getName(), newExportItem(exportColumn, field.getName(), value));
+                itemMap.put(field.getName(), newExportItem(exportColumn, field.getName(), null));
             }
         }
 
@@ -88,8 +86,7 @@ public class Exports {
             if (Strings.isBlank(exportColumn.name()) || ignores.contains(exportColumn.name())) {
                 continue;
             }
-            Object value = Reflections.getFieldValue(object, exportColumn.name());
-            itemMap.put(exportColumn.name(), newExportItem(exportColumn, null, value));
+            itemMap.put(exportColumn.name(), newExportItem(exportColumn, null, null));
         }
 
         // Ordered排序
@@ -97,14 +94,34 @@ public class Exports {
         OrderComparator.sort(exportItems);
 
         // 设置值
+        result.setItems(exportItems);
         List<String> titles = Lists.newArrayList();
-        List<Object> row = Lists.newArrayList();
         for (ExportItem item : exportItems) {
             titles.add(item.getTitle());
-            row.add(item.getValue());
+        }
+        result.setTitles(titles);
+        return result;
+    }
+
+    /**
+     * 获取单个实体对象的导出结果
+     *
+     * @param object
+     * @return
+     */
+    public static ExportResult parse(Object object) {
+        ExportResult result = parse(object.getClass());
+        return parse(result, object);
+    }
+
+    public static ExportResult parse(ExportResult result, Object object) {
+        List<Object> row = Lists.newArrayList();
+        for (ExportItem item : result.getItems()) {
+            Object cell = Reflections.getFieldValue(object, item.getName());
+            item.setValue(cell);
+            row.add(cell);
         }
         result.setRow(row);
-        result.setTitles(titles);
         return result;
     }
 

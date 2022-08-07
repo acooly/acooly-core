@@ -18,6 +18,7 @@ import com.acooly.core.test.enums.CustomerTypeEnum;
 import com.acooly.core.test.enums.IdcardTypeEnum;
 import com.acooly.core.utils.enums.SimpleStatus;
 import com.acooly.core.utils.enums.WhetherStatus;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,6 +54,24 @@ public class CoderCustomerManageController extends AbstractStandardEntityControl
     @Autowired
     private CoderCustomerService coderCustomerService;
 
+//
+//    @Override
+//    protected String getExportFileName(HttpServletRequest request) {
+//        return "客户信息";
+//    }
+//
+//    @Override
+//    protected List<String> getExportTitles() {
+//        return Lists.newArrayList("ID", "用户名", "年龄", "生日", "性别", "手机号码", "详情", "完成度(%)", "付款率(%)", "薪水(元)", "注册渠道", "创建时间", "更新时间");
+//    }
+//
+//    @Override
+//    protected List<Object> doExportRow(CoderCustomer entity) {
+//        return Lists.newArrayList(entity.getId(),
+//                entity.getUsername(), entity.getAge(), entity.getBirthday(), entity.getGender(),
+//                entity.getMobileNo(), entity.getContent(), entity.getDoneRatio(), entity.getPayRate(), entity.getSalary(),
+//                entity.getRegistryChannel(), entity.getCreateTime(), entity.getUpdateTime());
+//    }
 
     @Override
     protected void referenceData(HttpServletRequest request, Map<String, Object> model) {

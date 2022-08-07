@@ -335,9 +335,6 @@ public abstract class AbstractFileOperationController<
         }
     }
 
-    private ExportModelMeta getExportResult() {
-        return exportResultLocal.get();
-    }
 
     protected FileType getFileType(HttpServletRequest request) throws Exception {
         String fType = request.getParameter(WebRequestParameterEnum.importFileType.code());
@@ -376,6 +373,11 @@ public abstract class AbstractFileOperationController<
         }
     }
 
+    private ExportModelMeta getExportResult() {
+        return exportResultLocal.get();
+    }
+
+
     /**
      * 导出CSV操作
      *
@@ -385,8 +387,22 @@ public abstract class AbstractFileOperationController<
      */
     protected void doExportCsv(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
-        doExportCsvHeader(request, response);
-        doExportCsvBody(request, response, getExportBatchSize());
+        try {
+            // 1、提前解析T的导出元数据，缓冲到线程变量中
+            Class<T> clazz = getEntityClass();
+            ExportModelMeta exportModelMeta = Exports.parse(clazz);
+            if (exportModelMeta != null) {
+                exportResultLocal.set(exportModelMeta);
+            }
+
+            // 2、导出数据
+            doExportCsvHeader(request, response);
+            doExportCsvBody(request, response, getExportBatchSize());
+        } finally {
+            // 3、清理线程变量
+            exportResultLocal.remove();
+        }
+
     }
 
     /**
@@ -428,11 +444,15 @@ public abstract class AbstractFileOperationController<
                 row.setHeight(exportModelMeta.getHeaderStyleMeta().getRowHeight());
             }
             if (headerNames != null) {
-                // 构建通用CellStyle
-                CellStyle cellStyle = excelHeaderCellStyle(sheet);
+                // 构建通用CellStyle，并缓存到线程变量中
+                commonExcelCellStyle(sheet);
+                // 构建Header的CellStyle
+                CellStyle headerStyle = excelHeaderCellStyle(sheet);
                 for (int cellnum = 0; cellnum < headerNames.size(); cellnum++) {
                     row.createCell(cellnum).setCellValue(headerNames.get(cellnum));
-                    row.getCell(cellnum).setCellStyle(cellStyle);
+                    if (headerStyle != null) {
+                        row.getCell(cellnum).setCellStyle(headerStyle);
+                    }
                     updateExcelColumnWidth(cellnum, headerNames.get(cellnum), sheet);
                 }
                 rowNum++;
@@ -462,6 +482,7 @@ public abstract class AbstractFileOperationController<
             workbook.dispose();
         }
     }
+
 
     private CellStyle excelHeaderCellStyle(Sheet sheet) {
         ExportModelMeta exportModelMeta = getExportResult();
@@ -503,15 +524,21 @@ public abstract class AbstractFileOperationController<
 
     private CellStyle commonExcelCellStyle(Sheet sheet) {
         ExportModelMeta exportModelMeta = getExportResult();
-        CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
-        cellStyle.setWrapText(true);
-        if (exportModelMeta.isBorder()) {
-            cellStyle.setBorderTop(BorderStyle.THIN);
-            cellStyle.setBorderBottom(BorderStyle.THIN);
-            cellStyle.setBorderLeft(BorderStyle.THIN);
-            cellStyle.setBorderRight(BorderStyle.THIN);
+        if (exportModelMeta == null) {
+            return null;
         }
-        return cellStyle;
+        if (exportModelMeta.getStyle() == null) {
+            CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+            cellStyle.setWrapText(true);
+            if (exportModelMeta.isBorder()) {
+                cellStyle.setBorderTop(BorderStyle.THIN);
+                cellStyle.setBorderBottom(BorderStyle.THIN);
+                cellStyle.setBorderLeft(BorderStyle.THIN);
+                cellStyle.setBorderRight(BorderStyle.THIN);
+            }
+            exportModelMeta.setStyle(cellStyle);
+        }
+        return (CellStyle) exportModelMeta.getStyle();
     }
 
 
@@ -528,7 +555,9 @@ public abstract class AbstractFileOperationController<
             for (int cellNum = 0; cellNum < data.size(); cellNum++) {
                 value = data.get(cellNum);
                 cell = row.createCell(cellNum);
-                cell.setCellStyle(cellStyle);
+                if (cellStyle != null) {
+                    cell.setCellStyle(cellStyle);
+                }
                 // 空值直接返回
                 if (value == null) {
                     cell.setCellType(CellType.BLANK);

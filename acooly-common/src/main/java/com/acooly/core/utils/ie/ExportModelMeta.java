@@ -58,6 +58,11 @@ public class ExportModelMeta extends InfoBase {
      */
     private List<Object> row;
 
+    /**
+     * 临时对象
+     */
+    private Object style;
+
     public ExportColumnMeta getExportItem(int index) {
         return items.get(index);
     }

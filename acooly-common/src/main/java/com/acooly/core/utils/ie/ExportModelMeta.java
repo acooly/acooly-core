@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class ExportResult extends InfoBase {
+public class ExportModelMeta extends InfoBase {
 
 
     /**
@@ -29,18 +29,37 @@ public class ExportResult extends InfoBase {
     private String fileName;
 
     /**
+     * 标题行样式
+     */
+    private ExportStyleMeta headerStyleMeta;
+
+    /**
+     * 全局通用行高
+     */
+    private short rowHeight;
+
+    /**
+     * 全局是否有边框
+     */
+    private boolean border;
+
+    /**
      * 属性列表
      */
-    private List<ExportItem> items;
+    private List<ExportColumnMeta> items;
 
     /**
      * 表头
      */
-    private List<String> titles;
+    private List<String> headers;
 
     /**
      * 行数据
      */
     private List<Object> row;
+
+    public ExportColumnMeta getExportItem(int index) {
+        return items.get(index);
+    }
 
 }

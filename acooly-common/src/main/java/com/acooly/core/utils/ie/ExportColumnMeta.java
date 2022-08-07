@@ -21,12 +21,16 @@ import org.springframework.core.Ordered;
  */
 @Getter
 @Setter
-public class ExportItem extends InfoBase implements Ordered {
+public class ExportColumnMeta extends InfoBase implements Ordered {
 
-    private String title;
+    private String header;
     private String name;
+    private int width;
+    private boolean showMapping = true;
+    private String format;
     private Object value;
     private int order;
+
 
     @Override
     public boolean equals(Object o) {
@@ -34,11 +38,11 @@ public class ExportItem extends InfoBase implements Ordered {
             return true;
         }
 
-        if (!(o instanceof ExportItem)) {
+        if (!(o instanceof ExportColumnMeta)) {
             return false;
         }
 
-        ExportItem that = (ExportItem) o;
+        ExportColumnMeta that = (ExportColumnMeta) o;
 
         return new EqualsBuilder().append(getName(), that.getName()).isEquals();
     }

@@ -16,7 +16,7 @@ import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.enums.SimpleStatus;
 import com.acooly.core.utils.enums.WhetherStatus;
-import com.acooly.core.utils.ie.ExportResult;
+import com.acooly.core.utils.ie.ExportModelMeta;
 import com.acooly.core.utils.ie.Exports;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -35,8 +35,8 @@ public class ExportsTest {
     public void testExportParse() {
         CoderCustomer customer = getCustomer();
         log.info("{}", customer);
-        ExportResult exportResult = Exports.parse(customer);
-        log.info("{}", exportResult);
+        ExportModelMeta exportModelMeta = Exports.parse(customer);
+        log.info("{}", exportModelMeta);
     }
 
     private CoderCustomer getCustomer() {

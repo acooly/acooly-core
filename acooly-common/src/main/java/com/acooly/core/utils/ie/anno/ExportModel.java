@@ -6,7 +6,7 @@
  * @author zhangpu
  * @date 2022-08-03 09:22
  */
-package com.acooly.core.utils.ie;
+package com.acooly.core.utils.ie.anno;
 
 import java.lang.annotation.*;
 
@@ -26,6 +26,22 @@ public @interface ExportModel {
      * @return 文件名
      */
     String fileName() default "";
+
+    /**
+     * 表头样式
+     *
+     * @return
+     */
+    ExportStyle headerStyle() default @ExportStyle;
+
+
+    /**
+     * Excel时有效，表格是否有边框
+     *
+     * @return
+     */
+    boolean border() default false;
+
 
     /**
      * [可选] 针对配置了@ExportColumn的列表的全局忽略配置

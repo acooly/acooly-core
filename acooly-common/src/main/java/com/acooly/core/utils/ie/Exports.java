@@ -10,13 +10,19 @@ package com.acooly.core.utils.ie;
 
 import com.acooly.core.utils.Reflections;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.ie.anno.ExportColumn;
+import com.acooly.core.utils.ie.anno.ExportModel;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.sap.conn.jco.util.Codecs;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Hex;
 import org.springframework.core.OrderComparator;
 
+import java.awt.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -36,17 +42,22 @@ public class Exports {
      * @param clazz
      * @return
      */
-    public static ExportResult parse(Class<?> clazz) {
+    public static ExportModelMeta parse(Class<?> clazz) {
         ExportModel exportModel = clazz.getAnnotation(ExportModel.class);
         if (exportModel == null) {
             return null;
         }
-        ExportResult result = new ExportResult();
-        result.setFileName(exportModel.fileName());
+        ExportModelMeta exportModelMeta = new ExportModelMeta();
+        // 主属性
+        exportModelMeta.setFileName(exportModel.fileName());
+        exportModelMeta.setBorder(exportModel.border());
+        // 标题行样式
+        if (exportModel.headerStyle() != null) {
+            exportModelMeta.setHeaderStyleMeta(new ExportStyleMeta(exportModel.headerStyle()));
+        }
 
         // Temporary data container<name,ExportItem>
-        Map<String, ExportItem> itemMap = Maps.newHashMap();
-
+        Map<String, ExportColumnMeta> itemMap = Maps.newHashMap();
         // 获取对象继承树类列表写入sources列表（子类在前）
         List<Class> sources = Lists.newArrayList();
         Class<?> cc = clazz;
@@ -90,17 +101,17 @@ public class Exports {
         }
 
         // Ordered排序
-        List<ExportItem> exportItems = Lists.newArrayList(itemMap.values());
-        OrderComparator.sort(exportItems);
+        List<ExportColumnMeta> exportColumnMetas = Lists.newArrayList(itemMap.values());
+        OrderComparator.sort(exportColumnMetas);
 
         // 设置值
-        result.setItems(exportItems);
+        exportModelMeta.setItems(exportColumnMetas);
         List<String> titles = Lists.newArrayList();
-        for (ExportItem item : exportItems) {
-            titles.add(item.getTitle());
+        for (ExportColumnMeta item : exportColumnMetas) {
+            titles.add(item.getHeader());
         }
-        result.setTitles(titles);
-        return result;
+        exportModelMeta.setHeaders(titles);
+        return exportModelMeta;
     }
 
     /**
@@ -109,14 +120,14 @@ public class Exports {
      * @param object
      * @return
      */
-    public static ExportResult parse(Object object) {
-        ExportResult result = parse(object.getClass());
+    public static ExportModelMeta parse(Object object) {
+        ExportModelMeta result = parse(object.getClass());
         return parse(result, object);
     }
 
-    public static ExportResult parse(ExportResult result, Object object) {
+    public static ExportModelMeta parse(ExportModelMeta result, Object object) {
         List<Object> row = Lists.newArrayList();
-        for (ExportItem item : result.getItems()) {
+        for (ExportColumnMeta item : result.getItems()) {
             Object cell = Reflections.getFieldValue(object, item.getName());
             item.setValue(cell);
             row.add(cell);
@@ -126,13 +137,34 @@ public class Exports {
     }
 
 
-    private static ExportItem newExportItem(ExportColumn exportColumn, String name, Object value) {
-        ExportItem item = new ExportItem();
+    private static ExportColumnMeta newExportItem(ExportColumn exportColumn, String name, Object value) {
+        ExportColumnMeta item = new ExportColumnMeta();
         item.setValue(value);
         item.setOrder(exportColumn.order());
+        item.setFormat(exportColumn.format());
+        item.setShowMapping(exportColumn.showMapping());
+        item.setWidth(exportColumn.width());
         item.setName(Strings.isBlankDefault(name, exportColumn.name()));
-        item.setTitle(Strings.isBlankDefault(exportColumn.title(), exportColumn.name()));
+        item.setHeader(Strings.isBlankDefault(exportColumn.header(), exportColumn.name()));
         return item;
     }
+
+    /**
+     * 16进制颜色字符串转换成rgb
+     *
+     * @param hexStr
+     * @return rgb
+     */
+    public static byte[] hex2RGB(String hexStr) {
+        if (hexStr != null && !"".equals(hexStr) && hexStr.length() == 7) {
+            byte[] rgb = new byte[3];
+            rgb[0] = Byte.valueOf(hexStr.substring(1, 3), 16);
+            rgb[1] = Byte.valueOf(hexStr.substring(3, 5), 16);
+            rgb[2] = Byte.valueOf(hexStr.substring(5, 7), 16);
+            return rgb;
+        }
+        return null;
+    }
+
 
 }

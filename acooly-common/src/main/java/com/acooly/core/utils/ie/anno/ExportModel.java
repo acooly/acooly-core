@@ -28,6 +28,13 @@ public @interface ExportModel {
     String fileName() default "";
 
     /**
+     * 是否显示表头
+     *
+     * @return
+     */
+    boolean headerShow() default true;
+
+    /**
      * 表头样式
      *
      * @return

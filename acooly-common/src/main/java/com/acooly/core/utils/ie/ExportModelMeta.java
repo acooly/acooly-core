@@ -29,6 +29,11 @@ public class ExportModelMeta extends InfoBase {
     private String fileName;
 
     /**
+     * 是否显示表头
+     */
+    private boolean headerShow;
+
+    /**
      * 标题行样式
      */
     private ExportStyleMeta headerStyleMeta;

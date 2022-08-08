@@ -47,6 +47,7 @@ public class Exports {
         // 主属性
         exportModelMeta.setFileName(exportModel.fileName());
         exportModelMeta.setBorder(exportModel.border());
+        exportModelMeta.setHeaderShow(exportModel.headerShow());
         // 标题行样式
         if (exportModel.headerStyle() != null) {
             exportModelMeta.setHeaderStyleMeta(new ExportStyleMeta(exportModel.headerStyle()));

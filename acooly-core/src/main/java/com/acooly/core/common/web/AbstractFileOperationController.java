@@ -14,6 +14,7 @@ import com.acooly.core.utils.ie.Exports;
 import com.acooly.core.utils.io.Files;
 import com.acooly.core.utils.io.Streams;
 import com.acooly.core.utils.mapper.CsvMapper;
+import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -621,7 +622,6 @@ public abstract class AbstractFileOperationController<
 
 
             }
-
             rowNum = rowNum + 1;
         }
         return rowNum;
@@ -644,8 +644,7 @@ public abstract class AbstractFileOperationController<
     protected void doExportCsvHeader(HttpServletRequest request, HttpServletResponse response) {
         String fileName = getExportFileName(request);
         response.setContentType("application/octet-stream");
-        response.setHeader(
-                "Content-Disposition", "attachment;filename=\"" + Encodes.urlEncode(fileName) + ".csv\"");
+        response.setHeader("Content-Disposition", "attachment;filename=\"" + Encodes.urlEncode(fileName) + ".csv\"");
     }
 
     /**
@@ -674,8 +673,7 @@ public abstract class AbstractFileOperationController<
             if (totalPage > 1) {
                 for (int i = 2; i <= totalPage; i++) {
                     pageInfo.setCurrentPage(i);
-                    pageInfo =
-                            getEntityService().query(pageInfo, getSearchParams(request), getSortMap(request));
+                    pageInfo = getEntityService().query(pageInfo, getSearchParams(request), getSortMap(request));
                     doExportCsvPage(pageInfo.getPageResults(), p);
                 }
             }
@@ -690,9 +688,55 @@ public abstract class AbstractFileOperationController<
 
     protected void doExportCsvPage(List<T> list, PrintWriter p) throws Exception {
         for (T entity : list) {
-            p.println(CsvMapper.marshal(doExportEntity(entity)));
+            p.println(CsvMapper.marshal(convertToStringList(doExportRow(entity))));
         }
         p.flush();
+    }
+
+    private List<String> convertToStringList(List<Object> list) {
+        ExportModelMeta exportModelMeta = getExportResult();
+        List<String> data = Lists.newArrayList();
+        for (int i = 0; i < list.size(); i++) {
+            String e = null;
+            Object value = list.get(i);
+            // 空值直接返回
+            if (value == null) {
+                data.add(null);
+                continue;
+            }
+
+            // Money转数字
+            if (value instanceof Money) {
+                e = ((Money) value).toString();
+            } else if (value instanceof Messageable) {
+                // 枚举转字符串
+                e = ((Messageable) value).message();
+                if (exportModelMeta != null && exportModelMeta.getExportItem(i) != null) {
+                    ExportColumnMeta item = exportModelMeta.getExportItem(i);
+                    if (!item.isShowMapping()) {
+                        e = ((Messageable) value).code();
+                    }
+                }
+            } else if (value instanceof Date) {
+                // 默认日期时间格式化foramt
+                String foramt = Dates.CHINESE_DATETIME_FORMAT_LINE;
+                if (Dates.isDate((Date) value)) {
+                    foramt = Dates.CHINESE_DATE_FORMAT_SLASH;
+                }
+                // 如果@anno设置了format，则按设置的格式进行转换
+                if (exportModelMeta != null && exportModelMeta.getExportItem(i) != null) {
+                    ExportColumnMeta item = exportModelMeta.getExportItem(i);
+                    if (Strings.isNotBlank(item.getFormat())) {
+                        foramt = item.getFormat();
+                    }
+                }
+                e = Dates.format((Date) value, foramt);
+            } else {
+                e = conversionService.convert(value, String.class);
+            }
+            data.add(e);
+        }
+        return data;
     }
 
     /**
@@ -725,10 +769,10 @@ public abstract class AbstractFileOperationController<
      */
     protected List<String> getExportTitles() {
         ExportModelMeta exportModelMeta = getExportResult();
-        if (exportModelMeta == null) {
-            return null;
+        if (exportModelMeta != null && exportModelMeta.isHeaderShow()) {
+            return exportModelMeta.getHeaders();
         }
-        return exportModelMeta.getHeaders();
+        return null;
     }
 
     /**

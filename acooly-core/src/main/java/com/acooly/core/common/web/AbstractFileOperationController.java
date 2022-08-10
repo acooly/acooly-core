@@ -3,21 +3,28 @@ package com.acooly.core.common.web;
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.BusinessException;
-import com.acooly.core.common.service.EntityService;
 import com.acooly.core.common.exception.FileOperateErrorCodes;
+import com.acooly.core.common.service.EntityService;
 import com.acooly.core.utils.*;
 import com.acooly.core.utils.enums.Messageable;
+import com.acooly.core.utils.ie.ExportColumnMeta;
+import com.acooly.core.utils.ie.ExportModelMeta;
+import com.acooly.core.utils.ie.ExportStyleMeta;
+import com.acooly.core.utils.ie.Exports;
 import com.acooly.core.utils.io.Files;
 import com.acooly.core.utils.io.Streams;
 import com.acooly.core.utils.mapper.CsvMapper;
+import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
@@ -305,6 +312,20 @@ public abstract class AbstractFileOperationController<
         return doImportEntity(fields);
     }
 
+    /**
+     * 为保持原有持续结构，并合理处理性能：
+     * 1、在导入入口对目标实体进行基于@Annotation的元数据解析，
+     * 2、然后通本ThreadLocal变量进行线程类变量传输，不用在每行输出时都进行实体解析
+     */
+    private static ThreadLocal<ExportModelMeta> exportResultLocal = new ThreadLocal<>();
+
+    /**
+     * 导出主方法
+     *
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     protected void doExport(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         FileType fileType = getFileType(request);
@@ -312,16 +333,15 @@ public abstract class AbstractFileOperationController<
             doExportCsv(request, response);
         } else if (fileType == FileType.EXCEL) {
             doExportExcel(request, response);
-        } else {
-            throw new UnsupportedOperationException("不支持的导出文件类型:" + fileType);
         }
     }
+
 
     protected FileType getFileType(HttpServletRequest request) throws Exception {
         String fType = request.getParameter(WebRequestParameterEnum.importFileType.code());
         FileType fileType = FileType.findOf(fType);
         if (fileType == null) {
-            fileType = FileType.CSV;
+            fileType = FileType.EXCEL;
         }
         return fileType;
     }
@@ -337,9 +357,27 @@ public abstract class AbstractFileOperationController<
      */
     protected void doExportExcel(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
-        doExportExcelHeader(request, response);
-        doExportExcelBody(request, response, getExportBatchSize());
+        try {
+            // 1、提前解析T的导出元数据，缓冲到线程变量中
+            Class<T> clazz = getEntityClass();
+            ExportModelMeta exportModelMeta = Exports.parse(clazz);
+            if (exportModelMeta != null) {
+                exportResultLocal.set(exportModelMeta);
+            }
+
+            // 2、导出数据
+            doExportExcelHeader(request, response);
+            doExportExcelBody(request, response, getExportBatchSize());
+        } finally {
+            // 3、清理线程变量
+            exportResultLocal.remove();
+        }
     }
+
+    private ExportModelMeta getExportResult() {
+        return exportResultLocal.get();
+    }
+
 
     /**
      * 导出CSV操作
@@ -350,8 +388,22 @@ public abstract class AbstractFileOperationController<
      */
     protected void doExportCsv(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
-        doExportCsvHeader(request, response);
-        doExportCsvBody(request, response, getExportBatchSize());
+        try {
+            // 1、提前解析T的导出元数据，缓冲到线程变量中
+            Class<T> clazz = getEntityClass();
+            ExportModelMeta exportModelMeta = Exports.parse(clazz);
+            if (exportModelMeta != null) {
+                exportResultLocal.set(exportModelMeta);
+            }
+
+            // 2、导出数据
+            doExportCsvHeader(request, response);
+            doExportCsvBody(request, response, getExportBatchSize());
+        } finally {
+            // 3、清理线程变量
+            exportResultLocal.remove();
+        }
+
     }
 
     /**
@@ -361,8 +413,7 @@ public abstract class AbstractFileOperationController<
         String fileName = getExportFileName(request);
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "attachment");
-        response.setHeader(
-                "Content-Disposition", "filename=\"" + Encodes.urlEncode(fileName) + ".xlsx\"");
+        response.setHeader("Content-Disposition", "filename=\"" + Encodes.urlEncode(fileName) + ".xlsx\"");
     }
 
     /**
@@ -383,13 +434,27 @@ public abstract class AbstractFileOperationController<
             List<String> headerNames = getExportTitles();
             workbook = new SXSSFWorkbook(batchSize);
             workbook.setCompressTempFiles(true);
+            ExportModelMeta exportModelMeta = getExportResult();
             Sheet sheet = workbook.createSheet();
             int rowNum = 0;
-            // 写入header
+            // header
             Row row = sheet.createRow(rowNum);
+            // header高度
+            if (exportModelMeta != null && exportModelMeta.getHeaderStyleMeta() != null
+                    && exportModelMeta.getHeaderStyleMeta().getRowHeight() != -1) {
+                row.setHeight(exportModelMeta.getHeaderStyleMeta().getRowHeight());
+            }
             if (headerNames != null) {
+                // 构建通用CellStyle，并缓存到线程变量中
+                commonExcelCellStyle(sheet);
+                // 构建Header的CellStyle
+                CellStyle headerStyle = excelHeaderCellStyle(sheet);
                 for (int cellnum = 0; cellnum < headerNames.size(); cellnum++) {
                     row.createCell(cellnum).setCellValue(headerNames.get(cellnum));
+                    if (headerStyle != null) {
+                        row.getCell(cellnum).setCellStyle(headerStyle);
+                    }
+                    updateExcelColumnWidth(cellnum, headerNames.get(cellnum), sheet);
                 }
                 rowNum++;
             }
@@ -401,8 +466,7 @@ public abstract class AbstractFileOperationController<
             if (totalPage > 1) {
                 for (int i = 2; i <= totalPage; i++) {
                     pageInfo.setCurrentPage(i);
-                    pageInfo =
-                            getEntityService().query(pageInfo, getSearchParams(request), getSortMap(request));
+                    pageInfo = getEntityService().query(pageInfo, getSearchParams(request), getSortMap(request));
                     rowNum = doExportExcelPage(pageInfo.getPageResults(), rowNum, sheet);
                 }
             }
@@ -420,17 +484,81 @@ public abstract class AbstractFileOperationController<
         }
     }
 
+
+    private CellStyle excelHeaderCellStyle(Sheet sheet) {
+        ExportModelMeta exportModelMeta = getExportResult();
+        if (exportModelMeta == null) {
+            return null;
+        }
+        XSSFCellStyle cellStyle = (XSSFCellStyle) sheet.getWorkbook().createCellStyle();
+        cellStyle.setWrapText(true);
+        if (exportModelMeta.isBorder()) {
+            cellStyle.setBorderTop(BorderStyle.THIN);
+            cellStyle.setBorderBottom(BorderStyle.THIN);
+            cellStyle.setBorderLeft(BorderStyle.THIN);
+            cellStyle.setBorderRight(BorderStyle.THIN);
+        }
+
+        ExportStyleMeta headerStyleMeta = exportModelMeta.getHeaderStyleMeta();
+        if (headerStyleMeta != null) {
+            // 按需设置字体
+            if (headerStyleMeta.requireFont()) {
+                XSSFFont font = (XSSFFont) sheet.getWorkbook().createFont();
+                if (Strings.isNotBlank(headerStyleMeta.getFontName())) {
+                    font.setFontName(headerStyleMeta.getFontName());
+                }
+                if (headerStyleMeta.getFontSize() != -1) {
+                    font.setFontHeightInPoints(headerStyleMeta.getFontSize());
+                }
+                font.setBold(headerStyleMeta.isFontBold());
+                cellStyle.setFont(font);
+            }
+            // 按需设置背景填充色
+            if (Strings.isNotBlank(headerStyleMeta.getBackgroundColor())) {
+                cellStyle.setFillForegroundColor(new XSSFColor(java.awt.Color.decode(headerStyleMeta.getBackgroundColor())));
+                cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            }
+        }
+        return cellStyle;
+    }
+
+
+    private CellStyle commonExcelCellStyle(Sheet sheet) {
+        ExportModelMeta exportModelMeta = getExportResult();
+        if (exportModelMeta == null) {
+            return null;
+        }
+        if (exportModelMeta.getStyle() == null) {
+            CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+            cellStyle.setWrapText(true);
+            if (exportModelMeta.isBorder()) {
+                cellStyle.setBorderTop(BorderStyle.THIN);
+                cellStyle.setBorderBottom(BorderStyle.THIN);
+                cellStyle.setBorderLeft(BorderStyle.THIN);
+                cellStyle.setBorderRight(BorderStyle.THIN);
+            }
+            exportModelMeta.setStyle(cellStyle);
+        }
+        return (CellStyle) exportModelMeta.getStyle();
+    }
+
+
     protected int doExportExcelPage(List<T> list, int startRow, Sheet sheet) throws Exception {
         int rowNum = startRow;
         Object value;
         Row row;
         Cell cell;
+        CellStyle cellStyle = commonExcelCellStyle(sheet);
+        ExportModelMeta exportModelMeta = getExportResult();
         for (T entity : list) {
             List data = doExportRow(entity);
             row = sheet.createRow(rowNum);
             for (int cellNum = 0; cellNum < data.size(); cellNum++) {
                 value = data.get(cellNum);
                 cell = row.createCell(cellNum);
+                if (cellStyle != null) {
+                    cell.setCellStyle(cellStyle);
+                }
                 // 空值直接返回
                 if (value == null) {
                     cell.setCellType(CellType.BLANK);
@@ -444,16 +572,31 @@ public abstract class AbstractFileOperationController<
 
                 // 枚举转字符串
                 if (value instanceof Messageable) {
-                    value = ((Messageable) value).message();
+                    String temp = ((Messageable) value).message();
+                    if (exportModelMeta != null && exportModelMeta.getExportItem(cellNum) != null) {
+                        ExportColumnMeta item = exportModelMeta.getExportItem(cellNum);
+                        if (!item.isShowMapping()) {
+                            temp = ((Messageable) value).code();
+                        }
+                    }
+                    value = temp;
                 }
 
                 // 日期转字符串
                 if (value instanceof Date) {
+                    // 默认日期时间格式化foramt
+                    String foramt = Dates.CHINESE_DATETIME_FORMAT_LINE;
                     if (Dates.isDate((Date) value)) {
-                        value = Dates.format((Date) value, Dates.CHINESE_DATE_FORMAT_SLASH);
-                    } else {
-                        value = Dates.format((Date) value);
+                        foramt = Dates.CHINESE_DATE_FORMAT_SLASH;
                     }
+                    // 如果@anno设置了format，则按设置的格式进行转换
+                    if (exportModelMeta != null && exportModelMeta.getExportItem(cellNum) != null) {
+                        ExportColumnMeta item = exportModelMeta.getExportItem(cellNum);
+                        if (Strings.isNotBlank(item.getFormat())) {
+                            foramt = item.getFormat();
+                        }
+                    }
+                    value = Dates.format((Date) value, foramt);
                 }
 
                 // 数字或字符串处理
@@ -464,21 +607,35 @@ public abstract class AbstractFileOperationController<
                     if (!(value instanceof String)) {
                         value = conversionService.convert(value, String.class);
                     }
+                    cell.setCellType(CellType.STRING);
                     cell.setCellValue((String) value);
-                    int cellColumnWidth = (((String) value).getBytes("UTF-8").length + 1) * 256;
-                    if (cellColumnWidth > sheet.getColumnWidth(cellNum)) {
-                        if (cellColumnWidth <= 255 * 256) {
-                            sheet.setColumnWidth(cellNum, cellColumnWidth);
-                        } else {
-                            sheet.setColumnWidth(cellNum, 100 * 255);
-                        }
+                    updateExcelColumnWidth(cellNum, (String) value, sheet);
+                }
+
+                // 如果@anno设置了宽度，则覆盖设置
+                if (exportModelMeta != null && exportModelMeta.getExportItem(cellNum) != null) {
+                    ExportColumnMeta item = exportModelMeta.getExportItem(cellNum);
+                    if (item.getWidth() != -1) {
+                        sheet.setColumnWidth(cellNum, item.getWidth());
                     }
                 }
-            }
 
+
+            }
             rowNum = rowNum + 1;
         }
         return rowNum;
+    }
+
+    private void updateExcelColumnWidth(int colNum, String value, Sheet sheet) throws Exception {
+        int cellColumnWidth = (value.getBytes("UTF-8").length + 1) * 256;
+        if (cellColumnWidth > sheet.getColumnWidth(colNum)) {
+            if (cellColumnWidth <= 255 * 256) {
+                sheet.setColumnWidth(colNum, cellColumnWidth);
+            } else {
+                sheet.setColumnWidth(colNum, 100 * 255);
+            }
+        }
     }
 
     /**
@@ -487,8 +644,7 @@ public abstract class AbstractFileOperationController<
     protected void doExportCsvHeader(HttpServletRequest request, HttpServletResponse response) {
         String fileName = getExportFileName(request);
         response.setContentType("application/octet-stream");
-        response.setHeader(
-                "Content-Disposition", "attachment;filename=\"" + Encodes.urlEncode(fileName) + ".csv\"");
+        response.setHeader("Content-Disposition", "attachment;filename=\"" + Encodes.urlEncode(fileName) + ".csv\"");
     }
 
     /**
@@ -517,8 +673,7 @@ public abstract class AbstractFileOperationController<
             if (totalPage > 1) {
                 for (int i = 2; i <= totalPage; i++) {
                     pageInfo.setCurrentPage(i);
-                    pageInfo =
-                            getEntityService().query(pageInfo, getSearchParams(request), getSortMap(request));
+                    pageInfo = getEntityService().query(pageInfo, getSearchParams(request), getSortMap(request));
                     doExportCsvPage(pageInfo.getPageResults(), p);
                 }
             }
@@ -533,9 +688,55 @@ public abstract class AbstractFileOperationController<
 
     protected void doExportCsvPage(List<T> list, PrintWriter p) throws Exception {
         for (T entity : list) {
-            p.println(CsvMapper.marshal(doExportEntity(entity)));
+            p.println(CsvMapper.marshal(convertToStringList(doExportRow(entity))));
         }
         p.flush();
+    }
+
+    private List<String> convertToStringList(List<Object> list) {
+        ExportModelMeta exportModelMeta = getExportResult();
+        List<String> data = Lists.newArrayList();
+        for (int i = 0; i < list.size(); i++) {
+            String e = null;
+            Object value = list.get(i);
+            // 空值直接返回
+            if (value == null) {
+                data.add(null);
+                continue;
+            }
+
+            // Money转数字
+            if (value instanceof Money) {
+                e = ((Money) value).toString();
+            } else if (value instanceof Messageable) {
+                // 枚举转字符串
+                e = ((Messageable) value).message();
+                if (exportModelMeta != null && exportModelMeta.getExportItem(i) != null) {
+                    ExportColumnMeta item = exportModelMeta.getExportItem(i);
+                    if (!item.isShowMapping()) {
+                        e = ((Messageable) value).code();
+                    }
+                }
+            } else if (value instanceof Date) {
+                // 默认日期时间格式化foramt
+                String foramt = Dates.CHINESE_DATETIME_FORMAT_LINE;
+                if (Dates.isDate((Date) value)) {
+                    foramt = Dates.CHINESE_DATE_FORMAT_SLASH;
+                }
+                // 如果@anno设置了format，则按设置的格式进行转换
+                if (exportModelMeta != null && exportModelMeta.getExportItem(i) != null) {
+                    ExportColumnMeta item = exportModelMeta.getExportItem(i);
+                    if (Strings.isNotBlank(item.getFormat())) {
+                        foramt = item.getFormat();
+                    }
+                }
+                e = Dates.format((Date) value, foramt);
+            } else {
+                e = conversionService.convert(value, String.class);
+            }
+            data.add(e);
+        }
+        return data;
     }
 
     /**
@@ -552,6 +753,12 @@ public abstract class AbstractFileOperationController<
     }
 
     protected List<Object> doExportRow(T entity) {
+        ExportModelMeta exportModelMeta = getExportResult();
+        if (exportModelMeta != null && Collections3.isNotEmpty(exportModelMeta.getItems())) {
+            exportModelMeta = Exports.parse(exportModelMeta, entity);
+            return exportModelMeta.getRow();
+        }
+        // 为空，则走原有流程
         return doExportEntity(entity).stream().collect(Collectors.toList());
     }
 
@@ -561,6 +768,10 @@ public abstract class AbstractFileOperationController<
      * @return
      */
     protected List<String> getExportTitles() {
+        ExportModelMeta exportModelMeta = getExportResult();
+        if (exportModelMeta != null && exportModelMeta.isHeaderShow()) {
+            return exportModelMeta.getHeaders();
+        }
         return null;
     }
 
@@ -571,6 +782,11 @@ public abstract class AbstractFileOperationController<
      */
     protected String getExportFileName(HttpServletRequest request) {
         String fileName = getEntityName();
+        // @ExportModel.fileName优先级高于实体名称
+        ExportModelMeta result = getExportResult();
+        if (result != null && Strings.isNotBlank(result.getFileName())) {
+            fileName = result.getFileName();
+        }
         String exportFileName = request.getParameter(WebRequestParameterEnum.exportFileName.code());
         if (StringUtils.isNotBlank(exportFileName)) {
             fileName = exportFileName;

@@ -104,6 +104,12 @@ public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware,
     }
 
     @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        configurer.setUseSuffixPatternMatch(true);
+        configurer.setUseRegisteredSuffixPatternMatch(true);
+    }
+
+    @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         // 和底版本原逻辑保持一致：指定MVC的URL后置为html,已便于其他组件安全控制的粒度。不用去排除资源文件
         configurer.mediaType("html", MediaType.APPLICATION_JSON);

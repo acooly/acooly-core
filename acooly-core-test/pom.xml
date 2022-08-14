@@ -31,12 +31,6 @@
 
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-dubbo</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.acooly</groupId>
             <artifactId>acooly-component-defence</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -48,6 +42,18 @@
             <scope>test</scope>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>com.acooly</groupId>-->
+<!--            <artifactId>acooly-component-dubbo</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
+
+
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-springcloud</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!--<dependency>-->
         <!--<groupId>com.acooly</groupId>-->
@@ -81,7 +87,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-properties-migrator</artifactId>
-            <scope>runtime</scope>
         </dependency>
 
         <dependency>

@@ -204,8 +204,7 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
             throws DataAccessException {
         Specification<T> spec = buildSpecification(map);
         Sort sort = buildSort(sortMap);
-        Pageable pageable =
-                new PageRequest(pageInfo.getCurrentPage() - 1, pageInfo.getCountOfCurrentPage(), sort);
+        Pageable pageable = PageRequest.of(pageInfo.getCurrentPage() - 1, pageInfo.getCountOfCurrentPage(), sort);
         Page<T> page = findAll(spec, pageable);
         pageInfo.setPageResults(page.getContent());
         pageInfo.setTotalCount(page.getTotalElements());
@@ -252,7 +251,7 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
         } else {
             orders.add(new Order(Direction.DESC, "id"));
         }
-        Sort sort = new Sort(orders);
+        Sort sort = Sort.by(orders);
         return sort;
     }
 

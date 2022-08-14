@@ -21,14 +21,13 @@ public class TomcatComponentInitializer implements ComponentInitializer {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         // 奇葩的阿里云slb不在内网ip段
-        setPropertyIfMissing("server.tomcat.internal-proxies", ".*");
-        setPropertyIfMissing("server.tomcat.remoteIpHeader", "x-forwarded-for");
-        setPropertyIfMissing("server.tomcat.protocolHeader", "x-forwarded-proto");
+        setPropertyIfMissing("server.tomcat.remoteip.internal-proxies", ".*");
+        setPropertyIfMissing("server.tomcat.remoteip.remote-ip-header", "x-forwarded-for");
+        setPropertyIfMissing("server.tomcat.remoteip.protocol-header", "x-forwarded-proto");
         // 没必要，默认就是
         setPropertyIfMissing("server.tomcat.uri-encoding", "UTF-8");
         if (applicationContext.getEnvironment().getProperty("acooly.tomcat.port") != null) {
-            System.setProperty(
-                    Apps.HTTP_PORT, applicationContext.getEnvironment().getProperty("acooly.tomcat.port"));
+            System.setProperty(Apps.HTTP_PORT, applicationContext.getEnvironment().getProperty("acooly.tomcat.port"));
         }
     }
 }

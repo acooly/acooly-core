@@ -22,12 +22,6 @@ import com.alibaba.druid.pool.vendor.OracleValidConnectionChecker;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.SQLSyntaxErrorException;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,6 +33,13 @@ import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author qiubo
@@ -67,8 +68,7 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
     /**
      * 租户配置
      */
-    private Map<String,TenantDsProps> tenant ;
-
+    private Map<String, TenantDsProps> tenant;
 
 
     /**
@@ -116,8 +116,8 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
 
     private boolean testOnBorrow = false;
 
-    @Deprecated
-    private boolean useTomcatDataSource = false;
+//    @Deprecated
+//    private boolean useTomcatDataSource = false;
 
     /**
      * 自动创建表
@@ -288,25 +288,25 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
 
 
     @Data
-    public static class  TenantDsProps {
+    public static class TenantDsProps {
 
         private String url;
 
-         String username;
+        String username;
 
         @ToString.Maskable(maskAll = true)
         private String password;
 
-        private Integer initialSize ;
+        private Integer initialSize;
 
 
-        private Integer minIdle ;
+        private Integer minIdle;
 
-        private Integer maxActive ;
+        private Integer maxActive;
 
-        private Integer maxWait ;
+        private Integer maxWait;
 
-        private String alias ;
+        private String alias;
 
         /**
          * 检查表是否缺少某些字段，如果缺少，启动报错。

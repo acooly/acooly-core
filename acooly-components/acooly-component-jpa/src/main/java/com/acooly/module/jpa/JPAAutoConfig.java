@@ -86,7 +86,7 @@ public class JPAAutoConfig {
     public JpaVendorAdapter jpaVendorAdapter(JpaProperties properties, DataSource dataSource) {
         AbstractJpaVendorAdapter adapter = new ExHibernateJpaVendorAdapter();
         adapter.setShowSql(properties.isShowSql());
-        adapter.setDatabase(properties.determineDatabase(dataSource));
+//        adapter.setDatabase(properties.determineDatabase(dataSource));
         adapter.setDatabasePlatform(properties.getDatabasePlatform());
         adapter.setGenerateDdl(properties.isGenerateDdl());
         return adapter;

@@ -35,7 +35,7 @@ public class WebComponentInitializer implements ComponentInitializer {
         setPropertyIfMissing("spring.session.store-type", "REDIS");
         setPropertyIfMissing("spring.session.redis.namespace", "session:" + Apps.getAppName());
 
-        setPropertyIfMissing("spring.mvc.pathmatch.use-registered-suffix-pattern", "true");
+//        setPropertyIfMissing("spring.mvc.pathmatch.use-registered-suffix-pattern", "true");
 
         // 静态文件缓存
         if (!Apps.isDevMode()) {

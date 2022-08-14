@@ -8,13 +8,9 @@
  */
 package com.acooly.core.test.core;
 
-import com.acooly.core.common.boot.EnvironmentHolder;
-import com.acooly.module.dubbo.DubboProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.core.env.ConfigurablePropertyResolver;
-import org.springframework.core.env.Environment;
 
 /**
  * @author zhangpu
@@ -28,9 +24,9 @@ public class EnvironmentHolderTest {
     public void testBind() {
 
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
-        DubboProperties properties = new DubboProperties();
-        EnvironmentHolder.buildProperties(properties);
-        System.out.println(properties);
+//        DubboProperties properties = new DubboProperties();
+//        EnvironmentHolder.buildProperties(properties);
+//        System.out.println(properties);
     }
 
 }

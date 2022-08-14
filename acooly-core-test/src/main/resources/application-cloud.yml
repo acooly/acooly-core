@@ -1,0 +1,32 @@
+# spring
+spring:
+  application:
+    name: acooly-core
+  cloud:
+    nacos:
+      discovery:
+        namespace: cloud
+        server-addr: 127.0.0.1:8848
+# server
+server:
+  port: 8082
+
+# acooly
+acooly:
+  security:
+    csrf:
+      enable: false
+
+# feign
+feign:
+  client:
+    config:
+      # feign.Request.Options.Options()
+      default:
+        logger-level: FULL
+        # 请求超时时间，默认：10*1000 毫秒
+        connect-timeout: 10000
+        # 读取超时时间, 默认：60*1000 毫秒
+        read-timeout: 60000
+        # 是否自动处理重定向，默认：true -- 测试该属性无效
+        follow-redirects: true

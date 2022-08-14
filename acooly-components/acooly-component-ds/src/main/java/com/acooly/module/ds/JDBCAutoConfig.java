@@ -51,11 +51,10 @@ public class JDBCAutoConfig {
                 druidProperties = new DruidProperties();
                 EnvironmentHolder.buildProperties(druidProperties, DruidProperties.PREFIX);
             }
-            if (druidProperties.isUseTomcatDataSource()) {
-                dataSource = new TomcatDataSourceProperties().build(druidProperties);
-            } else {
-                dataSource = druidProperties.build();
-            }
+            dataSource = druidProperties.build();
+//            if (druidProperties.isUseTomcatDataSource()) {
+//                dataSource = new TomcatDataSourceProperties().build(druidProperties);
+//            }
             if (druidProperties.isAutoCreateTable()) {
                 ApplicationContextHolder.get().publishEvent(new DataSourceReadyEvent(dataSource));
             }

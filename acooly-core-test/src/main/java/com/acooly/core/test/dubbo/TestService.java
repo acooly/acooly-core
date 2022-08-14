@@ -1,7 +1,5 @@
 package com.acooly.core.test.dubbo;
 
-import com.alibaba.dubbo.rpc.RpcContext;
-
 /**
  * Zhouxi O_o
  *
@@ -10,6 +8,6 @@ import com.alibaba.dubbo.rpc.RpcContext;
  */
 public interface TestService {
 
-    String sayHello(String str) ;
+    String sayHello(String str);
 
 }

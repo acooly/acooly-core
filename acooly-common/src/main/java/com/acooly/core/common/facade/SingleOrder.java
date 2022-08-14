@@ -11,6 +11,7 @@ package com.acooly.core.common.facade;
 
 import com.acooly.core.utils.Ids;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.Valid;
@@ -21,6 +22,7 @@ import javax.validation.constraints.NotNull;
  */
 @Setter
 @Getter
+@NoArgsConstructor
 public class SingleOrder<T> extends OrderBase {
     @Valid
     @NotNull

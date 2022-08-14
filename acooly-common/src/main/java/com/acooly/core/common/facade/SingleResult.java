@@ -11,6 +11,7 @@ package com.acooly.core.common.facade;
 
 import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.core.utils.mapper.BeanCopier;
+import lombok.NoArgsConstructor;
 
 import java.util.function.BiFunction;
 
@@ -18,6 +19,7 @@ import java.util.function.BiFunction;
  * @author qiubo@yiji.com
  * @author zhangpu
  */
+@NoArgsConstructor
 public class SingleResult<T> extends ResultBase implements DtoAble {
     private T dto;
 

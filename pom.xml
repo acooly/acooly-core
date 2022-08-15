@@ -5,14 +5,14 @@
     <parent>
         <groupId>com.acooly</groupId>
         <artifactId>acooly-parent</artifactId>
-        <version>5.1.0</version>
+        <version>5.2.0</version>
+        <relativePath>../acooly-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>acooly-core-parent</artifactId>
-    <version>5.1.0-SNAPSHOT</version>
+    <version>5.2.0</version>
     <packaging>pom</packaging>
     <properties>
-        <caffeine.version>2.6.2</caffeine.version>
         <!-- 修复log4jBUG漏洞 -->
         <log4j2.version>2.15.0-rc2</log4j2.version>
     </properties>

@@ -30,3 +30,12 @@ feign:
         read-timeout: 60000
         # 是否自动处理重定向，默认：true -- 测试该属性无效
         follow-redirects: true
+logging:
+  level:
+    com:
+      acooly:
+        core:
+          test:
+            cloud:
+              feign: DEBUG
+

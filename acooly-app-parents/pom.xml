@@ -5,7 +5,7 @@
     <parent>
         <artifactId>acooly-core-parent</artifactId>
         <groupId>com.acooly</groupId>
-        <version>5.1.0-SNAPSHOT</version>
+        <version>5.2.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,7 +14,6 @@
 
     <modules>
         <module>acooly-app-independent-parent</module>
-        <module>acooly-app-parent</module>
     </modules>
 
 </project>

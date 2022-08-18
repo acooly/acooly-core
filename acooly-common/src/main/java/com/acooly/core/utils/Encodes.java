@@ -8,7 +8,7 @@ package com.acooly.core.utils;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -96,7 +96,7 @@ public class Encodes {
      * Xml 转码.
      */
     public static String escapeXml(String xml) {
-        return StringEscapeUtils.escapeXml(xml);
+        return StringEscapeUtils.escapeXml11(xml);
     }
 
     /**

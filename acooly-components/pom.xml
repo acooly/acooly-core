@@ -11,10 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>acooly-components</artifactId>
     <packaging>pom</packaging>
-    <properties>
-        <!-- 保留兼容其他组件库对acooly.version的引用 -->
-        <acooly.version>5.0.0-SNAPSHOT</acooly.version>
-    </properties>
+
     <modules>
         <module>acooly-component-appservice</module>
         <module>acooly-component-cache</module>
@@ -30,7 +27,6 @@
         <module>acooly-component-tomcat</module>
         <module>acooly-component-web</module>
         <module>acooly-component-springcloud</module>
-      <module>acooly-component-tenantsupport</module>
     </modules>
 
     <build>

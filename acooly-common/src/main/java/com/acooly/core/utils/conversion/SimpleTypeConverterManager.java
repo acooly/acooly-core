@@ -112,7 +112,7 @@ public class SimpleTypeConverterManager implements TypeConverterManager {
         converterManager.register(new EnumTypeConverter());
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
     public <T> Collection<TypeConverter<T>> unregister(Class<T> targetType) {
         if (targetType == null) {
             return Collections.emptyList();
@@ -122,7 +122,7 @@ public class SimpleTypeConverterManager implements TypeConverterManager {
                 (removed == null ? Collections.emptyList() : removed.values());
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
     public <S, T> TypeConverter<T> unregister(Class<S> sourceType, Class<T> targetType) {
         if (sourceType == null || targetType == null) {
             return null;
@@ -135,6 +135,7 @@ public class SimpleTypeConverterManager implements TypeConverterManager {
         return (TypeConverter<T>) removedTypeConverter;
     }
 
+    @Override
     public <S, T> void register(
             Class<? extends S> sourceType,
             Class<T> targetType,
@@ -143,6 +144,7 @@ public class SimpleTypeConverterManager implements TypeConverterManager {
         doRegister(sourceType, targetType, typeConverter);
     }
 
+    @Override
     public void register(TypeConverter<?> typeConverter) {
         Assert.notNull(typeConverter, "{typeConverter} 不能为 'null' 。");
         List<Class<?>> supportedSourceTypes = typeConverter.getSupportedSourceTypes();
@@ -170,7 +172,7 @@ public class SimpleTypeConverterManager implements TypeConverterManager {
         sourceTypeMap.putCache(targetType, typeConverter);
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
     public <T> Collection<TypeConverter<T>> getTypeConverter(Class<T> targetType) {
         if (targetType == null) {
             return Collections.emptyList();
@@ -180,7 +182,7 @@ public class SimpleTypeConverterManager implements TypeConverterManager {
                 (m == null ? Collections.emptyList() : Collections.unmodifiableCollection(m.values()));
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
     public <S, T> TypeConverter<T> getTypeConverter(Class<S> sourceType, Class<T> targetType) {
         if (sourceType == null || targetType == null) {
             return null;
@@ -236,6 +238,7 @@ public class SimpleTypeConverterManager implements TypeConverterManager {
         return m;
     }
 
+    @Override
     public boolean containsType(Class<?> targetType) {
         if (targetType == null) {
             return false;
@@ -243,6 +246,7 @@ public class SimpleTypeConverterManager implements TypeConverterManager {
         return getTypeConverter(targetType) != null;
     }
 
+    @Override
     public boolean containsType(Class<?> sourceType, Class<?> targetType) {
         if (sourceType == null || targetType == null) {
             return false;
@@ -250,6 +254,7 @@ public class SimpleTypeConverterManager implements TypeConverterManager {
         return getTypeConverter(sourceType, targetType) != null;
     }
 
+    @Override
     public boolean containsConverter(Class<TypeConverter<?>> typeConverterClass) {
         if (typeConverterClass == null) {
             return false;
@@ -265,10 +270,12 @@ public class SimpleTypeConverterManager implements TypeConverterManager {
         return false;
     }
 
+    @Override
     public boolean canConvert(Class<?> sourceType, Class<?> targetType) {
         return getTypeConverter(sourceType, targetType) != null;
     }
 
+    @Override
     public <T> T convert(Object source, Class<T> targetType) {
         if (source == null) {
             return null;
@@ -300,13 +307,14 @@ public class SimpleTypeConverterManager implements TypeConverterManager {
             super(ReferenceKeyType.WEAK, ReferenceValueType.STRONG, initialCapacity);
         }
 
+        @Override
         public TypeConverter<?> remove(Object key) {
             TypeConverter<?> removedTypeConverter = super.remove(key);
             if (removedTypeConverter != null) {
                 Class<?> sourceType = (Class<?>) key;
                 for (Iterator<Class<?>> iterator = this.sourceTypeConverterCache.keySet().iterator();
                      iterator.hasNext();
-                        ) {
+                ) {
                     if (sourceType.isAssignableFrom(iterator.next())) {
                         iterator.remove();
                     }
@@ -366,7 +374,7 @@ public class SimpleTypeConverterManager implements TypeConverterManager {
                 Class<?> targetType = (Class<?>) key;
                 for (Iterator<Class<?>> iterator = this.targetTypeConverterCacheMap.keySet().iterator();
                      iterator.hasNext();
-                        ) {
+                ) {
                     if (iterator.next().isAssignableFrom(targetType)) {
                         iterator.remove();
                     }

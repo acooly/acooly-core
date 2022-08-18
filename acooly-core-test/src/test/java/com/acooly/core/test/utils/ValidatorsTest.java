@@ -40,10 +40,7 @@ public class ValidatorsTest {
     @Setter
     static class CustomJsr303PropertyBean {
 
-        /**
-         * hibernate的NotEmpty
-         */
-        @org.hibernate.validator.constraints.NotEmpty
+        @NotEmpty
         private String title;
 
         /**

@@ -125,8 +125,23 @@ public interface EntityService<T> {
     PageInfo<T> query(PageInfo<T> pageInfo, Map<String, Object> map, Map<String, Boolean> sortMap)
             throws BusinessException;
 
+    /**
+     * 多条件分页查询
+     *
+     * @param pageInfo
+     * @param map
+     * @return
+     * @throws BusinessException
+     */
     PageInfo<T> query(PageInfo<T> pageInfo, Map<String, Object> map) throws BusinessException;
 
+    /**
+     * 多条件多字段排序列表查询
+     *
+     * @param map
+     * @param sortMap
+     * @return
+     */
     List<T> query(Map<String, Object> map, Map<String, Boolean> sortMap);
 
     /**

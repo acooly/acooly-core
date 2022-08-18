@@ -11,13 +11,15 @@ package com.acooly.module.appservice.filter;
 
 import com.acooly.module.appservice.AppService;
 import com.acooly.module.filterchain.Context;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.aopalliance.intercept.MethodInvocation;
 
 /**
  * @author qiubo@yiji.com
  */
-@Data
+@Getter
+@Setter
 public class AppServiceContext extends Context {
     private MethodInvocation methodInvocation;
     private Object target;

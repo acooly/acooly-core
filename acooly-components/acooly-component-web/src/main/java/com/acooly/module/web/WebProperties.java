@@ -74,7 +74,7 @@ public class WebProperties {
     private boolean enableDataCollector = false;
 
     public List<String> buildMappingUrlList() {
-        List mappingUrlList = new ArrayList<>();
+        List<String> mappingUrlList = new ArrayList<>();
         if (simplePageMap == null) {
             return mappingUrlList;
         }

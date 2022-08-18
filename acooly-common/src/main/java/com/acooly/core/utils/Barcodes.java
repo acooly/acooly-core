@@ -44,7 +44,7 @@ public final class Barcodes {
             BitMatrix bitMatrix = new MultiFormatWriter().encode(content, formart, width, height, hints);
             return toBufferedImage(bitMatrix);
         } catch (Exception e) {
-            throw new BusinessException("生成条形码[" + formart + "]失败", e);
+            throw new BusinessException("BARCODES_ENCODE_ERROR", "生成条形码[" + formart + "]失败", e);
         }
     }
 
@@ -73,7 +73,7 @@ public final class Barcodes {
         try {
             ImageIO.write(encodeQRcode(content, encoding, size), "png", output);
         } catch (Exception e) {
-            throw new BusinessException("生成QRcode输出到流失败", e);
+            throw new BusinessException("QRCODE_ENCODE_ERROR", "生成QRcode输出到流失败", e);
         } finally {
             if (closeAfterComplete) {
                 quietlyClose(output);
@@ -94,7 +94,7 @@ public final class Barcodes {
         try {
             ImageIO.write(encodeBarcode(str, width, height), "png", output);
         } catch (Exception e) {
-            throw new BusinessException("输出条形码失败", e);
+            throw new BusinessException("BARCODES_ENCODE_ERROR", "输出条形码失败", e);
         } finally {
             if (closeAfterComplete) {
                 quietlyClose(output);
@@ -119,7 +119,7 @@ public final class Barcodes {
             Result result = new MultiFormatReader().decode(bitmap, hints);
             return result.getText();
         } catch (Exception e) {
-            throw new BusinessException("二维码解码失败", e);
+            throw new BusinessException("BARCODES_DECODE_ERROR", "二维码解码失败", e);
         } finally {
             quietlyClose(in);
         }
@@ -130,7 +130,7 @@ public final class Barcodes {
         try {
             in = new FileInputStream(file);
         } catch (Exception e) {
-            throw new BusinessException("获取条形码/二维码文件输入流失败", e);
+            throw new BusinessException("BARCODES_DECODE_ERROR", "获取条形码/二维码文件输入流失败", e);
         }
         return decode(in);
     }

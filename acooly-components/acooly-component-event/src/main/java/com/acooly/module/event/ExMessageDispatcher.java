@@ -19,8 +19,7 @@ public class ExMessageDispatcher extends MessageDispatcher {
     }
 
     @Override
-    public void dispatch(
-            final MessagePublication publication, final Object message, final Iterable listeners) {
+    public void dispatch(final MessagePublication publication, final Object message, final Iterable listeners) {
         publication.markDispatched();
         for (Object listener : listeners) {
             log.info("listener:{} 收到消息:{}", listener.getClass().getSimpleName(), message);

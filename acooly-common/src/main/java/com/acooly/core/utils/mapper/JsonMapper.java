@@ -6,7 +6,6 @@
 package com.acooly.core.utils.mapper;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -83,7 +82,7 @@ public class JsonMapper {
                             .addFilter(
                                     object.getClass().getName(),
                                     SimpleBeanPropertyFilter.serializeAllExcept(filterFields));
-            mapper.setFilters(filter);
+            mapper.setFilterProvider(filter);
             return mapper.writeValueAsString(object);
         } catch (IOException e) {
             logger.warn("write to json string error:" + object, e);
@@ -144,13 +143,10 @@ public class JsonMapper {
     /**
      * 當JSON裡只含有Bean的部分屬性時，更新一個已存在Bean，只覆蓋該部分的屬性.
      */
-    @SuppressWarnings("unchecked")
     public <T> T update(String jsonString, T object) {
         try {
             return (T) mapper.readerForUpdating(object).readValue(jsonString);
-        } catch (JsonProcessingException e) {
-            logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
         }
         return null;

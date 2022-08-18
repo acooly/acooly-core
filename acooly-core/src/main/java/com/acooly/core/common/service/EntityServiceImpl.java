@@ -48,9 +48,9 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>>
                 entityDao = (M) context.getBean(daoType);
             }
         } catch (IllegalAccessException e) {
-            throw new BusinessException(e.getMessage(), e);
+            throw new BusinessException(CommonErrorCodes.INTERNAL_ERROR.code(), e.getMessage(), e);
         } catch (NoSuchFieldException e) {
-            throw new BusinessException(e.getMessage(), e);
+            throw new BusinessException(CommonErrorCodes.INTERNAL_ERROR.code(), e.getMessage(), e);
         }
         return entityDao;
     }

@@ -118,7 +118,7 @@ public class Servlets {
             IOUtils.copy(input, output);
             output.flush();
         } catch (Exception e) {
-            throw new BusinessException("响应请求(flushResponse)失败:" + e.getMessage());
+            throw new BusinessException(CommonErrorCodes.COMMUNICATION_ERROR, "响应请求(flushResponse)失败:" + e.getMessage());
         }
     }
 

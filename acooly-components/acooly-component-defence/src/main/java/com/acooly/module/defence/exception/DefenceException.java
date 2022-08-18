@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class DefenceException extends BusinessException {
 
     public DefenceException(String message) {
-        super(message);
+        super("DEFENCE_ERROR", message, "");
     }
 
     public DefenceException(Messageable messageable, String msg) {

@@ -25,7 +25,7 @@ public class AppServiceLogFilter implements Filter<AppServiceContext> {
     private static final Logger logger = LoggerFactory.getLogger(AppServiceLogFilter.class);
 
     private boolean dubboNotSupport = false;
-    private Class providerLogFilter;
+    private Class<?> providerLogFilter;
     private Method method;
     private Method markCurrentMethodNotPrintLogMethod;
 

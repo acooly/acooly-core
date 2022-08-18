@@ -25,7 +25,7 @@ public class VelocitiesTest {
     public void testVm() {
         String vmPath = "vm/";
         String vmName = "pname.vm";
-        Map paramters = Maps.newHashMap();
+        Map<String, String> paramters = Maps.newHashMap();
         paramters.put("rootArtifactId", "acooly-demo-allinone");
         String result = Velocities.merge(vmName, vmPath, paramters);
         System.out.println(result);

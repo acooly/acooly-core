@@ -351,7 +351,7 @@ public class RSA {
             File privateKeyFile, String keyAlgorithm, String providerName) {
         byte[] privateKeyBytes = null;
         try {
-            privateKeyBytes = Encodes.decodeBase64(FileUtils.readFileToString(privateKeyFile));
+            privateKeyBytes = Encodes.decodeBase64(FileUtils.readFileToString(privateKeyFile, "UTF-8"));
         } catch (Exception e) {
             throw new RuntimeException("加载秘钥文件内容失败:" + e.getMessage());
         }
@@ -414,7 +414,7 @@ public class RSA {
             File publicKeyFile, String keyAlgorithm, String providerName) {
         byte[] publicKeyBytes = null;
         try {
-            publicKeyBytes = Encodes.decodeBase64(FileUtils.readFileToString(publicKeyFile));
+            publicKeyBytes = Encodes.decodeBase64(FileUtils.readFileToString(publicKeyFile, "UTF-8"));
         } catch (Exception e) {
             throw new RuntimeException("加载公钥文件内容失败:" + e.getMessage());
         }

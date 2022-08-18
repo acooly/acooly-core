@@ -2,14 +2,10 @@ package com.acooly.module.web.exceptionhandler;
 
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.common.exception.CommonErrorCodes;
 import com.acooly.core.common.view.ViewResult;
 import com.acooly.core.utils.enums.Messageable;
 import com.google.common.collect.Sets;
-import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactoryUtils;
@@ -29,13 +25,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
 import java.util.Date;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * 全局MVC异常处理器
@@ -84,12 +84,12 @@ public class GlobalExceptionHandler implements InitializingBean {
     private String errorPath = "/error";
 
     @ExceptionHandler({Exception.class})
-    public Object badRequest( HttpServletRequest req, HttpServletResponse rep, HandlerMethod method,
-            Exception exception ) {
+    public Object badRequest(HttpServletRequest req, HttpServletResponse rep, HandlerMethod method,
+                             Exception exception) {
         logger.error("", exception);
 
-        if (!( exception instanceof BusinessException )) {
-            exception = new BusinessException(DEFAULT_ERROR_MESSAGE);
+        if (!(exception instanceof BusinessException)) {
+            exception = new BusinessException(CommonErrorCodes.INTERNAL_ERROR, exception.getMessage());
         }
         if (isJsonRequest(req, method.getMethod())) {
             ViewResult info = new ViewResult();
@@ -105,7 +105,7 @@ public class GlobalExceptionHandler implements InitializingBean {
     }
 
     private void buildModelAndView(
-            HttpServletRequest req, Exception exception, int statusCode, ModelAndView mav ) {
+            HttpServletRequest req, Exception exception, int statusCode, ModelAndView mav) {
         mav.addObject("timestamp", new Date());
         mav.addObject("status", statusCode);
         setException(exception, mav);
@@ -113,19 +113,19 @@ public class GlobalExceptionHandler implements InitializingBean {
         mav.setViewName("error");
     }
 
-    private void buildViewResultInfo( Exception exception, ViewResult info ) {
+    private void buildViewResultInfo(Exception exception, ViewResult info) {
         info.setSuccess(false);
         String msg;
         msg = exception.getMessage();
         if (exception instanceof Messageable) {
-            info.setCode(( (Messageable) exception ).code());
+            info.setCode(((Messageable) exception).code());
             info.setDetail(msg);
         } else {
             info.setDetail(msg);
         }
     }
 
-    private void setPath( HttpServletRequest req, ModelAndView mav ) {
+    private void setPath(HttpServletRequest req, ModelAndView mav) {
         Object path = req.getAttribute("javax.servlet.error.request_uri");
         if (path != null) {
             mav.addObject("path", path);
@@ -134,7 +134,7 @@ public class GlobalExceptionHandler implements InitializingBean {
         }
     }
 
-    private void setException( Exception exception, ModelAndView mav ) {
+    private void setException(Exception exception, ModelAndView mav) {
         while (exception instanceof ServletException && exception.getCause() != null) {
             exception = (Exception) exception.getCause();
         }
@@ -145,7 +145,7 @@ public class GlobalExceptionHandler implements InitializingBean {
 
             mav.addObject("message", responseStatus.reason());
         } else {
-            if (!( exception instanceof BindingResult )) {
+            if (!(exception instanceof BindingResult)) {
                 mav.addObject("message", exception.getMessage());
             } else {
                 BindingResult result = (BindingResult) exception;
@@ -164,7 +164,7 @@ public class GlobalExceptionHandler implements InitializingBean {
         }
     }
 
-    private int getStatus( HttpServletRequest req, Exception exception ) {
+    private int getStatus(HttpServletRequest req, Exception exception) {
         while (exception instanceof ServletException && exception.getCause() != null) {
             exception = (Exception) exception.getCause();
         }
@@ -186,7 +186,7 @@ public class GlobalExceptionHandler implements InitializingBean {
         return statusCode;
     }
 
-    private boolean isJsonRequest( HttpServletRequest request, Method method ) {
+    private boolean isJsonRequest(HttpServletRequest request, Method method) {
         String uri = request.getRequestURI();
         if (uri.endsWith(".json") || uri.endsWith(".data")) {
             return true;

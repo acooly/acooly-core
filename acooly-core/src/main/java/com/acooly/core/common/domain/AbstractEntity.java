@@ -82,11 +82,10 @@ public abstract class AbstractEntity implements Entityable {
     public <T> T to(Class<T> clazz) {
         try {
             T t = clazz.newInstance();
-            BeanCopier.copy(
-                    this, t, BeanCopier.CopyStrategy.IGNORE_NULL, BeanCopier.NoMatchingRule.IGNORE);
+            BeanCopier.copy(this, t, BeanCopier.CopyStrategy.IGNORE_NULL, BeanCopier.NoMatchingRule.IGNORE);
             return t;
         } catch (Exception e) {
-            throw new BusinessException(e);
+            throw new BusinessException("OBJECT_FILED_COPY_ERROR", "对象属性拷贝失败", e);
         }
     }
 
@@ -96,8 +95,7 @@ public abstract class AbstractEntity implements Entityable {
     }
 
     public void fromContainNUll(Object dto) {
-        BeanCopier.copy(
-                dto, this, BeanCopier.CopyStrategy.CONTAIN_NULL, BeanCopier.NoMatchingRule.EXCEPTION);
+        BeanCopier.copy(dto, this, BeanCopier.CopyStrategy.CONTAIN_NULL, BeanCopier.NoMatchingRule.EXCEPTION);
     }
 
     @Override

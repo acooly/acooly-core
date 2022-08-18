@@ -43,7 +43,7 @@ public class Files extends FileUtils {
         File[] roots = File.listRoots();
         for (File root : roots) {
             if (Strings.equalsIgnoreCase(root.getPath(), path)) {
-                log.info("文件安全判断 false {} path: {}", FileOperateErrorCodes.OPT_UN_SAFETY_FS_ROOT.message(),path);
+                log.info("文件安全判断 false {} path: {}", FileOperateErrorCodes.OPT_UN_SAFETY_FS_ROOT.message(), path);
                 if (silence) {
                     return false;
                 } else {

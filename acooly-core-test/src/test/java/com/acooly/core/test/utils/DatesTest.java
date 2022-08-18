@@ -15,12 +15,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 
-import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -29,20 +26,10 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class DatesTest {
 
-    @Test
-    public void utcDate() {
-        String utc = "Thu, 27 May 2021 00:02:31 +0000";
-        Date date = new Date(utc);
-        SimpleDateFormat sdf = new SimpleDateFormat(Dates.CHINESE_DATETIME_FORMAT_LINE);
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        System.out.println(sdf.format(date));
-    }
 
     @Test
     public void testDates() {
-
         System.out.println(1622073601 / 1000 / 60 / 60);
-
         Date date = new Date(1622073601);
         log.info(Dates.format(date));
     }
@@ -50,10 +37,8 @@ public class DatesTest {
 
     @Test
     public void testSub() throws Exception {
-
         Date birthday = Dates.parse("1982-07-15");
         System.out.println(Dates.sub(new Date(), birthday, Calendar.YEAR));
-
     }
 
     @Test

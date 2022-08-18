@@ -1,6 +1,7 @@
 package com.acooly.core.common.web.servlet;
 
 import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.common.exception.CommonErrorCodes;
 import com.acooly.core.utils.Dates;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -140,7 +141,7 @@ public class SimpleUploadServlet extends HttpServlet {
             uploadFileItem.write(pathToSave);
             return pathToSave;
         } catch (Exception e) {
-            throw new BusinessException(e);
+            throw new BusinessException(CommonErrorCodes.COMMUNICATION_ERROR, e);
         }
     }
 
@@ -201,11 +202,8 @@ public class SimpleUploadServlet extends HttpServlet {
     protected void validateExtension(String requestFileName) {
         String extName = getFileExtension(requestFileName);
         if (!StringUtils.containsIgnoreCase(allowedExtensions, extName)) {
-            logger.warn(
-                    "Extension is not allowed : [{}], we can support the following extensions:[{}]",
-                    extName,
-                    allowedExtensions);
-            throw new BusinessException("支持扩展名:" + extName + ", 目前支持扩展名：" + allowedExtensions);
+            logger.warn("Extension is not allowed : [{}], we can support the following extensions:[{}]", extName, allowedExtensions);
+            throw new BusinessException(CommonErrorCodes.UNSUPPORTED_ERROR, "不支持扩展名:" + extName + ", 目前支持扩展名：" + allowedExtensions);
         }
     }
 

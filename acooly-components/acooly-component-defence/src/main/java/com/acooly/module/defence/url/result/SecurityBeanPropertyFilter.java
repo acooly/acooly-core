@@ -8,12 +8,14 @@ import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.databind.ser.PropertyWriter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * @author qiubo@yiji.com
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class SecurityBeanPropertyFilter extends SimpleBeanPropertyFilter {
     private UrlSecurityService urlSecurityService;
     private EnhanceDefaultConversionService conversionService = EnhanceDefaultConversionService.INSTANCE;

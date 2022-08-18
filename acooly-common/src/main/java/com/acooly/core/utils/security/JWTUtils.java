@@ -125,7 +125,7 @@ public class JWTUtils {
     /**
      * header
      */
-    public static Map headerMap;
+    public static Map<String, Object> headerMap;
 
     /**
      * JWT 签发者 value
@@ -150,7 +150,7 @@ public class JWTUtils {
         Date iat = new Date();
         // 实效时间为 120分钟
         Date expTime = new Date(iat.getTime() + JWT_EXP_TIME * 60 * 1000);
-        Map claims = new HashMap<>();
+        Map<String, Object> claims = new HashMap<>(10);
         claims.put(CLAIMS_KEY_ISS, iss);
         claims.put(CLAIMS_KEY_SUB, sub);
         claims.put(CLAIMS_KEY_AUD, aud);

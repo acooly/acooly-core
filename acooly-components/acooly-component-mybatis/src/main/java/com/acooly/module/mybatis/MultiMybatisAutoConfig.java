@@ -12,7 +12,6 @@ package com.acooly.module.mybatis;
 import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.module.ds.DruidProperties;
-import com.acooly.module.ds.PagedJdbcTemplate;
 import com.acooly.module.mybatis.interceptor.DateInterceptor;
 import com.acooly.module.mybatis.interceptor.PageExecutorInterceptor;
 import com.alibaba.druid.pool.DruidDataSource;
@@ -102,10 +101,6 @@ public class MultiMybatisAutoConfig {
         return new JdbcTemplate(dataSource);
     }
 
-    @Bean
-    public PagedJdbcTemplate pagedJdbcTemplate(DataSource dataSource) {
-        return new PagedJdbcTemplate(dataSource);
-    }
 
     @Bean(name = "sqlSessionFactory")
     @Primary
@@ -138,9 +133,6 @@ public class MultiMybatisAutoConfig {
                         factory.registerSingleton(sqlSessionFactoryName, sqlSessionFactory);
                         String jdbcTemplateName = entry.getKey() + "JdbcTemplate";
                         factory.registerSingleton(jdbcTemplateName, new JdbcTemplate(druidDataSource));
-                        String pagedJdbcTemplateName = entry.getKey() + "PagedJdbcTemplate";
-                        factory.registerSingleton(
-                                pagedJdbcTemplateName, new PagedJdbcTemplate(druidDataSource));
                     }
                 }
             }

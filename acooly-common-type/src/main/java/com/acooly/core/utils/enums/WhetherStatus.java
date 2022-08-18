@@ -18,9 +18,14 @@ import java.util.Map;
  * @author zhangpu
  */
 public enum WhetherStatus implements Messageable {
-
+    /**
+     * 是
+     */
     yes("yes", "是", true),
 
+    /**
+     * 否
+     */
     no("no", "否", false);
 
     private final String code;
@@ -34,7 +39,7 @@ public enum WhetherStatus implements Messageable {
     }
 
     public static Map<String, String> mapping() {
-        Map<String, String> map = new LinkedHashMap();
+        Map<String, String> map = new LinkedHashMap<>();
         for (WhetherStatus type : values()) {
             map.put(type.getCode(), type.getMessage());
         }
@@ -63,7 +68,7 @@ public enum WhetherStatus implements Messageable {
      * @return 全部枚举值。
      */
     public static List<WhetherStatus> getAllStatus() {
-        List<WhetherStatus> list = new ArrayList<WhetherStatus>();
+        List<WhetherStatus> list = new ArrayList<>();
         for (WhetherStatus status : values()) {
             list.add(status);
         }
@@ -76,7 +81,7 @@ public enum WhetherStatus implements Messageable {
      * @return 全部枚举值码。
      */
     public static List<String> getAllStatusCode() {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         for (WhetherStatus status : values()) {
             list.add(status.code());
         }

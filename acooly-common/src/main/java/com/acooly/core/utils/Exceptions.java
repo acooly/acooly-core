@@ -6,6 +6,7 @@
 package com.acooly.core.utils;
 
 import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.common.exception.CommonErrorCodes;
 import com.acooly.core.utils.enums.Messageable;
 
 import java.io.PrintWriter;
@@ -27,11 +28,11 @@ public class Exceptions {
     }
 
     public static void rethrow(String code, String message) {
-        throw new BusinessException(message, code);
+        throw new BusinessException(code, message, "");
     }
 
     public static void rethrow(String code, String message, Throwable throwable) {
-        throw new BusinessException(message, throwable, code);
+        throw new BusinessException(code, message, throwable);
     }
 
     public static void rethrow(Throwable throwable) {
@@ -40,7 +41,7 @@ public class Exceptions {
         } else if (throwable instanceof Error) {
             throw (Error) throwable;
         } else {
-            throw new BusinessException(throwable.getMessage());
+            throw new BusinessException(CommonErrorCodes.INTERNAL_ERROR, throwable.getMessage());
         }
     }
 
@@ -50,7 +51,7 @@ public class Exceptions {
         } else if (throwable instanceof Error) {
             throw (Error) throwable;
         } else {
-            throw new BusinessException(throwable.getMessage());
+            throw new BusinessException(CommonErrorCodes.INTERNAL_ERROR, throwable.getMessage());
         }
     }
 
@@ -60,7 +61,7 @@ public class Exceptions {
         } else if (throwable instanceof Error) {
             throw (Error) throwable;
         } else {
-            throw new BusinessException(msg, throwable.getMessage());
+            throw new BusinessException(CommonErrorCodes.INTERNAL_ERROR.code(), msg, throwable.getMessage());
         }
     }
 

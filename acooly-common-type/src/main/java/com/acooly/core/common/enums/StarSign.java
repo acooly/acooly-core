@@ -119,7 +119,7 @@ public enum StarSign implements Messageable {
 
 
     public static Map<String, String> mapping() {
-        Map<String, String> map = new LinkedHashMap();
+        Map<String, String> map = new LinkedHashMap<>();
         for (StarSign type : values()) {
             map.put(type.getCode(), type.getMessage());
         }

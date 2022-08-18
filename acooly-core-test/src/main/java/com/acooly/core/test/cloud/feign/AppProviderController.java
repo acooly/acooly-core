@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
 /**
  * @author zhangpu
  * @date 2022-08-14 16:38
@@ -44,7 +42,7 @@ public class AppProviderController {
     }
 
     @RequestMapping("list")
-    public JsonListResult<App> list(@SpringQueryMap PageInfo pageInfo) {
+    public JsonListResult<App> list(@SpringQueryMap PageInfo<App> pageInfo) {
         log.info("list pageInfo: {}", pageInfo);
         JsonListResult<App> result = new JsonListResult<>();
         return result;

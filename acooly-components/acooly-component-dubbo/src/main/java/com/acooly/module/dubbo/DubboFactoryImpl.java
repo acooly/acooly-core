@@ -7,13 +7,13 @@ import com.alibaba.dubbo.config.ConsumerConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.config.utils.ReferenceConfigCache;
+import com.google.common.collect.Lists;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -41,16 +41,14 @@ public class DubboFactoryImpl implements DubboFactory, InitializingBean, Disposa
         Asserts.notNull(clazz);
         Asserts.notNull(group);
         Asserts.notNull(version);
-
         ApplicationConfig applicationConfig = applicationContext.getBean(ApplicationConfig.class);
-        Map<String, RegistryConfig> registryConfigMap =
-                applicationContext.getBeansOfType(RegistryConfig.class);
+        Map<String, RegistryConfig> registryConfigMap = applicationContext.getBeansOfType(RegistryConfig.class);
         if (registryConfigMap == null || registryConfigMap.isEmpty()) {
             throw new RuntimeException("请配置dubbo基本配置");
         }
-        ReferenceConfig reference = new ReferenceConfig();
+        ReferenceConfig<T> reference = new ReferenceConfig<>();
         reference.setApplication(applicationConfig);
-        reference.setRegistries(new ArrayList<>(registryConfigMap.values()));
+        reference.setRegistries(Lists.newArrayList(registryConfigMap.values()));
         reference.setInterface(clazz);
         reference.setVersion(version);
         reference.setGroup(group);

@@ -8,7 +8,6 @@
  */
 package com.acooly.core.utils.io;
 
-import com.google.common.base.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 
@@ -21,7 +20,7 @@ import java.io.Closeable;
 @Slf4j
 public class Streams extends IOUtils {
 
-
+    
     /**
      * 重启IOUtils的优雅关闭功能
      * <p>

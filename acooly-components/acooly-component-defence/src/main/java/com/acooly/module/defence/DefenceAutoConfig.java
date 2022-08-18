@@ -57,7 +57,7 @@ public class DefenceAutoConfig {
             }
             hhaFilter.setAccessDeniedHandler(accessDeniedHandler);
             hhaFilter.setDefenceProperties(defenceProperties);
-            FilterRegistrationBean registration = new FilterRegistrationBean();
+            FilterRegistrationBean<HostHeaderAttackDefenceFilter> registration = new FilterRegistrationBean<>();
             registration.setFilter(hhaFilter);
             registration.addUrlPatterns("/*");
             registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
@@ -82,7 +82,7 @@ public class DefenceAutoConfig {
             CsrfAccessDeniedHandlerImpl csrfAccessDeniedHandler = new CsrfAccessDeniedHandlerImpl();
             csrfAccessDeniedHandler.setErrorPage(defenceProperties.getCsrf().getErrorPage());
             csrfFilter.setAccessDeniedHandler(csrfAccessDeniedHandler);
-            FilterRegistrationBean registration = new FilterRegistrationBean();
+            FilterRegistrationBean<CsrfFilter> registration = new FilterRegistrationBean<>();
             registration.setFilter(csrfFilter);
             registration.addUrlPatterns("/*");
             registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
@@ -99,7 +99,7 @@ public class DefenceAutoConfig {
         public FilterRegistrationBean xssFilter(DefenceProperties defenceProperties) {
             XssDefenseFilter filter = new XssDefenseFilter();
             filter.setDefenceProperties(defenceProperties);
-            FilterRegistrationBean registration = new FilterRegistrationBean();
+            FilterRegistrationBean<XssDefenseFilter> registration = new FilterRegistrationBean<>();
             registration.setFilter(filter);
             registration.addUrlPatterns("/*");
             registration.setDispatcherTypes(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));

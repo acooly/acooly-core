@@ -1,9 +1,9 @@
 package com.acooly.core.common.dao.support;
 
+import com.acooly.core.utils.Asserts;
 import com.acooly.core.utils.Strings;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +19,8 @@ import static com.acooly.core.common.dao.support.SearchFilter.Operator.NULL;
  * @date 2012年6月30日
  */
 public class SearchFilter {
+
+    public static final int PARTS_COUNT = 2;
 
     public String fieldName;
     public Object value;
@@ -42,9 +44,9 @@ public class SearchFilter {
     }
 
     public static SearchFilter parse(String param, Object value) {
-        Assert.hasText(param);
+        Asserts.notEmpty(param);
         String[] names = StringUtils.split(param, "_");
-        if (names.length != 2) {
+        if (names.length != PARTS_COUNT) {
             throw new IllegalArgumentException(param + " is not a valid search filter name");
         }
         Operator op = Operator.valueOf(names[0].toUpperCase());
@@ -56,7 +58,13 @@ public class SearchFilter {
         return new SearchFilter(names[1], op, value);
     }
 
+    /**
+     * 操作符号
+     */
     public enum Operator {
+        /**
+         * 等于
+         */
         EQ,
         NEQ,
         LIKE,

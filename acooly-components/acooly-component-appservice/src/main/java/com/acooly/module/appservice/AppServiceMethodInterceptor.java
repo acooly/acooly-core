@@ -33,7 +33,7 @@ public class AppServiceMethodInterceptor implements MethodInterceptor {
         this.target = target;
     }
 
-    public void register(Method method, Class targetClass) {
+    public void register(Method method, Class<?> targetClass) {
         AppService appService = method.getAnnotation(AppService.class);
         if (appService == null) {
             appService = method.getDeclaringClass().getAnnotation(AppService.class);
@@ -63,6 +63,7 @@ public class AppServiceMethodInterceptor implements MethodInterceptor {
         return key.toString();
     }
 
+    @Override
     public Object invoke(MethodInvocation methodInvocation) throws Throwable {
         if (proxiedSet.contains(getMethodKey(methodInvocation.getMethod()))) {
             AppServiceContext appServiceContext = new AppServiceContext();

@@ -1,6 +1,7 @@
 package com.acooly.core.utils.net;
 
 import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.common.exception.CommonErrorCodes;
 import com.jcraft.jsch.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,7 +49,7 @@ public class SFTP {
             session.connect();
             return session;
         } catch (JSchException e) {
-            throw new BusinessException(e);
+            throw new BusinessException(CommonErrorCodes.COMMUNICATION_ERROR, e);
         }
     }
 
@@ -90,7 +91,7 @@ public class SFTP {
             channel.connect();
             return (ChannelSftp) channel;
         } catch (JSchException e) {
-            throw new BusinessException(e);
+            throw new BusinessException(CommonErrorCodes.COMMUNICATION_ERROR, e);
         }
     }
 
@@ -105,7 +106,7 @@ public class SFTP {
         try {
             channelSftp.get(src, dst, null, ChannelSftp.OVERWRITE);
         } catch (SftpException e) {
-            throw new BusinessException(e);
+            throw new BusinessException(CommonErrorCodes.COMMUNICATION_ERROR, e);
         }
     }
 
@@ -130,7 +131,7 @@ public class SFTP {
                     try {
                         channelSftp.get(src, dst, null, ChannelSftp.OVERWRITE);
                     } catch (SftpException e) {
-                        throw new BusinessException(e);
+                        throw new BusinessException(CommonErrorCodes.COMMUNICATION_ERROR, e);
                     }
                 });
     }
@@ -156,7 +157,7 @@ public class SFTP {
                     try {
                         channelSftp.put(src, dst, null, ChannelSftp.OVERWRITE);
                     } catch (SftpException e) {
-                        throw new BusinessException(e);
+                        throw new BusinessException(CommonErrorCodes.COMMUNICATION_ERROR, e);
                     }
                 });
     }
@@ -172,7 +173,7 @@ public class SFTP {
         try {
             channelSftp.get(src, dst, null, ChannelSftp.OVERWRITE);
         } catch (SftpException e) {
-            throw new BusinessException(e);
+            throw new BusinessException(CommonErrorCodes.COMMUNICATION_ERROR, e);
         }
     }
 

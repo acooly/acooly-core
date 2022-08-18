@@ -12,7 +12,7 @@ package com.acooly.module.mybatis;
 import com.acooly.core.common.boot.Apps;
 import com.acooly.core.common.domain.Entityable;
 import com.acooly.core.common.exception.AppConfigException;
-import com.acooly.module.ds.JDBCAutoConfig;
+import com.acooly.module.ds.JdbcAutoConfig;
 import com.acooly.module.mybatis.interceptor.DateInterceptor;
 import com.acooly.module.mybatis.interceptor.ExInterceptor;
 import com.acooly.module.mybatis.interceptor.PageExecutorInterceptor;
@@ -25,13 +25,10 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
 import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -52,7 +49,7 @@ import static com.acooly.module.mybatis.MybatisProperties.PREFIX;
 @Import({MapperScannerRegistrar.class})
 @EnableConfigurationProperties({MybatisProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
-@AutoConfigureAfter(JDBCAutoConfig.class)
+@AutoConfigureAfter(JdbcAutoConfig.class)
 public class MybatisAutoConfig  {
 
 

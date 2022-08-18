@@ -12,13 +12,13 @@ package com.acooly.module.appservice.filter;
 import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.module.filterchain.Filter;
-import com.acooly.module.filterchain.FilterChainBase;
+import com.acooly.module.filterchain.AbstractFilterChainBase;
 import com.google.common.base.Strings;
 
 /**
  * @author qiubo@yiji.com
  */
-public class AppServiceFilterChain extends FilterChainBase<AppServiceContext> {
+public class AppServiceFilterChain extends AbstractFilterChainBase<AppServiceContext> {
 
     private void replaceDefaultCheckFilter() {
         String parameterCheckFilterImpl =

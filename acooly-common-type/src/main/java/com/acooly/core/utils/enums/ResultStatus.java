@@ -41,7 +41,7 @@ public enum ResultStatus implements Messageable {
     }
 
     public static Map<String, String> mapping() {
-        Map<String, String> map = new LinkedHashMap();
+        Map<String, String> map = new LinkedHashMap<>();
         for (ResultStatus type : values()) {
             map.put(type.getCode(), type.getMessage());
         }

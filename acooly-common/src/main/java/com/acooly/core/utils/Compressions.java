@@ -6,6 +6,7 @@ import com.acooly.core.utils.lang.Paths;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +57,7 @@ public class Compressions {
         } catch (Exception e) {
             throw new RuntimeException("ZIP压缩失败 -> " + e.getMessage());
         } finally {
-            Streams.close(zipOut);
+            Streams.closeQuietly(zipOut);
         }
     }
 
@@ -167,7 +168,7 @@ public class Compressions {
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         } finally {
-            Streams.close(zin);
+            Streams.closeQuietly(zin);
         }
     }
 
@@ -183,14 +184,14 @@ public class Compressions {
             }
             zf = new ZipFile(zipFile);
             if (Strings.startsWith(internalFilePath, UNIX_FILE_SEPARATOR)) {
-                internalFilePath = Strings.removeFirst(internalFilePath, UNIX_FILE_SEPARATOR);
+                internalFilePath = RegExUtils.removeFirst(internalFilePath, UNIX_FILE_SEPARATOR);
             }
             return Streams.toString(zf.getInputStream(zf.getEntry(internalFilePath)), "UTF-8");
         } catch (Exception e) {
             logger.error("抓取Zip内文件失败。 zipPath: {}, interFilePath:{},  error: {}", zipPath, internalFilePath, e);
-            throw new BusinessException("抓取Zip内文件失败", "GRASP_ZIP_INTERNAL_FILE_FAIL");
+            throw new BusinessException("GRASP_ZIP_INTERNAL_FILE_FAIL", "抓取Zip内文件失败", e.getMessage());
         } finally {
-            Streams.close(zf);
+            Streams.closeQuietly(zf);
         }
     }
 
@@ -199,7 +200,7 @@ public class Compressions {
         try {
             zipInputStream = new ZipInputStream(inputStream);
             if (Strings.startsWith(internalFilePath, UNIX_FILE_SEPARATOR)) {
-                internalFilePath = Strings.removeFirst(internalFilePath, UNIX_FILE_SEPARATOR);
+                internalFilePath = RegExUtils.removeFirst(internalFilePath, UNIX_FILE_SEPARATOR);
             }
             ZipEntry entry = null;
             while ((entry = zipInputStream.getNextEntry()) != null) {
@@ -210,9 +211,9 @@ public class Compressions {
             return null;
         } catch (Exception e) {
             logger.error("抓取Zip流内文件失败。 interFilePath:{},  error: {}", internalFilePath, e);
-            throw new BusinessException("抓取Zip流内文件失败", "GRASP_ZIP_INTERNAL_FILE_FAIL");
+            throw new BusinessException("GRASP_ZIP_INTERNAL_FILE_FAIL", "抓取Zip流内文件失败", e.getMessage());
         } finally {
-            Streams.close(zipInputStream);
+            Streams.closeQuietly(zipInputStream);
         }
     }
 }

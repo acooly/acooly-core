@@ -291,7 +291,12 @@ public class PageInfo<T> implements Serializable {
         return info;
     }
 
-    //jdk 1.7打包兼容1.8 function interface
+    /**
+     * jdk 1.7打包兼容1.8 function interface
+     *
+     * @param <T>
+     * @param <E>
+     */
     public interface Function<T, E> {
         E apply(T t);
     }

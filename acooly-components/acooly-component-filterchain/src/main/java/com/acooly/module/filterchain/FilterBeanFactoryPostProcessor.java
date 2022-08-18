@@ -41,7 +41,7 @@ public class FilterBeanFactoryPostProcessor implements BeanDefinitionRegistryPos
         if (this.scanPackage != null) {
             ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(registry, false);
             scanner.addIncludeFilter(new AssignableTypeFilter(Filter.class));
-            scanner.addIncludeFilter(new AssignableTypeFilter(FilterChainBase.class));
+            scanner.addIncludeFilter(new AssignableTypeFilter(AbstractFilterChainBase.class));
             scanner.scan(Splitter.on(",").splitToList(scanPackage).toArray(new String[0]));
         }
     }

@@ -212,7 +212,6 @@ public class Apps {
     public static void report() {
         new Thread(() -> {
             try {
-
                 generateReport().newInstance().report();
             } catch (Exception e) {
                 // ig
@@ -280,7 +279,9 @@ public class Apps {
     }
 
     public static interface Report {
-
+        /**
+         * 报告接口
+         */
         void report();
     }
 

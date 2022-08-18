@@ -139,7 +139,7 @@ public class Systems {
             if (file != null) {
                 file.deleteOnExit();
             }
-            Streams.close(input);
+            Streams.closeQuietly(input);
         }
         return Strings.trimToEmpty(result);
     }

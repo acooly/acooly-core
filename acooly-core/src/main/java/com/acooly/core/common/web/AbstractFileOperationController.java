@@ -185,8 +185,8 @@ public abstract class AbstractFileOperationController<
                 throw new RuntimeException(
                         "读取文件[" + uResult.getName() + "]行错误,行号:" + readRows + " ,原因:" + e.getMessage());
             } finally {
-                Streams.close(workBook);
-                Streams.close(in);
+                Streams.closeQuietly(workBook);
+                Streams.closeQuietly(in);
                 if (!uploadConfig.isUseMemery()) {
                     if (uResult.getFile().exists()) {
                         uResult.getFile().delete();
@@ -237,7 +237,7 @@ public abstract class AbstractFileOperationController<
                                 + e.getMessage());
                 throw new RuntimeException("读取文件[" + uResult.getName() + "]行错误,行号:" + readRows);
             } finally {
-                Streams.close(reader);
+                Streams.closeQuietly(reader);
                 if (!uploadConfig.isUseMemery()) {
                     if (uResult.getFile().exists()) {
                         uResult.getFile().delete();
@@ -478,8 +478,8 @@ public abstract class AbstractFileOperationController<
             logger.warn("do export excel failure -> " + e.getMessage(), e);
             throw new BusinessException("FILE_EXPORT_EXCEL_FAIL", "EXCEL文件输出失败", e.getMessage());
         } finally {
-            Streams.close(out);
-            Streams.close(workbook);
+            Streams.closeQuietly(out);
+            Streams.closeQuietly(workbook);
             workbook.dispose();
         }
     }

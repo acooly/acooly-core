@@ -15,7 +15,6 @@ import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.core.common.dao.support.DataSourceReadyEvent;
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.module.ds.check.DBPatchChecker;
-import javax.sql.DataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -30,6 +29,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import javax.sql.DataSource;
+
 /**
  * @author qiubo
  */
@@ -37,7 +38,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 @EnableConfigurationProperties({DruidProperties.class})
 @ConditionalOnProperty(value = DruidProperties.ENABLE_KEY, matchIfMissing = true)
 @Slf4j
-public class JDBCAutoConfig {
+public class JdbcAutoConfig {
 
     @Autowired
     private DruidProperties druidProperties;
@@ -72,11 +73,6 @@ public class JDBCAutoConfig {
     @ConditionalOnMissingBean(JdbcOperations.class)
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
-    }
-
-    @Bean
-    public PagedJdbcTemplate pagedJdbcTemplate(DataSource dataSource) {
-        return new PagedJdbcTemplate(dataSource);
     }
 
     @Bean

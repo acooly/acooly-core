@@ -53,7 +53,6 @@ import java.util.Map;
  * @author Sam Brannen
  * @since 1.1.2
  */
-@Deprecated
 public abstract class Assert {
 
     /**
@@ -144,7 +143,7 @@ public abstract class Assert {
      * @see StringUtils#hasLength
      */
     public static void hasLength(String text, String message) {
-        if (!StringUtils.hasLength(text)) {
+        if (!Strings.isNotBlank(text)) {
             throw new IllegalArgumentException(message);
         }
     }
@@ -174,7 +173,7 @@ public abstract class Assert {
      * @see StringUtils#hasText
      */
     public static void hasText(String text, String message) {
-        if (!StringUtils.hasText(text)) {
+        if (!Strings.isNotBlank(text)) {
             throw new IllegalArgumentException(message);
         }
     }
@@ -203,7 +202,7 @@ public abstract class Assert {
      * @throws IllegalArgumentException if the text contains the substring
      */
     public static void doesNotContain(String textToSearch, String substring, String message) {
-        if (StringUtils.hasLength(textToSearch) && StringUtils.hasLength(substring) &&
+        if (Strings.isNotBlank(textToSearch) && Strings.isNotBlank(substring) &&
                 textToSearch.contains(substring)) {
             throw new IllegalArgumentException(message);
         }
@@ -365,7 +364,7 @@ public abstract class Assert {
         notNull(type, "Type to check against must not be null");
         if (!type.isInstance(obj)) {
             throw new IllegalArgumentException(
-                    (StringUtils.hasLength(message) ? message + " " : "") +
+                    (Strings.isNotBlank(message) ? message + " " : "") +
                             "Object of class [" + (obj != null ? obj.getClass().getName() : "null") +
                             "] must be an instance of " + type);
         }
@@ -398,7 +397,7 @@ public abstract class Assert {
     public static void isAssignable(Class<?> superType, Class<?> subType, String message) {
         notNull(superType, "Type to check against must not be null");
         if (subType == null || !superType.isAssignableFrom(subType)) {
-            throw new IllegalArgumentException((StringUtils.hasLength(message) ? message + " " : "") +
+            throw new IllegalArgumentException((Strings.isNotBlank(message) ? message + " " : "") +
                     subType + " is not assignable to " + superType);
         }
     }

@@ -73,12 +73,11 @@ public class TomcatAutoConfig {
             factory.addConnectorCustomizers((TomcatConnectorCustomizer) connector -> {
                 ProtocolHandler handler = connector.getProtocolHandler();
                 if (handler instanceof AbstractProtocol) {
-                    @SuppressWarnings("rawtypes")
                     AbstractProtocol protocol = (AbstractProtocol) handler;
                     protocol.setMaxThreads(tomcatProperties.getMaxThreads());
                     protocol.setMinSpareThreads(tomcatProperties.getMinSpareThreads());
                 }
-                connector.setAttribute("acceptCount", Integer.toString(tomcatProperties.getAcceptCount()));
+                connector.setProperty("acceptCount", Integer.toString(tomcatProperties.getAcceptCount()));
             });
 
             // 添加tomcat的默认访问页

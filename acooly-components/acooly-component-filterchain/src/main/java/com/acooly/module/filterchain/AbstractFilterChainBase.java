@@ -1,5 +1,5 @@
 /*
- * www.yiji.com Inc.
+ * www.acooly.cn Inc.
  * Copyright (c) 2016 All Rights Reserved
  */
 
@@ -9,7 +9,7 @@
  */
 package com.acooly.module.filterchain;
 
-import com.acooly.core.utils.GenericsUtils;
+import com.acooly.core.utils.Reflections;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ import java.util.List;
  *
  * @author qiubo@yiji.com
  */
-public abstract class FilterChainBase<C extends Context>
+public abstract class AbstractFilterChainBase<C extends Context>
         implements FilterChain<C>, ApplicationContextAware, InitializingBean, BeanNameAware {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -44,7 +44,6 @@ public abstract class FilterChainBase<C extends Context>
      * @param context 上下文对象
      */
     @Override
-    @SuppressWarnings("all")
     public void doFilter(C context) {
         if (context == null) {
             return;
@@ -67,7 +66,7 @@ public abstract class FilterChainBase<C extends Context>
     @SuppressWarnings("all")
     public void afterPropertiesSet() throws Exception {
         logger.info("FilterChain:{}初始化", beanName);
-        Class<?> genricType = GenericsUtils.getSuperClassGenricType(this.getClass(), 0);
+        Class<?> genricType = Reflections.getSuperClassGenricType(this.getClass(), 0);
         ResolvableType resolvableType = ResolvableType.forClassWithGenerics(Filter.class, genricType);
         String[] beanNames = applicationContext.getBeanNamesForType(resolvableType);
         Assert.notEmpty(

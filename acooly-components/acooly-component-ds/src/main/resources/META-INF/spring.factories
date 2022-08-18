@@ -1,5 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.acooly.module.ds.JDBCAutoConfig
+com.acooly.module.ds.JdbcAutoConfig
 com.acooly.core.common.boot.component.ComponentInitializer=\
 com.acooly.module.ds.DruidComponentInitializer
 com.acooly.core.common.boot.log.initializer.LogInitializer=\

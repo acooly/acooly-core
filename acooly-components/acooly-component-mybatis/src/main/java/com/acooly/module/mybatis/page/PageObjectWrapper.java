@@ -9,9 +9,11 @@ import org.apache.ibatis.reflection.wrapper.ObjectWrapper;
 
 import java.util.List;
 
+@SuppressWarnings("rawtypes")
 public class PageObjectWrapper implements ObjectWrapper {
 
-    private PageInfo pageInfo;
+    
+	private PageInfo pageInfo;
 
     public PageObjectWrapper(PageInfo pageInfo) {
         super();
@@ -23,9 +25,10 @@ public class PageObjectWrapper implements ObjectWrapper {
         return null;
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public <E> void addAll(List<E> element) {
-        MyBatisPage page = (MyBatisPage) element;
+        MyBatisPage<E> page = (MyBatisPage<E>) element;
         pageInfo.setTotalCount(page.getTotalCount());
         pageInfo.setTotalPage(page.getTotalPage());
         pageInfo.setCountOfCurrentPage(page.getCountOfCurrentPage());

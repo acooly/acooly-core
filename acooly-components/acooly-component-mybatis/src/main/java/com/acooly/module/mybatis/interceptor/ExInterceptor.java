@@ -40,11 +40,12 @@ import java.util.Properties;
 })
 @Slf4j
 @Order(Ordered.LOWEST_PRECEDENCE)
+@SuppressWarnings({"unchecked","rawtypes"})
 public class ExInterceptor extends AbstractInterceptor implements Interceptor {
-    private Map<String, Class> domanClassCache = Maps.newConcurrentMap();
+	private Map<String, Class> domanClassCache = Maps.newConcurrentMap();
     private Map<String, Class> fieldTypeCache = Maps.newConcurrentMap();
 
-    @Override
+	@Override
     public Object intercept(Invocation invocation) throws Throwable {
         PageInfo pageInfo = havePageInfoArg(invocation);
         if (pageInfo == null) {

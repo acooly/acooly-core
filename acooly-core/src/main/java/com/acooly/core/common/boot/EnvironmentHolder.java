@@ -48,10 +48,11 @@ public class EnvironmentHolder implements EnvironmentAware {
         PropertiesBuilder.build(target);
     }
 
-    public static <T> T buildProperties(Class<T> clazz) {
+    @SuppressWarnings("unchecked")
+	public static <T> T buildProperties(Class<T> clazz) {
         try {
-            T t = clazz.newInstance();
-            return (T) PropertiesBuilder.build(t);
+            T t = clazz.getDeclaredConstructor().newInstance();
+            return (T)PropertiesBuilder.build(t);
         } catch (Exception e) {
             throw new AppConfigException(e);
         }
@@ -82,9 +83,7 @@ public class EnvironmentHolder implements EnvironmentAware {
             Assert.notNull(target, "target对象不能为空");
             Assert.notNull(prefix, "prefix不能为空");
             try {
-
-
-                BindResult bindResult = Binder.get(EnvironmentHolder.get()).bind(prefix, Bindable.ofInstance(target));
+                BindResult<?> bindResult = Binder.get(EnvironmentHolder.get()).bind(prefix, Bindable.ofInstance(target));
                 if (bindResult.isBound()) {
                     target = bindResult.get();
                 }

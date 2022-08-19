@@ -191,7 +191,7 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
 
     private void checkAndSetPackage(SpringApplication application) {
         application.getAllSources().forEach(o -> {
-            Package pkg = ((Class) o).getPackage();
+            Package pkg = ((Class<?>) o).getPackage();
             if (pkg == null || disabledPackageName.contains(pkg.getName())) {
                 throw new AppConfigException(
                         "请把main-class定义到应用包中，禁止定义到以下包中:" + disabledPackageName);
@@ -237,11 +237,11 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
     }
 
     private BootApp findBootApplication(SpringApplication application) {
-        Class sourceClass =
+        Class<?> sourceClass =
                 application
                         .getAllSources()
                         .stream()
-                        .map(o1 -> (Class) o1)
+                        .map(o1 -> (Class<?>) o1)
                         .filter(o1 -> AnnotationUtils.findAnnotation(o1, BootApp.class) != null)
                         .findFirst()
                         .orElseThrow(() -> new AppConfigException(

@@ -7,7 +7,6 @@ import io.jsonwebtoken.impl.DefaultClaims;
 import io.jsonwebtoken.impl.TextCodec;
 import io.jsonwebtoken.lang.Assert;
 import io.jsonwebtoken.lang.Strings;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
@@ -27,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author shuijing
  */
-@Slf4j
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class JWTUtils {
 
     public static final String KEY_TARGETURL = "targetUrl";
@@ -136,7 +135,7 @@ public class JWTUtils {
      */
     private static String aud = "boss";
     private static ObjectMapper objectMapper;
-    private static RedisTemplate redisTemplate;
+	private static RedisTemplate redisTemplate;
 
     static {
         headerMap = new HashMap<>();
@@ -167,7 +166,7 @@ public class JWTUtils {
         return compactJws;
     }
 
-    public static String refreshJwt(Jwt<Header, Claims> jws) {
+    public static String refreshJwt(Jwt<Header<?>, Claims> jws) {
         Date expTime = new Date((System.currentTimeMillis() + JWT_EXP_TIME * 60 * 1000));
         jws.getBody().put(CLAIMS_KEY_EXP, expTime);
         String newJws =
@@ -226,7 +225,6 @@ public class JWTUtils {
         return claims;
     }
 
-    @SuppressWarnings("unchecked")
     protected static Map<String, Object> readValue(String val) {
         try {
             return objectMapper.readValue(val, Map.class);
@@ -242,23 +240,21 @@ public class JWTUtils {
      * @return
      * @throws Exception
      */
-    public static Jwt parseJws(String compactJws, final String secretKey) throws Exception {
-        return Jwts.parser()
-                .setSigningKeyResolver(
-                        new SigningKeyResolverAdapter() {
-                            @Override
-                            public Key resolveSigningKey(JwsHeader header, Claims claims) {
-                                SignatureAlgorithm alg = SignatureAlgorithm.forName(header.getAlgorithm());
-                                byte[] keyBytes = this.resolveSigningKeyBytes(header, claims);
-                                return new SecretKeySpec(keyBytes, alg.getJcaName());
-                            }
+	public static Jwt parseJws(String compactJws, final String secretKey) throws Exception {
+        return Jwts.parser().setSigningKeyResolver(
+                new SigningKeyResolverAdapter() {
+                    @Override
+                    public Key resolveSigningKey(JwsHeader header, Claims claims) {
+                        SignatureAlgorithm alg = SignatureAlgorithm.forName(header.getAlgorithm());
+                        byte[] keyBytes = this.resolveSigningKeyBytes(header, claims);
+                        return new SecretKeySpec(keyBytes, alg.getJcaName());
+                    }
 
-                            @Override
-                            public byte[] resolveSigningKeyBytes(JwsHeader header, Claims claims) {
-                                return secretKey.getBytes();
-                            }
-                        })
-                .parse(compactJws);
+                    @Override
+                    public byte[] resolveSigningKeyBytes(JwsHeader header, Claims claims) {
+                        return secretKey.getBytes();
+                    }
+                }).parse(compactJws);
     }
 
     /**
@@ -281,7 +277,7 @@ public class JWTUtils {
      * @param jwt
      * @return
      */
-    public static boolean validateTimeout(Jwt<Header, Claims> jwt) {
+    public static boolean validateTimeout(Jwt<Header<?>, Claims> jwt) {
         long expTime = Long.valueOf(String.valueOf(jwt.getBody().get(JWTUtils.CLAIMS_KEY_EXP)));
         return (System.currentTimeMillis() >= expTime);
     }

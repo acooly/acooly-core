@@ -16,6 +16,7 @@ import java.sql.SQLException;
  * @author qiuboboy@qq.com
  * @date 2018-04-18 11:40
  */
+@SuppressWarnings("rawtypes")
 @MappedTypes(DBMap.class)
 @MappedJdbcTypes({JdbcType.CHAR, JdbcType.VARCHAR, JdbcType.LONGVARCHAR})
 public class DBMapTypeHandler extends BaseTypeHandler<DBMap> {

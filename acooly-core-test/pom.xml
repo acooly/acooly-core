@@ -18,6 +18,11 @@
 
 
         <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-mybatis</artifactId>
             <version>${project.version}</version>

@@ -10,15 +10,18 @@ import net.engio.mbassy.subscription.SubscriptionContext;
  * @author qiubo@yiji.com
  */
 @Slf4j
+@SuppressWarnings("rawtypes")
 public class ExMessageDispatcher extends MessageDispatcher {
-    private final IHandlerInvocation invocation;
+    
+	private final IHandlerInvocation invocation;
 
     public ExMessageDispatcher(SubscriptionContext context, IHandlerInvocation invocation) {
         super(context, invocation);
         this.invocation = invocation;
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void dispatch(final MessagePublication publication, final Object message, final Iterable listeners) {
         publication.markDispatched();
         for (Object listener : listeners) {

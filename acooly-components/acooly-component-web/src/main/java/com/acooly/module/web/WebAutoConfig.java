@@ -104,7 +104,8 @@ public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware,
         }
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
         configurer.setUseSuffixPatternMatch(true);
         configurer.setUseRegisteredSuffixPatternMatch(true);

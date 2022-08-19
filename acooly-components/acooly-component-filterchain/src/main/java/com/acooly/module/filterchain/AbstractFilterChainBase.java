@@ -30,6 +30,7 @@ import java.util.List;
  *
  * @author qiubo@yiji.com
  */
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class AbstractFilterChainBase<C extends Context>
         implements FilterChain<C>, ApplicationContextAware, InitializingBean, BeanNameAware {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -43,7 +44,7 @@ public abstract class AbstractFilterChainBase<C extends Context>
      *
      * @param context 上下文对象
      */
-    @Override
+	@Override
     public void doFilter(C context) {
         if (context == null) {
             return;
@@ -63,7 +64,6 @@ public abstract class AbstractFilterChainBase<C extends Context>
     }
 
     @Override
-    @SuppressWarnings("all")
     public void afterPropertiesSet() throws Exception {
         logger.info("FilterChain:{}初始化", beanName);
         Class<?> genricType = Reflections.getSuperClassGenricType(this.getClass(), 0);

@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentMap;
  *
  * @author Agreal·Lee (e-mail:lixiang@yiji.com)
  */
+@SuppressWarnings("unchecked")
 public class SimpleTypeConverterManager implements TypeConverterManager {
 
     private final TargetTypeConverterMap typeConverterMap = new TargetTypeConverterMap(32);
@@ -112,7 +113,8 @@ public class SimpleTypeConverterManager implements TypeConverterManager {
         converterManager.register(new EnumTypeConverter());
     }
 
-    @Override
+    
+	@Override
     public <T> Collection<TypeConverter<T>> unregister(Class<T> targetType) {
         if (targetType == null) {
             return Collections.emptyList();

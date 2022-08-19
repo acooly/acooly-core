@@ -27,11 +27,10 @@ import java.util.List;
  * @author qiubo@yiji.com
  */
 public class SearchFilterParser {
-    private static final ConversionService conversionService =
-            EnhanceDefaultConversionService.INSTANCE;
+    private static final ConversionService conversionService = EnhanceDefaultConversionService.INSTANCE;
     private static final char UNDERLINE = '_';
 
-    public static String parseSqlField(SearchFilter searchFilter, Class proType) {
+    public static String parseSqlField(SearchFilter searchFilter, Class<?> proType) {
         StringBuilder sb = new StringBuilder();
         sb.append(" ");
         sb.append(Strings.camelToUnderline(searchFilter.fieldName));
@@ -100,18 +99,18 @@ public class SearchFilterParser {
                 break;
             case IN:
                 sb.append(" in (");
-                genInClause(proType, sb, (List) value);
+                genInClause(proType, sb, (List<?>) value);
                 break;
             case NOTIN:
                 sb.append(" not in (");
-                genInClause(proType, sb, (List) value);
+                genInClause(proType, sb, (List<?>) value);
                 break;
         }
 
         return sb.toString();
     }
 
-    private static void genInClause(Class proType, StringBuilder sb, List value) {
+    private static void genInClause(Class<?> proType, StringBuilder sb, List<?> value) {
         if (Number.class.isAssignableFrom(proType)) {
             StringBuilder tmp = new StringBuilder();
             for (Object o : value) {
@@ -129,12 +128,12 @@ public class SearchFilterParser {
         }
     }
 
-    private static Object convert(SearchFilter searchFilter, Class proType) {
+    private static Object convert(SearchFilter searchFilter, Class<?> proType) {
         if (proType.isEnum()) {
             if (searchFilter.value instanceof String) {
                 return searchFilter.value;
             } else if (searchFilter.value instanceof Enum) {
-                return ((Enum) searchFilter.value).name();
+                return ((Enum<?>) searchFilter.value).name();
             }
             return searchFilter.value;
         }
@@ -147,11 +146,11 @@ public class SearchFilterParser {
             if (!(Number.class.isAssignableFrom(proType) || String.class.isAssignableFrom(proType))) {
                 throw new RuntimeException("操作符[" + searchFilter.operator + "]时，支持属性为String或者数字");
             }
-            List tmp;
+            List<?> tmp;
             if (searchFilter.value.getClass().isArray()) {
                 tmp = CollectionUtils.arrayToList(searchFilter.value);
             } else if (List.class.isAssignableFrom(searchFilter.value.getClass())) {
-                tmp = (List) searchFilter.value;
+                tmp = (List<?>) searchFilter.value;
             } else if (String.class.isAssignableFrom(searchFilter.value.getClass())) {
                 tmp =
                         Lists.newArrayList(
@@ -167,7 +166,7 @@ public class SearchFilterParser {
                 throw new RuntimeException(
                         "操作符[" + searchFilter.operator + "]时，集合不能为空，value=" + searchFilter.value);
             }
-            List result = Lists.newArrayList();
+            List<Object> result = Lists.newArrayList();
             for (int i = 0; i < tmp.size(); i++) {
                 Object cur = tmp.get(i);
                 if (!proType.isAssignableFrom(cur.getClass())) {

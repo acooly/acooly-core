@@ -18,7 +18,6 @@ import java.util.Map;
  * @author zhangpu
  * @date 2019-01-06 23:07
  */
-@Slf4j
 public class QuickTree {
 
 
@@ -34,7 +33,7 @@ public class QuickTree {
      * @param <T>
      * @return
      */
-    public static <T extends TreeNode> List<T> quickTree(List<T> list, Long topParentId, Comparator comparator) {
+	public static <T extends TreeNode<T>> List<T> quickTree(List<T> list, Long topParentId, Comparator<T> comparator) {
         // 初始化结构
         Map<Long, T> data = Maps.newHashMap();
         List<T> tree = Lists.newArrayList();
@@ -56,7 +55,7 @@ public class QuickTree {
     }
 
 
-    public static <T extends TreeNode> List<T> quickTree(List<T> list, Comparator comparator) {
+    public static <T extends TreeNode<T>> List<T> quickTree(List<T> list, Comparator<T> comparator) {
         return quickTree(list, null, comparator);
     }
 

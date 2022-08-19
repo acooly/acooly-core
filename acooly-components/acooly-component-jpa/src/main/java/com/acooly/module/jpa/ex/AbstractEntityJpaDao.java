@@ -48,7 +48,7 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
     private Class<T> domainClass;
     private EntityManager em;
 
-    public AbstractEntityJpaDao(JpaEntityInformation entityInformation, EntityManager entityManager) {
+    public AbstractEntityJpaDao(JpaEntityInformation<T, ?> entityInformation, EntityManager entityManager) {
         super(entityInformation, entityManager);
         this.entityInformation = entityInformation;
         // Keep the EntityManager around to used from the newly introduced methods.
@@ -107,7 +107,7 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
 
     @Transactional
     public <S extends T> List<S> save(Iterable<S> entities) {
-        List<S> result = new ArrayList();
+        List<S> result = new ArrayList<>();
         if (entities == null) {
             return result;
         } else {
@@ -161,7 +161,8 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
         deleteById((ID) id);
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     @Transactional(rollbackFor = Throwable.class)
     public void removes(Serializable... ids) {
         Iterator<Serializable> iterator = Lists.newArrayList(ids).iterator();

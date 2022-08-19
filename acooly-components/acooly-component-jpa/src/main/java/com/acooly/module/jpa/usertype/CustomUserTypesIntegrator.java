@@ -26,7 +26,8 @@ public class CustomUserTypesIntegrator implements Integrator {
         registerType(mi, new MoneyUserType());
     }
 
-    private void registerType(MetadataImplementor mi, UserType type) {
+    @SuppressWarnings("deprecation")
+	private void registerType(MetadataImplementor mi, UserType type) {
         log.info("自动注册jpa usertype:{}", type.getClass().getName());
         String className = type.returnedClass().getName();
         mi.getTypeResolver().registerTypeOverride(type, new String[]{className});

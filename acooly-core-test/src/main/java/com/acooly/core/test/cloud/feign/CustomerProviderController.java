@@ -52,7 +52,7 @@ public class CustomerProviderController {
 
     @RequestMapping(value = "create")
     public JsonEntityResult<CoderCustomer> create(CoderCustomer coderCustomer) {
-        JsonEntityResult<CoderCustomer> result = new JsonEntityResult();
+        JsonEntityResult<CoderCustomer> result = new JsonEntityResult<>();
         coderCustomerService.save(coderCustomer);
         return result;
     }

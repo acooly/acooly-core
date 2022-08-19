@@ -143,7 +143,8 @@ public class JsonMapper {
     /**
      * 當JSON裡只含有Bean的部分屬性時，更新一個已存在Bean，只覆蓋該部分的屬性.
      */
-    public <T> T update(String jsonString, T object) {
+    @SuppressWarnings("unchecked")
+	public <T> T update(String jsonString, T object) {
         try {
             return (T) mapper.readerForUpdating(object).readValue(jsonString);
         } catch (Exception e) {

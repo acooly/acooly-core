@@ -110,7 +110,8 @@ public class LogbackConfigurator {
         }
     }
 
-    public void root(Level level, Appender<ILoggingEvent>... appenders) {
+    @SuppressWarnings("unchecked")
+	public void root(Level level, Appender<ILoggingEvent>... appenders) {
         Logger logger = this.context.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
         if (level != null) {
             logger.setLevel(level);
@@ -193,7 +194,8 @@ public class LogbackConfigurator {
      * @param maxHistory   日志文件保留时间
      * @return
      */
-    public RollingFileAppender<ILoggingEvent> fileAppender(
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public RollingFileAppender<ILoggingEvent> fileAppender(
             String appenderName, String pattern, String fileName, int maxHistory) {
         String logFile = Apps.getLogPath() + fileName;
         RollingFileAppender<ILoggingEvent> appender = new RollingFileAppender<>();

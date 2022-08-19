@@ -29,12 +29,16 @@ import static com.acooly.core.common.boot.log.LogAutoConfig.LogProperties.consol
  * @author qiubo
  */
 public class ConsoleLogInitializer extends AbstractLogInitializer {
-    //console log默认只启用10分钟
+
+    /**
+     * console log默认只启用10分钟
+     */
     private static final long CONSOLE_LOG_ENABLE_MILLISECONDS = 60 * 10 * 1000L;
 
     private static LogbackConfigurator configurator;
 
-    public static void addConsoleAppender() {
+    @SuppressWarnings("unchecked")
+	public static void addConsoleAppender() {
         LogbackConfigurator logbackConfigurator = ConsoleLogInitializer.configurator;
         if (logbackConfigurator == null) {
             return;

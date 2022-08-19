@@ -75,7 +75,7 @@ public class AppServiceBeanPostProcessor
 
     }
 
-    public static boolean isCglibProxyClass(Class clazz) {
+    public static boolean isCglibProxyClass(Class<?> clazz) {
         return clazz != null && clazz.getName().contains("$$");
     }
 
@@ -87,7 +87,7 @@ public class AppServiceBeanPostProcessor
     }
 
     private Class<?> getTargetClass(Object bean) {
-        Class targetClass;
+        Class<?> targetClass;
         for (targetClass = AopUtils.getTargetClass(bean);
              isCglibProxyClass(targetClass);
              targetClass = targetClass.getSuperclass()) {
@@ -152,8 +152,8 @@ public class AppServiceBeanPostProcessor
             checkBPPOrder();
             checkBPP = true;
         }
-        Class targetClass = this.getTargetClass(bean);
-        Class oriTargetClass = targetClass;
+        Class<?> targetClass = this.getTargetClass(bean);
+        Class<?> oriTargetClass = targetClass;
         if (isInAppServiceScanPackage(targetClass)) {
             if (appServiceFilterChain == null) {
                 appServiceFilterChain = applicationContext.getBean(AppServiceFilterChain.class);
@@ -192,7 +192,7 @@ public class AppServiceBeanPostProcessor
      * @param targetClass
      * @return
      */
-    private boolean isInAppServiceScanPackage(Class targetClass) {
+    private boolean isInAppServiceScanPackage(Class<?> targetClass) {
         return scanPackageList
                 .stream()
                 .anyMatch(scanPackage -> targetClass.getName().startsWith(scanPackage));

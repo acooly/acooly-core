@@ -4,17 +4,11 @@
  */
 package com.acooly.core.common.boot;
 
-import com.acooly.core.AcoolyVersion;
-import com.acooly.core.common.boot.listener.AcoolyApplicationRunListener;
-import com.acooly.core.common.boot.log.LogAutoConfig;
-import com.acooly.core.common.exception.AppConfigException;
-import com.acooly.core.common.exception.BusinessException;
-import com.acooly.core.utils.Strings;
-import com.acooly.core.utils.system.Systems;
-import com.github.kevinsawicki.http.HttpRequest;
-import com.google.common.collect.Maps;
-import javassist.*;
-import net.bytebuddy.ByteBuddy;
+import java.io.File;
+import java.io.IOException;
+import java.lang.instrument.Instrumentation;
+import java.util.Map;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.LoggerFactory;
@@ -26,14 +20,22 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.util.StringUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.instrument.Instrumentation;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import com.acooly.core.AcoolyVersion;
+import com.acooly.core.common.boot.listener.AcoolyApplicationRunListener;
+import com.acooly.core.common.boot.log.LogAutoConfig;
+import com.acooly.core.common.exception.AppConfigException;
+import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.system.Systems;
+import com.github.kevinsawicki.http.HttpRequest;
+import com.google.common.collect.Maps;
+
+import javassist.ClassClassPath;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.CtNewMethod;
+import net.bytebuddy.ByteBuddy;
 
 /**
  * @author qiubo
@@ -100,7 +102,7 @@ public class Apps {
      */
     public static boolean checkCloudEnv(SpringApplication application) {
         for (Object o : application.getAllSources()) {
-            if (((Class) o).getName().equals(CLOUD_CLASS)) {
+            if (((Class<?>) o).getName().equals(CLOUD_CLASS)) {
                 return true;
             }
         }
@@ -287,7 +289,8 @@ public class Apps {
         void report();
     }
 
-    private static Class<Report> generateReport() {
+    @SuppressWarnings("unchecked")
+	private static Class<Report> generateReport() {
         StringBuilder sb = new StringBuilder();
         String appsClassName = Apps.class.getName();
         String appsPackageName = Strings.substringBeforeLast(appsClassName, ".");

@@ -73,7 +73,7 @@ public class TomcatAutoConfig {
             factory.addConnectorCustomizers((TomcatConnectorCustomizer) connector -> {
                 ProtocolHandler handler = connector.getProtocolHandler();
                 if (handler instanceof AbstractProtocol) {
-                    AbstractProtocol protocol = (AbstractProtocol) handler;
+                    AbstractProtocol<?> protocol = (AbstractProtocol<?>) handler;
                     protocol.setMaxThreads(tomcatProperties.getMaxThreads());
                     protocol.setMinSpareThreads(tomcatProperties.getMinSpareThreads());
                 }

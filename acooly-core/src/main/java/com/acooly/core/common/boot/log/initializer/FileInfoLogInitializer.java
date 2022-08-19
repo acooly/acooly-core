@@ -22,7 +22,8 @@ import com.acooly.core.common.boot.log.LogbackConfigurator;
  * @author qiubo
  */
 public class FileInfoLogInitializer extends AbstractLogInitializer {
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void init(LogbackConfigurator configurator) {
         String fileName = Apps.getAppName() + "-info-30de.log";
         configurator.log("设置info级别的文件日志，日志文件为:%s", fileName);

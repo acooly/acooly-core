@@ -3,6 +3,9 @@ package com.acooly.module.mybatis.page;
 import com.acooly.core.common.dao.support.PageInfo;
 import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
 
+/**
+ * @author zhangpu
+ */
 public class PageObjectFactory extends DefaultObjectFactory {
 
     /**
@@ -10,10 +13,11 @@ public class PageObjectFactory extends DefaultObjectFactory {
      */
     private static final long serialVersionUID = -1082960721558661578L;
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T create(Class<T> type) {
         if (type == PageInfo.class) {
-            return (T) new PageInfo();
+            return (T) new PageInfo<>();
         }
         return create(type, null, null);
     }

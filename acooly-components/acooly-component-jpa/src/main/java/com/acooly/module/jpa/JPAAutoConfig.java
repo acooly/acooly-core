@@ -61,10 +61,9 @@ public class JPAAutoConfig {
             matchIfMissing = true
     )
     @ConditionalOnWebApplication
-    public FilterRegistrationBean openEntityManagerInViewFilter(JPAProperties properties) {
+    public FilterRegistrationBean<OpenEntityManagerInViewFilter> openEntityManagerInViewFilter(JPAProperties properties) {
         OpenEntityManagerInViewFilter filter = new OpenEntityManagerInViewFilter();
-
-        FilterRegistrationBean registration = new FilterRegistrationBean();
+        FilterRegistrationBean<OpenEntityManagerInViewFilter> registration = new FilterRegistrationBean<>();
         registration.setFilter(filter);
         registration.addUrlPatterns(
                 properties.getOpenEntityManagerInViewFilterUrlPatterns().toArray(new String[0]));

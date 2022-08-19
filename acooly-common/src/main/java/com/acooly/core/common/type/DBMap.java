@@ -11,6 +11,7 @@ import java.util.Map;
  * @author qiuboboy@qq.com
  * @date 2018-04-19 11:33
  */
+@SuppressWarnings("serial")
 public class DBMap<K, V> extends HashMap<K, V> {
     public DBMap() {
     }
@@ -23,7 +24,8 @@ public class DBMap<K, V> extends HashMap<K, V> {
         return JsonMapper.nonEmptyMapper().toJson(this);
     }
 
-    public static <K, V> DBMap<K, V> fromJson(String json) {
+    @SuppressWarnings("unchecked")
+	public static <K, V> DBMap<K, V> fromJson(String json) {
         if(json==null){
             return null;
         }

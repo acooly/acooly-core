@@ -49,7 +49,7 @@ public class BeanUtils {
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Asserts.notNull(object);
         Asserts.notEmpty(methodName);
-        Class[] types = new Class[params.length];
+        Class<?>[] types = new Class<?>[params.length];
         for (int i = 0; i < params.length; i++) {
             types[i] = params[i].getClass();
         }

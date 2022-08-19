@@ -84,11 +84,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @author qzhanbo@yiji.com
  * @author zhangpu
  */
+@SuppressWarnings("rawtypes")
 public class ToString {
     public static final String ALL_ASTERISK = "******";
-    private static final String packageName = getPackageName(ToString.class);
+    private static final String PACKAGE_NAME = getPackageName(ToString.class);
     private static final String NULL = "null";
-    private static final Map<String, I> cache = Maps.newConcurrentMap();
+    private static final Map<String, I> CACHE = Maps.newConcurrentMap();
     private static final char SEPARATOR_CHAR_ASTERISK = '*';
     private static final String DATE_FORMART = "yyyy-MM-dd HH:mm:ss";
     private static final Logger logger = LoggerFactory.getLogger(ToString.class);
@@ -110,15 +111,15 @@ public class ToString {
             return NULL;
         }
 
-        I i = cache.get(o.getClass().getName());
+        I i = CACHE.get(o.getClass().getName());
         if (i == null) {
             synchronized (o.getClass()) {
-                i = cache.get(o.getClass().getName());
+                i = CACHE.get(o.getClass().getName());
                 if (i == null) {
                     Generator generator = new Generator(o.getClass());
                     try {
-                        i = generator.generate().newInstance();
-                        cache.put(o.getClass().getName(), i);
+                        i = generator.generate().getDeclaredConstructor().newInstance();
+                        CACHE.put(o.getClass().getName(), i);
                     } catch (Exception e) {
                         throw Exceptions.runtimeException(e);
                     }
@@ -169,12 +170,15 @@ public class ToString {
      * @param maskKeys 需要mask的key列表
      * @return
      */
-    public static String toString(Map map, int size, List<String> maskKeys) {
+    @SuppressWarnings("unchecked")
+	public static String toString(Map map, int size, List<String> maskKeys) {
         if (map == null) {
             return NULL;
         }
         Iterator<Map.Entry> it = map.entrySet().iterator();
-        if (!it.hasNext()) return "{}";
+        if (!it.hasNext()) {
+            return "{}";
+        }
 
         StringBuilder sb = new StringBuilder(10 * Math.min(size, map.size()));
         sb.append('{');
@@ -225,15 +229,21 @@ public class ToString {
     }
 
     public static String toString(long[] a, int size) {
-        if (a == null) return NULL;
+        if (a == null) {
+            return NULL;
+        }
         int iMax = a.length - 1;
-        if (iMax == -1) return "[]";
+        if (iMax == -1) {
+            return "[]";
+        }
 
         StringBuilder b = new StringBuilder(5 * Math.min(size, a.length));
         b.append('[');
         for (int i = 0; i < size; i++) {
             b.append(a[i]);
-            if (i == iMax) return b.append(']').toString();
+            if (i == iMax) {
+                return b.append(']').toString();
+            }
             b.append(",");
         }
         b.append("...]");
@@ -243,13 +253,17 @@ public class ToString {
     public static String toString(int[] a, int size) {
         if (a == null) return NULL;
         int iMax = a.length - 1;
-        if (iMax == -1) return "[]";
+        if (iMax == -1) {
+            return "[]";
+        }
 
         StringBuilder b = new StringBuilder(5 * Math.min(size, a.length));
         b.append('[');
         for (int i = 0; i < size; i++) {
             b.append(a[i]);
-            if (i == iMax) return b.append(']').toString();
+            if (i == iMax) {
+                return b.append(']').toString();
+            }
             b.append(",");
         }
         b.append("...]");
@@ -257,15 +271,21 @@ public class ToString {
     }
 
     public static String toString(short[] a, int size) {
-        if (a == null) return NULL;
+        if (a == null) {
+            return NULL;
+        }
         int iMax = a.length - 1;
-        if (iMax == -1) return "[]";
+        if (iMax == -1) {
+            return "[]";
+        }
 
         StringBuilder b = new StringBuilder(3 * Math.min(size, a.length));
         b.append('[');
         for (int i = 0; i < size; i++) {
             b.append(a[i]);
-            if (i == iMax) return b.append(']').toString();
+            if (i == iMax) {
+                return b.append(']').toString();
+            }
             b.append(",");
         }
         b.append("...]");
@@ -307,7 +327,9 @@ public class ToString {
     public static String toString(boolean[] a, int size) {
         if (a == null) return NULL;
         int iMax = a.length - 1;
-        if (iMax == -1) return "[]";
+        if (iMax == -1) {
+            return "[]";
+        }
 
         StringBuilder b = new StringBuilder(5 * Math.min(size, a.length));
         b.append('[');
@@ -527,6 +549,7 @@ public class ToString {
         return ALL_ASTERISK;
     }
 
+    @SafeVarargs
     public static <E> List<E> newList(E... e) {
         List<E> list = new ArrayList<>();
         if (e != null) {
@@ -551,6 +574,12 @@ public class ToString {
     }
 
     public static interface I {
+        /**
+         * toString
+         *
+         * @param source
+         * @return
+         */
         String toString(Object source);
     }
 
@@ -631,7 +660,8 @@ public class ToString {
         String value();
     }
 
-    public abstract static class AbstractMasked implements Masked {
+    @SuppressWarnings("serial")
+	public abstract static class AbstractMasked implements Masked {
         private boolean mask = false;
 
         public AbstractMasked(boolean mask) {
@@ -656,6 +686,7 @@ public class ToString {
     /**
      * 包裹Object
      */
+    @SuppressWarnings("serial")
     public static class MaskedObject extends AbstractMasked {
         private Object ori;
 
@@ -672,6 +703,7 @@ public class ToString {
     /**
      * 包裹String
      */
+    @SuppressWarnings("serial")
     public static class MaskedString extends AbstractMasked {
         private String ori;
 
@@ -878,7 +910,8 @@ public class ToString {
             }
         }
 
-        public Class<I> generate() {
+        @SuppressWarnings("unchecked")
+		public Class<I> generate() {
             generateBegin();
             generateBody();
             generateEnd();
@@ -896,7 +929,7 @@ public class ToString {
             ClassPool pool = ClassPool.getDefault();
             ClassClassPath classPath = new ClassClassPath(this.getClass());
             pool.insertClassPath(classPath);
-            CtClass cc = pool.makeClass(packageName + ".ToStringImpl" + index.incrementAndGet());
+            CtClass cc = pool.makeClass(PACKAGE_NAME + ".ToStringImpl" + index.incrementAndGet());
 
             Class<I> copyClass = null;
             try {

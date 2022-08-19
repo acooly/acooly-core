@@ -9,12 +9,6 @@
  */
 package com.acooly.core.common.boot.listener;
 
-import com.acooly.core.common.boot.Apps;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.MapPropertySource;
-import org.springframework.util.ClassUtils;
-
 import java.lang.reflect.Field;
 import java.net.URI;
 import java.security.CodeSource;
@@ -23,9 +17,18 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.MapPropertySource;
+import org.springframework.util.ClassUtils;
+
+import com.acooly.core.common.boot.Apps;
+
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author qiubo@yiji.com
  */
+@SuppressWarnings("unchecked")
 @Slf4j
 public class DevModeDetector {
     private static Map<String, Object> PROPERTIES;
@@ -33,15 +36,13 @@ public class DevModeDetector {
 
     static {
         try {
-            Class<?> clazz =
-                    ClassUtils.forName(
-                            "org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor",
-                            ClassUtils.getDefaultClassLoader());
+            Class<?> clazz = ClassUtils.forName(
+                     "org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor",ClassUtils.getDefaultClassLoader());
             Field properties = clazz.getDeclaredField("PROPERTIES");
             properties.setAccessible(true);
             PROPERTIES = (Map<String, Object>) properties.get(null);
         } catch (Exception e) {
-            HashMap properties = new HashMap();
+            HashMap<String,Object> properties = new HashMap<>();
             properties.put("spring.thymeleaf.cache", "false");
             properties.put("spring.freemarker.cache", "false");
             properties.put("spring.groovy.template.cache", "false");

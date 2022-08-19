@@ -164,7 +164,8 @@ public class PageInfo<T> implements Serializable {
      * @param <E>        DTO泛型
      * @return DTO分页对象
      */
-    public <E> PageInfo<E> to(final Class<E> clazz, BiFunction<T, E, E> biFunction) {
+    @SuppressWarnings("unchecked")
+	public <E> PageInfo<E> to(final Class<E> clazz, BiFunction<T, E, E> biFunction) {
         PageInfo<E> info = new PageInfo<>();
         info.setTotalPage(this.totalPage);
         info.setTotalCount(this.totalCount);

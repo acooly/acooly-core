@@ -42,7 +42,7 @@ public class MapperConfig {
         MapperHelper mapperHelper = new MapperHelper();
         mapperHelper.setConfig(mapperProperties);
         if (mapperProperties.getMappers().size() > 0) {
-            for (Class mapper : mapperProperties.getMappers()) {
+            for (Class<?> mapper : mapperProperties.getMappers()) {
                 applicationContext.getBeansOfType(mapper);
                 mapperHelper.registerMapper(mapper);
             }

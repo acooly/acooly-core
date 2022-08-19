@@ -67,55 +67,52 @@ public class IdCards {
 
     static {
         //解析省
-        Map provinceJsons = getJsonMap("META-INF/idcard/province.json.zip");
-        provinces = praseJsonMap(provinceJsons);
+        Map<String, Map<String, Object>> provinceJsons = getJsonMap("META-INF/idcard/province.json.zip");
+        provinces = parseJsonMap(provinceJsons);
 
         //解析市
-        Map cityJsons = getJsonMap("META-INF/idcard/city.json.zip");
-        citys = praseJsonMap(cityJsons);
+        Map<String, Map<String, Object>> cityJsons = getJsonMap("META-INF/idcard/city.json.zip");
+        citys = parseJsonMap(cityJsons);
 
         //解析区
-        Map areaJsons = getJsonMap("META-INF/idcard/area.json.zip");
-        areas = praseJsonMap(areaJsons);
+        Map<String, Map<String, Object>> areaJsons = getJsonMap("META-INF/idcard/area.json.zip");
+        areas = parseJsonMap(areaJsons);
 
         //解析6位码对应
-        Map govCodeJsons = getJsonMap("META-INF/idcard/govCode.json.zip");
-        govCodes = praseGovCode(govCodeJsons);
+        Map<String, Map<String, Object>> govCodeJsons = getJsonMap("META-INF/idcard/govCode.json.zip");
+        govCodes = parseGovCode(govCodeJsons);
 
     }
 
-    private static Map<String, String> praseJsonMap(Map jsonMap) {
-        Map<String, String> jprovinces = Maps.newHashMapWithExpectedSize(jsonMap.size());
+    private static Map<String, String> parseJsonMap(Map<String, Map<String, Object>> jsonMap) {
+        Map<String, String> jProvinces = Maps.newHashMapWithExpectedSize(jsonMap.size());
         jsonMap.keySet().forEach(v -> {
-            Map lm = (Map) jsonMap.get(v);
+        	Map<String, Object> lm = jsonMap.get(v);
             String code = (String) lm.get("text");
-            jprovinces.put(v.toString(), code);
+            jProvinces.put(v.toString(), code);
         });
-        return jprovinces;
+        return jProvinces;
     }
 
-    private static Map<String, Map<String, String>> praseGovCode(Map jsonMap) {
-        Map<String, Map<String, String>> jgovCode = Maps.newHashMap();
+    private static Map<String, Map<String, String>> parseGovCode(Map<String, Map<String, Object>> jsonMap) {
+        Map<String, Map<String, String>> jGovCode = Maps.newHashMap();
         jsonMap.keySet().forEach(v -> {
-            Map lm = (Map) jsonMap.get(v);
-
+            Map<String, Object> lm = jsonMap.get(v);
             String code = (String) lm.get("code");
             String provinceCode = (String) lm.get(PROVINCE_CODE);
             String cityCode = (String) lm.get(CITY_CODE);
             String areaCode = (String) lm.get(AREA_CODE);
-
             Map<String, String> innerMap = Maps.newHashMap();
             innerMap.put(PROVINCE_CODE, provinces.get(provinceCode));
             innerMap.put(CITY_CODE, citys.get(cityCode));
             innerMap.put(AREA_CODE, areas.get(areaCode));
-
-            jgovCode.put(code, innerMap);
+            jGovCode.put(code, innerMap);
         });
-        return jgovCode;
+        return jGovCode;
     }
 
-    private static Map getJsonMap(String idcardPath) {
-        Map map = null;
+    private static Map<String, Map<String, Object>> getJsonMap(String idcardPath) {
+        Map<String, Map<String, Object>> map = null;
         try (InputStream inputStream = IdCards.class.getClassLoader().getResourceAsStream(idcardPath)) {
             ZipInputStream zipInputStream = new ZipInputStream(inputStream);
             zipInputStream.getNextEntry();

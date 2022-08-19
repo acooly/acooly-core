@@ -47,7 +47,7 @@ abstract class ArrayTypeConverterSupport<T> extends AbstractTypeConverter<T> {
         return result;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private static Object conver(
             TypeConverterManager typeConverterManager, Object source, Class<?> targetType) {
         if (source == null) {

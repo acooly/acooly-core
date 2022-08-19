@@ -10,6 +10,7 @@ import java.util.Locale;
  * @author qiuboboy@qq.com
  * @date 2018-07-02 17:01
  */
+@SuppressWarnings("rawtypes")
 public class DBMapFormatter implements Formatter<DBMap> {
     @Override
     public DBMap parse(String text, Locale locale) throws ParseException {

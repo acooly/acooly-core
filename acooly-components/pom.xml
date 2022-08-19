@@ -19,6 +19,7 @@
         <module>acooly-component-ds</module>
         <module>acooly-component-dubbo</module>
         <module>acooly-component-event</module>
+        <module>acooly-component-distributedlock</module>
         <module>acooly-component-filterchain</module>
         <module>acooly-component-jpa</module>
         <module>acooly-component-mybatis</module>

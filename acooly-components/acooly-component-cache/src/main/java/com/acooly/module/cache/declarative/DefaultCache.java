@@ -25,6 +25,7 @@ import java.util.function.BiFunction;
 /**
  * @author qiubo
  */
+@SuppressWarnings("unchecked")
 public class DefaultCache implements Cache {
 
     private String name;

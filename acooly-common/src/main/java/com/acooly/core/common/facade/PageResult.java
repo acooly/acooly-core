@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * @author qiubo@yiji.com
@@ -76,7 +77,7 @@ public class PageResult<T> extends ResultBase implements DtoAble {
         return result;
     }
 
-    public static <R extends PageResult<S>, T, S> R with(PageInfo<T> pageInfo, Class<R> clazz, PageInfo.Function<T, S> function) {
+    public static <R extends PageResult<S>, T, S> R with(PageInfo<T> pageInfo, Class<R> clazz, Function<T, S> function) {
         R result = null;
         try {
             result = clazz.newInstance();

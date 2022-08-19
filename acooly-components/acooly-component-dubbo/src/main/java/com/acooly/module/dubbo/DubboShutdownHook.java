@@ -29,7 +29,7 @@ public class DubboShutdownHook implements Runnable {
         logger.info("关闭dubbo");
         run = true;
         try {
-            final Class protocolConfig = Class.forName("com.alibaba.dubbo.config.ProtocolConfig");
+            final Class<?> protocolConfig = Class.forName("com.alibaba.dubbo.config.ProtocolConfig");
             final Method method = protocolConfig.getMethod("destroyAll");
             try {
                 method.invoke(protocolConfig);

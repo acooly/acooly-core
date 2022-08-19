@@ -31,6 +31,7 @@ import java.util.*;
 /**
  * @author qiubo@yiji.com
  */
+@SuppressWarnings("unchecked")
 public class IncludePage implements TemplateDirectiveModel {
     private HttpServletRequest request;
     private HttpServletResponse response;
@@ -39,18 +40,14 @@ public class IncludePage implements TemplateDirectiveModel {
             final Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body)
             throws TemplateException, IOException {
         request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        response =
-                ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         // Determine the path
         final TemplateModel path = (TemplateModel) params.get("path");
         if (path == null) {
             throw new _MiscTemplateException(env, "Missing required parameter \"path\"");
         }
         if (!(path instanceof TemplateScalarModel)) {
-            throw new _MiscTemplateException(
-                    env,
-                    "Expected a scalar model. \"path\" is instead ",
-                    new _DelayedFTLTypeDescription(path));
+            throw new _MiscTemplateException(env, "Expected a scalar model. \"path\" is instead ", new _DelayedFTLTypeDescription(path));
         }
         final String strPath = ((TemplateScalarModel) path).getAsString();
         if (strPath == null) {

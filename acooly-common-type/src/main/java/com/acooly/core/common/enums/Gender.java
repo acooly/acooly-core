@@ -42,7 +42,7 @@ public enum Gender implements Messageable {
     }
 
     public static Map<String, String> mapping() {
-        Map<String, String> map = new LinkedHashMap();
+        Map<String, String> map = new LinkedHashMap<>();
         for (Gender type : values()) {
             map.put(type.getCode(), type.getMessage());
         }

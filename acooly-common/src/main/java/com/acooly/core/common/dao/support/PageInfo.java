@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * 分页对象
@@ -193,38 +194,6 @@ public class PageInfo<T> implements Serializable {
 
 
     /**
-     * 转换PageInfo&lt;T&gt;为PageInfo&lt;E&gt;
-     * 注意：废弃Boolean convert参数的重载方法，在新的基础方法中自动判断如果T和E不同类型则转换拷贝属性，
-     *
-     * @param clazz   DTO类型
-     * @param convert 是否转换
-     * @param <E>     DTO泛型
-     * @return DTO分页对象
-     * @see com.acooly.core.common.dao.support.PageInfo#to(Class, BiFunction)
-     */
-    @Deprecated
-    public <E> PageInfo<E> to(final Class<E> clazz, Boolean convert) {
-        PageInfo<E> info = new PageInfo<>();
-        info.setTotalPage(this.totalPage);
-        info.setTotalCount(this.totalCount);
-        info.setCurrentPage(this.currentPage);
-        info.setCountOfCurrentPage(this.countOfCurrentPage);
-        if (convert == null || !convert) {
-            return info;
-        }
-        if (pageResults != null && !pageResults.isEmpty()) {
-            List<E> list = Lists.newArrayListWithCapacity(this.pageResults.size());
-            for (T pageResult : pageResults) {
-                list.add(BeanCopier.copy(pageResult, clazz, BeanCopier.CopyStrategy.IGNORE_NULL));
-            }
-            info.setPageResults(list);
-        } else {
-            info.setPageResults(Lists.<E>newArrayList());
-        }
-        return info;
-    }
-
-    /**
      * 转换PageInfo<T>为PageInfo<E>,默认空后置处理
      *
      * @param clazz
@@ -237,16 +206,15 @@ public class PageInfo<T> implements Serializable {
         });
     }
 
+
     /**
      * 自定义人工方式转换PageInfo<T>为PageInfo<E>
-     * <p>
-     * 废弃原因：使用Java1.8的Function代替自定义Function接口，不再支持JDK1.7
+     * 代替1.7的同参数重载方法
      *
      * @param function 转换函数
      * @param <E>      DTO泛型
      * @return DTO分页对象
      */
-    @Deprecated
     public <E> PageInfo<E> to(Function<T, E> function) {
         PageInfo<E> info = new PageInfo<>();
         info.setTotalPage(this.totalPage);
@@ -265,39 +233,5 @@ public class PageInfo<T> implements Serializable {
         return info;
     }
 
-    /**
-     * 自定义人工方式转换PageInfo<T>为PageInfo<E>
-     * 代替1.7的同参数重载方法
-     *
-     * @param function 转换函数
-     * @param <E>      DTO泛型
-     * @return DTO分页对象
-     */
-    public <E> PageInfo<E> to(java.util.function.Function<T, E> function) {
-        PageInfo<E> info = new PageInfo<>();
-        info.setTotalPage(this.totalPage);
-        info.setTotalCount(this.totalCount);
-        info.setCurrentPage(this.currentPage);
-        info.setCountOfCurrentPage(this.countOfCurrentPage);
-        if (pageResults != null && !pageResults.isEmpty()) {
-            List<E> list = Lists.newArrayListWithCapacity(this.pageResults.size());
-            for (T pageResult : pageResults) {
-                list.add(function.apply(pageResult));
-            }
-            info.setPageResults(list);
-        } else {
-            info.setPageResults(Lists.<E>newArrayList());
-        }
-        return info;
-    }
 
-    /**
-     * jdk 1.7打包兼容1.8 function interface
-     *
-     * @param <T>
-     * @param <E>
-     */
-    public interface Function<T, E> {
-        E apply(T t);
-    }
 }

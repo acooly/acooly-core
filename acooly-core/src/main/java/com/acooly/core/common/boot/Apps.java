@@ -30,6 +30,10 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author qiubo
@@ -65,7 +69,6 @@ public class Apps {
      * 的bootstrapContext 的初始化 加个标志避免被重新初始化
      */
     private static final String CLOUD_CLASS = "org.springframework.cloud.bootstrap.BootstrapImportSelectorConfiguration";
-
 
     private static String logPath = null;
     private static String dataPath = null;
@@ -190,8 +193,7 @@ public class Apps {
      * 当系统参数中没有{@link Apps#SPRING_PROFILE_ACTIVE}时，设置应用运行环境
      */
     public static void setProfileIfNotExists(String profile) {
-        if (!StringUtils.hasLength(System.getProperty(SPRING_PROFILE_ACTIVE))
-                && !System.getenv().containsKey("SPRING_PROFILES_ACTIVE")) {
+        if (!StringUtils.hasLength(System.getProperty(SPRING_PROFILE_ACTIVE)) && !System.getenv().containsKey("SPRING_PROFILES_ACTIVE")) {
             System.setProperty(SPRING_PROFILE_ACTIVE, profile);
         }
     }
@@ -286,33 +288,22 @@ public class Apps {
     }
 
     private static Class<Report> generateReport() {
-
         StringBuilder sb = new StringBuilder();
         String appsClassName = Apps.class.getName();
         String appsPackageName = Strings.substringBeforeLast(appsClassName, ".");
         sb.append("public void report(){\n");
         sb.append("if (!").append(Env.class.getName()).append(".isOnline()){return;}").append("\n");
-        sb.append("if (").append(Strings.class.getName()).append(".startsWithIgnoreCase(")
-                .append(appsClassName).append(".getAppName(), \"acooly\")) {return;}").append("\n");
+        sb.append("if (").append(Strings.class.getName()).append(".startsWithIgnoreCase(").append(appsClassName).append(".getAppName(), \"acooly\")) {return;}").append("\n");
         sb.append("try {").append("\n");
-        sb.append("String url = \"http://acooly.cn/acooly/app/report.html\";").append("\n");
-        sb.append(Map.class.getName()).append("/*<String, String>*/ data = ")
-                .append(Maps.class.getName()).append(".newHashMap();").append("\n");
-        sb.append("data.putAll(").append(Systems.class.getName()).append(".getSystemInfo());")
-                .append("\n");
+        sb.append("String url = \"https://acooly.cn/acooly/app/report.html\";").append("\n");
+        sb.append(Map.class.getName()).append("/*<String, String>*/ data = ").append(Maps.class.getName()).append(".newHashMap();").append("\n");
+        sb.append("data.putAll(").append(Systems.class.getName()).append(".getSystemInfo());").append("\n");
         sb.append("data.putAll(").append(appsClassName).append(".getVersions());").append("\n");
         sb.append("data.putAll(").append(appsClassName).append(".getAppInfo());").append("\n");
-        sb.append("data.put(\"sign\", ").append(DigestUtils.class.getName()).append(".md5Hex(")
-                .append(appsClassName).append(".getAppName() + data.get(\"machineNo\") " +
-                        "+ data.get(\"startupTime\")));").append("\n");
-        sb.append(HttpRequest.class.getName()).append(" httpRequest = " +
-                HttpRequest.class.getName() + ".post(url).contentType(" + HttpRequest.class
-                .getName() + ".CONTENT_TYPE_FORM).form(data);").append("\n");
+        sb.append("data.put(\"sign\", ").append(DigestUtils.class.getName()).append(".md5Hex(").append(appsClassName).append(".getAppName() + data.get(\"machineNo\") " + "+ data.get(\"startupTime\")));").append("\n");
+        sb.append(HttpRequest.class.getName()).append(" httpRequest = " + HttpRequest.class.getName() + ".post(url).contentType(" + HttpRequest.class.getName() + ".CONTENT_TYPE_FORM).form(data);").append("\n");
         sb.append("if (!httpRequest.ok()) { throw new RuntimeException(); }").append("\n");
-        sb.append("if (!" + Strings.class.getName()
-                + ".containsIgnoreCase(httpRequest.body(),\"true\")) { \n " + appsClassName
-                + ".mainLog(\"Acooly关闭: \"+" + appsClassName
-                + ".getAppName());\n System.exit(0); }").append("\n");
+        sb.append("if (!" + Strings.class.getName() + ".containsIgnoreCase(httpRequest.body(),\"true\")) { \n " + appsClassName + ".mainLog(\"Acooly关闭: \"+" + appsClassName + ".getAppName());\n System.exit(0); }").append("\n");
         sb.append("} catch(exception e){ }").append("\n");
         sb.append("}");
 
@@ -329,8 +320,7 @@ public class Apps {
             cc.addMethod(m);
             ClassLoader classLoader = getDefaultClassLoader();
             reportClass = cc.toClass(classLoader, null);
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return reportClass;

@@ -75,6 +75,7 @@ import java.util.Map;
 })
 @AutoConfigureAfter(WebMvcAutoConfiguration.class)
 @ComponentScan
+@SuppressWarnings("unchecked")
 public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware, InitializingBean {
 
     public static final String SIMPLE_URL_MAPPING_VIEW_CONTROLLER = "simpleUrlMappingViewController";

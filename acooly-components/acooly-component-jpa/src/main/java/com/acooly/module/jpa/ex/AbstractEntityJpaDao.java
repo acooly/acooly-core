@@ -148,21 +148,21 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
         }
     }
 
-    @Transactional
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public void remove(T o) throws DataAccessException {
         delete(o);
     }
 
-    @Transactional
     @SuppressWarnings("unchecked")
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public void removeById(Serializable id) throws DataAccessException {
         deleteById((ID) id);
     }
 
-    @Transactional
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public void removes(Serializable... ids) {
         Iterator<Serializable> iterator = Lists.newArrayList(ids).iterator();
         String queryString = String.format(QueryUtils.DELETE_ALL_QUERY_STRING, getEntityName());

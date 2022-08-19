@@ -1,5 +1,6 @@
 package com.acooly.module.defence.url.param;
 
+import com.google.common.collect.Maps;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -21,6 +22,7 @@ public class SecurityServletModelAttributeMethodProcessor extends ServletModelAt
 
     @Override
     protected void bindRequestParameters(WebDataBinder binder, NativeWebRequest request) {
+        @SuppressWarnings("unchecked")
         Map<String, String> maps = (Map<String, String>) request
                 .getAttribute(SecurityParamHandlerMethodArgumentResolver.class.getName(), SCOPE_REQUEST);
 
@@ -29,8 +31,7 @@ public class SecurityServletModelAttributeMethodProcessor extends ServletModelAt
         if (maps.isEmpty()) {
             servletBinder.bind(servletRequest);
         } else {
-            SecurityServletRequestWrapper securityServletRequestWrapper = new SecurityServletRequestWrapper(servletRequest,
-                    maps);
+            SecurityServletRequestWrapper securityServletRequestWrapper = new SecurityServletRequestWrapper(servletRequest, maps);
             servletBinder.bind(securityServletRequestWrapper);
         }
     }

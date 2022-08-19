@@ -48,12 +48,12 @@ public class AppProviderController {
         return result;
     }
 
-    @RequestMapping("page")
-    public PageResult<App> page(@RequestBody PageOrder pageOrder) {
-        log.info("pageOrder: {}", pageOrder);
-        PageInfo<App> pageInfo = appService.query(pageOrder.getPageInfo(), pageOrder.getMap(), pageOrder.getSortMap());
-        return PageResult.from(pageInfo, App.class);
-    }
+//    @RequestMapping("page")
+//    public PageResult<App> page(@RequestBody PageOrder pageOrder) {
+//        log.info("pageOrder: {}", pageOrder);
+//        PageInfo<App> pageInfo = appService.query(pageOrder.getPageInfo(), pageOrder.getMap(), pageOrder.getSortMap());
+//        return PageResult.from(pageInfo, App.class);
+//    }
 
     @RequestMapping("get")
     public SingleResult<App> get(@RequestBody SingleOrder<Long> order) {

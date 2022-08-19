@@ -25,7 +25,7 @@ import java.util.List;
  * @date 2021-05-08 23:32
  */
 @Slf4j
-public class Files extends FileUtils {
+public abstract class Files extends FileUtils {
 
 
     public static final List<String> DANGER_FS_PATHS = Lists.newArrayList(

@@ -66,8 +66,7 @@ public interface ListMapper<T> {
             for (EntityColumn column : entityTable.getEntityClassColumns()) {
                 fieldsTypes.put(column.getProperty(), column.getJavaType());
             }
-            ListSqlSource findSqlSource =
-                    new ListSqlSource(ms, entityClass, sql.toString(), fieldsTypes, 1);
+            ListSqlSource findSqlSource = new ListSqlSource(ms, entityClass, sql.toString(), fieldsTypes, 1);
             setSqlSource(ms, findSqlSource);
         }
 
@@ -83,8 +82,7 @@ public interface ListMapper<T> {
             for (EntityColumn column : entityTable.getEntityClassColumns()) {
                 fieldsTypes.put(column.getProperty(), column.getJavaType());
             }
-            ListSqlSource findSqlSource =
-                    new ListSqlSource(ms, entityClass, sql.toString(), fieldsTypes, 2);
+            ListSqlSource findSqlSource = new ListSqlSource(ms, entityClass, sql.toString(), fieldsTypes, 2);
             setSqlSource(ms, findSqlSource);
         }
     }
@@ -95,12 +93,8 @@ public interface ListMapper<T> {
         private Map<String, Class<?>> fieldsTypes;
         private int index;
 
-        public ListSqlSource(
-                MappedStatement ms,
-                Class<?> entityClass,
-                String sql,
-                Map<String, Class<?>> fieldsTypes,
-                int index) {
+        public ListSqlSource(MappedStatement ms, Class<?> entityClass,
+                String sql, Map<String, Class<?>> fieldsTypes, int index) {
             this.ms = ms;
             this.sql = sql;
             this.fieldsTypes = fieldsTypes;
@@ -108,9 +102,10 @@ public interface ListMapper<T> {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public BoundSql getBoundSql(Object parameterObject) {
             Assert.isInstanceOf(MapperMethod.ParamMap.class, parameterObject);
-            MapperMethod.ParamMap paramMap = (MapperMethod.ParamMap) parameterObject;
+            MapperMethod.ParamMap<Object> paramMap = (MapperMethod.ParamMap) parameterObject;
             paramMap.put("com.acooly.module.mybatis.ex.ListMapper.ListSqlSource",Boolean.TRUE);
             Map<String, Object> map = (Map<String, Object>) paramMap.get("param" + index);
             Map<String, Boolean> sortMap = (Map<String, Boolean>) paramMap.get("param" + (index + 1));

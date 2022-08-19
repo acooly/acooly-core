@@ -35,11 +35,6 @@
                 <artifactId>acooly-common-type</artifactId>
                 <version>${acooly.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>acooly-configuration-processor</artifactId>
-                <version>${acooly.version}</version>
-            </dependency>
 
             <!-- 基础组件 -->
             <dependency>

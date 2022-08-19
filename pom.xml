@@ -12,22 +12,18 @@
     <artifactId>acooly-core-parent</artifactId>
     <version>5.2.0</version>
     <packaging>pom</packaging>
-    <properties>
-        <!-- 修复log4jBUG漏洞 -->
-        <log4j2.version>2.15.0-rc2</log4j2.version>
-    </properties>
+
     <name>acooly-core-parent</name>
     <description>Acooly Common Basic Framework. Provide unified package for domian, dao, service, cache, webservice, etc.</description>
     <modules>
-        <module>acooly-core</module>
-        <module>acooly-core-test</module>
-        <module>acooly-components</module>
-        <module>acooly-core-docs</module>
+        <module>acooly-common-type</module>
         <module>acooly-common</module>
+        <module>acooly-core</module>
+        <module>acooly-core-docs</module>
+        <module>acooly-components</module>
         <module>acooly-archetypes</module>
         <module>acooly-app-parents</module>
-        <module>acooly-common-type</module>
-        <module>acooly-configuration-processor</module>
+        <module>acooly-core-test</module>
     </modules>
 
     <dependencyManagement>
@@ -40,21 +36,14 @@
 
             <dependency>
                 <groupId>com.acooly</groupId>
-                <artifactId>acooly-common</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.acooly</groupId>
                 <artifactId>acooly-common-type</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
-                <artifactId>acooly-configuration-processor</artifactId>
+                <artifactId>acooly-common</artifactId>
                 <version>${project.parent.version}</version>
-                <optional>true</optional>
             </dependency>
         </dependencies>
     </dependencyManagement>

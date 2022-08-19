@@ -166,7 +166,7 @@ public class JWTUtils {
         return compactJws;
     }
 
-    public static String refreshJwt(Jwt<Header<?>, Claims> jws) {
+    public static String refreshJwt(Jwt<Header, Claims> jws) {
         Date expTime = new Date((System.currentTimeMillis() + JWT_EXP_TIME * 60 * 1000));
         jws.getBody().put(CLAIMS_KEY_EXP, expTime);
         String newJws =
@@ -277,7 +277,7 @@ public class JWTUtils {
      * @param jwt
      * @return
      */
-    public static boolean validateTimeout(Jwt<Header<?>, Claims> jwt) {
+    public static boolean validateTimeout(Jwt<Header, Claims> jwt) {
         long expTime = Long.valueOf(String.valueOf(jwt.getBody().get(JWTUtils.CLAIMS_KEY_EXP)));
         return (System.currentTimeMillis() >= expTime);
     }

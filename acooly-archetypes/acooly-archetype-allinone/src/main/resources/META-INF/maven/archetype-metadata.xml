@@ -19,6 +19,9 @@
         <requiredProperty key="mysqlPassword">
             <defaultValue>123456</defaultValue>
         </requiredProperty>
+        <requiredProperty key="projectName">
+            <defaultValue>${rootArtifactId}</defaultValue>
+        </requiredProperty>
     </requiredProperties>
 
     <fileSets>

@@ -1,4 +1,4 @@
-acooly-allinone 项目说明
+${rootArtifactId} 项目说明
 ====
 
 ## 简介

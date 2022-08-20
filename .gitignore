@@ -78,3 +78,5 @@ acooly-components/acooly-component-portlet/src/test/
 .project
 .sts4-cache/
 /acooly-core-test/.factorypath
+/acooly-app-parents/.settings/
+/acooly-core-docs/.settings/

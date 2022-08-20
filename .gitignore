@@ -77,3 +77,4 @@ acooly-components/acooly-component-portlet/src/test/
 .classpath
 .project
 .sts4-cache/
+/acooly-core-test/.factorypath

@@ -31,6 +31,6 @@ public class ConstraintViolationExceptionHandler
                     constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
         }
         ResultBase res = context.getResponse();
-        res.setStatus(ResultCode.PARAMETER_ERROR, exception.getMessage());
+        res.makeResult(ResultCode.PARAMETER_ERROR, exception.getMessage());
     }
 }

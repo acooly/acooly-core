@@ -4,7 +4,6 @@ import com.acooly.core.common.facade.DtoAble;
 import com.acooly.core.common.facade.ResultBase;
 import com.acooly.core.common.facade.ResultCode;
 import com.acooly.core.utils.Assert;
-import com.acooly.core.utils.enums.ResultStatus;
 import lombok.Data;
 
 import javax.annotation.Nonnull;
@@ -62,7 +61,7 @@ public class ViewResult implements Serializable {
         if (resultBase == null) {
             return failure(ResultCode.INTERNAL_ERROR.code(), ResultCode.INTERNAL_ERROR.message());
         } else {
-            if (resultBase.getStatus() == ResultStatus.failure) {
+            if (resultBase.failure()) {
                 return failure(resultBase.getCode(), resultBase.getDetail());
             } else {
                 if (resultBase instanceof DtoAble) {

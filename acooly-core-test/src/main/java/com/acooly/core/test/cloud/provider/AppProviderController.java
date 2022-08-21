@@ -6,7 +6,7 @@
  * @author zhangpu
  * @date 2022-08-14 16:38
  */
-package com.acooly.core.test.cloud.feign;
+package com.acooly.core.test.cloud.provider;
 
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.facade.PageOrder;
@@ -48,12 +48,12 @@ public class AppProviderController {
         return result;
     }
 
-//    @RequestMapping("page")
-//    public PageResult<App> page(@RequestBody PageOrder pageOrder) {
-//        log.info("pageOrder: {}", pageOrder);
-//        PageInfo<App> pageInfo = appService.query(pageOrder.getPageInfo(), pageOrder.getMap(), pageOrder.getSortMap());
-//        return PageResult.from(pageInfo, App.class);
-//    }
+    @RequestMapping("page")
+    public PageResult<App> page(@RequestBody PageOrder pageOrder) {
+        log.info("pageOrder: {}", pageOrder);
+        PageInfo<App> pageInfo = appService.query(pageOrder.getPageInfo(), pageOrder.getMap(), pageOrder.getSortMap());
+        return PageResult.from(pageInfo, App.class);
+    }
 
     @RequestMapping("get")
     public SingleResult<App> get(@RequestBody SingleOrder<Long> order) {

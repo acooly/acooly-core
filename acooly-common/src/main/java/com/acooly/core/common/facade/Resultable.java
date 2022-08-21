@@ -14,9 +14,12 @@ import java.io.Serializable;
 /**
  * @author zhangpu
  */
-public interface Resultable extends Serializable {
+public interface Resultable extends Messageable, Serializable {
 
-    Messageable getStatus();
-
+    /**
+     * 详细信息
+     *
+     * @return
+     */
     String getDetail();
 }

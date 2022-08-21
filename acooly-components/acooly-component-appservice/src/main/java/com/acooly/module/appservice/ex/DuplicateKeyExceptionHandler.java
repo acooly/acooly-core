@@ -12,6 +12,6 @@ public class DuplicateKeyExceptionHandler implements ExceptionHandler<DuplicateK
     @Override
     public void handle(ExceptionContext<?> context, DuplicateKeyException e) {
         ResultBase res = context.getResponse();
-        res.setStatus(ResultCode.DATA_UNIQUE_CONFLICT);
+        res.makeResult(ResultCode.DATA_UNIQUE_CONFLICT);
     }
 }

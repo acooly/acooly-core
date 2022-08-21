@@ -23,6 +23,6 @@ public class OrderCheckExceptionHandler implements ExceptionHandler<OrderCheckEx
     @Override
     public void handle(ExceptionContext<?> context, OrderCheckException ex) {
         ResultBase res = context.getResponse();
-        res.setStatus(ResultCode.PARAMETER_ERROR, ex.getMessage());
+        res.makeResult(ResultCode.PARAMETER_ERROR, ex.getMessage());
     }
 }

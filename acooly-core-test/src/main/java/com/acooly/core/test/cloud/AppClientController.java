@@ -6,7 +6,7 @@
  * @author zhangpu
  * @date 2022-08-13 18:23
  */
-package com.acooly.core.test.cloud.feign;
+package com.acooly.core.test.cloud;
 
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.facade.PageOrder;
@@ -15,6 +15,7 @@ import com.acooly.core.common.facade.SingleOrder;
 import com.acooly.core.common.facade.SingleResult;
 import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.common.web.support.JsonListResult;
+import com.acooly.core.test.cloud.feign.AppProviderService;
 import com.acooly.core.test.core.entity.App;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/cloud/client/app")
-public class AppConsumeController {
+public class AppClientController {
 
     @Autowired
     private AppProviderService appProviderService;

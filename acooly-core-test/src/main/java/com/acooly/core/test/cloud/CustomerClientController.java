@@ -6,10 +6,11 @@
  * @author zhangpu
  * @date 2022-08-13 18:23
  */
-package com.acooly.core.test.cloud.feign;
+package com.acooly.core.test.cloud;
 
 import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.common.web.support.JsonListResult;
+import com.acooly.core.test.cloud.feign.CustomerProviderService;
 import com.acooly.core.test.core.entity.CoderCustomer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/cloud/client/customer")
-public class CustomerConsumeController {
+public class CustomerClientController {
 
     @Autowired
     private CustomerProviderService customerProviderService;

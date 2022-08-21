@@ -10,7 +10,6 @@
 package com.acooly.core.common.facade;
 
 import com.acooly.core.common.dao.support.PageInfo;
-import com.acooly.core.utils.enums.ResultStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +18,8 @@ import java.util.function.Function;
 
 /**
  * @author qiubo@yiji.com
- * @author zhangpu on 2019-06-03: from方法存在无法强制向下转型的问题(保留在OpenApi服务层PageApiResponse使用from做转换)，新增with方法代替
+ * @author zhangpu on 2019-06-03: from方法存在无法强制向下转型的问题(保留在OpenApi服务层PageApiResponse使用from做转换)``，新增with方法代替
+ * @author zhangpu on 2022-08-21: 使用`ResultCode`代替`ResultStatus`
  */
 @Getter
 @Setter
@@ -29,7 +29,7 @@ public class PageResult<T> extends ResultBase implements DtoAble {
     public static <T> PageResult<T> from(PageInfo<T> pageInfo) {
         PageResult<T> result = new PageResult<>();
         result.setDto(pageInfo);
-        result.setStatus(ResultStatus.success);
+        result.makeResult(ResultCode.SUCCESS);
         return result;
     }
 
@@ -41,7 +41,7 @@ public class PageResult<T> extends ResultBase implements DtoAble {
         if (pageInfo != null) {
             result.setDto(pageInfo.to(clazz));
         }
-        result.setStatus(ResultStatus.success);
+        result.makeResult(ResultCode.SUCCESS);
         return result;
     }
 
@@ -60,7 +60,7 @@ public class PageResult<T> extends ResultBase implements DtoAble {
         if (pageInfo != null) {
             result.setDto(pageInfo.to(clazz, function));
         }
-        result.setStatus(ResultStatus.success);
+        result.makeResult(ResultCode.SUCCESS);
         return result;
     }
 
@@ -73,7 +73,7 @@ public class PageResult<T> extends ResultBase implements DtoAble {
             return null;
         }
         result.setDto(pageInfo);
-        result.setStatus(ResultStatus.success);
+        result.makeResult(ResultCode.SUCCESS);
         return result;
     }
 
@@ -85,7 +85,7 @@ public class PageResult<T> extends ResultBase implements DtoAble {
             return null;
         }
         result.setDto(pageInfo.to(function));
-        result.setStatus(ResultStatus.success);
+        result.makeResult(ResultCode.SUCCESS);
         return result;
     }
 

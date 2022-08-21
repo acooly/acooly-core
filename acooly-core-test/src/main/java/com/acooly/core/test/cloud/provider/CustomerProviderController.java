@@ -6,7 +6,7 @@
  * @author zhangpu
  * @date 2022-08-13 14:43
  */
-package com.acooly.core.test.cloud.feign;
+package com.acooly.core.test.cloud.provider;
 
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.web.support.JsonEntityResult;

@@ -112,8 +112,13 @@
         <dependency>
             <groupId>com.esotericsoftware</groupId>
             <artifactId>kryo</artifactId>
-            <version>3.0.3</version>
-            <scope>provided</scope>
+            <version>5.3.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>asm</artifactId>
+                    <groupId>org.ow2.asm</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -216,12 +221,12 @@
             <version>0.1.53</version>
         </dependency>
 
-<!--        &lt;!&ndash; 软件缺陷检查的annotation &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.google.code.findbugs</groupId>-->
-<!--            <artifactId>jsr305</artifactId>-->
-<!--            <version>3.0.1</version>-->
-<!--        </dependency>-->
+        <!--        &lt;!&ndash; 软件缺陷检查的annotation &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.google.code.findbugs</groupId>-->
+        <!--            <artifactId>jsr305</artifactId>-->
+        <!--            <version>3.0.1</version>-->
+        <!--        </dependency>-->
 
         <!-- 拼音转换 -->
         <dependency>

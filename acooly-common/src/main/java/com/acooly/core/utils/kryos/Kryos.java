@@ -42,6 +42,7 @@ public class Kryos {
      */
     private static ThreadLocal<Kryo> kryoThreadLocal =
             new ThreadLocal<Kryo>() {
+                @Override
                 protected Kryo initialValue() {
                     Kryo kryo = new ReflectionFactorySupportKryo();
                     kryo.setDefaultSerializer(DuplicateFieldNameAcceptedCompatibleFieldSerializer.class);
@@ -56,6 +57,7 @@ public class Kryos {
      */
     private static ThreadLocal<Output> outputThreadLocal =
             new ThreadLocal<Output>() {
+                @Override
                 protected Output initialValue() {
                     return new Output(Kryos.INITIAL_BUFFER_SIZE, Kryos.MAX_BUFFER_SIZE);
                 }
@@ -131,7 +133,7 @@ public class Kryos {
             kryo.writeObject(output, object);
             return output.toBytes();
         } finally {
-            output.clear();
+            output.reset();
         }
     }
 
@@ -160,7 +162,7 @@ public class Kryos {
             kryo.writeClassAndObject(output, o);
             return output.toBytes();
         } finally {
-            output.clear();
+            output.reset();
         }
     }
 

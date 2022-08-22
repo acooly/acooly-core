@@ -10,11 +10,8 @@ package com.acooly.core.test.utils;
 
 import com.acooly.core.test.utils.bean.MaskEntity;
 import com.acooly.core.utils.mapper.BeanCopier;
-import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-
-import java.util.Map;
 
 /**
  * @author zhangpu
@@ -28,9 +25,10 @@ public class BeanCopierTest {
     public void testSimpleBeanCopy() {
 
         MaskEntity entity1 = new MaskEntity();
+        entity1.setBankCardNo("11111111");
         BeanCopier.logSource = true;
         MaskEntity entity2 = BeanCopier.copy(entity1, MaskEntity.class);
-        log.info(entity2.toString());
+        log.info("entity2:{}", entity2.toString());
         log.info(MaskEntity.class.getName());
     }
 }

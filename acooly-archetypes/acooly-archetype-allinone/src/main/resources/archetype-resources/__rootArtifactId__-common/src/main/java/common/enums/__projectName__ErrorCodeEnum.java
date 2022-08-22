@@ -24,12 +24,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public enum AllinoneErrorCodeEnum implements Messageable {
+public enum ${projectName}ErrorCodeEnum implements Messageable {
     ;
     private final String code;
     private final String message;
 
-    AllinoneErrorCodeEnum(String code, String message) {
+    ${projectName}ErrorCodeEnum(String code, String message) {
         this.code = code;
         this.message = message;
     }
@@ -54,7 +54,7 @@ public enum AllinoneErrorCodeEnum implements Messageable {
 
     public static Map<String, String> mapping() {
         Map<String, String> map = new LinkedHashMap<String, String>();
-        for (AllinoneErrorCodeEnum type : values()) {
+        for (${projectName}ErrorCodeEnum type : values()) {
             map.put(type.getCode(), type.getMessage());
         }
         return map;
@@ -67,8 +67,8 @@ public enum AllinoneErrorCodeEnum implements Messageable {
      * @return 枚举值码对应的枚举值。
      * @throws IllegalArgumentException 如果 code 没有对应的 Status 。
      */
-    public static AllinoneErrorCodeEnum find(String code) {
-        for (AllinoneErrorCodeEnum status : values()) {
+    public static ${projectName}ErrorCodeEnum find(String code) {
+        for (${projectName}ErrorCodeEnum status : values()) {
             if (status.getCode().equals(code)) {
                 return status;
             }
@@ -81,9 +81,9 @@ public enum AllinoneErrorCodeEnum implements Messageable {
      *
      * @return 全部枚举值。
      */
-    public static List<AllinoneErrorCodeEnum> getAll() {
-        List<AllinoneErrorCodeEnum> list = new ArrayList<AllinoneErrorCodeEnum>();
-        for (AllinoneErrorCodeEnum status : values()) {
+    public static List<${projectName}ErrorCodeEnum> getAll() {
+        List<${projectName}ErrorCodeEnum> list = new ArrayList<${projectName}ErrorCodeEnum>();
+        for (${projectName}ErrorCodeEnum status : values()) {
             list.add(status);
         }
         return list;
@@ -96,7 +96,7 @@ public enum AllinoneErrorCodeEnum implements Messageable {
      */
     public static List<String> getAllCode() {
         List<String> list = new ArrayList<String>();
-        for (AllinoneErrorCodeEnum status : values()) {
+        for (${projectName}ErrorCodeEnum status : values()) {
             list.add(status.code());
         }
         return list;

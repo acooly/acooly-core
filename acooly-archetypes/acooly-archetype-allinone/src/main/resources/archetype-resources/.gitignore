@@ -1,0 +1,15 @@
+/.classpath
+/.project
+/.settings
+src/main/webapp/WEB-INF/lib
+src/main/webapp/WEB-INF/logs
+target/
+.idea/
+*.iml
+/**/*.iml
+/**/*/.DS_Store
+.DS_Store
+.classpath
+.project
+.sts4-cache/
+

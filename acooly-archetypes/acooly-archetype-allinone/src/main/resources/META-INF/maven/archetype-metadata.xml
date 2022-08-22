@@ -4,6 +4,9 @@
                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <requiredProperties>
+        <requiredProperty key="projectName">
+            <defaultValue>Allinone</defaultValue>
+        </requiredProperty>
         <requiredProperty key="author">
             <defaultValue>acooly</defaultValue>
         </requiredProperty>
@@ -18,9 +21,6 @@
         </requiredProperty>
         <requiredProperty key="mysqlPassword">
             <defaultValue>123456</defaultValue>
-        </requiredProperty>
-        <requiredProperty key="projectName">
-            <defaultValue>${rootArtifactId}</defaultValue>
         </requiredProperty>
     </requiredProperties>
 

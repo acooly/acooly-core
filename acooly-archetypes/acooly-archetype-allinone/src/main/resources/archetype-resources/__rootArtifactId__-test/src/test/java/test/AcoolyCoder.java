@@ -42,11 +42,11 @@ public class AcoolyCoder {
         config.setManagePath(MANAGE_VIEW_PATH);
         config.setTableToEntityIgnorPrefix(TABLE_IGNOR_PREFIX);
         config.setRootPackage(ROOT_PACKAGE);
-        Set<GenerateModule> modules = Sets.newLinkedHashSet(GenerateModule.Manage
+//        Set<GenerateModule> modules = Sets.newLinkedHashSet(GenerateModule.Manage
 //                , GenerateModule.Facade
 //                , GenerateModule.OpenApi
-        );
-        config.setGeneratorModules(modules);
+//        );
+//        config.setGeneratorModules(modules);
         service.generateTable(TABLES);
     }
 

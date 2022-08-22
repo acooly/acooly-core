@@ -75,7 +75,7 @@ public class ReflectionFactorySupportKryo extends Kryo {
     public Serializer<?> getDefaultSerializer(@SuppressWarnings("rawtypes") final Class type) {
         final Serializer<?> result = super.getDefaultSerializer(type);
         if (result instanceof FieldSerializer) {
-            ((FieldSerializer<?>) result).setIgnoreSyntheticFields(false);
+            ((FieldSerializer<?>) result).getFieldSerializerConfig().setIgnoreSyntheticFields(false);
         }
         return result;
     }

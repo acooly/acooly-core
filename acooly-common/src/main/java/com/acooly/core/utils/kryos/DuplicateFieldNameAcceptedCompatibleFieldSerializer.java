@@ -30,6 +30,7 @@ public class DuplicateFieldNameAcceptedCompatibleFieldSerializer<T>
     /**
      * ignore the duplicated fields in the super class
      */
+    @Override
     protected void initializeCachedFields() {
         //get all cached fields form super class
         CachedField[] fields = super.getFields();
@@ -63,12 +64,19 @@ public class DuplicateFieldNameAcceptedCompatibleFieldSerializer<T>
             setFields(fields);
         } else {
             List<CachedField> list = new ArrayList<>(cachedFiledMap.values());
-            Collections.sort(list, this);
+            Collections.sort(list, new Comparator<CachedField>() {
+                @Override
+                public int compare(CachedField o1, CachedField o2) {
+                    // from v3.0.3 impl
+                    return o1.getField().getName().compareTo(o2.getField().getName());
+                }
+            });
             //set cached fields, the fields order must be as before
             setFields(list.toArray(new CachedField[cachedFiledMap.size()]));
         }
     }
 
+    @Override
     public void removeField(String fieldName) {
         for (int i = 0; i < fields.length; i++) {
             CachedField cachedField = fields[i];
@@ -88,6 +96,7 @@ public class DuplicateFieldNameAcceptedCompatibleFieldSerializer<T>
     /**
      * override the {@link com.esotericsoftware.kryo.serializers.CompatibleFieldSerializer#getFields}
      */
+    @Override
     public CachedField[] getFields() {
         return fields;
     }

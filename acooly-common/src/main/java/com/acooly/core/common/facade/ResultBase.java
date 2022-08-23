@@ -89,6 +89,19 @@ public class ResultBase extends LinkedHashMapParameterize<String, Object> implem
         }
     }
 
+    /**
+     * 兼容OLD-API
+     *
+     * @param status
+     */
+    public void setStatus(Messageable status) {
+        makeResult(status);
+    }
+
+    public void setStatus(Messageable status, String detail) {
+        makeResult(status, detail);
+    }
+
     public void markProcessing() {
         this.code = ResultCode.PROCESSING.code();
         this.message = ResultCode.PROCESSING.message();

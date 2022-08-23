@@ -45,6 +45,7 @@ public class Kryos {
                 @Override
                 protected Kryo initialValue() {
                     Kryo kryo = new ReflectionFactorySupportKryo();
+                    kryo.setRegistrationRequired(false);
                     kryo.setDefaultSerializer(DuplicateFieldNameAcceptedCompatibleFieldSerializer.class);
                     //注册kryo不能序列化的类
                     kryo.register(Arrays.asList("a").getClass(), new JavaSerializer());

@@ -18,13 +18,12 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class JPAComponentInitializer implements ComponentInitializer {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
-        if (!applicationContext
-                .getEnvironment()
-                .getProperty(JPAProperties.ENABLE_KEY, Boolean.class, Boolean.TRUE)) {
+        if (!applicationContext.getEnvironment().getProperty(JPAProperties.ENABLE_KEY, Boolean.class, Boolean.TRUE)) {
             System.setProperty("spring.data.jpa.repositories.enabled", "false");
         }
         setPropertyIfMissing("spring.jpa.hibernate.ddl-auto", "none");
         setPropertyIfMissing("spring.jpa.properties.hibernate.temp.use_jdbc_metadata_defaults", "false");
+        setPropertyIfMissing("spring.jpa.properties.hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
 
         //因为shiro的原因，使用filter代替 ref:com.acooly.core.common.boot.component.jpa.JPAAutoConfig.openEntityManagerInViewFilter
         System.setProperty("spring.jpa.open-in-view", "false");

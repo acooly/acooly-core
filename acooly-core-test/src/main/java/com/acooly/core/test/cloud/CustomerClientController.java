@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/cloud/client/customer")
 public class CustomerClientController {
 
-    @Autowired
+//    @Autowired
     private CustomerProviderService customerProviderService;
 
     @GetMapping("read")

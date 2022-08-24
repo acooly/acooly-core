@@ -15,8 +15,7 @@ import com.acooly.core.common.facade.SingleOrder;
 import com.acooly.core.common.facade.SingleResult;
 import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.test.core.entity.App;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.cloud.openfeign.SpringQueryMap;
+//import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author zhangpu
  * @date 2022-08-13 18:21
  */
-@FeignClient(name = "acooly-core", contextId = "app", path = "/cloud")
+//@FeignClient(name = "acooly-core", contextId = "app", path = "/cloud")
 public interface AppProviderService {
 
     /**
@@ -57,7 +56,7 @@ public interface AppProviderService {
     SingleResult<App> create(@RequestBody App app);
 
     @RequestMapping("/service/app/list")
-    public JsonListResult<App> list(@SpringQueryMap PageInfo pageInfo);
+    public JsonListResult<App> list(PageInfo pageInfo);
 
     @RequestMapping("/service/app/page")
     public PageResult<App> page(@RequestBody PageOrder pageOrder);

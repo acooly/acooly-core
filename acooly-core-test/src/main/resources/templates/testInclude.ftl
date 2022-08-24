@@ -5,5 +5,6 @@
 <body>
 ${where}
 <@includePage path="/testFtl.html"/>
+<#--<#include "test.ftl">-->
 </body>
 </html>

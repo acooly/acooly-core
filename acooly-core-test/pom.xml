@@ -16,12 +16,6 @@
     </properties>
     <dependencies>
 
-
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-mybatis</artifactId>
@@ -54,16 +48,25 @@
         <!--        </dependency>-->
 
 
+        <!--        <dependency>-->
+        <!--            <groupId>com.acooly</groupId>-->
+        <!--            <artifactId>acooly-component-springcloud</artifactId>-->
+        <!--            <version>${project.version}</version>-->
+        <!--        </dependency>-->
+
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-springcloud</artifactId>
+            <artifactId>acooly-component-security</artifactId>
             <version>${project.version}</version>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>com.acooly</groupId>-->
-        <!--<artifactId>acooly-component-security</artifactId>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-cms</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+
         <!--        <dependency>-->
         <!--            <groupId>com.acooly</groupId>-->
         <!--            <artifactId>acooly-component-appservice</artifactId>-->
@@ -89,10 +92,10 @@
         <!--            <version>${project.parent.version}</version>-->
         <!--        </dependency>-->
 
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-properties-migrator</artifactId>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-properties-migrator</artifactId>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -109,7 +112,7 @@
 
     </dependencies>
     <build>
-<!--        <plugins>-->
+        <!--        <plugins>-->
         <!--            <plugin>-->
         <!--                <groupId>org.springframework.boot</groupId>-->
         <!--                <artifactId>spring-boot-maven-plugin</artifactId>-->

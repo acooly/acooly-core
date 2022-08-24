@@ -19,7 +19,6 @@ import com.acooly.core.test.cloud.feign.AppProviderService;
 import com.acooly.core.test.core.entity.App;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/cloud/client/app")
 public class AppClientController {
 
-    @Autowired
+//    @Autowired
     private AppProviderService appProviderService;
 
     @RequestMapping("get")
@@ -67,7 +66,7 @@ public class AppClientController {
     }
 
     @RequestMapping("list")
-    public JsonListResult<App> list(@SpringQueryMap PageInfo pageInfo) {
+    public JsonListResult<App> list(PageInfo pageInfo) {
         return appProviderService.list(pageInfo);
     }
 

@@ -13,3 +13,5 @@
 
 <h2>request atrribute:${valueInRequest}</h2>
 
+<h2>ssoEnable: ${ssoEnable}</h2>
+

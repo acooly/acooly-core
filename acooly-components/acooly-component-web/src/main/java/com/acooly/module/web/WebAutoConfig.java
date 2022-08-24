@@ -1,16 +1,12 @@
-/*
- * www.yiji.com Inc.
- * Copyright (c) 2015 All Rights Reserved
- */
-
-/*
- * 修订记录:
- * qzhanbo@yiji.com 2015-06-16 17:52 创建
+/**
+ * acooly-component-web
+ * Copyright 2014 Acooly.cn, Inc. All rights reserved.
  *
+ * @author zhangpu
+ * @date 2022-08-24 21:24
  */
 package com.acooly.module.web;
 
-import com.acooly.core.common.boot.EnvironmentHolder;
 import com.acooly.module.web.filter.HttpsOnlyFilter;
 import com.acooly.module.web.formatter.BigMoneyFormatter;
 import com.acooly.module.web.formatter.DBMapFormatter;
@@ -19,14 +15,9 @@ import com.acooly.module.web.freemarker.IncludePage;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import freemarker.cache.ClassTemplateLoader;
-import freemarker.cache.MultiTemplateLoader;
-import freemarker.cache.TemplateLoader;
 import freemarker.template.utility.XmlEscape;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -38,10 +29,7 @@ import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguratio
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.format.FormatterRegistry;
@@ -51,7 +39,6 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import javax.annotation.PostConstruct;
@@ -61,37 +48,33 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author qiubo
+ * @author zhangpu
  */
 @Slf4j
 @Configuration
 @EnableWebMvc
 @ConditionalOnWebApplication
 @ConditionalOnClass({Servlet.class, DispatcherServlet.class, WebMvcConfigurer.class})
-@EnableConfigurationProperties({
-        WebMvcProperties.class,
-        ResourceProperties.class,
-        WebProperties.class
-})
+@EnableConfigurationProperties({WebMvcProperties.class, ResourceProperties.class, WebProperties.class})
 @AutoConfigureAfter(WebMvcAutoConfiguration.class)
-@ComponentScan
 @SuppressWarnings("unchecked")
-public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware, InitializingBean {
+public class WebAutoConfig implements WebMvcConfigurer {
 
     public static final String SIMPLE_URL_MAPPING_VIEW_CONTROLLER = "simpleUrlMappingViewController";
 
     @Autowired
     private WebProperties webProperties;
     @Autowired
-    private freemarker.template.Configuration configuration;
-    @Autowired
     private FreeMarkerConfigurer freeMarkerConfigurer;
 
-    private ApplicationContext applicationContext;
-
+    /**
+     * 扩展页面跳转
+     *
+     * @param registry
+     */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        // 设置 welcome-file
+        // 扩展设置welcome-file（acooly.web.welcome-file）
         if (!Strings.isNullOrEmpty(webProperties.getWelcomeFile())) {
             String welcomeFile = webProperties.getWelcomeFile();
             if (!welcomeFile.startsWith("/")) {
@@ -105,8 +88,10 @@ public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware,
     }
 
     @SuppressWarnings("deprecation")
-	@Override
+    @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
+        // 默认为true，是否使用尾斜杠匹配：如果设置为true，则“/hello”和“/hello/”都能匹配
+        configurer.setUseTrailingSlashMatch(true);
         configurer.setUseSuffixPatternMatch(true);
         configurer.setUseRegisteredSuffixPatternMatch(true);
     }
@@ -135,52 +120,28 @@ public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware,
     }
 
 
+    /**
+     * 扩展视图解析
+     *
+     * @param registry
+     */
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
+        // Freemarker扩展指令
         Map<String, Object> attributes = Maps.newHashMap();
         attributes.put("requestContextAttribute", "rc");
         attributes.put("xml_escape", new XmlEscape());
-
         attributes.put("includePage", new IncludePage());
         String ssoEnable = System.getProperty("acooly.sso.freemarker.include");
         if (!StringUtils.isEmpty(ssoEnable)) {
             attributes.put("ssoEnable", Boolean.valueOf(ssoEnable));
         }
         registry.freeMarker().attributes(attributes);
-    }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        Map<String, WebMvcAutoConfiguration> beansOfType =
-                applicationContext.getBeansOfType(WebMvcAutoConfiguration.class);
-        if (beansOfType.isEmpty()) {
-            log.error("spring mvc 没有正确加载WebMvcAutoConfiguration,原因可能有:");
-            log.error("1. JavaConfig中配置了@EnableWebMvc");
-            log.error("2. 引入了spring-mvc xml配置文件");
+        // JSP设置：如果开启则设置前缀和后缀
+        if (webProperties.getJsp().isEnable()) {
+            registry.jsp(webProperties.getJsp().getPrefix(), webProperties.getJsp().getSuffix());
         }
-
-
-        // 扩展freemarker
-        if (EnvironmentHolder.get()
-                .getProperty(WebProperties.Jsp.ENABLE_KEY, Boolean.class, Boolean.TRUE)) {
-            try {
-                InternalResourceViewResolver internalResourceViewResolver =
-                        applicationContext.getBean(InternalResourceViewResolver.class);
-                internalResourceViewResolver.setPrefix(webProperties.getJsp().getPrefix());
-                internalResourceViewResolver.setSuffix(webProperties.getJsp().getSuffix());
-
-
-            } catch (BeansException e) {
-                // do nothing
-            }
-        }
-
-
     }
 
 
@@ -246,26 +207,14 @@ public class WebAutoConfig implements WebMvcConfigurer, ApplicationContextAware,
      */
     @PostConstruct
     public void setConfigure() throws Exception {
-
-        MultiTemplateLoader templateLoaderOld = (MultiTemplateLoader) freeMarkerConfigurer.getConfiguration().getTemplateLoader();
-
-        List<TemplateLoader> templateLoaders = Lists.newLinkedList();
-        for (int i = 0; i < templateLoaderOld.getTemplateLoaderCount(); i++) {
-            templateLoaders.add(templateLoaderOld.getTemplateLoader(i));
-        }
-        templateLoaders.add(new ClassTemplateLoader(FreeMarkerConfigurer.class, "/templates"));
-        templateLoaders.add(new ClassTemplateLoader(FreeMarkerConfigurer.class, "/templates/common"));
-
-        freeMarkerConfigurer.getConfiguration().setTemplateLoader(new MultiTemplateLoader(templateLoaders.toArray(new TemplateLoader[]{})));
-
-        configuration.setSharedVariable("includePage", new IncludePage());
+        // 扩展Freemarker指令
+        freeMarkerConfigurer.getConfiguration().setSharedVariable("includePage", new IncludePage());
         String ssoEnable = System.getProperty("acooly.sso.freemarker.include");
         if (!StringUtils.isEmpty(ssoEnable)) {
-            configuration.setSharedVariable("ssoEnable", Boolean.valueOf(ssoEnable));
+            freeMarkerConfigurer.getConfiguration().setSharedVariable("ssoEnable", Boolean.valueOf(ssoEnable));
         }
-
+        // 扩展自定义的tags
         List<String> tlds = Lists.newArrayList();
-        tlds.add("/META-INF/acooly.tld");
         tlds.add("/META-INF/form_tag.tld");
         freeMarkerConfigurer.getTaglibFactory().setClasspathTlds(tlds);
 

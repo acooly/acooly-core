@@ -18,7 +18,6 @@ import com.acooly.core.test.core.entity.App;
 import com.acooly.core.test.core.service.AppService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,7 +41,7 @@ public class AppProviderController {
     }
 
     @RequestMapping("list")
-    public JsonListResult<App> list(@SpringQueryMap PageInfo<App> pageInfo) {
+    public JsonListResult<App> list(@RequestBody PageInfo<App> pageInfo) {
         log.info("list pageInfo: {}", pageInfo);
         JsonListResult<App> result = new JsonListResult<>();
         return result;

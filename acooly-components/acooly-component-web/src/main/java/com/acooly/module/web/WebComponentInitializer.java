@@ -22,11 +22,10 @@ public class WebComponentInitializer implements ComponentInitializer {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         // 文件上传
-
         setPropertyIfMissing("spring.servlet.multipart.max-file-size", DataSize.ofMegabytes(50).toBytes());
         setPropertyIfMissing("spring.servlet.multipart.max-request-size", DataSize.ofMegabytes(300).toBytes());
 
-        // 设置session
+        // 设置 Session
         setPropertyIfMissing("server.servlet.session.cookie.name", Apps.getAppSessionCookieName());
         setPropertyIfMissing("server.servlet.session.cookie.httpOnly", Boolean.TRUE.toString());
         setPropertyIfMissing("server.servlet.session.tracking-modes", "cookie");
@@ -35,19 +34,16 @@ public class WebComponentInitializer implements ComponentInitializer {
         setPropertyIfMissing("spring.session.store-type", "REDIS");
         setPropertyIfMissing("spring.session.redis.namespace", "session:" + Apps.getAppName());
 
-//        setPropertyIfMissing("spring.mvc.pathmatch.use-registered-suffix-pattern", "true");
-
         // 静态文件缓存
         if (!Apps.isDevMode()) {
             System.setProperty("spring.resources.cache.period", "-1");
         }
-        // 设置freemarker
-        setPropertyIfMissing("spring.freemarker.expose-session-attributes", false);
-        setPropertyIfMissing("spring.freemarker.expose-request-attributes", false);
-        setPropertyIfMissing("spring.freemarker.allow-session-override", false);
-        //org.springframework.web.servlet.support.RequestContext 对象在freemarker中的名称
+        // 设置FreemarkerProperties的非默认参数
         setPropertyIfMissing("spring.freemarker.request-context-attribute", "rc");
-
+        setPropertyIfMissing("spring.freemarker.prefer-file-system-access", false);
+        setPropertyIfMissing("spring.freemarker.cache", true);
+        setPropertyIfMissing("spring.freemarker.suffix", ".ftl");
+        // 设置Freemarker的参数
         setPropertyIfMissing("spring.freemarker.settings.classic_compatible", true);
         setPropertyIfMissing("spring.freemarker.settings.whitespace_stripping", true);
         setPropertyIfMissing("spring.freemarker.settings.locale", "zh_CN");

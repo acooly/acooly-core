@@ -84,6 +84,11 @@
             </dependency>
             <dependency>
                 <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-springcloud</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
                 <artifactId>acooly-component-test</artifactId>
                 <version>${acooly.version}</version>
             </dependency>

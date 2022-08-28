@@ -14,7 +14,10 @@ import com.acooly.core.test.cloud.feign.CustomerProviderService;
 import com.acooly.core.test.core.entity.CoderCustomer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author zhangpu
@@ -25,20 +28,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/cloud/client/customer")
 public class CustomerClientController {
 
-//    @Autowired
+    @Autowired
     private CustomerProviderService customerProviderService;
 
-    @GetMapping("read")
+    @RequestMapping("read")
     public JsonEntityResult<CoderCustomer> read(@RequestParam("id") Long id) {
         return customerProviderService.read(id);
     }
 
-    @GetMapping("page")
+    @RequestMapping("page")
     public JsonListResult<CoderCustomer> page() {
         return customerProviderService.page();
     }
 
-    @GetMapping("create")
+    @RequestMapping("create")
     public JsonEntityResult<CoderCustomer> create(@ModelAttribute("customer") CoderCustomer customer) {
         return customerProviderService.create(customer);
     }

@@ -16,6 +16,7 @@ import com.acooly.core.common.facade.SingleResult;
 import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.test.core.entity.App;
 //import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author zhangpu
  * @date 2022-08-13 18:21
  */
-//@FeignClient(name = "acooly-core", contextId = "app", path = "/cloud")
+@FeignClient(name = "acooly-core", contextId = "app", path = "/cloud")
 public interface AppProviderService {
 
     /**

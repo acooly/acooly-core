@@ -12,6 +12,7 @@ import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.system.Systems;
 import com.github.kevinsawicki.http.HttpRequest;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import javassist.*;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ import org.springframework.util.StringUtils;
 import java.io.File;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,6 +69,8 @@ public class Apps {
      * 的bootstrapContext 的初始化 加个标志避免被重新初始化
      */
     private static final String CLOUD_CLASS = "org.springframework.cloud.bootstrap.BootstrapImportSelectorConfiguration";
+    private static final String CLOUD_CONTEXT_REFRESH_CLASS = "org.springframework.cloud.context.refresh.ContextRefresher$Empty";
+    private static final List<String> CLOUD_CLASSES = Lists.newArrayList(CLOUD_CLASS, CLOUD_CONTEXT_REFRESH_CLASS);
 
     private static String logPath = null;
     private static String dataPath = null;
@@ -98,7 +102,7 @@ public class Apps {
      */
     public static boolean checkCloudEnv(SpringApplication application) {
         for (Object o : application.getAllSources()) {
-            if (((Class<?>) o).getName().equals(CLOUD_CLASS)) {
+            if (CLOUD_CLASSES.contains(((Class<?>) o).getName())) {
                 return true;
             }
         }

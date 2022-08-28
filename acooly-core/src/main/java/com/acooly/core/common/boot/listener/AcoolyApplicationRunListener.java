@@ -122,6 +122,7 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
         if (!cloudEnv) {
             ConsoleLogInitializer.addConsoleAppender();
             logger.error("启动失败: {}", exception.toString(), exception);
+            System.err.println("启动失败: " + exception.toString());
             ShutdownHooks.shutdownAll();
             shutdownLogSystem();
         }
@@ -222,7 +223,9 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
                         .stream()
                         .map(o1 -> (Class<?>) o1)
                         .filter(o1 -> AnnotationUtils.findAnnotation(o1, BootApp.class) != null)
-                        .findFirst().get();
+                        .findFirst().orElseGet(() -> {
+                            return null;
+                        });
         if (sourceClass == null) {
             return null;
         }

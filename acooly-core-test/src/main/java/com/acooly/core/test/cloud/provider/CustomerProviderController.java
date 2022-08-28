@@ -17,6 +17,7 @@ import com.acooly.core.test.core.service.CoderCustomerService;
 import com.acooly.core.utils.enums.Messageable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,7 +52,7 @@ public class CustomerProviderController {
     }
 
     @RequestMapping(value = "create")
-    public JsonEntityResult<CoderCustomer> create(CoderCustomer coderCustomer) {
+    public JsonEntityResult<CoderCustomer> create(@RequestBody CoderCustomer coderCustomer) {
         JsonEntityResult<CoderCustomer> result = new JsonEntityResult<>();
         coderCustomerService.save(coderCustomer);
         return result;

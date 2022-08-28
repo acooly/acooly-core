@@ -4,11 +4,18 @@
  */
 package com.acooly.core.common.boot;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.instrument.Instrumentation;
-import java.util.Map;
-
+import com.acooly.core.AcoolyVersion;
+import com.acooly.core.common.boot.listener.AcoolyApplicationRunListener;
+import com.acooly.core.common.boot.log.LogAutoConfig;
+import com.acooly.core.common.exception.AppConfigException;
+import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.system.Systems;
+import com.github.kevinsawicki.http.HttpRequest;
+import com.google.common.collect.Maps;
+import javassist.*;
+import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.ByteBuddy;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.LoggerFactory;
@@ -20,39 +27,28 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.util.StringUtils;
 
-import com.acooly.core.AcoolyVersion;
-import com.acooly.core.common.boot.listener.AcoolyApplicationRunListener;
-import com.acooly.core.common.boot.log.LogAutoConfig;
-import com.acooly.core.common.exception.AppConfigException;
-import com.acooly.core.common.exception.BusinessException;
-import com.acooly.core.utils.Strings;
-import com.acooly.core.utils.system.Systems;
-import com.github.kevinsawicki.http.HttpRequest;
-import com.google.common.collect.Maps;
-
-import javassist.ClassClassPath;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtMethod;
-import javassist.CtNewMethod;
-import net.bytebuddy.ByteBuddy;
+import java.io.File;
+import java.io.IOException;
+import java.lang.instrument.Instrumentation;
+import java.util.Map;
 
 /**
  * @author qiubo
  */
+@Slf4j
 public class Apps {
 
     /**
      * 应用名称
      */
-    public static final String APP_NAME = "acooly.appName";
+    public static final String APP_NAME = "spring.application.name";
     public static final String APP_TITLE = "acooly.appTitle";
     public static final String APP_OWNER = "acooly.appOwner";
     public static final String DEV_MODE_KEY = "acooly.devMode";
     /**
      * 日志路径
      */
-    public static final String LOG_PATH = "acooly.log.path";
+//    public static final String LOG_PATH = "acooly.log.path";
 
     public static final String HTTP_PORT = "server.port";
     /**
@@ -110,9 +106,9 @@ public class Apps {
     }
 
     public static String getAppName() {
-        String name = System.getProperty(APP_NAME);
+        String name = getEnvironment().getProperty(APP_NAME);
         if (name == null) {
-            throw new AppConfigException("没有设置应用名称,请设置系统变量" + APP_NAME);
+            throw new AppConfigException("没有设置应用名称,请设置系统变量:" + APP_NAME);
         }
         return name;
     }
@@ -144,6 +140,7 @@ public class Apps {
         try {
             FileUtils.forceMkdir(new File(logPath));
         } catch (IOException e) {
+            System.err.println("创建日志目录失败: " + logPath + ", 原因：" + e.getMessage());
             throw new BusinessException("APP_CONFIG_ERROR", "创建日志目录失败", logPath);
         }
         return logPath;
@@ -173,7 +170,7 @@ public class Apps {
     }
 
     public static int getHttpPort() {
-        return Integer.parseInt(System.getProperty(HTTP_PORT));
+        return Integer.parseInt(getEnvironment().getProperty(HTTP_PORT));
     }
 
     public static int getPid() {
@@ -290,7 +287,7 @@ public class Apps {
     }
 
     @SuppressWarnings("unchecked")
-	private static Class<Report> generateReport() {
+    private static Class<Report> generateReport() {
         StringBuilder sb = new StringBuilder();
         String appsClassName = Apps.class.getName();
         String appsPackageName = Strings.substringBeforeLast(appsClassName, ".");

@@ -23,6 +23,7 @@ import com.acooly.core.common.exception.UncaughtExceptionHandlerWrapper;
 import com.acooly.core.utils.ShutdownHooks;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
@@ -37,7 +38,6 @@ import org.springframework.core.PriorityOrdered;
 import org.springframework.core.SpringVersion;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.util.Assert;
 import org.springframework.util.StopWatch;
 
 import java.util.List;
@@ -47,12 +47,12 @@ import java.util.List;
  *
  * @author zhangpu for v5
  */
+@Slf4j
 public class AcoolyApplicationRunListener implements SpringApplicationRunListener, PriorityOrdered {
-
+    public static final Logger logger = LoggerFactory.getLogger(AcoolyApplicationRunListener.class);
     public static final String COMPONENTS_PACKAGE = "com.acooly.module";
-    private static List<String> disabledPackageName =
-            Lists.newArrayList("", "com.acooly", "com.acooly.core", "com.acooly.core.common.boot",
-                    COMPONENTS_PACKAGE);
+    private static List<String> disabledPackageName = Lists.newArrayList("", "com.acooly", "com.acooly.core",
+            "com.acooly.core.common.boot", COMPONENTS_PACKAGE);
     private boolean cloudEnv;
     private SpringApplication application;
     private String[] args;
@@ -68,9 +68,6 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
             stopWatch.start();
             setThreadName();
             application.setRegisterShutdownHook(false);
-            BootApp bootApp = findBootApplication(application);
-            application.setBanner(new AcoolyBanner(bootApp));
-            initEnvVars(bootApp);
         }
     }
 
@@ -81,9 +78,12 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
     @Override
     public void starting() {
         if (!cloudEnv) {
+            BootApp bootApp = findBootApplication(application);
+            initEnvVars(bootApp);
             checkAndSetPackage(application);
             checkCoreVersions();
             jvmPropstuning();
+            application.setBanner(new AcoolyBanner());
         }
     }
 
@@ -97,17 +97,7 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
     @Override
     public void environmentPrepared(ConfigurableEnvironment environment) {
         new EnvironmentHolder().setEnvironment(environment);
-
         setProfileIfEnableActiveProfiles(environment);
-    }
-
-
-    @Override
-    public void contextPrepared(final ConfigurableApplicationContext context) {
-    }
-
-    @Override
-    public void contextLoaded(ConfigurableApplicationContext context) {
     }
 
 
@@ -118,13 +108,11 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
             //install UncaughtExceptionHandler
             UncaughtExceptionHandlerWrapper.install();
             new ShutdownThread().register();
-
+            // 只是用于独立统计信息
             stopWatch.stop();
             Apps.setStartupTimes(stopWatch.getTotalTimeMillis());
             //log startup info
-            LoggerFactory.getLogger(AcoolyApplicationRunListener.class)
-                    .info("启动成功: http://127.0.0.1:{}",
-                            context.getEnvironment().getProperty(Apps.HTTP_PORT));
+            LoggerFactory.getLogger(AcoolyApplicationRunListener.class).info("启动成功: http://127.0.0.1:{}", context.getEnvironment().getProperty(Apps.HTTP_PORT));
         }
     }
 
@@ -133,7 +121,7 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
     public void failed(ConfigurableApplicationContext context, Throwable exception) {
         if (!cloudEnv) {
             ConsoleLogInitializer.addConsoleAppender();
-            LoggerFactory.getLogger(AcoolyApplicationRunListener.class).error("启动失败: {}", exception.toString(), exception);
+            logger.error("启动失败: {}", exception.toString(), exception);
             ShutdownHooks.shutdownAll();
             shutdownLogSystem();
         }
@@ -179,9 +167,7 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
      */
     private void checkCoreVersions() {
         if (!SpringVersion.getVersion().startsWith(AcoolyVersion.getMajorVersion())) {
-            throw new AppConfigException(
-                    "请确保org.springframework:spring-*版本与Acooly版本(" + AcoolyVersion.getVersion()
-                            + ")匹配");
+            throw new AppConfigException("请确保org.springframework:spring-*版本与Acooly版本(" + AcoolyVersion.getVersion() + ")匹配");
         }
         if (!SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_1_8)) {
             throw new AppConfigException("请使用jdk1.8及以上版本");
@@ -193,8 +179,7 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
         application.getAllSources().forEach(o -> {
             Package pkg = ((Class<?>) o).getPackage();
             if (pkg == null || disabledPackageName.contains(pkg.getName())) {
-                throw new AppConfigException(
-                        "请把main-class定义到应用包中，禁止定义到以下包中:" + disabledPackageName);
+                throw new AppConfigException("请把main-class定义到应用包中，禁止定义到以下包中:" + disabledPackageName);
             }
             System.setProperty(Apps.BASE_PACKAGE, pkg.getName());
         });
@@ -205,26 +190,22 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
     }
 
     private void initEnvVars(BootApp bootApp) {
-        String sysName = bootApp.sysName();
-        Assert.hasLength(sysName, "系统名不能为空");
-        System.setProperty(Apps.APP_NAME, sysName);
-        // ref ContextIdApplicationContextInitializer
-        System.setProperty("spring.application.name", sysName);
-        //set servlet container display name
-        System.setProperty("server.servlet.application-display-name", sysName);
+        if (bootApp != null) {
+            // 如果设置了bootApp，使用该配置覆盖springboot的标准配置。System.setProperty优先级大于.properties和yml的配置
+            System.setProperty(Apps.APP_NAME, bootApp.sysName());
+            System.setProperty("server.servlet.application-display-name", bootApp.sysName());
+            System.setProperty(Apps.HTTP_PORT, Integer.toString(bootApp.httpPort()));
+        }
         //set servelt container response header server
         System.setProperty("server.server-header", "ACOOLY");
-        System.setProperty(Apps.HTTP_PORT, Integer.toString(bootApp.httpPort()));
         //for extends log
-        System.setProperty(LoggingSystem.SYSTEM_PROPERTY,
-                AcoolyLogbackLoggingSystem.class.getName());
+//        String logPath = Apps.getLogPath();
+//        System.setProperty(Apps.LOG_PATH, logPath);
+        System.setProperty(LoggingSystem.SYSTEM_PROPERTY, AcoolyLogbackLoggingSystem.class.getName());
         //spring aop use cglib
         System.setProperty("spring.aop.proxy-target-class", Boolean.TRUE.toString());
-        String logPath = Apps.getLogPath();
-        System.setProperty(Apps.LOG_PATH, logPath);
-        //TODO:关闭导致开发者模式失效，开启导致mybatis mapper、dubbo类加载器不一致
+        // 关闭导致开发者模式失效，开启导致mybatis mapper、dubbo类加载器不一致
         System.setProperty("spring.devtools.restart.enabled", "false");
-
         // 独立线程设置PID
         new Runnable() {
             @Override
@@ -232,8 +213,6 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
                 System.setProperty(Apps.PID, new ApplicationPid().toString());
             }
         };
-
-
     }
 
     private BootApp findBootApplication(SpringApplication application) {
@@ -243,9 +222,10 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
                         .stream()
                         .map(o1 -> (Class<?>) o1)
                         .filter(o1 -> AnnotationUtils.findAnnotation(o1, BootApp.class) != null)
-                        .findFirst()
-                        .orElseThrow(() -> new AppConfigException(
-                                "启动类必须标注" + BootApp.class.getSimpleName()));
+                        .findFirst().get();
+        if (sourceClass == null) {
+            return null;
+        }
         return AnnotationUtils.findAnnotation(sourceClass, BootApp.class);
     }
 

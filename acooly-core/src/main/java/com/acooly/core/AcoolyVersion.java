@@ -16,7 +16,7 @@ import com.acooly.core.utils.Strings;
  */
 public class AcoolyVersion {
 
-    public static final String VERSION_5_0_0_SNAPSHOT = "5.1.0-SNAPSHOT";
+    public static final String CURRENT_MAIN_VERSION = "5.2.0";
 
     private AcoolyVersion() {
     }
@@ -31,8 +31,8 @@ public class AcoolyVersion {
     public static String getVersion() {
         Package pkg = AcoolyVersion.class.getPackage();
         String currentVersion = pkg.getImplementationVersion();
-        if(Strings.isBlank(currentVersion)){
-            currentVersion = VERSION_5_0_0_SNAPSHOT;
+        if (Strings.isBlank(currentVersion)) {
+            currentVersion = CURRENT_MAIN_VERSION;
         }
         return currentVersion;
     }

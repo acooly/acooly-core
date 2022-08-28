@@ -8,7 +8,6 @@
  */
 package com.acooly.core.common.boot;
 
-import com.acooly.core.common.BootApp;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
@@ -27,11 +26,6 @@ import java.util.List;
  */
 public class AcoolyBanner implements Banner {
     private static List<String> infos = Lists.newArrayList();
-    private BootApp application;
-
-    public AcoolyBanner(BootApp application) {
-        this.application = application;
-    }
 
     public static List<String> getInfos() {
         return infos;
@@ -39,18 +33,20 @@ public class AcoolyBanner implements Banner {
 
     @Override
     public void printBanner(Environment environment, Class<?> sourceClass, PrintStream out) {
-        printAppInfo();
+        printAppInfo(environment);
     }
 
-    private void printAppInfo() {
+    private void printAppInfo(Environment environment) {
         //don't init log system in object create phase
+        String appName = environment.getProperty("spring.application.name");
+        String port = environment.getProperty("server.port");
         Logger logger = LoggerFactory.getLogger(AcoolyBanner.class);
         logger.info("************************************");
         logger.info(
-                "应用[{}]开始启动,env={},http port={},basePackage={}",
-                Apps.getAppName(),
+                "应用[{}]开始启动,profile={},http port={},basePackage={}",
+                appName,
                 Env.getEnv(),
-                application.httpPort(),
+                port,
                 Preconditions.checkNotNull(Apps.getBasePackage()));
         logger.info("************************************");
         if (infos != null) {

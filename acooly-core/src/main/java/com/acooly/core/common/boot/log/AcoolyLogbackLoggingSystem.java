@@ -57,8 +57,7 @@ public class AcoolyLogbackLoggingSystem extends LogbackLoggingSystem {
         LoggerContext context = getLoggerContext();
         context.stop();
         context.reset();
-        LogbackConfigurator configurator =
-                new LogbackConfigurator(context, this.classLoader, initializationContext.getEnvironment());
+        LogbackConfigurator configurator = new LogbackConfigurator(context, this.classLoader, initializationContext.getEnvironment());
         customLog(configurator);
     }
 

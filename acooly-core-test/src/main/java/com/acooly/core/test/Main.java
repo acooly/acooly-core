@@ -11,11 +11,13 @@ package com.acooly.core.test;
 
 import com.acooly.core.common.BootApp;
 import com.acooly.core.common.boot.Apps;
+import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.utils.BigMoney;
 import com.acooly.core.utils.Ids;
 import org.springframework.boot.SpringApplication;
 //import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 //import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.math.BigDecimal;
@@ -25,7 +27,7 @@ import java.math.BigDecimal;
  */
 //@EnableDiscoveryClient
 //@EnableFeignClients
-@BootApp(sysName = "acooly-core", httpPort = 8082)
+@BootApp(sysName = "acooly-core1", httpPort = 8083)
 @EnableTransactionManagement(proxyTargetClass = true)
 public class Main {
     public static void main(String[] args) {

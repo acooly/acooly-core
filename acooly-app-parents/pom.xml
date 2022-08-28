@@ -13,7 +13,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>acooly-app-independent-parent</module>
+        <module>acooly-app-dependencies</module>
     </modules>
 
 </project>

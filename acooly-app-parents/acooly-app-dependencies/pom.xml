@@ -9,9 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>acooly-app-independent-parent</artifactId>
+    <artifactId>acooly-app-dependencies</artifactId>
     <packaging>pom</packaging>
-    <description>acooly boot app independent parent</description>
+    <description>acooly boot app dependencies</description>
 
     <properties>
         <acooly.version>5.2.0</acooly.version>

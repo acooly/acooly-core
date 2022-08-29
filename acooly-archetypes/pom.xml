@@ -11,7 +11,7 @@
 
     <modules>
         <module>acooly-archetype-simple</module>
-        <module>acooly-archetype-microservice</module>
+        <module>acooly-archetype-springcloud</module>
         <module>acooly-archetype-allinone</module>
     </modules>
 

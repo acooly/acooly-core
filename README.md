@@ -14,15 +14,18 @@ acooly框架是基于spring-boot提供快速开发、最佳实践，组件化的
 
 ## changelog
 
+### 6.0.0-SNAPSHOT
+
+* 开始v6版本：groupId: cn.acooly, 全面重构基础核心框架，支持SpringCloud全体系。
+
 ### 5.0.0-SNAPSHOT.20220808
 
 * 新增`com.acooly.core.utils.ie.Exports`工具，通过在实体对象上配置Annotation方式指定导出数据的行为（类似MyExcel）。
-  * `@ExportModel`：标记实体是否可导出，已经导出的相关配置。
-  * `@ExportColumn`：标记实体的属性可导出，及导出的中文标题，格式及顺序
-  * `ExportStyle`：标记导出的样式，包括：字体，大小，粗体，背景色，宽度等，目前用于`@ExportModel`子属性定义Excel导出的标题样式
+    * `@ExportModel`：标记实体是否可导出，已经导出的相关配置。
+    * `@ExportColumn`：标记实体的属性可导出，及导出的中文标题，格式及顺序
+    * `ExportStyle`：标记导出的样式，包括：字体，大小，粗体，背景色，宽度等，目前用于`@ExportModel`子属性定义Excel导出的标题样式
 * 在`AbstractFileOperationController`中集成annotation方式的导出配置支持。
 * 提供完整的Demo: `acooly-core-test`模块下的`com.acooly.core.test.core.entity.CoderCustomer`
-
 
 ### 5.0.0-SNAPSHOT.20210701
 
@@ -49,7 +52,7 @@ acooly框架是基于spring-boot提供快速开发、最佳实践，组件化的
 * 2021-04-09 - 优化：根据优化后的BusinessException和ResultBase的三元消息体系，优化AppService的自动异常处理逻辑 - [zhangpu] 79cad2fc
 * 2021-04-09 - 优化：转换OrderCheckException为ResultBase的参数错误码(ResultCode.PARAMETER_ERROR)+错误详情(detail) - [zhangpu] 1d380f43
 * 2021-04-09 - 优化：规范ResultBase的status和code/message/detail关系和用法。 1、status只标志成功/处理中/失败(其他)三类状态，成功/处理中/失败取值为ResultStatus，当为失败时，可以具体使用其他Messageable接口实现。 2、code/message/detail/表示 结果的消息，常用取值可从ResultCode枚举获取，但也可以直接设置字符串或Messageable接口实现 3、当status=success时，code/message为ResultCode.SUCCESS,detail为空，表示结果为成功。 4、当status=processing时，code/message为ResultCode.PROCESSING,detail为空，表示结果为处理中。 5、status为其他值时，都表示错误。
-  - [zhangpu] b5aa1081
+    - [zhangpu] b5aa1081
 * 2021-04-07 - 优化: 文件上传的异常处理，采用枚举提供三元错误异常和日志 新增：doUpload(request,entity)方法，提供通过表单命名自动上传文件并绑定到对应的实体属性的特性 - [zhangpu] 7379e6e0
 * 2021-04-06 - 文件上传默认允许的扩展名增加jpeg和pdf - [zhangpu] 1ebb7a3a
 

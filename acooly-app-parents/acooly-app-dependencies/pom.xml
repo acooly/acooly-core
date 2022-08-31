@@ -5,7 +5,7 @@
     <parent>
         <artifactId>acooly-app-parents</artifactId>
         <groupId>com.acooly</groupId>
-        <version>5.2.0</version>
+        <version>5.2.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,7 +14,7 @@
     <description>acooly boot app dependencies</description>
 
     <properties>
-        <acooly.version>5.2.0</acooly.version>
+        <acooly.version>5.2.0-SNAPSHOT</acooly.version>
     </properties>
 
     <dependencyManagement>

@@ -205,7 +205,7 @@ public class AcoolyApplicationRunListener implements SpringApplicationRunListene
         System.setProperty(LoggingSystem.SYSTEM_PROPERTY, AcoolyLogbackLoggingSystem.class.getName());
         //spring aop use cglib
         System.setProperty("spring.aop.proxy-target-class", Boolean.TRUE.toString());
-        // 关闭导致开发者模式失效，开启导致mybatis mapper、dubbo类加载器不一致
+        // 如果有加載devtools依賴，则关闭。
         System.setProperty("spring.devtools.restart.enabled", "false");
         // 独立线程设置PID
         new Runnable() {

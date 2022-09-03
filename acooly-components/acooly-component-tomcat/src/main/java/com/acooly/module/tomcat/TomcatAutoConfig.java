@@ -113,6 +113,8 @@ public class TomcatAutoConfig {
 
                     securityConstraint.addCollection(collection);
                     context.addConstraint(securityConstraint);
+                    context.setUseHttpOnly(true);
+                    context.setDenyUncoveredHttpMethods(true);
                 });
             }
         };
@@ -171,7 +173,7 @@ public class TomcatAutoConfig {
         docbase.mkdirs();
         factory.setDocumentRoot(docbase);
         docbase.deleteOnExit();
-        logger.info("设置tomcat baseDir={},docbase={}", file, docbase);
+        logger.info("Tomcat baseDir={},docbase={}", file, docbase);
     }
 
     /**

@@ -40,11 +40,47 @@ public class AcoolyLogbackLoggingSystem extends LogbackLoggingSystem {
         this.classLoader = classLoader;
     }
 
+
+    @Override
+    public void beforeInitialize() {
+        super.beforeInitialize();
+    }
+
     @Override
     public void initialize(
             LoggingInitializationContext initializationContext, String configLocation, LogFile logFile) {
         super.initialize(initializationContext, configLocation, logFile);
     }
+
+    /**
+     * 系统中有日志配置文件，调用此方法
+     *
+     * @param location
+     * @param logFile
+     */
+    @Override
+    protected void loadConfiguration(LoggingInitializationContext initializationContext, String location, LogFile logFile) {
+        LoggerContext loggerContext = getLoggerContext();
+        //渲染异常日志时，忽略的栈
+        System.setProperty(
+                "acooly.log.ignoredStackFrames",
+                "java.lang.reflect.Method,"
+                        + "org.apache.catalina,"
+                        + "sun.reflect,"
+                        + "net.sf.cglib,"
+                        + "org.springframework.aop,"
+                        + "org.springframework.web.filter.OncePerRequestFilter,"
+                        + "org.springframework.web.servlet,"
+                        + "com.alibaba.dubbo.rpc.protocol.ProtocolFilterWrapper");
+
+        super.loadConfiguration(initializationContext, location, logFile);
+        LogbackConfigurator configurator =
+                new LogbackConfigurator(
+                        loggerContext, this.classLoader, initializationContext.getEnvironment());
+        configurator.log("加载日志配置文件:%s", location);
+        customLog(configurator);
+    }
+
 
     /**
      * 没有logback日志配置文件调用此方法
@@ -71,36 +107,18 @@ public class AcoolyLogbackLoggingSystem extends LogbackLoggingSystem {
         AcoolyBanner.getInfos().addAll(configurator.getLogs());
     }
 
-    /**
-     * 系统中有日志配置文件，调用此方法
-     *
-     * @param location
-     * @param logFile
-     */
-    @Override
-    protected void loadConfiguration(
-            LoggingInitializationContext initializationContext, String location, LogFile logFile) {
-        LoggerContext loggerContext = getLoggerContext();
-        //渲染异常日志时，忽略的栈
-        System.setProperty(
-                "acooly.log.ignoredStackFrames",
-                "java.lang.reflect.Method,"
-                        + "org.apache.catalina,"
-                        + "sun.reflect,"
-                        + "net.sf.cglib,"
-                        + "org.springframework.aop,"
-                        + "org.springframework.web.filter.OncePerRequestFilter,"
-                        + "org.springframework.web.servlet,"
-                        + "com.alibaba.dubbo.rpc.protocol.ProtocolFilterWrapper");
 
-        super.loadConfiguration(initializationContext, location, logFile);
-        LogbackConfigurator configurator =
-                new LogbackConfigurator(
-                        loggerContext, this.classLoader, initializationContext.getEnvironment());
-        configurator.log("加载日志配置文件:%s", location);
-        customLog(configurator);
+    @Override
+    public void cleanUp() {
+        super.cleanUp();
     }
 
+
+    /**
+     * 父类为private,无法调用，这里只能人工copy实现
+     *
+     * @return
+     */
     private LoggerContext getLoggerContext() {
         ILoggerFactory factory = StaticLoggerBinder.getSingleton().getLoggerFactory();
         Assert.isInstanceOf(
@@ -127,15 +145,5 @@ public class AcoolyLogbackLoggingSystem extends LogbackLoggingSystem {
             // Unable to determine location
         }
         return "unknown location";
-    }
-
-    @Override
-    public void cleanUp() {
-        super.cleanUp();
-    }
-
-    @Override
-    public void beforeInitialize() {
-        super.beforeInitialize();
     }
 }

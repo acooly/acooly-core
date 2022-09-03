@@ -9,14 +9,14 @@
 package com.acooly.core.common.boot;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner;
 import org.springframework.core.env.Environment;
 
 import java.io.PrintStream;
-import java.util.List;
+import java.util.Set;
 
 /**
  * acooly banner
@@ -25,9 +25,9 @@ import java.util.List;
  * @date 2019-08-04 23:48
  */
 public class AcoolyBanner implements Banner {
-    private static List<String> infos = Lists.newArrayList();
+    private static Set<String> infos = Sets.newLinkedHashSet();
 
-    public static List<String> getInfos() {
+    public static Set<String> getInfos() {
         return infos;
     }
 

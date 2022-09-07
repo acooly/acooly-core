@@ -114,7 +114,7 @@ public class TomcatAutoConfig {
                     securityConstraint.addCollection(collection);
                     context.addConstraint(securityConstraint);
                     context.setUseHttpOnly(true);
-                    context.setDenyUncoveredHttpMethods(true);
+//                    context.setDenyUncoveredHttpMethods(true);
                 });
             }
         };

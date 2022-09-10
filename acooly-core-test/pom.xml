@@ -48,11 +48,11 @@
         <!--        </dependency>-->
 
 
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-springcloud</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.acooly</groupId>-->
+<!--            <artifactId>acooly-component-springcloud</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
 
         <!--        <dependency>-->
         <!--            <groupId>com.acooly</groupId>-->

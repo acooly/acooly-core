@@ -11,23 +11,16 @@ package com.acooly.core.test;
 
 import com.acooly.core.common.BootApp;
 import com.acooly.core.common.boot.Apps;
-import com.acooly.core.test.cloud.AcoolyCloudProperties;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * @author qiubo
  */
-@Configuration
-@EnableConfigurationProperties({AcoolyCloudProperties.class})
-@EnableDiscoveryClient
-@EnableFeignClients
+//@Configuration
+//@EnableConfigurationProperties({AcoolyCloudProperties.class})
+//@EnableDiscoveryClient
+//@EnableFeignClients
 @BootApp(sysName = "acooly-core", httpPort = 8083)
-@EnableTransactionManagement(proxyTargetClass = true)
 public class Main {
     public static void main(String[] args) {
         // 设置默认参数，全局

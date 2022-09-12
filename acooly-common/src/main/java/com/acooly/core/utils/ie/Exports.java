@@ -9,11 +9,13 @@
 package com.acooly.core.utils.ie;
 
 import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.common.exception.CommonErrorCodes;
 import com.acooly.core.utils.*;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.core.utils.ie.anno.ExportColumn;
 import com.acooly.core.utils.ie.anno.ExportModel;
 import com.acooly.core.utils.io.Streams;
+import com.acooly.core.utils.validate.Validators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -48,61 +50,63 @@ public class Exports {
     public static ConversionService conversionService = new DefaultConversionService();
 
 
-    public static void exportExcel(List<?> list, String filePath) {
-        try {
-            OutputStream outputStream = Files.newOutputStream(Paths.get(filePath));
-            exportExcel(list,outputStream);
-        } catch (BusinessException be) {
-            throw be;
-        } catch (Exception e) {
-            throw new BusinessException();
+    /**
+     * 导出多个sheet导出到一个文件
+     *
+     * @param exportSheets
+     * @param filePath
+     */
+    public static void exportExcel(ExportOrder exportOrder) {
+        Validators.assertJSR303(exportOrder);
+        List<ExportSheetMeta> exportSheetMetas = Lists.newArrayList();
+        for (ExportSheet exportSheet : exportOrder.getExportSheets()) {
+            Object first = Collections3.getFirst(exportSheet.getList());
+            ExportModelMeta exportModelMeta = parse(first);
+            ExportSheetMeta exportSheetMeta = new ExportSheetMeta(exportSheet.getSheetName(), exportSheet.getList(), exportModelMeta);
+            exportSheetMetas.add(exportSheetMeta);
         }
-
+        OutputStream out = null;
+        try {
+            out = Files.newOutputStream(Paths.get(exportOrder.getOutputFilePath()));
+        } catch (Exception e) {
+            throw new BusinessException(CommonErrorCodes.INTERNAL_ERROR, e.getMessage());
+        }
+        doExportExcel(exportSheetMetas, out);
     }
 
     /**
-     * 导出Excel
+     * 导出单个sheet的Excel
+     *
+     * @param sheetName
      * @param list
-     * @param out
+     * @param filePath
      */
-    public static void exportExcel(List<?> list, OutputStream out) {
-        Asserts.notEmpty(list);
-        Object first = Collections3.getFirst(list);
-        ExportModelMeta exportModelMeta = parse(first);
-        doExportExcel(exportModelMeta, list, out);
+    public static void exportExcel(String sheetName, List<?> list, String filePath) {
+        ExportOrder exportOrder = new ExportOrder(sheetName, list, filePath);
+        exportExcel(exportOrder);
     }
 
-    protected static void doExportExcel(ExportModelMeta exportModelMeta, List<?> list, OutputStream out) {
+    /**
+     * 导出单个sheet的Excel
+     * sheet和文件名来自：@ExportModel
+     *
+     * @param list
+     * @param filePath
+     */
+    public static void exportExcel(List<?> list, String filePath) {
+        ExportOrder exportOrder = new ExportOrder(null, list, filePath);
+        exportExcel(exportOrder);
+    }
+
+
+    protected static void doExportExcel(List<ExportSheetMeta> exportSheetMetas, OutputStream out) {
         SXSSFWorkbook workbook = null;
         try {
-            List<String> headerNames = exportModelMeta.getHeaders();
             workbook = new SXSSFWorkbook();
             workbook.setCompressTempFiles(true);
-            Sheet sheet = workbook.createSheet();
-            int rowNum = 0;
-            // header
-            Row row = sheet.createRow(rowNum);
-            // header高度
-            if (exportModelMeta != null && exportModelMeta.getHeaderStyleMeta() != null
-                    && exportModelMeta.getHeaderStyleMeta().getRowHeight() != -1) {
-                row.setHeight(exportModelMeta.getHeaderStyleMeta().getRowHeight());
+            for (ExportSheetMeta exportSheetMeta : exportSheetMetas) {
+                doExportExcelSheet(exportSheetMeta, workbook);
             }
-            if (headerNames != null) {
-                // 构建通用CellStyle，并缓存到线程变量中
-                commonExcelCellStyle(sheet, exportModelMeta);
-                // 构建Header的CellStyle
-                CellStyle headerStyle = excelHeaderCellStyle(sheet, exportModelMeta);
-                for (int cellnum = 0; cellnum < headerNames.size(); cellnum++) {
-                    row.createCell(cellnum).setCellValue(headerNames.get(cellnum));
-                    if (headerStyle != null) {
-                        row.getCell(cellnum).setCellStyle(headerStyle);
-                    }
-                    updateExcelColumnWidth(cellnum, headerNames.get(cellnum), sheet);
-                }
-                rowNum++;
-            }
-            // 写数据
-            doExportExcelPage(list, rowNum, sheet, exportModelMeta);
             workbook.write(out);
             out.flush();
         } catch (Exception e) {
@@ -116,12 +120,50 @@ public class Exports {
 
     }
 
-    protected static int doExportExcelPage(List<?> list, int startRow, Sheet sheet, ExportModelMeta exportModelMeta) throws Exception {
+    /**
+     * 输出Excel的单个sheet
+     *
+     * @param exportSheetMeta
+     * @param workbook
+     * @param out
+     */
+    protected static void doExportExcelSheet(ExportSheetMeta exportSheetMeta, SXSSFWorkbook workbook) {
+        ExportModelMeta exportModelMeta = exportSheetMeta.getExportModelMeta();
+        String sheetName = getSheetName(exportSheetMeta);
+        Sheet sheet = workbook.createSheet(sheetName);
+        int rowNum = 0;
+        // header
+        Row row = sheet.createRow(rowNum);
+        // header高度
+        if (exportModelMeta != null && exportModelMeta.getHeaderStyleMeta() != null
+                && exportModelMeta.getHeaderStyleMeta().getRowHeight() != -1) {
+            row.setHeight(exportModelMeta.getHeaderStyleMeta().getRowHeight());
+        }
+        List<String> headerNames = exportModelMeta.getHeaders();
+        if (headerNames != null) {
+            // 构建通用CellStyle，并缓存到线程变量中
+            excelCommonCellStyle(sheet, exportModelMeta);
+            // 构建Header的CellStyle
+            CellStyle headerStyle = excelHeaderCellStyle(sheet, exportModelMeta);
+            for (int cellnum = 0; cellnum < headerNames.size(); cellnum++) {
+                row.createCell(cellnum).setCellValue(headerNames.get(cellnum));
+                if (headerStyle != null) {
+                    row.getCell(cellnum).setCellStyle(headerStyle);
+                }
+                excelColumnWidthUpdate(cellnum, headerNames.get(cellnum), sheet);
+            }
+            rowNum++;
+        }
+        // 写数据
+        doExportExcelPage(exportSheetMeta.getList(), rowNum, sheet, exportModelMeta);
+    }
+
+    protected static int doExportExcelPage(List<?> list, int startRow, Sheet sheet, ExportModelMeta exportModelMeta) {
         int rowNum = startRow;
         Object value;
         Row row;
         Cell cell;
-        CellStyle cellStyle = commonExcelCellStyle(sheet, exportModelMeta);
+        CellStyle cellStyle = excelCommonCellStyle(sheet, exportModelMeta);
         for (Object entity : list) {
             List data = parseRow(exportModelMeta, entity);
             row = sheet.createRow(rowNum);
@@ -181,7 +223,7 @@ public class Exports {
                     }
                     cell.setCellType(CellType.STRING);
                     cell.setCellValue((String) value);
-                    updateExcelColumnWidth(cellNum, (String) value, sheet);
+                    excelColumnWidthUpdate(cellNum, (String) value, sheet);
                 }
 
                 // 如果@anno设置了宽度，则覆盖设置
@@ -197,8 +239,7 @@ public class Exports {
         return rowNum;
     }
 
-
-    private static CellStyle commonExcelCellStyle(Sheet sheet, ExportModelMeta exportModelMeta) {
+    private static CellStyle excelCommonCellStyle(Sheet sheet, ExportModelMeta exportModelMeta) {
         if (exportModelMeta.getStyle() == null) {
             CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
             cellStyle.setWrapText(true);
@@ -246,8 +287,13 @@ public class Exports {
         return cellStyle;
     }
 
-    private static void updateExcelColumnWidth(int colNum, String value, Sheet sheet) throws Exception {
-        int cellColumnWidth = (value.getBytes("UTF-8").length + 1) * 256;
+    private static void excelColumnWidthUpdate(int colNum, String value, Sheet sheet) {
+        int cellColumnWidth = 0;
+        try {
+            cellColumnWidth = (value.getBytes("UTF-8").length + 1) * 256;
+        } catch (Exception e) {
+            throw new BusinessException(CommonErrorCodes.UNSUPPORTED_ERROR, "不支持UTF8-8编码的getBytes");
+        }
         if (cellColumnWidth > sheet.getColumnWidth(colNum)) {
             if (cellColumnWidth <= 255 * 256) {
                 sheet.setColumnWidth(colNum, cellColumnWidth);
@@ -255,6 +301,17 @@ public class Exports {
                 sheet.setColumnWidth(colNum, 100 * 255);
             }
         }
+    }
+
+    private static String getSheetName(ExportSheetMeta exportSheetMeta) {
+        String sheetName = exportSheetMeta.getSheetName();
+        if (Strings.isBlank(sheetName)) {
+            sheetName = exportSheetMeta.getExportModelMeta().getName();
+        }
+        if (Strings.isBlank(sheetName)) {
+            sheetName = exportSheetMeta.getExportModelMeta().getClazz().getSimpleName();
+        }
+        return sheetName;
     }
 
     /**
@@ -270,14 +327,14 @@ public class Exports {
         }
         ExportModelMeta exportModelMeta = new ExportModelMeta();
         // 主属性
-        exportModelMeta.setFileName(exportModel.fileName());
+        exportModelMeta.setClazz(clazz);
+        exportModelMeta.setName(exportModel.name());
         exportModelMeta.setBorder(exportModel.border());
         exportModelMeta.setHeaderShow(exportModel.headerShow());
         // 标题行样式
         if (exportModel.headerStyle() != null) {
             exportModelMeta.setHeaderStyleMeta(new ExportStyleMeta(exportModel.headerStyle()));
         }
-
         // Temporary data container<name,ExportItem>
         Map<String, ExportColumnMeta> itemMap = Maps.newHashMap();
         // 获取对象继承树类列表写入sources列表（子类在前）
@@ -294,7 +351,7 @@ public class Exports {
         List<String> ignores = Lists.newArrayList(exportModel.ignores());
 
         for (Class<?> cls : sources) {
-            Field[] fields = clazz.getDeclaredFields();
+            Field[] fields = cls.getDeclaredFields();
             for (Field field : fields) {
                 if (Modifier.isStatic(field.getModifiers())) {
                     continue;

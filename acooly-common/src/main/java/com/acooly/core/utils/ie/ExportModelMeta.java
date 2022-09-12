@@ -24,9 +24,14 @@ public class ExportModelMeta extends InfoBase {
 
 
     /**
-     * 文件名
+     * 文件名或sheet名称
      */
-    private String fileName;
+    private String name;
+
+    /**
+     * 实体类
+     */
+    private Class<?> clazz;
 
     /**
      * 是否显示表头

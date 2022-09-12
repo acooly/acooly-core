@@ -784,8 +784,8 @@ public abstract class AbstractFileOperationController<
         String fileName = getEntityName();
         // @ExportModel.fileName优先级高于实体名称
         ExportModelMeta result = getExportResult();
-        if (result != null && Strings.isNotBlank(result.getFileName())) {
-            fileName = result.getFileName();
+        if (result != null && Strings.isNotBlank(result.getName())) {
+            fileName = result.getName();
         }
         String exportFileName = request.getParameter(WebRequestParameterEnum.exportFileName.code());
         if (StringUtils.isNotBlank(exportFileName)) {

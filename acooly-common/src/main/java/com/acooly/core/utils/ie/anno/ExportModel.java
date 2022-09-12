@@ -20,12 +20,12 @@ import java.lang.annotation.*;
 public @interface ExportModel {
 
     /**
-     * [可选] 文件名
+     * [可选] 文件名或sheet名称
      * 为空时，采用自动代码生成(实体的备注名)或前端界面指定的文件名。
      *
      * @return 文件名
      */
-    String fileName() default "";
+    String name() default "";
 
     /**
      * 是否显示表头

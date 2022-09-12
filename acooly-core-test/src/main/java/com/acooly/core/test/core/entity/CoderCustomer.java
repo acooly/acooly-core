@@ -42,7 +42,7 @@ import java.util.Date;
 // 导出规则：
 // 1、@ExportModel标记的实体
 // 2、@ExportColumn标记的列
-@ExportModel(fileName = "客户信息", border = true,headerShow = true,
+@ExportModel(name = "客户信息", border = true,headerShow = true,
         // 设置表头格式
         headerStyle = @ExportStyle(
                 fontBold = true,

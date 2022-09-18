@@ -10,6 +10,8 @@
 package com.acooly.module.jpa;
 
 import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
+import com.acooly.module.jpa.ex.DatabaseLookup;
+import com.acooly.module.jpa.ex.ExHibernateJpaVendorAdapter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -48,17 +50,12 @@ import java.util.Map;
 @Import(JPAAutoConfig.JpaRegistrar.class)
 @AutoConfigureBefore(HibernateJpaAutoConfiguration.class)
 @EnableConfigurationProperties({JPAProperties.class, HibernateProperties.class})
-@EnableJpaRepositories(
-        repositoryBaseClass = AbstractEntityJpaDao.class,
-        basePackages = "com.acooly.module.**.dao"
-)
+@EnableJpaRepositories(repositoryBaseClass = AbstractEntityJpaDao.class, basePackages = "com.acooly.module.**.dao")
 public class JPAAutoConfig {
 
 
     @Bean
-    @ConditionalOnProperty(
-            value = "acooly.jpa.openEntityManagerInViewFilterEnable",
-            matchIfMissing = true
+    @ConditionalOnProperty(value = "acooly.jpa.openEntityManagerInViewFilterEnable", matchIfMissing = true
     )
     @ConditionalOnWebApplication
     public FilterRegistrationBean<OpenEntityManagerInViewFilter> openEntityManagerInViewFilter(JPAProperties properties) {
@@ -85,7 +82,7 @@ public class JPAAutoConfig {
     public JpaVendorAdapter jpaVendorAdapter(JpaProperties properties, DataSource dataSource) {
         AbstractJpaVendorAdapter adapter = new ExHibernateJpaVendorAdapter();
         adapter.setShowSql(properties.isShowSql());
-//        adapter.setDatabase(properties.determineDatabase(dataSource));
+        adapter.setDatabase(DatabaseLookup.getDatabase(dataSource));
         adapter.setDatabasePlatform(properties.getDatabasePlatform());
         adapter.setGenerateDdl(properties.isGenerateDdl());
         return adapter;
@@ -97,12 +94,8 @@ public class JPAAutoConfig {
      * 目的：主要为扩展自定义默认的entity扫码路径
      */
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-            EntityManagerFactoryBuilder factoryBuilder,
-            DataSource dataSource,
-            JpaProperties properties,
-            HibernateProperties hibernateProperties,
-            JPAProperties jpaProperties) {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder factoryBuilder, DataSource dataSource,
+                                                                       JpaProperties properties, HibernateProperties hibernateProperties, JPAProperties jpaProperties) {
         Map<String, Object> vendorProperties = hibernateProperties.
                 determineHibernateProperties(properties.getProperties(), new HibernateSettings());
         return factoryBuilder.dataSource(dataSource)

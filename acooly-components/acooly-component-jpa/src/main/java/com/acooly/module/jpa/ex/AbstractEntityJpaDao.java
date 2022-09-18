@@ -67,32 +67,29 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
         }).get();
     }
 
-    @Transactional
     @Override
     public void create(T o) throws DataAccessException {
         save(o);
     }
 
-    @Transactional
     @Override
     public void update(T o) throws DataAccessException {
         save(o);
     }
 
-    @Transactional
     @Override
     public void saves(List<T> entities) {
         save(entities);
     }
 
     @Override
-    @Transactional
     public void inserts(List<T> entities) {
         save(entities);
     }
 
-    @Transactional
+
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public <S extends T> S save(S entity) {
         if (entityInformation.isNew(entity)) {
             onCreate(entity);
@@ -105,7 +102,7 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
         }
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Throwable.class)
     public <S extends T> List<S> save(Iterable<S> entities) {
         List<S> result = new ArrayList<>();
         if (entities == null) {
@@ -162,7 +159,7 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
     }
 
     @SuppressWarnings("deprecation")
-	@Override
+    @Override
     @Transactional(rollbackFor = Throwable.class)
     public void removes(Serializable... ids) {
         Iterator<Serializable> iterator = Lists.newArrayList(ids).iterator();

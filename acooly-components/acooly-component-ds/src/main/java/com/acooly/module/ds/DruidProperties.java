@@ -136,14 +136,17 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
 
     public static String normalizeUrl(String url) {
         if (isMysql(url) && !url.contains("?")) {
-            return url
-                    + "?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false";
+            return url + "?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false";
         }
         return url;
     }
 
     public static boolean isMysql(String url) {
         return url.toLowerCase().startsWith("jdbc:mysql");
+    }
+
+    public static boolean isOracle(String url) {
+        return url.toLowerCase().startsWith("jdbc:oracle");
     }
 
     /**
@@ -181,6 +184,10 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
         return isMysql(this.url);
     }
 
+    public boolean oracle() {
+        return isOracle(this.url);
+    }
+
     /**
      * 通过当前配置创建datasource
      */
@@ -190,7 +197,6 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
             this.beanClassLoader = ClassUtils.getDefaultClassLoader();
         }
         DruidDataSource dataSource = new DruidDataSource();
-
         // 基本配置
         dataSource.setDriverClassLoader(this.getBeanClassLoader());
         dataSource.setUrl(this.fetchUrl());
@@ -203,11 +209,9 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
         if (mysql()) {
             maxActive = Math.max(maxActive, MYSQL_MAX_ACTIVE);
             System.setProperty("spring.jpa.database", "MYSQL");
-
             // 设置支持utf8mb4
             dataSource.setConnectionInitSqls(Lists.newArrayList("set names utf8mb4;"));
-
-        } else {
+        } else if (oracle()) {
             maxActive = Math.max(maxActive, ORACLE_MAX_ACTIVE);
             System.setProperty("spring.jpa.database", "ORACLE");
         }
@@ -229,7 +233,7 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
             String validationQuery = "select 'x'";
             dataSource.setValidationQuery(validationQuery);
             dataSource.setValidationQueryTimeout(2);
-        } else {
+        } else if (oracle()) {
             System.setProperty("druid.oracle.pingTimeout", "5");
             dataSource.setValidConnectionChecker(new OracleValidConnectionChecker());
         }
@@ -241,9 +245,7 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
             properties.put("druid.stat.slowSqlMillis", Integer.toString(slowSqlThreshold));
         } else {
             //线上运行时，阈值选最大值。有可能线下测试设置为0，方便调试
-            properties.put(
-                    "druid.stat.slowSqlMillis",
-                    Integer.toString(Math.max(this.getSlowSqlThreshold(), DEFAULT_SLOW_SQL_THRESHOLD)));
+            properties.put("druid.stat.slowSqlMillis", Integer.toString(Math.max(this.getSlowSqlThreshold(), DEFAULT_SLOW_SQL_THRESHOLD)));
         }
         dataSource.setConnectProperties(properties);
 

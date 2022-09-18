@@ -17,8 +17,21 @@
     <dependencies>
 
         <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.1.214</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-mybatis</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-jpa</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -28,11 +41,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-defence</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>
@@ -48,17 +56,17 @@
         <!--        </dependency>-->
 
 
-<!--        <dependency>-->
-<!--            <groupId>com.acooly</groupId>-->
-<!--            <artifactId>acooly-component-springcloud</artifactId>-->
-<!--            <version>${project.version}</version>-->
-<!--        </dependency>-->
-
         <!--        <dependency>-->
         <!--            <groupId>com.acooly</groupId>-->
-        <!--            <artifactId>acooly-component-security</artifactId>-->
+        <!--            <artifactId>acooly-component-springcloud</artifactId>-->
         <!--            <version>${project.version}</version>-->
         <!--        </dependency>-->
+
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-security</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!--        <dependency>-->
         <!--            <groupId>com.acooly</groupId>-->

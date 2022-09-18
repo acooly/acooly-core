@@ -43,13 +43,22 @@ public final class DatabaseDialectManager {
      */
     public static DatabaseType getDatabaseType(Connection connection) {
         String jdbcUrl = getJdbcUrlFromDataSource(connection);
-        // 根据jdbc url判断dialect
         if (StringUtils.contains(jdbcUrl, ":mysql:")) {
             return DatabaseType.mysql;
         } else if (StringUtils.contains(jdbcUrl, ":oracle:")) {
             return DatabaseType.oracle;
+        } else if (StringUtils.contains(jdbcUrl, ":h2:")) {
+            return DatabaseType.h2;
+        } else if (StringUtils.contains(jdbcUrl, ":hsql:")) {
+            return DatabaseType.hsql;
+        } else if (StringUtils.contains(jdbcUrl, ":postgresql:")) {
+            return DatabaseType.postgresql;
+        } else if (StringUtils.contains(jdbcUrl, ":sql_server:")) {
+            return DatabaseType.sql_server;
+        } else if (StringUtils.contains(jdbcUrl, ":sybase:")) {
+            return DatabaseType.sybase;
         } else {
-            throw new IllegalArgumentException("Unknown Database of " + jdbcUrl);
+            throw new IllegalArgumentException("组件初始化执行SQL Unknown Database of " + jdbcUrl);
         }
     }
 

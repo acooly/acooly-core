@@ -36,6 +36,7 @@ import java.util.List;
  * 数据库初始化组件： 1. 仅在非online环境执行 2. 他判断数据库存在与否，不存在执行sql文件
  *
  * @author qiubo@yiji.com
+ * @author zhangpu
  */
 public abstract class StandardDatabaseScriptIniter
         implements ApplicationListener<DataSourceReadyEvent> {
@@ -50,15 +51,11 @@ public abstract class StandardDatabaseScriptIniter
     public void onApplicationEvent(DataSourceReadyEvent event) {
         DataSource dataSource = (DataSource) event.getSource();
         try {
-            DatabaseType databaseType =
-                    DatabaseDialectManager.getDatabaseType(dataSource.getConnection());
+            DatabaseType databaseType = DatabaseDialectManager.getDatabaseType(dataSource.getConnection());
             String componentName = getComponentName();
             String evaluateTable = getEvaluateTable();
             Asserts.notNull(componentName);
             Asserts.notNull(evaluateTable);
-//            if (!"SYS_USER".equals(evaluateTable)) {
-//                Assert.isTrue(evaluateTable.contains(componentName));
-//            }
             String evaluateSql = String.format(EVALUATE_SQL_PATTERN, evaluateTable);
             Connection connection = null;
             try {
@@ -67,15 +64,13 @@ public abstract class StandardDatabaseScriptIniter
             } catch (DataAccessException e) {
                 Throwable throwable = Throwables.getRootCause(e);
                 String msg = throwable.getMessage();
-
-                if (throwable.getClass().getName().endsWith(SQLSyntaxErrorException.class.getSimpleName())
-                        && msg.endsWith("doesn't exist")) {
+                if (throwable.getClass().getName().endsWith(SQLSyntaxErrorException.class.getSimpleName()) &&
+                        (msg.endsWith("doesn't exist") || msg.contains("not found"))
+                ) {
                     List<String> files = getInitSqlFile();
                     List<String> abFiles = Lists.newArrayListWithCapacity(files.size());
                     for (String file : files) {
-                        String initSql =
-                                String.format(
-                                        INIT_SQL_PATTERN, componentName, databaseType.name().toLowerCase(), file);
+                        String initSql = String.format(INIT_SQL_PATTERN, componentName, databaseType.name().toLowerCase(), file);
                         abFiles.add(initSql);
                     }
                     if (connection != null) {

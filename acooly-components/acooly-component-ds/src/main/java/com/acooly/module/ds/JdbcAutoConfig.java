@@ -53,9 +53,6 @@ public class JdbcAutoConfig {
                 EnvironmentHolder.buildProperties(druidProperties, DruidProperties.PREFIX);
             }
             dataSource = druidProperties.build();
-//            if (druidProperties.isUseTomcatDataSource()) {
-//                dataSource = new TomcatDataSourceProperties().build(druidProperties);
-//            }
             if (druidProperties.isAutoCreateTable()) {
                 ApplicationContextHolder.get().publishEvent(new DataSourceReadyEvent(dataSource));
             }

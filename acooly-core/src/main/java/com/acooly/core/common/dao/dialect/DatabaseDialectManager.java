@@ -1,5 +1,6 @@
 package com.acooly.core.common.dao.dialect;
 
+import com.acooly.core.common.dao.dialect.impl.H2DatabaseDialect;
 import com.acooly.core.common.dao.dialect.impl.MySQLDatabaseDialect;
 import com.acooly.core.common.dao.dialect.impl.OracleDatabaseDialect;
 import com.acooly.core.common.dao.support.PageInfo;
@@ -16,6 +17,7 @@ public final class DatabaseDialectManager {
 
     static {
         register(new MySQLDatabaseDialect());
+        register(new H2DatabaseDialect());
         register(new OracleDatabaseDialect());
     }
 

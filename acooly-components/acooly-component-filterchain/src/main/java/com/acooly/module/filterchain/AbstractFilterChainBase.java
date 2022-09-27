@@ -30,7 +30,7 @@ import java.util.List;
  *
  * @author qiubo@yiji.com
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({"unchecked", "rawtypes"})
 public abstract class AbstractFilterChainBase<C extends Context>
         implements FilterChain<C>, ApplicationContextAware, InitializingBean, BeanNameAware {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -44,7 +44,7 @@ public abstract class AbstractFilterChainBase<C extends Context>
      *
      * @param context 上下文对象
      */
-	@Override
+    @Override
     public void doFilter(C context) {
         if (context == null) {
             return;
@@ -65,23 +65,18 @@ public abstract class AbstractFilterChainBase<C extends Context>
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        logger.info("FilterChain:{}初始化", beanName);
         Class<?> genricType = Reflections.getSuperClassGenricType(this.getClass(), 0);
         ResolvableType resolvableType = ResolvableType.forClassWithGenerics(Filter.class, genricType);
         String[] beanNames = applicationContext.getBeanNamesForType(resolvableType);
-        Assert.notEmpty(
-                beanNames,
-                this.getClass().getSimpleName()
-                        + " load  filters failed,cause of no Filter<"
-                        + genricType.getSimpleName()
-                        + ">  found");
+        Assert.notEmpty(beanNames, this.getClass().getSimpleName()
+                + " load  filters failed,cause of no Filter<" + genricType.getSimpleName() + ">  found");
         for (String beanName : beanNames) {
             filters.add((Filter<C>) applicationContext.getBean(beanName));
         }
         OrderComparator.sort(filters);
         adjustFilters();
-        filters.forEach(
-                filter -> logger.info("加载filter:{}->{}", filter.getName(), filter.getClass().getName()));
+        logger.debug("FilterChain:{} 初始化 filters: {}", beanName, filters.size());
+        filters.forEach(filter -> logger.debug("加载filter:{}->{}", filter.getName(), filter.getClass().getName()));
     }
 
     protected void adjustFilters() {

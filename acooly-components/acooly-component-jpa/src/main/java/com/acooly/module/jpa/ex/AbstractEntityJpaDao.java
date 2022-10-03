@@ -68,28 +68,32 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
     }
 
     @Override
+    @Transactional
     public void create(T o) throws DataAccessException {
         save(o);
     }
 
     @Override
+    @Transactional
     public void update(T o) throws DataAccessException {
         save(o);
     }
 
     @Override
+    @Transactional
     public void saves(List<T> entities) {
         save(entities);
     }
 
     @Override
+    @Transactional
     public void inserts(List<T> entities) {
         save(entities);
     }
 
 
     @Override
-    @Transactional(rollbackFor = Throwable.class)
+    @Transactional
     public <S extends T> S save(S entity) {
         if (entityInformation.isNew(entity)) {
             onCreate(entity);
@@ -102,7 +106,7 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
         }
     }
 
-    @Transactional(rollbackFor = Throwable.class)
+    @Transactional
     public <S extends T> List<S> save(Iterable<S> entities) {
         List<S> result = new ArrayList<>();
         if (entities == null) {
@@ -146,21 +150,21 @@ public class AbstractEntityJpaDao<T, ID extends Serializable> extends SimpleJpaR
     }
 
     @Override
-    @Transactional(rollbackFor = Throwable.class)
+    @Transactional
     public void remove(T o) throws DataAccessException {
         delete(o);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    @Transactional(rollbackFor = Throwable.class)
+    @Transactional
     public void removeById(Serializable id) throws DataAccessException {
         deleteById((ID) id);
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    @Transactional(rollbackFor = Throwable.class)
+    @Transactional
     public void removes(Serializable... ids) {
         Iterator<Serializable> iterator = Lists.newArrayList(ids).iterator();
         String queryString = String.format(QueryUtils.DELETE_ALL_QUERY_STRING, getEntityName());

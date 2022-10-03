@@ -14,6 +14,7 @@ import com.google.common.collect.Maps;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -71,26 +72,31 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>>
     }
 
     @Override
+    @Transactional
     public void remove(T o) throws BusinessException {
         getEntityDao().remove(o);
     }
 
     @Override
+    @Transactional
     public void removeById(Serializable id) throws BusinessException {
         getEntityDao().removeById(id);
     }
 
     @Override
+    @Transactional
     public void removes(Serializable... ids) throws BusinessException {
         getEntityDao().removes(ids);
     }
 
     @Override
+    @Transactional
     public void save(T o) throws BusinessException {
         getEntityDao().create(o);
     }
 
     @Override
+    @Transactional
     public void saves(List<T> ts) throws BusinessException {
         if (Collections3.isNotEmpty(ts)) {
             getEntityDao().saves(ts);
@@ -98,6 +104,7 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>>
     }
 
     @Override
+    @Transactional
     public void inserts(List<T> ts) throws BusinessException {
         if (Collections3.isNotEmpty(ts)) {
             getEntityDao().inserts(ts);
@@ -105,11 +112,13 @@ public abstract class EntityServiceImpl<T, M extends EntityDao<T>>
     }
 
     @Override
+    @Transactional
     public void update(T o) throws BusinessException {
         getEntityDao().update(o);
     }
 
     @Override
+    @Transactional
     public void saveOrUpdate(T t) throws BusinessException {
         Assert.notNull(t, "实体不能为空");
         if (t instanceof Entityable) {

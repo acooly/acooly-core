@@ -41,4 +41,14 @@ public class DeleteAppDaoTest {
         appDao.remove(null);
     }
 
+    @Test
+    public void testDeleteById() {
+        appDao.removeById(null);
+    }
+
+    @Test
+    public void testDeletes() {
+        appDao.removes(null);
+    }
+
 }

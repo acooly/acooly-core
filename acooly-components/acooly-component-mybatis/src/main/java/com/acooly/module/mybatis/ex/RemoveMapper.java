@@ -50,16 +50,16 @@ public interface RemoveMapper<T> {
         }
 
         public String removeById(MappedStatement ms) {
-            if (ms.getConfiguration().getVariables() == null) {
-                throw new SQLWarningException("删除时必须加参数", null);
-            }
+//            if (ms.getConfiguration().getVariables() == null) {
+//                throw new SQLWarningException("删除时必须加参数", null);
+//            }
             return super.deleteByPrimaryKey(ms);
         }
 
         public String remove(MappedStatement ms) {
-            if (ms.getConfiguration().getVariables() == null) {
-                throw new SQLWarningException("删除时必须加参数", null);
-            }
+//            if (ms.getConfiguration().getVariables() == null) {
+//                throw new SQLWarningException("删除时必须加参数", null);
+//            }
             return super.delete(ms);
         }
 

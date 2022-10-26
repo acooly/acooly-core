@@ -11,8 +11,6 @@ package com.acooly.module.mybatis.ex;
 
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.mapping.MappedStatement;
-import org.springframework.dao.DataAccessException;
-import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.jdbc.SQLWarningException;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.SqlHelper;
@@ -22,6 +20,7 @@ import java.io.Serializable;
 
 /**
  * @author qiubo@yiji.com
+ * @author zhangpu
  */
 public interface RemoveMapper<T> {
 
@@ -51,16 +50,16 @@ public interface RemoveMapper<T> {
         }
 
         public String removeById(MappedStatement ms) {
-//            if (ms.getConfiguration().getVariables() == null) {
-//                throw new SQLWarningException("删除时必须加参数",null);
-//            }
+            if (ms.getConfiguration().getVariables() == null) {
+                throw new SQLWarningException("删除时必须加参数", null);
+            }
             return super.deleteByPrimaryKey(ms);
         }
 
         public String remove(MappedStatement ms) {
-//            if (ms.getConfiguration().getVariables() == null) {
-//                throw new SQLWarningException("删除时必须加参数",null);
-//            }
+            if (ms.getConfiguration().getVariables() == null) {
+                throw new SQLWarningException("删除时必须加参数", null);
+            }
             return super.delete(ms);
         }
 

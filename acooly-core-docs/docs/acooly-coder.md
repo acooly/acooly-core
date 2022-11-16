@@ -165,15 +165,16 @@ acooly框架为了方便开发和设计，以开发经验为基础，对使用ac
 
 ```json
 {
-	title: '中文label名称',
-	type: '自定义数据类型，包括：money,percent,mobile...',
-	alias: '业务类型别名，空间已定义好的枚举。gender，whether，animal等',
-	tip: '字段说明提示 -> 生成编辑表单字段的tip提示，实体字段的javadoc',
-	// 当type="option"时，自定义的选项值
-	options: {
-		key1:'val1',
-		key2:'val2'
-	}
+  title: '中文label名称',
+  type: '自定义数据类型，包括：money,percent,mobile...',
+  alias: '业务类型别名，空间已定义好的枚举。gender，whether，animal等',
+  tip: '字段说明提示 -> 生成编辑表单字段的tip提示，实体字段的javadoc',
+  func: 15,
+  // 当type="option"时，自定义的选项值
+  options: {
+    key1: 'val1',
+    key2: 'val2'
+  }
 }
 ```
 > 注意：
@@ -202,6 +203,7 @@ type：自定义的数据类型，用于定义前端BOSS生成时的界面显示
 |chinese|String|全中文内容|文本框/格式验证|
 |account|String|用户账户|文本框/mask/格式长度验证|字母开头，由字母，数字和下划线组成的字符串
 |file	|String|文件上传|文件选择|自动生成文件上传代码，并保持相对路径到该字段
+|code   |String|编码   |自动生成|
 
 
 

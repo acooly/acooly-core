@@ -11,22 +11,26 @@ package com.acooly.core.test.core.web;
 import com.acooly.core.common.enums.AnimalSign;
 import com.acooly.core.common.enums.ChannelEnum;
 import com.acooly.core.common.enums.Gender;
-import com.acooly.core.common.web.AbstractStandardEntityController;
+import com.acooly.core.common.facade.SingleOrder;
+import com.acooly.core.common.facade.SingleResult;
+import com.acooly.core.common.web.AbstractJsonEntityController;
+import com.acooly.core.test.appservice.CoderCustomerRemoteService;
 import com.acooly.core.test.core.entity.CoderCustomer;
 import com.acooly.core.test.core.service.CoderCustomerService;
 import com.acooly.core.test.enums.CustomerTypeEnum;
 import com.acooly.core.test.enums.IdcardTypeEnum;
+import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.enums.SimpleStatus;
 import com.acooly.core.utils.enums.WhetherStatus;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -36,7 +40,7 @@ import java.util.Map;
 @Slf4j
 @Controller
 @RequestMapping(value = "/manage/coder/customer")
-public class CoderCustomerManageController extends AbstractStandardEntityController<CoderCustomer, CoderCustomerService> {
+public class CoderCustomerManageController extends AbstractJsonEntityController<CoderCustomer, CoderCustomerService> {
 
     private static Map<Integer, String> allNumStatuss = Maps.newLinkedHashMap();
 
@@ -46,13 +50,24 @@ public class CoderCustomerManageController extends AbstractStandardEntityControl
         allNumStatuss.put(3, "C类型");
     }
 
+    @SuppressWarnings("unused")
+    @Autowired
+    private CoderCustomerService coderCustomerService;
+    @Autowired
+    private CoderCustomerRemoteService coderCustomerRemoteService;
+
     {
         allowMapping = "*";
     }
 
-    @SuppressWarnings("unused")
-    @Autowired
-    private CoderCustomerService coderCustomerService;
+    @RequestMapping(value = "unique")
+    @ResponseBody
+    public SingleResult<CoderCustomer> unique(HttpServletRequest request, HttpServletResponse response) {
+        Long id = Servlets.getLongParameter("id");
+        SingleResult<CoderCustomer> singleResult = coderCustomerRemoteService.getUniqueOne(SingleOrder.from(id));
+        return singleResult;
+    }
+
 
 //
 //    @Override

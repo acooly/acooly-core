@@ -42,22 +42,23 @@ import java.util.Date;
 // 导出规则：
 // 1、@ExportModel标记的实体
 // 2、@ExportColumn标记的列
-@ExportModel(name = "客户信息", border = true,headerShow = true,
+@ExportModel(name = "客户信息", border = true,headerShow = true
         // 设置表头格式
-        headerStyle = @ExportStyle(
-                fontBold = true,
-                fontSize = 12,
-                fontName = "微软雅黑",
-                backgroundColor = "#DDEBF7",
-                rowHeight = 400
-        ),
+//        ,headerStyle = @ExportStyle(
+//                fontBold = true,
+//                fontSize = 12,
+//                fontName = "微软雅黑",
+//                backgroundColor = "#DDEBF7",
+//                rowHeight = 400
+//        )
         // 父类属性的导出配置
-        exportColumns = {
-                @ExportColumn(name = "id", header = "ID", order = 1),
-                @ExportColumn(name = "createTime", header = "创建时间", order = 18),
-        },
+//        ,exportColumns = {
+//                @ExportColumn(name = "id", header = "ID", order = 1),
+//                @ExportColumn(name = "createTime", header = "创建时间", order = 18),
+//        }
         // 父类忽略的属性
-        ignores = {"updateTime"})
+//        ,ignores = {"updateTime"}
+)
 public class CoderCustomer extends AbstractEntity {
 
     /**

@@ -28,7 +28,7 @@ public class Main {
 //        BigMoney.DEFAULT_ROUNDING_MODE = BigDecimal.ROUND_DOWN;
 //        BigMoney.DEFAULT_DB_MODE = BigMoney.DB_MODE_LONG;
 //        System.out.println("在Main方法中设置全局静态参数, 测试地址：http://127.0.0.1:8082/manage/test/core/app/testBigMoney.html");
-        Apps.setProfileIfNotExists("h2");
+        Apps.setProfileIfNotExists("dev");
         SpringApplication.run(Main.class, args);
     }
 }

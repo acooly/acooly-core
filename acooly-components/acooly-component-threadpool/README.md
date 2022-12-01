@@ -20,6 +20,12 @@ maven坐标：
 
 ### 2.1 获取线程池
 
+    方式1:
     @Autowired
-    private ThreadPoolTaskExecutor taskExecutor;
+    private ThreadPoolTaskExecutor commonTaskExecutor;
+    方式2:
+    @Autowired
+    @Qualifier("commonTaskExecutor")
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor（名字随意）;
+
     

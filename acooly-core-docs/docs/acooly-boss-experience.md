@@ -225,7 +225,7 @@ $.extend($.fn.validatebox.defaults.rules, {
 });
 ```
 3. 在目标页面的表单中使用扩展的验证器和掩码处理器（这里一覆盖security组件的userEdit.ftl为例）
-```injectedfreemarker
+```html
 <#--...-->
 <input name="username" type="text" placeholder="请输入用户名..." class="easyui-validatebox form-control" data-inputmask="'alias':'accountSimple'" data-mask data-options="validType:['accountSimple','length[1,32]']" required="true"/>
 <#--...-->

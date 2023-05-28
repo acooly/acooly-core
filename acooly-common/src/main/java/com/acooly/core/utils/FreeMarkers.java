@@ -32,6 +32,17 @@ public class FreeMarkers {
         }
     }
 
+    public static String rendereString(String templateString, Object model) {
+        Template template = null;
+        try {
+            template = new Template("name", new StringReader(templateString),
+                    new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS));
+        } catch (Exception e) {
+            throw Exceptions.unchecked(e);
+        }
+        return doRenderTemplate(template, model);
+    }
+
     /**
      * 渲染Template文件.
      */

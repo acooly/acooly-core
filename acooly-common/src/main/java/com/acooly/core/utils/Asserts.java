@@ -26,11 +26,13 @@ import java.util.Map;
 public class Asserts {
 
     /**
-     * 判断数字在start（含）和end（含）间
+     * 判断数字（int）在start（含）和end（含）间
      *
-     * @param number
-     * @param start
-     * @param end
+     * @param paramValue 参数值
+     * @param start      最小值
+     * @param end        最大值
+     * @param paramName  参数名
+     * @param message    消息
      */
     public static void between(int paramValue, int start, int end, String paramName, String message) {
         if (paramValue < start || paramValue > end) {
@@ -38,6 +40,15 @@ public class Asserts {
         }
     }
 
+    /**
+     * 判断数字（long）在start（含）和end（含）间
+     *
+     * @param paramValue 参数值
+     * @param start      最小值
+     * @param end        最大值
+     * @param paramName  参数名
+     * @param message    消息
+     */
     public static void between(long paramValue, long start, long end, String paramName, String message) {
         if (paramValue < start || paramValue > end) {
             throw new ParameterException(paramName, message);
@@ -45,12 +56,12 @@ public class Asserts {
     }
 
     /**
-     * 字符串不能为空
+     * 字符串不能为空及异常
      *
-     * @param text
-     * @param message
-     * @param paramName
-     * @see Strings
+     * @param text      参数值（字符串）
+     * @param message   错误消息
+     * @param paramName 参数名称
+     * @see Strings#isBlank(CharSequence)
      */
     public static void notEmpty(String text, String paramName, String message) {
         if (Strings.isBlank(text)) {
@@ -58,20 +69,35 @@ public class Asserts {
         }
     }
 
+    /**
+     * 字符串不能为空判断及异常
+     * <p>
+     * 采用默认消息
+     *
+     * @param text      参数值（字符串）
+     * @param paramName 参数名称
+     */
     public static void notEmpty(String text, String paramName) {
         notEmpty(text, paramName, "%s不能为空和空字符串");
     }
 
+    /**
+     * 字符串不能为空判断及异常
+     *
+     * @param text
+     */
     public static void notEmpty(String text) {
         notEmpty(text, null);
     }
 
+
     /**
      * 字符串为空断言
+     * 判断字符串为空，如果不为空，则抛出异常
      *
-     * @param text
-     * @param paramName
-     * @param message
+     * @param text      参数值（字符串）
+     * @param paramName 参数名称
+     * @param message   错误消息
      */
     public static void empty(String text, String paramName, String message) {
         if (Strings.isNotBlank(text)) {
@@ -79,10 +105,24 @@ public class Asserts {
         }
     }
 
+    /**
+     * 字符串为空断言
+     * 默认错误消息
+     *
+     * @param text      参数值（字符串）
+     * @param paramName 参数名称
+     * @see Asserts#empty(String，String，String)
+     */
     public static void empty(String text, String paramName) {
         empty(text, paramName, "%s必须为空或空字符串");
     }
 
+    /**
+     * 字符串为空断言
+     *
+     * @param text 参数值（字符串）
+     * @see Asserts#empty(String，String，String)
+     */
     public static void empty(String text) {
         empty(text, null);
     }

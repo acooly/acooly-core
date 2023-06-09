@@ -1,7 +1,6 @@
 package com.acooly.core.utils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.Assert;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -10,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Bean反射操作工具
+ * <p>
  * 访问在当前类声明的private/protected成员变量及private/protected函数的BeanUtils.
  * 注意,因为必须为当前类声明的变量,通过继承获得的protected变量将不能访问, 需要转型到声明该变量的类才能访问. 反射的其他功能请使用Apache Jarkarta Commons
  * BeanUtils
@@ -17,8 +18,15 @@ import java.util.List;
  * @author zhangpu
  */
 public class BeanUtils {
+
     /**
-     * 获取当前类声明的private/protected变量
+     * 获取当前类声明的private/protected变量值
+     *
+     * @param object       bean对象
+     * @param propertyName 属性名
+     * @return 属性值
+     * @throws IllegalAccessException
+     * @throws NoSuchFieldException
      */
     public static Object getPrivateProperty(Object object, String propertyName)
             throws IllegalAccessException, NoSuchFieldException {
@@ -30,7 +38,13 @@ public class BeanUtils {
     }
 
     /**
-     * 设置当前类声明的private/protected变量
+     * 设置当前类声明的private/protected变量值
+     *
+     * @param object
+     * @param propertyName
+     * @param newValue
+     * @throws IllegalAccessException
+     * @throws NoSuchFieldException
      */
     public static void setPrivateProperty(Object object, String propertyName, Object newValue)
             throws IllegalAccessException, NoSuchFieldException {

@@ -120,11 +120,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.esotericsoftware</groupId>-->
-<!--            <artifactId>kryo</artifactId>-->
-<!--            <version>3.0.3</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.esotericsoftware</groupId>-->
+        <!--            <artifactId>kryo</artifactId>-->
+        <!--            <version>3.0.3</version>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
@@ -226,12 +226,12 @@
             <version>0.1.53</version>
         </dependency>
 
-<!--        &lt;!&ndash; 软件缺陷检查的annotation &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.google.code.findbugs</groupId>-->
-<!--            <artifactId>jsr305</artifactId>-->
-<!--            <version>3.0.1</version>-->
-<!--        </dependency>-->
+        <!--        &lt;!&ndash; 软件缺陷检查的annotation &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.google.code.findbugs</groupId>-->
+        <!--            <artifactId>jsr305</artifactId>-->
+        <!--            <version>3.0.1</version>-->
+        <!--        </dependency>-->
 
         <!-- 拼音转换 -->
         <dependency>
@@ -252,4 +252,22 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <doclint>none</doclint>
+                    <additionalJOptions>
+                        <additionalJOption>-J-Ddoc.date.format=yyyy-MM-dd</additionalJOption>
+                        <additionalJOption>-Xdoclint:none</additionalJOption>
+                    </additionalJOptions>
+                    <excludePackageNames>com.acooly.core.common.*,com.acooly.core.conversion.*,com.acooly.core.Assert</excludePackageNames>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

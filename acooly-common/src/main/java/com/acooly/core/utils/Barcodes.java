@@ -7,6 +7,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 
 import javax.imageio.ImageIO;
+import javax.validation.constraints.NotBlank;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -16,8 +17,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 条形码工具类
+ * 提供生成、解析等功能
  *
- * <p>1、二维码采用QRcode 2、一维条形码采用CODE_128
+ * <p>
+ * <li>1、二维码采用QRcode </li>
+ * <li>2、一维条形码采用CODE_128</li>
  *
  * @author zhangpu
  */
@@ -25,51 +29,65 @@ public final class Barcodes {
 
     public static final String DEFAULT_ENCODING = "UTF-8";
 
-
     /**
-     * 通用条形码生成
+     * 通用码生成
+     * 支持条形码和二维码
      *
-     * @param content
-     * @param encoding
-     * @param formart
-     * @param width
-     * @param height
-     * @return
+     * @param content  [必选] 内容
+     * @param encoding 编码，默认：UTF-8
+     * @param format   条形码格式，默认：BarcodeFormat.CODE_128
+     * @param width    [必选] 宽度，单位：像素
+     * @param height   [必选] 高度，单位：像素
+     * @return 条形码图片对象
+     * @see BarcodeFormat
      */
-    public static BufferedImage encode(
-            String content, String encoding, BarcodeFormat formart, int width, int height) {
+    public static BufferedImage encode(@NotBlank String content, String encoding, BarcodeFormat format, int width, int height) {
         try {
             ConcurrentHashMap<EncodeHintType, String> hints = new ConcurrentHashMap<>();
             hints.put(EncodeHintType.CHARACTER_SET, encoding);
-            BitMatrix bitMatrix = new MultiFormatWriter().encode(content, formart, width, height, hints);
+            if (format == null) {
+                format = BarcodeFormat.CODE_128;
+            }
+            BitMatrix bitMatrix = new MultiFormatWriter().encode(content, format, width, height, hints);
             return toBufferedImage(bitMatrix);
         } catch (Exception e) {
-            throw new BusinessException("BARCODES_ENCODE_ERROR", "生成条形码[" + formart + "]失败", e);
+            throw new BusinessException("BARCODES_ENCODE_ERROR", "生成条形码[" + format + "]失败", e);
         }
     }
 
     /**
-     * 创建QRcode二维码
+     * 生成二维码（QRcode）
      *
      * <p>创建后，可以输出到文件或HTTP-Response输出流
-     * <li>servlet输出：ImageIO.write(image, "png", response.getOutputStream());
-     * <li>文件输出：ImageIO.write(image, "png", file);
+     *
+     * <pre class="code">
+     * BufferedImage image = encodeQRcode("http://www.acooly.cn", "UTF-8", 200);
+     * // Servlet输出
+     * ImageIO.write(image, "png", response.getOutputStream());
+     * // OR 文件输出
+     * ImageIO.write(image, "png", file);
+     * </pre>
      *
      * @param content  二维码数据内容
      * @param encoding 编码格式
      * @param size     QRcode一般是正方形的，表示边长
-     * @return QRcode
+     * @return QRcode的图片对象
      */
     public static BufferedImage encodeQRcode(String content, String encoding, Integer size) {
         return encode(content, encoding, BarcodeFormat.QR_CODE, size, size);
     }
 
-    public static void encodeQRcode(
-            String content,
-            String encoding,
-            Integer size,
-            OutputStream output,
-            boolean closeAfterComplete) {
+
+    /**
+     * 生成并输出二维码
+     *
+     * @param content            二维码数据内容
+     * @param encoding           编码格式：默认UTF-8
+     * @param size               QRcode一般是正方形的，表示边长，单位像素
+     * @param output             输出的流
+     * @param closeAfterComplete 完成输出后是否关闭流
+     */
+    public static void encodeQRcode(String content, String encoding, Integer size, OutputStream output, boolean closeAfterComplete) {
         try {
             ImageIO.write(encodeQRcode(content, encoding, size), "png", output);
         } catch (Exception e) {
@@ -81,6 +99,14 @@ public final class Barcodes {
         }
     }
 
+    /**
+     * 生成条形码
+     *
+     * @param content 数据内容
+     * @param width   宽，单位：像素
+     * @param height  高，单位：像素
+     * @return 条形码图片对象
+     */
     public static BufferedImage encodeBarcode(String content, Integer width, Integer height) {
         try {
             return encode(content, DEFAULT_ENCODING, BarcodeFormat.CODE_128, width, height);
@@ -89,10 +115,18 @@ public final class Barcodes {
         }
     }
 
-    public static void encodeBarcode(
-            String str, Integer width, Integer height, OutputStream output, boolean closeAfterComplete) {
+    /**
+     * 生成并输出条形码
+     *
+     * @param content            数据内容
+     * @param width              宽，单位：像素
+     * @param height             高，单位：像素
+     * @param output             输出的流
+     * @param closeAfterComplete 完成输出后是否关闭流
+     */
+    public static void encodeBarcode(String content, Integer width, Integer height, OutputStream output, boolean closeAfterComplete) {
         try {
-            ImageIO.write(encodeBarcode(str, width, height), "png", output);
+            ImageIO.write(encodeBarcode(content, width, height), "png", output);
         } catch (Exception e) {
             throw new BusinessException("BARCODES_ENCODE_ERROR", "输出条形码失败", e);
         } finally {
@@ -103,10 +137,11 @@ public final class Barcodes {
     }
 
     /**
-     * 解码
+     * 解码数据
+     * 通用，支持条形码和二维码
      *
-     * @param in
-     * @return
+     * @param in 条形码/二维码图片输入流
+     * @return 解码后的内容
      */
     public static String decode(InputStream in) {
         try {
@@ -125,6 +160,13 @@ public final class Barcodes {
         }
     }
 
+    /**
+     * 解码文件
+     * 通用，支持条形码和二维码
+     *
+     * @param file 条形码/二维码图片文件
+     * @return 解码后的内容
+     */
     public static String decode(File file) {
         InputStream in = null;
         try {

@@ -53,6 +53,7 @@ import java.util.Map;
  * @author Sam Brannen
  * @since 1.1.2
  */
+@Deprecated
 public abstract class Assert {
 
     /**

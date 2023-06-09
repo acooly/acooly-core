@@ -153,8 +153,9 @@ public class PageInfo<T> implements Serializable {
     }
 
     /**
-     * 转换PageInfo<T>为PageInfo<E>（完整实现）
+     * 转换PageInfo<T>为PageInfo<E>
      * <p>
+     * （完整实现）
      * 一般使用场景为：从数据库查询出entity的PageInfo<T>转换为facade或接口层的DTO类型PageInfo<E>
      * <li>内部自动BeanCopies</li>
      * <li>可后置处理已经完成Bean Copy的DTO</li>
@@ -165,7 +166,7 @@ public class PageInfo<T> implements Serializable {
      * @return DTO分页对象
      */
     @SuppressWarnings("unchecked")
-	public <E> PageInfo<E> to(final Class<E> clazz, BiFunction<T, E, E> biFunction) {
+    public <E> PageInfo<E> to(final Class<E> clazz, BiFunction<T, E, E> biFunction) {
         PageInfo<E> info = new PageInfo<>();
         info.setTotalPage(this.totalPage);
         info.setTotalCount(this.totalCount);

@@ -26,7 +26,10 @@ public class Cryptos {
     private static final String AES_CBC = "AES/CBC/PKCS5Padding";
     private static final String HMACSHA1 = "HmacSHA1";
     private static final String DEFAULT_ENCODE = "UTF-8";
-    private static final int DEFAULT_HMACSHA1_KEYSIZE = 160; // RFC2401
+    /**
+     * RFC2401
+     */
+    private static final int DEFAULT_HMACSHA1_KEYSIZE = 160;
     private static final int DEFAULT_AES_KEYSIZE = 128;
     private static final int DEFAULT_IVSIZE = 16;
 
@@ -282,5 +285,5 @@ public class Cryptos {
         random.nextBytes(bytes);
         return bytes;
     }
-    
+
 }

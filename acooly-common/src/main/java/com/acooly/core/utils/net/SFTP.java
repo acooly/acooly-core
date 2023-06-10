@@ -53,32 +53,6 @@ public class SFTP {
         }
     }
 
-    public static Logger getLogger() {
-        return new Logger() {
-            org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(SFTP.class);
-
-            @Override
-            public boolean isEnabled(int level) {
-                return true;
-            }
-
-            @Override
-            public void log(int level, String message) {
-                if (level == Logger.INFO) {
-                    logger.info(message);
-                } else if (level == Logger.DEBUG) {
-                    logger.debug(message);
-                } else if (level == Logger.WARN) {
-                    logger.warn(message);
-                } else if (level == Logger.ERROR) {
-                    logger.error(message);
-                } else if (level == Logger.FATAL) {
-                    logger.error(message);
-                }
-            }
-        };
-    }
-
     /**
      * 创建ChannelSftp
      *
@@ -120,8 +94,7 @@ public class SFTP {
      * @param src      sftp上文件路径
      * @param dst      本地目录
      */
-    public static void download(
-            String host, int port, String userName, String password, final String src, final String dst) {
+    public static void download(String host, int port, String userName, String password, final String src, final String dst) {
         exeSftpCmd(
                 host,
                 port,
@@ -146,8 +119,7 @@ public class SFTP {
      * @param src      本地目录
      * @param dst      sftp上文件路径
      */
-    public static void upload(
-            String host, int port, String userName, String password, final String src, final String dst) {
+    public static void upload(String host, int port, String userName, String password, final String src, final String dst) {
         exeSftpCmd(
                 host,
                 port,
@@ -228,6 +200,34 @@ public class SFTP {
             session.disconnect();
         }
     }
+
+
+    private static Logger getLogger() {
+        return new Logger() {
+            org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(SFTP.class);
+
+            @Override
+            public boolean isEnabled(int level) {
+                return true;
+            }
+
+            @Override
+            public void log(int level, String message) {
+                if (level == Logger.INFO) {
+                    logger.info(message);
+                } else if (level == Logger.DEBUG) {
+                    logger.debug(message);
+                } else if (level == Logger.WARN) {
+                    logger.warn(message);
+                } else if (level == Logger.ERROR) {
+                    logger.error(message);
+                } else if (level == Logger.FATAL) {
+                    logger.error(message);
+                }
+            }
+        };
+    }
+
 
     /**
      * sftp命令

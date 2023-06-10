@@ -6,11 +6,25 @@ package com.acooly.core.utils.net;
 import java.util.Map;
 
 /**
+ * Http通用请求结果对象
+ *
  * @author zhangpu
+ * @date 2016年8月23日
  */
 public class HttpResult {
+
+    /**
+     * HTTP状态码
+     */
     private int status;
+    /**
+     * HTTP头信息
+     */
     private Map<String, String> headers;
+
+    /**
+     * HTTP响应体
+     */
     private String body;
 
     public int getStatus() {

@@ -47,4 +47,46 @@
         </dependencies>
     </dependencyManagement>
 
+    <build>
+        <plugins>
+            <!-- acooly-common-utils javadoc -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <additionalJOptions>
+                        <additionalJOption>-J-Ddoc.date.format=yyyy-MM-dd</additionalJOption>
+                        <additionalJOption>-Xdoclint:none</additionalJOption>
+                    </additionalJOptions>
+                    <author>true</author>
+                    <version>true</version>
+                    <nodeprecated>true</nodeprecated>
+                    <nodeprecatedlist>true</nodeprecatedlist>
+                    <use>true</use>
+
+                    <sourceFileIncludes>
+                        <sourceFileInclude>com/acooly/core/utils/**/*.java</sourceFileInclude>
+                    </sourceFileIncludes>
+
+                    <excludePackageNames>
+                        com.acooly.core.utils.conversion,
+                        com.acooly.core.utils.conversion*,
+                        com.acooly.core.utils.id
+                    </excludePackageNames>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>aggregate</id>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                        <phase>site</phase>
+                        <configuration></configuration>
+                    </execution>
+                </executions>
+
+            </plugin>
+        </plugins>
+    </build>
 </project>

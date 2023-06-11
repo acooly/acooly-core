@@ -19,8 +19,9 @@ import java.util.Collection;
 import java.util.Enumeration;
 
 /**
- * @Filename: IPUtil.java @Description: @Version: 1.0 @Author: peigen @Email:
- * peigen@yiji.com @History:<br>
+ * IP工具类
+ *
+ * @author peigen@yiji.com @History:<br>
  * <li>Author: peigen
  * <li>Date: 2011-7-28
  * <li>Version: 1.0
@@ -46,9 +47,9 @@ public class IPUtil {
      * 判断指定IP是否在子网网段内
      * 例如：ip 192.168.1.1 , cidr 192.168.1.0/24
      *
-     * @param ip
-     * @param cidr
-     * @return
+     * @param ip   ip地址
+     * @param cidr 子网网段
+     * @return 是：true/ 否：false
      */
     public static boolean isInRange(String ip, String cidr) {
         long ipLong = ip2Long(ip);
@@ -63,71 +64,89 @@ public class IPUtil {
     /**
      * 将IP地址(61.172.201.235)转变成Long，如果ip格式非法，那么返回0
      *
-     * @param ip
-     * @return
+     * @param ip IP地址
+     * @return IP的数字形式
      */
     public static long ip2Long(String ip) {
         if (!isIP(ip)) {
             return 0;
         }
-
         long iplong = 0;
         String[] segs = Strings.split(ip, ".");
-
         for (int i = 0; i < segs.length; i++) {
             long seg = Long.parseLong(segs[i]);
             iplong += seg << ((3 - i) * 8);
         }
-
         return iplong;
     }
 
     /**
      * 将数据库中表示IP的Long型，转变成标准形式（61.172.201.235）
      *
-     * @param ipLong
-     * @return
+     * @param ipLong IP的数字形式
+     * @return 标准IP地址
      */
     public static String long2IP(long ipLong) {
-
         StringBuilder ip = new StringBuilder(String.valueOf(ipLong >> 24) + ".");
-
         ip.append(String.valueOf((ipLong & 16711680) >> 16) + ".");
         ip.append(String.valueOf((ipLong & 65280) >> 8) + ".");
         ip.append(String.valueOf(ipLong & 255));
-
         return ip.toString();
     }
 
     /**
      * 判断ip是否是公网ip
+     *
+     * @param ip ip地址
+     * @return 是：true/ 否：false
      */
     public static boolean isPublicIpv4(String ip) {
-        if (Strings.isBlank(ip)) return false;
+        if (Strings.isBlank(ip)) {
+            return false;
+        }
         long ipL = ip2Long(ip);
-        if (ipL == 0) return false;
+        if (ipL == 0) {
+            return false;
+        }
         return isPublicIpv4(ipL);
     }
 
+    /**
+     * 判断ip是否是公网ip
+     *
+     * @param ip ip数字形态
+     * @return 是：true/ 否：false
+     */
     public static boolean isPublicIpv4(long ip) {
         // 判断是否是ipv4，并且是否为0.0.0.0 或者 255.255.255.255
-        if (ip <= 0 || ip >= 4294967295L) return false;
+        if (ip <= 0 || ip >= 4294967295L) {
+            return false;
+        }
         // 判断是否本地回环地址 127.0.0.0 ~ 127.255.255.255
-        if (ip >= 2130706432L && ip <= 2147483647L) return false;
+        if (ip >= 2130706432L && ip <= 2147483647L) {
+            return false;
+        }
         // 判断是否在10.0.0.0 ~ 10.255.255.255之间
-        if (ip >= 167772160L && ip <= 184549375L) return false;
+        if (ip >= 167772160L && ip <= 184549375L) {
+            return false;
+        }
         // 判断是否在172.16.0.0 ~ 172.31.255.255之间
-        if (ip >= 2886729728L && ip <= 2887778303L) return false;
+        if (ip >= 2886729728L && ip <= 2887778303L) {
+            return false;
+        }
         // 判断是否在192.168.0.0 ~ 192.168.255.255之间
-        if (ip >= 3232235520L && ip <= 3232301055L) return false;
+        if (ip >= 3232235520L && ip <= 3232301055L) {
+            return false;
+        }
         return true;
     }
 
     /**
-     * 判断字符是否是一个表示IP的字符
+     * 判断字符是否是一个表示IP的格式
+     * 例如：192.168.1.1
      *
-     * @param str
-     * @return
+     * @param str 字符串
+     * @return 是：true/ 否：false
      */
     public static boolean isIP(String str) {
         if (str == null) {
@@ -143,14 +162,13 @@ public class IPUtil {
                 return false;
             }
         }
-
         return true;
     }
 
     /**
      * 获取所有本机ip地址
      *
-     * @return
+     * @return ip地址集合
      */
     public static Collection<InetAddress> getAllHostAddress() {
         if (allHostAddress == null) {
@@ -179,7 +197,7 @@ public class IPUtil {
     /**
      * 获取所有本机ipv4地址
      *
-     * @return
+     * @return ip地址集合
      */
     public static Collection<InetAddress> getAllHostIPV4Address() {
         if (allHostIPV4Address == null) {
@@ -209,7 +227,7 @@ public class IPUtil {
     /**
      * 获取所有本机ipv6地址
      *
-     * @return
+     * @return ip地址集合
      */
     public static Collection<InetAddress> getAllHostIPV6Address() {
         if (allHostIPV6Address == null) {
@@ -239,7 +257,7 @@ public class IPUtil {
     /**
      * 获取所有本机非loopback地址
      *
-     * @return
+     * @return ip地址集合
      */
     public static Collection<String> getAllNoLoopbackAddresses() {
         Collection<String> noLoopbackAddresses = new ArrayList<String>();
@@ -257,7 +275,7 @@ public class IPUtil {
     /**
      * 获取所有本机非loopback IPV4地址
      *
-     * @return
+     * @return ip地址集合
      */
     public static Collection<String> getAllNoLoopbackIPV4Addresses() {
         Collection<String> noLoopbackAddresses = new ArrayList<String>();
@@ -275,7 +293,7 @@ public class IPUtil {
     /**
      * 获取所有本机非loopback IPV6地址
      *
-     * @return
+     * @return ip地址集合
      */
     public static Collection<String> getAllNoLoopbackIPV6Addresses() {
         Collection<String> noLoopbackAddresses = new ArrayList<String>();
@@ -286,14 +304,13 @@ public class IPUtil {
                 noLoopbackAddresses.add(address.getHostAddress());
             }
         }
-
         return noLoopbackAddresses;
     }
 
     /**
      * 获取ip地址，如果有多个网卡的情况，获取第一个非loopback ip地址
      *
-     * @return
+     * @return ip地址
      */
     public static String getFirstNoLoopbackAddress() {
         if (firstNoLoopbackAddress != null) {
@@ -316,7 +333,7 @@ public class IPUtil {
     /**
      * 获取ipv4地址，如果有多个网卡的情况，获取第一个非loopback ip地址
      *
-     * @return
+     * @return ip地址
      */
     public static String getFirstNoLoopbackIPV4Address() {
         if (firstNoLoopbackIPV4Address != null) {
@@ -339,7 +356,7 @@ public class IPUtil {
     /**
      * 获取ipv6地址，如果有多个网卡的情况，获取第一个非loopback ip地址
      *
-     * @return
+     * @return ip地址
      */
     public static String getFirstNoLoopbackIPV6Address() {
         if (firstNoLoopbackIPV6Address != null) {
@@ -362,7 +379,7 @@ public class IPUtil {
     /**
      * 获取机器名
      *
-     * @return
+     * @return 机器名
      */
     public static String getComputerName() {
         return System.getenv().get("COMPUTERNAME");
@@ -371,10 +388,9 @@ public class IPUtil {
     /**
      * 获取mac地址
      *
-     * @return
-     * @throws Exception
+     * @return mac地址
      */
-    public static String getMACAddress() throws Exception {
+    public static String getMACAddress() {
         if (macAddress == null) {
             macAddress = getMacByNetworkInterface();
             if (macAddress == null) {
@@ -387,8 +403,7 @@ public class IPUtil {
     /**
      * 获取hostname
      *
-     * @return
-     * @throws Exception
+     * @return 主机名
      */
     public static String getHostName() {
         try {
@@ -402,7 +417,7 @@ public class IPUtil {
      * 获取http请求真实ip
      *
      * @param request
-     * @return
+     * @return ip地址
      */
     public static String getIpAddr(HttpServletRequest request) {
         if (request == null) {
@@ -424,8 +439,8 @@ public class IPUtil {
     /**
      * 获取mac地址
      *
-     * @param ia
-     * @return
+     * @param ia ip地址对象
+     * @return mac地址
      */
     public static String getMACAddress(InetAddress ia) {
         byte[] mac = null;
@@ -435,7 +450,6 @@ public class IPUtil {
             throw Exceptions.unchecked(e);
         }
         StringBuilder sb = new StringBuilder();
-
         for (int i = 0; i < mac.length; i++) {
             if (i != 0) {
                 sb.append("-");

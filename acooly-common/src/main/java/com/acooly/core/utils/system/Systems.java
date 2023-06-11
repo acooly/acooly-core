@@ -21,19 +21,40 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
+import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Map;
 
 /**
+ * 系统环境相关的工具类
+ * 合并Envs到Systems
+ *
  * @author zhangpu
  * @date 2019-10-19 23:16
+ * @see com.acooly.core.utils.env.Envs
  */
 @Slf4j
 public class Systems {
 
 
+    /**
+     * 获取当前进程Id
+     *
+     * @return 当前进程Id
+     */
+    public static String getPid() {
+        String name = ManagementFactory.getRuntimeMXBean().getName();
+        return name.split("@")[0];
+    }
+
+    /**
+     * 获取系统常规信息
+     * 包括：机器码、主机名、内网IP、操作系统名称、操作系统版本
+     *
+     * @return Map结构的系统信息组
+     */
     public static Map<String, String> getSystemInfo() {
         Map<String, String> map = Maps.newHashMap();
         map.put("machineNo", Systems.getSystemId());
@@ -48,7 +69,7 @@ public class Systems {
     /**
      * 获取HostName
      *
-     * @return
+     * @return 主机名
      */
     public static String getHostName() {
         try {
@@ -61,8 +82,9 @@ public class Systems {
 
     /**
      * 获取系统唯一标志
+     * md5(CPU序列号+主板序列号+MAC地址)
      *
-     * @return
+     * @return 系统唯一标志
      */
     public static String getSystemId() {
         StringBuilder sb = new StringBuilder();
@@ -72,10 +94,10 @@ public class Systems {
 
 
     /**
-     * 执行命令
+     * 执行操作系统命令
      *
-     * @param cmd
-     * @return
+     * @param cmd 系统命令数组
+     * @return 执行结果
      */
     public static String exec(String... cmd) {
         try (InputStream in = Runtime.getRuntime().exec(cmd).getInputStream();
@@ -87,6 +109,12 @@ public class Systems {
         }
     }
 
+    /**
+     * 执行操作系统命令
+     *
+     * @param cmd 系统命令
+     * @return 执行结果
+     */
     public static String exec(String cmd) {
         try (InputStream in = Runtime.getRuntime().exec(cmd).getInputStream();
              StringWriter stringWriter = new StringWriter()) {
@@ -103,15 +131,23 @@ public class Systems {
      * @param cmd    命令语句
      * @param label  要查看的字段
      * @param symbol 分隔符
-     * @return
+     * @return 匹配数据
      */
     protected static String getExecValue(String cmd, String label, String symbol) {
         String execResult = exec(cmd);
         return doExecValue(execResult, label, symbol);
     }
 
-    protected static String getExecValue(String[] cmd, String label, String symbol) {
-        String execResult = exec(cmd);
+    /**
+     * 获取执行命令行的匹配数据
+     *
+     * @param cmds   命令语句数组
+     * @param label  要查看的字段
+     * @param symbol 分隔符
+     * @return
+     */
+    protected static String getExecValue(String[] cmds, String label, String symbol) {
+        String execResult = exec(cmds);
         return doExecValue(execResult, label, symbol);
     }
 
@@ -119,8 +155,8 @@ public class Systems {
      * 执行VBS
      * windows下创建临时文件执行
      *
-     * @param vbs
-     * @return
+     * @param vbs vbs脚本
+     * @return 执行结果
      */
     public static String execVbs(String vbs) {
         String result = null;
@@ -148,25 +184,45 @@ public class Systems {
     /**
      * 操作系统信息
      *
-     * @return
+     * @return 操作系统信息
      */
     public static OsPlatform getOS() {
         return new OsPlatform(OS.of(System.getProperty("os.name")), System.getProperty("os.arch"),
                 System.getProperty("os.version"));
     }
 
+    /**
+     * 获取CPU序列号
+     *
+     * @return CPU序列号
+     */
     public static String getCpuId() {
         return getOS().os.getCpuId();
     }
 
+    /**
+     * 获取硬盘序列号
+     *
+     * @return 硬盘序列号
+     */
     public static String getDiskId() {
         return getOS().os.getDiskId();
     }
 
+    /**
+     * 获取主板序列号
+     *
+     * @return 主板序列号
+     */
     public static String getMainboardId() {
         return getOS().os.getMainboardId();
     }
 
+    /**
+     * 获取MAC地址
+     *
+     * @return MAC地址
+     */
     public static String getMac() {
         try {
             return IPUtil.getMACAddress();
@@ -191,32 +247,6 @@ public class Systems {
         }
         return null;
     }
-
-    public static interface HardWareInfo {
-        /**
-         * CPU串号
-         *
-         * @return
-         */
-        String getCpuId();
-
-        /**
-         * 主板串号
-         *
-         * @return
-         */
-        String getMainboardId();
-
-        /**
-         * 硬盘串号
-         *
-         * @return
-         */
-        String getDiskId();
-
-
-    }
-
 
     /**
      * 操作系统
@@ -317,6 +347,32 @@ public class Systems {
             sb.append("\"diskId\":\"").append(this.getDiskId()).append("\"}");
             return sb.toString();
         }
+    }
+
+
+    public static interface HardWareInfo {
+        /**
+         * CPU串号
+         *
+         * @return CPU串号
+         */
+        String getCpuId();
+
+        /**
+         * 主板串号
+         *
+         * @return 主板串号
+         */
+        String getMainboardId();
+
+        /**
+         * 硬盘串号
+         *
+         * @return 硬盘串号
+         */
+        String getDiskId();
+
+
     }
 
     @Getter

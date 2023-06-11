@@ -4,8 +4,9 @@
 package com.acooly.core.utils.system;
 
 /**
- * @Filename MACAddressParser.java @Description @Version 1.0 @Author bohr.qiu @Email
- * qzhanbo@yiji.com @History
+ * MAC地址解析工具类
+ *
+ * @author qzhanbo@yiji.com
  * <li>Author: bohr.qiu
  * <li>Date: 2013-9-3
  * <li>Version: 1.0

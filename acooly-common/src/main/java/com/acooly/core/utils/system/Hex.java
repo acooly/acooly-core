@@ -6,7 +6,8 @@ package com.acooly.core.utils.system;
 import java.io.IOException;
 
 /**
- * @Filename Hex.java @Description @Version 1.0 @Author bohr.qiu @Email qzhanbo@yiji.com @History
+ * Hex自定义工具类
+ *
  * <li>Author: bohr.qiu
  * <li>Date: 2013-9-3
  * <li>Version: 1.0

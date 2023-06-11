@@ -24,13 +24,29 @@ import java.util.zip.ZipOutputStream;
  * @author zhangpu
  */
 public class Compressions {
-
+    /**
+     * 日志
+     */
     private static final Logger logger = LoggerFactory.getLogger(Compressions.class);
 
+    /**
+     * 压缩文件
+     * 多个源文件压缩到一个指定的压缩zip文件
+     *
+     * @param files  源文件集合
+     * @param target 生成目标压缩文件
+     */
     public static void zip(List<File> files, File target) {
         zip(files, null, target);
     }
 
+    /**
+     * 压缩文件到目标文件
+     *
+     * @param files           源文件集合
+     * @param zipRelativePath
+     * @param target
+     */
     public static void zip(List<File> files, String zipRelativePath, File target) {
         OutputStream out = null;
         try {
@@ -74,23 +90,25 @@ public class Compressions {
     }
 
     public static File zip(File source, String password) {
-        File target =
-                new File(
-                        source.getParentFile(),
-                        StringUtils.substringBeforeLast(source.getName(), ".") + ".zip");
+        File target = new File(source.getParentFile(), StringUtils.substringBeforeLast(source.getName(), ".") + ".zip");
         zip(source, target, password, true);
         return target;
     }
 
-    public static void zip(
-            File source, String zipRelativePath, ZipOutputStream zipOut, boolean needCloseOutStream)
-            throws IOException {
+    /**
+     * Zip压缩主方法
+     *
+     * @param source             源文件
+     * @param zipRelativePath    生成的压缩文件的目录
+     * @param zipOut             压缩文件输出流
+     * @param needCloseOutStream 完成压缩输出后是否关闭输出流zipOut，true：关闭，false：不关闭
+     */
+    public static void zip(File source, String zipRelativePath, ZipOutputStream zipOut, boolean needCloseOutStream) {
         InputStream in = null;
         try {
             in = new FileInputStream(source);
             String entryName = Strings.trimToEmpty(zipRelativePath);
-            entryName =
-                    Strings.isBlank(entryName) ? source.getName() : entryName + "/" + source.getName();
+            entryName = Strings.isBlank(entryName) ? source.getName() : entryName + "/" + source.getName();
             zipOut.putNextEntry(new ZipEntry(entryName));
             byte[] buf = new byte[1024];
             int num;
@@ -99,11 +117,11 @@ public class Compressions {
                 zipOut.flush();
             }
         } catch (Exception e) {
-            throw new RuntimeException("Zip [" + source.getName() + "] fail. <" + e.getMessage() + ">");
+            throw new RuntimeException("Zip [" + source.getName() + "] 压缩失败. <" + e.getMessage() + ">");
         } finally {
-            Streams.close(in);
+            Streams.closeQuietly(in);
             if (needCloseOutStream) {
-                Streams.close(zipOut);
+                Streams.closeQuietly(zipOut);
             }
         }
     }

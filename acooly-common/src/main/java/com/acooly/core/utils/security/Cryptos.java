@@ -15,7 +15,7 @@ import java.util.Arrays;
 
 /**
  * 加密和签名
- * 主要提供hmac-sha1签名及严重；AES加密和解密的常用模式工具类
+ * 主要提供hmac-sha1签名及验签；AES加密和解密的常用模式工具类
  *
  * @author zhangpu
  * @date 2014-6-16

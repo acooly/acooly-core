@@ -32,9 +32,8 @@ import java.util.Map;
 /**
  * RAS 非对称加密工具类
  *
- * <p>基础说明：
- *
- *
+ * <p>
+ * 基础说明：
  * <li>不管明文长度是多少，RSA 生成的密文长度总是固定的。
  * <li>明文长度不能超过密钥长度。比如 Java 默认的RSA加密实现不允许明文长度超过密钥长度减去 11(单位是字节，也就是 byte)。也就是说，如果我们定义的密钥(我们可以通过
  * java.security.KeyPairGenerator.initialize(int keysize) 来定义密钥长度)长度为1024(单位是位，也就是
@@ -43,31 +42,57 @@ import java.util.Map;
  * 53 bytes 的异常)。
  * <li>BC(Provider --> Security.addProvider(new BouncyCastleProvider());) 提供的加密算法能够支持到的 RSA
  * 明文长度最长为密钥长度。
+ * </p>
+ * <br/>
+ * <p>
+ * 本工具类提供了如下功能：
+ * <li>生成RSA秘钥对
+ * <li>从keystore,pem,x509证书,bytes,base64,Hex等多种数据格式中加载公私秘钥对象
+ * <li>数字签名：使用RSA私钥签名,公钥验签
+ * <li>加密解密：使用RSA公钥加密,私钥解密(分段加密解密)
+ * </p>
  *
  * @author zhangpu
+ * @date 2016年4月26日
  */
 public class RSA {
 
+    /**
+     * 算法和编码默认值
+     */
+    public static final String DEFAULT_KEY_ALGO = "RSA";
+    public static final String DEFAULT_CHARSET = "UTF-8";
+
+    /**
+     * RAS标准算法名称：SHA1withRSA,SHA256withRSA
+     */
     public static final String SIGN_ALGO_SHA1 = "SHA1withRSA";
     public static final String SIGN_ALGO_SHA2 = "SHA256withRSA";
     public static final String SIGN_ALGO_MD5 = "MD5withRSA";
-    public static final String DEFAULT_KEY_ALGO = "RSA";
-    public static final String DEFAULT_CHARSET = "utf-8";
 
+    /**
+     * 存储秘钥对的keystore类型，JKS（java体系）或PKCS12（通用性好，默认）
+     */
     public static final String KEY_STORE_JKS = "JKS";
     public static final String KEY_STORE_PKCS12 = "PKCS12";
     public static final String DEFAULT_KEY_STORE = KEY_STORE_PKCS12;
 
+    // ******** 非对称秘钥数字签名（私钥）/验签（公钥） ********
+
     /**
-     * 私钥签名
+     * 私钥签名(字节数组方式传值，主方法)
+     * 数字签名：私钥签名，公钥验签。这里是第一步：使用秘钥对的私钥进行签名，然后使用公钥进行验签(verify)
      *
      * @param dataBytes          明文数据bytes
      * @param privateKey         私钥 参考 loadPrivateKey方法
-     * @param signatureAlgorithm 签名算法 如：SHA1withRSA，MD5withRSA
+     * @param signatureAlgorithm 签名算法 如：SHA1withRSA，SHA256withRSA，MD5withRSA
      * @return 签名的二进制结果
+     * @see #verify(byte[], byte[], PublicKey, String)
+     * @see #SIGN_ALGO_SHA1
+     * @see #SIGN_ALGO_SHA2
+     * @see #SIGN_ALGO_MD5
      */
-    public static byte[] sign(
-            @NotNull byte[] dataBytes, @NotNull PrivateKey privateKey, @Null String signatureAlgorithm) {
+    public static byte[] sign(@NotNull byte[] dataBytes, @NotNull PrivateKey privateKey, @Null String signatureAlgorithm) {
         String sa = Strings.isBlankDefault(signatureAlgorithm, SIGN_ALGO_SHA1);
         try {
             Signature signature = Signature.getInstance(sa);
@@ -79,43 +104,74 @@ public class RSA {
         }
     }
 
-    public static String signBase64(
-            @NotNull String data,
-            @NotNull PrivateKey privateKey,
-            @Null String signatureAlgorithm,
-            @Null String dataCharset) {
-        byte[] result = sign(getBytes(data, dataCharset), privateKey, signatureAlgorithm);
-        return Encodes.encodeBase64(result);
-    }
-
-    public static String signBase64(@NotNull String data, @NotNull PrivateKey privateKey) {
-        return signBase64(data, privateKey, null, null);
-    }
-
+    /**
+     * 私钥签名（字符串方式）
+     *
+     * @param data               待签名数据
+     * @param privateKey         私钥对象
+     * @param signatureAlgorithm 签名算法
+     * @param dataCharset        待签名数据字符集
+     * @return 签名数据的Hex（16进制）编码字符串
+     */
     public static String signHex(
-            @NotNull String data,
-            @NotNull PrivateKey privateKey,
-            @Null String signatureAlgorithm,
-            @Null String dataCharset) {
+            @NotNull String data, @NotNull PrivateKey privateKey,
+            @Null String signatureAlgorithm, @Null String dataCharset) {
         byte[] result = sign(getBytes(data, dataCharset), privateKey, signatureAlgorithm);
         return Encodes.encodeHex(result);
     }
 
+    /**
+     * 私钥签名（字符串方式,默认算法和编码）
+     * 默认算法：SHA1withRSA
+     * 默认编码：UTF-8
+     *
+     * @param data       待签名数据
+     * @param privateKey 私钥对象
+     * @return 签名数据的Hex（16进制）编码字符串
+     */
     public static String signHex(@NotNull String data, @NotNull PrivateKey privateKey) {
         return signHex(data, privateKey, null, null);
     }
 
     /**
-     * 公钥验签
+     * 私钥签名BASE64数据
+     *
+     * @param data               base64编码的待签名数据
+     * @param privateKey         私钥对象
+     * @param signatureAlgorithm 签名算法
+     * @param dataCharset        待签名数据字符集
+     * @return 签名数据的BASE64编码字符串
+     * @see #loadPrivateKey(File)
+     */
+    public static String signBase64(@NotNull String data, @NotNull PrivateKey privateKey,
+                                    @Null String signatureAlgorithm, @Null String dataCharset) {
+        byte[] result = sign(getBytes(data, dataCharset), privateKey, signatureAlgorithm);
+        return Encodes.encodeBase64(result);
+    }
+
+    /**
+     * 私钥签名，输出BASE64数据（默认算法和编码）
+     *
+     * @param data       base64编码的待签名数据
+     * @param privateKey 私钥对象
+     * @return 签名数据的BASE64编码字符串
+     */
+    public static String signBase64(@NotNull String data, @NotNull PrivateKey privateKey) {
+        return signBase64(data, privateKey, null, null);
+    }
+
+
+    /**
+     * 公钥验签（字节数组，主方法）
      *
      * @param data               明文数据bytes
      * @param signData           签名数据bytes
      * @param publicKey          公钥 参考 loadPublicKey(...)方法
      * @param signatureAlgorithm 签名算法
-     * @return
+     * @return 是否验签通过，true：通过，false：不通过
+     * @see #loadPublicKey(File)
      */
-    public static boolean verify(
-            byte[] data, byte[] signData, PublicKey publicKey, String signatureAlgorithm) {
+    public static boolean verify(byte[] data, byte[] signData, PublicKey publicKey, String signatureAlgorithm) {
         String sa = Strings.isBlankDefault(signatureAlgorithm, SIGN_ALGO_SHA1);
         try {
             Signature signature = Signature.getInstance(sa);
@@ -127,38 +183,74 @@ public class RSA {
         }
     }
 
+    /**
+     * 公钥验签Base64数据
+     *
+     * @param text               明文数据
+     * @param signBase64         签名数据的BASE64编码字符串
+     * @param publicKey          公钥对象
+     * @param signatureAlgorithm 签名算法
+     * @param charset            明文数据字符集
+     * @return 是否验签通过，true：通过，false：不通过
+     */
     public static boolean verifyBase64(
-            String text,
-            String signBase64,
-            PublicKey publicKey,
-            String signatureAlgorithm,
-            String charset) {
+            String text, String signBase64, PublicKey publicKey,
+            String signatureAlgorithm, String charset) {
         byte[] data = getBytes(text, charset);
         byte[] signData = Encodes.decodeBase64(signBase64);
         return verify(data, signData, publicKey, signatureAlgorithm);
     }
 
+    /**
+     * 公钥验签Base64数据（默认算法和编码）
+     *
+     * @param text       明文数据
+     * @param signBase64 签名数据的BASE64编码字符串
+     * @param publicKey  公钥对象
+     * @return 是否验签通过，true：通过，false：不通过
+     */
     public static boolean verifyBase64(String text, String signBase64, PublicKey publicKey) {
         return verifyBase64(text, signBase64, publicKey, null, null);
     }
 
-    public static boolean verifyHex(
-            String text, String signHex, PublicKey publicKey, String signatureAlgorithm, String charset) {
+    /**
+     * 公钥验签Hex数据
+     *
+     * @param text               明文数据
+     * @param signHex            签名数据的Hex（16进制）编码字符串
+     * @param publicKey          公钥对象
+     * @param signatureAlgorithm 签名算法
+     * @param charset            明文数据字符集
+     * @return 是否验签通过，true：通过，false：不通过
+     */
+    public static boolean verifyHex(String text, String signHex, PublicKey publicKey, String signatureAlgorithm, String charset) {
         byte[] data = getBytes(text, charset);
         byte[] signData = Encodes.decodeHex(signHex);
         return verify(data, signData, publicKey, signatureAlgorithm);
     }
 
+    /**
+     * 公钥验签Hex数据（默认算法和编码）
+     *
+     * @param text      明文数据
+     * @param signHex   签名数据的Hex（16进制）编码字符串
+     * @param publicKey 公钥对象
+     * @return 是否验签通过，true：通过，false：不通过
+     */
     public static boolean verifyHex(String text, String signHex, PublicKey publicKey) {
         return verifyHex(text, signHex, publicKey, null, null);
     }
 
+
+    // ******** 非对称秘钥加（公钥）解（私钥）密 ********
+
     /**
-     * 公钥加密
+     * 公钥加密（字节数组，主方法）
      *
      * @param plainBytes 明文bytes
-     * @param publicKey  公钥
+     * @param publicKey  公钥对象
      * @return 密文bytes
+     * @see #loadPrivateKey(File)
      */
     public static byte[] encryptByPublicKey(byte[] plainBytes, PublicKey publicKey) {
         ByteArrayOutputStream out = null;
@@ -193,29 +285,61 @@ public class RSA {
         }
     }
 
+    /**
+     * 公钥加密字符串数据，输出base64
+     * 输入为制定字符集的字符串，输出位Base64编码的字符串
+     *
+     * @param plainText 字符串明文
+     * @param publicKey 公钥对象
+     * @param charset   字符串明文的字符集
+     * @return Base64编码的密文字符串
+     */
     public static String encryptByPublicKeyBase64(
             String plainText, PublicKey publicKey, String charset) {
         return Encodes.encodeBase64(encryptByPublicKey(getBytes(plainText, charset), publicKey));
     }
 
+    /**
+     * 公钥加密字符串数据，输出base64（默认字符集，UTF-8）
+     *
+     * @param plainText 字符串明文
+     * @param publicKey 公钥对象
+     * @return Base64编码的密文字符串
+     * @see #encryptByPublicKeyBase64(String, PublicKey, String)
+     */
     public static String encryptByPublicKeyBase64(String plainText, PublicKey publicKey) {
         return encryptByPublicKeyBase64(plainText, publicKey, DEFAULT_CHARSET);
     }
 
+    /**
+     * 公钥加密字符串数据，输出Hex
+     *
+     * @param plainText 字符串明文
+     * @param publicKey 公钥对象
+     * @param charset   字符串明文的字符集
+     * @return Hex编码的密文字符串
+     */
     public static String encryptByPublicKeyHex(
             String plainText, PublicKey publicKey, String charset) {
         return Encodes.encodeHex(encryptByPublicKey(getBytes(plainText, charset), publicKey));
     }
 
+    /**
+     * 公钥加密字符串数据，输出Hex（默认字符集，UTF-8）
+     *
+     * @param plainText 字符串明文
+     * @param publicKey 公钥对象
+     * @return Hex编码的密文字符串
+     */
     public static String encryptByPublicKeyHex(String plainText, PublicKey publicKey) {
         return encryptByPublicKeyHex(plainText, publicKey, DEFAULT_CHARSET);
     }
 
     /**
-     * 私钥解密
+     * 私钥解密(字节数组，主方法)
      *
      * @param encryptedBytes 密文数据bytes
-     * @param privateKey     私钥
+     * @param privateKey     私钥对象
      * @return 明文数据bytes
      */
     public static byte[] decryptByPrivateKey(byte[] encryptedBytes, PrivateKey privateKey) {
@@ -249,6 +373,15 @@ public class RSA {
         }
     }
 
+    /**
+     * 私钥解密字符串数据，输入base64
+     *
+     * @param encryptedBase64 base64格式的密文数据，通过`encryptByPublicKeyBase64`方法获取的加密数据
+     * @param privateKey      私钥对象
+     * @param charset         字符串明文的字符集
+     * @return 明文字符串
+     * @see #encryptByPublicKeyBase64(String, PublicKey)
+     */
     public static String decryptByPrivateKeyBase64(
             String encryptedBase64, PrivateKey privateKey, String charset) {
         byte[] plainBytes = decryptByPrivateKey(Encodes.decodeBase64(encryptedBase64), privateKey);
@@ -259,9 +392,18 @@ public class RSA {
         }
     }
 
+    /**
+     * 私钥解密字符串数据，输入Hex
+     *
+     * @param encryptedHex Hex格式的密文数据，通过`encryptByPublicKeyHex`方法获取的加密数据
+     * @param privateKey   私钥对象
+     * @param charset      字符串明文的字符集
+     * @return 明文字符串
+     * @See #encryptByPublicKeyHex(String, PublicKey)
+     */
     public static String decryptByPrivateKeyHex(
-            String plainHex, PrivateKey privateKey, String charset) {
-        byte[] plainBytes = decryptByPrivateKey(Encodes.decodeHex(plainHex), privateKey);
+            String encryptedHex, PrivateKey privateKey, String charset) {
+        byte[] plainBytes = decryptByPrivateKey(Encodes.decodeHex(encryptedHex), privateKey);
         try {
             return new String(plainBytes, Strings.isBlankDefault(charset, DEFAULT_CHARSET));
         } catch (UnsupportedEncodingException e) {
@@ -269,27 +411,24 @@ public class RSA {
         }
     }
 
+    // **************** 秘钥管理 **************** //
+
     /**
      * 通过keystore方式加载私钥
      *
-     * @param keystoreUri
-     * @param keystoreType
-     * @param keystorePassword
-     * @return
+     * @param keystoreUri      秘钥库资源路径，采用spring资源管理模式，支持classpath:,file:和http等
+     * @param keystoreType     秘钥库类型，可选JPKCS12（默认）或JKS
+     * @param keystorePassword 秘钥库密码
+     * @return 私钥对象
      */
-    public static PrivateKey loadPrivateKeyFromKeyStore(
-            String keystoreUri, String keystoreType, String keystorePassword) {
+    public static PrivateKey loadPrivateKeyFromKeyStore(String keystoreUri, String keystoreType, String keystorePassword) {
         InputStream in = null;
         try {
-            KeyStore keyStore = KeyStore.getInstance(keystoreType);
-            Resource resource = new DefaultResourceLoader().getResource(keystoreUri);
-            in = resource.getInputStream();
-            keyStore.load(in, keystorePassword.toCharArray());
-
-            Enumeration<String> enumas = keyStore.aliases();
+            KeyStore keyStore = loadKeystore(keystoreUri, keystoreType, keystorePassword);
+            Enumeration<String> enumeration = keyStore.aliases();
             String keyAlias = null;
-            if (enumas.hasMoreElements()) {
-                keyAlias = enumas.nextElement();
+            if (enumeration.hasMoreElements()) {
+                keyAlias = enumeration.nextElement();
             }
             return (PrivateKey) keyStore.getKey(keyAlias, keystorePassword.toCharArray());
         } catch (Exception e) {
@@ -300,15 +439,15 @@ public class RSA {
     }
 
     /**
-     * 加载私钥
+     * 通过私钥数据（字节数组）加载私钥对象
      *
      * @param privateKeyBytes 秘钥的二进制格式
-     * @param keyAlgorithm    如：RSA
-     * @param providerName    可以为空，如：BC
-     * @return
+     * @param keyAlgorithm    默认：RSA（常量DEFAULT_KEY_ALGO）
+     * @param providerName    可以为空，默认：BC
+     * @return 私钥对象
+     * @see #DEFAULT_KEY_ALGO
      */
-    public static PrivateKey loadPrivateKey(
-            byte[] privateKeyBytes, String keyAlgorithm, String providerName) {
+    public static PrivateKey loadPrivateKey(byte[] privateKeyBytes, String keyAlgorithm, String providerName) {
         String algorithm = Strings.isBlankDefault(keyAlgorithm, DEFAULT_KEY_ALGO);
         try {
             // 构造PKCS8EncodedKeySpec对象
@@ -328,27 +467,27 @@ public class RSA {
     }
 
     /**
-     * 加载私钥
+     * 通过base64数据加载私钥
      *
      * @param privateKeyBase64 秘钥为BASE64编码
      * @param keyAlgorithm     如：RSA
      * @param providerName     可以为空，如：BC
-     * @return
+     * @return 私钥对象
      */
-    public static PrivateKey loadPrivateKey(
-            String privateKeyBase64, String keyAlgorithm, String providerName) {
+    public static PrivateKey loadPrivateKey(String privateKeyBase64, String keyAlgorithm, String providerName) {
         byte[] privateKeyBytes = Encodes.decodeBase64(privateKeyBase64);
         return loadPrivateKey(privateKeyBytes, keyAlgorithm, providerName);
     }
 
     /**
+     * 通过私钥文件加载私钥
+     *
      * @param privateKeyFile 秘钥文件（内容为BASE64）
      * @param keyAlgorithm   如：RSA
-     * @param providerName   可以为空
-     * @return
+     * @param providerName   可以为空，BC
+     * @return 私钥对象
      */
-    public static PrivateKey loadPrivateKey(
-            File privateKeyFile, String keyAlgorithm, String providerName) {
+    public static PrivateKey loadPrivateKey(File privateKeyFile, String keyAlgorithm, String providerName) {
         byte[] privateKeyBytes = null;
         try {
             privateKeyBytes = Encodes.decodeBase64(FileUtils.readFileToString(privateKeyFile, "UTF-8"));
@@ -358,17 +497,23 @@ public class RSA {
         return loadPrivateKey(privateKeyBytes, keyAlgorithm, providerName);
     }
 
+    /**
+     * 通过私钥文件加载私钥（默认算法）
+     *
+     * @param privateKeyFile 秘钥文件（内容为BASE64）
+     * @return 私钥对象
+     */
     public static PrivateKey loadPrivateKey(File privateKeyFile) {
         return loadPrivateKey(privateKeyFile, null, null);
     }
 
     /**
-     * 加载公钥
+     * 加载公钥（从bytes字节数组）
      *
      * @param publicKeyBytes 公钥bytes
      * @param keyAlgorithm   算法，如：RSA
      * @param providerName   可为空
-     * @return
+     * @return 公钥对象
      */
     public static PublicKey loadPublicKey(
             byte[] publicKeyBytes, String keyAlgorithm, String providerName) {
@@ -389,26 +534,25 @@ public class RSA {
     }
 
     /**
-     * 加载公钥
+     * 加载公钥（Base64）
      *
      * @param publicKeyBase64 秘钥为BASE64编码
      * @param keyAlgorithm    如：RSA
      * @param providerName    可以为空，如：BC
-     * @return
+     * @return 公钥对象
      */
-    public static PublicKey loadPublicKey(
-            String publicKeyBase64, String keyAlgorithm, String providerName) {
+    public static PublicKey loadPublicKey(String publicKeyBase64, String keyAlgorithm, String providerName) {
         byte[] publicKeyBytes = Encodes.decodeBase64(publicKeyBase64);
         return loadPublicKey(publicKeyBytes, keyAlgorithm, providerName);
     }
 
     /**
-     * 加载公钥
+     * 加载公钥（Base64文件）
      *
      * @param publicKeyFile 公钥秘钥文件，内容为BASE64编码
      * @param keyAlgorithm  如：RSA
      * @param providerName  可以为空，如：BC
-     * @return
+     * @return 公钥对象
      */
     public static PublicKey loadPublicKey(
             File publicKeyFile, String keyAlgorithm, String providerName) {
@@ -421,15 +565,21 @@ public class RSA {
         return loadPublicKey(publicKeyBytes, keyAlgorithm, providerName);
     }
 
+    /**
+     * 加载公钥（Base64文件,默认算法）
+     *
+     * @param publicKeyFile 公钥秘钥文件，内容为BASE64编码
+     * @return 公钥对象
+     */
     public static PublicKey loadPublicKey(File publicKeyFile) {
         return loadPublicKey(publicKeyFile, null, null);
     }
 
     /**
-     * 证书文件加载
+     * 加载公钥（x509证书）
      *
-     * @param springResourceUri
-     * @return
+     * @param springResourceUri 证书文件URI
+     * @return 公钥对象
      */
     public static PublicKey loadPublicKeyFromCert(String springResourceUri) {
         InputStream in = null;
@@ -447,10 +597,10 @@ public class RSA {
     }
 
     /**
-     * 证书pem格式加载
+     * 加载公钥(证书pem数据）
      *
-     * @param pemCert
-     * @return
+     * @param pemCert pem证书数据
+     * @return 公钥对象
      */
     public static PublicKey loadPublicKeyFromCertWithPem(String pemCert) {
         InputStream in = null;
@@ -467,26 +617,22 @@ public class RSA {
     }
 
     /**
-     * 从keystore加载公钥
+     * 加载公钥(keystore)
      *
-     * @param keystoreUri
-     * @param keystoreType
-     * @param keystorePassword
-     * @return
+     * @param keystoreUri      秘钥库资源路径，采用spring资源管理模式，支持classpath:,file:和http等
+     * @param keystoreType     秘钥库类型，可选JPKCS12（默认）或JKS
+     * @param keystorePassword 秘钥库密码
+     * @return 公钥对象
      */
     public static PublicKey loadPublicKeyFromKeyStore(
             String keystoreUri, String keystoreType, String keystorePassword) {
         InputStream in = null;
         try {
-            KeyStore keyStore = KeyStore.getInstance(keystoreType);
-            Resource resource = new DefaultResourceLoader().getResource(keystoreUri);
-            in = resource.getInputStream();
-            keyStore.load(in, keystorePassword.toCharArray());
-
-            Enumeration<String> enumas = keyStore.aliases();
+            KeyStore keyStore = loadKeystore(keystoreUri, keystoreType, keystorePassword);
+            Enumeration<String> enumeration = keyStore.aliases();
             String keyAlias = null;
-            if (enumas.hasMoreElements()) {
-                keyAlias = enumas.nextElement();
+            if (enumeration.hasMoreElements()) {
+                keyAlias = enumeration.nextElement();
             }
             return keyStore.getCertificate(keyAlias).getPublicKey();
         } catch (Exception e) {
@@ -496,6 +642,13 @@ public class RSA {
         }
     }
 
+    /**
+     * 生成非对称秘钥对
+     * 算法：RSA,长度：1024
+     *
+     * @return 秘钥对，Map<PublicKey,PrivateKey>
+     * @throws Exception
+     */
     public static Map<String, Object> genKeyPair() throws Exception {
         KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(DEFAULT_KEY_ALGO);
         keyPairGen.initialize(1024);
@@ -508,8 +661,8 @@ public class RSA {
         return keyMap;
     }
 
-    private static byte[] getBytes(String data, String dataCharset) {
-        String charset = Strings.isBlankDefault(dataCharset, "UTF-8");
+    protected static byte[] getBytes(String data, String dataCharset) {
+        String charset = Strings.isBlankDefault(dataCharset, DEFAULT_CHARSET);
         try {
             return data.getBytes(charset);
         } catch (Exception e) {
@@ -517,63 +670,23 @@ public class RSA {
         }
     }
 
-    /*public static void main(String[] args) throws Exception {
-        Map<String, Object> keys = genKeyPair();
-        final PublicKey publicKey = (PublicKey) keys.get("publicKey");
-        final PrivateKey privateKey = (PrivateKey) keys.get("privateKey");
-
-        final String data =
-                "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                        + "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                        + "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        System.out.println("plain: " + data);
-        // 签名和验签
-        // String sign = RSA.signBase64(data, privateKey);
-        // boolean verify = RSA.verifyBase64(data, sign, publicKey);
-        // System.out.println("plain:" + data);
-        // System.out.println("sign: " + sign);
-        // System.out.println("verify: " + verify);
-
-        // 公钥加密和私钥解密
-
-        int threadCount = 2;
-        int testCount = 10;
-        final int timesPerThread = 1;
-        ExecutorService pool = Executors.newFixedThreadPool(threadCount);
-        final CountDownLatch countDownLatch = new CountDownLatch(testCount);
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < testCount; i++) {
-            pool.execute(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            // 线程内加密10次
-                            String encrypt = null;
-                            for (int j = 0; j < timesPerThread; j++) {
-                                encrypt = RSA.encryptByPublicKeyBase64(data, publicKey, null);
-                            }
-                            // 线程内解密10次
-                            // String decrypt = null;
-                            // for (int j = 0; j < timesPerThread; j++) {
-                            // decrypt = RSA.decryptByPrivateKeyBase64(encrypt,
-                            // privateKey, null);
-                            // }
-                            // System.out.println("thread" +
-                            // Thread.currentThread().getName() + " encrypted:" +
-                            // encrypt);
-                            // System.out.println("thread" +
-                            // Thread.currentThread().getName() + " decrypted: " +
-                            // decrypt);
-                            // System.out.println(
-                            // "thread" + Thread.currentThread().getId() + " cache
-                            // stats: " + RSACipherCache.getStats());
-                            countDownLatch.countDown();
-                        }
-                    });
+    /**
+     * 加载KeyStore对象
+     *
+     * @param keystoreUri      秘钥库资源路径，采用spring资源管理模式，支持classpath:,file:和http等
+     * @param keystoreType     秘钥库类型，可选JPKCS12（默认）或JKS
+     * @param keystorePassword 秘钥库密码
+     * @return KeyStore对象
+     * @throws Exception
+     */
+    protected static KeyStore loadKeystore(String keystoreUri, String keystoreType, String keystorePassword) throws Exception {
+        KeyStore keyStore = KeyStore.getInstance(keystoreType);
+        Resource resource = new DefaultResourceLoader().getResource(keystoreUri);
+        try (InputStream in = resource.getInputStream()) {
+            keyStore.load(in, keystorePassword.toCharArray());
+        } catch (Exception e) {
+            throw new RuntimeException("通过keystore加载私钥失败:" + e.getMessage());
         }
-        countDownLatch.await();
-        pool.shutdown();
-        System.out.println("seconds: " + (System.currentTimeMillis() - start));
-        System.out.println("count: " + testCount * timesPerThread);
-    }*/
+        return keyStore;
+    }
 }

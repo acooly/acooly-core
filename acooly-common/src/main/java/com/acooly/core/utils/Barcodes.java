@@ -181,7 +181,7 @@ public final class Barcodes {
      * 转换成图片
      *
      * @param matrix
-     * @return
+     * @return BufferedImage, 图片对象
      */
     private static BufferedImage toBufferedImage(BitMatrix matrix) {
         int width = matrix.getWidth();

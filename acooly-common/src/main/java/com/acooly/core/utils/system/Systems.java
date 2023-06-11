@@ -33,7 +33,7 @@ import java.util.Map;
  *
  * @author zhangpu
  * @date 2019-10-19 23:16
- * @see com.acooly.core.utils.env.Envs
+ * @see com.acooly.core.utils.system.Envs
  */
 @Slf4j
 public class Systems {
@@ -144,7 +144,7 @@ public class Systems {
      * @param cmds   命令语句数组
      * @param label  要查看的字段
      * @param symbol 分隔符
-     * @return
+     * @return 匹配数据
      */
     protected static String getExecValue(String[] cmds, String label, String symbol) {
         String execResult = exec(cmds);

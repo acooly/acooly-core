@@ -26,35 +26,35 @@ public @interface ExportStyle {
     /**
      * [可选] 字体名称 例如：微软雅黑
      *
-     * @return
+     * @return 字体名称
      */
     String fontName() default "";
 
     /**
      * [可选] 字体大小 例如：11（默认）
      *
-     * @return
+     * @return 字体大小
      */
     short fontSize() default -1;
 
     /**
      * [可选] 粗体 例如：true表示粗体，默认false
      *
-     * @return
+     * @return true表示粗体，默认false
      */
     boolean fontBold() default false;
 
     /**
      * [可选] 背景填充颜色值（16进制格式） 例如：#DDEBF7，默认无
      *
-     * @return
+     * @return 背景填充颜色值
      */
     String backgroundColor() default "";
 
     /**
      * [可选] 行高 例如：400（与默认值差不多）
      *
-     * @return
+     * @return 行高
      */
     short rowHeight() default -1;
 }

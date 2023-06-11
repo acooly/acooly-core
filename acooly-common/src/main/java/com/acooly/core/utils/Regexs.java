@@ -16,12 +16,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * 正则表达式工具类
+ *
  * @author zhangpu
  * @date 2019-09-01 17:20
  */
 @Slf4j
 public class Regexs {
-
 
     private static final int REGEX_GOURP_FIRST = 1;
 

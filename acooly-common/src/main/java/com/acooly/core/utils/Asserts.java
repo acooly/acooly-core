@@ -111,7 +111,7 @@ public class Asserts {
      *
      * @param text      参数值（字符串）
      * @param paramName 参数名称
-     * @see Asserts#empty(String，String，String)
+     * @see #empty(String，String，String)
      */
     public static void empty(String text, String paramName) {
         empty(text, paramName, "%s必须为空或空字符串");
@@ -121,7 +121,7 @@ public class Asserts {
      * 字符串为空断言
      *
      * @param text 参数值（字符串）
-     * @see Asserts#empty(String，String，String)
+     * @see #empty(String，String，String)
      */
     public static void empty(String text) {
         empty(text, null);

@@ -178,7 +178,7 @@ public class BigMoney implements Serializable {
      * 获取"分"整数值。
      * 注意：该值与精度相关。例如：进度为8，则该值为：`value * 10^8`然后取整数
      *
-     * @return
+     * @return 分，整数值
      */
     public Long getCent() {
         double d = Math.pow(10, this.value.scale());

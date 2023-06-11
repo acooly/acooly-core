@@ -30,7 +30,7 @@ public @interface ExportColumn {
      * 属性名
      * 在@ExportModel内配置父类属性时使用
      *
-     * @return
+     * @return 属性名
      */
     String name() default "";
 
@@ -62,7 +62,7 @@ public @interface ExportColumn {
     /**
      * 枚举（Messagable）显示message还是name（code）
      *
-     * @return
+     * @return true表示显示message，false表示显示name
      */
     boolean showMapping() default true;
 }

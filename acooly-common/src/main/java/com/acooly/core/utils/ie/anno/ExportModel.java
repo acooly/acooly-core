@@ -30,14 +30,14 @@ public @interface ExportModel {
     /**
      * 是否显示表头
      *
-     * @return
+     * @return true表示显示，默认true
      */
     boolean headerShow() default true;
 
     /**
      * 表头样式
      *
-     * @return
+     * @return 表头样式
      */
     ExportStyle headerStyle() default @ExportStyle;
 
@@ -45,7 +45,7 @@ public @interface ExportModel {
     /**
      * Excel时有效，表格是否有边框
      *
-     * @return
+     * @return true表示有边框，默认false
      */
     boolean border() default false;
 
@@ -66,7 +66,7 @@ public @interface ExportModel {
      * <p>
      * 该配置的优先级高于属性列上的配置
      *
-     * @return
+     * @return ExportColumn列表
      */
     ExportColumn[] exportColumns() default {};
 

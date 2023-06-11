@@ -28,7 +28,7 @@ public class CsvMapper {
      * 反编列CSV行为集合
      *
      * @param line
-     * @return
+     * @return List<String>
      */
     public static List<String> unmarshal(String line) {
         List<String> result = new LinkedList<String>();
@@ -57,7 +57,7 @@ public class CsvMapper {
      * 编列集合为CSV行数据
      *
      * @param data
-     * @return
+     * @return CSV行数据
      */
     public static String marshal(List<String> data) {
         StringBuilder sb = new StringBuilder();

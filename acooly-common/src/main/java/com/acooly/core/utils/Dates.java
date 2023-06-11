@@ -79,7 +79,7 @@ public class Dates {
      * 例如：2019-11-11 12:12:12 --getDate()--> 2019-11-11 00:00:00
      *
      * @param date
-     * @return
+     * @return {@link Date}
      */
     public static Date getDate(Date date) {
         return parse(format(date, Dates.CHINESE_DATE_FORMAT_LINE));
@@ -90,7 +90,7 @@ public class Dates {
      *
      * @param date
      * @param pattern
-     * @return
+     * @return 指定格式的日期字符串
      */
     public static String format(Date date, String pattern) {
         SimpleDateFormat sdf = getSimpleDateFormat(pattern);

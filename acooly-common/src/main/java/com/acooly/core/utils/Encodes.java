@@ -15,21 +15,30 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 /**
- * 封装各种格式的编码解码工具类.
+ * 封装编码/解码工具类.
  *
- * <p>1.Commons-Codec的 hex/base64 编码 2.自制的base62 编码 3.Commons-Lang的xml/html escape
- * 4.JDK提供的URLEncoder
+ * <p>
+ * <li>1.Commons-Codec的 hex/base64 编码
+ * <li>2.自制的base62 编码
+ * <li>3.Commons-Lang的xml/html escape
+ * <li>4.JDK提供的URLEncoder
  *
  * @author calvin
+ * @author zhangpu
  */
 public class Encodes {
 
     private static final String DEFAULT_URL_ENCODING = "UTF-8";
-    private static final char[] BASE62 =
-            "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
+    /**
+     * BASE62编码表.
+     */
+    private static final char[] BASE62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
 
     /**
      * Hex编码.
+     *
+     * @param input 待编码的byte数组
+     * @return 编码后的字符串
      */
     public static String encodeHex(byte[] input) {
         return Hex.encodeHexString(input);

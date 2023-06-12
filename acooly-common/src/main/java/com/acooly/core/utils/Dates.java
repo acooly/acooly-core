@@ -193,7 +193,7 @@ public class Dates {
      * 减去一天
      *
      * @param date
-     * @return
+     * @return 日期
      */
     @Deprecated
     public static Date minusDay(Date date) {

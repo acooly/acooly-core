@@ -35,9 +35,6 @@ import java.util.Map;
  * @author Chris Beams
  * @author Sam Brannen
  * @since 19.03.2004
- * @see ClassUtils
- * @see CollectionUtils
- * @see StringUtils
  */
 public abstract class ObjectUtils {
 
@@ -122,8 +119,6 @@ public abstract class ObjectUtils {
 	 * @see ObjectUtils#isEmpty(Object[])
 	 * @see StringUtils#hasLength(CharSequence)
 	 * @see StringUtils#isEmpty(Object)
-	 * @see CollectionUtils#isEmpty(Collection)
-	 * @see CollectionUtils#isEmpty(Map)
 	 */
 	@SuppressWarnings("rawtypes")
 	public static boolean isEmpty(Object obj) {

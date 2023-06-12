@@ -14,9 +14,6 @@ public class KetamaNodeLocatorTest {
 
     static Random ran = new Random();
 
-    /**
-     * @param args
-     */
 //    public static void main(String[] args) {
 //        KetamaNodeLocatorTest test = new KetamaNodeLocatorTest();
 //        Map<KetamaNode, Integer> nodeRecord = new LinkedHashMap<KetamaNode, Integer>();

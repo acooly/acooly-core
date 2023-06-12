@@ -37,7 +37,7 @@ public abstract class Files extends FileUtils {
      * 判断路径是否安全
      *
      * @param path
-     * @return
+     * @return true 安全 false 不安全
      */
     public static boolean isSafe(String path, boolean silence) {
         // 判断是否文件系统根目录

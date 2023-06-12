@@ -103,8 +103,8 @@ public class ToString {
     /**
      * 把对象转换为字符串.
      *
-     * @param o
-     * @return
+     * @param o 要转换的对象
+     * @return 字符串，如果o为null, 返回"null"
      */
     public static String toString(Object o) {
         if (o == null) {
@@ -139,23 +139,27 @@ public class ToString {
     /**
      * 集合toString 注意避免循环引用
      *
-     * @param collection
-     * @param size
-     * @return
+     * @param collection 集合
+     * @param size      序列化元素个数
+     * @return 集合序列化的字符串，形如：[1,2,3,4,5...]
      */
     public static String toString(Collection collection, int size) {
         if (collection == null) {
             return NULL;
         }
         Iterator it = collection.iterator();
-        if (!it.hasNext()) return "[]";
+        if (!it.hasNext()) {
+            return "[]";
+        }
 
         StringBuilder sb = new StringBuilder(10 * Math.min(size, collection.size()));
         sb.append('[');
         for (int i = 0; i < size; i++) {
             Object e = it.next();
             sb.append(e == collection ? "(this Collection)" : e);
-            if (!it.hasNext()) return sb.append(']').toString();
+            if (!it.hasNext()) {
+                return sb.append(']').toString();
+            }
             sb.append(',');
         }
         sb.append("...]");
@@ -168,10 +172,10 @@ public class ToString {
      * @param map      map
      * @param size     打印entry个数
      * @param maskKeys 需要mask的key列表
-     * @return
+     * @return map序列化的字符串，形如：{key1=value1,key2=value2...}
      */
     @SuppressWarnings("unchecked")
-	public static String toString(Map map, int size, List<String> maskKeys) {
+    public static String toString(Map map, int size, List<String> maskKeys) {
         if (map == null) {
             return NULL;
         }
@@ -213,9 +217,9 @@ public class ToString {
     /**
      * string tostring
      *
-     * @param str
-     * @param size
-     * @return
+     * @param str 原字符串
+     * @param size 输出的长度（从左到右）
+     * @return string序列化的字符串，形如：abc...
      */
     public static String toString(String str, int size) {
         if (str == null) {
@@ -577,8 +581,8 @@ public class ToString {
         /**
          * toString
          *
-         * @param source
-         * @return
+         * @param source 源对象
+         * @return 字符串序列化
          */
         String toString(Object source);
     }
@@ -661,7 +665,7 @@ public class ToString {
     }
 
     @SuppressWarnings("serial")
-	public abstract static class AbstractMasked implements Masked {
+    public abstract static class AbstractMasked implements Masked {
         private boolean mask = false;
 
         public AbstractMasked(boolean mask) {
@@ -911,7 +915,7 @@ public class ToString {
         }
 
         @SuppressWarnings("unchecked")
-		public Class<I> generate() {
+        public Class<I> generate() {
             generateBegin();
             generateBody();
             generateEnd();

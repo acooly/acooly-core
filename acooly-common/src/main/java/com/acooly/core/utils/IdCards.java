@@ -27,34 +27,25 @@ public class IdCards {
 
     public static final int IDCARD_LENGTH_OLD = 15;
     public static final int IDCARD_LENGTH_NEW = 18;
-
+    public static final String PROVINCE_CODE = "provinceCode";
+    public static final String CITY_CODE = "cityCode";
+    public static final String AREA_CODE = "areaCode";
     /**
      * 省
      */
     private static Map<String, String> provinces;
-
     /**
      * 市
      */
     private static Map<String, String> citys;
-
     /**
      * 区
      */
     private static Map<String, String> areas;
-
     /**
      * 6位区码对应
      */
     private static Map<String, Map<String, String>> govCodes;
-
-    public static final String PROVINCE_CODE = "provinceCode";
-
-    public static final String CITY_CODE = "cityCode";
-
-    public static final String AREA_CODE = "areaCode";
-
-
     /**
      * 身份证号码前17位各位校验计算值
      */
@@ -87,7 +78,7 @@ public class IdCards {
     private static Map<String, String> parseJsonMap(Map<String, Map<String, Object>> jsonMap) {
         Map<String, String> jProvinces = Maps.newHashMapWithExpectedSize(jsonMap.size());
         jsonMap.keySet().forEach(v -> {
-        	Map<String, Object> lm = jsonMap.get(v);
+            Map<String, Object> lm = jsonMap.get(v);
             String code = (String) lm.get("text");
             jProvinces.put(v.toString(), code);
         });
@@ -129,7 +120,7 @@ public class IdCards {
      * 15位身份证号码为18位
      *
      * @param oldCardNo
-     * @return
+     * @return 18位身份证号码
      */
     public static String upgrade(String oldCardNo) {
         if (Strings.isNotBlank(oldCardNo) && Strings.length(oldCardNo) == IDCARD_LENGTH_OLD) {
@@ -149,7 +140,7 @@ public class IdCards {
      * 验证18位身份证号码
      *
      * @param cardNo
-     * @return
+     * @return true:验证通过,false:验证未通过
      */
     public static boolean verify(String cardNo) {
         return Strings.equalsIgnoreCase(calcCheckBit(cardNo), Strings.right(cardNo, 1));
@@ -159,7 +150,7 @@ public class IdCards {
      * 解析身份证信息
      *
      * @param cardNo
-     * @return
+     * @return 身份证信息 {@link IdCardInfo}
      */
     public static IdCardInfo parse(String cardNo) {
         return doParse(cardNo);
@@ -222,13 +213,37 @@ public class IdCards {
     @Getter
     @Setter
     public static class IdCardInfo extends InfoBase {
+        /**
+         * 身份证号码
+         */
         private String cardNo;
+        /**
+         * 性别
+         */
         private Gender gender;
+        /**
+         * 生日（字符串：yyyy-MM-dd）
+         */
         private String birthday;
+        /**
+         * 生日（日期）
+         */
         private Date birthdate;
+        /**
+         * 地区编码
+         */
         private String regionCode;
+        /**
+         * 省
+         */
         private String province;
+        /**
+         * 市
+         */
         private String city;
+        /**
+         * 区
+         */
         private String area;
 
         /**

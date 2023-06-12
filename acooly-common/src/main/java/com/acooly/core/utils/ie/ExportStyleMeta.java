@@ -51,7 +51,7 @@ public class ExportStyleMeta {
     /**
      * 是否需要设置字体
      *
-     * @return
+     * @return true:已设置字体,false:未设置字体
      */
     public boolean requireFont() {
         return this.fontBold || Strings.isNotBlank(fontName) || this.fontSize != -1;

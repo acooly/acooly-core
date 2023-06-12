@@ -399,7 +399,7 @@ public class RSA {
      * @param privateKey   私钥对象
      * @param charset      字符串明文的字符集
      * @return 明文字符串
-     * @See #encryptByPublicKeyHex(String, PublicKey)
+     * @see #encryptByPublicKeyHex(String, PublicKey)
      */
     public static String decryptByPrivateKeyHex(
             String encryptedHex, PrivateKey privateKey, String charset) {

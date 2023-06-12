@@ -3,7 +3,6 @@ package com.acooly.core.utils.arithmetic.tree;
 import com.acooly.core.utils.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,12 +27,12 @@ public class QuickTree {
      * <i>1. 单属性排序（null处理和反序），demo：Comparator.nullsLast(Comparator.comparing(SortEntity::getBirthday).reversed());<i/>
      * <i>2. 多属性排序（先按性别字符排序，然后按ID倒序），demo：Comparator.nullsLast(Comparator.comparing(SortEntity::getGender).thenComparing(t -> -t.getId));<i/>
      *
-     * @param list
-     * @param comparator
-     * @param <T>
-     * @return
+     * @param list       待排序的树形结构集合
+     * @param comparator 排序比较器
+     * @param <T>        成员泛型
+     * @return 已排序的树形结构集合
      */
-	public static <T extends TreeNode<T>> List<T> quickTree(List<T> list, Long topParentId, Comparator<T> comparator) {
+    public static <T extends TreeNode<T>> List<T> quickTree(List<T> list, Long topParentId, Comparator<T> comparator) {
         // 初始化结构
         Map<Long, T> data = Maps.newHashMap();
         List<T> tree = Lists.newArrayList();

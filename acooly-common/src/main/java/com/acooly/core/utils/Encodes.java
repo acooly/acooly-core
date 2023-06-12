@@ -46,6 +46,9 @@ public class Encodes {
 
     /**
      * Hex解码.
+     *
+     * @param input 待解码的字符串
+     * @return 解码后的byte数组
      */
     public static byte[] decodeHex(String input) {
         try {

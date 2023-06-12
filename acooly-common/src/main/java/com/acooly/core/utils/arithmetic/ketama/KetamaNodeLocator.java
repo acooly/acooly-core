@@ -104,9 +104,9 @@ public final class KetamaNodeLocator {
     /**
      * 分散hash算法
      *
-     * @param digest
-     * @param nTime
-     * @return
+     * @param digest 摘要
+     * @param nTime 分散次数
+     * @return long
      */
     private long diversifyHash(byte[] digest, int nTime) {
         long rv =

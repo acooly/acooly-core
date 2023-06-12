@@ -20,6 +20,14 @@ public class Hashs {
             'U', 'V', 'W', 'X', 'Y', 'Z'
     };
 
+    /**
+     * 把字符串hash后转换成64进制的字符串
+     *
+     * 短域名场景使用
+     *
+     * @param text 待hash的字符串
+     * @return 64进制的字符串
+     */
     public static String hash(String text) {
         HashCode l = Hashing.murmur3_32().hashString(text, StandardCharsets.UTF_8);
         int i = l.asInt();

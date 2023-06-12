@@ -24,7 +24,7 @@ public class Tasks {
      *
      * @param nThreads
      * @param task
-     * @return
+     * @return 返回任务执行耗时
      * @throws InterruptedException
      */
     public static long concurrentTasks(int nThreads, final Runnable task) throws InterruptedException {

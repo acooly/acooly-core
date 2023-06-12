@@ -314,7 +314,7 @@ public class Reflections {
      * 根據類型返回類型所有的屬性Field，支持繼承向上搜索
      *
      * @param pojoClass
-     * @return
+     * @return Set<Field>. Bean的字段元数据集合
      */
     public static Set<Field> getFields(Class<?> pojoClass) {
         Set<Field> allFields = new HashSet<Field>();
@@ -547,7 +547,7 @@ public class Reflections {
      * 获取Filed泛型参数类型
      *
      * @param field
-     * @return
+     * @return Class 属性的泛化类型
      */
     public static Class<?> getParameterGenericType(Field field) {
         TypeToken<?> t = TypeToken.of(field.getGenericType());

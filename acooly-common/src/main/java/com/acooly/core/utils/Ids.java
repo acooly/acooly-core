@@ -10,14 +10,16 @@ import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Id生成器
  *
- * <p>简单实现：支持分布式环境，单机秒级并发9999
+ * <p>
+ * <li>唯一编码规则：机器码+进程/IP+秒级时间磋+随机数+循环计数</li>
+ * <li>支持分布式环境，单机秒级并发9999</li>
+ * <li>支持15~36字节长度的分布式唯一编码</li>
  *
  * @author zhangpu
  */
@@ -34,7 +36,12 @@ public class Ids {
         }
     }
 
-
+    /**
+     * 生成15字节长度的分布式唯一编码
+     *
+     * @return 15字节长度的分布式唯一编码
+     * @see Did#newId15()
+     */
     public static String newId15() {
         return Did.getInstance().newId15();
     }
@@ -43,7 +50,7 @@ public class Ids {
      * MongodbId生成方案
      * 长度24，格式：HEX
      *
-     * @return
+     * @return 24位HEX编码
      */
     public static String mid() {
         return ObjectId.get().toHexString();
@@ -52,13 +59,13 @@ public class Ids {
     // ******* 特定场景ID ***********//
 
     /**
-     * 生产GID
-     *
-     *
+     * 特定场景36字节GID
      *
      * <p>长度：36 格式：系统编码(4字节)+保留(8字节)+gid(24字节)
      *
-     * @return
+     * @param systemCode 4字节系统编码
+     * @param reserved   最长8字节保留段
+     * @return 36位全局唯一标识
      */
     public static String gid(String systemCode, String reserved) {
         StringBuilder sb = new StringBuilder();
@@ -70,19 +77,29 @@ public class Ids {
         return sb.toString();
     }
 
+    /**
+     * 特定场景36字节GID
+     *
+     * @param systemCode 4字节系统编码
+     * @return 36位全局唯一标识
+     */
     public static String gid(String systemCode) {
         return gid(systemCode, null);
     }
 
     /**
-     * 长度24位全球唯一标识
+     * 长度21字节GID
+     * <p>
+     * 以G字母开头+20字节分布式唯一ID
+     *
+     * @return 21位全局唯一标识
      */
     public static String gid() {
         return "G" + Did.getInstance().getId();
     }
 
     /**
-     * 统一不重复内部订单号
+     * 24字节内部订单号
      *
      * @param systemCode 4字节系统编码
      * @return 24字节不重复编码
@@ -94,6 +111,13 @@ public class Ids {
         return sb.toString();
     }
 
+    /**
+     * 21字节内部订单号
+     * <p>
+     * 以O字母开头+20字节分布式唯一ID
+     *
+     * @return 订单号
+     */
     public static String oid() {
         StringBuilder sb = new StringBuilder();
         sb.append("O");
@@ -102,32 +126,53 @@ public class Ids {
     }
 
     /**
-     * 获取分布式Id
+     * 获取标准20字节分布式Id的getter
      *
-     * @return 默认20字符长度的数字不重复编码
+     * @return 20字节分布式ID
      */
     public static String getDid() {
         return did();
     }
 
+    /**
+     * 标准20字节分布式Id
+     *
+     * @return 20字节分布式ID
+     */
     public static String did() {
         return Did.getInstance().getId();
     }
 
+    /**
+     * 指定长度的分布式ID
+     *
+     * @param size 指定长度，最短20字节
+     * @return 分布式ID
+     */
     public static String did(int size) {
         return Did.getInstance().getId(size);
     }
 
     /**
-     * @param size 位数需大于20
+     * 指定长度的分布式ID(getter)
+     *
+     * @param size 最小20
+     * @return 分布式ID
      */
     public static String getDid(int size) {
         return Did.getInstance().getId(size);
     }
 
+    /**
+     * 指定前缀的分布式ID
+     *
+     * @param prefix 前缀
+     * @return 分布式ID
+     */
     public static String getDid(String prefix) {
         return prefix + Did.getInstance().getId();
     }
+
 
     private static String padding(String text, int size) {
         String txt = Strings.trimToEmpty(text);
@@ -171,9 +216,11 @@ public class Ids {
         }
 
         /**
-         * 15位唯一ID
+         * 15字节分布式唯一ID
+         * <p>
+         * 组成：7字压缩的时间戳+4字节的压缩IP+4位循环序号，支持1秒内9999并发
          *
-         * @return
+         * @return 15字节分布式唯一ID
          */
         public String newId15() {
             StringBuilder sb = new StringBuilder();
@@ -188,9 +235,9 @@ public class Ids {
 
 
         /**
-         * 生产新Id(20位)
+         * 生成标准Id(20位)
          *
-         * @return
+         * @return 分布式ID
          */
         public String getId() {
             return getId(MIN_LENGTH);
@@ -198,9 +245,12 @@ public class Ids {
 
 
         /**
-         * 生产新Id
+         * 标准分布式Id，20字节
+         * <p>
+         * 组成：12字节时间戳+4字节IP+（大于20字节的情况：PID和随机数）+4位循环序号，支持1秒内9999并发
          *
-         * @param size最少20位
+         * @param size 最少20位
+         * @return 分布式ID
          */
         public String getId(int size) {
             if (size < MIN_LENGTH) {
@@ -227,6 +277,8 @@ public class Ids {
 
         /**
          * 获取两位pid
+         *
+         * @return 两位pid
          */
         private String getPid() {
             if (pidStr == null) {
@@ -240,7 +292,7 @@ public class Ids {
         /**
          * 获取节点IP后缀4位
          *
-         * @return
+         * @return IP后缀4位
          */
         private String getIp() {
             if (ipStr == null) {
@@ -252,11 +304,11 @@ public class Ids {
         /**
          * 计数器
          *
-         * @return
+         * @return 4位循环序号
          */
         public String getSequ() {
+            lock.lock();
             try {
-                lock.lock();
                 if (sequ++ == SEQU_MAX) {
                     sequ = 0;
                 }
@@ -269,7 +321,7 @@ public class Ids {
         /**
          * 获取当前时间戳
          *
-         * @return
+         * @return 12字节的`yyMMddHHmmss`
          */
         public String getTimestamp() {
             SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
@@ -277,10 +329,10 @@ public class Ids {
         }
 
         /**
-         * 压缩的时间戳
-         * （7字符）
+         * 自定义压缩的时间戳
+         * （7字节）
          *
-         * @return
+         * @return 7字节的`年月日时分秒`
          */
         public String getCompressTimestamp() {
             Calendar calendar = Calendar.getInstance();
@@ -312,11 +364,9 @@ public class Ids {
         /**
          * 简单节点编码
          *
-         *
-         *
          * <p>逻辑：Ip地址后三位，便于快速知道是哪个节点
          *
-         * @return
+         * @return 3字节的`IP后三位`
          */
         private String generateIpPostfix() {
             String result = null;

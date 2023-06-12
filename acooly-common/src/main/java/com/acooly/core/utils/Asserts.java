@@ -20,7 +20,7 @@ import java.util.Map;
  * 直接转换为BusinessException，免去调用端的异常处理和转换
  *
  * @author zhangpu
- * @date 2019-06-08 10:39
+ * @date 2019-06-08
  */
 @Slf4j
 public class Asserts {

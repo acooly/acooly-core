@@ -624,8 +624,8 @@ public class Images {
      * <p>
      * 主要用于计算文字的打印长度，已废弃，采用FontDesignMetrics代替
      *
-     * @param text
-     * @return
+     * @param text 文字
+     * @return 长度
      */
     @Deprecated
     public static int getLength(String text) {
@@ -767,7 +767,7 @@ public class Images {
      * @param text
      * @param font
      * @param color
-     * @return
+     * @return BufferedImage图片对象
      */
     public static BufferedImage buildTextImage(String text, Font font, Color color) {
         if (color == null) {

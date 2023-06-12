@@ -235,10 +235,10 @@ public class Dates {
     /**
      * 两个时间减法
      *
-     * @param left
-     * @param right
-     * @param type  Calendar.xxx
-     * @return
+     * @param left  左边的时间
+     * @param right 右边的时间
+     * @param type  时间类型，参考：Calendar.xxx
+     * @return 指定时间类型的差值
      */
     public static long sub(Date left, Date right, int type) {
         long subms = left.getTime() - right.getTime();
@@ -269,8 +269,8 @@ public class Dates {
     /**
      * 取得日期：年
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 年
      */
     public static int getYear(Date date) {
         Calendar c = Calendar.getInstance();
@@ -280,10 +280,10 @@ public class Dates {
     }
 
     /**
-     * 取得日期：年
+     * 取得日期：月份
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 月份
      */
     public static int getMonth(Date date) {
         Calendar c = Calendar.getInstance();
@@ -293,10 +293,10 @@ public class Dates {
     }
 
     /**
-     * 取得日期：年
+     * 取得日期：号数
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 号数（月份内，1-31）
      */
     public static int getDay(Date date) {
         Calendar c = Calendar.getInstance();
@@ -308,8 +308,8 @@ public class Dates {
     /**
      * 取得当天日期是周几
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 星期几（周日：0，周一：1，周二：2，周三：3，周四：4，周五：5，周六：6）
      */
     public static int getWeekDay(Date date) {
         Calendar c = Calendar.getInstance();
@@ -321,8 +321,8 @@ public class Dates {
     /**
      * 获取一年的第几周
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 年度星期数
      */
     public static int getWeekOfYear(Date date) {
         Calendar c = Calendar.getInstance();
@@ -332,10 +332,10 @@ public class Dates {
     }
 
     /**
-     * 根据日期取得对应周周一日期
+     * 指定日期同周一的日期
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 同周一的日期
      */
     public static Date getMondayOfWeek(Date date) {
         Calendar monday = Calendar.getInstance();
@@ -346,10 +346,10 @@ public class Dates {
     }
 
     /**
-     * 根据日期取得对应周周日日期
+     * 同周日日期
      *
-     * @param date
-     * @return
+     * @param date 指定日期
+     * @return 同周日日期
      */
     public static Date getSundayOfWeek(Date date) {
         Calendar sunday = Calendar.getInstance();
@@ -362,8 +362,8 @@ public class Dates {
     /**
      * 取得月的剩余天数
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 剩余天数
      */
     public static int getRemainDayOfMonth(Date date) {
         int dayOfMonth = getDayOfMonth(date);
@@ -374,8 +374,8 @@ public class Dates {
     /**
      * 取得月已经过的天数
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 已经过的天数
      */
     public static int getPassDayOfMonth(Date date) {
         Calendar c = Calendar.getInstance();
@@ -386,8 +386,8 @@ public class Dates {
     /**
      * 取得月天数
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 当月的天数
      */
     public static int getDayOfMonth(Date date) {
         Calendar c = Calendar.getInstance();
@@ -398,8 +398,8 @@ public class Dates {
     /**
      * 取得月第一天
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 月第一天的日期
      */
     public static Date getFirstDateOfMonth(Date date) {
         Calendar c = Calendar.getInstance();
@@ -411,8 +411,8 @@ public class Dates {
     /**
      * 取得月最后一天
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 当月最后一天的日期
      */
     public static Date getLastDateOfMonth(Date date) {
         Calendar c = Calendar.getInstance();
@@ -424,8 +424,8 @@ public class Dates {
     /**
      * 取得季度第一天
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 本季度第一天的日期
      */
     public static Date getFirstDateOfSeason(Date date) {
         return getFirstDateOfMonth(getQuarterDate(date)[0]);
@@ -434,8 +434,8 @@ public class Dates {
     /**
      * 取得季度最后一天
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 本季度最后一天的日期
      */
     public static Date getLastDateOfSeason(Date date) {
         return getLastDateOfMonth(getQuarterDate(date)[2]);
@@ -444,8 +444,8 @@ public class Dates {
     /**
      * 取得季度天数
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 季度天数
      */
     public static int getDayOfSeason(Date date) {
         int day = 0;
@@ -459,8 +459,8 @@ public class Dates {
     /**
      * 取得季度剩余天数
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 当前季度剩余天数
      */
     public static int getRemainDayOfSeason(Date date) {
         return getDayOfSeason(date) - getPassDayOfSeason(date);
@@ -469,8 +469,8 @@ public class Dates {
     /**
      * 取得季度已过天数
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 季度已过天数
      */
     public static int getPassDayOfSeason(Date date) {
         int day = 0;
@@ -506,8 +506,8 @@ public class Dates {
     /**
      * 取得季度月
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 季度月
      */
     public static Date[] getQuarterDate(Date date) {
         Date[] quarters = new Date[3];
@@ -550,8 +550,8 @@ public class Dates {
     /**
      * 获取指定日期在一年的第几季度
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 第几季度
      */
     public static int getQuarter(Date date) {
         int quarter = 0;
@@ -633,8 +633,8 @@ public class Dates {
      * 判断是否存日期
      * （time部分为0）
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return true：只是日期yyyy-MM-dd/false:不是，含有效时间部分
      */
     public static boolean isDate(Date date) {
         Calendar calendar = Calendar.getInstance();
@@ -646,9 +646,9 @@ public class Dates {
     /**
      * 判断日期时间段是否重叠
      *
-     * @param period
-     * @param periods
-     * @return
+     * @param period  日期时间段
+     * @param periods 日期时间段集合
+     * @return true:重叠/false:不重叠
      */
     public static boolean isOverlap(Pair<Date, Date> period, List<Pair<Date, Date>> periods) {
         for (Pair<Date, Date> p : periods) {
@@ -664,12 +664,14 @@ public class Dates {
     }
 
     /**
-     * 判断日期是否在start和end之间
+     * 判断日期是否在start（含）和end（含）之间
+     * <p>
+     * 包括start和end
      *
-     * @param date
-     * @param start
-     * @param end
-     * @return
+     * @param date  日期
+     * @param start 开始日期
+     * @param end   结束日期
+     * @return true: date在start和end之间，false: date不在start和end之间
      */
     public static boolean between(Date date, Date start, Date end) {
         return gte(date, start) && lte(date, end);
@@ -681,9 +683,9 @@ public class Dates {
      * <p>
      * left > right: true
      *
-     * @param left
-     * @param right
-     * @return
+     * @param left 左边日期
+     * @param right 右边日期
+     * @return true: left > right，false: left <= right
      */
     public static boolean gt(Date left, Date right) {
         return left.compareTo(right) > 0;
@@ -694,9 +696,9 @@ public class Dates {
      * <p>
      * left >= right: true
      *
-     * @param left
-     * @param right
-     * @return
+     * @param left 日期时间
+     * @param right 日期时间
+     * @return true: left >= right, false: left < right
      */
     public static boolean gte(Date left, Date right) {
         return left.compareTo(right) >= 0;
@@ -708,9 +710,9 @@ public class Dates {
      * <p>
      * left < right: true
      *
-     * @param left
-     * @param right
-     * @return
+     * @param left 左边日期
+     * @param right     右边日期
+     * @return true: left < right, false: left >= right
      */
     public static boolean lt(Date left, Date right) {
         return left.compareTo(right) < 0;
@@ -721,9 +723,9 @@ public class Dates {
      * <p>
      * left <= right: true
      *
-     * @param left
-     * @param right
-     * @return
+     * @param left  日期时间
+     * @param right 日期时间
+     * @return true: left <= right, false: left > right
      */
     public static boolean lte(Date left, Date right) {
         return left.compareTo(right) <= 0;

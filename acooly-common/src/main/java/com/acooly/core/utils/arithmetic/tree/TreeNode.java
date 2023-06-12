@@ -13,35 +13,35 @@ public interface TreeNode<T extends TreeNode> {
     /**
      * ID,唯一标志
      *
-     * @return
+     * @return ID
      */
     Long getId();
 
     /**
      * 父ID
      *
-     * @return
+     * @return 父ID
      */
     Long getParentId();
 
     /**
      * 子对象列表
      *
-     * @return
+     * @return 子对象列表
      */
     List<T> getChildren();
 
     /**
      * 设置子对象
      *
-     * @param children
+     * @param children 子对象列表
      */
     void setChildren(List<T> children);
 
     /**
      * 添加子到子对象集合中
      *
-     * @param treeNode
+     * @param treeNode 节点对象
      */
     default void addChild(T treeNode) {
         if (getChildren() == null) {

@@ -21,7 +21,7 @@ public class BitPermissions {
      *
      * @param permValue 你的权限值 (你拥有权限的权限单元值的代数和，如：3表示你拥有1+2两个权限)
      * @param permUnit  权限单元值，每个值代表一个权限 （2的幂次方：1,2,4,8,16,32,64,128...）
-     * @return
+     * @return true:有权限，false:无权限
      */
     public static boolean hasPerm(int permValue, int permUnit) {
         checkPermUnit(permUnit);
@@ -33,7 +33,7 @@ public class BitPermissions {
      * 与运算权限控制：计算权限值
      *
      * @param permUnits 权限单元值集合
-     * @return
+     * @return 总计权限值
      */
     public static int calcPerm(Integer... permUnits) {
         return calcPerm(Lists.newArrayList(permUnits));

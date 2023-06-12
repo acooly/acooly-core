@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author shuijing
  */
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class JWTUtils {
 
     public static final String KEY_TARGETURL = "targetUrl";
@@ -135,7 +135,7 @@ public class JWTUtils {
      */
     private static String aud = "boss";
     private static ObjectMapper objectMapper;
-	private static RedisTemplate redisTemplate;
+    private static RedisTemplate redisTemplate;
 
     static {
         headerMap = new HashMap<>();
@@ -185,7 +185,7 @@ public class JWTUtils {
      * 根据jwt加密串获得 Claims
      *
      * @param jwt
-     * @return
+     * @return Claims
      */
     public static Claims getClaims(String jwt) {
 
@@ -236,11 +236,11 @@ public class JWTUtils {
     /**
      * 解密并验证信息有无被篡改
      *
-     * @param compactJws
-     * @return
+     * @param compactJws 加密后的字符串
+     * @return Jwt对象
      * @throws Exception
      */
-	public static Jwt parseJws(String compactJws, final String secretKey) throws Exception {
+    public static Jwt parseJws(String compactJws, final String secretKey) throws Exception {
         return Jwts.parser().setSigningKeyResolver(
                 new SigningKeyResolverAdapter() {
                     @Override
@@ -260,8 +260,8 @@ public class JWTUtils {
     /**
      * 解密并验证信息有无被篡改
      *
-     * @param authentication
-     * @return
+     * @param authentication 加密后的字符串
+     * @return Jwt对象
      * @throws Exception
      */
     public static Jwt<Header, Claims> parseAuthentication(String authentication) throws Exception {
@@ -274,8 +274,8 @@ public class JWTUtils {
     /**
      * 验证 jwt 是否过期
      *
-     * @param jwt
-     * @return
+     * @param jwt jwt对象
+     * @return true 过期 false 未过期
      */
     public static boolean validateTimeout(Jwt<Header, Claims> jwt) {
         long expTime = Long.valueOf(String.valueOf(jwt.getBody().get(JWTUtils.CLAIMS_KEY_EXP)));
@@ -285,8 +285,8 @@ public class JWTUtils {
     /**
      * 验证 jwt 信息
      *
-     * @param jwt
-     * @return
+     * @param jwt jwt对象
+     * @return true 通过 false 不通过
      */
     public static boolean validateJwt(String jwt, String sub) {
         if (sub == null) {
@@ -301,8 +301,8 @@ public class JWTUtils {
     /**
      * 从 cookie 中获取 jwt
      *
-     * @param cookies
-     * @return
+     * @param cookies cookie数组数据
+     * @return jwt数据
      */
     public static String getJwtFromCookie(Cookie[] cookies) {
         if (ArrayUtils.isNotEmpty(cookies)) {

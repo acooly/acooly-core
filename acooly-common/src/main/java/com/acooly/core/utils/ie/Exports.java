@@ -53,8 +53,7 @@ public class Exports {
     /**
      * 导出多个sheet导出到一个文件
      *
-     * @param exportSheets
-     * @param filePath
+     * @param exportOrder 导出请求参数对象
      */
     public static void exportExcel(ExportOrder exportOrder) {
         Validators.assertJSR303(exportOrder);
@@ -123,9 +122,8 @@ public class Exports {
     /**
      * 输出Excel的单个sheet
      *
-     * @param exportSheetMeta
-     * @param workbook
-     * @param out
+     * @param exportSheetMeta 单个sheet的元数据
+     * @param workbook        工作簿对象
      */
     protected static void doExportExcelSheet(ExportSheetMeta exportSheetMeta, SXSSFWorkbook workbook) {
         ExportModelMeta exportModelMeta = exportSheetMeta.getExportModelMeta();
@@ -317,8 +315,8 @@ public class Exports {
     /**
      * 解析导出元数据
      *
-     * @param clazz
-     * @return
+     * @param clazz 导出数据的类
+     * @return 导出模型元数据对象
      */
     public static ExportModelMeta parse(Class<?> clazz) {
         ExportModel exportModel = clazz.getAnnotation(ExportModel.class);
@@ -396,8 +394,8 @@ public class Exports {
     /**
      * 获取单个实体对象的导出结果
      *
-     * @param object
-     * @return
+     * @param object 实体对象
+     * @return 导出模型元数据对象
      */
     public static ExportModelMeta parse(Object object) {
         ExportModelMeta result = parse(object.getClass());

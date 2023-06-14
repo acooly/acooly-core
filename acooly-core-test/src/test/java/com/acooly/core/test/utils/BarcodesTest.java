@@ -31,7 +31,7 @@ public class BarcodesTest {
         String content = "http://www.acooly.cn?username=张飞";
         int size = 300;
         String format = "png";
-        String filePath = "/Users/zhangpu/temp/qrcode/acooly.png";
+        String filePath = "/Users/zhangpu/temp/qrcode/acoolyX.png";
 
         try (FileOutputStream out = new FileOutputStream(filePath)) {
             Barcodes.encodeQRcode(content, "UTF-8", size, out, true);

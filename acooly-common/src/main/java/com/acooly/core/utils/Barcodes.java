@@ -22,6 +22,15 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * <li>1、二维码采用QRcode </li>
  * <li>2、一维条形码采用CODE_128</li>
+ * <p>
+ * 注意：为降低耦合，需要自行引入zxing包，目前框架管理版本为`3.3.3`,你可以再自己覆盖。默认引入如下：
+ *
+ * <pre class="code">{@code
+ * <dependency>
+ *      <groupId>com.google.zxing</groupId>
+ *      <artifactId>javase</artifactId>
+ * </dependency>
+ * }</pre>
  *
  * @author zhangpu
  */
@@ -44,6 +53,9 @@ public final class Barcodes {
     public static BufferedImage encode(@NotBlank String content, String encoding, BarcodeFormat format, int width, int height) {
         try {
             ConcurrentHashMap<EncodeHintType, String> hints = new ConcurrentHashMap<>();
+            if (Strings.isBlank(encoding)) {
+                encoding = DEFAULT_ENCODING;
+            }
             hints.put(EncodeHintType.CHARACTER_SET, encoding);
             if (format == null) {
                 format = BarcodeFormat.CODE_128;
@@ -69,14 +81,24 @@ public final class Barcodes {
      * </pre>
      *
      * @param content  二维码数据内容
-     * @param encoding 编码格式
-     * @param size     QRcode一般是正方形的，表示边长
+     * @param encoding 编码格式，默认UTF-8
+     * @param size     QRcode一般是正方形的，表示边长，单位：像素
      * @return QRcode的图片对象
      */
     public static BufferedImage encodeQRcode(String content, String encoding, Integer size) {
         return encode(content, encoding, BarcodeFormat.QR_CODE, size, size);
     }
 
+    /**
+     * 生成二维码（默认UTF8编码，QRcode）
+     *
+     * @param content 二维码数据内容
+     * @param size    QRcode一般是正方形的，表示边长。单位：像素
+     * @return QRcode的图片对象
+     */
+    public static BufferedImage encodeQRcode(String content, Integer size) {
+        return encode(content, DEFAULT_ENCODING, BarcodeFormat.QR_CODE, size, size);
+    }
 
     /**
      * 生成并输出二维码
@@ -96,6 +118,36 @@ public final class Barcodes {
             if (closeAfterComplete) {
                 quietlyClose(output);
             }
+        }
+    }
+
+    /**
+     * 生成并输出二维码文件
+     *
+     * @param content    二维码数据内容
+     * @param size       QRcode一般是正方形的，表示边长，单位像素
+     * @param qrcodeFile 输出的文件（PNG）
+     */
+    public static void encodeQRcodeFile(String content, Integer size, File qrcodeFile) {
+        try (FileOutputStream out = new FileOutputStream(qrcodeFile)) {
+            encodeQRcode(content, DEFAULT_ENCODING, size, out, true);
+        } catch (Exception e) {
+            throw new BusinessException("QRCODE_ENCODE_FILE_FAIL", "生成QRcode文件失败", e);
+        }
+    }
+
+    /**
+     * 生成并输出二维码文件（路径）
+     *
+     * @param content        二维码数据内容
+     * @param size           QRcode一般是正方形的，表示边长，单位像素
+     * @param qrcodeFilePath 输出的文件路径（PNG）
+     */
+    public static void encodeQRcodeFile(String content, Integer size, String qrcodeFilePath) {
+        try (FileOutputStream out = new FileOutputStream(qrcodeFilePath)) {
+            encodeQRcode(content, DEFAULT_ENCODING, size, out, true);
+        } catch (Exception e) {
+            throw new BusinessException("QRCODE_ENCODE_FILE_FAIL", "生成QRcode文件失败", e);
         }
     }
 

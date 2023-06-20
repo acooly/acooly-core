@@ -24,7 +24,10 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Regexs {
 
-    private static final int REGEX_GOURP_FIRST = 1;
+    /**
+     * 整个匹配group(0)
+     */
+    private static final int REGEX_GROUP_WHOLE = 0;
 
     /**
      * 判断正则匹配
@@ -44,28 +47,84 @@ public class Regexs {
     }
 
     public static String finder(Pattern p, String text) {
-        Matcher matcher = p.matcher(text);
-        if (matcher.find()) {
-            return matcher.group(REGEX_GOURP_FIRST);
+        return finder(p, text, REGEX_GROUP_WHOLE);
+    }
+
+    /**
+     * 正则匹配查找
+     *
+     * @param p          正则对象
+     * @param text       被查对象
+     * @param groupIndex 正则分组（0:全匹配，1：第一个括号...）,默认为：0
+     * @return 返回匹配的多个模式内容中的${groupIndex}第个
+     */
+    public static String finder(Pattern p, String text, Integer groupIndex) {
+        List<String> result = finderWholes(p, text);
+        if (Collections3.isEmpty(result)) {
+            return null;
+        }
+        if (groupIndex == null) {
+            groupIndex = REGEX_GROUP_WHOLE;
+        }
+        if (groupIndex < result.size()) {
+            return result.get(groupIndex);
         }
         return null;
     }
 
+    /**
+     * 查找所有匹配的模式内容
+     * <p>
+     * 匹配所有的模式内容，包括分组。例如：
+     * <p>
+     * regex：(//d{4})-(//d{2})-(//d{2})
+     * text：date1:2022-09-02,date2:2022-09-03...
+     * 匹配返回8个结果：2022-09-02,2022,09,02,2022-09-03,2022,09,03
+     *
+     * @param p    正则对象
+     * @param text 被查对象
+     * @return 匹配的模式内容列表
+     */
     public static List<String> finders(Pattern p, String text) {
         Matcher matcher = p.matcher(text);
         List<String> result = Lists.newArrayList();
         while (matcher.find()) {
-            result.add(matcher.group(REGEX_GOURP_FIRST));
+            for (int i = 0; i <= matcher.groupCount(); i++) {
+                result.add(matcher.group(i));
+            }
         }
-        return result;
+        return Collections3.isEmpty(result) ? null : result;
     }
+
+    /**
+     * 查找所有匹配的模式内容
+     * <p>
+     * 匹配所有的完整匹配模式内容，不包括分组。例如：
+     * <p>
+     * regex：(//d{4})-(//d{2})-(//d{2})
+     * text：date1:2022-09-02,date2:2022-09-03...
+     * 匹配返回2个结果：2022-09-02,2022-09-03
+     *
+     * @param p    正则对象
+     * @param text 被查对象
+     * @return 匹配的模式内容列表
+     */
+    public static List<String> finderWholes(Pattern p, String text) {
+        Matcher matcher = p.matcher(text);
+        List<String> result = Lists.newArrayList();
+        while (matcher.find()) {
+            result.add(matcher.group(REGEX_GROUP_WHOLE));
+        }
+        return Collections3.isEmpty(result) ? null : result;
+    }
+
 
     public static String finder(CommonRegex commonRegex, String text) {
         return finder(commonRegex.pattern, text);
     }
 
     public static List<String> finders(CommonRegex commonRegex, String text) {
-        return finders(commonRegex.pattern, text);
+        return finderWholes(commonRegex.pattern, text);
     }
 
     /**

@@ -56,7 +56,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
         // value = value.replaceAll(";", "&#59;");
         value = value.replaceAll("(?i) or ", "&#111;&#114;");
         value = value.replaceAll("(?i)%20or%20", "&#111;&#114;");
-        value = value.replaceAll("(?i)script", "");
+        // value = value.replaceAll("(?i)script", "");
         value = Strings.trimToEmpty(value);
         return value;
     }

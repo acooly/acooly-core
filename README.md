@@ -14,6 +14,16 @@ acooly框架是基于spring-boot提供快速开发、最佳实践，组件化的
 
 ## changelog
 
+### 5.2.0-SNAPSHOT.20230801
+
+* main版本为后续的主线版本。开始正式开源并发布到github。
+
+### 5.0.0-SNAPSHOT.20230801
+
+* 发布v5.0.0-SNAPSHOT.20230801的tag。
+* master版本为v5.0.0-SNAPSHOT的最新版本。
+
+
 ### 5.0.0-SNAPSHOT.20220808
 
 * 新增`com.acooly.core.utils.ie.Exports`工具，通过在实体对象上配置Annotation方式指定导出数据的行为（类似MyExcel）。

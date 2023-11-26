@@ -1,7 +1,5 @@
 package com.acooly.module.defence.xss;
 
-import com.acooly.core.utils.Strings;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
@@ -23,7 +21,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
         int count = values.length;
         String[] encodedValues = new String[count];
         for (int i = 0; i < count; i++) {
-            encodedValues[i] = cleanXSS(values[i]);
+            encodedValues[i] = XssCleaner.clean(values[i]);
         }
         return encodedValues;
     }
@@ -34,7 +32,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
         if (value == null) {
             return null;
         }
-        return cleanXSS(value);
+        return XssCleaner.clean(value);
     }
 
     @Override
@@ -43,21 +41,6 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
         if (value == null) {
             return null;
         }
-        return cleanXSS(value);
-    }
-
-    private String cleanXSS(String value) {
-        // You'll need to remove the spaces from the html entities below
-        value = value.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-        value = value.replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;");
-        value = value.replaceAll("(?i)eval\\((.*)\\)", "");
-        value = value.replaceAll("[\\\"\\\'][\\s]*javascript:(.*)[\\\"\\\']", "\"\"");
-        value = value.replaceAll("'", "&#39;");
-        // value = value.replaceAll(";", "&#59;");
-        value = value.replaceAll("(?i) or ", "&#111;&#114;");
-        value = value.replaceAll("(?i)%20or%20", "&#111;&#114;");
-        value = value.replaceAll("(?i)script", "");
-        value = Strings.trimToEmpty(value);
-        return value;
+        return XssCleaner.clean(value);
     }
 }

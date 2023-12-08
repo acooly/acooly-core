@@ -23,15 +23,15 @@ acooly框架提供了一些方便快捷的开发工具脚本，请在开始前�
 
 下载地址：
 
-* [acooly-script-V4](http://acooly.cn/nexus/service/local/repositories/releases/content/com/acooly/acooly-script/4.2.0/acooly-script-4.2.0-dev.tar.gz)
-* [acooly-script-V5](http://acooly.cn/nexus/service/local/repositories/releases/content/com/acooly/acooly-script/5.0.0/acooly-script-5.0.0-dev.tar.gz)
+* [acooly-script-V4](http://nexus.acooly.cn/repository/releases/com/acooly/acooly-script/4.2.0/acooly-script-4.2.0-dev.tar.gz)
+* [acooly-script-V5](http://nexus.acooly.cn/repository/releases/com/acooly/acooly-script/5.0.0/acooly-script-5.0.0-dev.tar.gz)
 
 工具包为cli方式，下载后，直接解压及可用。工具包里面提供的工具请参考解压后根目录的README.md文件，或跟随下面的说明来熟悉。
 
 ```sh
 # 如果你是windows，随便解压都可以，解压后目录为：acooly-script-4.2.0/5.0.0
-wget http://acooly.cn/nexus/service/local/repositories/releases/content/com/acooly/acooly-script/4.2.0/acooly-script-4.2.0-dev.tar.gz
-cd acooly-script-4.2.0
+wget http://nexus.acooly.cn/repository/releases/com/acooly/acooly-script/5.0.0/acooly-script-5.0.0-dev.tar.gz
+cd acooly-script-5.0.0
 ```
 
 >最新版也可直接从：https://gitlab.acooly.cn/acoolys/acooly-script/ 拉取

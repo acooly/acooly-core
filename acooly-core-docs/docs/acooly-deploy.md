@@ -53,7 +53,7 @@ Acooly生产环境与部署
 	5. Repository Name：acooly-snapshots
 	6. Provider：Maven2
 	7. Repository Policy：Snapshot
-	8. Remote Storage Location：http://acooly.cn/nexus/content/repositories/snapshots/
+	8. Remote Storage Location：http://nexus.acooly.cn/repository/snapshots/
 	9. Expiration Settings: 所有参数输入：5，表示5分钟
 	10. 其他参数：全部默认即可
 4. check仓库列表中出现名称为`acooly-snapshots`的`proxy`仓库。

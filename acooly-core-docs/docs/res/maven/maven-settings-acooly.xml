@@ -44,7 +44,7 @@
                 <pluginRepository>
                     <id>acooly-maven-plugin-repos</id>
                     <name>Maven acooly Mirror</name>
-                    <url>http://acooly.cn/nexus/content/groups/public</url>
+                    <url>http://nexus.acooly.cn/repository/public/</url>
                     <releases>
                         <enabled>true</enabled>
                     </releases>
@@ -59,7 +59,7 @@
                 <repository>
                     <id>acooly-maven-dep-repos</id>
                     <name>Maven acooly Mirror</name>
-                    <url>http://acooly.cn/nexus/content/groups/public</url>
+                    <url>http://nexus.acooly.cn/repository/public/</url>
                     <releases>
                         <enabled>true</enabled>
                         <updatePolicy>always</updatePolicy>

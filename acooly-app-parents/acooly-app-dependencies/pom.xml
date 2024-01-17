@@ -256,6 +256,13 @@
                 <artifactId>acooly-component-content-audit</artifactId>
                 <version>${acooly.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>acooly-component-i18n</artifactId>
+                <version>${acooly.version}</version>
+            </dependency>
+
+
             <!-- openapi -->
             <dependency>
                 <groupId>com.acooly</groupId>

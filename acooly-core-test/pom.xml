@@ -105,6 +105,13 @@
         <!--            <artifactId>spring-boot-properties-migrator</artifactId>-->
         <!--        </dependency>-->
 
+        <!-- 国际化支持的枚举和异常测试 -->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-i18n</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>

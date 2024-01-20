@@ -40,7 +40,7 @@ public interface Messageable extends Serializable {
      * @return
      */
     default String i18nErrorMessage() {
-        return i18nMessage(null);
+        return getI18n(code(), message());
     }
 
     /**
@@ -50,8 +50,8 @@ public interface Messageable extends Serializable {
      * @param detailDefault
      * @return
      */
-    default String i18nErrorMessage(String detailKey, String detailDefault) {
-        return getI18n(detailKey, detailDefault);
+    default String i18nErrorMessage(String code, String defaultValue) {
+        return getI18n(code, defaultValue);
     }
 
     /**

@@ -3,6 +3,8 @@ package com.acooly.core.common.exception;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.Messageable;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * 标记事务可回滚的业务异常,配合声明式事务使用
  *
@@ -69,7 +71,7 @@ public class BusinessException extends RuntimeException implements Messageable {
 
     @Deprecated
     public BusinessException(String message, String code) {
-        this(code, message, message);
+        this(code, message, "");
     }
 
     @Deprecated
@@ -78,68 +80,72 @@ public class BusinessException extends RuntimeException implements Messageable {
     }
 
     public BusinessException(String code, String message, String detail) {
-        super(detail);
-        this.code = code;
-        this.message = message;
+        super(code);
+        // 开启国际化的情况`acooly.i18n.enable=true`，且存在I18nMessages组件，则采用国际化消息
+        // 采用直接以code为key的方式获取国际化消息
         this.errorCode = new Messageable() {
             @Override
             public String code() {
                 return code;
             }
+
             @Override
             public String message() {
                 return message;
             }
+
             @Override
             public String toString() {
-                return this.code()+":"+this.message();
+                return this.code() + ":" + this.i18nErrorMessage();
             }
         };
+        this.code = code;
+        this.message = this.errorCode.i18nErrorMessage();
         this.detail = detail;
     }
 
     public BusinessException(String code, String message, Throwable cause) {
-        super(message, cause);
-        this.code = code;
-        this.message = message;
-        this.errorCode = new Messageable() {
-            @Override
-            public String code() {
-                return code;
-            }
-
-            @Override
-            public String message() {
-                return message;
-            }
-
-            @Override
-            public String toString() {
-                return this.code()+":"+this.message();
-            }
-        };
-        this.detail = cause.getMessage();
+        this(code, message, cause.getMessage());
     }
 
-
-    public BusinessException(Messageable messageable) {
-        super(messageable.message());
-        this.errorCode = messageable;
-        this.code = messageable.code();
-        this.message = messageable.message();
-    }
 
     public BusinessException(Messageable messageable, String detail) {
-        this(messageable);
+        super(messageable.i18nErrorMessage());
+        this.errorCode = messageable;
+        this.code = messageable.code();
+        this.message = messageable.i18nErrorMessage();
         this.detail = detail;
     }
 
+    public BusinessException(Messageable messageable) {
+        this(messageable, "");
+    }
+
     public BusinessException(Messageable messageable, Throwable cause) {
-        super(messageable.message(), cause);
-        this.errorCode = messageable;
-        this.code = messageable.code();
-        this.message = messageable.message();
-        this.detail = cause.getMessage();
+        this(messageable, cause.getMessage());
+    }
+
+
+    /**
+     * 国际化专用
+     *
+     * @param codeI18nKey
+     * @param i18nDefaultMessage
+     * @param detailI18nKey
+     * @param i18nDefaultDetail
+     */
+    public BusinessException(@NotBlank String codeI18nKey, String i18nDefaultMessage, String detailI18nKey, String i18nDefaultDetail) {
+        this(codeI18nKey, i18nDefaultMessage, "");
+        if (Strings.isNotBlank(detailI18nKey)) {
+            this.detail = this.errorCode.i18nErrorMessage(detailI18nKey, i18nDefaultDetail);
+        }
+    }
+
+    public BusinessException(Messageable messageable, String detailI18nKey, String i18nDefaultDetail) {
+        this(messageable, i18nDefaultDetail);
+        if (Strings.isNotBlank(detailI18nKey)) {
+            this.detail = this.errorCode.i18nErrorMessage(detailI18nKey, i18nDefaultDetail);
+        }
     }
 
     @Deprecated

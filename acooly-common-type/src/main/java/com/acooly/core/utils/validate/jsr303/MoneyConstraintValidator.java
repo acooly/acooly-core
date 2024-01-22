@@ -7,6 +7,9 @@
  */
 package com.acooly.core.utils.validate.jsr303;
 
+import com.acooly.core.utils.Money;
+import org.hibernate.validator.constraintvalidation.HibernateConstraintValidatorContext;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -16,7 +19,7 @@ import javax.validation.ConstraintValidatorContext;
  * @author zhangpu
  */
 public class MoneyConstraintValidator extends ConstraintValidatorSupport
-        implements ConstraintValidator<MoneyConstraint, com.acooly.core.utils.Money> {
+        implements ConstraintValidator<MoneyConstraint, Money> {
 
     private long min;
     private long max;
@@ -29,7 +32,6 @@ public class MoneyConstraintValidator extends ConstraintValidatorSupport
         nullable = constraintAnnotation.nullable();
         this.message = constraintAnnotation.message();
         if (min < 0) {
-
             throw new RuntimeException("金额约束最小值不能小于零");
         }
         if (max <= min) {
@@ -44,19 +46,25 @@ public class MoneyConstraintValidator extends ConstraintValidatorSupport
             if (!nullable) {
                 if (hasCustomMessage()) {
                     context.disableDefaultConstraintViolation();
-                    context
+                    context.unwrap(HibernateConstraintValidatorContext.class)
+                            .addMessageParameter("min", Money.cent(min))
+                            .addMessageParameter("max", Money.cent(max))
                             .buildConstraintViolationWithTemplate(
-                                    "{com.acooly.utils.validator.Money.message.notNull}")
+                                    "{com.acooly.utils.validator.Money.message}")
                             .addConstraintViolation();
+
                 }
             }
             return nullable;
         }
+
         if (value.getCent() < min) {
             if (hasCustomMessage()) {
                 context.disableDefaultConstraintViolation();
-                context
-                        .buildConstraintViolationWithTemplate("{com.acooly.utils.validator.Money.Min.message}")
+                context.unwrap(HibernateConstraintValidatorContext.class)
+                        .addMessageParameter("value", Money.cent(min))
+                        .buildConstraintViolationWithTemplate(
+                                "{javax.validation.constraints.Min.message}")
                         .addConstraintViolation();
             }
 
@@ -65,8 +73,10 @@ public class MoneyConstraintValidator extends ConstraintValidatorSupport
         if (value.getCent() >= max) {
             if (hasCustomMessage()) {
                 context.disableDefaultConstraintViolation();
-                context
-                        .buildConstraintViolationWithTemplate("{com.acooly.utils.validator.Money.Max.message}")
+                context.unwrap(HibernateConstraintValidatorContext.class)
+                        .addMessageParameter("value", Money.cent(max))
+                        .buildConstraintViolationWithTemplate(
+                                "{javax.validation.constraints.Max.message}")
                         .addConstraintViolation();
             }
             return false;

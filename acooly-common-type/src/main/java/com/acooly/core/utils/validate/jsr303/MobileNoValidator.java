@@ -32,10 +32,8 @@ public class MobileNoValidator extends ConstraintValidatorSupport
             if (!blankable) {
                 if (hasCustomMessage()) {
                     context.disableDefaultConstraintViolation();
-                    context
-                            .buildConstraintViolationWithTemplate(
-                                    "{org.hibernate.validator.constraints.NotBlank.message}")
-                            .addConstraintViolation();
+                    context.buildConstraintViolationWithTemplate(
+                            "{org.hibernate.validator.constraints.NotBlank.message}").addConstraintViolation();
                 }
             }
             return blankable;
@@ -43,10 +41,8 @@ public class MobileNoValidator extends ConstraintValidatorSupport
         if (!MobileNoPredicate.INSTANCE.apply(value)) {
             if (hasCustomMessage()) {
                 context.disableDefaultConstraintViolation();
-                context
-                        .buildConstraintViolationWithTemplate(
-                                "{com.acooly.utils.validator.MobileNo.format.message}")
-                        .addConstraintViolation();
+                context.buildConstraintViolationWithTemplate(
+                        "{foo.bar.error}").addConstraintViolation();
             }
             return false;
         }

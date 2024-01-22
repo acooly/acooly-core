@@ -5,6 +5,6 @@ public class ConstraintValidatorSupport {
     protected String message;
 
     protected boolean hasCustomMessage() {
-        return this.message != null && "".equals(this.message);
+        return this.message != null && !"".equals(this.message);
     }
 }

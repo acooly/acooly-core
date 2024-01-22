@@ -15,16 +15,20 @@ import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 /**
  * 异常和枚举国际化方案测试
- *
+ * <p>
  * http://127.0.0.1:8083/test/i18n/exception?lang=zh_CN
  * http://127.0.0.1:8083/test/i18n/enums?lang=en_US
+ * http://127.0.0.1:8083/test/i18n/beanValidate?lang=zh_CN
  *
  * @author zhangpu
  * @date 2024-01-19 11:16
@@ -33,6 +37,21 @@ import java.util.Map;
 @RestController
 @RequestMapping("/test/i18n")
 public class I18nTestController {
+
+
+    @RequestMapping("/beanValidate")
+    public ResponseEntity testBeanValidate(@Valid Customer customer, BindingResult result) {
+        Map<String, Object> data = Maps.newHashMap();
+        data.put("当前语言:", LocaleContextHolder.getLocale());
+        if (result.getErrorCount() > 0) {
+            Map<String, String> errors = Maps.newHashMap();
+            for (FieldError error : result.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            data.put("errors", errors);
+        }
+        return ResponseEntity.ok().body(data);
+    }
 
 
     @RequestMapping("/enums")

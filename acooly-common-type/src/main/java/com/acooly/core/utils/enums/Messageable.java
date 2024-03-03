@@ -46,8 +46,8 @@ public interface Messageable extends Serializable {
     /**
      * 快捷（顺便）获取异常的detail的国际化值
      *
-     * @param detailKey
-     * @param detailDefault
+     * @param code
+     * @param defaultValue
      * @return
      */
     default String i18nErrorMessage(String code, String defaultValue) {

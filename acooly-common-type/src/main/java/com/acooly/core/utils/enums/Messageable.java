@@ -76,7 +76,7 @@ public interface Messageable extends Serializable {
      * @return
      */
     default String i18nMessage(String keyPrefix) {
-        return i18nMessage(keyPrefix + "." + this.getClass().getSimpleName(), null);
+        return i18nMessage(keyPrefix == null ? "" : keyPrefix + "." + this.getClass().getSimpleName(), null);
     }
 
     /**

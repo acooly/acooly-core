@@ -5,7 +5,7 @@
     <parent>
         <artifactId>acooly-core-parent</artifactId>
         <groupId>com.acooly</groupId>
-        <version>5.2.0-SNAPSHOT</version>
+        <version>5.2.0.YS_RC1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -41,6 +41,18 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-defence</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-appservice</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>com.acooly</groupId>
@@ -62,11 +74,11 @@
         <!--            <version>${project.version}</version>-->
         <!--        </dependency>-->
 
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-security</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.acooly</groupId>-->
+<!--            <artifactId>acooly-component-security</artifactId>-->
+<!--            <version>5.2.0-SNAPSHOT</version>-->
+<!--        </dependency>-->
 
         <!--        <dependency>-->
         <!--            <groupId>com.acooly</groupId>-->
@@ -75,11 +87,7 @@
         <!--        </dependency>-->
 
 
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-appservice</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
+
 
         <!--        <dependency>-->
         <!--            <groupId>com.acooly</groupId>-->
@@ -106,11 +114,10 @@
         <!--        </dependency>-->
 
         <!-- 国际化支持的枚举和异常测试 -->
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-i18n</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+<!--        <dependency>-->
+        <!--            <groupId>com.acooly</groupId>-->
+        <!--            <artifactId>acooly-component-i18n</artifactId>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>org.apache.velocity</groupId>

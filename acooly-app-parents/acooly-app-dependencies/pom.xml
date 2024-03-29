@@ -14,7 +14,7 @@
     <description>acooly boot app dependencies</description>
 
     <properties>
-        <acooly.version>5.2.0-SNAPSHOT</acooly.version>
+        <acooly.version>5.2.0-202402_YS_RC1</acooly.version>
         <openapi.version>5.2.0-SNAPSHOT</openapi.version>
     </properties>
 

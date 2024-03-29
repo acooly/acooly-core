@@ -74,7 +74,6 @@
                         com.acooly.core.utils.id
                     </excludePackageNames>
                 </configuration>
-
                 <executions>
                     <execution>
                         <id>aggregate-jar</id>
@@ -85,7 +84,6 @@
                         <configuration></configuration>
                     </execution>
                 </executions>
-
             </plugin>
         </plugins>
     </build>

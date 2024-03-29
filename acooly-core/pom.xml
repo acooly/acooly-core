@@ -10,9 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>acooly-core</artifactId>
     <name>acooly-core</name>
-    <properties>
-        <deploy.skip>false</deploy.skip>
-    </properties>
+
     <dependencies>
 
         <dependency>

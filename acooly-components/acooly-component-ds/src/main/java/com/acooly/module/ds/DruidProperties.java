@@ -116,6 +116,15 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
 
     private boolean testOnBorrow = false;
 
+    /**
+     * 据库连接的超时时间（ms,默认10秒）,如果在设定的时间内没有建立连接，将会抛出Connection timed out异常
+     */
+    private int connectTimeout = 10_000;
+    /**
+     * 数据库socket通讯的超时时间(ms，默认10秒),在设定的时间内没有得到响应，将会抛出Read timed out异常
+     */
+    private int socketTimeout = 10_000;
+
 //    @Deprecated
 //    private boolean useTomcatDataSource = false;
 
@@ -205,6 +214,12 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
         //应用程序可以自定义的参数
         dataSource.setInitialSize(this.getInitialSize());
         dataSource.setMinIdle(this.getMinIdle());
+
+        /**
+         * 设置链接超时参数
+         */
+        dataSource.setConnectTimeout(this.connectTimeout);
+        dataSource.setSocketTimeout(this.socketTimeout);
 
         if (mysql()) {
             maxActive = Math.max(maxActive, MYSQL_MAX_ACTIVE);

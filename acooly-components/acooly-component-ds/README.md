@@ -2,6 +2,7 @@
 <!-- type: infrastructure -->
 <!-- author: qiubo -->
 <!-- date: 2019-12-31 -->
+
 ## 1. 组件介绍
 
 此组件提供druid的数据源
@@ -22,7 +23,7 @@ maven坐标：
       </dependency>
 
 `${acooly-latest-version}`为框架最新版本或者购买的版本。
-	
+
 ## 3. FAQ
 
 ### 3.1 如何关闭自动创建表
@@ -64,3 +65,20 @@ maven坐标：
 
     2017-06-30 22:46:10.391 ERROR [DatabasePatchCheckThread1] DBPatchChecker:65-- 表:api_service缺少以下字段：[gid]，请按照提示执行sql语句:
     ALTER TABLE `api_service` ADD COLUMN `gid` VARCHAR(45) NULL COMMENT '全局唯一id';
+
+### 3.4 数据库连接超时参数
+
+Druid连接池默认的连接超时参数是10秒，如果需要修改，可以在配置文件中配置：
+
+```properties
+# 据库连接的超时时间（ms,默认10秒）,如果在设定的时间内没有建立连接，将会抛出Connection timed out异常
+acooly.ds.socket-timeout=10000
+# 数据库socket通讯的超时时间(ms，默认10秒),在设定的时间内没有得到响应，将会抛出Read timed out异常
+acooly.ds.connect-timeout=10000
+```
+
+## 4. changelog
+
+### 5.2.0-SNAPSHOT.20240331
+
+* 2024-03-30 - 在DruidProperties中新增保留connectTimeout和socketTimeout两个参数，单位毫秒，默认10秒。 - [zhangpu] 297e4eb9

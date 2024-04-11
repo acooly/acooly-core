@@ -62,7 +62,7 @@ public abstract class AbstractFileOperationController<
     private int defaultExportBatchSize = 1000;
 
     @Resource(name = "mvcConversionService")
-    private ConversionService conversionService;
+    protected ConversionService conversionService;
 
     /**
      * 批量导入保存模板数据基础实现

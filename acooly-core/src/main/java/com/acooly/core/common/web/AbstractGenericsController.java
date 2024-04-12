@@ -19,8 +19,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.format.WebConversionService;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.core.convert.support.DefaultConversionService;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.validation.DataBinder;
@@ -30,6 +31,7 @@ import org.springframework.validation.Validator;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
@@ -64,7 +66,10 @@ public abstract class AbstractGenericsController<T extends Entityable, M extends
     @Autowired(required = false)
     private Validator[] validators;
 
-    protected DefaultConversionService conversionService = new DefaultConversionService();
+//    protected DefaultConversionService conversionService = new DefaultConversionService();
+
+    @Resource(name = "mvcConversionService")
+    protected ConversionService conversionService;
 
     /**
      * 通过Map作为数据源绑定到实体
@@ -210,13 +215,10 @@ public abstract class AbstractGenericsController<T extends Entityable, M extends
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Boolean property =
-                Apps.getEnvironment()
-                        .getProperty("acooly.web.enableMoneyDisplayYuan", Boolean.class, Boolean.FALSE);
-        if (property) {
-            conversionService.addConverter(
-                    String.class,
-                    Money.class,
+        Boolean property = Apps.getEnvironment()
+                .getProperty("acooly.web.enableMoneyDisplayYuan", Boolean.class, Boolean.FALSE);
+        if (property && conversionService != null && conversionService instanceof WebConversionService) {
+            ((WebConversionService) conversionService).addConverter(String.class, Money.class,
                     source -> Strings.isNullOrEmpty(source) ? null : new Money(source));
         }
     }

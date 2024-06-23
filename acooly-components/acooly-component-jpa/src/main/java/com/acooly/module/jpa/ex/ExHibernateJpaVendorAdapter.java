@@ -2,10 +2,12 @@ package com.acooly.module.jpa.ex;
 
 import com.acooly.core.common.boot.ApplicationContextHolder;
 import com.acooly.core.utils.Strings;
+import com.acooly.module.ds.DruidProperties;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
@@ -30,9 +32,19 @@ import static org.springframework.jdbc.datasource.init.ScriptUtils.*;
  */
 @Slf4j
 public class ExHibernateJpaVendorAdapter extends HibernateJpaVendorAdapter {
+
+    @Autowired(required = false)
+    private DruidProperties druidProperties;
+
     @Override
     public void postProcessEntityManagerFactory(EntityManagerFactory emf) {
         super.postProcessEntityManagerFactory(emf);
+
+        // 如果当前环境`acooly.ds.init-sql-exec = false`则不执行。默认为false
+        if (druidProperties == null || !druidProperties.isInitSqlExec()) {
+            return;
+        }
+
         EntityManager entityManager = emf.createEntityManager();
         entityManager.getTransaction().begin();
         Session session = entityManager.unwrap(Session.class);

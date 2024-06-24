@@ -64,6 +64,13 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
      */
     private boolean enable = true;
 
+    /**
+     * 是否执行初始化SQL
+     * 1、数据库账号权限允许
+     * 2、执行的是: `classpath:META-INF/database/mysql/ddl.sql` 和 `classpath:META-INF/database/mysql/dml.sql`
+     */
+    private boolean initSqlExec = false;
+
 
     /**
      * 租户配置
@@ -307,10 +314,8 @@ public class DruidProperties extends InfoBase implements BeanClassLoaderAware {
     @Data
     public static class TenantDsProps {
 
-        private String url;
-
         String username;
-
+        private String url;
         @ToString.Maskable(maskAll = true)
         private String password;
 

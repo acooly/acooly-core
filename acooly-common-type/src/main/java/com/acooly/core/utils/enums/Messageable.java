@@ -113,7 +113,7 @@ public interface Messageable extends Serializable {
         }
         String className = "com.acooly.component.i18n.support.I18nMessages";
         String methodName = "getMessage";
-        String message = defaultValue;
+        String message = null;
         try {
             Class clazz = Class.forName(className);
             // 根据方法名称和参数列表获取方法对象
@@ -125,6 +125,7 @@ public interface Messageable extends Serializable {
             message = (String) method.invoke(null, code);
         } catch (Exception e) {
             // ignore
+            message = defaultValue;
         }
         return message;
     }

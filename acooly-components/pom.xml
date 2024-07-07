@@ -29,4 +29,5 @@
         <module>acooly-component-web</module>
         <module>acooly-component-springcloud</module>
     </modules>
+
 </project>

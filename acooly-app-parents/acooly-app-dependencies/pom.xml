@@ -447,7 +447,7 @@
             <dependency>
                 <groupId>cn.acooly</groupId>
                 <artifactId>acooly-auth-google-authenticator</artifactId>
-                <version>5.0.0</version>
+                <version>${acooly.version}</version>
             </dependency>
 
             <!-- SDK组件 -->
@@ -478,14 +478,12 @@
                 <version>${acooly.version}</version>
             </dependency>
 
-
             <!-- 工具 -->
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>acooly-coder</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>${acooly.version}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 

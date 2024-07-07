@@ -29,18 +29,4 @@
         <module>acooly-component-web</module>
         <module>acooly-component-springcloud</module>
     </modules>
-
-    <build>
-        <resources>
-            <resource>
-                <directory>.</directory>
-                <includes>
-                    <include>*.md</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-        </resources>
-    </build>
 </project>
